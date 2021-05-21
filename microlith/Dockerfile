@@ -19,6 +19,8 @@ COPY --from=prometheus-official /etc/prometheus/prometheus.yml /etc/prometheus/p
 COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/share/prometheus/console_libraries/
 COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
 
+# Try to keep the originals as they are and fix anything later to make it easy to merge changes
+
 # GRAFANA:
 # From https://github.com/grafana/grafana/blob/main/Dockerfile
 ARG GF_UID="472"
@@ -81,7 +83,6 @@ RUN mkdir -p /prometheus && \
 # USER       nobody
 EXPOSE     9090
 VOLUME     [ "/prometheus" ]
-WORKDIR    /prometheus
 
 # Customisation for entrypoints and run as a non-root user
 WORKDIR /entrypoints
@@ -106,14 +107,3 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
-
-# s6 might be a better option as lot more configuration and support for per-service but requires a bit of config to get env, etc. sorted first
-# ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/s6-overlay-amd64-installer
-# RUN chmod +x /tmp/s6-overlay-amd64-installer && \
-#     /tmp/s6-overlay-amd64-installer / && \
-#     rm -f /tmp/s6-overlay-amd64-installer
-# WORKDIR /
-# COPY --from=grafana-official /run.sh /etc/services.d/grafana/run
-# COPY --from=loki-official /usr/bin/loki /etc/services.d/loki/run
-# COPY --from=prometheus-official /bin/prometheus /etc/services.d/prometheus/run
-# ENTRYPOINT [ "/init" ]
