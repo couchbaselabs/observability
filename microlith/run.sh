@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
+# https://stackoverflow.com/a/5586663
 trap 'kill $(jobs -pr)' SIGINT SIGTERM EXIT
 
 for i in /entrypoints/*; do
