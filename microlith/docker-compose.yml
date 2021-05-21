@@ -1,0 +1,67 @@
+version: "3"
+networks:
+    front:
+    back:
+
+services:
+    db1:
+        container_name: db1
+        # image: couchbase:6.6.2
+        image: couchbase/server-sandbox:6.6.0
+        ports:
+            - "8091-8096:8091-8096"
+            - "11210-11211:11210-11211"
+        volumes:
+            - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
+        networks:
+            back:
+                aliases:
+                    - couchbase1.compose.local
+    logging:
+        container_name: logging
+        image: couchbase/fluent-bit:1.0.2
+        ports:
+            # Metrics
+            - "2020:2020"
+        depends_on:
+            - db1
+            - couchbase-grafana
+        environment:
+            - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
+        volumes:
+            - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
+            - ./fluent-bit.conf:/fluent-bit/config/fluent-bit.conf:ro
+        networks:
+            - back
+
+    exporter:
+        container_name: exporter
+        image: couchbase/exporter:1.0.4
+        depends_on:
+            - db1
+        command:
+            - '--couchbase-address=db1'
+        networks:
+            - back
+
+    couchbase-grafana:
+        build: .
+        container_name: couchbase-grafana
+        volumes:
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /:/host/rootfs:ro
+        expose:
+            - 3000
+            - 3100
+            - 9090
+            - 9093
+            - 9100
+        networks:
+            - front
+            - back
+        ports:
+            - "3000:3000"
+
+volumes:
+    log-volume:
