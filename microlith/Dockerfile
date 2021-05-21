@@ -3,6 +3,7 @@ FROM grafana/loki:2.0.0 as loki-official
 FROM prom/prometheus as prometheus-official
 FROM prom/alertmanager as alertmanager-official
 FROM prom/pushgateway:v1.4.0 as pushgateway-official
+FROM prom/node-exporter:v1.1.2 as node-exporter-official
 
 # Combined image
 FROM alpine:3.13
@@ -108,6 +109,18 @@ COPY --from=pushgateway-official /bin/pushgateway /bin/pushgateway
 EXPOSE 9091
 RUN mkdir -p /pushgateway && chown nobody:nobody /pushgateway
 
+# NODE EXPORTER
+# From https://github.com/prometheus/node_exporter/blob/master/Dockerfile
+COPY --from=node-exporter-official /bin/node_exporter /bin/node_exporter
+EXPOSE      9100
+
+# Customisation to support node exporter access to proc/sys/rootfs: mount here and/or set to wherever mounted.
+ENV NODE_EXPORTER_HOST_PROC="/node-exporter/host/proc"
+ENV NODE_EXPORTER_HOST_ROOTFS="/node-exporter/host/rootfs"
+ENV NODE_EXPORTER_HOST_SYS="/node-exporter/host/sys"
+# To provide node exporter custom collector output if needed:
+ENV NODE_EXPORTER_CUSTOM_COLLECTOR="/node-exporter/custom/"
+
 # Add support for auto-provisioning now
 COPY grafana/provisioning/ /etc/grafana/provisioning/
 COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
@@ -118,11 +131,11 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 
 # Customisation for entrypoints and run as a non-root user
-WORKDIR /entrypoints
+RUN mkdir -p /logs && chmod 777 /logs
+WORKDIR /logs
+ENV LOGS_DIR=/logs
+COPY entrypoints/ /entrypoints/
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
-COPY --from=loki-official /usr/bin/loki /entrypoints/loki
-COPY --from=prometheus-official /bin/prometheus /entrypoints/prometheus
-COPY --from=alertmanager-official /bin/alertmanager /entrypoints/alertmanager
 COPY --from=pushgateway-official /bin/pushgateway /entrypoints/pushgateway
 
 RUN apk add --no-cache tini
@@ -140,7 +153,8 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/loki /loki && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
-    chown -R couchbase:couchbase /pushgateway
+    chown -R couchbase:couchbase /pushgateway && \
+    chown -R couchbase:couchbase /logs /entrypoints
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
