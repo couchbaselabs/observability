@@ -2,7 +2,7 @@ FROM grafana/grafana:7.5.2 as grafana-official
 FROM grafana/loki:2.0.0 as loki-official
 FROM prom/prometheus as prometheus-official
 
-# Final stage
+# Combined image
 FROM alpine:3.13
 
 RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata
@@ -56,7 +56,6 @@ RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
 
 EXPOSE 3000
 # USER grafana
-# ENTRYPOINT [ "/run.sh" ]
 
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
@@ -72,8 +71,6 @@ RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 EXPOSE 3100
 # USER loki
-# ENTRYPOINT [ "/usr/bin/loki" ]
-# CMD ["-config.file=/etc/loki/local-config.yaml"]
 
 # PROMETHEUS
 # From https://github.com/prometheus/prometheus/blob/main/Dockerfile
@@ -85,25 +82,38 @@ RUN mkdir -p /prometheus && \
 EXPOSE     9090
 VOLUME     [ "/prometheus" ]
 WORKDIR    /prometheus
-# ENTRYPOINT [ "/bin/prometheus" ]
-# CMD        [ "--config.file=/etc/prometheus/prometheus.yml", \
-#              "--storage.tsdb.path=/prometheus", \
-#              "--web.console.libraries=/usr/share/prometheus/console_libraries", \
-#              "--web.console.templates=/usr/share/prometheus/consoles" ]
 
+# Customisation for entrypoints and run as a non-root user
 WORKDIR /entrypoints
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 COPY --from=loki-official /usr/bin/loki /entrypoints/loki
 COPY --from=prometheus-official /bin/prometheus /entrypoints/prometheus
+
 RUN apk add --no-cache tini
 ENV TINI_SUBREAPER=
+COPY run.sh /run.sh
+RUN chmod a+x /run.sh /entrypoints/*
 
-# USER       nobody
-ENTRYPOINT [ "/sbin/tini", "--" ]
-# ENTRYPOINT ["/sbin/tini", "--", "/entrypoints/grafana.sh"]
-# ENTRYPOINT ["/sbin/tini", "--", "/entrypoints/loki", "-config.file=/etc/loki/local-config.yaml"]
-# ENTRYPOINT [ "/sbin/tini", "--", "/entrypoints/prometheus", \
-# CMD        [ "--config.file=/etc/prometheus/prometheus.yml", \
-#              "--storage.tsdb.path=/prometheus", \
-#              "--web.console.libraries=/usr/share/prometheus/console_libraries", \
-#              "--web.console.templates=/usr/share/prometheus/consoles" ]
+ARG CB_UID="8453"
+ARG CB_GID="8453"
+RUN addgroup -g $CB_GID -S couchbase && \
+    adduser -u $CB_UID -S couchbase -G couchbase
+
+# Copied from `chown` lines in the original, just substitute our user
+RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
+    chown -R couchbase:couchbase /etc/loki /loki && \
+    chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
+
+USER       $CB_UID
+ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
+
+# s6 might be a better option as lot more configuration and support for per-service but requires a bit of config to get env, etc. sorted first
+# ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/s6-overlay-amd64-installer
+# RUN chmod +x /tmp/s6-overlay-amd64-installer && \
+#     /tmp/s6-overlay-amd64-installer / && \
+#     rm -f /tmp/s6-overlay-amd64-installer
+# WORKDIR /
+# COPY --from=grafana-official /run.sh /etc/services.d/grafana/run
+# COPY --from=loki-official /usr/bin/loki /etc/services.d/loki/run
+# COPY --from=prometheus-official /bin/prometheus /etc/services.d/prometheus/run
+# ENTRYPOINT [ "/init" ]
