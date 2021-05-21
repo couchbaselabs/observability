@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -e
+
+trap "exit" INT TERM
+trap 'kill $(jobs -p)' EXIT
+
 for i in /entrypoints/*; do
     EXE_NAME=${i##/entrypoints/}
     UPPERCASE=${EXE_NAME^^}
