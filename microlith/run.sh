@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-trap "exit" INT TERM
-trap 'kill $(jobs -p)' EXIT
+trap 'kill $(jobs -pr)' SIGINT SIGTERM EXIT
 
 for i in /entrypoints/*; do
     EXE_NAME=${i##/entrypoints/}
