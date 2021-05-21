@@ -1,0 +1,23 @@
+groups:
+  - name: rate-alerting
+    rules:
+      - alert: HighLogRate
+        expr: |
+          sum by (filename, compose_service)
+            (rate({job="couchbase-fluentbit"}[1m]))
+            > 60
+        for: 1m
+        labels:
+            severity: warning
+            team: devops
+            category: logs
+        annotations:
+            title: "High LogRate Alert"
+            description: "something is logging a lot"
+            impact: "impact"
+            action: "action"
+            dashboard: "https://grafana.com/service-dashboard"
+            # What do do when this alert triggers - a URL for more information/remediation
+            runbook: "https://wiki.com"
+            # Link to the logs...
+            logurl: "https://grafana.com/log-explorer"

@@ -1,0 +1,1 @@
+A prototype for deploying a single image to rule them all for observability.
