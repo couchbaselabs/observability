@@ -10,6 +10,9 @@ for i in /entrypoints/*; do
              "--storage.tsdb.path=/prometheus" \
              "--web.console.libraries=/usr/share/prometheus/console_libraries" \
              "--web.console.templates=/usr/share/prometheus/consoles" &
+        elif [[ "$i" == "/entrypoints/alertmanager" ]]; then
+            tini -- "$i" "--config.file=/etc/alertmanager/alertmanager.yml" \
+             "--storage.path=/alertmanager" &
         else
             tini -- "$i" "$@" &
         fi

@@ -1,6 +1,8 @@
 FROM grafana/grafana:7.5.2 as grafana-official
 FROM grafana/loki:2.0.0 as loki-official
 FROM prom/prometheus as prometheus-official
+FROM prom/alertmanager as alertmanager-official
+FROM prom/pushgateway:v1.4.0 as pushgateway-official
 
 # Combined image
 FROM alpine:3.13
@@ -59,6 +61,8 @@ RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
 EXPOSE 3000
 # USER grafana
 
+WORKDIR /
+
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
 RUN addgroup -g 10001 -S loki && \
@@ -84,6 +88,26 @@ RUN mkdir -p /prometheus && \
 EXPOSE     9090
 VOLUME     [ "/prometheus" ]
 
+# ALERT MANAGER
+# From https://github.com/prometheus/alertmanager/blob/master/Dockerfile
+COPY --from=alertmanager-official /bin/amtool      /bin/amtool
+COPY --from=alertmanager-official /bin/alertmanager /bin/alertmanager
+COPY --from=alertmanager-official /etc/alertmanager/alertmanager.yml     /etc/alertmanager/alertmanager.yml
+
+RUN mkdir -p /alertmanager && \
+    chown -R nobody:nobody etc/alertmanager /alertmanager
+
+# USER       nobody
+EXPOSE     9093
+VOLUME     [ "/alertmanager" ]
+
+# PROM PUSH GATEWAY
+# From https://github.com/prometheus/pushgateway/blob/master/Dockerfile
+COPY --from=pushgateway-official /bin/pushgateway /bin/pushgateway
+
+EXPOSE 9091
+RUN mkdir -p /pushgateway && chown nobody:nobody /pushgateway
+
 # Add support for auto-provisioning now
 COPY grafana/provisioning/ /etc/grafana/provisioning/
 COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
@@ -91,12 +115,15 @@ ENV GF_SECURITY_ADMIN_PASSWORD=password
 ENV GF_USERS_ALLOW_SIGN_UP=false
 
 COPY prometheus/ /etc/prometheus/
+COPY alertmanager/ /etc/alertmanager/
 
 # Customisation for entrypoints and run as a non-root user
 WORKDIR /entrypoints
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 COPY --from=loki-official /usr/bin/loki /entrypoints/loki
 COPY --from=prometheus-official /bin/prometheus /entrypoints/prometheus
+COPY --from=alertmanager-official /bin/alertmanager /entrypoints/alertmanager
+COPY --from=pushgateway-official /bin/pushgateway /entrypoints/pushgateway
 
 RUN apk add --no-cache tini
 ENV TINI_SUBREAPER=
@@ -111,7 +138,9 @@ RUN addgroup -g $CB_GID -S couchbase && \
 # Copied from `chown` lines in the original, just substitute our user
 RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/loki /loki && \
-    chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING"
+    chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
+    chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
+    chown -R couchbase:couchbase /pushgateway
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
