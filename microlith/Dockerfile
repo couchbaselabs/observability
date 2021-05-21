@@ -131,9 +131,6 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 
 # Customisation for entrypoints and run as a non-root user
-RUN mkdir -p /logs && chmod 777 /logs
-WORKDIR /logs
-ENV LOGS_DIR=/logs
 COPY entrypoints/ /entrypoints/
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 COPY --from=pushgateway-official /bin/pushgateway /entrypoints/pushgateway
@@ -154,7 +151,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /pushgateway && \
-    chown -R couchbase:couchbase /logs /entrypoints
+    chown -R couchbase:couchbase /entrypoints
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
