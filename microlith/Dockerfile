@@ -84,6 +84,14 @@ RUN mkdir -p /prometheus && \
 EXPOSE     9090
 VOLUME     [ "/prometheus" ]
 
+# Add support for auto-provisioning now
+COPY grafana/provisioning/ /etc/grafana/provisioning/
+COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
+ENV GF_SECURITY_ADMIN_PASSWORD=password
+ENV GF_USERS_ALLOW_SIGN_UP=false
+
+COPY prometheus/ /etc/prometheus/
+
 # Customisation for entrypoints and run as a non-root user
 WORKDIR /entrypoints
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
