@@ -1,0 +1,20 @@
+[
+    {
+      "targets": [
+        "localhost:2020"
+      ],
+      "labels": {
+        "job": "couchbase",
+        "container": "logging"
+      }
+    },
+    {
+      "targets": [
+        "localhost:9091"
+      ],
+      "labels": {
+        "job": "couchbase",
+        "container": "monitoring"
+      }
+    }
+  ]
