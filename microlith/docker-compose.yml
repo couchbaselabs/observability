@@ -1,4 +1,6 @@
 version: "3"
+
+# Split into front-end and back-end networks although front-end is probably unnecessary
 networks:
     front:
     back:
@@ -7,6 +9,7 @@ services:
 
     # This first section is the main thrust of the microlith, it runs the all-in-one container up
     couchbase-grafana:
+        # Build if not up-to-date/present
         build: .
         container_name: couchbase-grafana
         volumes:
