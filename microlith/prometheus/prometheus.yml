@@ -21,6 +21,7 @@ alerting:
     - targets:
       - "localhost:9093"
 
+# https://github.com/prometheus/prometheus/blob/main/config/testdata/conf.good.yml
 scrape_configs:
   - job_name: 'prometheus'
     scrape_interval: 5s
@@ -44,3 +45,4 @@ scrape_configs:
     file_sd_configs:
       - files:
         - 'couchbase/targets.json'
+        refresh_interval: 30s
