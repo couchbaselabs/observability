@@ -1,3 +1,7 @@
+# This is a simple compose stack to represent an example of an on-premise deployment.
+# We run the couchbase server "stuff" as a set of containers but this is just a simulation and equivalent to running natively.
+# We then run the microlith container to monitor the couchbase cluster.
+
 version: "3"
 
 # Split into front-end and back-end networks although front-end is probably unnecessary
