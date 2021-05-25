@@ -5,7 +5,8 @@
       ],
       "labels": {
         "job": "couchbase",
-        "container": "logging"
+        "container": "logging",
+        "__metrics_path__": "/api/v1/metrics/prometheus"
       }
     },
     {

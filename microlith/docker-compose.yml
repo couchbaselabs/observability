@@ -4,6 +4,30 @@ networks:
     back:
 
 services:
+
+    # This first section is the main thrust of the microlith, it runs the all-in-one container up
+    couchbase-grafana:
+        build: .
+        container_name: couchbase-grafana
+        volumes:
+            # Mount various node exporter paths for metrics - may be superceded by Couchbase Server
+            # You can also disable node exporter usage by setting the relevant env var
+            - /proc:/host/proc:ro
+            - /sys:/host/sys:ro
+            - /:/host/rootfs:ro
+            # This location stores any dynamic Prometheus info (e.g. targets to scrape)
+            # Update as necessary and it should be automatically picked up at the next interval (5m)
+            - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw
+        networks:
+            - front
+            - back
+        ports:
+            # Grafana
+            - "3000:3000"
+            # Prometheus
+            - "9090:9090"
+
+    # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
         container_name: db1
         # image: couchbase:6.6.2
@@ -27,7 +51,7 @@ services:
 
     logging:
         container_name: logging
-        image: couchbase/fluent-bit:1.0.2
+        image: couchbase/fluent-bit:1.0.3
         ports:
             # Metrics
             - "2020:2020"
@@ -52,21 +76,6 @@ services:
             - db1
         networks:
             - back
-
-    couchbase-grafana:
-        build: .
-        container_name: couchbase-grafana
-        volumes:
-            - /proc:/host/proc:ro
-            - /sys:/host/sys:ro
-            - /:/host/rootfs:ro
-            - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw
-        networks:
-            - front
-            - back
-        ports:
-            - "3000:3000"
-            - "9090:9090"
 
 volumes:
     log-volume:
