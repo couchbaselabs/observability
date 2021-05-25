@@ -1,6 +1,7 @@
 all: build start logs
 
 clean: stop
+	-docker compose rm --force --stop -v
 	-docker rmi couchbase-observability:latest
 
 container-image:
@@ -10,10 +11,10 @@ build: clean
 	docker compose build
 
 start:
-	docker compose up -d
+	docker compose up -d --force-recreate
 
 stop:
-	docker compose down
+	docker compose down -v --remove-orphans
 
 logs:
 	docker compose logs

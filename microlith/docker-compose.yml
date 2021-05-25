@@ -14,9 +14,17 @@ services:
         volumes:
             - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
         networks:
-            back:
-                aliases:
-                    - couchbase1.compose.local
+            - back
+
+    permission-fixer:
+        image: bash
+        # CB server forces this on us as the permissions for the rebalance directory as well as logs are not for all
+        # https://issues.couchbase.com/browse/MB-46485
+        command: sh -c "mkdir -p /opt/couchbase/var/lib/couchbase/logs/rebalance; while true; do sleep 10;chmod -R a+r /opt/couchbase/var/lib/couchbase/logs/; done"
+        user: root
+        volumes:
+            - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
+
     logging:
         container_name: logging
         image: couchbase/fluent-bit:1.0.2
@@ -25,7 +33,6 @@ services:
             - "2020:2020"
         depends_on:
             - db1
-            - couchbase-grafana
         environment:
             - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
         volumes:
@@ -37,10 +44,12 @@ services:
     exporter:
         container_name: exporter
         image: couchbase/exporter:1.0.4
-        depends_on:
-            - db1
         command:
             - '--couchbase-address=db1'
+        ports:
+            - "9091:9091"
+        depends_on:
+            - db1
         networks:
             - back
 
@@ -51,17 +60,13 @@ services:
             - /proc:/host/proc:ro
             - /sys:/host/sys:ro
             - /:/host/rootfs:ro
-        expose:
-            - 3000
-            - 3100
-            - 9090
-            - 9093
-            - 9100
+            - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw
         networks:
             - front
             - back
         ports:
             - "3000:3000"
+            - "9090:9090"
 
 volumes:
     log-volume:

@@ -1,7 +1,7 @@
 [
     {
       "targets": [
-        "localhost:2020"
+        "logging:2020"
       ],
       "labels": {
         "job": "couchbase",
@@ -10,7 +10,7 @@
     },
     {
       "targets": [
-        "localhost:9091"
+        "exporter:9091"
       ],
       "labels": {
         "job": "couchbase",
