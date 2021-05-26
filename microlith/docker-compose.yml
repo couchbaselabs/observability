@@ -34,6 +34,15 @@ services:
             # Prometheus
             - "9090:9090"
 
+    # This should go into the microlith
+    cluster-monitor:
+        build: ../cluster-manager/
+        container_name: cluster-monitor
+        networks:
+            - back
+        ports:
+            - "7196-7197:7196-7197"
+
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
         container_name: db1

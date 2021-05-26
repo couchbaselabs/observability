@@ -19,11 +19,11 @@ WORKDIR /src/github.com/couchbaselabs/cbmultimanager
 ENV CGO_ENABLED=1
 ENV GO111MODULE=on
 RUN go mod download
-RUN go build -o ./build/cbmultimanager ./cmd/cbmultimanager
-RUN go build -o ./build/cbeventlog ./cmd/cbeventlog
+RUN go build -o /bin/cbmultimanager ./cmd/cbmultimanager
+RUN go build -o /bin/cbeventlog ./cmd/cbeventlog
 
 # FROM alpine:3.13
-# COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/cmd/cbmultimanager /bin/cbmultimanager
+# COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
 # RUN chmod a+x /bin/cbmultimanager
 
 # RUN apk add --no-cache openssl sqlcipher && \
@@ -33,5 +33,8 @@ COPY --from=cert-generator /certs/ /priv/
 
 EXPOSE 7196 7197
 
-ENTRYPOINT [ "./build/cbmultimanager" ]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod a+x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "--sqlite-db", "/data/data.sqlite", "--sqlite-key", "password", "--cert-path", "/priv/server.crt", "--key-path", "/priv/server.key", "-log-level", "debug" ]
