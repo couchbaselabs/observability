@@ -46,3 +46,11 @@ scrape_configs:
       - files:
         - 'couchbase/targets.json'
         refresh_interval: 30s
+  - job_name: 'couchbase-cluster'
+    basic_auth:
+      username: admin
+      password: password
+    scrape_interval: 10s
+    metrics_path: /api/v1/_prometheus
+    static_configs:
+      - targets: ['cluster-monitor:7196']

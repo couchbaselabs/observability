@@ -17,15 +17,5 @@
         "job": "couchbase",
         "container": "monitoring"
       }
-    },
-    {
-      "targets": [
-        "cluster-monitor:7196"
-      ],
-      "labels": {
-        "job": "couchbase",
-        "container": "cluster-monitor",
-        "__metrics_path__": "/api/v1/metrics/_prometheus"
-      }
     }
 ]
