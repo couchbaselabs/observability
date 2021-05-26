@@ -1,0 +1,60 @@
+<div class="dialog-med">
+  <div class="panel-header">
+    <h2>Add Remote Cluster</h2>
+    <a class="ui-dialog-titlebar-close modal-close" (click)="activeModal.dismiss('X')">X</a>
+  </div>
+  <div class="panel-content forms">
+    <form id="editRemoteCluster" [formGroup]="updateClusterForm"
+      (ngSubmit)="submitForm()" class="margin-top-half">
+      <div class="formrow">
+        <div class="row">
+          <label>Host</label>
+        </div>
+        <input
+          type="url"
+          formControlName="host"
+          autocapitalize="off"
+          placeholder="Host">
+      </div>
+        <div class="formrow">
+          <div class="row">
+            <label>User</label>
+          </div>
+          <input
+            type="text"
+            autocapitalize="off"
+            formControlName="user"
+            placeholder="Username"
+            spellcheck="off">
+        </div>
+        <div class="formrow">
+          <div class="row">
+            <label>Password</label>
+          </div>
+          <input type="password" formControlName="password" placeholder="Password">
+        </div>
+    </form>
+    <div class="error word-wrap margin-top-1" *ngIf="updateClusterForm.errors?.atLeastOneRequired">
+      At least host or user and password required.
+    </div>
+    <div class="error word-wrap margin-top-1" *ngIf="updateClusterForm.errors?.userAndPasswordRequired">
+      User and password have to be provided together.
+    </div>
+    <div class="error word-wrap margin-top-1" *ngIf="submitErr">{{submitErr}}</div>
+  </div>
+  <div class="panel-footer">
+    <a (click)="activeModal.dismiss()">Cancel</a>
+    <button
+      type="submit"
+      form="editRemoteCluster"
+      class="btn btn-outline-dark"
+      [disabled]="updateClusterForm.invalid">
+      <div class="button-spinner" *ngIf="submitting;else addSpan">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <ng-template #addSpan>Add</ng-template>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+<div class="zero-content row flex-wrap items-space-around margin-bottom-1">
+  <div class="row" *ngIf="cluster.heart_beat_issue">
+    <i
+    class="icon fa-heartbeat fa-2x red-0"
+    placement="bottom"
+    [ngbTooltip]="heartBeatMessage(cluster.heart_beat_issue)"></i>
+  </div>
+  <div class="row">
+    <span class="margin-right-half text-larger">{{
+      cluster.nodes_summary.length
+    }}</span>
+    <i class="icon fa-database fa-2x"></i>
+  </div>
+  <div class="row" *ngIf="runningCheckers()">
+    <span class="margin-right-half text-larger">{{getPending()}}</span>
+    <i class="icon fa-spinner fa-2x animated-spin"></i>
+  </div>
+  <div class="row">
+    <span class="margin-right-half text-larger">{{
+      count.get("alert") || 0
+    }}</span>
+    <i class="icon fa-exclamation-circle fa-2x red-0"></i>
+  </div>
+  <div class="row">
+    <span class="margin-right-half text-larger">{{
+      count.get("warn") || 0
+    }}</span>
+    <i class="icon fa-exclamation-triangle fa-2x orange-0"></i>
+  </div>
+  <div class="row">
+    <span class="margin-right-half text-larger">{{
+      count.get("good") || 0
+    }}</span>
+    <i class="icon fa-check-circle fa-2x green-0"></i>
+  </div>
+</div>
