@@ -1,5 +1,5 @@
-#!/bin/bash
-set -x
+#!/usr/bin/env bash
+set -ex
 CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}

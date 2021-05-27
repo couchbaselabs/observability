@@ -13,26 +13,23 @@ RUN apt-get update && \
 
 COPY repo/ /src/github.com/couchbaselabs/cbmultimanager/
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
-ENV CGO_ENABLED=1
-ENV GO111MODULE=on
-RUN go mod download
-RUN go build -o /bin/cbmultimanager ./cmd/cbmultimanager
-RUN go build -o /bin/cbeventlog ./cmd/cbeventlog
+RUN go mod download && mkdir -p /bin
+# Statically build it properly
+RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager
 
-# For Alpine we need to look at the sqlcipher dependency and slim things down to the minimum
-# FROM alpine:3.13
-# COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
-# RUN chmod a+x /bin/cbmultimanager
-
-# RUN apk add --no-cache openssl sqlcipher && \
+FROM alpine:3.13
+RUN apk add --no-cache tini bash curl
+ENV TINI_SUBREAPER=
 
 RUN mkdir -p /data /priv
 COPY --from=cert-generator /certs/ /priv/
 
-EXPOSE 7196 7197
+COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
+RUN chmod a+x /bin/cbmultimanager
 
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod a+x /entrypoint.sh
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+EXPOSE 7196 7197
+ENTRYPOINT [ "/sbin/tini", "--", "/entrypoint.sh" ]
 CMD [ "--sqlite-db", "/data/data.sqlite", "--sqlite-key", "password", "--cert-path", "/priv/server.crt", "--key-path", "/priv/server.key", "-log-level", "debug" ]
