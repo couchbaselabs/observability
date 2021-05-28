@@ -154,7 +154,8 @@ RUN mkdir -p /data /priv && \
     openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" -addext "subjectAltName=DNS:couchbase.com" -newkey rsa:2048 -keyout /priv/server.key -out /priv/server.crt;
 
 COPY --from=healthcheck-builder /bin/cbmultimanager /bin/cbmultimanager
-RUN chmod a+x /bin/cbmultimanager
+COPY --from=healthcheck-builder /bin/cbeventlog /bin/cbeventlog
+RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
 EXPOSE 7196 7197
 
@@ -178,6 +179,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /pushgateway && \
+    chown -R couchbase:couchbase /data /priv && \
     chown -R couchbase:couchbase /entrypoints
 
 USER       $CB_UID

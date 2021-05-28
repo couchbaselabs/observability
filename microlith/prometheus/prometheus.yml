@@ -53,4 +53,4 @@ scrape_configs:
     scrape_interval: 10s
     metrics_path: /api/v1/_prometheus
     static_configs:
-      - targets: ['cluster-monitor:7196']
+      - targets: ['localhost:7196']
