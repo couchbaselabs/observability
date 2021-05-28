@@ -11,11 +11,11 @@ RUN apt-get update && \
     apt-get install -y sqlcipher libssl-dev openssl openssh-client git && \
     rm -rf /var/lib/apt/lists/*
 
-# Support cloning the private repo, unfortunately no real buildkit or good option for compose
-# For a proper build we should use the secret injection via buildkit ssh mounts
-ARG GITHUB_TOKEN
-RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ /bin && \
-    git clone --depth 1 https://${GITHUB_TOKEN}@github.com/couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
+RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ /bin
+
+# Support cloning the private repo
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
 
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
 

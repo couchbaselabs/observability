@@ -13,11 +13,10 @@ services:
 
     # This first section is the main thrust of the microlith, it runs the all-in-one container up
     couchbase-grafana:
-        # Build if not up-to-date/present
-        build: .
+        # Build using build kit so we can do ssh mounts for private repo, do not build here
+        # build: .
+        image: couchbase-observability:latest
         container_name: couchbase-grafana
-        environment:
-            - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
         volumes:
             # Mount various node exporter paths for metrics - may be superceded by Couchbase Server
             # You can also disable node exporter usage by setting the relevant env var
