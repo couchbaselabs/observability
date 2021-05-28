@@ -5,10 +5,29 @@ FROM prom/alertmanager:v0.22.1 as alertmanager-official
 FROM prom/pushgateway:v1.4.0 as pushgateway-official
 FROM prom/node-exporter:v1.1.2 as node-exporter-official
 
+FROM golang:1.16 as healthcheck-builder
+
+RUN apt-get update && \
+    apt-get install -y sqlcipher libssl-dev openssl openssh-client git && \
+    rm -rf /var/lib/apt/lists/*
+
+# Support cloning the private repo, unfortunately no real buildkit or good option for compose
+# For a proper build we should use the secret injection via buildkit ssh mounts
+ARG GITHUB_TOKEN
+RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ /bin && \
+    git clone --depth 1 https://${GITHUB_TOKEN}@github.com/couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
+
+WORKDIR /src/github.com/couchbaselabs/cbmultimanager
+
+# Statically build it to allow reuse on Alpine Linux
+RUN go mod download
+RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager
+RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
+
 # Combined image
 FROM alpine:3.13
 
-RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata
+RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
@@ -130,12 +149,20 @@ ENV GF_USERS_ALLOW_SIGN_UP=false
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 
+# Couchbase healthcheck
+RUN mkdir -p /data /priv && \
+    openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" -addext "subjectAltName=DNS:couchbase.com" -newkey rsa:2048 -keyout /priv/server.key -out /priv/server.crt;
+
+COPY --from=healthcheck-builder /bin/cbmultimanager /bin/cbmultimanager
+RUN chmod a+x /bin/cbmultimanager
+
+EXPOSE 7196 7197
+
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 COPY --from=pushgateway-official /bin/pushgateway /entrypoints/pushgateway
 
-RUN apk add --no-cache tini
 ENV TINI_SUBREAPER=
 COPY run.sh /run.sh
 RUN chmod a+x /run.sh /entrypoints/*

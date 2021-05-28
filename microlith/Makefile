@@ -5,7 +5,7 @@ clean: stop
 	-docker rmi couchbase-observability:latest
 
 container-image:
-	docker build -t couchbase-observability:latest -f Dockerfile .
+	docker build --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} -t couchbase-observability:latest -f Dockerfile .
 
 build: clean
 	docker compose build

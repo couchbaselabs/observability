@@ -1,9 +1,0 @@
-tags
-.envrc
-.idea/
-build/
-data/
-priv/
-ui/.vscode/settings.json
-logs/
-.vscode/

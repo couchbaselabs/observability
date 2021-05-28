@@ -16,6 +16,8 @@ services:
         # Build if not up-to-date/present
         build: .
         container_name: couchbase-grafana
+        environment:
+            - SSH_PRIVATE_KEY=${SSH_PRIVATE_KEY}
         volumes:
             # Mount various node exporter paths for metrics - may be superceded by Couchbase Server
             # You can also disable node exporter usage by setting the relevant env var
@@ -33,14 +35,7 @@ services:
             - "3000:3000"
             # Prometheus
             - "9090:9090"
-
-    # This should go into the microlith
-    cluster-monitor:
-        build: ../cluster-manager/
-        container_name: cluster-monitor
-        networks:
-            - back
-        ports:
+            # Healthcheck
             - "7196-7197:7196-7197"
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
