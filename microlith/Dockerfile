@@ -1,7 +1,7 @@
 FROM grafana/grafana:7.5.2 as grafana-official
 FROM grafana/loki:2.0.0 as loki-official
-FROM prom/prometheus as prometheus-official
-FROM prom/alertmanager as alertmanager-official
+FROM prom/prometheus:v2.27.1 as prometheus-official
+FROM prom/alertmanager:v0.22.1 as alertmanager-official
 FROM prom/pushgateway:v1.4.0 as pushgateway-official
 FROM prom/node-exporter:v1.1.2 as node-exporter-official
 

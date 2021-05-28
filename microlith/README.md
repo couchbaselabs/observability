@@ -14,3 +14,5 @@ docker container port couchbase-grafana 3000
 Browse to `localhost:55124` and log in with the default creds of `admin:password` for Grafana.
 
 You can disable each of the tools using a `-e DISABLE_XXX=` to set an environment variable named `DISABLE_<tool>` for each.
+
+Add additional clusters by running up a new Couchbase Server image and either attaching it to an existing cluster or creating a new one.
