@@ -36,6 +36,8 @@ services:
             - "9090:9090"
             # Healthcheck
             - "7196-7197:7196-7197"
+            # Fluent bit forwarding
+            - "24224:24224"
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
@@ -71,7 +73,7 @@ services:
             - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
         volumes:
             - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
-            - ./fluent-bit.conf:/fluent-bit/config/fluent-bit.conf:ro
+            - ./fluent-bit.conf.server:/fluent-bit/config/fluent-bit.conf:ro
         networks:
             - back
 
