@@ -10,6 +10,23 @@
     Alias file_replication_input_microlith
     Port 24224
 
+[INPUT]
+    Name tail
+    Alias tail_event_log_microlith
+    Path /opt/couchbase/var/lib/couchbase/logs/db1/events_db1.log
+    Path_Key filename
+    Offset_Key offset
+    Parser json
+    Skip_Long_Lines On
+    Refresh_Interval 10
+    Tag eventlog
+
+# Update tags so we can use for output
+[FILTER]
+    name rewrite_tag
+    match couchbase.log.*
+    Rule $filename ^(.*)$ $filename false
+
 [OUTPUT]
     name  stdout
     alias stdout_microlith

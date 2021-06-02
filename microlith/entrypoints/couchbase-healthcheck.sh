@@ -24,7 +24,9 @@ curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "
 # Now we can run a command that receives files from fluent bit, zips them up and calls cbeventlog on it periodically
 while true; do
     sleep 10
-    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --cluster "${COUCHBASE_ENDPOINT}" --node-name db1
+    # TODO: replace with usage of replicated logs
+    mkdir -p /opt/couchbase/var/lib/couchbase/logs/db1
+    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1 --log-path /opt/couchbase/var/lib/couchbase/logs/db1/
 done
 
 wait -n

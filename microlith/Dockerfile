@@ -41,8 +41,8 @@ RUN git apply *.patch && \
 		-DFLB_CORO_STACK_SIZE=24576 \
         -DFLB_RELEASE=On \
         -DFLB_SHARED_LIB=No \
-		-DFLB_TESTS_INTERNAL=Yes \
-		-DFLB_TESTS_RUNTIME=Yes \
+		-DFLB_TESTS_INTERNAL=No \
+		-DFLB_TESTS_RUNTIME=No \
 		-DFLB_TLS=Yes \
 		-DFLB_HTTP_SERVER=Yes \
          . && \
@@ -51,7 +51,7 @@ RUN git apply *.patch && \
 # Combined image
 FROM alpine:3.13
 
-RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl gcc fts
+RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
@@ -186,6 +186,8 @@ EXPOSE 7196 7197
 # Golang Fluent Bit
 COPY --from=fluentbit-builder /fluent-bit/ fluent-bit/
 COPY fluent-bit/fluent-bit.conf.microlith /fluent-bit/etc/fluent-bit.conf
+RUN mkdir -p /opt/couchbase/var/lib/couchbase/logs/ && chmod 777 /opt/couchbase/var/lib/couchbase/logs/
+ENV COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/
 EXPOSE 22020
 
 # Customisation for entrypoints and run as a non-root user
@@ -209,6 +211,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /pushgateway && \
     chown -R couchbase:couchbase /data /priv && \
+    chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
     chown -R couchbase:couchbase /entrypoints
 
 USER       $CB_UID
