@@ -21,12 +21,11 @@ done
 sleep 60
 curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
 
-# Now we can run a command that receives files from fluent bit, zips them up and calls cbeventlog on it periodically
+# TODO: replace with usage of replicated logs or move to fluent bit itself and send to loki: https://github.com/couchbaselabs/cbmultimanager/issues/33
+mkdir -p /opt/couchbase/var/lib/couchbase/logs/db1 && cd /opt/couchbase/var/lib/couchbase/logs/db1/
 while true; do
     sleep 10
-    # TODO: replace with usage of replicated logs
-    mkdir -p /opt/couchbase/var/lib/couchbase/logs/db1
-    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1 --log-path /opt/couchbase/var/lib/couchbase/logs/db1/
+    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1 #--log-path /opt/couchbase/var/lib/couchbase/logs/db1/
 done
 
 wait -n

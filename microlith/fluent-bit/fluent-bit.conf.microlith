@@ -25,7 +25,14 @@
 [FILTER]
     name rewrite_tag
     match couchbase.log.*
+    # TODO: we should use hostname here to create sub-directories or similar
     Rule $filename ^(.*)$ $filename false
+
+[FILTER]
+    Name    modify
+    Match_regex eventlog
+    Condition Key_Does_Not_Exist level
+    Set level INFO
 
 [OUTPUT]
     name  stdout
@@ -35,6 +42,16 @@
 [OUTPUT]
     name  file
     Alias file_output_microlith
+    # TODO: Filter out the local event log
     match *
     format template
     template {log}
+
+[OUTPUT]
+    name loki
+    alias loki_microlith
+    match eventlog
+    host couchbase-grafana
+    labels job=couchbase-microlith
+    label_keys $filename
+    Retry_limit 0
