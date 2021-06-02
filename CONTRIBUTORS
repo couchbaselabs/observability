@@ -1,0 +1,8 @@
+Portions of this project reuse the following components:
+* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
+* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
+* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
+* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
+* Push Gateway: Apache 2.0 https://github.com/prometheus/pushgateway/blob/master/LICENSE
+* Node Exporter: Apache 2.0 https://github.com/prometheus/node_exporter/blob/master/LICENSE
+* Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE

@@ -63,8 +63,15 @@ TBD - using the same approach as the PLG stack to pull apart the microlith and j
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
-# Outstanding issues
+# Feedback
+Please raise issues directly on this Github repository.
 
-* Configuration of the credentials required.
-* Event log changes to provide node level information directly from files.
-* Documentation and tutorials
+# Support
+No official support is currently provided, this is purely an example implementation.
+
+# Release tagging and branching
+Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbaselabs/observability/tags will have a matching tag in this repository that built them.
+Updates will be pushed to the `main` branch often and then tagged once released as a new image version.
+Tags will not be moved after release, even just for a documentation update - this should trigger a new release or just be available as the latest version on `main`.
+
+The branching strategy is to minimise any branches other than `main` following the standard [GitHub flow model](https://guides.github.com/introduction/flow/).
