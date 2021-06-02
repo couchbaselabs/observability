@@ -1,7 +1,5 @@
 # Observability
 
-A work in progress, not intended for use by anyone or supported in any way.
-
 The intention of this repository is to provide a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster.
 * An additional requirement is to ensure we can integrate into existing observability pipelines people may already have as easily as possible.
 * This must all support being deployed on-premise and on cloud platforms with minimal change.
@@ -72,7 +70,7 @@ For those customers who want to scale up the deployment and/or follow a more clo
 Please raise issues directly on this Github repository.
 
 # Support
-No official support is currently provided, this is purely an example implementation.
+No official support is currently provided but best efforts will be made.
 
 # Release tagging and branching
 Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbaselabs/observability/tags will have a matching tag in this repository that built them.
