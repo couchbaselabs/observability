@@ -51,7 +51,7 @@ RUN git apply *.patch && \
 # Combined image
 FROM alpine:3.13
 
-RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl
+RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl gcc fts
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
@@ -186,7 +186,7 @@ EXPOSE 7196 7197
 # Golang Fluent Bit
 COPY --from=fluentbit-builder /fluent-bit/ fluent-bit/
 COPY fluent-bit/fluent-bit.conf.microlith /fluent-bit/etc/fluent-bit.conf
-EXPOSE 2020
+EXPOSE 22020
 
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/

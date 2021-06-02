@@ -6,7 +6,6 @@ clean: stop
 
 container-image:
 	DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:latest -f Dockerfile .
-	DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability-logger:latest -f fluent-bit/Dockerfile fluent-bit/
 
 build: clean container-image
 

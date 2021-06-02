@@ -2,17 +2,22 @@
     flush        1
     grace        2
     log_level    debug
+    HTTP_Server  On
+    HTTP_Port    22020
 
 [INPUT]
     Name forward
+    Alias file_replication_input_microlith
     Port 24224
 
 [OUTPUT]
     name  stdout
+    alias stdout_microlith
     match *
 
 [OUTPUT]
     name  file
+    Alias file_output_microlith
     match *
     format template
     template {log}

@@ -22,6 +22,9 @@ sleep 60
 curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
 
 # Now we can run a command that receives files from fluent bit, zips them up and calls cbeventlog on it periodically
-
+while true; do
+    sleep 10
+    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --cluster "${COUCHBASE_ENDPOINT}" --node-name db1
+done
 
 wait -n

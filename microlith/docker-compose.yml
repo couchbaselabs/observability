@@ -32,6 +32,8 @@ services:
         ports:
             # Grafana
             - "3000:3000"
+            # Loki
+            - "3100:3100"
             # Prometheus
             - "9090:9090"
             # Healthcheck
@@ -39,7 +41,7 @@ services:
             # Fluent bit forwarding
             - "24224:24224"
             # Fluent bit metrics (if set up)
-            - "22020:2020"
+            - "22020:22020"
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
@@ -71,6 +73,7 @@ services:
             - "2020:2020"
         depends_on:
             - db1
+            - couchbase-grafana
         environment:
             - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
         volumes:

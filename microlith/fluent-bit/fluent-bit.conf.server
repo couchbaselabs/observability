@@ -1,5 +1,6 @@
-#@include /fluent-bit/etc/fluent-bit.conf
 @include /fluent-bit/etc/couchbase/service.conf
+    HTTP_Port    2020
+
 @include /fluent-bit/etc/couchbase/in-audit-log.conf
 @include /fluent-bit/etc/couchbase/in-xdcr-log.conf
 @include /fluent-bit/etc/couchbase/in-indexer-projector-log.conf
@@ -10,8 +11,6 @@
 @include /fluent-bit/etc/couchbase/in-http-log.conf
 @include /fluent-bit/etc/couchbase/in-rebalance-report.conf
 
-
-
 # DISABLE if not in K8S:
 # Add in common info
 # @include /fluent-bit/etc/couchbase/filter-add-common-info.conf
@@ -19,26 +18,12 @@
 @include /fluent-bit/etc/couchbase/filter-handle-levels.conf
 @include /fluent-bit/etc/couchbase/out-stdout.conf
 
-# Special test failure generators
-[INPUT]
-    Name Dummy
-    Alias slowops_dummy
-    Tag couchbase.log.slow
-    Dummy {"filename":"/opt/couchbase/var/lib/couchbase/logs/babysitter.log", "logger":"ns_server", "level":"WARNING", "message":"Slow scheduling for NON_IO task 'SheCannaeTakeItCapn'"}
-    Rate 0.1
-
-[INPUT]
-    Name Dummy
-    Alias memstats_dummy
-    Tag couchbase.log.memstats
-    Dummy {"filename":"/opt/couchbase/var/lib/couchbase/logs/indexer.log", "level":"info", "Alloc":112660432, "TotalAlloc":4708685015712, "Sys":244970440, "Lookups":10242641, "Mallocs":83383067679,"Frees":83382470478, "HeapAlloc":112660432, "HeapSys":227213312, "HeapIdle":90202112, "HeapInuse":137011200,"HeapReleased":44335104, "HeapObjects":597201,"GCSys":8876032, "LastGC":1582843054136758992,"PauseTotalNs":125227311529, "PauseNs":[1044934, 1057989], "NumGC":61939}
-    Rate 1
-
 # Send to loki: refer to configuration guide
 # Do not make too many labels: https://grafana.com/blog/2020/08/27/the-concise-guide-to-labels-in-loki/
 # Do the work in Loki later via queries
 [OUTPUT]
     name loki
+    alias loki_server
     match *
     host couchbase-grafana
     labels job=couchbase-fluentbit
@@ -48,8 +33,9 @@
 # Send to file replicator
 [OUTPUT]
     name forward
+    alias file_replication_output_server
     match *
-    host localhost
+    host couchbase-grafana
     Port 24224
     Require_ack_response true
     Retry_limit 0
