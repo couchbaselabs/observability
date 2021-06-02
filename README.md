@@ -13,6 +13,17 @@ We essentially need to support two fairly distinct types of user:
 1. Those who have nothing and just want a simple working solution to monitor their cluster.
 2. Those who have an existing monitoring pipeline and want to integrate Couchbase monitoring into it, likely with a set of custom rules and configuration.
 
+## Components
+
+* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
+* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
+* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
+* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
+* Push Gateway: Apache 2.0 https://github.com/prometheus/pushgateway/blob/master/LICENSE
+* Node Exporter: Apache 2.0 https://github.com/prometheus/node_exporter/blob/master/LICENSE
+* Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
+* Couchbase Healthcheck: Proprietary/TBC
+
 # Architecture
 
 A Grafana-based stack has been selected for a few reasons:
@@ -56,3 +67,4 @@ For those customers who want to scale up the deployment and/or follow a more clo
 
 * Configuration of the credentials required.
 * Event log changes to provide node level information directly from files.
+* Documentation and tutorials
