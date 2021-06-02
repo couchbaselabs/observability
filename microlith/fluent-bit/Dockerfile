@@ -21,6 +21,5 @@ COPY --from=healthcheck-builder /bin/cbeventlog /fluent-bit/bin/cbeventlog
 COPY entrypoint.sh /entrypoint.sh
 COPY fluent-bit.conf.server /fluent-bit/config/fluent-bit.conf
 
-RUN chmod a+x /fluent-bit/bin/cbeventlog /entrypoint.sh
 EXPOSE 2020
 CMD [ "/entrypoint.sh" ]
