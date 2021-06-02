@@ -59,7 +59,7 @@ For full details refer to the [microlith](microlith/README.md) sub-directory.
 
 # Distributed deployment
 
-TBD - using the same approach as the PLG stack to pull apart the microlith and just provide the configuration to the distributed components.
+TBD: https://github.com/couchbaselabs/observability/issues/6
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
