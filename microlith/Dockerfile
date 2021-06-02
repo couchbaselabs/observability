@@ -24,6 +24,30 @@ RUN go mod download
 RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager
 RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
 
+FROM alpine:3.13 as fluentbit-builder
+RUN apk add --no-cache build-base gcc abuild binutils cmake git flex bison fts-dev gtest-dev zlib-dev
+
+ARG FLUENT_BIT_VER=1.7.7
+RUN mkdir -p /src/fluent-bit && \
+    git clone --depth 1 --branch v${FLUENT_BIT_VER} https://github.com/fluent/fluent-bit.git /src/fluent-bit
+
+WORKDIR /src/fluent-bit
+
+COPY fluent-bit/*.patch ./
+RUN git apply *.patch && \
+    cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/fluent-bit \
+		-DCMAKE_BUILD_TYPE=None \
+		-DFLB_CORO_STACK_SIZE=24576 \
+        -DFLB_RELEASE=On \
+        -DFLB_SHARED_LIB=No \
+		-DFLB_TESTS_INTERNAL=Yes \
+		-DFLB_TESTS_RUNTIME=Yes \
+		-DFLB_TLS=Yes \
+		-DFLB_HTTP_SERVER=Yes \
+         . && \
+    make -C build install
+
 # Combined image
 FROM alpine:3.13
 
@@ -158,6 +182,11 @@ COPY --from=healthcheck-builder /bin/cbeventlog /bin/cbeventlog
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
 EXPOSE 7196 7197
+
+# Golang Fluent Bit
+COPY --from=fluentbit-builder /fluent-bit/ fluent-bit/
+COPY fluent-bit/fluent-bit.conf.microlith /fluent-bit/etc/fluent-bit.conf
+EXPOSE 2020
 
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/

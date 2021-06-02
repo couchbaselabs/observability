@@ -45,11 +45,11 @@
     label_keys $filename,$level
     Retry_limit 0
 
-# # Send to file replicator
-# [OUTPUT]
-#     name forward
-#     match *
-#     host localhost
-#     Port 24224
-#     Require_ack_response true
-#     Retry_limit 0
+# Send to file replicator
+[OUTPUT]
+    name forward
+    match *
+    host localhost
+    Port 24224
+    Require_ack_response true
+    Retry_limit 0
