@@ -63,6 +63,11 @@ TBD - using the same approach as the PLG stack to pull apart the microlith and j
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
+# Caveats and restrictions
+
+* No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
+* Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
+
 # Feedback
 Please raise issues directly on this Github repository.
 
