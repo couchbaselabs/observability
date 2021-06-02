@@ -55,6 +55,8 @@ A single container can then be run on-premise or on a Kubernetes platform very e
 
 Whilst on-premise customers may primarily be using native binaries, all supported OS's for Couchbase Server can run containers easily. This also makes it easier to deploy as a self-contained image and easy to upgrade as well. We could produce an OS-specific package (e.g. RPM) with all necessary dependencies on the container runtime.
 
+For full details refer to the [microlith](microlith/README.md) sub-directory.
+
 # Distributed deployment
 
 TBD - using the same approach as the PLG stack to pull apart the microlith and just provide the configuration to the distributed components.
