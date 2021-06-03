@@ -57,6 +57,21 @@ Whilst on-premise customers may primarily be using native binaries, all supporte
 
 For full details refer to the [microlith](microlith/README.md) sub-directory.
 
+## Customisation
+
+Areas to support customisation:
+* Dashboards
+  * Support providing bespoke dashboards directly by specifying at runtime.
+* Alerting rules
+  * Provide our own alert rules
+  * Tweak the configuration for existing ones deployed
+  * Disable or inhibit default rules we provide
+* Cluster credentials and identities
+  * Support adding new cluster nodes easily
+  * Support fully dynamic credentials and discovery (no need to restart to pick up a change)
+
+In all cases we do not want to have to rebuild anything to customise it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
+
 # Distributed deployment
 
 TBD: https://github.com/couchbaselabs/observability/issues/6
