@@ -26,6 +26,8 @@ services:
             # This location stores any dynamic Prometheus info (e.g. targets to scrape)
             # Update as necessary and it should be automatically picked up at the next interval (5m)
             - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw
+            # This location stores any dynamic Healthcheck configuration
+            - ./dynamic/healthcheck/:/etc/healthcheck/:rw
         networks:
             - front
             - back

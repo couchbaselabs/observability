@@ -73,6 +73,19 @@ The cluster monitor currently requires configuration via a bespoke REST API:
 * CLUSTER_MONITOR_ENDPOINT is the mapping to port 7196 of the container we started, e.g. `http://localhost:7196`. In the container run line above we map to dynamic ports so grab them using `docker container port couchbase-grafana 7196` and use that value in the URL.
 * CLUSTER_MONITOR_USER & CLUSTER_MONITOR_PWD are the credentials for the cluster monitor tool, defaults to a `admin:password` but can be set differently using these variables when launching the container.
 
+As an example to configure a new cluster node to be monitored:
+```
+CLUSTER_MONITOR_USER=admin
+CLUSTER_MONITOR_PWD=password
+CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port couchbase-grafana 7196)
+COUCHBASE_USER=Administrator
+COUCHBASE_PWD=password
+COUCHBASE_ENDPOINT=http://db2:8091
+curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
+```
+We can also run with a directory containing shell scripts that do the above: `-v $PWD/microlith/dynamic/healthcheck/:/etc/healthcheck/`
+This will be re-scanned periodically and any scripts in it run.
+
 ## Customisation
 
 Areas to support customisation:

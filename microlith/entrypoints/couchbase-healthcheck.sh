@@ -19,11 +19,22 @@ done
 
 # Configure clusters to monitor - unfortunately you have to wait for the couchbase endpoint to come up
 sleep 60
-curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
 
-# TODO: replace with usage of replicated logs or move to fluent bit itself and send to loki: https://github.com/couchbaselabs/cbmultimanager/issues/33
+# Issue with using --log-path: https://github.com/couchbaselabs/cbmultimanager/issues/39
 mkdir -p /opt/couchbase/var/lib/couchbase/logs/db1 && cd /opt/couchbase/var/lib/couchbase/logs/db1/
+
 while true; do
+    # Periodically we scan for stuff to do, e.g. register new clusters
+    if [[ -d /etc/healthcheck/ ]]; then
+        for SCRIPT in /etc/healthcheck/*.sh; do
+            [[ ! -f $SCRIPT ]] && continue
+            echo "Using dynamic script: $SCRIPT"
+            /bin/bash "$SCRIPT"
+        done
+    fi
+
+    # Run the event log generator
+    # TODO: replace with usage of replicated logs or move to fluent bit itself and send to loki: https://github.com/couchbaselabs/cbmultimanager/issues/33
     sleep 10
     /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1 #--log-path /opt/couchbase/var/lib/couchbase/logs/db1/
 done
