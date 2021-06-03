@@ -4,10 +4,9 @@ clean: stop
 	-docker compose rm --force --stop -v
 	-docker rmi couchbase-observability:latest
 
-container-image:
-	DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:latest -f Dockerfile .
 
-build: clean container-image
+build: clean
+	DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:latest -f ../../microlith/Dockerfile ../../microlith/
 
 start:
 	docker compose up -d --force-recreate

@@ -80,7 +80,7 @@ services:
             - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
         volumes:
             - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
-            - ./fluent-bit/fluent-bit.conf.server:/fluent-bit/config/fluent-bit.conf:ro
+            - ../../microlith/fluent-bit/fluent-bit.conf.server:/fluent-bit/config/fluent-bit.conf:ro
         networks:
             - back
 

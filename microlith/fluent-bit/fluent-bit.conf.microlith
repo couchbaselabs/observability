@@ -51,7 +51,7 @@
     name loki
     alias loki_microlith
     match eventlog
-    host couchbase-grafana
+    host localhost
     labels job=couchbase-microlith
     label_keys $filename
     Retry_limit 0
