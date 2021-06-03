@@ -59,6 +59,8 @@ For full details refer to the [microlith](microlith/README.md) sub-directory.
 
 ## On-premise usage
 
+A working example is [provided](examples/native/) based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
+
 The basic steps are:
 1. Install a container runtime for your platform, for example on Ubuntu details are here: https://docs.docker.com/engine/install/ubuntu/
 2. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P -e DISABLE_NODE-EXPORTER -v $PWD/microlith/dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/ couchbase-observability`
