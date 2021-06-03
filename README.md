@@ -57,18 +57,34 @@ Whilst on-premise customers may primarily be using native binaries, all supporte
 
 For full details refer to the [microlith](microlith/README.md) sub-directory.
 
+## On-premise usage
+
+The basic steps are:
+1. Install a container runtime for your platform, for example on Ubuntu details are here: https://docs.docker.com/engine/install/ubuntu/
+2. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P -e DISABLE_NODE-EXPORTER -v $PWD/microlith/dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/ couchbase-observability`
+3. Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.
+
+Prometheus end points and credentials can be added to the [config file](microlith/dynamic/prometheus/couchbase/targets.json) mounted into the container above. This is periodically rescanned and new end points added.
+
+The cluster monitor currently requires configuration via a bespoke REST API:
+`curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"`
+* COUCHBASE_ENDPOINT should be set to a node that you want to monitor in a Couchbase cluster.
+* COUCHBASE_USER & COUCHBASE_PWD are the credentials for accesing that cluster.
+* CLUSTER_MONITOR_ENDPOINT is the mapping to port 7196 of the container we started, e.g. `http://localhost:7196`. In the container run line above we map to dynamic ports so grab them using `docker container port couchbase-grafana 7196` and use that value in the URL.
+* CLUSTER_MONITOR_USER & CLUSTER_MONITOR_PWD are the credentials for the cluster monitor tool, defaults to a `admin:password` but can be set differently using these variables when launching the container.
+
 ## Customisation
 
 Areas to support customisation:
 * Dashboards
   * Support providing bespoke dashboards directly by specifying at runtime.
 * Alerting rules
-  * Provide our own alert rules
+  * Provide custom alert rules and other metric generation (e.g. pre-calculated ones)
   * Tweak the configuration for existing ones deployed
-  * Disable or inhibit default rules we provide
+  * Disable or inhibit default rules provided
 * Cluster credentials and identities
   * Support adding new cluster nodes easily
-  * Support fully dynamic credentials and discovery (no need to restart to pick up a change)
+  * Support fully dynamic credentials and discovery (no need to restart to pick up a change), e.g. https://github.com/mrsiano/openshift-grafana/blob/master/prometheus-high-performance.yaml#L292
 
 In all cases we do not want to have to rebuild anything to customise it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
 

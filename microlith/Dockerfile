@@ -51,7 +51,7 @@ RUN git apply *.patch && \
 # Combined image
 FROM alpine:3.13
 
-RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts
+RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana

@@ -7,7 +7,7 @@ global:
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-      monitor: 'observability-poc'
+      monitor: 'observability'
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
@@ -48,8 +48,9 @@ scrape_configs:
         refresh_interval: 30s
   - job_name: 'couchbase-cluster'
     basic_auth:
-      username: admin
-      password: password
+      # We use envsubst to replace these prior to launch
+      username: $CLUSTER_MONITOR_USER
+      password: $CLUSTER_MONITOR_PWD
     scrape_interval: 10s
     metrics_path: /api/v1/_prometheus
     static_configs:
