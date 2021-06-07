@@ -10,4 +10,7 @@ envsubst < /etc/prometheus/prometheus.yml > /etc/prometheus/prometheus-runtime.y
 /bin/prometheus --config.file=/etc/prometheus/prometheus-runtime.yml \
                 --storage.tsdb.path=/prometheus \
                 --web.console.libraries=/usr/share/prometheus/console_libraries \
-                --web.console.templates=/usr/share/prometheus/consoles
+                --web.console.templates=/usr/share/prometheus/consoles \
+                --web.external-url=/prometheus/
+
+# https://www.robustperception.io/using-external-urls-and-proxies-with-prometheus
