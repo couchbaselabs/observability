@@ -190,6 +190,11 @@ RUN mkdir -p /opt/couchbase/var/lib/couchbase/logs/ && chmod 777 /opt/couchbase/
 ENV COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/
 EXPOSE 22020
 
+# Simple static webserver, easier to integrate than NGINX (for now)
+COPY html/ /html/
+RUN apk add --no-cache darkhttpd
+EXPOSE 80
+
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
@@ -201,6 +206,7 @@ RUN chmod a+x /run.sh /entrypoints/*
 
 ARG CB_UID="8453"
 ARG CB_GID="8453"
+
 RUN addgroup -g $CB_GID -S couchbase && \
     adduser -u $CB_UID -S couchbase -G couchbase
 
@@ -210,7 +216,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /pushgateway && \
-    chown -R couchbase:couchbase /data /priv && \
+    chown -R couchbase:couchbase /data /priv /html && \
     chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
     chown -R couchbase:couchbase /entrypoints
 
