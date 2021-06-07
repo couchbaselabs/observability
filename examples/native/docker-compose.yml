@@ -19,9 +19,9 @@ services:
         container_name: couchbase-grafana
         environment:
             # Disable the fluent bit forwarding and demonstrate as an example
-            - DISABLE_FLUENT-BIT=true
+            - DISABLE_FLUENT_BIT=true
             # No need for node exporter
-            - DISABLE_NODE-EXPORTER=true
+            - DISABLE_NODE_EXPORTER=true
         volumes:
             # Mount various node exporter paths for metrics - may be superceded by Couchbase Server
             # You can also disable node exporter usage by setting the relevant env var
