@@ -49,7 +49,7 @@ RUN git apply *.patch && \
     make -C build install
 
 # Combined image
-FROM alpine:3.13
+FROM nginx:alpine
 
 RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
 
@@ -165,6 +165,7 @@ ENV NODE_EXPORTER_HOST_SYS="/node-exporter/host/sys"
 ENV NODE_EXPORTER_CUSTOM_COLLECTOR="/node-exporter/custom/"
 
 # Add support for auto-provisioning now
+COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
 COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
 ENV GF_SECURITY_ADMIN_PASSWORD=password
@@ -190,9 +191,9 @@ RUN mkdir -p /opt/couchbase/var/lib/couchbase/logs/ && chmod 777 /opt/couchbase/
 ENV COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/
 EXPOSE 22020
 
-# Simple static webserver, easier to integrate than NGINX (for now)
+# Simple static webserver
+COPY nginx/ /etc/nginx/
 COPY html/ /html/
-RUN apk add --no-cache darkhttpd
 EXPOSE 80
 
 # Customisation for entrypoints and run as a non-root user
@@ -216,7 +217,8 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /pushgateway && \
-    chown -R couchbase:couchbase /data /priv /html && \
+    chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
+    chown -R couchbase:couchbase /data /priv && \
     chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
     chown -R couchbase:couchbase /entrypoints
 
