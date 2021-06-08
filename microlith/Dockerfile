@@ -3,7 +3,6 @@ FROM grafana/loki:2.0.0 as loki-official
 FROM prom/prometheus:v2.27.1 as prometheus-official
 FROM prom/alertmanager:v0.22.1 as alertmanager-official
 FROM prom/pushgateway:v1.4.0 as pushgateway-official
-FROM prom/node-exporter:v1.1.2 as node-exporter-official
 
 FROM golang:1.16 as healthcheck-builder
 
@@ -151,18 +150,6 @@ COPY --from=pushgateway-official /bin/pushgateway /bin/pushgateway
 
 EXPOSE 9091
 RUN mkdir -p /pushgateway && chown nobody:nobody /pushgateway
-
-# NODE EXPORTER
-# From https://github.com/prometheus/node_exporter/blob/master/Dockerfile
-COPY --from=node-exporter-official /bin/node_exporter /bin/node_exporter
-EXPOSE      9100
-
-# Customisation to support node exporter access to proc/sys/rootfs: mount here and/or set to wherever mounted.
-ENV NODE_EXPORTER_HOST_PROC="/node-exporter/host/proc"
-ENV NODE_EXPORTER_HOST_ROOTFS="/node-exporter/host/rootfs"
-ENV NODE_EXPORTER_HOST_SYS="/node-exporter/host/sys"
-# To provide node exporter custom collector output if needed:
-ENV NODE_EXPORTER_CUSTOM_COLLECTOR="/node-exporter/custom/"
 
 # Add support for auto-provisioning now
 COPY grafana/grafana.ini /etc/grafana/grafana.ini

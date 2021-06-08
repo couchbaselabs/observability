@@ -20,14 +20,7 @@ services:
         environment:
             # Disable the fluent bit forwarding and demonstrate as an example
             - DISABLE_FLUENT_BIT=true
-            # No need for node exporter
-            - DISABLE_NODE_EXPORTER=true
         volumes:
-            # Mount various node exporter paths for metrics - may be superceded by Couchbase Server
-            # You can also disable node exporter usage by setting the relevant env var
-            # - /proc:/host/proc:ro
-            # - /sys:/host/sys:ro
-            # - /:/host/rootfs:ro
             # This location stores any dynamic Prometheus info (e.g. targets to scrape)
             # Update as necessary and it should be automatically picked up at the next interval (5m)
             - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw

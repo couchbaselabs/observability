@@ -37,10 +37,6 @@ scrape_configs:
     honor_labels: true
     static_configs:
       - targets: ['localhost:9091']
-  - job_name: 'nodeexporter'
-    scrape_interval: 5s
-    static_configs:
-         - targets: ['localhost:9100']
   - job_name: 'couchbase'
     scrape_interval: 10s
     file_sd_configs:

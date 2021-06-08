@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 # Expose all nested config variables to make it simple to seeCLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
@@ -7,10 +7,6 @@ export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:719
 export COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 export COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 export COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
-export HOST_PROC=${NODE_EXPORTER_HOST_PROC:-/node-exporter/host/proc}
-export HOST_ROOTFS=${NODE_EXPORTER_HOST_ROOTFS:-/node-exporter/host/rootfs}
-export HOST_SYS=${NODE_EXPORTER_HOST_SYS:-/node-exporter/host/sys}
-export CUSTOM_COLLECTOR=${NODE_EXPORTER_CUSTOM_COLLECTOR:-/node-exporter/custom}
 
 # Support passing in custom command to run, e.g. bash
 if [[ $# -gt 0 ]]; then
