@@ -208,7 +208,12 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /data /priv && \
     chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
     mkdir -p /logs && chmod 777 /logs && \
-    chown -R couchbase:couchbase /entrypoints /logs
+    mkdir -p /etc/prometheus/monitoring/ && chmod 777 /etc/prometheus/monitoring/ && \
+    chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/monitoring/
+
+# Location of dynamic target information for Prometheus
+ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/monitoring/
+ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]

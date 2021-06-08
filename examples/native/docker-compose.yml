@@ -24,9 +24,11 @@ services:
             - DISABLE_PUSHGATEWAY=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
+            # Grafana password (default)
+            # - GF_SECURITY_ADMIN_PASSWORD=password
         volumes:
             # This location stores any dynamic Prometheus info (e.g. targets to scrape)
-            # Update as necessary and it should be automatically picked up at the next interval (5m)
+            # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
             - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw
             # This location stores any dynamic Healthcheck configuration
             - ./dynamic/healthcheck/:/etc/healthcheck/:rw

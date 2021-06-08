@@ -7,6 +7,24 @@ COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
 
+# Set up Prometheus scraping for this target - this allows us to dynamically turn it on/off
+PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
+mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
+cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/healthcheck.json << __EOF__
+[
+    {
+      "targets": [
+        "localhost:7196"
+      ],
+      "labels": {
+        "job": "healthcheck",
+        "container": "monitoring",
+        "__metrics_path__": "/api/v1/_prometheus"
+      }
+    }
+]
+__EOF__
+
 /bin/cbmultimanager --sqlite-db /data/data.sqlite --sqlite-key password --cert-path /priv/server.crt --key-path /priv/server.key -log-level debug &
 
 # From: https://github.com/couchbaselabs/cbmultimanager/wiki/Basic-REST-API-usage

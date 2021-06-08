@@ -1,7 +1,7 @@
 # my global config
 global:
-  scrape_interval:     15s # By default, scrape targets every 15 seconds.
-  evaluation_interval: 15s # By default, scrape targets every 15 seconds.
+  scrape_interval:     30s
+  evaluation_interval: 30s
   # scrape_timeout is set to the global default (10s).
 
   # Attach these labels to any time series or alerts when communicating with
@@ -24,31 +24,25 @@ alerting:
 # https://github.com/prometheus/prometheus/blob/main/config/testdata/conf.good.yml
 scrape_configs:
   - job_name: 'prometheus'
-    scrape_interval: 5s
     metrics_path: /prometheus/metrics
     static_configs:
          - targets: ['localhost:9090']
-  - job_name: 'loki'
-    scrape_interval: 30s
-    static_configs:
-         - targets: ['localhost:3100']
-  - job_name: 'pushgateway'
-    scrape_interval: 30s
-    honor_labels: true
-    static_configs:
-      - targets: ['localhost:9091']
-  - job_name: 'couchbase'
-    scrape_interval: 10s
+  - job_name: 'couchbase-grafana'
     file_sd_configs:
       - files:
-        - 'couchbase/targets.json'
+        - 'monitoring/*.json'
+        refresh_interval: 30s
+  - job_name: 'couchbase-server'
+    file_sd_configs:
+      - files:
+        - 'couchbase/*.json'
         refresh_interval: 30s
   - job_name: 'couchbase-cluster'
     basic_auth:
       # We use envsubst to replace these prior to launch
       username: $CLUSTER_MONITOR_USER
       password: $CLUSTER_MONITOR_PWD
-    scrape_interval: 10s
-    metrics_path: /api/v1/_prometheus
-    static_configs:
-      - targets: ['localhost:7196']
+    file_sd_configs:
+      - files:
+        - 'couchbase/healthcheck.json'
+        refresh_interval: 30s

@@ -1,21 +1,11 @@
 [
     {
       "targets": [
-        "logging:2020"
-      ],
-      "labels": {
-        "job": "couchbase",
-        "container": "logging",
-        "__metrics_path__": "/api/v1/metrics/prometheus"
-      }
-    },
-    {
-      "targets": [
         "exporter:9091"
       ],
       "labels": {
-        "job": "couchbase",
-        "container": "monitoring"
+        "job": "db1",
+        "container": "exporter"
       }
     }
 ]

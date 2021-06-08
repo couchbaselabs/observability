@@ -8,6 +8,11 @@ export COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 export COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 export COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
 
+# Clean up dynamic targets generated
+export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
+rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
+mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
+
 # Support passing in custom command to run, e.g. bash
 if [[ $# -gt 0 ]]; then
     echo "[ENTRYPOINT] Running custom: $*"
@@ -21,12 +26,12 @@ else
         if [[ -v "${DISABLE_VAR}" ]]; then
             echo "[ENTRYPOINT] Disabled as ${DISABLE_VAR} set (value ignored): $i"
         elif [[ -x "$i" ]]; then
-            echo "[ENTRYPOINT] Enabled as ${DISABLE_VAR} not set: $i"
             # For performance or other reasons we may just want to log to discrete files, watch out for size
             if [[ -v "ENABLE_LOG_TO_FILE" ]]; then
+                echo "[ENTRYPOINT] Running: $i ==> /logs/${EXE_NAME}.log"
                 "$i" "$@" &> /logs/"${EXE_NAME}".log &
-                echo "[ENTRYPOINT] Logging $i to /logs/${EXE_NAME}.log"
             else
+                echo "[ENTRYPOINT] Running: $i"
                 # See https://github.com/hilbix/speedtests for log name pre-pending info
                 "$i" "$@" 2>&1 | awk '{ print "['"${EXE_NAME}"']" $0 }' &
             fi
