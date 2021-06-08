@@ -36,7 +36,7 @@ while true; do
     # Run the event log generator
     # TODO: replace with usage of replicated logs or move to fluent bit itself and send to loki: https://github.com/couchbaselabs/cbmultimanager/issues/33
     sleep 10
-    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1 #--log-path /opt/couchbase/var/lib/couchbase/logs/db1/
+    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1
 done
 
 wait -n

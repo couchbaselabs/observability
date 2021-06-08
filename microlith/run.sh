@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 # Expose all nested config variables to make it simple to seeCLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
@@ -21,9 +21,15 @@ else
         if [[ -v "${DISABLE_VAR}" ]]; then
             echo "[ENTRYPOINT] Disabled as ${DISABLE_VAR} set (value ignored): $i"
         elif [[ -x "$i" ]]; then
-            # See https://github.com/hilbix/speedtests for log name pre-pending info
             echo "[ENTRYPOINT] Enabled as ${DISABLE_VAR} not set: $i"
-            "$i" "$@" 2>&1 | awk '{ print "['"${EXE_NAME}"']" $0 }' &
+            # For performance or other reasons we may just want to log to discrete files, watch out for size
+            if [[ -v "ENABLE_LOG_TO_FILE" ]]; then
+                "$i" "$@" &> /logs/"${EXE_NAME}".log &
+                echo "[ENTRYPOINT] Logging $i to /logs/${EXE_NAME}.log"
+            else
+                # See https://github.com/hilbix/speedtests for log name pre-pending info
+                "$i" "$@" 2>&1 | awk '{ print "['"${EXE_NAME}"']" $0 }' &
+            fi
         else
             echo "[ENTRYPOINT] Skipping non-executable: $i"
         fi

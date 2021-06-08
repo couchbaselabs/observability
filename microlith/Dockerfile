@@ -47,7 +47,7 @@ RUN git apply *.patch && \
          . && \
     make -C build install
 
-# Combined image
+# Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 
 RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
@@ -207,7 +207,8 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /data /priv && \
     chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
-    chown -R couchbase:couchbase /entrypoints
+    mkdir -p /logs && chmod 777 /logs && \
+    chown -R couchbase:couchbase /entrypoints /logs
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
