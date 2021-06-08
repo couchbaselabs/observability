@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 set -e
-/bin/alertmanager --config.file=/etc/alertmanager/alertmanager.yml --storage.path=/alertmanager
+/bin/alertmanager --config.file=/etc/alertmanager/config.yml --storage.path=/alertmanager
