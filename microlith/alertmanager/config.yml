@@ -1,7 +1,11 @@
 # https://grafana.com/blog/2020/02/25/step-by-step-guide-to-setting-up-prometheus-alertmanager-with-slack-pagerduty-and-gmail
+
+# Useful tool: https://juliusv.com/promslack/
+
 global:
   resolve_timeout: 1m
-  slack_api_url: 'https://hooks.slack.com/services/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'
+  # Using the file so can exclude it from check-in and trigger invalidation:
+  slack_api_url_file: '/etc/alertmanager/slack_url'
 
 route:
   receiver: 'slack-notifications'

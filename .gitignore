@@ -1,1 +1,2 @@
 examples/native/logs/*.log
+microlith/alertmanager/slack_url
