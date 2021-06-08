@@ -12,3 +12,10 @@ groups:
     # Labels - additional labels to be attached to the alert
     labels:
       severity: 'critical'
+      impact: "Something is failing"
+      action: "To remediate fix the broken thing"
+      dashboard: "https://grafana.com/service-dashboard"
+      # What do do when this alert triggers - a URL for more information/remediation
+      runbook: "https://wiki.com/whattodo"
+      # Link to the logs...
+      logurl: "https://grafana.com/log-explorer"
