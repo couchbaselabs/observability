@@ -9,9 +9,12 @@ envsubst < /etc/prometheus/prometheus.yml > /etc/prometheus/prometheus-runtime.y
 
 # Add in metric support for pushgateway if enabled - it runs its own binary separately
 if [[ -v "DISABLE_PUSHGATEWAY" ]]; then
-    PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
-    mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
-    cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/pushgateway.json << __EOF__
+  echo "DISABLE_PUSHGATEWAY set so no endpoint to create"
+else
+  echo "Creating pushgateway metric endpoint"
+  PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
+  mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
+  cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/pushgateway.json << __EOF__
 [
     {
       "targets": [
@@ -24,7 +27,6 @@ if [[ -v "DISABLE_PUSHGATEWAY" ]]; then
     }
 ]
 __EOF__
-
 fi
 
 /bin/prometheus --config.file=/etc/prometheus/prometheus-runtime.yml \

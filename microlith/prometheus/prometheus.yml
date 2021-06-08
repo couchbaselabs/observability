@@ -42,7 +42,7 @@ scrape_configs:
       # We use envsubst to replace these prior to launch
       username: $CLUSTER_MONITOR_USER
       password: $CLUSTER_MONITOR_PWD
-    file_sd_configs:
-      - files:
-        - 'couchbase/healthcheck.json'
-        refresh_interval: 30s
+    metrics_path: /api/v1/_prometheus
+    # For basic auth we cannot use file_sd
+    static_configs:
+         - targets: ['localhost:7196']
