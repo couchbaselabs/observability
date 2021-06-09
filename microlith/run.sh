@@ -7,12 +7,19 @@ export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:719
 export COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 export COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 export COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
+
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
-export PROMETHEUS_SUBPATH=${PROMETHEUS_SUBPATH-/prometheus/}
+export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
+export PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
+
+export ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
+export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
+
+export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 
 # Clean up dynamic targets generated
-export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
+export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
 mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 

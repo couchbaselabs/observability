@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-set -e
+set -ex
+
+LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 
 # Set up Prometheus scraping for this target - this allows us to dynamically turn it on/off
-PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
+PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/loki.json << __EOF__
 [
@@ -18,4 +20,4 @@ cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/loki.json << __EOF__
 ]
 __EOF__
 
-/usr/bin/loki -config.file=/etc/loki/local-config.yaml
+/usr/bin/loki -config.file="${LOKI_CONFIG_FILE}"

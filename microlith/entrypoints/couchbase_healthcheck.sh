@@ -8,6 +8,7 @@ COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
 
 /bin/cbmultimanager --sqlite-db /data/data.sqlite --sqlite-key password --cert-path /priv/server.crt --key-path /priv/server.key -log-level debug &
+set +x
 
 # From: https://github.com/couchbaselabs/cbmultimanager/wiki/Basic-REST-API-usage
 # Must be in JSON format

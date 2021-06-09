@@ -10,4 +10,4 @@ COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
 curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
-# Otherwise can run the command separately.
+# Otherwise can run the command separately outside the container into it, the port is exposed.

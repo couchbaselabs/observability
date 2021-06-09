@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 # Set up Prometheus scraping for this target - this allows us to dynamically turn it on/off
-PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}
+PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/fluentbit.json << __EOF__
 [
