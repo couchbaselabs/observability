@@ -7,6 +7,9 @@ export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:719
 export COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 export COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 export COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
+export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
+export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
+export PROMETHEUS_SUBPATH=${PROMETHEUS_SUBPATH-/prometheus/}
 
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/monitoring/}

@@ -1,0 +1,1 @@
+All Couchbase specific rules go here. This way they can easily be referenced by others particularly when you want the defaults plus custom rules.

@@ -1,4 +1,4 @@
-# my global config
+# This is a template file we use so we can substitute environment variables at launch
 global:
   scrape_interval:     30s
   evaluation_interval: 30s
@@ -11,15 +11,23 @@ global:
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
-  - alerting/*.yaml
+  # All Couchbase default rules go here
+  - alerting/couchbase/*.yaml
+  - alerting/couchbase/*.yml
+  # All custom rules can go here
+  - alerting/custom/*.yaml
+  - alerting/custom/*.yml
 
-# alert
 alerting:
   alertmanagers:
   - scheme: http
     static_configs:
     - targets:
       - "localhost:9093"
+    file_sd_configs:
+      - files:
+        - 'alertmanager/*.json'
+        refresh_interval: 30s
 
 # https://github.com/prometheus/prometheus/blob/main/config/testdata/conf.good.yml
 scrape_configs:

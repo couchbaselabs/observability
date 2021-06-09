@@ -3,9 +3,16 @@ set -ex
 export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 
+# To customise the Prometheus configuration used, set these values at launch
+PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
+PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
+PROMETHEUS_SUBPATH=${PROMETHEUS_SUBPATH-/prometheus/}
+
 # Substitute environment variables as Prometheus does not support this (actively refused to do so)
 # https://www.robustperception.io/environment-substitution-with-docker
-envsubst < /etc/prometheus/prometheus.yml > /etc/prometheus/prometheus-runtime.yml
+if [[ -f "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" ]] ; then
+  envsubst < "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" > "${PROMETHEUS_CONFIG_FILE}"
+fi
 
 # Add in metric support for pushgateway if enabled - it runs its own binary separately
 if [[ -v "DISABLE_PUSHGATEWAY" ]]; then
@@ -29,10 +36,15 @@ else
 __EOF__
 fi
 
-/bin/prometheus --config.file=/etc/prometheus/prometheus-runtime.yml \
+# From: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
+# A configuration reload is triggered by sending a SIGHUP to the Prometheus process or
+# sending a HTTP POST request to the /-/reload endpoint.
+
+/bin/prometheus --config.file="${PROMETHEUS_CONFIG_FILE}" \
                 --storage.tsdb.path=/prometheus \
                 --web.console.libraries=/usr/share/prometheus/console_libraries \
                 --web.console.templates=/usr/share/prometheus/consoles \
-                --web.external-url=/prometheus/
+                --web.external-url="${PROMETHEUS_SUBPATH}" \
+                --web.enable-lifecycle=true
 
 # https://www.robustperception.io/using-external-urls-and-proxies-with-prometheus
