@@ -1,6 +1,16 @@
 groups:
 - name: Couchbase-Server
   rules:
+  # {{ $labels.node }} has some checker status of warn
+  - alert: CheckerFailure
+    expr: checker_status_node{status="warn"} == 1
+    for: 2m
+    labels:
+      severity: warning
+    annotations:
+      summary: Generic warning about a node status (name {{ $labels.name }}, instance {{ $labels.instance }})
+      description: "{{ $labels.node }} has condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
   - alert: InstanceDown
     # Condition for alerting
     expr: up == 0

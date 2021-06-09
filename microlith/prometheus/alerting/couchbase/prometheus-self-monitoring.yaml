@@ -1,5 +1,7 @@
 # https://awesome-prometheus-alerts.grep.to/rules.html#prometheus-self-monitoring-1
 
+# TODO: inhibit during startup?
+
 groups:
 - name: Prometheus-Monitoring
   rules:
