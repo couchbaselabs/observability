@@ -31,7 +31,7 @@ Refer to the official documentation for options available: https://docs.docker.c
 ## Environment variables
 
 ```
-# Health check specific configuraion
+# Health check specific configuration
 export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}

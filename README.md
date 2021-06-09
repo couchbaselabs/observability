@@ -63,7 +63,7 @@ A working example is [provided](examples/native/) based on a docker compose stac
 
 The basic steps are:
 1. Install a container runtime for your platform, for example on Ubuntu details are here: https://docs.docker.com/engine/install/ubuntu/
-2. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P -e DISABLE_NODE-EXPORTER -v $PWD/microlith/dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/ couchbase-observability`
+2. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P couchbase-observability`
 3. Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.
 
 Prometheus end points and credentials can be added to the [config file](microlith/dynamic/prometheus/couchbase/targets.json) mounted into the container above. This is periodically rescanned and new end points added.
@@ -113,6 +113,9 @@ For those customers who want to scale up the deployment and/or follow a more clo
 
 * No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
+
+# Resources
+* A good overview of how Prometheus and Alert Manager: https://www.fabernovel.com/en/engineering/alerting-in-prometheus-or-how-i-can-sleep-well-at-night
 
 # Feedback
 Please raise issues directly on this Github repository.
