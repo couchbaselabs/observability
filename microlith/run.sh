@@ -1,12 +1,10 @@
 #!/bin/bash
 set -e
 
-# Expose all nested config variables to make it simple to seeCLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
+# Expose all nested config variables to make it simple to see
+export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}
-export COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
-export COUCHBASE_PWD=${COUCHBASE_PWD:-password}
-export COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
 
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
