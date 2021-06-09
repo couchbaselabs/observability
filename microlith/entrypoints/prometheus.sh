@@ -45,6 +45,6 @@ fi
                 --web.console.libraries=/usr/share/prometheus/console_libraries \
                 --web.console.templates=/usr/share/prometheus/consoles \
                 --web.external-url="${PROMETHEUS_SUBPATH}" \
-                --web.enable-lifecycle=true
+                --web.enable-lifecycle
 
 # https://www.robustperception.io/using-external-urls-and-proxies-with-prometheus

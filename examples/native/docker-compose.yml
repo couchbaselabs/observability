@@ -29,9 +29,10 @@ services:
         volumes:
             # This location stores any dynamic Prometheus info (e.g. targets to scrape)
             # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
-            - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:rw
+            - ./dynamic/prometheus/couchbase/:/etc/prometheus/couchbase/:ro
+            - ./dynamic/prometheus/alertmanager/:/etc/prometheus/alertmanager/:ro
             # This location stores any dynamic Healthcheck configuration
-            - ./dynamic/healthcheck/:/etc/healthcheck/:rw
+            - ./dynamic/healthcheck/:/etc/healthcheck/:ro
             # Log output here to help
             - ./logs:/logs:rw
         networks:
