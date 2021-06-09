@@ -116,6 +116,8 @@ For those customers who want to scale up the deployment and/or follow a more clo
 
 # Resources
 * A good overview of how Prometheus and Alert Manager: https://www.fabernovel.com/en/engineering/alerting-in-prometheus-or-how-i-can-sleep-well-at-night
+* How to disable or override rules: https://medium.com/@hauskrechtmartin/how-we-solved-our-need-to-override-prometheus-alerts-b9faf9a4558c
+* Useful example rules: https://awesome-prometheus-alerts.grep.to/rules.html
 
 # Feedback
 Please raise issues directly on this Github repository.

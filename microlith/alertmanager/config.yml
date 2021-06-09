@@ -1,4 +1,5 @@
 # https://grafana.com/blog/2020/02/25/step-by-step-guide-to-setting-up-prometheus-alertmanager-with-slack-pagerduty-and-gmail
+# https://awesome-prometheus-alerts.grep.to/alertmanager
 
 # Useful tool: https://juliusv.com/promslack/
 
@@ -8,10 +9,35 @@ global:
   slack_api_url_file: '/etc/alertmanager/slack_url'
 
 route:
-  receiver: 'slack-notifications'
+  # When a new group of alerts is created by an incoming alert, wait at
+  # least 'group_wait' to send the initial notification.
+  # This way ensures that you get multiple alerts for the same group that start
+  # firing shortly after another are batched together on the first
+  # notification.
+  group_wait: 10s
+
+  # When the first notification was sent, wait 'group_interval' to send a batch
+  # of new alerts that started firing for that group.
+  group_interval: 30s
+
+  # If an alert has successfully been sent, wait 'repeat_interval' to
+  # resend them.
+  repeat_interval: 30m
+
+  # Set the default receiver
+  receiver: 'slack'
+
+  # All the above attributes are inherited by all child routes and can
+  # overwritten on each.
+  routes:
+    - receiver: "slack"
+      group_wait: 10s
+      match_re:
+        severity: critical|warning
+      continue: true
 
 receivers:
-- name: 'slack-notifications'
+- name: 'slack'
   slack_configs:
   - channel: '#alerts'
     send_resolved: true
