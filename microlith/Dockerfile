@@ -212,7 +212,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/
 
 # Location of dynamic target information for Prometheus
-ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/}
+ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
 ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
 USER       $CB_UID
