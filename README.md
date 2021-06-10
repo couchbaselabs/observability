@@ -18,7 +18,6 @@ We essentially need to support two fairly distinct types of user:
 * Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
 * Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
 * Push Gateway: Apache 2.0 https://github.com/prometheus/pushgateway/blob/master/LICENSE
-* Node Exporter: Apache 2.0 https://github.com/prometheus/node_exporter/blob/master/LICENSE
 * Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
 * Couchbase Healthcheck: Proprietary/TBC
 
