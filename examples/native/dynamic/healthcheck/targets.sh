@@ -8,6 +8,6 @@ CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}
 COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 COUCHBASE_PWD=${COUCHBASE_PWD:-password}
-COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://192.168.48.2:8091}
+COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://192.168.144.2:8091}
 curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
 # Otherwise can run the command separately outside the container into it, the port is exposed.

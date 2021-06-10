@@ -8,7 +8,7 @@ groups:
     labels:
       severity: warning
     annotations:
-      summary: Generic warning about a node status (name {{ $labels.name }}, instance {{ $labels.instance }})
+      title: Generic warning about a node status (name {{ $labels.name }}, instance {{ $labels.instance }})
       description: "{{ $labels.node }} has condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
   - alert: InstanceDown
