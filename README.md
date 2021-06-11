@@ -19,6 +19,7 @@ We essentially need to support two fairly distinct types of user:
 * Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
 * Push Gateway: Apache 2.0 https://github.com/prometheus/pushgateway/blob/master/LICENSE
 * Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
+* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
 * Couchbase Healthcheck: Proprietary/TBC
 
 # Architecture

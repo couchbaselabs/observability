@@ -22,6 +22,7 @@ services:
             - DISABLE_FLUENT_BIT=true
             - DISABLE_LOKI=true
             - DISABLE_PUSHGATEWAY=true
+            # - DISABLE_JAEGAER=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
             # Grafana password (default)
@@ -51,6 +52,8 @@ services:
             - "9090:9090"
             # Healthcheck
             - "7196-7197:7196-7197"
+            # Jaeger
+            - "16686:16686"
             # Landing page
             - "8080:80"
             # Fluent bit metrics

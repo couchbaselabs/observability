@@ -3,6 +3,7 @@ FROM grafana/loki:2.0.0 as loki-official
 FROM prom/prometheus:v2.27.1 as prometheus-official
 FROM prom/alertmanager:v0.22.1 as alertmanager-official
 FROM prom/pushgateway:v1.4.0 as pushgateway-official
+FROM jaegertracing/all-in-one:1.23.0 as jaegaer-official
 
 FROM golang:1.16 as healthcheck-builder
 
@@ -151,6 +152,38 @@ COPY --from=pushgateway-official /bin/pushgateway /bin/pushgateway
 EXPOSE 9091
 RUN mkdir -p /pushgateway && chown nobody:nobody /pushgateway
 
+# JAEGER ALL IN ONE
+# https://github.com/jaegertracing/jaeger/blob/master/cmd/all-in-one/Dockerfile
+COPY --from=jaegaer-official /go/bin/all-in-one-linux /go/bin/all-in-one-linux
+COPY --from=jaegaer-official /etc/jaeger/ /etc/jaeger/
+
+# Agent zipkin.thrift compact
+EXPOSE 5775/udp
+
+# Agent jaeger.thrift compact
+EXPOSE 6831/udp
+
+# Agent jaeger.thrift binary
+EXPOSE 6832/udp
+
+# Agent config HTTP
+EXPOSE 5778
+
+# Collector HTTP
+EXPOSE 14268
+
+# Collector gRPC
+EXPOSE 14250
+
+# Web HTTP
+EXPOSE 16686
+
+# Default configuration file for setting sampling strategies
+ENV SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json
+
+# VOLUME ["/tmp"]
+# ENTRYPOINT ["/go/bin/all-in-one-linux"]
+
 # Add support for auto-provisioning now
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
@@ -160,6 +193,7 @@ ENV GF_USERS_ALLOW_SIGN_UP=false
 
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
+COPY jaeger/ /etc/jaeger/
 
 # Couchbase healthcheck
 RUN mkdir -p /data /priv && \
@@ -205,6 +239,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /pushgateway && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
+    chown -R couchbase:couchbase /etc/jaeger/ && \
     chown -R couchbase:couchbase /data /priv && \
     chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
     mkdir -p /logs && chmod 777 /logs && \

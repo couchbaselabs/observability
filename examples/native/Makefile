@@ -6,6 +6,7 @@ clean: stop
 
 
 build: clean
+	rm -f logs/*.log
 	DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:latest -f ../../microlith/Dockerfile ../../microlith/
 
 start:

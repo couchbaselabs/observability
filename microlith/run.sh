@@ -16,6 +16,10 @@ export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
 
 export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 
+export JAEGER_URL_SUBPATH=${JAEGER_URL_SUBPATH-/jaeger}
+export JAEGER_CONFIG_FILE=${JAEGER_CONFIG_FILE:-/etc/jaeger/config.json}
+export SPAN_STORAGE_TYPE=${SPAN_STORAGE_TYPE:-memory}
+
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
