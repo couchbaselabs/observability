@@ -9,11 +9,38 @@ PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/promethe
 PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
 PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
 
+# Example variables to tune with - it would be nicer to include defaults in the file but envsubst does not support that:
+export COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=${COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD:-50}
+export COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_DURATION=${COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_DURATION:-1m}
+
+set +x
+
 # Substitute environment variables as Prometheus does not support this (actively refused to do so)
 # https://www.robustperception.io/environment-substitution-with-docker
 if [[ -f "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" ]] ; then
-  envsubst < "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" > "${PROMETHEUS_CONFIG_FILE}"
+  # Make sure to leave alone anything that is not a defined environment variable
+  envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" > "${PROMETHEUS_CONFIG_FILE}"
 fi
+
+# Now work on the rules, we substitute in-place to keep it simple
+while IFS= read -r -d '' FILE
+do
+  if mv -f "${FILE}" "${FILE}".orig; then
+    # We need to make sure we only substitute defined variables otherwise we remove label/annotation processing as well
+    # e.g. `description: {{ $labels.node }} has condition VALUE = {{ $value }} LABELS = {{ $labels }}`
+    # Using envsubst on its own would mean the $labeles and $values fields are blank
+    # Therefore we pass envsubst a list of all values defined in the environment as the "only" things to substitute
+    envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')" < "${FILE}".orig > "${FILE}"
+    if diff -aq "${FILE}".orig "${FILE}"; then
+      echo "Processed ${FILE}:"
+      diff -a "${FILE}".orig "${FILE}"
+    else
+      rm -f "${FILE}".orig
+    fi
+  else
+    echo "Unable to substitue any values in ${FILE} - likely read-only due to being mounted in"
+  fi
+done < <(find "/etc/prometheus/alerting" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
 
 # Add in metric support for pushgateway if enabled - it runs its own binary separately
 if [[ -v "DISABLE_PUSHGATEWAY" ]]; then
