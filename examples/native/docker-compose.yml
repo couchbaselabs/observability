@@ -17,6 +17,7 @@ services:
         # build: .
         image: couchbase-observability:latest
         container_name: couchbase-grafana
+        # Note an environment file can be used as well, this is likely better for production
         environment:
             # Disable fluent bit and loki for perfomance plus demonstrate as an example
             - DISABLE_FLUENT_BIT=true
