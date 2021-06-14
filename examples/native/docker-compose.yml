@@ -34,7 +34,7 @@ services:
             # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
             - ./dynamic/prometheus/couchbase-servers/:/etc/prometheus/couchbase/custom/:ro
             - ./dynamic/prometheus/custom-alertmanagers/:/etc/prometheus/alertmanager/custom/:ro
-            # Custom alerts can be provided like so:
+            # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
             - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
             # You can also replace all alerts to remove defaults so only provide custom:
             # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
