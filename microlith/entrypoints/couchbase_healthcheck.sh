@@ -7,7 +7,11 @@ COUCHBASE_USER=${COUCHBASE_USER:-Administrator}
 COUCHBASE_PWD=${COUCHBASE_PWD:-password}
 COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db1:8091}
 
-/bin/cbmultimanager --sqlite-db /data/data.sqlite --sqlite-key password --cert-path /priv/server.crt --key-path /priv/server.key -log-level debug &
+if [[ -x "/bin/cbmultimanager" ]]; then
+    /bin/cbmultimanager --sqlite-db /data/data.sqlite --sqlite-key password --cert-path /priv/server.crt --key-path /priv/server.key -log-level debug &
+else
+    echo "No healthchecker to run"
+fi
 set +x
 
 # From: https://github.com/couchbaselabs/cbmultimanager/wiki/Basic-REST-API-usage
@@ -37,7 +41,11 @@ while true; do
     # Run the event log generator
     # TODO: replace with usage of replicated logs or move to fluent bit itself and send to loki: https://github.com/couchbaselabs/cbmultimanager/issues/33
     sleep 30
-    /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1
+    if [[ -x "/bin/cbeventlog" ]]; then
+        /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1
+    else
+        echo "No event log generator to run"
+    fi
 done
 
 wait -n

@@ -201,7 +201,7 @@ RUN mkdir -p /data /priv && \
 
 COPY --from=healthcheck-builder /bin/cbmultimanager /bin/cbmultimanager
 COPY --from=healthcheck-builder /bin/cbeventlog /bin/cbeventlog
-RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
+RUN chmod a+x /bin/cb*
 
 EXPOSE 7196 7197
 
