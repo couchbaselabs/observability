@@ -78,7 +78,11 @@ To support this there are two locations to be used:
 2. /etc/prometheus/alerting/
 
 The first only adds whilst the second will replace the defaults.
-Of course you can also just specify extra files rather than the full directory which can be useful to inhibit default rules by removing them.
+Of course you can also just specify files rather than the full directory which can be useful to inhibit default rules by removing them from the file.
+
+We also support tuning of rules by environment variable.
+When Prometheus is launched, it will run `envsubst` on the files with all available environment variables then substituted.
+Be aware that if you use a variable then you cannot currently default it other than providing that default to the [entrypoint](entrypoints/prometheus.sh) script for substitution: a variable must be defined.
 
 ## Alert manager
 
