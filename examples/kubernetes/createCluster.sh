@@ -72,6 +72,7 @@ EOF
     # Ensure we have everything we need
     kind load docker-image "couchbase/couchbase-operator:${OPERATOR_VERSION}" --name="${CLUSTER_NAME}"
     kind load docker-image "couchbase/couchbase-operator-admission:${DAC_VERSION}" --name="${CLUSTER_NAME}"
+    kind load docker-image "couchbase-observability:latest" --name="${CLUSTER_NAME}"
 
     # Not strictly required but improves caching performance
     docker pull "${SERVER_IMAGE}"
@@ -100,60 +101,9 @@ EOF
     echo " done"
 fi #SKIP_CLUSTER_CREATION
 
-cat << __CLUSTER_CONFIG_EOF__ | kubectl apply -f -
-apiVersion: v1
-kind: Secret
-metadata:
-  name: cb-example-auth
-type: Opaque
-data:
-  username: QWRtaW5pc3RyYXRvcg== # Administrator
-  password: cGFzc3dvcmQ=         # password
----
-apiVersion: couchbase.com/v2
-kind: CouchbaseEphemeralBucket
-metadata:
-  name: default
----
-apiVersion: couchbase.com/v2
-kind: CouchbaseCluster
-metadata:
-  name: cb-example
-spec:
-  monitoring:
-    prometheus:
-      enabled: true
-  logging:
-    server:
-      enabled: true
-    audit:
-      enabled: true
-  image: ${SERVER_IMAGE}
-  security:
-    adminSecret: cb-example-auth
-  buckets:
-    managed: true
-  servers:
-  - size: ${SERVER_COUNT}
-    name: all_services
-    services:
-    - data
-    - index
-    - query
-    - search
-    - eventing
-    - analytics
-    volumeMounts:
-      default: couchbase
-  volumeClaimTemplates:
-  - metadata:
-      name: couchbase
-    spec:
-      storageClassName: standard
-      resources:
-        requests:
-          storage: 1Gi
-__CLUSTER_CONFIG_EOF__
+kubectl apply -f "${SCRIPT_DIR}/couchbase.yaml"
+# kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
+kubectl run couchbase-grafana --image=couchbase-observability:latest
 
 # Wait for deployment to complete
 echo "Waiting for CB to start up..."
@@ -162,3 +112,5 @@ until [[ $(kubectl get pods --field-selector=status.phase=Running --selector='ap
     sleep 2
 done
 echo "CB started"
+
+# TODO: run local container as well that talks to the cluster

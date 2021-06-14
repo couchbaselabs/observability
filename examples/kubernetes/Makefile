@@ -1,7 +1,6 @@
 all: build
 
 clean:
-	kind delete cluster --name=microlith-test
 	-docker rmi couchbase-observability:latest
 
 build: clean
