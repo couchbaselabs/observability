@@ -1,16 +1,6 @@
 groups:
 - name: Couchbase-Server
   rules:
-  # {{ $labels.node }} has some checker status of warn
-  - alert: CheckerFailure
-    expr: checker_status_node{status="warn"} == 1
-    for: 2m
-    labels:
-      severity: warning
-    annotations:
-      title: Generic warning about a node status (name {{ $labels.name }}, instance {{ $labels.instance }})
-      description: "{{ $labels.node }} has condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
-
 # Example of a configurable rule (via environment variables)
   - alert: ConfigurableResidentRatio
     expr: cbbucketstat_vbuckets_active_resident_items_ratio > $COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD

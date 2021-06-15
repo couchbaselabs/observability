@@ -1,0 +1,20 @@
+groups:
+- name: Couchbase-Observer
+  rules:
+  # {{ $labels.node }} has some checker status of warn
+  - alert: NodeCheckerWarning
+    expr: multimanager_checker_status_node{status="warn"} >= 1
+    for: 2m
+    annotations:
+      title: Generic warning about a node status (name {{ $labels.name }}, instance {{ $labels.instance }})
+      description: "{{ $labels.node }} has condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+    labels:
+      node: "{{ $labels.node }}"
+      severity: 'warning'
+      impact: "Something is failing"
+      action: "To remediate fix the broken thing"
+      dashboard: "https://grafana.com/service-dashboard"
+      # What do do when this alert triggers - a URL for more information/remediation
+      runbook: "https://wiki.com/whattodo"
+      # Link to the logs...
+      logurl: "https://grafana.com/log-explorer"

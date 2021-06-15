@@ -23,7 +23,7 @@ services:
             - DISABLE_FLUENT_BIT=true
             - DISABLE_LOKI=true
             - DISABLE_PUSHGATEWAY=true
-            # - DISABLE_JAEGAER=true
+            - DISABLE_JAEGAER=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
             # Grafana password (default)
@@ -38,6 +38,8 @@ services:
             - ./dynamic/prometheus/custom-alertmanagers/:/etc/prometheus/alertmanager/custom/:ro
             # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
             - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
+            # An example of how to also disable a default rule
+            - ${PWD}/dynamic/prometheus/disable-alert-rules/stubbed-checker-cbs7-rules.yaml:/etc/prometheus/alerting/couchbase/checker-cbs7-rules.yaml:ro
             # You can also replace all alerts to remove defaults so only provide custom:
             # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
             # This location stores any dynamic Healthcheck configuration
@@ -54,6 +56,8 @@ services:
             - "3100:3100"
             # Prometheus
             - "9090:9090"
+            # Alert manager
+            - "9093:9093"
             # Healthcheck
             - "7196-7197:7196-7197"
             # Jaeger

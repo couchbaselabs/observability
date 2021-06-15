@@ -21,6 +21,7 @@ rule_files:
 alerting:
   alertmanagers:
   - scheme: http
+    path_prefix: "${ALERTMANAGER_URL_SUBPATH}"
     # Assumption is we always have AlertManager with Prometheus
     static_configs:
     - targets:
