@@ -1,2 +1,3 @@
+examples/kubernetes/couchbase-operator/
 examples/native/logs/*.log
 microlith/alertmanager/slack_url
