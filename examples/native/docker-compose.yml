@@ -23,7 +23,7 @@ services:
             # - DISABLE_FLUENT_BIT=true
             # - DISABLE_LOKI=true
             - DISABLE_PUSHGATEWAY=true
-            - DISABLE_JAEGAER=true
+            - DISABLE_JAEGER=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
             # Grafana password (default)
