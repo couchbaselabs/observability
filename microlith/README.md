@@ -2,7 +2,7 @@
 
 A simple Nginx web server is exposed on port 80 to provide a landing page.
 
-![Overview](/images/microith-runtime.png)
+![Overview](/images/microlith-runtime.png)
 
 # Usage
 
@@ -23,7 +23,7 @@ Browse to `localhost:55124` and log in with the default creds of `admin:password
 
 # Configuration options
 
-![Microlith configuration](/images/microith-config.png)
+![Microlith configuration](/images/microlith-config.png)
 
 To disable various services from being run, set a variable (`docker run -e var ...`) called `DISABLE_X` where X is an uppercase version of their [entrypoint name](entrypoints/) (minus any `.sh` suffix). For example, to disable [Loki](entrypoints/loki.sh) you would set `DISABLE_LOKI`.
 

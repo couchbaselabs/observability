@@ -53,7 +53,7 @@ This is essentially the various scalable components of the Grafana stack (Loki, 
 
 A single container can then be run on-premise or on a Kubernetes platform very easily with minimal effort.
 
-![Microlith overview](/images/microith-runtime.png)
+![Microlith overview](/images/microlith-runtime.png)
 
 Whilst on-premise customers may primarily be using native binaries, all supported OS's for Couchbase Server can run containers easily. This also makes it easier to deploy as a self-contained image and easy to upgrade as well. We could produce an OS-specific package (e.g. RPM) with all necessary dependencies on the container runtime.
 
@@ -105,7 +105,7 @@ Areas to support customisation:
 
 In all cases we do not want to have to rebuild anything to customise it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
 
-![Microlith configuration](/images/microith-config.png)
+![Microlith configuration](/images/microlith-config.png)
 
 # Distributed deployment
 
