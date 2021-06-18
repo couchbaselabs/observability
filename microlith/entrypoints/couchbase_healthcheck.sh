@@ -25,8 +25,7 @@ done
 # Configure clusters to monitor - unfortunately you have to wait for the couchbase endpoint to come up
 sleep 60
 
-# Issue with using --log-path: https://github.com/couchbaselabs/cbmultimanager/issues/39
-mkdir -p /opt/couchbase/var/lib/couchbase/logs/db1 && cd /opt/couchbase/var/lib/couchbase/logs/db1/
+mkdir -p /opt/couchbase/var/lib/couchbase/logs/db1
 
 while true; do
     # Periodically we scan for stuff to do, e.g. register new clusters
@@ -40,9 +39,9 @@ while true; do
 
     # Run the event log generator
     # TODO: replace with usage of replicated logs or move to fluent bit itself and send to loki: https://github.com/couchbaselabs/cbmultimanager/issues/33
-    sleep 30
+    sleep 60
     if [[ -x "/bin/cbeventlog" ]]; then
-        /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1
+        /bin/cbeventlog node --username "${COUCHBASE_USER}" --password "${COUCHBASE_PWD}" --node db1 --node-name db1 --log-path /opt/couchbase/var/lib/couchbase/logs/db1 --output-path /opt/couchbase/var/lib/couchbase/logs/db1/
     else
         echo "No event log generator to run"
     fi

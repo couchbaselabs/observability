@@ -19,9 +19,9 @@ services:
         container_name: couchbase-grafana
         # Note an environment file can be used as well, this is likely better for production
         environment:
-            # Disable fluent bit and loki for perfomance plus demonstrate as an example
-            - DISABLE_FLUENT_BIT=true
-            - DISABLE_LOKI=true
+            # Disable various components as an example
+            # - DISABLE_FLUENT_BIT=true
+            # - DISABLE_LOKI=true
             - DISABLE_PUSHGATEWAY=true
             - DISABLE_JAEGAER=true
             # Log to local files rather than stdout
@@ -39,7 +39,7 @@ services:
             # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
             - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
             # An example of how to also disable a default rule
-            - ${PWD}/dynamic/prometheus/disable-alert-rules/stubbed-checker-cbs7-rules.yaml:/etc/prometheus/alerting/couchbase/checker-cbs7-rules.yaml:ro
+            - ./dynamic/prometheus/disable-alert-rules/stubbed-checker-cbs7-rules.yaml:/etc/prometheus/alerting/couchbase/checker-cbs7-rules.yaml:ro
             # You can also replace all alerts to remove defaults so only provide custom:
             # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
             # This location stores any dynamic Healthcheck configuration
