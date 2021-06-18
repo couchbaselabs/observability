@@ -2,6 +2,8 @@
 
 A simple Nginx web server is exposed on port 80 to provide a landing page.
 
+![Overview](/images/microith-runtime.png)
+
 # Usage
 
 This uses an SSH mount to access a private git repository during the container build so make sure your SSH keys are set up for git locally and ssh agent is running with them to provide it.
@@ -20,6 +22,8 @@ docker container port couchbase-grafana 3000
 Browse to `localhost:55124` and log in with the default creds of `admin:password` for Grafana.
 
 # Configuration options
+
+![Microlith configuration](/images/microith-config.png)
 
 To disable various services from being run, set a variable (`docker run -e var ...`) called `DISABLE_X` where X is an uppercase version of their [entrypoint name](entrypoints/) (minus any `.sh` suffix). For example, to disable [Loki](entrypoints/loki.sh) you would set `DISABLE_LOKI`.
 
