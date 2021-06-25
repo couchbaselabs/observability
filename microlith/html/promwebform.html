@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <meta charset="utf-8">
+        <title>Generate Prometheus Endpoint Configuration</title>
+    </head>
+    <body>
+        <h2>Configuration</h2>
+        <div>
+            <form name="inputForm" id="inputForm">
+                <div>
+                    <label for="endpoint">New server name</label>
+                    <input type="text" name="serverName" id="serverName" placeholder="db1" required>
+                    <label for="endpoint">New endpoint</label>
+                    <input type="text" name="endpoint" id="endpoint" placeholder="127.0.0.1:9090" required>
+                </div>
+                <div>
+                    <button type="submit" name="generateButton" id="generateButton" onClick="generate();return false;">Generate</button>
+                </div>
+            </form>
+        </div>
+        <h2>Output</h2>
+        <div>
+            <pre id="json" name="json"></pre>
+        </div>
+    <script>
+        function generate() {
+            var output = [
+                            {
+                            "targets": [
+                                document.inputForm.endpoint.value
+                            ],
+                            "labels": {
+                                "job": document.inputForm.serverName.value
+                                }
+                            }
+                        ]
+            document.getElementById("json").innerHTML = JSON.stringify(output, undefined, 2);
+        }
+    </script>
+  </body>
+</html>
