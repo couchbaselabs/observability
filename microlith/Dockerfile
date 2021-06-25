@@ -5,20 +5,6 @@ FROM prom/alertmanager:v0.22.1 as alertmanager-official
 FROM prom/pushgateway:v1.4.0 as pushgateway-official
 FROM jaegertracing/all-in-one:1.23.0 as jaegaer-official
 
-FROM golang:1.16 as healthcheck-builder
-
-RUN apt-get update && \
-    apt-get install -y sqlcipher libssl-dev openssl openssh-client git && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ /bin
-
-# Support cloning the private repo
-RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
-
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager
-
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 
@@ -166,16 +152,6 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 
-# Couchbase healthcheck
-RUN mkdir -p /data /priv && \
-    openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" -addext "subjectAltName=DNS:couchbase.com" -newkey rsa:2048 -keyout /priv/server.key -out /priv/server.crt;
-
-COPY --from=healthcheck-builder /bin/cbmultimanager /bin/cbmultimanager
-COPY --from=healthcheck-builder /bin/cbeventlog /bin/cbeventlog
-RUN chmod a+x /bin/cb*
-
-EXPOSE 7196 7197
-
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
@@ -204,7 +180,6 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /pushgateway && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
-    chown -R couchbase:couchbase /data /priv && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/
