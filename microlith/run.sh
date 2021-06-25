@@ -18,10 +18,6 @@
 set -e
 
 # Expose all nested config variables to make it simple to see
-export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
-export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
-export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}
-
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
 export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
