@@ -19,35 +19,6 @@ RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultiman
 
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
 
-# Statically build it to allow reuse on Alpine Linux
-RUN go mod download
-RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager
-RUN CGO_ENABLED=1 GOOS=linux go build -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
-
-FROM alpine:3.13 as fluentbit-builder
-RUN apk add --no-cache build-base gcc abuild binutils cmake git flex bison fts-dev gtest-dev zlib-dev
-
-ARG FLUENT_BIT_VER=1.7.7
-RUN mkdir -p /src/fluent-bit && \
-    git clone --depth 1 --branch v${FLUENT_BIT_VER} https://github.com/fluent/fluent-bit.git /src/fluent-bit
-
-WORKDIR /src/fluent-bit
-
-COPY fluent-bit/*.patch ./
-RUN git apply *.patch && \
-    cmake -B build \
-		-DCMAKE_INSTALL_PREFIX=/fluent-bit \
-		-DCMAKE_BUILD_TYPE=None \
-		-DFLB_CORO_STACK_SIZE=24576 \
-        -DFLB_RELEASE=On \
-        -DFLB_SHARED_LIB=No \
-		-DFLB_TESTS_INTERNAL=No \
-		-DFLB_TESTS_RUNTIME=No \
-		-DFLB_TLS=Yes \
-		-DFLB_HTTP_SERVER=Yes \
-         . && \
-    make -C build install
-
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 
@@ -205,13 +176,6 @@ RUN chmod a+x /bin/cb*
 
 EXPOSE 7196 7197
 
-# Golang Fluent Bit
-COPY --from=fluentbit-builder /fluent-bit/ fluent-bit/
-COPY fluent-bit/fluent-bit.conf.microlith /fluent-bit/etc/fluent-bit.conf
-RUN mkdir -p /opt/couchbase/var/lib/couchbase/logs/ && chmod 777 /opt/couchbase/var/lib/couchbase/logs/
-ENV COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/
-EXPOSE 22020
-
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
@@ -241,7 +205,6 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
     chown -R couchbase:couchbase /data /priv && \
-    chown -R couchbase:couchbase /opt/couchbase/var/lib/couchbase/logs/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/
