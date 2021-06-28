@@ -33,3 +33,21 @@ spec:
     protocol: TCP
   selector:
     run: couchbase-grafana
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: minimal-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: couchbase-grafana
+            port:
+              number: 8080

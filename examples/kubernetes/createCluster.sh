@@ -39,6 +39,19 @@ featureGates:
  EphemeralContainers: true
 nodes:
 - role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
 EOF
 
     for i in $(seq "$SERVER_COUNT"); do
@@ -51,6 +64,14 @@ EOF
   kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
   rm -rf "${CONFIG_DIR}"
 
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+  kubectl wait --namespace ingress-nginx \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=90s
+
+  # The webhook installation is not complete so just remove
+  kubectl delete validatingwebhookconfigurations ingress-nginx-admission
 fi #SKIP_CLUSTER_CREATION
 
 # Build and deploy the microlith
