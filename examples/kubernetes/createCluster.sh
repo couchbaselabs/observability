@@ -21,34 +21,15 @@ CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 CLUSTER_CONFIG="${CONFIG_DIR}/multinode-cluster-conf.yaml"
 
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
-REBUILD_ALL=${REBUILD_ALL:-yes}
 
 SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:6.6.2}
 SERVER_COUNT=${SERVER_COUNT:-3}
 
-DOCKER_TAG=${DOCKER_TAG:-v1}
-OPERATOR_VERSION=${OPERATOR_VERSION:-$DOCKER_TAG}
-DAC_VERSION=${DAC_VERSION:-$DOCKER_TAG}
-
-OPERATOR_REPO_DIR=${OPERATOR_REPO_DIR:-${SCRIPT_DIR}/couchbase-operator}
-
 set +x
-
-if [[ "${REBUILD_ALL}" == "yes" ]]; then
-  echo "Full rebuild"
-  SKIP_CLUSTER_CREATION=no
-
-  if [[ ! -d "${OPERATOR_REPO_DIR}" ]]; then
-    git clone --depth 1 git@github.com:couchbase/couchbase-operator.git "${OPERATOR_REPO_DIR}"
-  fi
-
-  pushd "${OPERATOR_REPO_DIR}"
-  make && make container
-  popd
-fi
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
   echo "Recreating full cluster"
+  kind delete cluster --name="${CLUSTER_NAME}"
 
   # Simple script to deal with running up a test cluster for KIND for developing logging updates for.
   cat << EOF > "${CLUSTER_CONFIG}"
@@ -67,56 +48,20 @@ EOF
 EOF
     done
 
-    kind delete cluster --name="${CLUSTER_NAME}"
-    kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
-    echo "$(date) waiting for cluster..."
-    until kubectl cluster-info;  do
-        echo -n "."
-        sleep 2
-    done
-    echo -n " done"
+  kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
+  rm -rf "${CONFIG_DIR}"
 
-    # Check we can use the storage ok
-    if ! kubectl get sc standard -o yaml|grep -q "volumeBindingMode: WaitForFirstConsumer"; then
-        echo "Standard storage class is not lazy binding so needs manual set up"
-        exit 1
-    fi
-
-    # Ensure we have everything we need
-    kind load docker-image "couchbase/couchbase-operator:${OPERATOR_VERSION}" --name="${CLUSTER_NAME}"
-    kind load docker-image "couchbase/couchbase-operator-admission:${DAC_VERSION}" --name="${CLUSTER_NAME}"
-    kind load docker-image "couchbase-observability:latest" --name="${CLUSTER_NAME}"
-
-    # Not strictly required but improves caching performance
-    docker pull "${SERVER_IMAGE}"
-    kind load docker-image "${SERVER_IMAGE}" --name="${CLUSTER_NAME}"
-    # It also slows down everything to allow the cluster to come up fully
-
-    rm -rf "${CONFIG_DIR}"
-
-    # Install CRD, DAC and operator
-    kubectl apply -f "${OPERATOR_REPO_DIR}/example/crd.yaml"
-    "${OPERATOR_REPO_DIR}/build/bin/cbopcfg" create admission --image="couchbase/couchbase-operator-admission:${OPERATOR_VERSION}" --log-level=debug
-    "${OPERATOR_REPO_DIR}/build/bin/cbopcfg" create operator --image="couchbase/couchbase-operator:${DAC_VERSION}" --log-level=debug
-
-    # Need to wait for operator and DAC to start up
-    echo "Waiting for DAC to complete..."
-    until kubectl rollout status deployment couchbase-operator-admission; do
-        echo -n "."
-        sleep 2
-    done
-    echo " done"
-    echo "Waiting for operator to complete..."
-    until kubectl rollout status deployment couchbase-operator; do
-        echo -n "."
-        sleep 2
-    done
-    echo " done"
 fi #SKIP_CLUSTER_CREATION
 
-kubectl apply -f "${SCRIPT_DIR}/couchbase.yaml"
-# kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
-kubectl run couchbase-grafana --image=couchbase-observability:latest
+# Build and deploy the microlith
+DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:v1 -f "${SCRIPT_DIR}/../../microlith/Dockerfile" "${SCRIPT_DIR}/../../microlith/"
+kind load docker-image couchbase-observability:v1 --name="${CLUSTER_NAME}"
+kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
+
+# Add Couchbase via helm chart
+helm repo add couchbase https://couchbase-partners.github.io/helm-charts/
+helm repo update
+helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${SERVER_IMAGE}",cluster.monitoring.prometheus.enabled=true
 
 # Wait for deployment to complete
 echo "Waiting for CB to start up..."

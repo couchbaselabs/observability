@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: couchbase-grafana
+spec:
+  selector:
+    matchLabels:
+      run: couchbase-grafana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: couchbase-grafana
+    spec:
+      containers:
+      - name: couchbase-grafana
+        image: couchbase-observability:v1
+        ports:
+        - containerPort: 8080
+        env:
+        - name: DISABLE_PUSHGATEWAY
+          value: "TRUE"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: couchbase-grafana
+  labels:
+    run: couchbase-grafana
+spec:
+  ports:
+  - port: 8080
+    protocol: TCP
+  selector:
+    run: couchbase-grafana

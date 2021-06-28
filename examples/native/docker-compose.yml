@@ -63,7 +63,7 @@ services:
             # Jaeger
             - "16686:16686"
             # Landing page
-            - "8080:80"
+            - "8080:8080"
             # Fluent bit metrics
             - "22020:22020"
 
