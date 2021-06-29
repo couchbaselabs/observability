@@ -38,6 +38,10 @@ export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/p
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
 mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 
+if [[ -v "KUBERNETES_DEPLOYMENT" ]]; then
+    echo "[ENTRYPOINT] Using Kubernetes mode as KUBERNETES_DEPLOYMENT set (value ignored)"
+fi
+
 # Support passing in custom command to run, e.g. bash
 if [[ $# -gt 0 ]]; then
     echo "[ENTRYPOINT] Running custom: $*"

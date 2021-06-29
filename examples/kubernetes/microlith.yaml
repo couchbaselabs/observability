@@ -20,6 +20,8 @@ spec:
         env:
         - name: DISABLE_PUSHGATEWAY
           value: "TRUE"
+        - name: KUBERNETES_DEPLOYMENT
+          value: "TRUE"
 ---
 apiVersion: v1
 kind: Service
@@ -37,14 +39,16 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: minimal-ingress
+  name: couchbase-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   rules:
   - http:
       paths:
-      - path: /
+      - path: /(.*)(/|$)
         pathType: Prefix
         backend:
           service:

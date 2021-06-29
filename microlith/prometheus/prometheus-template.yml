@@ -47,6 +47,28 @@ scrape_configs:
       - files:
         - 'couchbase/custom/*.json'
         refresh_interval: 30s
+  - job_name: 'couchbase-kubernetes-pods'
+    kubernetes_sd_configs:
+    - role: pod
+    relabel_configs:
+      # scrape only pods that have couchbase_server = true" annotation.
+    - source_labels: [__meta_kubernetes_pod_label_couchbase_server]
+      action: keep
+      regex: true
+      # need to only scrape port 9091
+    - source_labels: [__address__]
+      action: replace
+      regex: ([^:]+)(?::\d+)?
+      replacement: $1:9091
+      target_label: __address__
+    - action: labelmap
+      regex: __meta_kubernetes_pod_label_(.+)
+    - source_labels: [__meta_kubernetes_namespace]
+      action: replace
+      target_label: kubernetes_namespace
+    - source_labels: [__meta_kubernetes_pod_name]
+      action: replace
+      target_label: kubernetes_pod_name
   - job_name: 'couchbase-cluster'
     basic_auth:
       # We use envsubst to replace these prior to launch
