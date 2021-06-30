@@ -33,3 +33,7 @@ datasources:
     tlsClientCert: "..."
     tlsClientKey: "..."
   version: 1
+- name: Jaeger
+  type: jaeger
+  access: proxy
+  url: http://localhost:16686/
