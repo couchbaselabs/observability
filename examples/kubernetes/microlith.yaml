@@ -99,7 +99,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: couchbase-grafana
+            name: couchbase-grafana-http
             port:
               number: 8080
 ---
