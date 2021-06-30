@@ -69,6 +69,14 @@ DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:v1 -f "$
 kind load docker-image couchbase-observability:v1 --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
+# Create the secret for Fluent Bit customisation
+kubectl delete secret fluent-bit-custom 2>/dev/null || true
+kubectl create secret generic fluent-bit-custom --from-file="${SCRIPT_DIR}/fluent-bit.conf"
+
+# Output the contents of the secret so we can verify
+# shellcheck disable=SC2016
+kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+
 # Add Couchbase via helm chart
 helm repo add couchbase https://couchbase-partners.github.io/helm-charts/
 helm repo update

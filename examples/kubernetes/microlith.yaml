@@ -1,4 +1,5 @@
 ---
+# Prometheus service discovery via the K8S API requires some permissions
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
@@ -23,6 +24,7 @@ subjects:
   name: system:serviceaccounts
   apiGroup: rbac.authorization.k8s.io
 ---
+# Our actual container to run
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -41,17 +43,22 @@ spec:
       - name: couchbase-grafana
         image: couchbase-observability:v1
         ports:
-        - containerPort: 8080
+        - name: http
+          containerPort: 8080
+        - name: loki # So we can push logs to it
+          containerPort: 3100
         env:
         - name: DISABLE_PUSHGATEWAY
-          value: "TRUE"
+          value: "true"
         - name: KUBERNETES_DEPLOYMENT
-          value: "TRUE"
+          value: "true"
+        - name: ENABLE_LOG_TO_FILE
+          value: "true"
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: couchbase-grafana
+  name: couchbase-grafana-http
   labels:
     run: couchbase-grafana
 spec:
@@ -61,6 +68,21 @@ spec:
   selector:
     run: couchbase-grafana
 ---
+# To allow us to send to Loki we need this
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  labels:
+    run: couchbase-grafana
+spec:
+  ports:
+  - port: 3100
+    protocol: TCP
+  selector:
+    run: couchbase-grafana
+---
+# Ingress to forward to our web server including sub-paths: we should just forward what we need but for local testing just sending it all.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -80,3 +102,4 @@ spec:
             name: couchbase-grafana
             port:
               number: 8080
+---

@@ -1092,8 +1092,8 @@
         {
           "current": {
             "selected": false,
-            "text": "travel-sample",
-            "value": "travel-sample"
+            "text": "default",
+            "value": "default"
           },
           "description": "Enter bucket name to use",
           "error": null,
@@ -1103,11 +1103,11 @@
           "options": [
             {
               "selected": true,
-              "text": "travel-sample",
-              "value": "travel-sample"
+              "text": "default",
+              "value": "default"
             }
           ],
-          "query": "travel-sample",
+          "query": "default",
           "skipUrlSync": false,
           "type": "textbox"
         }

@@ -2,6 +2,8 @@ cluster:
   logging:
     server:
       enabled: true
+      manageConfiguration: false # Provide custom configuration to use
+      configurationName: fluent-bit-custom # Name of the secret to use
       sidecar:
         image: couchbase/fluent-bit:1.0.3
   monitoring:
