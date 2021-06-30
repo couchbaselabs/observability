@@ -79,8 +79,11 @@ kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{p
 
 # Add Couchbase via helm chart
 if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; then
-  echo "Unable to add Couchbase helm repository - may just be a trailing / on the URL but confirm"
-  helm repo list | grep couchbase
+  if ! helm repo list|grep couchbase|grep -q https://couchbase-partners.github.io/helm-charts ; then
+    echo "Unable to add Couchbase helm repository, remove the current 'couchbase' entry using 'helm repo remove couchbase' then re-run this script"
+    helm repo list|grep couchbase
+    exit 1
+  fi
 fi
 helm repo update
 helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
