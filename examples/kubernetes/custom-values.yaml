@@ -1,0 +1,20 @@
+cluster:
+  logging:
+    server:
+      enabled: true
+      sidecar:
+        image: couchbase/fluent-bit:1.0.3
+  monitoring:
+    prometheus:
+      enabled: true
+  servers:
+    default:
+      volumeMounts:
+        default: couchbase
+  volumeClaimTemplates:
+  - metadata:
+      name: couchbase
+    spec:
+      resources:
+        requests:
+          storage: 1Gi

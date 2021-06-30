@@ -42,19 +42,20 @@ scrape_configs:
       - files:
         - 'couchbase/monitoring/*.json'
         refresh_interval: 30s
+
+  # Used for local deployment: add targets to this
   - job_name: 'couchbase-server'
     file_sd_configs:
       - files:
         - 'couchbase/custom/*.json'
         refresh_interval: 30s
 
+  # Used for kuberenetes deployment as we can discover the end points to scrape from the API
   - job_name: 'couchbase-kubernetes-pods'
-
     kubernetes_sd_configs:
       - role: pod
-
     relabel_configs:
-      Scrap
+      # Scrape pods labelled with app=couchbase and then only port 9091
       - source_labels: [__meta_kubernetes_pod_label_app]
         action: keep
         regex: couchbase
