@@ -78,7 +78,10 @@ kubectl create secret generic fluent-bit-custom --from-file="${SCRIPT_DIR}/fluen
 kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
 
 # Add Couchbase via helm chart
-helm repo add couchbase https://couchbase-partners.github.io/helm-charts
+if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; then
+  echo "Unable to add Couchbase helm repository - may just be a trailing / on the URL but confirm"
+  helm repo list | grep couchbase
+fi
 helm repo update
 helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
 
