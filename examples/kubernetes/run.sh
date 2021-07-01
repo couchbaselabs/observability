@@ -63,6 +63,14 @@ EOF
   kubectl delete validatingwebhookconfigurations ingress-nginx-admission
 fi #SKIP_CLUSTER_CREATION
 
+# Deploy kube-state-metrics via helm chart
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
+
+kubectl delete configmap prometheus-config || true
+kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus-k8s.yml"
+
 # Deploy the microlith
 kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"

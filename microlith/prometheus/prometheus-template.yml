@@ -31,7 +31,6 @@ alerting:
         - 'alertmanager/custom/*.json'
         refresh_interval: 30s
 
-# https://github.com/prometheus/prometheus/blob/main/config/testdata/conf.good.yml
 scrape_configs:
   - job_name: 'prometheus'
     metrics_path: /prometheus/metrics
@@ -49,24 +48,3 @@ scrape_configs:
       - files:
         - 'couchbase/custom/*.json'
         refresh_interval: 30s
-
-  # Used for kuberenetes deployment as we can discover the end points to scrape from the API
-  - job_name: 'couchbase-kubernetes-pods'
-    kubernetes_sd_configs:
-      - role: pod
-    relabel_configs:
-      # Scrape pods labelled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
-      - source_labels: [__meta_kubernetes_pod_label_app]
-        action: keep
-        regex: couchbase
-      - source_labels: [__meta_kubernetes_pod_container_port_number]
-        action: keep
-        regex: "(9091|2020)"
-      - action: labelmap
-        regex: __meta_kubernetes_pod_label_(.+)
-      - source_labels: [__meta_kubernetes_namespace]
-        action: replace
-        target_label: kubernetes_namespace
-      - source_labels: [__meta_kubernetes_pod_name]
-        action: replace
-        target_label: kubernetes_pod_name
