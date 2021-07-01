@@ -60,28 +60,6 @@ do
   fi
 done < <(find "/etc/prometheus/alerting" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
 
-# Add in metric support for pushgateway if enabled - it runs its own binary separately
-if [[ -v "DISABLE_PUSHGATEWAY" ]]; then
-  echo "DISABLE_PUSHGATEWAY set so no endpoint to create"
-else
-  echo "Creating pushgateway metric endpoint"
-  PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
-  mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
-  cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/pushgateway.json << __EOF__
-[
-    {
-      "targets": [
-        "localhost:9091"
-      ],
-      "labels": {
-        "job": "pushgateway",
-        "container": "monitoring"
-      }
-    }
-]
-__EOF__
-fi
-
 # From: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 # A configuration reload is triggered by sending a SIGHUP to the Prometheus process or
 # sending a HTTP POST request to the /-/reload endpoint.

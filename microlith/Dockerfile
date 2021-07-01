@@ -1,8 +1,7 @@
-FROM grafana/grafana:7.5.9 as grafana-official
-FROM grafana/loki:2.0.0 as loki-official
-FROM prom/prometheus:v2.27.1 as prometheus-official
-FROM prom/alertmanager:v0.22.1 as alertmanager-official
-FROM prom/pushgateway:v1.4.0 as pushgateway-official
+FROM grafana/grafana:8.0.3 as grafana-official
+FROM grafana/loki:2.2.1 as loki-official
+FROM prom/prometheus:v2.28.0 as prometheus-official
+FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.23.0 as jaegaer-official
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
@@ -104,13 +103,6 @@ RUN mkdir -p /alertmanager && \
 EXPOSE     9093
 VOLUME     [ "/alertmanager" ]
 
-# PROM PUSH GATEWAY
-# From https://github.com/prometheus/pushgateway/blob/master/Dockerfile
-COPY --from=pushgateway-official /bin/pushgateway /bin/pushgateway
-
-EXPOSE 9091
-RUN mkdir -p /pushgateway && chown nobody:nobody /pushgateway
-
 # JAEGER ALL IN ONE
 # https://github.com/jaegertracing/jaeger/blob/master/cmd/all-in-one/Dockerfile
 COPY --from=jaegaer-official /go/bin/all-in-one-linux /go/bin/all-in-one-linux
@@ -162,7 +154,6 @@ EXPOSE 80
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
-COPY --from=pushgateway-official /bin/pushgateway /entrypoints/pushgateway
 
 ENV TINI_SUBREAPER=
 COPY run.sh /run.sh
@@ -179,7 +170,6 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/loki /loki && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
-    chown -R couchbase:couchbase /pushgateway && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
     mkdir -p /logs && chmod 777 /logs && \

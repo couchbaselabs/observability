@@ -61,7 +61,7 @@ scrape_configs:
         regex: couchbase
       - source_labels: [__meta_kubernetes_pod_container_port_number]
         action: keep
-        regex: "9091"
+        regex: "(9091|2020)"
       - action: labelmap
         regex: __meta_kubernetes_pod_label_(.+)
       - source_labels: [__meta_kubernetes_namespace]
@@ -70,13 +70,3 @@ scrape_configs:
       - source_labels: [__meta_kubernetes_pod_name]
         action: replace
         target_label: kubernetes_pod_name
-
-  - job_name: 'couchbase-cluster'
-    basic_auth:
-      # We use envsubst to replace these prior to launch
-      username: $CLUSTER_MONITOR_USER
-      password: $CLUSTER_MONITOR_PWD
-    metrics_path: /api/v1/_prometheus
-    # For basic auth we cannot use file_sd
-    static_configs:
-         - targets: ['localhost:7196']
