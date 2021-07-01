@@ -55,7 +55,7 @@ scrape_configs:
   - job_name: 'couchbase-grafana'
     file_sd_configs:
       - files:
-        - 'couchbase/monitoring/*.json'
+        - '/etc/prometheus/couchbase/monitoring/*.json'
         refresh_interval: 30s
 
   # Used for kubernetes deployment as we can discover the end points to scrape from the API
