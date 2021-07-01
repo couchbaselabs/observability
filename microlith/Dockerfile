@@ -1,4 +1,4 @@
-FROM grafana/grafana:7.5.2 as grafana-official
+FROM grafana/grafana:7.5.9 as grafana-official
 FROM grafana/loki:2.0.0 as loki-official
 FROM prom/prometheus:v2.27.1 as prometheus-official
 FROM prom/alertmanager:v0.22.1 as alertmanager-official
@@ -7,8 +7,8 @@ FROM jaegertracing/all-in-one:1.23.0 as jaegaer-official
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
-
-RUN apk add --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
+# hadolint ignore=DL3018
+RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
@@ -39,10 +39,12 @@ ENV PATH="/usr/share/grafana/bin:$PATH" \
 
 WORKDIR $GF_PATHS_HOME
 
+# hadolint ignore=SC2046
 RUN if [ ! $(getent group "$GF_GID") ]; then \
       addgroup -S -g $GF_GID grafana; \
     fi
 
+# hadolint ignore=DL3059,DL4006,SC2155
 RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
     mkdir -p "$GF_PATHS_HOME/.aws" && \
     adduser -S -u $GF_UID -G "$GF_GID_NAME" grafana && \
@@ -67,8 +69,8 @@ WORKDIR /
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
 RUN addgroup -g 10001 -S loki && \
-    adduser -u 10001 -S loki -G loki
-RUN mkdir -p /loki/rules && \
+    adduser -u 10001 -S loki -G loki && \
+    mkdir -p /loki/rules && \
     mkdir -p /loki/tmprules && \
     mkdir -p /loki/rules-temp && \
     chown -R loki:loki /etc/loki /loki
@@ -81,8 +83,8 @@ EXPOSE 3100
 
 # PROMETHEUS
 # From https://github.com/prometheus/prometheus/blob/main/Dockerfile
-RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/
-RUN mkdir -p /prometheus && \
+RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles/ /etc/prometheus/ && \
+    mkdir -p /prometheus && \
     chown -R nobody:nobody /etc/prometheus /prometheus
 
 # USER       nobody

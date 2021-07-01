@@ -48,10 +48,10 @@ container: build
 	docker build -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
 container-lint: build lint
-	-docker run --rm -i hadolint/hadolint < microlith/Dockerfile
+	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
 
 container-scan: container
-	-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
 		--severity "HIGH,CRITICAL" --ignore-unfixed --exit-code 1 --no-progress ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -e CI=true wagoodman/dive \
 		${DOCKER_USER}/observability-stack:${DOCKER_TAG}
