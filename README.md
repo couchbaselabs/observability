@@ -17,10 +17,8 @@ We essentially need to support two fairly distinct types of user:
 * Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
 * Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
 * Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
-* Push Gateway: Apache 2.0 https://github.com/prometheus/pushgateway/blob/master/LICENSE
 * Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
 * Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
-* Couchbase Healthcheck: Proprietary/TBC
 
 # Architecture
 
@@ -130,7 +128,7 @@ Please raise issues directly on this Github repository.
 No official support is currently provided but best efforts will be made.
 
 # Release tagging and branching
-Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbaselabs/observability/tags will have a matching tag in this repository that built them.
+Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbase/observability-stack/tags will have a matching tag in this repository that built them.
 Updates will be pushed to the `main` branch often and then tagged once released as a new image version.
 Tags will not be moved after release, even just for a documentation update - this should trigger a new release or just be available as the latest version on `main`.
 

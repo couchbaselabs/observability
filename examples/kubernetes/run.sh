@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -eux
+set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -20,8 +20,6 @@ CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
 SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:6.6.2}
 COS_IMAGE=${COS_IMAGE:-couchbase/observability-stack:v1}
-
-set +x
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
   echo "Recreating full cluster"

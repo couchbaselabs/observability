@@ -20,9 +20,7 @@ services:
         # Note an environment file can be used as well, this is likely better for production
         environment:
             # Disable various components as an example
-            # - DISABLE_FLUENT_BIT=true
-            # - DISABLE_LOKI=true
-            - DISABLE_PUSHGATEWAY=true
+            - DISABLE_LOKI=true
             - DISABLE_JAEGER=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
@@ -42,8 +40,6 @@ services:
             - ./dynamic/prometheus/disable-alert-rules/stubbed-checker-cbs7-rules.yaml:/etc/prometheus/alerting/couchbase/checker-cbs7-rules.yaml:ro
             # You can also replace all alerts to remove defaults so only provide custom:
             # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
-            # This location stores any dynamic Healthcheck configuration
-            - ./dynamic/healthcheck/:/etc/healthcheck/:ro
             # Log output here to help
             - ./logs:/logs:rw
         networks:
@@ -52,20 +48,12 @@ services:
         ports:
             # Grafana
             - "3000:3000"
-            # Loki
-            - "3100:3100"
             # Prometheus
             - "9090:9090"
             # Alert manager
             - "9093:9093"
-            # Healthcheck
-            - "7196-7197:7196-7197"
-            # Jaeger
-            - "16686:16686"
             # Landing page
             - "8080:8080"
-            # Fluent bit metrics
-            - "22020:22020"
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
@@ -92,7 +80,7 @@ services:
 
     # logging:
     #     container_name: logging
-    #     image: couchbase/fluent-bit:1.0.3
+    #     image: couchbase/fluent-bit:1.0.4
     #     ports:
     #         # Metrics
     #         - "2020:2020"

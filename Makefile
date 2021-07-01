@@ -17,10 +17,10 @@ revision = $(if $(REVISION),$(REVISION),)
 
 .PHONY: all build lint container container-public container-lint container-scan dist test-dist container-clean clean examples
 
-all: clean build lint container container-lint container-scan dist test-dist
+all: clean build lint container container-lint container-scan dist test-dist examples
 
 build:
-	echo "Nothing to do"
+	echo "Nothing to do - repackaging only"
 
 image-artifacts: build
 	mkdir -p $(ARTIFACTS)
@@ -63,7 +63,8 @@ container-public: container
 	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
 
 # Build and run the examples
-examples: container
+examples: clean container
+	examples/native/run.sh
 	examples/kubernetes/run.sh
 
 # Special target to verify the internal release pipeline will work as well
@@ -82,3 +83,6 @@ container-clean:
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/
+	examples/native/stop.sh
+	rm -f examples/native/logs/*.log
+	examples/kubernetes/stop.sh
