@@ -17,7 +17,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1625052673561,
+  "iteration": 1625154405830,
   "links": [],
   "panels": [
     {
@@ -63,7 +63,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -163,7 +163,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -285,7 +285,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "targets": [
         {
           "expr": "cbpernodebucket_curr_connections{bucket=\"$bucket\"}",
@@ -341,7 +341,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -441,7 +441,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -538,7 +538,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -605,11 +605,13 @@
           },
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -652,7 +654,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "targets": [
         {
           "exemplar": true,
@@ -679,11 +681,13 @@
           },
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -726,7 +730,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "targets": [
         {
           "exemplar": true,
@@ -784,7 +788,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -890,7 +894,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -988,7 +992,7 @@
       },
       "paceLength": 10,
       "percentage": false,
-      "pluginVersion": "7.5.2",
+      "pluginVersion": "8.0.3",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -1059,32 +1063,37 @@
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 27,
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
+        "allValue": null,
         "current": {
           "selected": false,
           "text": "default",
           "value": "default"
         },
+        "datasource": null,
+        "definition": "label_values(bucket)",
         "description": "Enter bucket name to use",
         "error": null,
         "hide": 0,
+        "includeAll": false,
         "label": "bucket",
+        "multi": false,
         "name": "bucket",
-        "options": [
-          {
-            "selected": false,
-            "text": "travel-sample",
-            "value": "travel-sample"
-          }
-        ],
-        "query": "default",
+        "options": [],
+        "query": {
+          "query": "label_values(bucket)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
         "skipUrlSync": false,
-        "type": "textbox"
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
