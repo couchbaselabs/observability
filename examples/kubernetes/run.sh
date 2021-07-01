@@ -19,6 +19,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
 SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:6.6.2}
+COS_IMAGE=${COS_IMAGE:-couchbase/observability-stack:v1}
 
 set +x
 
@@ -64,9 +65,8 @@ EOF
   kubectl delete validatingwebhookconfigurations ingress-nginx-admission
 fi #SKIP_CLUSTER_CREATION
 
-# Build and deploy the microlith
-DOCKER_BUILDKIT=1 docker build --ssh default -t couchbase-observability:v1 -f "${SCRIPT_DIR}/../../microlith/Dockerfile" "${SCRIPT_DIR}/../../microlith/"
-kind load docker-image couchbase-observability:v1 --name="${CLUSTER_NAME}"
+# Deploy the microlith
+kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
 # Create the secret for Fluent Bit customisation

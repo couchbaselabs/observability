@@ -62,9 +62,9 @@ container-scan: container
 container-public: container
 	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
 
-# TODO: special tests of examples
-examples:
-	examples/kubernetes/createCluster.sh
+# Build and run the examples
+examples: container
+	examples/kubernetes/run.sh
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
