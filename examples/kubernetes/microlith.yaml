@@ -48,8 +48,6 @@ spec:
         - name: loki # So we can push logs to it
           containerPort: 3100
         env:
-        - name: DISABLE_PUSHGATEWAY
-          value: "true"
         - name: KUBERNETES_DEPLOYMENT
           value: "true"
         - name: ENABLE_LOG_TO_FILE

@@ -13,12 +13,18 @@ We essentially need to support two fairly distinct types of user:
 
 ## Components
 
+This software uses the following components with their associated licensing also captured:
+
 * Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
 * Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
 * Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
 * Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
 * Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
 * Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
+* Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
+
+Nginx is used as the base for the microlith container.
+All licences are in the source repository and the microlith container in the [`/licenses`](microlith/licenses/) directory.
 
 # Architecture
 

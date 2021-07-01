@@ -180,5 +180,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
 ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
+# Add all useful and required information
+COPY licenses/* /licenses/
+COPY README.md /help.1
+
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
