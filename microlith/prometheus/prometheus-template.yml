@@ -55,7 +55,7 @@ scrape_configs:
     kubernetes_sd_configs:
       - role: pod
     relabel_configs:
-      # Scrape pods labelled with app=couchbase and then only port 9091
+      # Scrape pods labelled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
       - source_labels: [__meta_kubernetes_pod_label_app]
         action: keep
         regex: couchbase
