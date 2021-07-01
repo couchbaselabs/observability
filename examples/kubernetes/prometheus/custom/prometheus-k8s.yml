@@ -7,16 +7,16 @@ global:
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
   external_labels:
-      monitor: 'observability'
+      monitor: 'couchbase-observability-stack'
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
   # All Couchbase default rules go here
-  - alerting/couchbase/*.yaml
-  - alerting/couchbase/*.yml
-  # All custom rules can go here
-  - alerting/custom/*.yaml
-  - alerting/custom/*.yml
+  - /etc/prometheus/alerting/couchbase/*.yaml
+  - /etc/prometheus/alerting/couchbase/*.yml
+  # All custom rules can go here: relative to this file
+  - alerting/*.yaml
+  - alerting/*.yml
 
 alerting:
   alertmanagers:

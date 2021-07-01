@@ -68,8 +68,9 @@ helm repo add prometheus-community https://prometheus-community.github.io/helm-c
 helm repo update
 helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 
+# Prometheus configuration is all pulled from this directory
 kubectl delete configmap prometheus-config || true
-kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus-k8s.yml"
+kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
 
 # Deploy the microlith
 kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"

@@ -24,9 +24,6 @@ PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/promethe
 PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
 PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
 
-# If we override the configuration then we always use it, however we may be running under kubernetes so we want the defaults tor that
-# KUBERNETES_DEPLOYMENT=TRUE
-
 # Example variables to tune with - it would be nicer to include defaults in the file but envsubst does not support that:
 export COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=${COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD:-100}
 export COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_DURATION=${COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_DURATION:-1m}
