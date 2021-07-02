@@ -117,6 +117,38 @@ TBD: https://github.com/couchbaselabs/observability/issues/6
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
+# Testing
+
+We need to verify the following key use cases:
+* Deploying microlith to Kubernetes using CAO, automatic service discovery
+  * Without CAO still possible but not tested
+* Deploying on-premise using manual configuration with the microlith
+
+We need to test the following aspects:
+* Couchbase Server metrics are available (using the exporter pre 7.0)
+* Default alerting rules are triggered under appropriate failures
+  * Defaults in general just work out of the box
+* Custom alerting rules can be provided
+  * Extend existing
+  * Replace defaults
+* Prometheus endpoint is available from the microlith
+* Loki endpoint is available from the microlith
+* Grafana dashboards are available from the microlith
+* Custom dashboards can be provided to the microlith
+* Components within the microlith can be enabled or disabled
+* Reproducible ephemeral container with custom configuration via GitOps
+
+Variation points:
+* Clusters with and without Prometheus end points
+* Clusters with different credentials
+* Clusters using different versions of Couchbase Server
+* In same namespace and separate namespaces
+* CE and EE clusters (not with CAO though for EE)
+* On-prem and CAO clusters mixed together for monitoring
+
+We use the BATS framework (reuse some SDK set up tests as well) to verify all this locally using a docker-compose stack to represent an on-premise option and a KIND cluster for a kubernetes option.
+Scale up to run tests in GKE as well using multiple nodes explicitly there.
+
 # Caveats and restrictions
 
 * No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
