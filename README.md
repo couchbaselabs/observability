@@ -120,26 +120,38 @@ For those customers who want to scale up the deployment and/or follow a more clo
 # Testing
 
 We need to verify the following key use cases:
+* Out of the box defaults provided for simple usage to give a cluster overview
+* Customisation of rules and integrate into existing pipeline
+
+In two separate infrastructures:
 * Deploying microlith to Kubernetes using CAO, automatic service discovery
   * Without CAO still possible but not tested
 * Deploying on-premise using manual configuration with the microlith
+  * Remote end point or in Vagrant as well
 
 We need to test the following aspects:
-* Couchbase Server metrics are available (using the exporter pre 7.0)
+* Prometheus endpoint is available from the microlith
+* Couchbase Server metrics are available (using the exporter pre 7.0) from the microlith endpoint
+  * PromQL or promcli tooling can verify this
 * Default alerting rules are triggered under appropriate failures
   * Defaults in general just work out of the box
 * Custom alerting rules can be provided
   * Extend existing
   * Replace defaults
-* Prometheus endpoint is available from the microlith
-* Loki endpoint is available from the microlith
 * Grafana dashboards are available from the microlith
 * Custom dashboards can be provided to the microlith
+  * We can query the REST API for this information, i.e. what rules are present and firing, etc.
+* Loki endpoint is available from the microlith
+  * LogQL can verify this and that there is some data (need to ensure we send some logs)
 * Components within the microlith can be enabled or disabled
+  * Repeat one of the previous tests (e.g. Loki) with the component disabled and confirm the test fails.
 * Reproducible ephemeral container with custom configuration via GitOps
+  * Configuration of cluster connection & credentials
+  * Addition of custom alerts and tuning/inhibition of those alerts, plus addition of custom dashboards
 
 Variation points:
 * Clusters with and without Prometheus end points
+* Clusters using CBS 7.0+ and Prometheus exporter
 * Clusters with different credentials
 * Clusters using different versions of Couchbase Server
 * In same namespace and separate namespaces
