@@ -126,11 +126,13 @@ We need to verify the following key use cases:
 In two separate infrastructures:
 * Deploying microlith to Kubernetes using CAO, automatic service discovery
   * Without CAO still possible but not tested
+  * Can also mix-and-match this with on-premise cluster (COS in k8s, Couchbase Server on premise)
 * Deploying on-premise using manual configuration with the microlith
   * Remote end point or in Vagrant as well
 
 We need to test the following aspects:
 * Prometheus endpoint is available from the microlith
+* Adding the Couchbase Server instances to be monitored
 * Couchbase Server metrics are available (using the exporter pre 7.0) from the microlith endpoint
   * PromQL or promcli tooling can verify this
 * Default alerting rules are triggered under appropriate failures
