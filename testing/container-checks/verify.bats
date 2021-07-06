@@ -29,9 +29,5 @@ DETIK_CLIENT_NAME="kubectl"
 @test 'check bats_detik' {
     DETIK_CLIENT_NAME="kubectl -n kube-system"
     DETIK_CLIENT_NAMESPACE="kube-system"
-    run kubectl -n $DETIK_CLIENT_NAMESPACE get svc
-    echo "Command output is: $output"
-    run verify "there are 1 services named 'kube-dns'"
-    echo "Command output is: $output"
-	[ "$status" -eq 0 ]
+    verify "there are 1 services named 'kube-dns'"
 }
