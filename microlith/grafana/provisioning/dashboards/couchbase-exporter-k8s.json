@@ -72,7 +72,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_cpu_utilization_rate{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_cpu_utilization_rate{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -170,20 +170,20 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_mem_used_bytes{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_mem_used_bytes{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
           "refId": "A"
         },
         {
-          "expr": "couchbase_bucketstat_mem_actual_used_bytes{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_mem_actual_used_bytes{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "B"
         },
         {
-          "expr": "couchbase_bucketstat_mem_actual_used_free{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_mem_actual_used_free{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "C"
@@ -283,7 +283,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "couchbase_per_node_bucket_curr_connections{pod=~\"$pod\", node=~\"$node\", bucket=~\"$bucket\"}",
+          "expr": "cbper_node_bucket_curr_connections{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -344,7 +344,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_ops{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_ops{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "instant": false,
           "intervalFactor": 1,
@@ -442,7 +442,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_cmd_get{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_cmd_get{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "",
@@ -537,7 +537,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_cmd_set{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_cmd_set{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -632,7 +632,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "couchbase_per_node_bucket_curr_items{pod=~\"$pod\", node=~\"$node\", bucket=~\"$bucket\"}",
+          "expr": "cbper_node_bucket_curr_items{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -692,14 +692,14 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_disk_write_queue{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_disk_write_queue{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
           "refId": "A"
         },
         {
-          "expr": "couchbase_bucketstat_ep_diskqueue_items{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_ep_diskqueue_items{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -795,7 +795,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_couch_total_disk_size{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\"}",
+          "expr": "cbbucketstat_couch_total_disk_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -891,19 +891,19 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "couchbase_bucketstat_vbuckets_active_queue_size{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\", node=~\"$node\"}",
+          "expr": "cbbucketstat_vbuckets_active_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "C"
         },
         {
-          "expr": "couchbase_per_node_bucket_vb_pending_queue_size{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\", node=~\"$node\"}",
+          "expr": "cbper_node_bucket_vb_pending_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "D"
         },
         {
-          "expr": "couchbase_per_node_bucket_vb_replica_queue_size{pod=~\"$pod\", bucket=~\"$bucket\", namespace=~\"$namespace\", node=~\"$node\"}",
+          "expr": "cbper_node_bucket_vb_replica_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "E"
@@ -998,7 +998,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "couchbase_per_node_bucket_curr_items_tot{pod=~\"$pod\", node=~\"$node\", bucket=~\"$bucket\"}",
+          "expr": "cbper_node_bucket_curr_items_tot{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -1090,7 +1090,7 @@
           "value": "$__all"
         },
         "datasource": "Prometheus",
-        "definition": "label_values(node)",
+        "definition": "label_values(couchbase_node)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -1100,7 +1100,7 @@
         "name": "node",
         "options": [],
         "query": {
-          "query": "label_values(node)",
+          "query": "label_values(couchbase_node)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
