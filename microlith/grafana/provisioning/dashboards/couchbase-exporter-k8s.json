@@ -283,7 +283,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "cbper_node_bucket_curr_connections{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
+          "expr": "cbpernodebucket_curr_connections{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -632,7 +632,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "cbper_node_bucket_curr_items{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
+          "expr": "cbpernodebucket_curr_items{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -897,13 +897,13 @@
           "refId": "C"
         },
         {
-          "expr": "cbper_node_bucket_vb_pending_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
+          "expr": "cbpernodebucket_vb_pending_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "D"
         },
         {
-          "expr": "cbper_node_bucket_vb_replica_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
+          "expr": "cbpernodebucket_vb_replica_queue_size{kubernetes_pod_name=~\"$pod\", bucket=~\"$bucket\", kubernetes_namespace=~\"$namespace\", couchbase_node=~\"$node\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "E"
@@ -998,7 +998,7 @@
       "pluginVersion": "7.5.2",
       "targets": [
         {
-          "expr": "cbper_node_bucket_curr_items_tot{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
+          "expr": "cbpernodebucket_curr_items_tot{kubernetes_pod_name=~\"$pod\", couchbase_node=~\"$node\", bucket=~\"$bucket\"}",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
