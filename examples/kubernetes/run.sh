@@ -53,14 +53,16 @@ EOF
   kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
   rm -f "${CLUSTER_CONFIG}"
 
-  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/deploy/static/provider/kind/deploy.yaml
+  # Wait for cluster to come up
+  docker pull "${SERVER_IMAGE}"
+  kind load docker-image "${SERVER_IMAGE}" --name="${CLUSTER_NAME}"
+
+  INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
+  kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml
   kubectl wait --namespace ingress-nginx \
     --for=condition=ready pod \
     --selector=app.kubernetes.io/component=controller \
     --timeout=120s
-
-  # The webhook installation is not complete so just remove
-  kubectl delete validatingwebhookconfigurations ingress-nginx-admission
 fi #SKIP_CLUSTER_CREATION
 
 # Deploy kube-state-metrics via helm chart
