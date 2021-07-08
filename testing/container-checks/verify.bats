@@ -29,5 +29,5 @@ DETIK_CLIENT_NAME="kubectl"
 @test 'check bats_detik' {
     DETIK_CLIENT_NAME="kubectl -n kube-system"
     DETIK_CLIENT_NAMESPACE="kube-system"
-    verify "there are 1 services named 'kube-dns'"
+    verify "there is 1 service named 'kube-dns'"
 }
