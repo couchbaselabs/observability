@@ -49,5 +49,7 @@ exitCode=1
 if kubectl wait --for=condition=complete job/microlith-test --timeout=30s; then
     exitCode=0
 fi
+
+# shellcheck disable=SC2046
 kubectl logs $(kubectl get pods -l job-name=microlith-test --no-headers -o custom-columns=":metadata.name")
 exit $exitCode

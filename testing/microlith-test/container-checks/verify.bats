@@ -1,4 +1,6 @@
 #!/usr/bin/env bats
+# shellcheck disable=SC2034
+
 # Copyright 2021 Couchbase, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,8 +24,6 @@ load "$BATS_DETIK_ROOT/detik.bash"
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
-
-DETIK_CLIENT_NAME="kubectl"
 
 @test 'check bats_assert' {
     assert true
