@@ -64,8 +64,16 @@ container-public: container
 
 # Build and run the examples
 examples: clean container
-	examples/native/run.sh
-	examples/kubernetes/run.sh
+	KUBECONFIG=/tmp/kubeconfig examples/kubernetes/run.sh
+
+container-test:
+	docker build -f testing/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} testing/
+
+test: container-test examples
+	docker run --rm -v /tmp/kubeconfig:/kubeconfig:ro \
+		-e KUBECONFIG=/kubeconfig \
+		--network=host \
+		${DOCKER_USER}/observability-stack-test:${DOCKER_TAG}
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
