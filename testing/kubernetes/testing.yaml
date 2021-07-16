@@ -1,0 +1,54 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: testexecutor
+spec:
+  manualSelector: true
+  selector:
+    matchLabels:
+      app: testexecutor
+  activeDeadlineSeconds: %%TIMEOUT%%  #Prevent jobs from continuing to spawn for eternity if failing.
+  completions: %%COMPLETIONS%%        #Number of completions required for job to succeed
+  parallelism: %%PARALLELISM%%       #Number of pods that can run in parallel to reach desired completion
+  template:
+    metadata:
+      name: testexecutor
+      labels:
+        app: testexecutor
+    containers:
+    - name: tester
+      image: %%IMAGE%%
+      serviceAccountName: microlith-test-role
+      env:
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.name
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.namespace
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            fieldPath: status.podIP
+      restartPolicy: Never
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: microlith-test-role
+subjects:
+- kind: ServiceAccount
+  name: microlith-test-role
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin # Probably doesn't need this.
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: microlith-test-role

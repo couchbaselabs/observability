@@ -63,17 +63,15 @@ container-public: container
 	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
 
 # Build and run the examples
-examples: clean container
-	KUBECONFIG=/tmp/kubeconfig examples/kubernetes/run.sh
+example-kubernetes: clean container
+	examples/kubernetes/run.sh
 
+# Deal with automated testing
 container-test:
-	docker build -f testing/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} testing/
+	docker build -f testing/microlith-test/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} testing/microlith-test/
 
-test: container-test examples
-	docker run --rm -v /tmp/kubeconfig:/kubeconfig:ro \
-		-e KUBECONFIG=/kubeconfig \
-		--network=host \
-		${DOCKER_USER}/observability-stack-test:${DOCKER_TAG}
+test-kubernetes:
+	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
