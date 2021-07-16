@@ -150,6 +150,8 @@ We need to test the following aspects:
 * Reproducible ephemeral container with custom configuration via GitOps
   * Configuration of cluster connection & credentials
   * Addition of custom alerts and tuning/inhibition of those alerts, plus addition of custom dashboards
+* Integration with an existing stack
+  * Use Grafana operator here to create a separate stack in another namespace and demonstrate we can use this.
 
 Variation points:
 * Clusters with and without Prometheus end points
@@ -157,6 +159,7 @@ Variation points:
 * Clusters with different credentials
 * Clusters using different versions of Couchbase Server
 * In same namespace and separate namespaces
+* With and without the useful extras like kube-state-metrics and eventrouter
 * CE and EE clusters (not with CAO though for EE)
 * On-prem and CAO clusters mixed together for monitoring
 
