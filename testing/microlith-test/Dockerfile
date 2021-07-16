@@ -85,7 +85,5 @@ WORKDIR /home/testing
 
 COPY . ./
 
-# When you run we need to provide the kubecontext:
-# docker run --rm -it -v $HOME/.kube/config:/kubeconfig -e KUBECONFIG=/kubeconfig --network=host ...
 ENTRYPOINT [ "bats" ]
 CMD [ "container-checks/verify.bats"]
