@@ -61,17 +61,23 @@ container-scan: container
 # 	make container-public -e DOCKER_USER=couchbase DOCKER_TAG=2.0.0
 container-public: container
 	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
+	docker push ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG}
 
 # Build and run the examples
 example-kubernetes: clean container
 	examples/kubernetes/run.sh
 
 # Deal with automated testing
-container-test:
+container-test: container-clean
 	docker build -f testing/microlith-test/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} testing/microlith-test/
 
 test-kubernetes:
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
+
+test-native:
+	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/native/run.sh
+
+test: clean test-kubernetes test-native
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
@@ -84,6 +90,7 @@ test-dist: dist
 # Remove our images then remove dangling ones to prevent any caching
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 	docker image prune --force
 
