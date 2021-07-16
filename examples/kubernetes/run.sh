@@ -78,6 +78,9 @@ kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus
 kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
+# Set up ingress
+kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"
+
 # Create the secret for Fluent Bit customisation
 kubectl delete secret fluent-bit-custom 2>/dev/null || true
 kubectl create secret generic fluent-bit-custom --from-file="${SCRIPT_DIR}/fluent-bit.conf"

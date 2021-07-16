@@ -98,24 +98,3 @@ spec:
   selector:
     run: couchbase-grafana
 ---
-# Ingress to forward to our web server including sub-paths: we should just forward what we need but for local testing just sending it all.
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: couchbase-ingress
-  annotations:
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$1$2
-    nginx.ingress.kubernetes.io/use-regex: "true"
-spec:
-  rules:
-  - http:
-      paths:
-      - path: /(.*)(/|$)
-        pathType: Prefix
-        backend:
-          service:
-            name: couchbase-grafana-http
-            port:
-              number: 8080
----
