@@ -20,6 +20,7 @@ CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
 SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:6.6.2}
 COS_IMAGE=${COS_IMAGE:-couchbase/observability-stack:v1}
+KUBECONFIG=${KUBECONFIG:-$SCRIPT_DIR/kubeconfig}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
   echo "Recreating full cluster"
@@ -50,7 +51,7 @@ nodes:
 - role: worker
 EOF
 
-  kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
+  kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}" --kubeconfig="${KUBECONFIG}"
   rm -f "${CLUSTER_CONFIG}"
 
   # Wait for cluster to come up
