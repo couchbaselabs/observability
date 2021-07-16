@@ -47,6 +47,9 @@ kubectl apply -f "${SCRIPT_DIR}/testing-actual.yaml"
 # Wait for the job to complete and grab the logs either way
 exitCode=1
 if kubectl wait --for=condition=complete job/microlith-test --timeout=30s; then
+    # All ok so remove the job for the next run
+    kubectl delete -f "${SCRIPT_DIR}/testing-actual.yaml"
+    rm -f "${SCRIPT_DIR}/testing-actual.yaml"
     exitCode=0
 fi
 

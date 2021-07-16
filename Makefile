@@ -64,20 +64,25 @@ container-public: container
 	docker push ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG}
 
 # Build and run the examples
-example-kubernetes: clean container
+example-kubernetes: container
 	examples/kubernetes/run.sh
 
+example-native: container
+	examples/native/run.sh
+
+examples: clean container example-kubernetes example-native
+
 # Deal with automated testing
-container-test: container-clean
+container-test:
 	docker build -f testing/microlith-test/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} testing/microlith-test/
 
-test-kubernetes:
+test-kubernetes: container container-test
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
 
-test-native:
+test-native: container container-test
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/native/run.sh
 
-test: clean test-kubernetes test-native
+test: clean container container-test test-kubernetes test-native
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
