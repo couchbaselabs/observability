@@ -20,11 +20,11 @@
 # Simple method to skip all tests within a file
 
 setup(){
-    if [ "$TEST_NATIVE" == "true" ]; then
-        skip "Skipping kubernetes specific tests"
+    if [ "$TEST_NATIVE" != "true" ]; then
+        skip "Skipping native specific tests"
     fi
 }
 
-@test 'skip on native' {
-    [ "$TEST_NATIVE" != "true" ]
+@test 'skip on not native' {
+    [ "$TEST_NATIVE" == "true" ]
 }
