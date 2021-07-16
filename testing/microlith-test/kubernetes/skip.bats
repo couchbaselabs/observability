@@ -25,6 +25,6 @@ setup(){
     fi
 }
 
-@test 'skip on native' {
+@test 'test we are kubernetes' {
     [ "$TEST_NATIVE" != "true" ]
 }

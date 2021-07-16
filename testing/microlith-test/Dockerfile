@@ -88,5 +88,8 @@ COPY --chown=testing . ./
 ENV COS_TEST_IMAGE=couchbase/observability-stack-test:v1
 ENV COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
 
+# Run native tests if set to true, run kubernetes tests otherwise
+ENV TEST_NATIVE=true
+
 ENTRYPOINT [ "/bin/bash", "/home/testing/entrypoint.sh" ]
 # Pass in `bash` and it will just run a shell for example, otherwise it will run tests.

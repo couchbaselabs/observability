@@ -29,8 +29,8 @@ spec:
       containers:
       - name: tester
         env:
-        - name: TEST_KUBERNETES
-          value: "true"
+        - name: TEST_NATIVE
+          value: "false"
         - name: COUCHBASE_SERVER_IMAGE
           value: %%COUCHBASE_SERVER_IMAGE%%
         image: %%IMAGE%%

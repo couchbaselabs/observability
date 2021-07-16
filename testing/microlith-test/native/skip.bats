@@ -25,6 +25,6 @@ setup(){
     fi
 }
 
-@test 'skip on not native' {
+@test 'test we are native' {
     [ "$TEST_NATIVE" == "true" ]
 }
