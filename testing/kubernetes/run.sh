@@ -24,6 +24,7 @@ PARALLELISM=${PARALLELISM:-1}
 
 CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
+COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
 
 docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
 
@@ -31,12 +32,35 @@ if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Really we should move to a simple cluster created with Couchbase deployed
     # and the testing will deploy the microlith in various combinations then.
     CLUSTER_NAME="${CLUSTER_NAME}" "${SCRIPT_DIR}/../../examples/kubernetes/run.sh"
+
+    # Create a 4 node KIND cluster
+    echo "Recreating full cluster"
+    kind delete cluster --name="${CLUSTER_NAME}"
+
+    CLUSTER_CONFIG=$(mktemp)
+    cat << EOF > "${CLUSTER_CONFIG}"
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+- role: worker
+- role: worker
+- role: worker
+EOF
+
+    kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
+    rm -f "${CLUSTER_CONFIG}"
+
+    # Wait for cluster to come up
+    docker pull "${COUCHBASE_SERVER_IMAGE}"
+    kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
 fi
 
 sed -e "s|%%IMAGE%%|$IMAGE|" \
     -e "s/%%TIMEOUT%%/$TIMEOUT/" \
     -e "s/%%COMPLETIONS%%/$COMPLETIONS/" \
     -e "s/%%PARALLELISM%%/$PARALLELISM/" \
+    -e "s/%%COUCHBASE_SERVER_IMAGE%%/$COUCHBASE_SERVER_IMAGE/" \
     "${SCRIPT_DIR}/testing.yaml" > "${SCRIPT_DIR}/testing-actual.yaml"
 
 kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"

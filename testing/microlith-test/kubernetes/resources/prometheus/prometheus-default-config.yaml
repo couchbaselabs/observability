@@ -1,0 +1,61 @@
+# This is a template file we use so we can substitute environment variables at launch
+global:
+  scrape_interval:     30s
+  evaluation_interval: 30s
+  # scrape_timeout is set to the global default (10s).
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'couchbase-observability-stack'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  # All Couchbase default rules go here
+  - /etc/prometheus/alerting/couchbase/*.yaml
+  - /etc/prometheus/alerting/couchbase/*.yml
+  # All custom rules can go here: relative to this file
+  - alerting/*.yaml
+  - alerting/*.yml
+
+alerting:
+  alertmanagers:
+  - scheme: http
+    path_prefix: "/alertmanager/"
+    # Assumption is we always have AlertManager with Prometheus
+    static_configs:
+    - targets:
+      - "localhost:9093"
+
+scrape_configs:
+  - job_name: 'prometheus'
+    metrics_path: /prometheus/metrics
+    static_configs:
+         - targets: ['localhost:9090']
+
+  - job_name: 'couchbase-grafana'
+    file_sd_configs:
+      - files:
+        - '/etc/prometheus/couchbase/monitoring/*.json'
+        refresh_interval: 60s
+
+  # Used for kubernetes deployment as we can discover the end points to scrape from the API
+  - job_name: 'couchbase-kubernetes-pods'
+    kubernetes_sd_configs:
+      - role: pod
+    relabel_configs:
+      # Scrape pods labelled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        action: keep
+        regex: couchbase
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        action: keep
+        regex: "(9091|2020)"
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - source_labels: [__meta_kubernetes_namespace]
+        action: replace
+        target_label: kubernetes_namespace
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: replace
+        target_label: kubernetes_pod_name

@@ -86,6 +86,7 @@ COPY --chown=testing . ./
 
 # This is the image we want to test against, override to change.
 ENV COS_TEST_IMAGE=couchbase/observability-stack-test:v1
+ENV COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
 
 ENTRYPOINT [ "/bin/bash", "/home/testing/entrypoint.sh" ]
 # Pass in `bash` and it will just run a shell for example, otherwise it will run tests.

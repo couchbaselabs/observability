@@ -56,13 +56,6 @@ EOF
   # Wait for cluster to come up
   docker pull "${SERVER_IMAGE}"
   kind load docker-image "${SERVER_IMAGE}" --name="${CLUSTER_NAME}"
-
-  INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
-  kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
-  kubectl wait --namespace ingress-nginx \
-    --for=condition=ready pod \
-    --selector=app.kubernetes.io/component=controller \
-    --timeout=120s
 fi #SKIP_CLUSTER_CREATION
 
 # Deploy kube-state-metrics via helm chart
@@ -79,6 +72,12 @@ kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
 # Set up ingress
+INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
+kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
 kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"
 
 # Create the secret for Fluent Bit customisation

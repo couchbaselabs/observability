@@ -31,6 +31,8 @@ spec:
         env:
         - name: TEST_KUBERNETES
           value: "true"
+        - name: COUCHBASE_SERVER_IMAGE
+          value: %%COUCHBASE_SERVER_IMAGE%%
         image: %%IMAGE%%
   activeDeadlineSeconds: %%TIMEOUT%%  #Prevent jobs from continuing to spawn for eternity if failing.
   completions: %%COMPLETIONS%%        #Number of completions required for job to succeed
