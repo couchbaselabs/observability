@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -eux
+set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_USER=${DOCKER_USER:-couchbase}
@@ -40,5 +40,10 @@ kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
 
 kubectl apply -f "${SCRIPT_DIR}/testing-actual.yaml"
 
-kubectl rollout status deployment/microlith-test-deployment --timeout=30s
-kubectl logs -f deployment/microlith-test-deployment
+# Wait for the job to complete and grab the logs either way
+exitCode=1
+if kubectl wait --for=condition=complete job/microlith-test --timeout=30s; then
+    exitCode=0
+fi
+kubectl logs $(kubectl get pods -l job-name=microlith-test --no-headers -o custom-columns=":metadata.name")
+exit $exitCode
