@@ -28,6 +28,8 @@ SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
 docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
+    # Really we should move to a simple cluster created with Couchbase deployed
+    # and the testing will deploy the microlith in various combinations then.
     CLUSTER_NAME="${CLUSTER_NAME}" "${SCRIPT_DIR}/../../examples/kubernetes/run.sh"
 fi
 
@@ -47,9 +49,6 @@ kubectl apply -f "${SCRIPT_DIR}/testing-actual.yaml"
 # Wait for the job to complete and grab the logs either way
 exitCode=1
 if kubectl wait --for=condition=complete job/microlith-test --timeout=30s; then
-    # All ok so remove the job for the next run
-    kubectl delete -f "${SCRIPT_DIR}/testing-actual.yaml"
-    rm -f "${SCRIPT_DIR}/testing-actual.yaml"
     exitCode=0
 fi
 

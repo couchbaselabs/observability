@@ -1,5 +1,3 @@
-FROM couchbase/observability-stack:v1 as microlith
-
 # Taken from https://github.com/bats-core/bats-detik/blob/master/Dockerfile (MIT license)
 FROM alpine:3.14
 
@@ -17,7 +15,8 @@ RUN apk --no-cache add \
     git \
     libc6-compat \
     openssh-client \
-    bash
+    bash \
+	gettext
 
 # Install BATS
 RUN curl -LO "https://github.com/bats-core/bats-core/archive/refs/tags/v$BATS_VERSION.zip" && \
@@ -83,7 +82,10 @@ RUN adduser -D -u 10000 testing
 USER testing
 WORKDIR /home/testing
 
-COPY . ./
+COPY --chown=testing . ./
 
-ENTRYPOINT [ "bats" ]
-CMD [ "container-checks/verify.bats"]
+# This is the image we want to test against, override to change.
+ENV COS_TEST_IMAGE=couchbase/observability-stack-test:v1
+
+ENTRYPOINT [ "/bin/bash", "/home/testing/entrypoint.sh" ]
+# Pass in `bash` and it will just run a shell for example, otherwise it will run tests.
