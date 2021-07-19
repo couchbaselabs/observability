@@ -43,6 +43,10 @@ load "$BATS_FILE_ROOT/load.bash"
 	kubectl version --client=true
 }
 
+@test "check helm" {
+    helm version
+}
+
 @test 'check bats_detik' {
     if [[ "$TEST_NATIVE" == "true" ]]; then
         skip "Skipping kubernetes specific tests"
