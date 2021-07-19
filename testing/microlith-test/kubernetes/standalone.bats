@@ -29,21 +29,24 @@ setup() {
         skip "Skipping kubernetes specific tests"
     fi
 
-    kubectl delete namespace $TEST_NAMESPACE || true
+    kubectl delete namespace "$TEST_NAMESPACE" || true
     kubectl create namespace "$TEST_NAMESPACE"
 }
 
 teardown() {
-    kubectl delete namespace $TEST_NAMESPACE || true
+    kubectl delete namespace "$TEST_NAMESPACE" || true
 }
 
 TEST_NAMESPACE=${TEST_NAMESPACE:-test}
-DETIK_CLIENT_NAMESPACE=${TEST_NAMESPACE}
 TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/kubernetes/resources}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
 TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
 
+# These are required for bats-detik
+# shellcheck disable=SC2034
 DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
+# shellcheck disable=SC2034
+DETIK_CLIENT_NAMESPACE="${TEST_NAMESPACE}"
 
 createDefaultDeployment() {
     # Prometheus configuration is all pulled from this directory
@@ -69,7 +72,7 @@ createDefaultDeployment() {
     verify "'port' is '3100' for services named 'loki'"
 
     # Check the web server provides the landing page
-    run curl --show-error --silent couchbase-grafana-http.$TEST_NAMESPACE:8080
+    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
     assert_success # https://everything.curl.dev/usingcurl/returns for errors here
     assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
 
@@ -113,7 +116,6 @@ createCouchbaseCluster() {
 }
 
 @test "Verify Couchbase Server metrics" {
-    skip "TODO"
     # Spin up a Couchbase cluster to then confirm we get metrics and targets for that
     createDefaultDeployment
     createCouchbaseCluster
@@ -145,7 +147,7 @@ createLoggingCluster() {
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: $TEST_CUSTOM_CONFIG
+  name: $TEST_CUSTOM_CONFIG # The default deployment uses this as an optional config map
 data:
   DISABLE_LOKI: "true"
   DISABLE_WEBSERVER: "true"
@@ -156,16 +158,17 @@ __EOF__
     try "at most 10 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
 
     # Now check they are disabled
+    # shellcheck disable=SC2046
     run kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name|grep couchbase-grafana)
     assert_success
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_WEBSERVER set"
 
     # Attempt to hit the endpoints as well
-    run curl --show-error --silent couchbase-grafana-http.$TEST_NAMESPACE:8080
+    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
     assert_failure
     # https://grafana.com/docs/loki/latest/api/#get-ready
-    run curl --show-error --silent couchbase-grafana-http.$TEST_NAMESPACE:8080/loki/ready
+    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080/loki/ready"
     assert_failure
 }
 
