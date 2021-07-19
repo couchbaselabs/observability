@@ -100,6 +100,10 @@ spec:
             port: http
           failureThreshold: 1
           periodSeconds: 10
+        volumeMounts:
+        - name: prometheus-config-volume
+          mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
+        image: $COS_IMAGE # substitute with actual image
         env:
         - name: KUBERNETES_DEPLOYMENT
           value: "true"
@@ -108,10 +112,15 @@ spec:
         - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
           value: ignore
         # Log to files rather than stdout
-        - name: ENABLE_LOG_TO_FILE
-          value: "true"
-        volumeMounts:
-        - name: prometheus-config-volume
-          mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
-        image: $COS_IMAGE # substitute with actual image
----
+        # - name: ENABLE_LOG_TO_FILE
+        #   value: "true"
+        # Disable components as required - matching entrypoint script name
+        # - name: DISABLE_LOKI
+        #   value: "true"
+        # - name: DISABLE_WEBSERVER
+        #   value: "true"
+        # To define customisation make sure to set up this config map first
+        envFrom:
+          - configMapRef:
+              name: $TEST_CUSTOM_CONFIG
+              optional: true

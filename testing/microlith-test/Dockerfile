@@ -96,6 +96,8 @@ ENV TEST_NAMESPACE=test
 ENV TEST_ROOT=/home/testing
 # Helper for k8s resources root
 ENV TEST_KUBERNETES_RESOURCES_ROOT=/home/testing/kubernetes/resources
+# Extra customisation per test
+ENV TEST_CUSTOM_CONFIG=test-custom-config
 
 ENTRYPOINT [ "/bin/bash", "/home/testing/entrypoint.sh" ]
 # Pass in `bash` and it will just run a shell for example, otherwise it will run tests.
