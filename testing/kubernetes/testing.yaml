@@ -31,5 +31,7 @@ spec:
       value: "false"
     - name: COUCHBASE_SERVER_IMAGE
       value: %%COUCHBASE_SERVER_IMAGE%%
+    - name: COS_IMAGE
+      value: %%COS_IMAGE%%
     image: %%IMAGE%%
 ---

@@ -63,6 +63,8 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        kubectl.kubernetes.io/default-logs-container: couchbase-grafana
       labels:
         run: couchbase-grafana
     spec:
@@ -88,14 +90,12 @@ spec:
         env:
         - name: KUBERNETES_DEPLOYMENT
           value: "true"
-        - name: ENABLE_LOG_TO_FILE
-          value: "true"
         - name: PROMETHEUS_CONFIG_FILE
-          value: /etc/prometheus/custom/prometheus-k8s.yml
+          value: /etc/prometheus/custom/prometheus-default-config.yaml
         - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
           value: ignore
         volumeMounts:
         - name: prometheus-config-volume
           mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
-        image: $COS_TEST_IMAGE # substitute with actual image
+        image: $COS_IMAGE # substitute with actual image
 ---

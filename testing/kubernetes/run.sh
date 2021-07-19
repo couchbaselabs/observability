@@ -17,6 +17,7 @@ set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
+COS_IMAGE=${IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 TIMEOUT=${TIMEOUT:-30}
 COMPLETIONS=${COMPLETIONS:-1}
@@ -57,9 +58,11 @@ sed -e "s|%%IMAGE%%|$IMAGE|" \
     -e "s/%%COMPLETIONS%%/$COMPLETIONS/" \
     -e "s/%%PARALLELISM%%/$PARALLELISM/" \
     -e "s|%%COUCHBASE_SERVER_IMAGE%%|$COUCHBASE_SERVER_IMAGE|" \
+    -e "s|%%COS_IMAGE%%|$COS_IMAGE|" \
     "${SCRIPT_DIR}/testing.yaml" > "${SCRIPT_DIR}/testing-actual.yaml"
 
 kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
+kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
 
 if kubectl delete -f "${SCRIPT_DIR}/testing-actual.yaml"; then
     echo "Removed previous job"

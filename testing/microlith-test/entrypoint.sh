@@ -29,5 +29,5 @@ if [[ $# -gt 0 ]]; then
     echo "[ENTRYPOINT] Running custom: $*"
     exec "$@"
 else
-    exec bats -r "${SCRIPT_DIR}/"
+    exec bats --timing --recursive "${SCRIPT_DIR}/"
 fi

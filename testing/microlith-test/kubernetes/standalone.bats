@@ -24,7 +24,7 @@ load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
-function setup() {
+setup() {
     if [ "$TEST_NATIVE" == "true" ]; then
         skip "Skipping kubernetes specific tests"
     fi
@@ -32,7 +32,7 @@ function setup() {
     kubectl delete namespace $TEST_NAMESPACE || true
 }
 
-function teardown() {
+teardown() {
     kubectl delete namespace $TEST_NAMESPACE || true
 }
 
@@ -55,5 +55,9 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
     # Now check it comes up
     try "at most 5 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
     # Note this only tests that it is marked as 'running', it may then crash out so need more checks
+
+    sleep 60
+
+    kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name) >&3
 }
 

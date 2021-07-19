@@ -18,7 +18,7 @@
 # This is so that it can then be used by actual tests.
 
 # Simple method to skip all tests within a file
-function setup() {
+setup() {
     if [ "$TEST_NATIVE" != "true" ]; then
         skip "Skipping native specific tests"
     fi
