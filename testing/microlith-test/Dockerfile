@@ -90,9 +90,11 @@ ENV COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
 
 # Run native tests if set to true, run kubernetes tests otherwise
 ENV TEST_NATIVE=true
-
+# The kubernetes namespace to run tests in, useful to just destroy
 ENV TEST_NAMESPACE=test
+# Test root, not good to use current directory with scripts launched by BATS
 ENV TEST_ROOT=/home/testing
+# Helper for k8s resources root
 ENV TEST_KUBERNETES_RESOURCES_ROOT=/home/testing/kubernetes/resources
 
 ENTRYPOINT [ "/bin/bash", "/home/testing/entrypoint.sh" ]

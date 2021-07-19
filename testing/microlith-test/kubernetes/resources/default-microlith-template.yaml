@@ -94,6 +94,9 @@ spec:
           value: /etc/prometheus/custom/prometheus-default-config.yaml
         - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
           value: ignore
+        # Log to files rather than stdout
+        - name: ENABLE_LOG_TO_FILE
+          value: "true"
         volumeMounts:
         - name: prometheus-config-volume
           mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults

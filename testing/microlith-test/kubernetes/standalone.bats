@@ -50,14 +50,30 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
 
     # Deploy the microlith, without couchbase
     kubectl apply -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
-    sleep 20
+    sleep 10
 
     # Now check it comes up
     try "at most 5 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
     # Note this only tests that it is marked as 'running', it may then crash out so need more checks
 
-    sleep 60
+    # Make sure everything starts up for logs
+    sleep 20
 
-    kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name) >&3
+    # Export logs - can trigger a hang: https://bats-core.readthedocs.io/en/latest/writing-tests.html#file-descriptor-3-read-this-if-bats-hangs
+    # kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name) >&3
+
+    # Check we have the relevant services exposed
+    verify "there is 1 service named 'couchbase-grafana-http'"
+    verify "'port' is '8080' for services named 'couchbase-grafana-http'"
+    verify "there is 1 service named 'loki'"
+    verify "'port' is '3100' for services named 'loki'"
+
+    # Check we have a valid prometheus end point exposed
+}
+
+@test "Verify Loki deployment from scratch" {
+    # Slightly custom config to send logs
+    # Test that we can explicitly poke the Loki API
+    # Test that we can send logs to it
 }
 
