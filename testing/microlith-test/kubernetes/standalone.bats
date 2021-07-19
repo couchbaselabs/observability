@@ -40,9 +40,7 @@ TEST_NAMESPACE=${TEST_NAMESPACE:-test}
 DETIK_CLIENT_NAMESPACE=${TEST_NAMESPACE}
 TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/kubernetes/resources}
 
-# Test that we can do a default deployment from scratch
-@test "Verify simple deployment from scratch" {
-    DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
+createDefaultDeployment() {
     kubectl create namespace "$TEST_NAMESPACE"
 
     # Prometheus configuration is all pulled from this directory
@@ -51,6 +49,13 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
     # Deploy the microlith, without couchbase
     kubectl apply -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
     sleep 10
+}
+
+# Test that we can do a default deployment from scratch
+@test "Verify simple deployment from scratch" {
+    DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
+
+    createDefaultDeployment
 
     # Now check it comes up
     try "at most 5 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
@@ -63,27 +68,50 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
     verify "'port' is '3100' for services named 'loki'"
 
     # Check the web server provides the landing page
-    run curl --show-error couchbase-grafana-http.$TEST_NAMESPACE:8080
+    run curl --show-error --silent couchbase-grafana-http.$TEST_NAMESPACE:8080
     [ "$status" -eq 0 ] # https://everything.curl.dev/usingcurl/returns for errors here
     assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
 
+    PROMETHEUS_URL="couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus"
+
     # Check we have a valid prometheus end point exposed and it is healthy
-    curl --show-error couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus/-/healthy
+    curl --show-error --silent $PROMETHEUS_URL/-/healthy
 
     # Check we have loaded the right config: https://prometheus.io/docs/prometheus/latest/querying/api/#config
-    run curl --show-error --silent couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus/api/v1/status/config
+    run curl --show-error --silent $PROMETHEUS_URL/api/v1/status/config
     [ "$status" -eq 0 ]
     assert_output --partial 'couchbase-kubernetes-pods' # The default config does not contain this - we could diff as well
 
     # TODO:
     # Check we have no Couchbase targets but all the internal ones
-    # Spin up a Couchbase cluster to then confirm we get metrics for that
     # Check that alerts and rules are set up, with defaults only
+    # Check that default dashboards are available
+}
+
+@test "Verify Couchbase Server metrics" {
+    skip "TODO"
+    # Spin up a Couchbase cluster to then confirm we get metrics and targets for that
 }
 
 @test "Verify Loki deployment from scratch" {
+    skip "TODO"
     # Slightly custom config to send logs
     # Test that we can explicitly poke the Loki API
     # Test that we can send logs to it
 }
 
+@test "Verify disabling of components in microlith" {
+    skip "TODO"
+    # Turn components off and confirm not available
+}
+
+@test "Verify customisation by adding" {
+    skip "TODO"
+    # Add new rules and check for
+    # Add new dashboards and check for
+}
+
+@test "Verify default rules are triggered" {
+    skip "TODO"
+    # Create error conditions and ensure the rule is triggered
+}
