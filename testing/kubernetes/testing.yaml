@@ -17,24 +17,19 @@ kind: ServiceAccount
 metadata:
   name: microlith-test-role
 ---
-apiVersion: batch/v1
-kind: Job
+apiVersion: v1
+kind: Pod
 metadata:
   name: microlith-test
 spec:
-  template:
-    spec:
-      serviceAccountName: microlith-test-role
-      restartPolicy: Never
-      containers:
-      - name: tester
-        env:
-        - name: TEST_NATIVE
-          value: "false"
-        - name: COUCHBASE_SERVER_IMAGE
-          value: %%COUCHBASE_SERVER_IMAGE%%
-        image: %%IMAGE%%
-  activeDeadlineSeconds: %%TIMEOUT%%  #Prevent jobs from continuing to spawn for eternity if failing.
-  completions: %%COMPLETIONS%%        #Number of completions required for job to succeed
-  parallelism: %%PARALLELISM%%       #Number of pods that can run in parallel to reach desired completion
+  serviceAccountName: microlith-test-role
+  restartPolicy: Never
+  containers:
+  - name: tester
+    env:
+    - name: TEST_NATIVE
+      value: "false"
+    - name: COUCHBASE_SERVER_IMAGE
+      value: %%COUCHBASE_SERVER_IMAGE%%
+    image: %%IMAGE%%
 ---

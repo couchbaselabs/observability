@@ -91,5 +91,9 @@ ENV COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
 # Run native tests if set to true, run kubernetes tests otherwise
 ENV TEST_NATIVE=true
 
+ENV TEST_NAMESPACE=test
+ENV TEST_ROOT=/home/testing
+ENV TEST_KUBERNETES_RESOURCES_ROOT=/home/testing/kubernetes/resources
+
 ENTRYPOINT [ "/bin/bash", "/home/testing/entrypoint.sh" ]
 # Pass in `bash` and it will just run a shell for example, otherwise it will run tests.

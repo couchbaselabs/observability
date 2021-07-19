@@ -29,10 +29,6 @@ COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
 docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
-    # Really we should move to a simple cluster created with Couchbase deployed
-    # and the testing will deploy the microlith in various combinations then.
-    CLUSTER_NAME="${CLUSTER_NAME}" "${SCRIPT_DIR}/../../examples/kubernetes/run.sh"
-
     # Create a 4 node KIND cluster
     echo "Recreating full cluster"
     kind delete cluster --name="${CLUSTER_NAME}"
@@ -60,7 +56,7 @@ sed -e "s|%%IMAGE%%|$IMAGE|" \
     -e "s/%%TIMEOUT%%/$TIMEOUT/" \
     -e "s/%%COMPLETIONS%%/$COMPLETIONS/" \
     -e "s/%%PARALLELISM%%/$PARALLELISM/" \
-    -e "s/%%COUCHBASE_SERVER_IMAGE%%/$COUCHBASE_SERVER_IMAGE/" \
+    -e "s|%%COUCHBASE_SERVER_IMAGE%%|$COUCHBASE_SERVER_IMAGE|" \
     "${SCRIPT_DIR}/testing.yaml" > "${SCRIPT_DIR}/testing-actual.yaml"
 
 kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
@@ -72,10 +68,9 @@ kubectl apply -f "${SCRIPT_DIR}/testing-actual.yaml"
 
 # Wait for the job to complete and grab the logs either way
 exitCode=1
-if kubectl wait --for=condition=complete job/microlith-test --timeout=30s; then
+if kubectl wait --for=condition=ready pod/microlith-test --timeout=30s; then
     exitCode=0
 fi
 
-# shellcheck disable=SC2046
-kubectl logs $(kubectl get pods -l job-name=microlith-test --no-headers -o custom-columns=":metadata.name")
+kubectl logs microlith-test -f
 exit $exitCode
