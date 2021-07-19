@@ -30,6 +30,7 @@ setup() {
     fi
 
     kubectl delete namespace $TEST_NAMESPACE || true
+    kubectl create namespace "$TEST_NAMESPACE"
 }
 
 teardown() {
@@ -42,9 +43,9 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
 TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
 
-createDefaultDeployment() {
-    kubectl create namespace "$TEST_NAMESPACE"
+DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
 
+createDefaultDeployment() {
     # Prometheus configuration is all pulled from this directory
     kubectl create -n "$TEST_NAMESPACE" configmap prometheus-config --from-file="$TEST_KUBERNETES_RESOURCES_ROOT/prometheus/"
 
@@ -55,8 +56,6 @@ createDefaultDeployment() {
 
 # Test that we can do a default deployment from scratch
 @test "Verify simple deployment from scratch" {
-    DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
-
     createDefaultDeployment
 
     # Now check it comes up
@@ -116,7 +115,6 @@ createCouchbaseCluster() {
 @test "Verify Couchbase Server metrics" {
     skip "TODO"
     # Spin up a Couchbase cluster to then confirm we get metrics and targets for that
-    DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
     createDefaultDeployment
     createCouchbaseCluster
     try "at most 10 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
@@ -134,7 +132,6 @@ createLoggingCluster() {
 
 @test "Verify Loki deployment from scratch" {
     skip "TODO"
-    DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
     createDefaultDeployment
     # Slightly custom config to send logs
     createLoggingCluster
