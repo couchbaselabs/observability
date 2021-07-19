@@ -15,9 +15,9 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-public container-lint container-scan dist test-dist container-clean clean examples
+.PHONY: all build lint container container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native container-test
 
-all: clean build lint container container-lint container-scan dist test-dist examples
+all: clean build lint container container-lint container-scan dist test-dist test examples
 
 build:
 	echo "Nothing to do - repackaging only"
