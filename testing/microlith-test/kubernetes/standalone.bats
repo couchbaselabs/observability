@@ -54,13 +54,7 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
 
     # Now check it comes up
     try "at most 5 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
-    # Note this only tests that it is marked as 'running', it may then crash out so need more checks
-
-    # Make sure everything starts up for logs
-    sleep 20
-
-    # Export logs - can trigger a hang: https://bats-core.readthedocs.io/en/latest/writing-tests.html#file-descriptor-3-read-this-if-bats-hangs
-    # kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name) >&3
+    # Note this only tests that it is marked as 'running', it may then crash out so need more checksx
 
     # Check we have the relevant services exposed
     verify "there is 1 service named 'couchbase-grafana-http'"
@@ -68,7 +62,23 @@ TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/k
     verify "there is 1 service named 'loki'"
     verify "'port' is '3100' for services named 'loki'"
 
-    # Check we have a valid prometheus end point exposed
+    # Check the web server provides the landing page
+    run curl --show-error couchbase-grafana-http.$TEST_NAMESPACE:8080
+    [ "$status" -eq 0 ] # https://everything.curl.dev/usingcurl/returns for errors here
+    assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
+
+    # Check we have a valid prometheus end point exposed and it is healthy
+    curl --show-error couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus/-/healthy
+
+    # Check we have loaded the right config: https://prometheus.io/docs/prometheus/latest/querying/api/#config
+    run curl --show-error --silent couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus/api/v1/status/config
+    [ "$status" -eq 0 ]
+    assert_output --partial 'couchbase-kubernetes-pods' # The default config does not contain this - we could diff as well
+
+    # TODO:
+    # Check we have no Couchbase targets but all the internal ones
+    # Spin up a Couchbase cluster to then confirm we get metrics for that
+    # Check that alerts and rules are set up, with defaults only
 }
 
 @test "Verify Loki deployment from scratch" {

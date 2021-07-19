@@ -87,6 +87,19 @@ spec:
           containerPort: 8080
         - name: loki # So we can push logs to it
           containerPort: 3100
+        startupProbe:
+          httpGet:
+            # Uses Grafana check so change to Prometheus or other if not running
+            path: /grafana/api/health # https://grafana.com/docs/grafana/latest/http_api/other/#returns-health-information-about-grafana
+            port: http
+          failureThreshold: 3
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /grafana/api/health
+            port: http
+          failureThreshold: 1
+          periodSeconds: 10
         env:
         - name: KUBERNETES_DEPLOYMENT
           value: "true"
