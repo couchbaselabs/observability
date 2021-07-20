@@ -29,12 +29,14 @@ setup() {
         skip "Skipping kubernetes specific tests"
     fi
 
-    kubectl delete namespace "$TEST_NAMESPACE" || true
+    run kubectl delete namespace "$TEST_NAMESPACE"
     kubectl create namespace "$TEST_NAMESPACE"
 }
 
 teardown() {
-    kubectl delete namespace "$TEST_NAMESPACE" || true
+    run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
+    run kubectl delete --force --grace-period=0 --now=true --wait=true -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
+    run kubectl delete namespace "$TEST_NAMESPACE"
 }
 
 TEST_NAMESPACE=${TEST_NAMESPACE:-test}
@@ -54,16 +56,21 @@ createDefaultDeployment() {
 
     # Deploy the microlith, without couchbase
     kubectl apply -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
-    sleep 10
+    sleep 30
 }
 
 # Test that we can do a default deployment from scratch
 @test "Verify simple deployment from scratch" {
     createDefaultDeployment
 
+    kubectl get pods --all-namespaces
+
     # Now check it comes up
     try "at most 10 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
-    # Note this only tests that it is marked as 'running', it may then crash out so need more checksx
+    # Note this only tests that it is marked as 'running', it may then crash out so need more checks
+
+    kubectl -n "$TEST_NAMESPACE" describe service loki
+    kubectl -n "$TEST_NAMESPACE" describe service couchbase-grafana-http
 
     # Check we have the relevant services exposed
     verify "there is 1 service named 'couchbase-grafana-http'"
@@ -112,14 +119,17 @@ createCouchbaseCluster() {
     # Add Couchbase via helm chart
     helm repo add couchbase https://couchbase-partners.github.io/helm-charts
     helm repo update
-    helm upgrade --install --debug --namespace "$TEST_NAMESPACE" couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}"
+    helm upgrade --install --debug --namespace "$TEST_NAMESPACE" --create-namespace couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}"
+    sleep 60
 }
 
 @test "Verify Couchbase Server metrics" {
     # Spin up a Couchbase cluster to then confirm we get metrics and targets for that
-    createDefaultDeployment
     createCouchbaseCluster
+    createDefaultDeployment
+    run kubectl get pods --all-namespaces
     try "at most 10 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
+    run kubectl get pods --all-namespaces
     try "at most 10 times every 30s to find 3 pods named 'couchbase-couchbase-cluster-*' with 'status' being 'running'"
 }
 
@@ -150,9 +160,8 @@ metadata:
   name: $TEST_CUSTOM_CONFIG # The default deployment uses this as an optional config map
 data:
   DISABLE_LOKI: "true"
-  DISABLE_WEBSERVER: "true"
 __EOF__
-    # Disable web server and Loki
+    # Disable Loki
     createDefaultDeployment
     sleep 10
     try "at most 10 times every 30s to find 1 pod named 'couchbase-grafana-*' with 'status' being 'running'"
@@ -162,13 +171,12 @@ __EOF__
     run kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name|grep couchbase-grafana)
     assert_success
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
-    assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_WEBSERVER set"
 
     # Attempt to hit the endpoints as well
     run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
-    assert_failure
+    assert_success
     # https://grafana.com/docs/loki/latest/api/#get-ready
-    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080/loki/ready"
+    run curl --show-error --silent "loki.$TEST_NAMESPACE:3100/ready"
     assert_failure
 }
 

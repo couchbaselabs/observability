@@ -68,6 +68,7 @@ spec:
       labels:
         run: couchbase-grafana
     spec:
+      # The Prometheus configuration
       volumes:
         - name: prometheus-config-volume
           configMap:
