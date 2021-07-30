@@ -21,6 +21,22 @@ COPY --from=prometheus-official /etc/prometheus/prometheus.yml /etc/prometheus/p
 COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/share/prometheus/console_libraries/
 COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
 
+# Support scripted access to kubernetes API, e.g. to get credentials from Secrets
+ARG KUBECTL_VERSION=v1.21.3
+ENV KUBECTL_VERSION=$KUBECTL_VERSION
+RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
+	chmod +x kubectl && \
+	mv kubectl /usr/local/bin/
+
+# Helm - to support deployment from this container of custom tools
+ARG HELM_VERSION=v3.6.3
+ENV HELM_VERSION=$HELM_VERSION
+RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
+	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
+	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
+	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
+	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
+
 # Try to keep the originals as they are and fix anything later to make it easy to merge changes
 
 # GRAFANA:
