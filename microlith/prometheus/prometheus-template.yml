@@ -41,6 +41,16 @@ scrape_configs:
       - files:
         - 'couchbase/monitoring/*.json'
         refresh_interval: 30s
+  - job_name: 'couchbase-cluster-monitor'
+    basic_auth:
+      # We use envsubst to replace these prior to launch
+      username: $CB_MULTI_ADMIN_USER
+      password: $CB_MULTI_ADMIN_PASSWORD
+    metrics_path: /api/v1/_prometheus
+    # For basic auth we cannot use file_sd
+    # TODO: add unauthenticated endpoint
+    static_configs:
+         - targets: ['localhost:7196']
 
   # Used for local deployment: add targets to this
   - job_name: 'couchbase-server'

@@ -58,6 +58,16 @@ scrape_configs:
         - '/etc/prometheus/couchbase/monitoring/*.json'
         refresh_interval: 30s
 
+  # TODO: add unauthenticated endpoint
+  - job_name: 'couchbase-cluster-monitor'
+    basic_auth:
+      username: admin
+      password: password
+    metrics_path: /api/v1/_prometheus
+    # For basic auth we cannot use file_sd
+    static_configs:
+         - targets: ['localhost:7196']
+
   # Used for kubernetes deployment as we can discover the end points to scrape from the API
   - job_name: 'couchbase-kubernetes-pods'
     kubernetes_sd_configs:

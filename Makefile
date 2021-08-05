@@ -45,7 +45,7 @@ lint:
 # need to be moved to a separate repo in which case the "docker build" command
 # can't be here anyway.
 container: build
-	docker build -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
 container-lint: build lint
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile

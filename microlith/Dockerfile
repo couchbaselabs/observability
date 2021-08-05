@@ -4,6 +4,33 @@ FROM prom/prometheus:v2.28.0 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.23.0 as jaegaer-official
 
+FROM golang:1.16 as builder
+# Builder image so ignore pinning and we do want recommended packages
+# hadolint ignore=DL3008,DL3015
+RUN apt-get update && apt-get install -y sqlcipher libssl-dev openssl openssh-client && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ /bin
+
+# Support cloning the private repo
+RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
+
+WORKDIR /src/github.com/couchbaselabs/cbmultimanager
+
+RUN go mod download
+
+# Statically build it to allow reuse on Alpine Linux
+RUN CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
+
+FROM node:16-alpine3.14 as ui-builder
+RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ui/
+
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
+WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui/app/
+RUN npm install && npm run build
+
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 # hadolint ignore=DL3018
@@ -167,6 +194,19 @@ COPY nginx/ /etc/nginx/
 COPY html/ /html/
 EXPOSE 80
 
+# Couchbase healthcheck
+RUN mkdir -p /data /priv && \
+    openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" -addext "subjectAltName=DNS:couchbase.com" -newkey rsa:2048 -keyout /priv/server.key -out /priv/server.crt;
+
+COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
+COPY --from=builder /bin/cbeventlog /bin/cbeventlog
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/entrypoint.sh /entrypoints/couchbase-cluster-monitor.sh
+COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/app/dist/app/ /ui/
+
+RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
+
+EXPOSE 7196 7197
+
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/
 COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
@@ -190,7 +230,8 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
-    chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/
+    chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
+    chown -R couchbase:couchbase /data /priv /ui
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/

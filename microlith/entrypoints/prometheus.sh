@@ -15,8 +15,8 @@
 
 set -ex
 # For envsubst we have to export
-export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
-export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
+export CB_MULTI_ADMIN_USER=${CB_MULTI_ADMIN_USER:-admin}
+export CB_MULTI_ADMIN_PASSWORD=${CB_MULTI_ADMIN_PASSWORD:-password}
 
 # To customise the Prometheus configuration used, set these values at launch
 PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
