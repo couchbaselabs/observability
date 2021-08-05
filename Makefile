@@ -38,12 +38,7 @@ lint:
 	tools/shellcheck.sh
 	tools/licence-lint.sh
 
-# NOTE: This target is only for local development. While we use this Dockerfile
-# (for now), the actual "docker build" command is located in the Jenkins job
-# "couchbase-operator-docker". We could make use of this Makefile there as
-# well, but it is quite possible in future that the canonical Dockerfile will
-# need to be moved to a separate repo in which case the "docker build" command
-# can't be here anyway.
+# NOTE: This target is only for local development.
 container: build
 	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
@@ -53,7 +48,7 @@ container-lint: build lint
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
 		--severity "HIGH,CRITICAL" --ignore-unfixed --exit-code 1 --no-progress ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -e CI=true wagoodman/dive \
+	-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -e CI=true wagoodman/dive \
 		${DOCKER_USER}/observability-stack:${DOCKER_TAG}
 
 # This target pushes the containers to a public repository.

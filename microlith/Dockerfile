@@ -1,8 +1,8 @@
-FROM grafana/grafana:8.0.3 as grafana-official
+FROM grafana/grafana:8.0.6 as grafana-official
 FROM grafana/loki:2.2.1 as loki-official
-FROM prom/prometheus:v2.28.0 as prometheus-official
+FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
-FROM jaegertracing/all-in-one:1.23.0 as jaegaer-official
+FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 
 FROM golang:1.16 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -10,23 +10,32 @@ FROM golang:1.16 as builder
 RUN apt-get update && apt-get install -y sqlcipher libssl-dev openssl openssh-client && \
     rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ /bin
+# Set up SSH access
+# hadolint ignore=SC2174
+RUN mkdir -p /bin && \
+    mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
-# Support cloning the private repo
-RUN mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+# Build the Prometheus merge tool so we can ensure we have a static build
+ARG PROM_CONFIG_TOOL_VERSION=v0.2.0
+WORKDIR /src/github.com/lablabs/prometheus-alert-overrider
+RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-overrider/archive/refs/tags/$PROM_CONFIG_TOOL_VERSION.tar.gz" && \
+    tar --strip-components 1 -xzvf /src/prom.tgz && \
+    go mod init github.com/lablabs/prometheus-alert-overrider && \
+    go mod tidy && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
+
+# Standalone as need to use --mount option
+WORKDIR /src/github.com/couchbaselabs/cbmultimanager
 RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
 
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager
-
-RUN go mod download
-
 # Statically build it to allow reuse on Alpine Linux
-RUN CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager && \
+RUN go mod download && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
 
 FROM node:16-alpine3.14 as ui-builder
-RUN mkdir -p /src/github.com/couchbaselabs/cbmultimanager/ui/
 
+# Just copy over rather than clone
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui/app/
 RUN npm install && npm run build
@@ -49,20 +58,28 @@ COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/sh
 COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
 
 # Support scripted access to kubernetes API, e.g. to get credentials from Secrets
-ARG KUBECTL_VERSION=v1.21.3
+ARG KUBECTL_VERSION=v1.22.0
 ENV KUBECTL_VERSION=$KUBECTL_VERSION
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
 	chmod +x kubectl && \
 	mv kubectl /usr/local/bin/
 
+# Add the Prometheus config handling tool
+# https://github.com/lablabs/prometheus-alert-overrider
+ARG PROM_CONFIG_TOOL_VERSION=v0.2.0
+ENV PROM_CONFIG_TOOL_VERSION=$PROM_CONFIG_TOOL_VERSION
+COPY --from=builder /bin/prometheus_merge /bin/prometheus_merge
+RUN chmod a+x /bin/prometheus_merge
+
 # Helm - to support deployment from this container of custom tools
-ARG HELM_VERSION=v3.6.3
-ENV HELM_VERSION=$HELM_VERSION
-RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
-	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
-	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
-	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
-	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
+# TODO: Currently triggering a CVE
+# ARG HELM_VERSION=v3.6.3
+# ENV HELM_VERSION=$HELM_VERSION
+# RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
+# 	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
+# 	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
+# 	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
+# 	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
 
 # Try to keep the originals as they are and fix anything later to make it easy to merge changes
 
@@ -196,7 +213,11 @@ EXPOSE 80
 
 # Couchbase healthcheck
 RUN mkdir -p /data /priv && \
-    openssl req -x509 -nodes -days 365 -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" -addext "subjectAltName=DNS:couchbase.com" -newkey rsa:2048 -keyout /priv/server.key -out /priv/server.crt;
+    openssl req -x509 -nodes -days 365 \
+    -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
+    -addext "subjectAltName=DNS:couchbase.com" \
+    -newkey rsa:2048 \
+    -keyout /priv/server.key -out /priv/server.crt;
 
 COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
 COPY --from=builder /bin/cbeventlog /bin/cbeventlog
