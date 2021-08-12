@@ -192,6 +192,9 @@ EXPOSE 16686
 # Default configuration file for setting sampling strategies
 ENV SAMPLING_STRATEGIES_FILE=/etc/jaeger/sampling_strategies.json
 
+# Send traces to us
+ENV JAEGER_AGENT_HOST=localhost
+
 # VOLUME ["/tmp"]
 # ENTRYPOINT ["/go/bin/all-in-one-linux"]
 

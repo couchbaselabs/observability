@@ -13,15 +13,17 @@ services:
 
     # This first section is the main thrust of the microlith, it runs the all-in-one container up
     couchbase-grafana:
-        # Build using build kit so we can do ssh mounts for private repo, do not build here
-        # build: .
-        image: couchbase-observability:latest
+        # Build using build kit so we can do ssh mounts for private repo, do not build here.
+        # Unfortunately Docker Compose does not use locally built images, it tries to pull them unless you specify 'build'
+        build:
+            context: ../../microlith/
+        # image: couchbase-observability:v1
         container_name: couchbase-grafana
         # Note an environment file can be used as well, this is likely better for production
         environment:
             # Disable various components as an example
             - DISABLE_LOKI=true
-            - DISABLE_JAEGER=true
+            # - DISABLE_JAEGER=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
             # Grafana password (default)
@@ -54,12 +56,13 @@ services:
             - "9093:9093"
             # Landing page
             - "8080:8080"
+            # Cluster monitor
+            - "7196:7196"
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
         container_name: db1
-        # image: couchbase:6.6.2
-        image: couchbase/server-sandbox:6.6.0
+        image: couchbase/server-sandbox:7.0.0
         ports:
             - "8091-8096:8091-8096"
             - "11210-11211:11210-11211"
@@ -80,7 +83,7 @@ services:
 
     # logging:
     #     container_name: logging
-    #     image: couchbase/fluent-bit:1.0.4
+    #     image: couchbase/fluent-bit:1.1.0
     #     ports:
     #         # Metrics
     #         - "2020:2020"
@@ -97,7 +100,7 @@ services:
 
     exporter:
         container_name: exporter
-        image: couchbase/exporter:1.0.4
+        image: couchbase/exporter:1.0.5
         command:
             - '--couchbase-address=db1'
         ports:
