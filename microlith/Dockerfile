@@ -218,7 +218,7 @@ COPY jaeger/ /etc/jaeger/
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
-EXPOSE 80
+EXPOSE 8080
 
 # Couchbase cluster monitor
 RUN mkdir -p /data /priv /ui
