@@ -24,6 +24,7 @@ RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-override
     go mod tidy && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
 
+# Couchbase proprietary start
 # Standalone as need to use --mount option
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
 RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
@@ -35,6 +36,7 @@ RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
 RUN go mod download && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
+# Couchbase proprietary end
 
 # TODO: golang17 version once available
 FROM node:16-alpine3.14 as ui-builder
@@ -219,8 +221,10 @@ COPY html/ /html/
 EXPOSE 80
 
 # Couchbase cluster monitor
-RUN mkdir -p /data /priv && \
-    openssl req -x509 -nodes -days 365 \
+RUN mkdir -p /data /priv /ui
+
+# Couchbase proprietary start
+RUN openssl req -x509 -nodes -days 365 \
     -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
     -addext "subjectAltName=DNS:couchbase.com" \
     -newkey rsa:2048 \
@@ -235,6 +239,7 @@ COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/app/dist/
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
 EXPOSE 7196 7197
+# Couchbase proprietary end
 
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/
@@ -260,8 +265,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui && \
-    chmod -R a+r /licenses
+    chown -R couchbase:couchbase /data /priv /ui
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/

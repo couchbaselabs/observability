@@ -1,5 +1,5 @@
 bldNum = $(if $(BLD_NUM),$(BLD_NUM),999)
-version = $(if $(VERSION),$(VERSION),1.0.4)
+version = $(if $(VERSION),$(VERSION),1.0.0)
 productVersion = $(version)-$(bldNum)
 ARTIFACTS = build/artifacts/
 
@@ -15,12 +15,16 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native container-test
+.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native container-test
 
-all: clean build lint container container-lint container-scan dist test-dist test examples
+# TODO: add 'test examples'
+all: clean build lint container container-oss container-lint container-scan dist test-dist
 
 build:
-	echo "$GIT_REVISION" > microlith/git-commit.txt
+	echo "Version: $(version)" >> microlith/git-commit.txt
+	echo "Build: $(productVersion)" > microlith/git-commit.txt
+	echo "Revision: $(revision)" >> microlith/git-commit.txt
+	echo "Git commit: $(GIT_REVISION)" >> microlith/git-commit.txt
 
 image-artifacts: build
 	mkdir -p $(ARTIFACTS)
@@ -41,6 +45,9 @@ lint:
 # NOTE: This target is only for local development.
 container: build
 	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+
+container-oss: build
+	tools/build-oss-container.sh
 
 container-lint: build lint
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile

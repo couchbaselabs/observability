@@ -23,9 +23,9 @@ This software uses the following components with their associated licensing also
 * Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
 * Prometheus Merge Too: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
-* Couchbase Cluster Monitor: TBD
+* Couchbase Cluster Monitor: Proprietary to Couchbase https://github.com/couchbaselabs/cbmultimanager/blob/master/LICENSE
 
-Nginx is used as the base for the microlith container.
+Nginx is used as the base image for the microlith container.
 All licences are in the source repository and the microlith container in the [`/licenses`](microlith/licenses/) directory.
 
 # Architecture
@@ -172,6 +172,7 @@ Scale up to run tests in GKE as well using multiple nodes explicitly there.
 
 * No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
+* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a [helper script](tools/build-oss-container.sh) that does this.
 
 # Resources
 * A good overview of how Prometheus and Alert Manager: https://www.fabernovel.com/en/engineering/alerting-in-prometheus-or-how-i-can-sleep-well-at-night

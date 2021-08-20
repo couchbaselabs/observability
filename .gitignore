@@ -8,3 +8,4 @@ bin/
 test-dist/
 # Test
 *-actual.yaml
+microlith/Dockerfile.oss
