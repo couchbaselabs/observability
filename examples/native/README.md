@@ -1,6 +1,6 @@
 An example of using the microlith image locally.
 
-To run a full stack use the `Makefile` and just execute the default target: `make`
+To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-native`
 
 This uses an SSH mount to access a private git repository during the container build so make sure your SSH keys are set up for git locally and ssh agent is running with them to provide it.
 

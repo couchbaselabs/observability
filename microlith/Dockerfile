@@ -1,10 +1,10 @@
-FROM grafana/grafana:8.0.6 as grafana-official
-FROM grafana/loki:2.2.1 as loki-official
+FROM grafana/grafana:8.1.1 as grafana-official
+FROM grafana/loki:2.3.0 as loki-official
 FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 
-FROM golang:1.16 as builder
+FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
 # hadolint ignore=DL3008,DL3015
 RUN apt-get update && apt-get install -y sqlcipher libssl-dev openssl openssh-client && \
@@ -33,6 +33,7 @@ RUN go mod download && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
 
+# TODO: golang17 version once available
 FROM node:16-alpine3.14 as ui-builder
 
 # Just copy over rather than clone

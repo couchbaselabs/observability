@@ -56,7 +56,6 @@ container-scan: container
 # 	make container-public -e DOCKER_USER=couchbase DOCKER_TAG=2.0.0
 container-public: container
 	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
-	docker push ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG}
 
 # Build and run the examples
 example-kubernetes: container
