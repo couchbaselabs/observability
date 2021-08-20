@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y sqlcipher libssl-dev openssl openssh-cl
 
 # Set up SSH access
 # hadolint ignore=SC2174
-RUN mkdir -p /bin && \
+RUN mkdir -p /bin /etc/couchbase && \
     mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # Build the Prometheus merge tool so we can ensure we have a static build
@@ -27,6 +27,9 @@ RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-override
 # Standalone as need to use --mount option
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
 RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
+
+# Output our commit information to a file we can access
+RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
 
 # Statically build it to allow reuse on Alpine Linux
 RUN go mod download && \
@@ -215,7 +218,7 @@ COPY nginx/ /etc/nginx/
 COPY html/ /html/
 EXPOSE 80
 
-# Couchbase healthcheck
+# Couchbase cluster monitor
 RUN mkdir -p /data /priv && \
     openssl req -x509 -nodes -days 365 \
     -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
@@ -226,6 +229,7 @@ RUN mkdir -p /data /priv && \
 COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
 COPY --from=builder /bin/cbeventlog /bin/cbeventlog
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/entrypoint.sh /entrypoints/couchbase-cluster-monitor.sh
+COPY --from=builder /etc/couchbase/git-commit.txt /etc/couchbase-cluster-monitor-release.txt
 COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/app/dist/app/ /ui/
 
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
@@ -256,7 +260,8 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui
+    chown -R couchbase:couchbase /data /priv /ui && \
+    chmod -R a+r /licenses
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
@@ -265,6 +270,7 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 # Add all useful and required information
 COPY licenses/* /licenses/
 COPY README.md /help.1
+COPY git-commit.txt /etc/cmos-release.txt
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]

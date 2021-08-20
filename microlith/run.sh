@@ -17,6 +17,14 @@
 # Simple support for dynamic disabling of generic commands and logging
 set -e
 
+# We will output licensing information unless this variable is set to "yes"
+export DISABLE_LICENSE_OUTPUT=${DISABLE_LICENSE_OUTPUT:-no}
+if [[ "${DISABLE_LICENSE_OUTPUT}" == "yes" ]]; then
+    echo "Accepted Couchbase license agreement (and all others) explicity by specifying DISABLE_LICENSE_OUTPUT variable"
+else
+    cat /licenses/*
+fi
+
 # Expose all nested config variables to make it simple to see
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
@@ -45,6 +53,7 @@ export CB_MULTI_BIN=${CB_MULTI_BIN:-/bin/cbmultimanager}
 export CB_MULTI_ENABLE_ADMIN_API=${CB_MULTI_ENABLE_ADMIN_API:-true}
 export CB_MULTI_ENABLE_CLUSTER_API=${CB_MULTI_ENABLE_CLUSTER_API:-true}
 export CB_MULTI_ENABLE_EXTENDED_API=${CB_MULTI_ENABLE_EXTENDED_API:-true}
+export CB_MULTI_DISABLE_LICENSE_OUTPUT=${CB_MULTI_DISABLE_LICENSE_OUTPUT:-$DISABLE_LICENSE_OUTPUT}
 
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}

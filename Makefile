@@ -20,7 +20,7 @@ revision = $(if $(REVISION),$(REVISION),)
 all: clean build lint container container-lint container-scan dist test-dist test examples
 
 build:
-	echo "Nothing to do - repackaging only"
+	echo "$GIT_REVISION" > microlith/git-commit.txt
 
 image-artifacts: build
 	mkdir -p $(ARTIFACTS)
