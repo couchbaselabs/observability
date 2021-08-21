@@ -220,7 +220,7 @@ COPY nginx/ /etc/nginx/
 COPY html/ /html/
 EXPOSE 8080
 
-# Couchbase cluster monitor
+# Couchbase cluster monitor - need these to keep OSS generic
 RUN mkdir -p /data /priv /ui
 
 # Couchbase proprietary start
