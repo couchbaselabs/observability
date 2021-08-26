@@ -27,6 +27,8 @@ This software uses the following components with their associated licensing also
 
 Nginx is used as the base image for the microlith container.
 All licences are in the source repository and the microlith container in the [`/licenses`](microlith/licenses/) directory.
+A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
+A simple [helper script](./tools/build-oss-container.sh) is provided as well to build without the Couchbase Cluster monitor.
 
 # Architecture
 
