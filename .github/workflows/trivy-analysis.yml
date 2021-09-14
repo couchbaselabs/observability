@@ -19,7 +19,7 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t docker.io/couchbase/observability-stack:${{ github.sha }} microlith/
+          IMAGE_TAG=docker.io/couchbase/observability-stack:${{ github.sha }} tools/build-oss-container.sh
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
