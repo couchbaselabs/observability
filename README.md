@@ -22,7 +22,7 @@ This software uses the following components with their associated licensing also
 * Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
 * Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
-* Prometheus Merge Too: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
+* Prometheus Merge Tool: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
 * Couchbase Cluster Monitor: Proprietary to Couchbase https://github.com/couchbaselabs/cbmultimanager/blob/master/LICENSE
 
 Nginx is used as the base image for the microlith container.
