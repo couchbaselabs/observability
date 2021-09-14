@@ -36,7 +36,6 @@ RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
 RUN go mod download && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
-# Couchbase proprietary end
 
 # TODO: golang17 version once available
 FROM node:16-alpine3.14 as ui-builder
@@ -45,6 +44,8 @@ FROM node:16-alpine3.14 as ui-builder
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui
 RUN npm install && npm run build
+
+# Couchbase proprietary end
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
