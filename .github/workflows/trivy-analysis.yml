@@ -19,12 +19,12 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          docker build -t docker.io/couchbase/monitoring-stack:${{ github.sha }} .
+          DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t docker.io/couchbase/observability-stack:${{ github.sha }} microlith/
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/couchbase/monitoring-stack:${{ github.sha }}'
+          image-ref: 'docker.io/couchbase/observability-stack:${{ github.sha }}'
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'
