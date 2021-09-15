@@ -43,7 +43,8 @@ FROM node:16-alpine3.14 as ui-builder
 # Just copy over rather than clone
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui
-RUN npm install && npm run build
+# We reverse proxy it to /couchbase/ so fix up the base and asset paths to account for this
+RUN npm install && npm run build -- --base-href=/couchbase/ui/ --deploy-url=/couchbase/ui/
 
 # Couchbase proprietary end
 
