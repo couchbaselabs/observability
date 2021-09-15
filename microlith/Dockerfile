@@ -34,17 +34,18 @@ RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
 
 # Statically build it to allow reuse on Alpine Linux
 RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cmd/cbmultimanager && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cmd/cbeventlog
-# Couchbase proprietary end
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
 
 # TODO: golang17 version once available
 FROM node:16-alpine3.14 as ui-builder
 
 # Just copy over rather than clone
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui/app/
+WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui
 RUN npm install && npm run build
+
+# Couchbase proprietary end
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
@@ -234,7 +235,7 @@ COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
 COPY --from=builder /bin/cbeventlog /bin/cbeventlog
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/entrypoint.sh /entrypoints/couchbase-cluster-monitor.sh
 COPY --from=builder /etc/couchbase/git-commit.txt /etc/couchbase-cluster-monitor-release.txt
-COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/app/dist/app/ /ui/
+COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/dist/app/ /ui/
 
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
@@ -274,7 +275,11 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 # Add all useful and required information
 COPY licenses/* /licenses/
 COPY README.md /help.1
-COPY git-commit.txt /etc/cmos-release.txt
+
+# TODO (CMOS-12): this doesn't work in the OSS build (and uses CBMM's version, not CMOS's)
+# Couchbase proprietary start
+COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
+# Couchbase proprietary end
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
