@@ -17,6 +17,8 @@ set -ex
 # For envsubst we have to export
 export CB_MULTI_ADMIN_USER=${CB_MULTI_ADMIN_USER:-admin}
 export CB_MULTI_ADMIN_PASSWORD=${CB_MULTI_ADMIN_PASSWORD:-password}
+export CB_SERVER_AUTH_USER=${CB_SERVER_AUTH_USER:-Administrator}
+export CB_SERVER_AUTH_PASSWORD=${CB_SERVER_AUTH_PASSWORD:-password}
 
 # To customise the Prometheus configuration used, set these values at launch
 PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
