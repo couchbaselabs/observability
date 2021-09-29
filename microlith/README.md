@@ -46,6 +46,10 @@ export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/p
 export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
 export PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
 
+# Couchbase Server scrape credentials
+export CB_SERVER_AUTH_USER=${CB_SERVER_AUTH_USER:-Administrator}
+export CB_SERVER_AUTH_PASSWORD=${CB_SERVER_AUTH_PASSWORD:-password}
+
 # Alert manager configuration
 export ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
 export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
@@ -70,6 +74,8 @@ The [file-based service discovery](https://prometheus.io/docs/prometheus/latest/
 The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entrypoint adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}` directory when it is run.
 
 To add Couchbase Server end points, create a similar JSON format file to the [example](../examples/native/dynamic/prometheus/couchbase-servers/targets.json) in the `/etc/prometheus/couchbase/custom/` directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).
+
+You can set the authentication credentials for your Couchbase Server clusters using the `$CB_SERVER_AUTH_USER` and `$CB_SERVER_AUTH_PASSWORD` environment variables, as shown above. Note that currently we do not support using different credentials for multiple clusters.
 
 ### Alerting rules
 

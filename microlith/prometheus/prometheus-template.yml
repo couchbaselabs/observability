@@ -58,3 +58,7 @@ scrape_configs:
       - files:
         - 'couchbase/custom/*.json'
         refresh_interval: 30s
+      # We use envsubst to replace these prior to launch
+    basic_auth:
+      username: "$CB_SERVER_AUTH_USER"
+      password: "$CB_SERVER_AUTH_PASSWORD"
