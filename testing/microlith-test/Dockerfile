@@ -16,7 +16,8 @@ RUN apk --no-cache add \
     libc6-compat \
     openssh-client \
     bash \
-	gettext
+	gettext \
+	jq
 
 # Install BATS
 RUN curl -LO "https://github.com/bats-core/bats-core/archive/refs/tags/v$BATS_VERSION.zip" && \

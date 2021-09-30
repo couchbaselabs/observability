@@ -1,0 +1,21 @@
+version: '3.8'
+services:
+  cb1:
+    image: ${SERVER_IMAGE}
+    ports:
+    - '8091-8096:8091-8096'
+    - '11209-11211:11209-11211'
+    volumes:
+      - ./cb-entrypoint.sh:/entrypoint.sh
+  cmos:
+    # Docker Compose doesn't support passing ssh into builds, so we need to pre-build the image
+    image: ${CMOS_IMAGE}
+    ports:
+    - '${CMOS_PORT}:8080'
+    depends_on:
+    - cb1
+    environment:
+      CB_SERVER_AUTH_USER: prometheus
+      CB_SERVER_AUTH_PASSWORD: prometheus
+    volumes:
+    - ./cb1.json:/etc/prometheus/couchbase/custom/cb1.json
