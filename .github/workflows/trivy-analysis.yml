@@ -12,7 +12,7 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Run Trivy against OSS container
     runs-on: "ubuntu-18.04"
     steps:
       - name: Checkout code
