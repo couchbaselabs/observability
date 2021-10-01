@@ -26,9 +26,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Test clone
-        run: git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git
-
       - name: Run makefile
         run: |
           DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }} make all
