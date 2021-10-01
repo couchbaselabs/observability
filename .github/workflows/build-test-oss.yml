@@ -36,7 +36,6 @@ jobs:
       - name: Create K8S Kind Cluster
         uses: helm/kind-action@v1.2.0
 
-      # - name: Run K8S tests
-      #   # TODO: mount in the kubectl context
-      #   run: |
-      #     make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
+      - name: Run K8S tests
+        run: |
+          make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}

@@ -77,13 +77,8 @@ ENV BATS_FILE_ROOT=/usr/local/lib/bats-file
 ENV BATS_SUPPORT_ROOT=/usr/local/lib/bats-support
 ENV BATS_ASSERT_ROOT=/usr/local/lib/bats-assert
 
-# Use the same UID as Jenkins:
-# For Jenkins versions < 2.62, this is 1000
-RUN adduser -D -u 10000 testing
-USER testing
+COPY . /home/testing/
 WORKDIR /home/testing
-
-COPY --chown=testing . ./
 
 # This is the image we want to test against, override to change.
 ARG CMOS_IMAGE=couchbase/observability-stack:v1

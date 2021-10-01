@@ -22,21 +22,19 @@ load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
 setup() {
-    if [ "$TEST_INTEGRATION" == "true" ]; then
-        skip "Skipping integration tests"
+    if [ "$TEST_NATIVE" == "true" ]; then
+        skip "Skipping native prometheus tests"
     fi
 }
 
 teardown() {
-    if [ "$SKIP_TEARDOWN" == "true" ]; then
-        echo "# Skipping teardown. Make sure to manually run the commands in teardown()." >&3
-        return
+    if [ "$TEST_NATIVE" == "true" ]; then
+        docker-compose --project-directory="${TEST_ROOT}/native/prometheus_basic_auth" rm -v --force --stop
     fi
-    docker-compose rm -v --force --stop --project-directory "${TEST_ROOT}/native/prometheus_basic_auth"
 }
 
 @test "Verify that basic auth can be passed by environment variable" {
-    docker-compose up -d --force-recreate --remove-orphans --project-directory "${TEST_ROOT}/native/prometheus_basic_auth"
+    docker-compose --project-directory="${TEST_ROOT}/native/prometheus_basic_auth" up -d --force-recreate --remove-orphans
     # Wait for Couchbase to initialise
     while true; do
         if curl -s -o /dev/null -u Administrator:newpassword http://127.0.0.1:8091/pools/default; then

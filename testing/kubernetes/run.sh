@@ -21,6 +21,7 @@ IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
+KUBECONFIG=${KUBECONFIG:-${HOME}/.kube/config}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster
@@ -48,4 +49,4 @@ kind load docker-image "${COUCHBASE_SERVER_IMAGE}"
 kind load docker-image "${IMAGE}"
 kind load docker-image "${CMOS_IMAGE}"
 
-docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -t -e TEST_NATIVE=false "${IMAGE}"
+docker run -v /var/run/docker.sock:/var/run/docker.sock -v "${KUBECONFIG}":/home/.kube/config --rm -t -e TEST_NATIVE=false "${IMAGE}"
