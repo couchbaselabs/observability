@@ -1,0 +1,42 @@
+# Main workflow
+name: main CICD build
+
+on:
+  push:
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.adoc'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-oss:
+    name: Build container and run CICD pipeline
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Build OSS image
+        run: |
+          IMAGE_TAG=docker.io/couchbaselabs/observability-stack:${{ github.sha }} tools/build-oss-container.sh
+
+      - name: Build test image
+        run: |
+          docker build -t docker.io/couchbaselabs/observability-stack-test:${{ github.sha }} --build-arg COS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }} testing/microlith-test
+
+      - name: Run native tests
+        run: |
+          docker run --rm -t -e TEST_NATIVE=true docker.io/couchbaselabs/observability-stack-test:${{ github.sha }}
+
+      - name: Create K8S Kind Cluster
+        uses: helm/kind-action@v1.2.0
+
+      - name: Run K8S tests
+        run: |
+          docker run --rm -t -e TEST_NATIVE=false docker.io/couchbaselabs/observability-stack-test:${{ github.sha }}
+

@@ -2,7 +2,7 @@
 FROM alpine:3.14
 
 ARG KUBECTL_VERSION=v1.21.2
-ARG HELM_VERSION=v3.6.1
+ARG HELM_VERSION=v3.7.0
 ARG BATS_VERSION=1.3.0
 ARG BATS_DETIK_VERSION=1.0.0
 ARG BATS_ASSERT_VERSION=2.0.0
@@ -86,8 +86,10 @@ WORKDIR /home/testing
 COPY --chown=testing . ./
 
 # This is the image we want to test against, override to change.
-ENV COS_IMAGE=couchbase/observability-stack:v1
-ENV COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
+ARG COS_IMAGE=couchbase/observability-stack:v1
+ENV COS_IMAGE=${COS_IMAGE}
+ARG COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
+ENV COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE}
 
 # Run native tests if set to true, run kubernetes tests otherwise
 ENV TEST_NATIVE=true
