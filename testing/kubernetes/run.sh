@@ -14,25 +14,18 @@
 # limitations under the License.
 set -eu
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
-COS_IMAGE=${IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+CMOS_IMAGE=${IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
-TIMEOUT=${TIMEOUT:-30}
-COMPLETIONS=${COMPLETIONS:-1}
-PARALLELISM=${PARALLELISM:-1}
 
-CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
-COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
-
-docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
+COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster
     echo "Recreating full cluster"
-    kind delete cluster --name="${CLUSTER_NAME}"
+    kind delete cluster
 
     CLUSTER_CONFIG=$(mktemp)
     cat << EOF > "${CLUSTER_CONFIG}"
@@ -45,35 +38,14 @@ nodes:
 - role: worker
 EOF
 
-    kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
+    kind create cluster --config="${CLUSTER_CONFIG}"
     rm -f "${CLUSTER_CONFIG}"
 fi
 
-    # Wait for cluster to come up
-    docker pull "${COUCHBASE_SERVER_IMAGE}"
-    kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
+# Wait for cluster to come up
+docker pull "${COUCHBASE_SERVER_IMAGE}"
+kind load docker-image "${COUCHBASE_SERVER_IMAGE}"
+kind load docker-image "${IMAGE}"
+kind load docker-image "${CMOS_IMAGE}"
 
-sed -e "s|%%IMAGE%%|$IMAGE|" \
-    -e "s/%%TIMEOUT%%/$TIMEOUT/" \
-    -e "s/%%COMPLETIONS%%/$COMPLETIONS/" \
-    -e "s/%%PARALLELISM%%/$PARALLELISM/" \
-    -e "s|%%COUCHBASE_SERVER_IMAGE%%|$COUCHBASE_SERVER_IMAGE|" \
-    -e "s|%%COS_IMAGE%%|$COS_IMAGE|" \
-    "${SCRIPT_DIR}/testing.yaml" > "${SCRIPT_DIR}/testing-actual.yaml"
-
-kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
-kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
-
-if kubectl delete -f "${SCRIPT_DIR}/testing-actual.yaml"; then
-    echo "Removed previous job"
-fi
-kubectl apply -f "${SCRIPT_DIR}/testing-actual.yaml"
-
-# Wait for the job to complete and grab the logs either way
-exitCode=1
-if kubectl wait --for=condition=ready pod/microlith-test --timeout=30s; then
-    exitCode=0
-fi
-
-kubectl logs microlith-test -f
-exit $exitCode
+docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -t -e TEST_NATIVE=false "${IMAGE}"

@@ -19,7 +19,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
 SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:6.6.2}
-COS_IMAGE=${COS_IMAGE:-couchbase/observability-stack:v1}
+CMOS_IMAGE=${CMOS_IMAGE:-couchbase/observability-stack:v1}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
   echo "Recreating full cluster"
@@ -68,7 +68,7 @@ kubectl delete configmap prometheus-config || true
 kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
 
 # Deploy the microlith
-kind load docker-image "${COS_IMAGE}" --name="${CLUSTER_NAME}"
+kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
 # Set up ingress

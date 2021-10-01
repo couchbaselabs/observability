@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   cb1:
-    image: ${SERVER_IMAGE}
+    image: ${COUCHBASE_SERVER_IMAGE}
     ports:
     - '8091-8096:8091-8096'
     - '11209-11211:11209-11211'

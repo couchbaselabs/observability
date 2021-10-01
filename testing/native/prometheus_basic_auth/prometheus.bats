@@ -21,10 +21,6 @@ load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
-export SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:7.0.1}
-export CMOS_IMAGE=${CMOS_IMAGE:-couchbase/observability-stack:v1}
-export CMOS_PORT=${CMOS_PORT:-8080}
-
 setup() {
     if [ "$TEST_INTEGRATION" == "true" ]; then
         skip "Skipping integration tests"

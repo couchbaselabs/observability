@@ -86,9 +86,11 @@ WORKDIR /home/testing
 COPY --chown=testing . ./
 
 # This is the image we want to test against, override to change.
-ARG COS_IMAGE=couchbase/observability-stack:v1
-ENV COS_IMAGE=${COS_IMAGE}
-ARG COUCHBASE_SERVER_IMAGE=couchbase/server:6.6.2
+ARG CMOS_IMAGE=couchbase/observability-stack:v1
+ENV CMOS_IMAGE=${CMOS_IMAGE}
+ARG CMOS_PORT=8080
+ENV CMOS_PORT=${CMOS_PORT}
+ARG COUCHBASE_SERVER_IMAGE=couchbase/server:7.0.1
 ENV COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE}
 
 # Run native tests if set to true, run kubernetes tests otherwise

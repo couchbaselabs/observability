@@ -14,10 +14,8 @@
 # limitations under the License.
 set -eu
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 
-docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
-docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -it -e TEST_NATIVE=true "${IMAGE}"
+docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -t -e TEST_NATIVE=true "${IMAGE}"
