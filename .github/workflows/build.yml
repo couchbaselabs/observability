@@ -27,7 +27,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Test clone
-        run: apt update && apt install -y openssh-client git && git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git
+        run: git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git
 
       - name: Run makefile
         run: |
