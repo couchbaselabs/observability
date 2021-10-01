@@ -197,7 +197,7 @@ Scale up to run tests in GKE as well using multiple nodes explicitly there.
 * Useful example rules: https://awesome-prometheus-alerts.grep.to/rules.html
 
 # Feedback
-Please raise issues directly on this Github repository.
+Please use our official [JIRA board](https://issues.couchbase.com/projects/CMOS/issues) to report any bugs and issues with the appropriate components. We also encourage you to use the [Couchbase Forums](https://forums.couchbase.com) for posting any questions or feedback that you might have.
 
 # Support
 No official support is currently provided but best efforts will be made.
