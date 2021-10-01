@@ -1,4 +1,5 @@
-name: build
+# Separate action to allow us to initiate occasionally and manually
+name: trivy security analysis
 
 on:
   push:
