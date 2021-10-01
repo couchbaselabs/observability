@@ -77,9 +77,11 @@ examples: clean container example-kubernetes example-native
 container-test:
 	docker build -f testing/microlith-test/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} --build-arg COS_IMAGE=${DOCKER_USER}/observability-stack:${DOCKER_TAG} testing/microlith-test/
 
+# To support the usage of the OSS container here we do not build the container
 test-kubernetes: container-test
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
 
+# To support the usage of the OSS container here we do not build the container
 test-native: container-test
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/native/run.sh
 

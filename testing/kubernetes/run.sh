@@ -24,7 +24,7 @@ COMPLETIONS=${COMPLETIONS:-1}
 PARALLELISM=${PARALLELISM:-1}
 
 CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
-SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
+SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
 
 docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
@@ -47,11 +47,11 @@ EOF
 
     kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
     rm -f "${CLUSTER_CONFIG}"
+fi
 
     # Wait for cluster to come up
     docker pull "${COUCHBASE_SERVER_IMAGE}"
     kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
-fi
 
 sed -e "s|%%IMAGE%%|$IMAGE|" \
     -e "s/%%TIMEOUT%%/$TIMEOUT/" \

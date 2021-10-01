@@ -19,12 +19,5 @@ DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 
-SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
-
 docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
-
-if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
-    "${SCRIPT_DIR}/../../examples/native/run.sh"
-fi
-
 docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -it -e TEST_NATIVE=true "${IMAGE}"
