@@ -3,10 +3,13 @@ name: main CICD build
 
 on:
   push:
-    branches: [ main ]
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '*.adoc'
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ main ]
+    branches:
+      - main
 
 jobs:
   build:
@@ -15,6 +18,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
       - name: Run standard build
         run: |
