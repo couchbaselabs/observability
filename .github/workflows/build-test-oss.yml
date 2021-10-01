@@ -15,6 +15,7 @@ jobs:
   build-test-oss:
     name: Build container and run CICD pipeline
     runs-on: "ubuntu-latest"
+    timeout-minutes: 30
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,12 +31,17 @@ jobs:
           make container-test -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
 
       - name: Run native tests
+        timeout-minutes: 10
         run: |
           make test-native -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
 
       - name: Create K8S Kind Cluster
         uses: helm/kind-action@v1.2.0
+        with:
+          cluster_name: kind-${{ github.sha }}
+          kubectl_version: v1.21.2
 
       - name: Run K8S tests
+        timeout-minutes: 10
         run: |
           make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}

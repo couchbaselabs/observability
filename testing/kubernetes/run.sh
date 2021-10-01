@@ -22,6 +22,7 @@ IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
 KUBECONFIG=${KUBECONFIG:-${HOME}/.kube/config}
+CLUSTER_NAME=${CLUSTER_NAME:-kind-$DOCKER_TAG}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster
@@ -39,14 +40,14 @@ nodes:
 - role: worker
 EOF
 
-    kind create cluster --config="${CLUSTER_CONFIG}"
+    kind create cluster --config="${CLUSTER_CONFIG}" --name="${CLUSTER_NAME}"
     rm -f "${CLUSTER_CONFIG}"
 fi
 
 # Wait for cluster to come up
 docker pull "${COUCHBASE_SERVER_IMAGE}"
-kind load docker-image "${COUCHBASE_SERVER_IMAGE}"
-kind load docker-image "${IMAGE}"
-kind load docker-image "${CMOS_IMAGE}"
+kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
+kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
+kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 
 docker run -v /var/run/docker.sock:/var/run/docker.sock -v "${KUBECONFIG}":/home/.kube/config --rm -t -e TEST_NATIVE=false "${IMAGE}"
