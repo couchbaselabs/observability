@@ -23,5 +23,5 @@ jobs:
 
       - name: Run standard CICD pipeline but only for OSS
         run: |
-          IMAGE_TAG=docker.io/couchbase/observability-stack:${{ github.sha }} make clean build lint container-oss container-lint container-scan dist test-dist
+          IMAGE_TAG=docker.io/couchbase/observability-stack:${{ github.sha }} make clean build lint container-lint container-oss dist test-dist
 
