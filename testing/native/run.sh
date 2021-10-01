@@ -27,4 +27,4 @@ if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     "${SCRIPT_DIR}/../../examples/native/run.sh"
 fi
 
-docker run --rm -it -e TEST_NATIVE=true "${IMAGE}"
+docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -it -e TEST_NATIVE=true "${IMAGE}"

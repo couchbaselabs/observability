@@ -34,9 +34,11 @@ setup() {
 }
 
 teardown() {
-    run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
-    run kubectl delete --force --grace-period=0 --now=true --wait=true -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
-    run kubectl delete namespace "$TEST_NAMESPACE"
+    if [ "$TEST_NATIVE" != "true" ]; then
+        run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
+        run kubectl delete --force --grace-period=0 --now=true --wait=true -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
+        run kubectl delete namespace "$TEST_NAMESPACE"
+    fi
 }
 
 TEST_NAMESPACE=${TEST_NAMESPACE:-test}

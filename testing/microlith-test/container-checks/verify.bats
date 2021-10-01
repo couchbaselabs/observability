@@ -56,3 +56,7 @@ load "$BATS_FILE_ROOT/load.bash"
     DETIK_CLIENT_NAMESPACE="kube-system"
     verify "there is 1 service named 'kube-dns'"
 }
+
+@test 'check docker-compose' {
+    docker-compose version
+}

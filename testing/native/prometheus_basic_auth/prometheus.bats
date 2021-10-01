@@ -36,11 +36,11 @@ teardown() {
         echo "# Skipping teardown. Make sure to manually run the commands in teardown()." >&3
         return
     fi
-    docker-compose rm -v --force --stop
+    docker-compose rm -v --force --stop --project-directory "${TEST_ROOT}/native/prometheus_basic_auth"
 }
 
 @test "Verify that basic auth can be passed by environment variable" {
-    docker-compose up -d --force-recreate --remove-orphans
+    docker-compose up -d --force-recreate --remove-orphans --project-directory "${TEST_ROOT}/native/prometheus_basic_auth"
     # Wait for Couchbase to initialise
     while true; do
         if curl -s -o /dev/null -u Administrator:newpassword http://127.0.0.1:8091/pools/default; then
