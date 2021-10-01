@@ -21,10 +21,12 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Run makefile
+      - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Run makefile
         run: |
           DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }} make all
 
