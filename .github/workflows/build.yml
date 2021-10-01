@@ -14,7 +14,7 @@ on:
 jobs:
   build:
     name: Build container and standard CICD pipeline
-    runs-on: "ubuntu-18.04"
+    runs-on: "ubuntu-latest"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,6 +25,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Test clone
+        run: apt update && apt install -y openssh-client git && git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git
 
       - name: Run makefile
         run: |
