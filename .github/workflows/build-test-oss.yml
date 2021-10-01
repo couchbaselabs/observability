@@ -1,5 +1,5 @@
 # Main workflow
-name: main CICD build
+name: Build and test changes
 
 on:
   push:
@@ -31,12 +31,12 @@ jobs:
 
       - name: Run native tests
         run: |
-          docker run --rm -t -e TEST_NATIVE=true docker.io/couchbaselabs/observability-stack-test:${{ github.sha }}
+          docker run -v /var/run/docker.sock:/var/run/docker.sock --rm -t -e TEST_NATIVE=true docker.io/couchbaselabs/observability-stack-test:${{ github.sha }}
 
       - name: Create K8S Kind Cluster
         uses: helm/kind-action@v1.2.0
 
       - name: Run K8S tests
+        # TODO: mount in the kubectl context
         run: |
           docker run --rm -t -e TEST_NATIVE=false docker.io/couchbaselabs/observability-stack-test:${{ github.sha }}
-

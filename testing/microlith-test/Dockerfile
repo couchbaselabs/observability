@@ -1,5 +1,5 @@
 # Taken from https://github.com/bats-core/bats-detik/blob/master/Dockerfile (MIT license)
-FROM alpine:3.14
+FROM docker:dind
 
 ARG KUBECTL_VERSION=v1.21.2
 ARG HELM_VERSION=v3.7.0
@@ -8,6 +8,7 @@ ARG BATS_DETIK_VERSION=1.0.0
 ARG BATS_ASSERT_VERSION=2.0.0
 ARG BATS_SUPPORT_VERSION=0.3.0
 ARG BATS_FILE_VERSION=0.3.0
+ARG DOCKER_COMPOSE_VERSION=1.29.2
 
 # Add packages
 RUN apk --no-cache add \
@@ -38,6 +39,10 @@ RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
 	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
 	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
 	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
+
+# Install compose
+RUN curl -L --fail "https://github.com/docker/compose/releases/download/$DOCKER_COMPOSE_VERSION/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+	chmod a+x /usr/local/bin/docker-compose
 
 # Install Detik - we use cd to expand the variables
 RUN curl -LO "https://github.com/bats-core/bats-detik/archive/refs/tags/v$BATS_DETIK_VERSION.zip" && \
