@@ -81,8 +81,7 @@ container-test:
 test-kubernetes: container-test
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
 
-# To support the usage of the OSS container here we do not build the container
-test-native: container-test
+test-native:
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/native/run.sh
 
 test: clean container container-test test-kubernetes test-native

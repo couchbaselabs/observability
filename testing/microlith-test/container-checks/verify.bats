@@ -58,5 +58,8 @@ load "$BATS_FILE_ROOT/load.bash"
 }
 
 @test 'check docker-compose' {
+    if [[ "$TEST_NATIVE" != "true" ]]; then
+        skip "Skipping native specific tests"
+    fi
     docker-compose version
 }

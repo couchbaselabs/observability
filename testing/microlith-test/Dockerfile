@@ -89,7 +89,7 @@ ARG COUCHBASE_SERVER_IMAGE=couchbase/server:7.0.1
 ENV COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE}
 
 # Run native tests if set to true, run kubernetes tests otherwise
-ENV TEST_NATIVE=true
+ENV TEST_NATIVE=false
 # The kubernetes namespace to run tests in, useful to just destroy
 ENV TEST_NAMESPACE=test
 # Test root, not good to use current directory with scripts launched by BATS

@@ -12,10 +12,43 @@ on:
       - main
 
 jobs:
-  build-test-oss:
+
+  shellcheck:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Run shellcheck
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install shellcheck
+          ./shellcheck.sh
+
+  build-test-native:
     name: Build container and run CICD pipeline
-    runs-on: "ubuntu-latest"
-    timeout-minutes: 30
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Build OSS image
+        run: |
+          IMAGE_TAG=docker.io/couchbaselabs/observability-stack:${{ github.sha }} tools/build-oss-container.sh
+
+      - name: Run native tests
+        timeout-minutes: 10
+        run: |
+          sudo npm install bats
+          make test-native
+
+  build-test-k8s:
+    name: Build container and run CICD pipeline for K8S
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,18 +63,13 @@ jobs:
         run: |
           make container-test -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
 
-      - name: Run native tests
-        timeout-minutes: 10
-        run: |
-          make test-native -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
-
       - name: Create K8S Kind Cluster
         uses: helm/kind-action@v1.2.0
         with:
           cluster_name: kind-${{ github.sha }}
           kubectl_version: v1.21.2
 
-      - name: Run K8S tests
-        timeout-minutes: 10
-        run: |
-          make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
+      # - name: Run K8S tests
+      #   timeout-minutes: 10
+      #   run: |
+      #     make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
