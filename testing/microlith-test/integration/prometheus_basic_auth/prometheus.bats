@@ -67,7 +67,7 @@ waitForRemote() {
     # And Prometheus, just in case
     waitForRemote "http://localhost:${CMOS_PORT}/prometheus/-/ready" 12
     # Create a user
-    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
+    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec -T cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
     assert_success
     # Wait the length of one scrape_interval, plus some margin
     sleep 35
