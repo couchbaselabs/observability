@@ -26,7 +26,8 @@ setup() {
 
 teardown() {
     if [ "$TEST_NATIVE" == "true" ]; then
-        docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" rm -v --force --stop
+        docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output" >&3
+        docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop || true
     fi
 }
 
@@ -38,13 +39,11 @@ waitForRemote() {
     until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
         # shellcheck disable=SC2086
         if [ $ATTEMPTS -gt $MAX_ATTEMPTS ]; then
-            docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" logs --timestamps
             assert_failure "unable to communicate with $URL"
         fi
         ((ATTEMPTS++))
         sleep 10
     done
-    docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" logs --timestamps
     run curl -s "${CREDENTIALS}" "${URL}"
     assert_success
 }
@@ -57,7 +56,7 @@ waitForRemote() {
 }
 
 @test "Verify that basic auth can be passed by environment variable" {
-    docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" up -d --force-recreate --remove-orphans
+    docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
     # Wait for Couchbase to initialise
     waitForRemote "http://localhost:8091/pools/default" 30 "-u Administrator:newpassword"
     run curl -s -u Administrator:newpassword "http://localhost:8091/pools/default"
@@ -67,7 +66,7 @@ waitForRemote() {
     # And Prometheus, just in case
     waitForRemote "http://localhost:${CMOS_PORT}/prometheus/-/ready" 12
     # Create a user
-    run docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" exec cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
+    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
     assert_success
     # Wait the length of one scrape_interval, plus some margin
     sleep 35
