@@ -155,7 +155,7 @@ RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles
 
 # USER       nobody
 EXPOSE     9090
-VOLUME     [ "/prometheus" ]
+# VOLUME     [ "/prometheus" ]
 
 # ALERT MANAGER
 # From https://github.com/prometheus/alertmanager/blob/master/Dockerfile
@@ -168,7 +168,7 @@ RUN mkdir -p /alertmanager && \
 
 # USER       nobody
 EXPOSE     9093
-VOLUME     [ "/alertmanager" ]
+# VOLUME     [ "/alertmanager" ]
 
 # JAEGER ALL IN ONE
 # https://github.com/jaegertracing/jaeger/blob/master/cmd/all-in-one/Dockerfile
@@ -276,7 +276,6 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 COPY README.md /help.1
 
-# TODO (CMOS-12): this doesn't work in the OSS build (and uses CBMM's version, not CMOS's)
 # Couchbase proprietary start
 COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
 # Couchbase proprietary end
