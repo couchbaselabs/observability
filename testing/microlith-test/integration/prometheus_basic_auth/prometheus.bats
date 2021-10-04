@@ -22,11 +22,18 @@ setup() {
     if [ "$TEST_NATIVE" != "true" ]; then
         skip "Skipping native prometheus tests"
     fi
+    echo "Verify pre-requisites"
+    run : "${TEST_ROOT?"Need to set TEST_ROOT"}"
+    assert_success
+    run : "${CMOS_PORT?"Need to set CMOS_PORT"}"
+    assert_success
 }
 
 teardown() {
-    if [ "$TEST_NATIVE" == "true" ]; then
-        docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output" >&3
+    if [ "$SKIP_TEARDOWN" == "true" ]; then
+        skip "Skipping teardown"
+    elif [ "$TEST_NATIVE" == "true" ]; then
+        docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output"
         docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop || true
     fi
 }
@@ -39,20 +46,13 @@ waitForRemote() {
     until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
         # shellcheck disable=SC2086
         if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
-            assert_failure "unable to communicate with $URL"
+            fail "unable to communicate with $URL after $ATTEMPTS attempts"
         fi
         ATTEMPTS=$((ATTEMPTS+1))
-        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for $URL" >&3
+        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for $URL"
         sleep 10
     done
     run curl -s "${CREDENTIALS}" "${URL}"
-    assert_success
-}
-
-@test "Verify pre-requisites" {
-    run : "${TEST_ROOT?"Need to set TEST_ROOT"}"
-    assert_success
-    run : "${CMOS_PORT?"Need to set CMOS_PORT"}"
     assert_success
 }
 

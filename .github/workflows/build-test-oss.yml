@@ -12,57 +12,59 @@ on:
       - main
 
 jobs:
-  linting:
-    name: Run static analysis and linting tools
+  setup:
+    name: Common setup
     runs-on: ubuntu-20.04
-    timeout-minutes: 15
+    timeout-minutes: 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
         with:
           fetch-depth: 1
 
+      - name: Set up BATS
+        run: |
+          sudo apt upgrade -y
+          sudo apt install -y npm
+          sudo npm install -g bats
+          tools/install-bats.sh
+
+  linting:
+    name: Run static analysis and linting tools
+    runs-on: ubuntu-20.04
+    needs: setup
+    timeout-minutes: 15
+    steps:
       - name: Run linting
         run: |
           make lint
 
+  build-oss-container:
+    name: Builds the OSS version of CMOS container
+    runs-on: ubuntu-20.04
+    needs: setup
+    timeout-minutes: 5
+    steps:
+      - name: Build OSS image
+        run: |
+          make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
+
   build-test-native:
     name: Native tests
     runs-on: ubuntu-20.04
+    needs: build-oss-container
     timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - name: Build OSS image
-        run: |
-          IMAGE_TAG=docker.io/couchbaselabs/observability-stack:${{ github.sha }} tools/build-oss-container.sh
-
       - name: Run native tests
         run: |
-          sudo npm install -g bats
           make test-native -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
   build-test-k8s:
     name: K8S tests
+    needs: build-oss-container
     runs-on: ubuntu-20.04
     timeout-minutes: 30
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 1
-
-      - name: Build OSS image
-        run: |
-          IMAGE_TAG=docker.io/couchbaselabs/observability-stack:${{ github.sha }} tools/build-oss-container.sh
-
-      - name: Build test image
-        run: |
-          make container-test -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
-
       - name: Create K8S Kind Cluster
         timeout-minutes: 10
         uses: helm/kind-action@v1.2.0
@@ -70,7 +72,6 @@ jobs:
           cluster_name: kind-${{ github.sha }}
           kubectl_version: v1.21.2
 
-      # - name: Run K8S tests
-      #   timeout-minutes: 10
-      #   run: |
-      #     make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}
+      - name: Run K8S tests
+        run: |
+          make test-kubernetes -e DOCKER_USER=docker.io/couchbaselabs DOCKER_TAG=${{ github.sha }}

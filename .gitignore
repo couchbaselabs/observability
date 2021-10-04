@@ -9,4 +9,4 @@ test-dist/
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
-testing/native/bats/
+tools/bats/
