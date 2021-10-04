@@ -42,7 +42,7 @@ jobs:
 
       - name: Run ${{ matrix.makefile-target }}
         run: |
-          make ${{ matrix.makefile-target }} -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
+          make ${{ matrix.makefile-target }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   linting:
     name: Run static analysis and linting tools
