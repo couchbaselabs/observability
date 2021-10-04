@@ -93,7 +93,6 @@ test-dist: dist
 # Remove our images then remove dangling ones to prevent any caching
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 	docker image prune --force
 
