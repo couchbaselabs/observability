@@ -51,6 +51,8 @@ nodes:
 EOF
 fi
 
+kubectl cluster-info
+
 # Wait for cluster to come up
 docker pull "${COUCHBASE_SERVER_IMAGE}"
 kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
