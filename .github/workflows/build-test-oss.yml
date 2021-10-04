@@ -29,10 +29,6 @@ jobs:
         run: |
           sudo npm install -g bats
 
-      - name: Build OSS image
-        run: |
-          make container-oss -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-
       - name: Create K8S Kind Cluster
         if: ${{ matrix.makefile-target }} == 'test-kubernetes'
         timeout-minutes: 10
@@ -40,9 +36,9 @@ jobs:
         with:
           cluster_name: kind-${{ github.sha }}
 
-      - name: Run ${{ matrix.makefile-target }}
+      - name: Run ${{ matrix.makefile-target }} tests
         run: |
-          make ${{ matrix.makefile-target }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make container-oss ${{ matrix.makefile-target }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   linting:
     name: Run static analysis and linting tools
