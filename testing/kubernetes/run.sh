@@ -15,15 +15,24 @@
 
 set -xueo pipefail
 
+SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
+CLUSTER_NAME=${CLUSTER_NAME:-kind-$DOCKER_TAG}
+BATS_FORMATTER=${BATS_FORMATTER:-tap}
+
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
-CMOS_IMAGE=${IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
-IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 
-SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
-COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
-KUBECONFIG=${KUBECONFIG:-${HOME}/.kube/config}
-CLUSTER_NAME=${CLUSTER_NAME:-kind-$DOCKER_TAG}
+export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
+export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
+export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
+export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
+export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
+
+export TEST_NATIVE=false
+export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
+export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+export CMOS_PORT=${CMOS_PORT:-8080}
+export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster
@@ -51,4 +60,4 @@ kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 
-docker run "${KUBECONFIG}":/home/.kube/config --rm -t "${IMAGE}"
+bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
