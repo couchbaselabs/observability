@@ -38,10 +38,11 @@ waitForRemote() {
     ATTEMPTS=0
     until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
         # shellcheck disable=SC2086
-        if [ $ATTEMPTS -gt $MAX_ATTEMPTS ]; then
+        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
             assert_failure "unable to communicate with $URL"
         fi
-        ((ATTEMPTS++))
+        ATTEMPTS=$((ATTEMPTS+1))
+        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for $URL" >&3
         sleep 10
     done
     run curl -s "${CREDENTIALS}" "${URL}"
