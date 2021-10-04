@@ -56,4 +56,13 @@ docker pull "${COUCHBASE_SERVER_IMAGE}"
 kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 
+# Run envsubst on all test files that might need it
+while IFS= read -r -d '' INPUT_FILE; do
+    OUTPUT_FILE=${INPUT_FILE%%-template.yaml}.yaml
+    echo "Substitute template ${INPUT_FILE} --> ${OUTPUT_FILE}"
+    # Make sure to leave alone anything that is not a defined environment variable
+    # TODO: filter by TEST_ prefix
+    envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
+done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
+
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
