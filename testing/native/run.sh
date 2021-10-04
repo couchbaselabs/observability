@@ -33,5 +33,6 @@ export TEST_NATIVE=true
 export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
 export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_PORT=${CMOS_PORT:-8080}
-export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
+# TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter
+export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
