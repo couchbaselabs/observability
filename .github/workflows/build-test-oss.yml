@@ -35,12 +35,11 @@ jobs:
           make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
       - name: Create K8S Kind Cluster
-        if: contains(${{ matrix.makefile-target }}, 'kubernetes')
+        if: ${{ contains(${{ matrix.makefile-target }}, 'kubernetes') }}
         timeout-minutes: 10
         uses: helm/kind-action@v1.2.0
         with:
           cluster_name: kind-${{ github.sha }}
-          kubectl_version: v1.21.2
 
       - name: Run ${{ matrix.makefile-target }}
         run: |
