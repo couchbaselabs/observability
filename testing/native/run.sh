@@ -49,8 +49,8 @@ pushd "${DOWNLOAD_TEMP_DIR}"
     rm -f "v$BATS_FILE_VERSION.zip"
 
     curl -LO "https://github.com/bats-core/bats-detik/archive/refs/tags/v$BATS_DETIK_VERSION.zip"
-	unzip -q "v$BATS_DETIK_VERSION.zip"
-	mv -f "${DOWNLOAD_TEMP_DIR}/bats-detik-$BATS_DETIK_VERSION/lib" "${BATS_DETIK_ROOT}"
+    unzip -q "v$BATS_DETIK_VERSION.zip"
+    mv -f "${DOWNLOAD_TEMP_DIR}/bats-detik-$BATS_DETIK_VERSION/lib" "${BATS_DETIK_ROOT}"
     rm -f "v$BATS_DETIK_VERSION.zip"
 popd
 rm -rf "${DOWNLOAD_TEMP_DIR}"

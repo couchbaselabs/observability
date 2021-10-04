@@ -38,11 +38,13 @@ waitForRemote() {
     until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
         # shellcheck disable=SC2086
         if [ $ATTEMPTS -gt $MAX_ATTEMPTS ]; then
+            docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" logs --timestamps
             assert_failure "unable to communicate with $URL"
         fi
         ((ATTEMPTS++))
         sleep 10
     done
+    docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" logs --timestamps
     run curl -s "${CREDENTIALS}" "${URL}"
     assert_success
 }

@@ -50,4 +50,4 @@ kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 
-docker run -v /var/run/docker.sock:/var/run/docker.sock -v "${KUBECONFIG}":/home/.kube/config --rm -t -e TEST_NATIVE=false "${IMAGE}"
+docker run "${KUBECONFIG}":/home/.kube/config --rm -t "${IMAGE}"
