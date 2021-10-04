@@ -13,7 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Run all the K8S cluster tests against a KIND cluster.
+
 set -xueo pipefail
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
 CLUSTER_NAME=${CLUSTER_NAME:-kind-$DOCKER_TAG}
