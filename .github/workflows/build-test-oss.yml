@@ -20,7 +20,6 @@ jobs:
       fail-fast: false
       matrix:
         makefile-target: [ 'test-native', 'test-kubernetes' ]
-        need-kind-cluster: [ 'false', 'true' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -36,7 +35,7 @@ jobs:
           make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
       - name: Create K8S Kind Cluster
-        if: ${{ matrix.need-kind-cluster == 'true' }}
+        if: contains(${{ matrix.makefile-target }}, 'kubernetes')
         timeout-minutes: 10
         uses: helm/kind-action@v1.2.0
         with:
