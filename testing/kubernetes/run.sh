@@ -19,24 +19,22 @@ set -xueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
+    # No point shell checking it as done separately anyway
+    # shellcheck disable=SC1091
+    /bin/bash "${SCRIPT_DIR}/../../tools/install-bats.sh"
+fi
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../test-common.sh"
+# Anything that is not common now specified:
+export TEST_NATIVE=false
+export TEST_NAMESPACE=${TEST_NAMESPACE:-test}
+export TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-$TEST_ROOT/kubernetes/resources}
+export TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
+
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
 CLUSTER_NAME=${CLUSTER_NAME:-kind-$DOCKER_TAG}
-BATS_FORMATTER=${BATS_FORMATTER:-tap}
-
-DOCKER_USER=${DOCKER_USER:-couchbase}
-DOCKER_TAG=${DOCKER_TAG:-v1}
-
-export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
-export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
-export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
-export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
-export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
-
-export TEST_NATIVE=false
-export TEST_ROOT="${SCRIPT_DIR}/../bats/"
-export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
-export CMOS_PORT=${CMOS_PORT:-8080}
-export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster

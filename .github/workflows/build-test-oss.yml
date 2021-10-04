@@ -24,11 +24,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up BATS
+      - name: Install BATS
         timeout-minutes: 5
         run: |
           sudo npm install -g bats
-          tools/install-bats.sh
 
       - name: Build OSS image
         run: |

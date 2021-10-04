@@ -28,6 +28,11 @@ setup() {
     if [ "$TEST_NATIVE" == "true" ]; then
         skip "Skipping kubernetes specific tests"
     fi
+    echo "Verify pre-requisites"
+    run : "${TEST_NAMESPACE?"Need to set TEST_NAMESPACE"}"
+    assert_success
+    run : "${TEST_KUBERNETES_RESOURCES_ROOT?"Need to set TEST_KUBERNETES_RESOURCES_ROOT"}"
+    assert_success
 
     run kubectl delete namespace "$TEST_NAMESPACE"
     kubectl create namespace "$TEST_NAMESPACE"
@@ -42,11 +47,6 @@ teardown() {
         run kubectl delete namespace "$TEST_NAMESPACE"
     fi
 }
-
-TEST_NAMESPACE=${TEST_NAMESPACE:-test}
-TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/kubernetes/resources}
-COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
-TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
 
 # These are required for bats-detik
 # shellcheck disable=SC2034
@@ -156,6 +156,9 @@ createLoggingCluster() {
 }
 
 @test "Verify disabling of components in microlith" {
+    run : "${TEST_CUSTOM_CONFIG?"Need to set TEST_CUSTOM_CONFIG"}"
+    assert_success
+
     # Turn components off and confirm not available
     cat << __EOF__ | kubectl create -n "$TEST_NAMESPACE" -f -
 apiVersion: v1

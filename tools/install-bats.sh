@@ -19,11 +19,11 @@ set -xueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/bats}
-export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
-export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
-export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
-export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
+BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/bats}
+BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
+BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
+BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
+BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 rm -rf  "${BATS_ROOT}"
 mkdir -p "${BATS_ROOT}/lib"
 
