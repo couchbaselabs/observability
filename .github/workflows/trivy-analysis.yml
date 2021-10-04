@@ -20,7 +20,7 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          IMAGE_TAG=docker.io/couchbaselabs/observability-stack:${{ github.sha }} tools/build-oss-container.sh
+          make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
