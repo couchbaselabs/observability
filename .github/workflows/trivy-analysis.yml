@@ -1,4 +1,5 @@
-name: build
+# Separate action to allow us to initiate occasionally and manually
+name: trivy security analysis
 
 on:
   push:
@@ -10,8 +11,8 @@ on:
     - cron: '44 13 * * 4'
 
 jobs:
-  build:
-    name: Build
+  trivy:
+    name: Run Trivy against OSS container
     runs-on: "ubuntu-18.04"
     steps:
       - name: Checkout code
@@ -19,12 +20,12 @@ jobs:
 
       - name: Build an image from Dockerfile
         run: |
-          IMAGE_TAG=docker.io/couchbase/observability-stack:${{ github.sha }} tools/build-oss-container.sh
+          make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: 'docker.io/couchbase/observability-stack:${{ github.sha }}'
+          image-ref: 'docker.io/couchbaselabs/observability-stack:${{ github.sha }}'
           format: 'template'
           template: '@/contrib/sarif.tpl'
           output: 'trivy-results.sarif'

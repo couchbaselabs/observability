@@ -40,7 +40,7 @@ load "$BATS_FILE_ROOT/load.bash"
 
 @test "check kubectl" {
     # This can run regardless of whether we are in k8s or not.
-	kubectl version --client=true
+    kubectl version --client=true
 }
 
 @test "check helm" {
@@ -55,4 +55,11 @@ load "$BATS_FILE_ROOT/load.bash"
     DETIK_CLIENT_NAME="kubectl -n kube-system"
     DETIK_CLIENT_NAMESPACE="kube-system"
     verify "there is 1 service named 'kube-dns'"
+}
+
+@test 'check docker-compose' {
+    if [[ "$TEST_NATIVE" != "true" ]]; then
+        skip "Skipping native specific tests"
+    fi
+    docker-compose version
 }
