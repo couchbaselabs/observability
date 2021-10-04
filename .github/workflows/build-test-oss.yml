@@ -44,7 +44,7 @@ jobs:
         timeout-minutes: 10
         run: |
           sudo npm install -g bats
-          make test-native
+          make test-native -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
   build-test-k8s:
     name: Build container and run CICD pipeline for K8S

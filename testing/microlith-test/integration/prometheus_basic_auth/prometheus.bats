@@ -36,6 +36,7 @@ waitForRemote() {
     CREDENTIALS=$3
     ATTEMPTS=0
     until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
+        # shellcheck disable=SC2086
         if [ $ATTEMPTS -gt $MAX_ATTEMPTS ]; then
             assert_failure "unable to communicate with $URL"
         fi
@@ -47,17 +48,15 @@ waitForRemote() {
 }
 
 @test "Verify pre-requisites" {
-    run : ${TEST_ROOT?"Need to set TEST_ROOT"}
+    run : "${TEST_ROOT?"Need to set TEST_ROOT"}"
     assert_success
-    run : ${CMOS_PORT?"Need to set CMOS_PORT"}
+    run : "${CMOS_PORT?"Need to set CMOS_PORT"}"
     assert_success
 }
 
 @test "Verify that basic auth can be passed by environment variable" {
     docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" up -d --force-recreate --remove-orphans
     # Wait for Couchbase to initialise
-    CH_HOST=cb1
-    CB_PORT=8091
     waitForRemote "http://localhost:8091/pools/default" 12 "-u Administrator:newpassword"
     run curl -s -u Administrator:newpassword "http://localhost:8091/pools/default"
     assert_success
