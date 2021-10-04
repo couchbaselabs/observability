@@ -82,12 +82,30 @@ createDefaultDeployment() {
     verify "there is 1 service named 'loki'"
     verify "'port' is '3100' for services named 'loki'"
 
+    # Port forward into the K8S cluster
+    kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$CMOS_PORT:8080" &
+    PORT_FORWARD_PID=$!
+
+    # Takes a little while to actually set up
+    LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    ATTEMPTS=0
+    MAX_ATTEMPTS=6
+    until curl -s -o /dev/null "$LOCAL_SERVICE_URL"; do
+        # shellcheck disable=SC2086
+        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
+            fail "unable to communicate with CMOS on $LOCAL_SERVICE_URL after $ATTEMPTS attempts"
+        fi
+        ATTEMPTS=$((ATTEMPTS+1))
+        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for CMOS on $LOCAL_SERVICE_URL"
+        sleep 10
+    done
+
     # Check the web server provides the landing page
-    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
-    assert_success # https://everything.curl.dev/usingcurl/returns for errors here
+    run curl --show-error --silent "$LOCAL_SERVICE_URL"
+    assert_success
     assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
 
-    PROMETHEUS_URL="couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus"
+    PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
 
     # Check we have a valid prometheus end point exposed and it is healthy
     curl --show-error --silent "$PROMETHEUS_URL/-/healthy"
@@ -110,13 +128,15 @@ createDefaultDeployment() {
     run curl --show-error --silent "$PROMETHEUS_URL/api/v1/alerts"
     assert_success
     # Check that default dashboards are available
-    GRAFANA_URL="couchbase-grafana-http.$TEST_NAMESPACE:8080/grafana"
+    GRAFANA_URL="$LOCAL_SERVICE_URL/grafana"
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#gets-the-home-dashboard
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#get-dashboard-by-uid
     run curl --show-error --silent "$GRAFANA_URL/api/search"
     assert_success
     run curl --show-error --silent "$GRAFANA_URL/api/dashboards/home"
     assert_success
+
+    kill -9 "$PORT_FORWARD_PID"
 }
 
 createCouchbaseCluster() {
