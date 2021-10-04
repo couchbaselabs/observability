@@ -57,13 +57,13 @@ waitForRemote() {
 @test "Verify that basic auth can be passed by environment variable" {
     docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" up -d --force-recreate --remove-orphans
     # Wait for Couchbase to initialise
-    waitForRemote "http://localhost:8091/pools/default" 12 "-u Administrator:newpassword"
+    waitForRemote "http://localhost:8091/pools/default" 30 "-u Administrator:newpassword"
     run curl -s -u Administrator:newpassword "http://localhost:8091/pools/default"
     assert_success
     # Sometimes it isn't quite ready even after that starts 200ing
     sleep 10
     # And Prometheus, just in case
-    waitForRemote "http://localhost:${CMOS_PORT}/prometheus/-/ready" 3
+    waitForRemote "http://localhost:${CMOS_PORT}/prometheus/-/ready" 12
     # Create a user
     run docker-compose --project-directory="${TEST_ROOT}/integration/prometheus_basic_auth" exec cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
     assert_success

@@ -27,7 +27,7 @@ jobs:
           make lint
 
   build-test-native:
-    name: Build container and run CICD pipeline
+    name: Native tests
     runs-on: ubuntu-20.04
     timeout-minutes: 15
     steps:
@@ -47,7 +47,7 @@ jobs:
           make test-native -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
   build-test-k8s:
-    name: Build container and run CICD pipeline for K8S
+    name: K8S tests
     runs-on: ubuntu-20.04
     timeout-minutes: 15
     steps:
