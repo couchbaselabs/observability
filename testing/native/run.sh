@@ -12,19 +12,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -eu
+
+# Simple script to run all native tests.
+# It relies on BATS being installed, see tools/install-bats.sh
+
+set -xueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+BATS_FORMATTER=${BATS_FORMATTER:-tap}
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
-IMAGE=${IMAGE:-$DOCKER_USER/observability-stack-test:$DOCKER_TAG}
 
-SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
+export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
+export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
+export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
+export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
+export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 
-docker build -f "${SCRIPT_DIR}/../microlith-test/Dockerfile" -t "${IMAGE}" "${SCRIPT_DIR}/../microlith-test/"
-
-if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
-    "${SCRIPT_DIR}/../../examples/native/run.sh"
-fi
-
-docker run --rm -it -e TEST_NATIVE=true "${IMAGE}"
+export TEST_NATIVE=true
+export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
+export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+export CMOS_PORT=${CMOS_PORT:-8080}
+# TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter
+export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
+bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing

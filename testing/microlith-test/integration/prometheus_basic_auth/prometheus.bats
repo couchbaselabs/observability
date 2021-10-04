@@ -14,52 +14,64 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-load "$BATS_DETIK_ROOT/utils.bash"
-load "$BATS_DETIK_ROOT/linter.bash"
-load "$BATS_DETIK_ROOT/detik.bash"
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
-export SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:7.0.1}
-export CMOS_IMAGE=${CMOS_IMAGE:-couchbase/observability-stack:v1}
-export CMOS_PORT=${CMOS_PORT:-8080}
-
 setup() {
-    if [ "$TEST_INTEGRATION" == "true" ]; then
-        skip "Skipping integration tests"
+    if [ "$TEST_NATIVE" != "true" ]; then
+        skip "Skipping native prometheus tests"
     fi
+    echo "Verify pre-requisites"
+    run : "${TEST_ROOT?"Need to set TEST_ROOT"}"
+    assert_success
+    run : "${CMOS_PORT?"Need to set CMOS_PORT"}"
+    assert_success
 }
 
 teardown() {
     if [ "$SKIP_TEARDOWN" == "true" ]; then
-        echo "# Skipping teardown. Make sure to manually run the commands in teardown()." >&3
-        return
+        skip "Skipping teardown"
+    elif [ "$TEST_NATIVE" == "true" ]; then
+        docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output"
+        docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop || true
     fi
-    docker-compose rm -v --force --stop
+}
+
+waitForRemote() {
+    URL=$1
+    MAX_ATTEMPTS=$2
+    CREDENTIALS=$3
+    ATTEMPTS=0
+    until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
+        # shellcheck disable=SC2086
+        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
+            fail "unable to communicate with $URL after $ATTEMPTS attempts"
+        fi
+        ATTEMPTS=$((ATTEMPTS+1))
+        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for $URL"
+        sleep 10
+    done
+    run curl -s "${CREDENTIALS}" "${URL}"
+    assert_success
 }
 
 @test "Verify that basic auth can be passed by environment variable" {
-    docker-compose up -d --force-recreate --remove-orphans
+    docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
     # Wait for Couchbase to initialise
-    while true; do
-        if curl -s -o /dev/null -u Administrator:newpassword http://127.0.0.1:8091/pools/default; then
-            break
-        fi
-    done
+    waitForRemote "http://localhost:8091/pools/default" 30 "-u Administrator:newpassword"
+    run curl -s -u Administrator:newpassword "http://localhost:8091/pools/default"
+    assert_success
     # Sometimes it isn't quite ready even after that starts 200ing
     sleep 10
     # And Prometheus, just in case
-    while true; do
-        if curl -s -o /dev/null "http://127.0.0.1:${CMOS_PORT}/prometheus/-/ready"; then
-            break
-        fi
-    done
+    waitForRemote "http://localhost:${CMOS_PORT}/prometheus/-/ready" 12
     # Create a user
-    docker-compose exec cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
+    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec -T cb1 /opt/couchbase/bin/couchbase-cli user-manage -c localhost -u Administrator -p newpassword --set --auth-domain "local" --rbac-username prometheus --rbac-password prometheus --roles external_stats_reader
+    assert_success
     # Wait the length of one scrape_interval, plus some margin
     sleep 35
-    # Check that we're able to scrape CB
+    # Check that we're able to scrape CB in CMOS
     run bash -c "curl -s http://localhost:${CMOS_PORT}/prometheus/api/v1/targets 2>/dev/null | jq -r '.data.activeTargets[] | select(.labels.job == "'"'"couchbase-server"'"'") | .health'"
     assert_line "up"
 }

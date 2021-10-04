@@ -104,7 +104,7 @@ spec:
         volumeMounts:
         - name: prometheus-config-volume
           mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
-        image: $COS_IMAGE # substitute with actual image
+        image: $CMOS_IMAGE # substitute with actual image
         env:
         - name: KUBERNETES_DEPLOYMENT
           value: "true"

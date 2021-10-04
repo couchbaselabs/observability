@@ -78,14 +78,13 @@ COPY --from=builder /bin/prometheus_merge /bin/prometheus_merge
 RUN chmod a+x /bin/prometheus_merge
 
 # Helm - to support deployment from this container of custom tools
-# TODO: Currently triggering a CVE
-# ARG HELM_VERSION=v3.6.3
-# ENV HELM_VERSION=$HELM_VERSION
-# RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
-# 	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
-# 	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
-# 	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
-# 	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
+ARG HELM_VERSION=v3.7.0
+ENV HELM_VERSION=$HELM_VERSION
+RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
+	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
+	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
+	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
+	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
 
 # Try to keep the originals as they are and fix anything later to make it easy to merge changes
 
@@ -154,7 +153,7 @@ RUN ln -s /usr/share/prometheus/console_libraries /usr/share/prometheus/consoles
 
 # USER       nobody
 EXPOSE     9090
-VOLUME     [ "/prometheus" ]
+# VOLUME     [ "/prometheus" ]
 
 # ALERT MANAGER
 # From https://github.com/prometheus/alertmanager/blob/master/Dockerfile
@@ -167,7 +166,7 @@ RUN mkdir -p /alertmanager && \
 
 # USER       nobody
 EXPOSE     9093
-VOLUME     [ "/alertmanager" ]
+# VOLUME     [ "/alertmanager" ]
 
 # JAEGER ALL IN ONE
 # https://github.com/jaegertracing/jaeger/blob/master/cmd/all-in-one/Dockerfile
@@ -275,7 +274,6 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 COPY README.md /help.1
 
-# TODO (CMOS-12): this doesn't work in the OSS build (and uses CBMM's version, not CMOS's)
 # Couchbase proprietary start
 COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
 # Couchbase proprietary end
