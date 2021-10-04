@@ -12,6 +12,19 @@ on:
       - main
 
 jobs:
+  linting:
+    name: Run static analysis and linting tools
+    runs-on: ubuntu-20.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Run linting
+        run: |
+          make lint
 
   build-test-native:
     name: Build container and run CICD pipeline
@@ -30,7 +43,7 @@ jobs:
       - name: Run native tests
         timeout-minutes: 10
         run: |
-          sudo npm install bats
+          sudo npm install -g bats
           make test-native
 
   build-test-k8s:
