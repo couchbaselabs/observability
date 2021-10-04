@@ -40,7 +40,7 @@ load "$BATS_FILE_ROOT/load.bash"
 
 @test "check kubectl" {
     # This can run regardless of whether we are in k8s or not.
-	kubectl version --client=true
+    kubectl version --client=true
 }
 
 @test "check helm" {
