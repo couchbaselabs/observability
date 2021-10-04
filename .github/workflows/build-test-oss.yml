@@ -39,7 +39,7 @@ jobs:
         timeout-minutes: 10
         uses: helm/kind-action@v1.2.0
         with:
-          cluster_name: kind-${{ github.sha }}
+          cluster_name: ${{ github.sha }}
 
       - name: Run ${{ matrix.makefile-target }}
         run: |
