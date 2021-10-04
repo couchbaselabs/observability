@@ -16,12 +16,10 @@ RUN mkdir -p /bin /etc/couchbase && \
     mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 # Build the Prometheus merge tool so we can ensure we have a static build
-ARG PROM_CONFIG_TOOL_VERSION=v0.2.0
+ARG PROM_CONFIG_TOOL_VERSION=v0.3.0
 WORKDIR /src/github.com/lablabs/prometheus-alert-overrider
 RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-overrider/archive/refs/tags/$PROM_CONFIG_TOOL_VERSION.tar.gz" && \
     tar --strip-components 1 -xzvf /src/prom.tgz && \
-    go mod init github.com/lablabs/prometheus-alert-overrider && \
-    go mod tidy && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
 
 # Couchbase proprietary start
