@@ -12,7 +12,8 @@ on:
       - main
 
 jobs:
-  build:
+  build-test-oss:
+    name: Auto-build and test the OSS variant
     runs-on: ubuntu-20.04
     timeout-minutes: 30
     strategy:
@@ -49,7 +50,6 @@ jobs:
   linting:
     name: Run static analysis and linting tools
     runs-on: ubuntu-20.04
-    needs: setup
     timeout-minutes: 15
     steps:
       - name: Checkout code
