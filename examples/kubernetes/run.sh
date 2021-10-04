@@ -18,16 +18,19 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
-SERVER_IMAGE=${SERVER_IMAGE:-couchbase/server:6.6.2}
-CMOS_IMAGE=${CMOS_IMAGE:-couchbase/observability-stack:v1}
+COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
+
+DOCKER_USER=${DOCKER_USER:-couchbase}
+DOCKER_TAG=${DOCKER_TAG:-v1}
+CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
   echo "Recreating full cluster"
+
   kind delete cluster --name="${CLUSTER_NAME}"
 
   # Simple script to deal with running up a test cluster for KIND for developing logging updates for.
-  CLUSTER_CONFIG=$(mktemp)
-  cat << EOF > "${CLUSTER_CONFIG}"
+  kind create cluster --name="${CLUSTER_NAME}" --config - <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -50,12 +53,9 @@ nodes:
 - role: worker
 EOF
 
-  kind create cluster --name="${CLUSTER_NAME}" --config="${CLUSTER_CONFIG}"
-  rm -f "${CLUSTER_CONFIG}"
-
   # Wait for cluster to come up
-  docker pull "${SERVER_IMAGE}"
-  kind load docker-image "${SERVER_IMAGE}" --name="${CLUSTER_NAME}"
+  docker pull "${COUCHBASE_SERVER_IMAGE}"
+  kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
 fi #SKIP_CLUSTER_CREATION
 
 # Deploy kube-state-metrics via helm chart
@@ -97,7 +97,7 @@ if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; t
   fi
 fi
 helm repo update
-helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
+helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
 
 # Wait for deployment to complete
 echo "Waiting for CB to start up..."

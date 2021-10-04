@@ -33,7 +33,7 @@ export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
 export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 
 export TEST_NATIVE=false
-export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
+export TEST_ROOT="${SCRIPT_DIR}/../bats/"
 export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_PORT=${CMOS_PORT:-8080}
 export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
@@ -41,10 +41,8 @@ export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster
     echo "Recreating full cluster"
-    kind delete cluster
-
-    CLUSTER_CONFIG=$(mktemp)
-    cat << EOF > "${CLUSTER_CONFIG}"
+    kind delete cluster --name="${CLUSTER_NAME}"
+    kind create cluster --name="${CLUSTER_NAME}" --config - <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -53,15 +51,11 @@ nodes:
 - role: worker
 - role: worker
 EOF
-
-    kind create cluster --config="${CLUSTER_CONFIG}" --name="${CLUSTER_NAME}"
-    rm -f "${CLUSTER_CONFIG}"
 fi
 
 # Wait for cluster to come up
 docker pull "${COUCHBASE_SERVER_IMAGE}"
 kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
-kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing

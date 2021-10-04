@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-test-oss:
-    name: Auto-build and test the OSS variant
+    name: CICD for the OSS variant
     runs-on: ubuntu-20.04
     timeout-minutes: 30
     strategy:
@@ -32,7 +32,7 @@ jobs:
 
       - name: Build OSS image
         run: |
-          make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
+          make container-oss -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
       - name: Create K8S Kind Cluster
         if: ${{ matrix.makefile-target }} == 'test-kubernetes'

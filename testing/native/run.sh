@@ -30,7 +30,7 @@ export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
 export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 
 export TEST_NATIVE=true
-export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
+export TEST_ROOT="${SCRIPT_DIR}/../bats/"
 export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_PORT=${CMOS_PORT:-8080}
 # TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter

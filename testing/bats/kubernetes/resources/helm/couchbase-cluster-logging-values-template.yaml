@@ -6,7 +6,7 @@ cluster:
       manageConfiguration: false # Provide custom configuration to use
       configurationName: fluent-bit-custom # Name of the secret to use
       sidecar:
-        image: couchbase/fluent-bit:1.0.4
+        image: couchbase/fluent-bit:1.1.0
   monitoring:
     prometheus:
       enabled: true
