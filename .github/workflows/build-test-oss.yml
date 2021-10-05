@@ -23,6 +23,7 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
+  # TODO: split into push testing (smaller, just smoke) and PR testing (all of matrix)
   build-test-oss:
     name: CICD for the OSS variant
     needs: cancel-identical-runs
