@@ -20,11 +20,14 @@
 # Remaining parameters: passed directly to cURL.
 function wait_for_curl() {
     local MAX_ATTEMPTS=$1
-    assert [ "$MAX_ATTEMPTS" =~ '^[0-9]+$']
     shift
     local ATTEMPTS=0
     echo "Curl command: curl -s -o /dev/null -f $*"
     until curl -s -o /dev/null -f "$@"; do
+        # Prevent an infinite loop - at 2 seconds per go this is 10 minutes
+        if [ $ATTEMPTS -gt "300" ]; then
+            fail "wait_for_curl ultimate max exceeded"
+        fi
         if [ $ATTEMPTS -gt "$MAX_ATTEMPTS" ]; then
             fail "unable to perform cURL"
         fi
