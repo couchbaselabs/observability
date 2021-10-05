@@ -130,6 +130,28 @@ There is also a fourth directory, `/etc/prometheus/alerting/generated`, where th
 
 If you want to disable the pre-processing and use entirely your own ruleset, set the environment variable `DISABLE_ALERTS_PREPARE=true`.
 
+#### Cluster Monitor checker results
+
+If running with the Couchbase Cluster Monitor enabled, it will output the status of its checkers to Prometheus like the following:
+
+```
+# HELP multimanager_cluster_checker_status Checker results for cluster level checkers
+# TYPE multimanager_cluster_checker_status gauge
+multimanager_cluster_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="singleOrTwoNodeCluster"} 1
+# HELP multimanager_node_checker_status Checker results for node level checkers
+# TYPE multimanager_node_checker_status gauge
+multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="nonGABuild",node="47a45d39583947823ac9866dce2a74b2"} 0
+multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="oneServicePerNode",node="47a45d39583947823ac9866dce2a74b2"} 1
+multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="supportedVersion",node="47a45d39583947823ac9866dce2a74b2"} 0
+```
+
+The metric values are mapped as follows:
+* 0: Good
+* 1: Warn
+* 2: Alert
+* 3: Info
+* 4: Missing
+
 # Distributed deployment
 
 TBD: https://github.com/couchbaselabs/observability/issues/6
