@@ -22,7 +22,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
     # No point shell checking it as done separately anyway
     # shellcheck disable=SC1091
-    /bin/bash "${SCRIPT_DIR}/../../tools/install-bats.sh"
+    /bin/bash "${SCRIPT_DIR}/../tools/install-bats.sh"
 fi
 
 # shellcheck disable=SC1091
