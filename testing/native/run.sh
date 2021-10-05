@@ -24,10 +24,10 @@ DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 
 export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
-export BATS_FILE_ROOT=${BATS_FILE_ROOT:-BATS_ROOT/lib/bats-file}
-export BATS_SUPPORT_ROOT=${BATS_SUPPORT_ROOT:-BATS_ROOT/lib/bats-support}
-export BATS_ASSERT_ROOT=${BATS_ASSERT_ROOT:-BATS_ROOT/lib/bats-assert}
-export BATS_DETIK_ROOT=${BATS_DETIK_ROOT:-BATS_ROOT/lib/bats-detik}
+export BATS_FILE_ROOT=${BATS_FILE_ROOT:-$BATS_ROOT/lib/bats-file}
+export BATS_SUPPORT_ROOT=${BATS_SUPPORT_ROOT:-$BATS_ROOT/lib/bats-support}
+export BATS_ASSERT_ROOT=${BATS_ASSERT_ROOT:-$BATS_ROOT/lib/bats-assert}
+export BATS_DETIK_ROOT=${BATS_DETIK_ROOT:-$BATS_ROOT/lib/bats-detik}
 
 export TEST_NATIVE=true
 export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
