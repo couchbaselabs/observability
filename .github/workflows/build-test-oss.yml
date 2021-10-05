@@ -50,7 +50,7 @@ jobs:
       # TODO: cache single container build across matrix runs
       - name: Run ${{ matrix.server-version }} tests
         run: |
-          make container-oss test-native test-containers test-kubernetes -e COUCHBASE_SERVER_IMAGE=${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make container-oss test-native test-containers test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   linting:
     name: Run static analysis and linting tools
