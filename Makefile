@@ -38,7 +38,7 @@ dist: image-artifacts
 	tar -C $(ARTIFACTS) -czvf dist/couchbase-observability-stack-image_$(productVersion).tgz .
 	rm -rf $(ARTIFACTS)
 
-lint:
+lint: container-lint
 	tools/shellcheck.sh
 	tools/licence-lint.sh
 
@@ -49,7 +49,7 @@ container: build
 container-oss: build
 	tools/build-oss-container.sh
 
-container-lint: build lint
+container-lint:
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
 
 container-scan: container
@@ -74,12 +74,8 @@ example-native: container
 examples: clean container example-kubernetes example-native
 
 # Deal with automated testing
-container-test:
-	docker build -f testing/microlith-test/Dockerfile -t ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} --build-arg CMOS_IMAGE=${DOCKER_USER}/observability-stack:${DOCKER_TAG} testing/microlith-test/
-
-# TODO: fail on error again
 test-kubernetes:
-	-DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
+	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
 
 test-native:
 	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/native/run.sh
@@ -97,7 +93,6 @@ test-dist: dist
 # Remove our images then remove dangling ones to prevent any caching
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-test:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 	docker image prune --force
 

@@ -13,7 +13,7 @@ on:
 
 jobs:
   build-test-oss:
-    name: Auto-build and test the OSS variant
+    name: CICD for the OSS variant
     runs-on: ubuntu-20.04
     timeout-minutes: 30
     strategy:
@@ -24,26 +24,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up BATS
+      - name: Install BATS
         timeout-minutes: 5
         run: |
           sudo npm install -g bats
-          tools/install-bats.sh
-
-      - name: Build OSS image
-        run: |
-          make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
 
       - name: Create K8S Kind Cluster
         if: ${{ matrix.makefile-target }} == 'test-kubernetes'
         timeout-minutes: 10
         uses: helm/kind-action@v1.2.0
         with:
-          cluster_name: ${{ github.sha }}
+          cluster_name: kind-${{ github.sha }}
 
-      - name: Run ${{ matrix.makefile-target }}
+      - name: Run ${{ matrix.makefile-target }} tests
         run: |
-          make ${{ matrix.makefile-target }} -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
+          make container-oss ${{ matrix.makefile-target }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   linting:
     name: Run static analysis and linting tools

@@ -19,16 +19,16 @@
 set -xueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-BATS_FORMATTER=${BATS_FORMATTER:-tap}
-DOCKER_USER=${DOCKER_USER:-couchbase}
-DOCKER_TAG=${DOCKER_TAG:-v1}
 
-export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
-export BATS_FILE_ROOT=${BATS_FILE_ROOT:-$BATS_ROOT/lib/bats-file}
-export BATS_SUPPORT_ROOT=${BATS_SUPPORT_ROOT:-$BATS_ROOT/lib/bats-support}
-export BATS_ASSERT_ROOT=${BATS_ASSERT_ROOT:-$BATS_ROOT/lib/bats-assert}
-export BATS_DETIK_ROOT=${BATS_DETIK_ROOT:-$BATS_ROOT/lib/bats-detik}
+if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
+    # No point shell checking it as done separately anyway
+    # shellcheck disable=SC1091
+    /bin/bash "${SCRIPT_DIR}/../../tools/install-bats.sh"
+fi
 
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../test-common.sh"
+# Anything that is not common now specified:
 export TEST_NATIVE=true
 export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
 export HELPERS_ROOT="${SCRIPT_DIR}/../helpers"
@@ -36,4 +36,5 @@ export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_PORT=${CMOS_PORT:-8080}
 # TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter
 export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
+
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
