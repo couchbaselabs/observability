@@ -63,17 +63,17 @@ createDefaultDeployment() {
     sleep 30
 }
 
+# Aim to use locals in case we want to parallelise to prevent overwriting globals
 setupPortForwarding() {
-    # Set up return variable
-    local -n PORT_FORWARD_PID=$1
     # Port forward into the K8S cluster
+    local PORT_FORWARD_PID_FILE=$1
     kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$CMOS_PORT:8080" &
-    PORT_FORWARD_PID=$!
+    echo "$!" > "${PORT_FORWARD_PID_FILE}"
 
     # Takes a little while to actually set up
-    LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
-    ATTEMPTS=0
-    MAX_ATTEMPTS=6
+    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    local ATTEMPTS=0
+    local MAX_ATTEMPTS=6
     until curl -s -o /dev/null "$LOCAL_SERVICE_URL"; do
         # shellcheck disable=SC2086
         if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
@@ -105,15 +105,16 @@ setupPortForwarding() {
     verify "'port' is '3100' for services named 'loki'"
 
     # Port forward into the K8S cluster
-    setupPortForwarding PORT_FORWARD_PID
-    LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    local PID_FILE=$(mktemp)
+    setupPortForwarding "${PID_FILE}"
+    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
 
     # Check the web server provides the landing page
     run curl --show-error --silent "$LOCAL_SERVICE_URL"
     assert_success
     assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
 
-    PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
+    local PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
 
     # Check we have a valid prometheus end point exposed and it is healthy
     curl --show-error --silent "$PROMETHEUS_URL/-/healthy"
@@ -136,7 +137,7 @@ setupPortForwarding() {
     run curl --show-error --silent "$PROMETHEUS_URL/api/v1/alerts"
     assert_success
     # Check that default dashboards are available
-    GRAFANA_URL="$LOCAL_SERVICE_URL/grafana"
+    local GRAFANA_URL="$LOCAL_SERVICE_URL/grafana"
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#gets-the-home-dashboard
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#get-dashboard-by-uid
     run curl --show-error --silent "$GRAFANA_URL/api/search"
@@ -145,11 +146,11 @@ setupPortForwarding() {
     assert_success
 
     # Check Loki is up
-    LOKI_URL="$LOCAL_SERVICE_URL/loki"
+    local LOKI_URL="$LOCAL_SERVICE_URL/loki"
     run curl --show-error --silent "$LOKI_URL/ready"
     assert_success
 
-    kill -9 "$PORT_FORWARD_PID"
+    pkill -F "${PID_FILE}"
 }
 
 createCouchbaseCluster() {
@@ -213,8 +214,9 @@ __EOF__
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
 
     # Port forward into the K8S cluster
-    setupPortForwarding PORT_FORWARD_PID
-    LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    local PID_FILE=$(mktemp)
+    setupPortForwarding "${PID_FILE}"
+    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
 
     # Attempt to hit the endpoints as well
     run curl --show-error --silent "$LOCAL_SERVICE_URL"
@@ -224,7 +226,8 @@ __EOF__
     run curl --show-error --silent "$LOCAL_SERVICE_URL/loki/ready"
     assert_failure
 
-    kill -9 "${PORT_FORWARD_PID}"
+    pkill -F "${PID_FILE}"
+    rm -f "${PID_FILE}"
 }
 
 @test "Verify customisation by adding" {
