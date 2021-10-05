@@ -16,7 +16,7 @@
 
 load "$HELPERS_ROOT/test-helpers.bash"
 
-ensure_variables_set TEST_ROOT CMOS_PORT BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT COUCHBASE_SERVER_IMAGE
+ensure_variables_set TEST_ROOT CMOS_PORT BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT
 
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
@@ -29,7 +29,7 @@ teardown() {
         skip "Skipping teardown"
     elif [ "$TEST_NATIVE" == "true" ]; then
         run docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output"
-        run docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop
+        run docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop || true
     fi
 }
 

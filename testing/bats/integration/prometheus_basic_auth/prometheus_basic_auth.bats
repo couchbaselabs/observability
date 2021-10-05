@@ -21,8 +21,19 @@ ensure_variables_set TEST_ROOT CMOS_PORT BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
+<<<<<<< HEAD:testing/bats/integration/containers/prometheus_basic_auth/prometheus.bats
+
+setup() {
+    echo "Verify pre-requisites"
+    run : "${TEST_ROOT?"Need to set TEST_ROOT"}"
+    assert_success
+    run : "${CMOS_PORT?"Need to set CMOS_PORT"}"
+    assert_success
+}
+=======
 load "$HELPERS_ROOT/couchbase-helpers.bash"
 load "$HELPERS_ROOT/url-helpers.bash"
+>>>>>>> origin/main:testing/bats/integration/prometheus_basic_auth/prometheus_basic_auth.bats
 
 teardown() {
     if [ "$SKIP_TEARDOWN" == "true" ]; then

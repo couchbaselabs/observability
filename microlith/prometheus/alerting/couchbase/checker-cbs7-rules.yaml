@@ -1,5 +1,5 @@
 groups:
-- name: Couchbase-Observer
+- name: Couchbase-Observer-CBS7
   rules:
   # {{ $labels.node }} has some checker status of warn
   - alert: CheckerFailureToRun

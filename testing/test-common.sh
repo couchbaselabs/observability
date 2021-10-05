@@ -17,6 +17,7 @@ set -xueo pipefail
 # Profile script for common variables
 TEST_COMMON_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 export TEST_ROOT="${TEST_COMMON_SCRIPT_DIR}/bats/"
+export HELPERS_ROOT="${TEST_COMMON_SCRIPT_DIR}/helpers/"
 
 export DOCKER_USER=${DOCKER_USER:-couchbase}
 export DOCKER_TAG=${DOCKER_TAG:-v1}
