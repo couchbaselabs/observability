@@ -105,7 +105,8 @@ setupPortForwarding() {
     verify "'port' is '3100' for services named 'loki'"
 
     # Port forward into the K8S cluster
-    local PID_FILE=$(mktemp)
+    local PID_FILE
+    PID_FILE=$(mktemp)
     setupPortForwarding "${PID_FILE}"
     local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
 
@@ -214,7 +215,8 @@ __EOF__
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
 
     # Port forward into the K8S cluster
-    local PID_FILE=$(mktemp)
+    local PID_FILE
+    PID_FILE=$(mktemp)
     setupPortForwarding "${PID_FILE}"
     local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
 

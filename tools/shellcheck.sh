@@ -27,6 +27,6 @@ while IFS= read -r -d '' file; do
     if ! docker run -i --rm koalaman/shellcheck:stable - < "$file"; then
         exitCode=1
     fi
-done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type f \( -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
+done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type d -path "*/bats" -prune -o -type f \( -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 
 exit $exitCode
