@@ -31,8 +31,6 @@ setup() {
     echo "Verify pre-requisites"
     run : "${TEST_NAMESPACE?"Need to set TEST_NAMESPACE"}"
     assert_success
-    run : "${TEST_KUBERNETES_RESOURCES_ROOT?"Need to set TEST_KUBERNETES_RESOURCES_ROOT"}"
-    assert_success
 
     run kubectl delete namespace "$TEST_NAMESPACE"
     kubectl create namespace "$TEST_NAMESPACE"
@@ -43,7 +41,7 @@ teardown() {
         skip "Skipping teardown"
     elif [ "$TEST_NATIVE" != "true" ]; then
         run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
-        run kubectl delete --force --grace-period=0 --now=true --wait=true -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
+        run kubectl delete --force --grace-period=0 --now=true -n "$TEST_NAMESPACE" -f "${BATS_TEST_DIRNAME}/../resources/default-microlith.yaml"
         run kubectl delete namespace "$TEST_NAMESPACE"
     fi
 }
@@ -56,10 +54,10 @@ DETIK_CLIENT_NAMESPACE="${TEST_NAMESPACE}"
 
 createDefaultDeployment() {
     # Prometheus configuration is all pulled from this directory
-    kubectl create -n "$TEST_NAMESPACE" configmap prometheus-config --from-file="$TEST_KUBERNETES_RESOURCES_ROOT/prometheus/"
+    kubectl create -n "$TEST_NAMESPACE" configmap prometheus-config --from-file="${BATS_TEST_DIRNAME}/../resources/prometheus/"
 
     # Deploy the microlith, without couchbase
-    kubectl apply -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
+    kubectl apply -n "$TEST_NAMESPACE" -f "${BATS_TEST_DIRNAME}/../resources/default-microlith.yaml"
     sleep 30
 }
 

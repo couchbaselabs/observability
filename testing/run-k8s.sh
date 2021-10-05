@@ -30,7 +30,6 @@ source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
 export TEST_PLATFORM=kubernetes
 export TEST_NAMESPACE=${TEST_NAMESPACE:-test}
-export TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-$TEST_ROOT/kubernetes/resources}
 export TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
 
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
