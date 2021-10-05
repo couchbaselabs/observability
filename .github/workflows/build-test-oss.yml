@@ -12,14 +12,10 @@ on:
       - main
 
 jobs:
-  build-test-oss:
-    name: CICD for the OSS variant
+  cancel-identical-runs:
+    name: Cancel any other runs
     runs-on: ubuntu-20.04
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        server-version: [ '6.6.3' ] #, '7.0.1' ]
+    timeout-minutes: 5
     steps:
       # Prevent duplication on PRs and branch pushes
       - name: Cancel Previous Runs
@@ -27,6 +23,16 @@ jobs:
         with:
           access_token: ${{ github.token }}
 
+  build-test-oss:
+    name: CICD for the OSS variant
+    needs: cancel-identical-runs
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        server-version: [ '6.6.3' ] #, '7.0.1' ]
+    steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -48,6 +54,7 @@ jobs:
 
   linting:
     name: Run static analysis and linting tools
+    needs: cancel-identical-runs
     runs-on: ubuntu-20.04
     timeout-minutes: 10
     steps:
