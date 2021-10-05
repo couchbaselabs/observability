@@ -15,7 +15,7 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native container-test
+.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native test-containers
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
@@ -75,12 +75,15 @@ examples: clean container example-kubernetes example-native
 
 # Deal with automated testing
 test-kubernetes:
-	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/kubernetes/run.sh
+	testing/run-k8s.sh
+
+test-containers:
+	testing/run-containers.sh
 
 test-native:
-	DOCKER_USER=${DOCKER_USER} DOCKER_TAG=${DOCKER_TAG} testing/native/run.sh
+	testing/run-native.sh
 
-test: clean container container-test test-kubernetes test-native
+test: clean container-oss test-native test-containers test-kubernetes
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on

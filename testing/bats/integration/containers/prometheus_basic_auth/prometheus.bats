@@ -19,9 +19,6 @@ load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
 setup() {
-    if [ "$TEST_NATIVE" != "true" ]; then
-        skip "Skipping native prometheus tests"
-    fi
     echo "Verify pre-requisites"
     run : "${TEST_ROOT?"Need to set TEST_ROOT"}"
     assert_success

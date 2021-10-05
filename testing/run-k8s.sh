@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # Run all the K8S cluster tests against a KIND cluster.
-
+# It relies on BATS being installed, see tools/install-bats.sh
 set -ueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -28,7 +28,7 @@ fi
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../test-common.sh"
 # Anything that is not common now specified:
-export TEST_NATIVE=false
+export TEST_PLATFORM=kubernetes
 export TEST_NAMESPACE=${TEST_NAMESPACE:-test}
 export TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-$TEST_ROOT/kubernetes/resources}
 export TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
@@ -67,4 +67,4 @@ while IFS= read -r -d '' INPUT_FILE; do
     envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
 done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
 
-bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
+bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}/integration/${TEST_PLATFORM}" "${TEST_ROOT}/smoke" --timing

@@ -14,16 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The intention of this file is to verify the tooling installed within the container.
-# This is so that it can then be used by actual tests.
-
-# Simple method to skip all tests within a file
-setup() {
-    if [ "$TEST_NATIVE" == "true" ]; then
-        skip "Skipping kubernetes specific tests"
-    fi
-}
-
-@test 'test we are kubernetes' {
-    [ "$TEST_NATIVE" != "true" ]
+@test 'Verify we are native' {
+    [ "$TEST_PLATFORM" == "native" ]
 }
