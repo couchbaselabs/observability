@@ -16,7 +16,7 @@
 
 load "$HELPERS_ROOT/test-helpers.bash"
 
-verify_prerequisites BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT TEST_ROOT CMOS_IMAGE
+ensure_variables_set BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT TEST_ROOT CMOS_IMAGE
 
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
@@ -25,10 +25,7 @@ load "$HELPERS_ROOT/couchbase-helpers.bash"
 load "$HELPERS_ROOT/url-helpers.bash"
 
 setup() {
-    if [ "$TEST_INTEGRATION" == "true" ]; then
-        skip "Skipping integration tests"
-    fi
-    find "$BATS_TEST_DIRNAME/couchbase" "$BATS_TEST_DIRNAME/custom" "$BATS_TEST_DIRNAME/overrides" -name '*.orig' -delete
+    find "$BATS_TEST_DIRNAME" -name '*.orig' -delete
 }
 
 teardown() {

@@ -15,7 +15,9 @@
 # limitations under the License.
 
 # Verifies if all the given variables are set, and exits otherwise
-function verify_prerequisites() {
+# Parameters:
+# Variadic: variable names to check presence of
+function ensure_variables_set() {
     missing=""
     for var in "$@"; do
         if [ -z "${!var}" ]; then
@@ -24,7 +26,7 @@ function verify_prerequisites() {
     done
     if [ -n "$missing" ]; then
         # We use exit rather than fail so that this works even if the BATS helper root is missing
-        echo "Missing prerequisites: $missing"
+        echo "Missing required variables: $missing"
         exit 1
     fi
 }

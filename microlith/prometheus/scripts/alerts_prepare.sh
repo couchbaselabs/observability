@@ -17,6 +17,7 @@
 # to merge them into one alerts file, applying overrides.
 
 if [[ -v "${DISABLE_ALERTS_PREPARE}" ]]; then
+  echo "alerts_prepare.sh: disabled, not using preset alerting rules."
   exit 0
 fi
 

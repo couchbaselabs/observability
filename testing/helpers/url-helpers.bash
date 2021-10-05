@@ -14,11 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Waits for the given cURL call to succeed, waiting up to $1 times.
+# Waits for the given cURL call to succeed.
+# Parameters:
+# $1: the number of attempts to try loading before failing
+# Remaining parameters: passed directly to cURL.
 function wait_for_curl() {
-    MAX_ATTEMPTS=$1
+    local MAX_ATTEMPTS=$1
+    assert [ "$MAX_ATTEMPTS" =~ '^[0-9]+$']
     shift
-    ATTEMPTS=0
+    local ATTEMPTS=0
     echo "Curl command: curl -s -o /dev/null -f $*"
     until curl -s -o /dev/null -f "$@"; do
         if [ $ATTEMPTS -gt "$MAX_ATTEMPTS" ]; then
@@ -30,11 +34,15 @@ function wait_for_curl() {
 }
 
 # Waits for the given URL to return 200
+# Parameters:
+# $1: the number of attempts to try loading before failing
+# $2: the URL to load
+# $3: HTTP basic authentication credentials (format: username:password) [optional]
 function wait_for_url() {
-    MAX_ATTEMPTS=$1
-    URL=$2
-    CREDENTIALS=$3
-    extra_args=""
+    local MAX_ATTEMPTS=$1
+    local URL=$2
+    local CREDENTIALS=$3
+    local extra_args=""
     if [ -n "$CREDENTIALS" ]; then
         extra_args="-u $CREDENTIALS"
     fi

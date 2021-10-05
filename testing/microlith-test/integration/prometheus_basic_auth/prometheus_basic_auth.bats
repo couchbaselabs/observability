@@ -16,23 +16,13 @@
 
 load "$HELPERS_ROOT/test-helpers.bash"
 
-verify_prerequisites TEST_ROOT CMOS_PORT BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT
+ensure_variables_set TEST_ROOT CMOS_PORT BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT
 
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 load "$HELPERS_ROOT/couchbase-helpers.bash"
 load "$HELPERS_ROOT/url-helpers.bash"
-
-setup() {
-    if [ "$TEST_NATIVE" != "true" ]; then
-        skip "Skipping native prometheus tests"
-    fi
-    # shellcheck disable=SC2076
-    if [[ ! "$COUCHBASE_SERVER_IMAGE" =~ "7." ]]; then
-        skip "Skipping, only applicable to Server 7.x"
-    fi
-}
 
 teardown() {
     if [ "$SKIP_TEARDOWN" == "true" ]; then
@@ -44,6 +34,10 @@ teardown() {
 }
 
 @test "Verify that basic auth can be passed by environment variable" {
+    # shellcheck disable=SC2076
+    if [[ ! "$COUCHBASE_SERVER_IMAGE" =~ "7." ]]; then
+        skip "Skipping, only applicable to Server 7.x"
+    fi
     docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
     # Wait for Couchbase to initialise
     wait_for_curl 30 "http://localhost:8091/pools/default" -u Administrator:newpassword

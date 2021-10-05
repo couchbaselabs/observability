@@ -39,6 +39,8 @@ services:
             # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
             - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
             # Currently there's no good way to disable a default rule (see https://issues.couchbase.com/browse/CMOS-72)
+            # You can override the entire rules file to disable all rules in it, like so:
+            # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
             # Log output here to help
             - ./logs:/logs:rw
         networks:
