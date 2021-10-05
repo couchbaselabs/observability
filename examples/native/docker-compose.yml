@@ -38,10 +38,7 @@ services:
             - ./dynamic/prometheus/custom-alertmanagers/:/etc/prometheus/alertmanager/custom/:ro
             # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
             - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
-            # An example of how to also disable a default rule
-            - ./dynamic/prometheus/disable-alert-rules/stubbed-checker-cbs7-rules.yaml:/etc/prometheus/alerting/couchbase/checker-cbs7-rules.yaml:ro
-            # You can also replace all alerts to remove defaults so only provide custom:
-            # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
+            # Currently there's no good way to disable a default rule (see https://issues.couchbase.com/browse/CMOS-72)
             # Log output here to help
             - ./logs:/logs:rw
         networks:
