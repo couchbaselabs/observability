@@ -30,7 +30,7 @@ fi
 source "${SCRIPT_DIR}/../test-common.sh"
 # Anything that is not common now specified:
 export TEST_NATIVE=true
-export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
+export TEST_ROOT="${SCRIPT_DIR}/../bats/"
 export HELPERS_ROOT="${SCRIPT_DIR}/../helpers"
 export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_PORT=${CMOS_PORT:-8080}
