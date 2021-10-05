@@ -39,10 +39,10 @@ teardown() {
 }
 
 waitForRemote() {
-    URL=$1
-    MAX_ATTEMPTS=$2
-    CREDENTIALS=$3
-    ATTEMPTS=0
+    local URL=$1
+    local MAX_ATTEMPTS=$2
+    local CREDENTIALS=$3
+    local ATTEMPTS=0
     until curl -s -o /dev/null "${CREDENTIALS}" "${URL}"; do
         # shellcheck disable=SC2086
         if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
