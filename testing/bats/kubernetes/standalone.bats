@@ -63,6 +63,28 @@ createDefaultDeployment() {
     sleep 30
 }
 
+setupPortForwarding() {
+    # Set up return variable
+    local -n PORT_FORWARD_PID=$1
+    # Port forward into the K8S cluster
+    kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$CMOS_PORT:8080" &
+    PORT_FORWARD_PID=$!
+
+    # Takes a little while to actually set up
+    LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    ATTEMPTS=0
+    MAX_ATTEMPTS=6
+    until curl -s -o /dev/null "$LOCAL_SERVICE_URL"; do
+        # shellcheck disable=SC2086
+        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
+            fail "unable to communicate with CMOS on $LOCAL_SERVICE_URL after $ATTEMPTS attempts"
+        fi
+        ATTEMPTS=$((ATTEMPTS+1))
+        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for CMOS on $LOCAL_SERVICE_URL"
+        sleep 10
+    done
+}
+
 # Test that we can do a default deployment from scratch
 @test "Verify simple deployment from scratch" {
     createDefaultDeployment
@@ -83,22 +105,8 @@ createDefaultDeployment() {
     verify "'port' is '3100' for services named 'loki'"
 
     # Port forward into the K8S cluster
-    kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$CMOS_PORT:8080" &
-    PORT_FORWARD_PID=$!
-
-    # Takes a little while to actually set up
+    setupPortForwarding PORT_FORWARD_PID
     LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
-    ATTEMPTS=0
-    MAX_ATTEMPTS=6
-    until curl -s -o /dev/null "$LOCAL_SERVICE_URL"; do
-        # shellcheck disable=SC2086
-        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
-            fail "unable to communicate with CMOS on $LOCAL_SERVICE_URL after $ATTEMPTS attempts"
-        fi
-        ATTEMPTS=$((ATTEMPTS+1))
-        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for CMOS on $LOCAL_SERVICE_URL"
-        sleep 10
-    done
 
     # Check the web server provides the landing page
     run curl --show-error --silent "$LOCAL_SERVICE_URL"
@@ -134,6 +142,11 @@ createDefaultDeployment() {
     run curl --show-error --silent "$GRAFANA_URL/api/search"
     assert_success
     run curl --show-error --silent "$GRAFANA_URL/api/dashboards/home"
+    assert_success
+
+    # Check Loki is up
+    LOKI_URL="$LOCAL_SERVICE_URL/loki"
+    run curl --show-error --silent "$LOKI_URL/ready"
     assert_success
 
     kill -9 "$PORT_FORWARD_PID"
@@ -199,12 +212,19 @@ __EOF__
     assert_success
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
 
+    # Port forward into the K8S cluster
+    setupPortForwarding PORT_FORWARD_PID
+    LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+
     # Attempt to hit the endpoints as well
-    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
+    run curl --show-error --silent "$LOCAL_SERVICE_URL"
     assert_success
+
     # https://grafana.com/docs/loki/latest/api/#get-ready
-    run curl --show-error --silent "loki.$TEST_NAMESPACE:3100/ready"
+    run curl --show-error --silent "$LOCAL_SERVICE_URL/loki/ready"
     assert_failure
+
+    kill -9 "${PORT_FORWARD_PID}"
 }
 
 @test "Verify customisation by adding" {
