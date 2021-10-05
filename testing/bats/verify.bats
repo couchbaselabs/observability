@@ -48,9 +48,6 @@ load "$BATS_FILE_ROOT/load.bash"
 }
 
 @test 'check bats_detik' {
-    if [[ "$TEST_NATIVE" == "true" ]]; then
-        skip "Skipping kubernetes specific tests"
-    fi
     # For whatever reason namespace must be provided with the client name
     DETIK_CLIENT_NAME="kubectl -n kube-system"
     DETIK_CLIENT_NAMESPACE="kube-system"
@@ -58,8 +55,5 @@ load "$BATS_FILE_ROOT/load.bash"
 }
 
 @test 'check docker-compose' {
-    if [[ "$TEST_NATIVE" != "true" ]]; then
-        skip "Skipping native specific tests"
-    fi
     docker-compose version
 }

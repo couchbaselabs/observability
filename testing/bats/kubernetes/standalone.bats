@@ -28,6 +28,11 @@ setup() {
     if [ "$TEST_NATIVE" == "true" ]; then
         skip "Skipping kubernetes specific tests"
     fi
+    echo "Verify pre-requisites"
+    run : "${TEST_NAMESPACE?"Need to set TEST_NAMESPACE"}"
+    assert_success
+    run : "${TEST_KUBERNETES_RESOURCES_ROOT?"Need to set TEST_KUBERNETES_RESOURCES_ROOT"}"
+    assert_success
 
     run kubectl delete namespace "$TEST_NAMESPACE"
     kubectl create namespace "$TEST_NAMESPACE"
@@ -43,11 +48,6 @@ teardown() {
     fi
 }
 
-TEST_NAMESPACE=${TEST_NAMESPACE:-test}
-TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-/home/testing/kubernetes/resources}
-COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.2}
-TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
-
 # These are required for bats-detik
 # shellcheck disable=SC2034
 DETIK_CLIENT_NAME="kubectl -n $TEST_NAMESPACE"
@@ -61,6 +61,28 @@ createDefaultDeployment() {
     # Deploy the microlith, without couchbase
     kubectl apply -n "$TEST_NAMESPACE" -f "$TEST_KUBERNETES_RESOURCES_ROOT/default-microlith.yaml"
     sleep 30
+}
+
+# Aim to use locals in case we want to parallelise to prevent overwriting globals
+setupPortForwarding() {
+    # Port forward into the K8S cluster
+    local PORT_FORWARD_PID_FILE=$1
+    kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$CMOS_PORT:8080" &
+    echo "$!" > "${PORT_FORWARD_PID_FILE}"
+
+    # Takes a little while to actually set up
+    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    local ATTEMPTS=0
+    local MAX_ATTEMPTS=6
+    until curl -s -o /dev/null "$LOCAL_SERVICE_URL"; do
+        # shellcheck disable=SC2086
+        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
+            fail "unable to communicate with CMOS on $LOCAL_SERVICE_URL after $ATTEMPTS attempts"
+        fi
+        ATTEMPTS=$((ATTEMPTS+1))
+        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for CMOS on $LOCAL_SERVICE_URL"
+        sleep 10
+    done
 }
 
 # Test that we can do a default deployment from scratch
@@ -82,12 +104,18 @@ createDefaultDeployment() {
     verify "there is 1 service named 'loki'"
     verify "'port' is '3100' for services named 'loki'"
 
+    # Port forward into the K8S cluster
+    local PID_FILE
+    PID_FILE=$(mktemp)
+    setupPortForwarding "${PID_FILE}"
+    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+
     # Check the web server provides the landing page
-    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
-    assert_success # https://everything.curl.dev/usingcurl/returns for errors here
+    run curl --show-error --silent "$LOCAL_SERVICE_URL"
+    assert_success
     assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
 
-    PROMETHEUS_URL="couchbase-grafana-http.$TEST_NAMESPACE:8080/prometheus"
+    local PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
 
     # Check we have a valid prometheus end point exposed and it is healthy
     curl --show-error --silent "$PROMETHEUS_URL/-/healthy"
@@ -110,13 +138,20 @@ createDefaultDeployment() {
     run curl --show-error --silent "$PROMETHEUS_URL/api/v1/alerts"
     assert_success
     # Check that default dashboards are available
-    GRAFANA_URL="couchbase-grafana-http.$TEST_NAMESPACE:8080/grafana"
+    local GRAFANA_URL="$LOCAL_SERVICE_URL/grafana"
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#gets-the-home-dashboard
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#get-dashboard-by-uid
     run curl --show-error --silent "$GRAFANA_URL/api/search"
     assert_success
     run curl --show-error --silent "$GRAFANA_URL/api/dashboards/home"
     assert_success
+
+    # Check Loki is up
+    local LOKI_URL="$LOCAL_SERVICE_URL/loki"
+    run curl --show-error --silent "$LOKI_URL/ready"
+    assert_success
+
+    pkill -F "${PID_FILE}"
 }
 
 createCouchbaseCluster() {
@@ -156,6 +191,9 @@ createLoggingCluster() {
 }
 
 @test "Verify disabling of components in microlith" {
+    run : "${TEST_CUSTOM_CONFIG?"Need to set TEST_CUSTOM_CONFIG"}"
+    assert_success
+
     # Turn components off and confirm not available
     cat << __EOF__ | kubectl create -n "$TEST_NAMESPACE" -f -
 apiVersion: v1
@@ -176,12 +214,24 @@ __EOF__
     assert_success
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
 
+    # Port forward into the K8S cluster
+    local PID_FILE
+    PID_FILE=$(mktemp)
+    setupPortForwarding "${PID_FILE}"
+    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+
     # Attempt to hit the endpoints as well
-    run curl --show-error --silent "couchbase-grafana-http.$TEST_NAMESPACE:8080"
+    run curl --show-error --silent "$LOCAL_SERVICE_URL"
     assert_success
+
     # https://grafana.com/docs/loki/latest/api/#get-ready
-    run curl --show-error --silent "loki.$TEST_NAMESPACE:3100/ready"
-    assert_failure
+    run curl --show-error --silent "$LOCAL_SERVICE_URL/loki/ready"
+    # assert_failure
+    # Nginx reverse proxy gives us a page for a 404
+    assert_output --partial "404 Not Found"
+
+    pkill -F "${PID_FILE}"
+    rm -f "${PID_FILE}"
 }
 
 @test "Verify customisation by adding" {

@@ -17,7 +17,9 @@
 set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-CMOS_IMAGE=${CMOS_IMAGE:-couchbase/observability-stack:v1}
+DOCKER_USER=${DOCKER_USER:-couchbase}
+DOCKER_TAG=${DOCKER_TAG:-v1}
+CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 
 # Remove everything between `# Couchbase proprietary start` and `# Couchbase proprietary end`
 sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "$SCRIPT_DIR/../microlith/Dockerfile" > "$SCRIPT_DIR/../microlith/Dockerfile.oss"

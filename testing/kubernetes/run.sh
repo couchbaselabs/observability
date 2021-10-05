@@ -15,36 +15,32 @@
 
 # Run all the K8S cluster tests against a KIND cluster.
 
-set -xueo pipefail
+set -ueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
+    # No point shell checking it as done separately anyway
+    # shellcheck disable=SC1091
+    /bin/bash "${SCRIPT_DIR}/../../tools/install-bats.sh"
+fi
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/../test-common.sh"
+# Anything that is not common now specified:
+export TEST_NATIVE=false
+export TEST_NAMESPACE=${TEST_NAMESPACE:-test}
+export TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-$TEST_ROOT/kubernetes/resources}
+export TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
+
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
 CLUSTER_NAME=${CLUSTER_NAME:-kind-$DOCKER_TAG}
-BATS_FORMATTER=${BATS_FORMATTER:-tap}
-
-DOCKER_USER=${DOCKER_USER:-couchbase}
-DOCKER_TAG=${DOCKER_TAG:-v1}
-
-export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
-export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
-export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
-export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
-export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
-
-export TEST_NATIVE=false
-export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
-export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
-export CMOS_PORT=${CMOS_PORT:-8080}
-export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
 
 if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
     # Create a 4 node KIND cluster
     echo "Recreating full cluster"
-    kind delete cluster
-
-    CLUSTER_CONFIG=$(mktemp)
-    cat << EOF > "${CLUSTER_CONFIG}"
+    kind delete cluster --name="${CLUSTER_NAME}"
+    kind create cluster --name="${CLUSTER_NAME}" --config - <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
@@ -53,15 +49,22 @@ nodes:
 - role: worker
 - role: worker
 EOF
-
-    kind create cluster --config="${CLUSTER_CONFIG}" --name="${CLUSTER_NAME}"
-    rm -f "${CLUSTER_CONFIG}"
 fi
+
+kubectl cluster-info
 
 # Wait for cluster to come up
 docker pull "${COUCHBASE_SERVER_IMAGE}"
 kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
-kind load docker-image "${IMAGE}" --name="${CLUSTER_NAME}"
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
+
+# Run envsubst on all test files that might need it
+while IFS= read -r -d '' INPUT_FILE; do
+    OUTPUT_FILE=${INPUT_FILE%%-template.yaml}.yaml
+    echo "Substitute template ${INPUT_FILE} --> ${OUTPUT_FILE}"
+    # Make sure to leave alone anything that is not a defined environment variable
+    # TODO: filter by TEST_ prefix
+    envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
+done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
 
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
