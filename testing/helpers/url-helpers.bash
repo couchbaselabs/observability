@@ -24,7 +24,7 @@ function wait_for_curl() {
         if [ $ATTEMPTS -gt "$MAX_ATTEMPTS" ]; then
             fail "unable to perform cURL"
         fi
-        ((ATTEMPTS++))
+        ATTEMPTS=$((ATTEMPTS+1))
         sleep 2
     done
 }
