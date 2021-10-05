@@ -52,16 +52,14 @@ teardown() {
     echo "Prometheus is on port $prom_port"
     wait_for_url 10 "http://localhost:$prom_port/prometheus/-/ready"
 
-    tempdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'cmos-test-prometheus_alert_overrides')
-    curl --silent --show-error --fail http://localhost:"${prom_port}"/prometheus/api/v1/rules\?type=alert > "$tempdir/rules.json"
-    echo "/api/v1/rules output: $(cat "$tempdir/rules.json")"
+    curl --silent --show-error --fail http://localhost:"${prom_port}"/prometheus/api/v1/rules\?type=alert > "$BATS_TEST_TMPDIR/rules.json"
+    echo "/api/v1/rules output: $(cat "$BATS_TEST_TMPDIR/rules.json")"
 
-    run jq -r '.data.groups[].rules[].query' "$tempdir/rules.json"
+    run jq -r '.data.groups[].rules[].query' "$BATS_TEST_TMPDIR/rules.json"
     assert_line 'untouched'
     assert_line 'overridden{foo!="true"}'
     assert_line 'disabled{foo!="true"}'
     refute_line 'disabled{}'
     assert_line 'overridden{foo="true"}'
     assert_line 'custom'
-    rm -r "$tempdir"
 }
