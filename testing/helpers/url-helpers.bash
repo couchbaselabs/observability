@@ -19,6 +19,7 @@ function wait_for_curl() {
     MAX_ATTEMPTS=$1
     shift
     ATTEMPTS=0
+    echo "Curl command: curl -s -o /dev/null -f $*"
     until curl -s -o /dev/null -f "$@"; do
         if [ $ATTEMPTS -gt "$MAX_ATTEMPTS" ]; then
             fail "unable to perform cURL"

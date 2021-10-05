@@ -41,7 +41,7 @@ teardown() {
 
 @test "Alert overrides (generated YAML file)" {
     docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
-    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec cmos cat /etc/prometheus/alerting/generated/alerts.yaml
+    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec -T cmos cat /etc/prometheus/alerting/generated/alerts.yaml
     assert_line -p 'expr: untouched'
     assert_line -p 'expr: overridden{foo!="true"}'
     assert_line -p 'expr: disabled{foo!="true"}'
