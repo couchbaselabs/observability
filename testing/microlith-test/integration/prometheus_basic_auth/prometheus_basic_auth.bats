@@ -28,6 +28,7 @@ setup() {
     if [ "$TEST_NATIVE" != "true" ]; then
         skip "Skipping native prometheus tests"
     fi
+    # shellcheck disable=SC2076
     if [[ ! "$COUCHBASE_SERVER_IMAGE" =~ "7." ]]; then
         skip "Skipping, only applicable to Server 7.x"
     fi
