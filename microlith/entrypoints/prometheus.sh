@@ -39,25 +39,8 @@ if [[ -f "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" ]] ; then
   envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${PROMETHEUS_CONFIG_TEMPLATE_FILE}" > "${PROMETHEUS_CONFIG_FILE}"
 fi
 
-# Now work on the rules, we substitute in-place to keep it simple
-while IFS= read -r -d '' FILE
-do
-  if mv -f "${FILE}" "${FILE}".orig; then
-    # We need to make sure we only substitute defined variables otherwise we remove label/annotation processing as well
-    # e.g. `description: {{ $labels.node }} has condition VALUE = {{ $value }} LABELS = {{ $labels }}`
-    # Using envsubst on its own would mean the $labeles and $values fields are blank
-    # Therefore we pass envsubst a list of all values defined in the environment as the "only" things to substitute
-    envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')" < "${FILE}".orig > "${FILE}"
-    if diff -aq "${FILE}".orig "${FILE}"; then
-      echo "Processed ${FILE}:"
-      diff -a "${FILE}".orig "${FILE}"
-    else
-      rm -f "${FILE}".orig
-    fi
-  else
-    echo "Unable to substitue any values in ${FILE} - likely read-only due to being mounted in"
-  fi
-done < <(find "/etc/prometheus/alerting" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
+# Prepare the alerting rules (the script itself handles the disable variable)
+bash /etc/prometheus/scripts/alerts_prepare.sh
 
 # From: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 # A configuration reload is triggered by sending a SIGHUP to the Prometheus process or

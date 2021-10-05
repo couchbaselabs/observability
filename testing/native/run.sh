@@ -30,7 +30,11 @@ fi
 source "${SCRIPT_DIR}/../test-common.sh"
 # Anything that is not common now specified:
 export TEST_NATIVE=true
+export TEST_ROOT="${SCRIPT_DIR}/../bats/"
+export HELPERS_ROOT="${SCRIPT_DIR}/../helpers"
+export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+export CMOS_PORT=${CMOS_PORT:-8080}
 # TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter
-export COUCHBASE_SERVER_IMAGE=couchbase/server:7.0.1
+export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
 
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
