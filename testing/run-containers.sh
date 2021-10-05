@@ -26,7 +26,7 @@ if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
 fi
 
 # shellcheck disable=SC1091
-source "${SCRIPT_DIR}/../test-common.sh"
+source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
 export TEST_PLATFORM=containers
 # TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter

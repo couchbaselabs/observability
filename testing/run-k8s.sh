@@ -26,7 +26,7 @@ if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
 fi
 
 # shellcheck disable=SC1091
-source "${SCRIPT_DIR}/../test-common.sh"
+source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
 export TEST_PLATFORM=kubernetes
 export TEST_NAMESPACE=${TEST_NAMESPACE:-test}
