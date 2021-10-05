@@ -24,15 +24,16 @@ DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 
 export BATS_ROOT=${BATS_ROOT:-$SCRIPT_DIR/../../tools/bats}
-export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
-export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
-export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
-export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
+export BATS_FILE_ROOT=${BATS_FILE_ROOT:-BATS_ROOT/lib/bats-file}
+export BATS_SUPPORT_ROOT=${BATS_SUPPORT_ROOT:-BATS_ROOT/lib/bats-support}
+export BATS_ASSERT_ROOT=${BATS_ASSERT_ROOT:-BATS_ROOT/lib/bats-assert}
+export BATS_DETIK_ROOT=${BATS_DETIK_ROOT:-BATS_ROOT/lib/bats-detik}
 
 export TEST_NATIVE=true
 export TEST_ROOT="${SCRIPT_DIR}/../microlith-test/"
+export HELPERS_ROOT="${SCRIPT_DIR}/../helpers"
 export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_PORT=${CMOS_PORT:-8080}
 # TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter
-export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.1}
+export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
 bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing

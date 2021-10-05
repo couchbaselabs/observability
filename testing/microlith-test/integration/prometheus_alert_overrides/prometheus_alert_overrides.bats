@@ -14,18 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load "$HELPERS_ROOT/test-helpers.bash"
+
+verify_prerequisites BATS_SUPPORT_ROOT BATS_ASSERT_ROOT BATS_FILE_ROOT HELPERS_ROOT TEST_ROOT CMOS_IMAGE
+
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
-load "../helpers"
-
-export CMOS_IMAGE=${CMOS_IMAGE:-couchbase/observability-stack:v1}
+load "$HELPERS_ROOT/couchbase-helpers.bash"
+load "$HELPERS_ROOT/url-helpers.bash"
 
 setup() {
     if [ "$TEST_INTEGRATION" == "true" ]; then
         skip "Skipping integration tests"
     fi
-    find couchbase custom overrides -regex '.*\.ya?ml\.orig$' -delete
+    find "$BATS_TEST_DIRNAME/couchbase" "$BATS_TEST_DIRNAME/custom" "$BATS_TEST_DIRNAME/overrides" -name '*.orig' -delete
 }
 
 teardown() {
@@ -33,12 +36,12 @@ teardown() {
         echo "# Skipping teardown. Make sure to manually run the commands in teardown()." >&3
         return
     fi
-    docker-compose rm -v --force --stop
+    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop
 }
 
 @test "Alert overrides (generated YAML file)" {
-    docker-compose up -d --force-recreate --remove-orphans
-    run docker-compose exec cmos cat /etc/prometheus/alerting/generated/alerts.yaml
+    docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
+    run docker-compose --project-directory="${BATS_TEST_DIRNAME}" exec cmos cat /etc/prometheus/alerting/generated/alerts.yaml
     assert_line -p 'expr: untouched'
     assert_line -p 'expr: overridden{foo!="true"}'
     assert_line -p 'expr: disabled{foo!="true"}'
@@ -47,11 +50,10 @@ teardown() {
 }
 
 @test "Alert overrides (API JSON output)" {
-    docker-compose up -d --force-recreate --remove-orphans
-    sleep 5 # ensure Prom has a chance to start up
-
+    docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
     prom_port=$(get_service_port prometheus_alert_overrides_cmos 9090)
     echo "Prometheus is on port $prom_port"
+    wait_for_url 10 "http://localhost:$prom_port/prometheus/-/ready"
 
     tempdir=$(mktemp -d 2>/dev/null || mktemp -d -t 'cmos-test-prometheus_alert_overrides')
     curl --silent --show-error --fail http://localhost:"${prom_port}"/prometheus/api/v1/rules\?type=alert > "$tempdir/rules.json"
