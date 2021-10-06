@@ -10,4 +10,4 @@ test-dist/
 *-actual.yaml
 microlith/Dockerfile.oss
 tools/bats/
-testing/bats/kubernetes/resources/default-microlith.yaml
+testing/bats/integration/kubernetes/resources/default-microlith.yaml
