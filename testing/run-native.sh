@@ -16,25 +16,19 @@
 # Simple script to run all native tests.
 # It relies on BATS being installed, see tools/install-bats.sh
 
-set -xueo pipefail
+set -ueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
     # No point shell checking it as done separately anyway
     # shellcheck disable=SC1091
-    /bin/bash "${SCRIPT_DIR}/../../tools/install-bats.sh"
+    /bin/bash "${SCRIPT_DIR}/../tools/install-bats.sh"
 fi
 
 # shellcheck disable=SC1091
-source "${SCRIPT_DIR}/../test-common.sh"
+source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
-export TEST_NATIVE=true
-export TEST_ROOT="${SCRIPT_DIR}/../bats/"
-export HELPERS_ROOT="${SCRIPT_DIR}/../helpers"
-export CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
-export CMOS_PORT=${CMOS_PORT:-8080}
-# TODO: this is required for the role used by the basic auth test, this needs updating to be conditional and use the exporter
-export COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
+export TEST_PLATFORM=native
 
-bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
+run_tests "${1-}"

@@ -12,14 +12,27 @@ on:
       - main
 
 jobs:
+  cancel-identical-runs:
+    name: Cancel any other runs
+    runs-on: ubuntu-20.04
+    timeout-minutes: 5
+    steps:
+      # Prevent duplication on PRs and branch pushes
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
+  # TODO: split into push testing (smaller, just smoke) and PR testing (all of matrix)
   build-test-oss:
     name: CICD for the OSS variant
+    needs: cancel-identical-runs
     runs-on: ubuntu-20.04
-    timeout-minutes: 30
+    timeout-minutes: 60
     strategy:
       fail-fast: false
       matrix:
-        makefile-target: [ 'test-native', 'test-kubernetes' ]
+        server-version: [ '6.6.3' ] #, '7.0.1' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,20 +43,21 @@ jobs:
           sudo npm install -g bats
 
       - name: Create K8S Kind Cluster
-        if: ${{ matrix.makefile-target }} == 'test-kubernetes'
         timeout-minutes: 10
         uses: helm/kind-action@v1.2.0
         with:
           cluster_name: kind-${{ github.sha }}
 
-      - name: Run ${{ matrix.makefile-target }} tests
+      # TODO: cache single container build across matrix runs
+      - name: Run ${{ matrix.server-version }} tests
         run: |
-          make container-oss ${{ matrix.makefile-target }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make container-oss test-native test-containers test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   linting:
     name: Run static analysis and linting tools
+    needs: cancel-identical-runs
     runs-on: ubuntu-20.04
-    timeout-minutes: 15
+    timeout-minutes: 10
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

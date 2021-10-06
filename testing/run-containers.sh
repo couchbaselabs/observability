@@ -1,5 +1,4 @@
-#!/usr/bin/env bats
-
+#!/bin/bash
 # Copyright 2021 Couchbase, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# The intention of this file is to verify the tooling installed within the container.
-# This is so that it can then be used by actual tests.
+# Simple script to run all container tests.
+# It relies on BATS being installed, see tools/install-bats.sh
+set -ueo pipefail
 
-# Simple method to skip all tests within a file
-setup() {
-    if [ "$TEST_NATIVE" != "true" ]; then
-        skip "Skipping native specific tests"
-    fi
-}
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-@test 'test we are native' {
-    [ "$TEST_NATIVE" == "true" ]
-}
+if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
+    # No point shell checking it as done separately anyway
+    # shellcheck disable=SC1091
+    /bin/bash "${SCRIPT_DIR}/../tools/install-bats.sh"
+fi
+
+# shellcheck disable=SC1091
+source "${SCRIPT_DIR}/test-common.sh"
+# Anything that is not common now specified:
+export TEST_PLATFORM=containers
+
+run_tests "${1-}"

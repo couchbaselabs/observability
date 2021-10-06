@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # Run all the K8S cluster tests against a KIND cluster.
-
+# It relies on BATS being installed, see tools/install-bats.sh
 set -ueo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -22,15 +22,14 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if [[ "${SKIP_BATS:-no}" != "yes" ]]; then
     # No point shell checking it as done separately anyway
     # shellcheck disable=SC1091
-    /bin/bash "${SCRIPT_DIR}/../../tools/install-bats.sh"
+    /bin/bash "${SCRIPT_DIR}/../tools/install-bats.sh"
 fi
 
 # shellcheck disable=SC1091
-source "${SCRIPT_DIR}/../test-common.sh"
+source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
-export TEST_NATIVE=false
+export TEST_PLATFORM=kubernetes
 export TEST_NAMESPACE=${TEST_NAMESPACE:-test}
-export TEST_KUBERNETES_RESOURCES_ROOT=${TEST_KUBERNETES_RESOURCES_ROOT:-$TEST_ROOT/kubernetes/resources}
 export TEST_CUSTOM_CONFIG=${TEST_CUSTOM_CONFIG:-test-custom-config}
 
 SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-yes}
@@ -67,6 +66,4 @@ while IFS= read -r -d '' INPUT_FILE; do
     envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
 done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
 
-export HELPERS_ROOT="${SCRIPT_DIR}/../helpers"
-
-bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}" --timing
+run_tests "${1-}"
