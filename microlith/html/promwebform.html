@@ -165,28 +165,6 @@
           };
         });
       });
-      function generate(data) {
-        console.log(data);
-        return;
-        var output = [
-          {
-            targets: [document.inputForm.endpoint.value],
-            labels: {
-              job: document.inputForm.serverName.value,
-            },
-          },
-        ];
-        document.getElementById("jsonPrometheus").innerHTML = JSON.stringify(
-          output,
-          undefined,
-          2
-        );
-
-        var serverConfig = {};
-
-        document.getElementById("healthcheckCommand").value =
-          "" + JSON.stringify(serverConfig, undefined, 2) + "' ";
-      }
     </script>
   </body>
 </html>
