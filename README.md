@@ -11,6 +11,16 @@ We essentially need to support two fairly distinct types of user:
 1. Those who have nothing and just want a simple working solution to monitor their cluster.
 2. Those who have an existing monitoring pipeline and want to integrate Couchbase monitoring into it, likely with a set of custom rules and configuration.
 
+## Quick Start
+
+1. Ensure you have a Couchbase cluster running and accessible - for testing we recommend using [Vagrant](https://github.com/couchbaselabs/vagrants) or [Docker](https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html)
+2. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
+3. Part of CMOS is the proprietary Couchbase Cluster Monitor, in [this private repository](https://github.com/couchbaselabs/cbmultimanager). If you want to build CMOS to use it, [set up your local SSH agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent).
+4. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
+5. Run the microlith: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1`
+6. Browse to http://localhost:8080
+7. Click "Prometheus Add Endpoint" and follow the instructions
+
 ## Components
 
 This software uses the following components with their associated licensing also captured:
@@ -23,6 +33,7 @@ This software uses the following components with their associated licensing also
 * Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
 * Prometheus Merge Tool: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
+* Alpine.js: MIT https://github.com/alpinejs/alpine/blob/main/LICENSE.md
 * Couchbase Cluster Monitor: Proprietary to Couchbase https://github.com/couchbaselabs/cbmultimanager/blob/master/LICENSE
 
 Nginx is used as the base image for the microlith container.

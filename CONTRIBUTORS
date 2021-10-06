@@ -6,3 +6,4 @@ Portions of this project reuse the following components:
 * Node Exporter: Apache 2.0 https://github.com/prometheus/node_exporter/blob/master/LICENSE
 * Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
+* Alpine.js: https://github.com/alpinejs/alpine/blob/main/LICENSE.md
