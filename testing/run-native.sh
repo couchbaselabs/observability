@@ -31,4 +31,4 @@ source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
 export TEST_PLATFORM=native
 
-bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}/integration/${TEST_PLATFORM}" "${TEST_ROOT}/smoke" --timing
+run_tests "${1-}"

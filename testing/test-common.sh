@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -xueo pipefail
+set -ueo pipefail
 
 # Profile script for common variables
 TEST_COMMON_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -31,3 +31,26 @@ export BATS_FILE_ROOT=$BATS_ROOT/lib/bats-file
 export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
 export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
 export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
+
+# Helper function to run a set of tests based on our specific configuration
+function run_tests() {
+    local requested=$1
+    local run=""
+
+    if [[ "$requested" =~ .*\.bats$ ]]; then
+        # One individual test
+        run="$requested"
+    elif [[ "$requested" == "smoke" ]]; then
+        # Smoke suite
+        run="--recursive ${TEST_ROOT}/smoke"
+    elif [ -n "$requested" ]; then
+        # Likely an individual integration suite
+        run="--recursive ${TEST_ROOT}/$requested"
+    else
+        # Empty => everything
+        run="--recursive ${TEST_ROOT}/smoke ${TEST_ROOT}/integration/${TEST_PLATFORM}"
+    fi
+
+    # shellcheck disable=SC2086
+    bats --formatter "${BATS_FORMATTER}" $run --timing
+}

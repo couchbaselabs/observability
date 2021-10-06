@@ -185,6 +185,10 @@ Variation points:
 We use the BATS framework (reuse some SDK set up tests as well) to verify all this locally using a docker-compose stack to represent an on-premise option and a KIND cluster for a kubernetes option.
 Scale up to run tests in GKE as well using multiple nodes explicitly there.
 
+## Test configuration
+
+Testing is broken down into general `smoke` tests independent of the infrastructure we are running on, e.g. the general ones above, and `integration` tests that are cover some specific aspect for a particular infrastructure, e.g. a Kubernetes-specific test case.
+
 # Caveats and restrictions
 
 * No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5

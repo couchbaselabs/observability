@@ -66,4 +66,4 @@ while IFS= read -r -d '' INPUT_FILE; do
     envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
 done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
 
-bats --formatter "${BATS_FORMATTER}" --recursive "${TEST_ROOT}/integration/${TEST_PLATFORM}" "${TEST_ROOT}/smoke" --timing
+run_tests "${1-}"
