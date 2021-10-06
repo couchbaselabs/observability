@@ -1,69 +1,192 @@
 <!DOCTYPE html>
 <html lang="en-US">
-    <head>
-        <meta charset="utf-8">
-        <title>Generate Prometheus Endpoint Configuration</title>
-    </head>
-    <body>
-        <h2>Configuration</h2>
+  <head>
+    <meta charset="utf-8" />
+    <title>Generate Prometheus Endpoint Configuration</title>
+  </head>
+  <body>
+    <h1>Configuration</h1>
+    <div x-data="generator">
+      <form name="inputForm" id="inputForm">
         <div>
-            <form name="inputForm" id="inputForm">
-                <fieldset>
-                    <legend>
-                        <h2>Prometheus endpoint configuration</h2>
-                    </legend>
-                    <div>
-                        <label for="endpoint">Couchbase Server name (for metrics):</label>
-                        <input type="text" name="serverName" id="serverName" placeholder="db1" required>
-                        <label for="endpoint">Couchbase Server Prometheus endpoint:</label>
-                        <input type="text" name="endpoint" id="endpoint" placeholder="127.0.0.1:9090" required>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>
-                        <h2>Couchbase Healthchecker configuration</h2>
-                    </legend>
-                    <div>
-                        <label for="serverUser">Couchbase Server Username:</label>
-                        <input type="text" name="serverUser" id="serverUser" placeholder="Administrator" required>
-                        <label for="serverPwd">Couchbase Server Password:</label>
-                        <input type="text" name="serverPwd" id="serverPwd" placeholder="password" required>
-                        <label for="serverUrl">Couchbase Server URL:</label>
-                        <input type="text" name="serverUrl" id="serverUrl" placeholder="http://db1:8091" required>
-                    </div>
-                </fieldset>
-                <div>
-                    <button type="submit" name="generateButton" id="generateButton" onClick="generate();return false;">Generate</button>
-                </div>
-            </form>
+          <label for="endpoint">Cluster label:</label>
+          <input type="text" x-model="clusterLabel" required />
         </div>
-        <h2>Prometheus configuration</h2>
+        <h2>Couchbase Server nodes</h2>
+        <template x-for="(_, index) in nodes">
+          <fieldset>
+            <label :for="'node' + index">Hostname:</label>
+            <input
+              :id="'node' + index"
+              x-model="nodes[index]"
+              placeholder="127.0.0.1"
+              required
+            />
+            <button type="button" @click="nodes.splice(index, 1)">
+              Remove
+            </button>
+          </fieldset>
+        </template>
         <div>
-            <pre id="jsonPrometheus" name="jsonPrometheus"></pre>
+          <button type="button" @click="nodes.push('')">Add Node</button>
         </div>
-        <h2>Couchbase Healthcheck configuration</h2>
+        <fieldset>
+          <legend>
+            <h2>Prometheus endpoint configuration</h2>
+          </legend>
+          <div>
+            <label for="endpoint">Prometheus Exporter port:</label>
+            <input type="text" x-model="exporterPort" required />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>
+            <h2>Couchbase Healthchecker configuration</h2>
+          </legend>
+          <div>
+            <div>
+              <label for="serverUser">Couchbase Server Username:</label>
+              <input
+                type="text"
+                id="serverUser"
+                x-model="serverUsername"
+                placeholder="Administrator"
+                required
+              />
+            </div>
+            <div>
+              <label for="serverPwd">Couchbase Server Password:</label>
+              <input
+                type="password"
+                id="serverPwd"
+                x-model="serverPassword"
+                placeholder="password"
+                required
+              />
+            </div>
+            <div>
+              <label for="serverUrl">Couchbase Server Management Port:</label>
+              <input
+                type="text"
+                id="serverUrl"
+                x-model="managementPort"
+                required
+              />
+            </div>
+            <hr />
+            <div>
+              <label for="serverUrl">Couchbase Cluster Monitor host:</label>
+              <input type="text" id="serverUrl" x-model="cbmmHost" required />
+            </div>
+            <div>
+              <label for="serverUrl">Couchbase Cluster Monitor username:</label>
+              <input
+                type="text"
+                id="serverUrl"
+                x-model="cbmmUsername"
+                required
+              />
+            </div>
+            <div>
+              <label for="serverUrl">Couchbase Cluster Monitor password:</label>
+              <input
+                type="password"
+                id="serverUrl"
+                x-model="cbmmPassword"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
         <div>
-            <p>Execute this command to register a Couchbase Server cluster with the local Healthcheck process.</p>
-            <textarea name="healthcheckCommand" id="healthcheckCommand" class="generatedCode" onclick="this.focus();this.select()" readonly></textarea>
+          <button type="submit" @click.prevent="generate()">Generate</button>
         </div>
+      </form>
+      <h2>Prometheus configuration</h2>
+      <div>
+        <pre id="jsonPrometheus" x-text="jsonPrometheus"></pre>
+      </div>
+      <h2>Couchbase Healthcheck configuration</h2>
+      <div>
+        <p>
+          Execute this command to register a Couchbase Server cluster with the
+          local Healthcheck process.
+        </p>
+        <textarea
+          x-text="healthcheckCommand"
+          id="healthcheckCommand"
+          class="generatedCode"
+          onclick="this.focus();this.select()"
+          cols="80"
+          rows="4"
+          readonly
+        ></textarea>
+      </div>
+    </div>
+    <script defer src="/alpine-3.4.2.min.js"></script>
     <script>
-        function generate(form) {
-            var output = [
-                            {
-                            "targets": [
-                                document.inputForm.endpoint.value
-                            ],
-                            "labels": {
-                                "job": document.inputForm.serverName.value
-                                }
-                            }
-                        ]
-            document.getElementById("jsonPrometheus").innerHTML = JSON.stringify(output, undefined, 2);
+      document.addEventListener("alpine:init", function () {
+        Alpine.data("generator", function () {
+          return {
+            clusterLabel: "",
+            nodes: [""],
+            exporterPort: "9091",
+            managementPort: "8091",
+            serverUsername: "Administrator",
+            serverPassword: "password",
 
-            var serverConfig = { "user": document.inputForm.serverUser.value, "password": document.inputForm.serverPwd.value, "host": document.inputForm.serverUrl.value }
+            cbmmUsername: "admin",
+            cbmmPassword: "password",
+            cbmmHost: "localhost:8080/couchbase",
 
-            document.getElementById("healthcheckCommand").value = "curl -u ${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD} -X POST -d '" + JSON.stringify(serverConfig, undefined, 2) + "' http://localhost:7196/api/v1/clusters"
-        }
+            jsonPrometheus: "",
+            healthcheckCommand: "",
+
+            generate() {
+              this.jsonPrometheus = JSON.stringify(
+                {
+                  targets: this.nodes.map(
+                    (node) => `${node}:${this.exporterPort}`
+                  ),
+                  labels: {
+                    cluster: this.clusterLabel,
+                  },
+                },
+                null,
+                2
+              );
+              const serverConfig = JSON.stringify({
+                user: this.serverUsername,
+                password: this.serverPassword,
+                host: this.nodes[0] + ":" + this.managementPort,
+              });
+              this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://${this.cbmmHost}/api/v1/clusters'`;
+            },
+          };
+        });
+      });
+      function generate(data) {
+        console.log(data);
+        return;
+        var output = [
+          {
+            targets: [document.inputForm.endpoint.value],
+            labels: {
+              job: document.inputForm.serverName.value,
+            },
+          },
+        ];
+        document.getElementById("jsonPrometheus").innerHTML = JSON.stringify(
+          output,
+          undefined,
+          2
+        );
+
+        var serverConfig = {};
+
+        document.getElementById("healthcheckCommand").value =
+          "" + JSON.stringify(serverConfig, undefined, 2) + "' ";
+      }
     </script>
   </body>
 </html>
