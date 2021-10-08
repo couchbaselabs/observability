@@ -145,12 +145,12 @@ multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name
 multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="supportedVersion",node="47a45d39583947823ac9866dce2a74b2"} 0
 ```
 
-The metric values are mapped as follows:
-* 0: Good
-* 1: Warn
-* 2: Alert
-* 3: Info
-* 4: Missing
+The values of each metric represent the current status of the checker. The integer values have the following meanings:
+* 0: Good (everything is fine, no action required)
+* 1: Warn (potential issue, worth investigating)
+* 2: Alert (serious issue, action required)
+* 3: Info (informational only, no action required)
+* 4: Missing (checker failed to run or information was not available)
 
 # Distributed deployment
 
