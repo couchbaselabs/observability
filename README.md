@@ -13,13 +13,16 @@ We essentially need to support two fairly distinct types of user:
 
 ## Quick Start
 
-1. Ensure you have a Couchbase cluster running and accessible - for testing we recommend using [Vagrant](https://github.com/couchbaselabs/vagrants) or [Docker](https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html)
-2. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
-3. Part of CMOS is the proprietary Couchbase Cluster Monitor, in [this private repository](https://github.com/couchbaselabs/cbmultimanager). If you want to build CMOS to use it, [set up your local SSH agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent).
-4. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
-5. Run the microlith: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1`
-6. Browse to http://localhost:8080
-7. Click "Prometheus Add Endpoint" and follow the instructions
+1. Ensure you have a Couchbase Server cluster running and accessible - for testing we recommend using [Vagrant](https://github.com/couchbaselabs/vagrants) or [Docker](https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html)
+2. Ensure you have the [Couchbase Prometheus Exporter](https://github.com/couchbase/couchbase-exporter) set up on each of your Couchbase Server nodes
+3. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
+4. Part of CMOS is the proprietary Couchbase Cluster Monitor, in [this private repository](https://github.com/couchbaselabs/cbmultimanager). If you want to build CMOS to use it, [set up your local SSH agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent).
+5. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
+6. Run the microlith: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1` (if your Couchbase Server is running in Docker, you may need to set [extra options](https://docs.docker.com/network/) to permit them to communicate.)
+7. Browse to http://localhost:8080
+8. Click "Prometheus Add Endpoint" and follow the instructions
+
+When you are done testing, run `docker stop cmos` to clean up.
 
 ## Components
 

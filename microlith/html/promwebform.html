@@ -10,12 +10,13 @@
       <form name="inputForm" id="inputForm">
         <div>
           <label for="endpoint">Cluster label:</label>
-          <input type="text" x-model="clusterLabel" required />
+          <input type="text" x-model="clusterLabel" required pattern="[a-zA-Z_][a-zA-Z0-9_]*" title="Permitted: ASCII letters, numbers, underscores." />
+          <em>Permitted: ASCII letters, numbers, underscores.</em>
         </div>
         <h2>Couchbase Server nodes</h2>
         <template x-for="(_, index) in nodes">
           <fieldset>
-            <label :for="'node' + index">Hostname:</label>
+            <label :for="'node' + index">Hostname / IP Address:</label>
             <input
               :id="'node' + index"
               x-model="nodes[index]"
@@ -104,13 +105,18 @@
       </form>
       <h2>Prometheus configuration</h2>
       <div>
+        <p x-show="jsonPrometheus.length > 0">
+          Save the below JSON to a file and place it in <code>/etc/prometheus/couchbase/custom/<span x-text="clusterLabel"></span>.json</code>.
+          For example: <code>docker cp <span x-text="clusterLabel"></span>.json cmos:/etc/prometheus/couchbase/custom/<span x-text="clusterLabel"></span>.json</code> (substitute <code>cmos</code> for the name of your running container).
+          Once saved, check the "Targets" page in Prometheus to see if it has picked it up. If it does not, wait 30-60 seconds and check again, as the process is not instant.
+        </p>
         <pre id="jsonPrometheus" x-text="jsonPrometheus"></pre>
       </div>
       <h2>Couchbase Healthcheck configuration</h2>
       <div>
-        <p>
+        <p x-show="healthcheckCommand.length > 0">
           Execute this command to register a Couchbase Server cluster with the
-          local Healthcheck process.
+          local Cluster Monitor process.
         </p>
         <textarea
           x-text="healthcheckCommand"
