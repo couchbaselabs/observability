@@ -25,7 +25,7 @@ load "$HELPERS_ROOT/couchbase-helpers.bash"
 load "$HELPERS_ROOT/url-helpers.bash"
 
 teardown() {
-    if [ "$SKIP_TEARDOWN" == "true" ]; then
+    if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
     elif [ "$TEST_NATIVE" == "true" ]; then
         run docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output"

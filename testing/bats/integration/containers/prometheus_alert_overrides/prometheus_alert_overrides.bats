@@ -29,7 +29,7 @@ setup() {
 }
 
 teardown() {
-    if [ "$SKIP_TEARDOWN" == "true" ]; then
+    if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         echo "# Skipping teardown. Make sure to manually run the commands in teardown()." >&3
         return
     fi

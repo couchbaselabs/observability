@@ -37,7 +37,7 @@ setup() {
 }
 
 teardown() {
-    if [ "$SKIP_TEARDOWN" == "true" ]; then
+    if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
     elif [ "$TEST_NATIVE" != "true" ]; then
         run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
