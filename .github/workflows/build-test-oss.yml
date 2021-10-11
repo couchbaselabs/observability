@@ -64,5 +64,6 @@ jobs:
 
       - name: Run linting
         run: |
+          sudo apt install aspell
           make lint
 

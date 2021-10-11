@@ -6,6 +6,9 @@ build/
 dist/
 bin/
 test-dist/
+# Documentation output
+.cache/
+microlith/html/cmos/
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
