@@ -39,7 +39,7 @@ function start_vagrant_cluster() {
         git pull
         popd || exit 1
     else
-        git clone https://github.com/couchbaselabs/vagrants.git "$RESOURCES_ROOT/native/vagrants"
+        git clone --depth=1 https://github.com/couchbaselabs/vagrants.git "$RESOURCES_ROOT/native/vagrants"
     fi
 
     ansible-galaxy install -r "$RESOURCES_ROOT/native/requirements.yml"

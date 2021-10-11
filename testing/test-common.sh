@@ -34,6 +34,7 @@ export BATS_SUPPORT_ROOT=$BATS_ROOT/lib/bats-support
 export BATS_ASSERT_ROOT=$BATS_ROOT/lib/bats-assert
 export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 
+# shellcheck disable=SC1091
 source "$HELPERS_ROOT/test-helpers.bash"
 
 # Helper function to run a set of tests based on our specific configuration
@@ -76,9 +77,16 @@ function run_tests() {
 
     # shellcheck disable=SC2086
     bats --formatter "${BATS_FORMATTER}" $run --timing
+    local bats_retval=$?
 
     echo
     echo
+    echo "========================"
+    if [ "$bats_retval" -eq 0 ]; then
+        echo "All tests passed!"
+    else
+        echo "Some tests failed. Please inspect the output above for details."
+    fi
     echo "========================"
     echo
     echo

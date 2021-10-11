@@ -20,14 +20,23 @@ load "$HELPERS_ROOT/url-helpers.bash"
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 
-@test "Prometheus finds targets" {
+@test "file_sd_config finds Couchbase Server targets" {
     wait_for_url 10 "$CMOS_HOST/prometheus/-/ready"
     # TODO: HACK - Prometheus being ready doesn't necessarily mean it's had a chance to scrape
     sleep 10
 
-    run curl -o "$BATS_TEST_TMPDIR/targets.json" "$CMOS_HOST/prometheus/api/v1/targets"
-    assert_success
+    attempt=0
+    while true; do
+        run curl -o "$BATS_TEST_TMPDIR/targets.json" "$CMOS_HOST/prometheus/api/v1/targets"
+        assert_success
 
-    run jq -c '.data.activeTargets[] | select(.labels.job == "couchbase-server")' "$BATS_TEST_TMPDIR/targets.json"
-    refute_output ''
+        run jq -c '.data.activeTargets[] | select(.labels.job == "couchbase-server")' "$BATS_TEST_TMPDIR/targets.json"
+        if [[ "$output" == "" ]]; then
+            if [ "$attempt" -lt 10 ]; then
+                attempt=$(( attempt + 1 ))
+            else 
+                fail "Didn't find any targets even after $attempt attempts"
+            fi
+        fi
+    done
 }

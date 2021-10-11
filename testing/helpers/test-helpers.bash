@@ -15,7 +15,9 @@
 # limitations under the License.
 set -euo pipefail
 
+# shellcheck disable=SC1091
 source "$HELPERS_ROOT/url-helpers.bash"
+# shellcheck disable=SC1091
 source "$HELPERS_ROOT/native-helpers.bash"
 
 # Verifies if all the given variables are set, and exits otherwise
@@ -57,7 +59,7 @@ function _start_cmos() {
 # Starts a Couchbase cluster and CMOS container.
 #
 # Parameters:
-# $SMOKE_NODES: The nubmer of nodes to start (defaults to 3)
+# $SMOKE_NODES: The number of nodes to start (defaults to 3)
 #
 # This function will set the following variables with its results:
 # $COUCHBASE_SERVER_HOSTS: the hostname/IP and management port of every CBS node, separated by newlines
@@ -80,6 +82,7 @@ function start_smoke_cluster() {
         containers)
             ensure_variables_set CMOS_IMAGE
             ensure_variables_set COUCHBASE_SERVER_IMAGE
+            # We're creating these manually instead of using Compose because we need to support a variable number of nodes.
             docker network create cmos_test
             for i in $(seq 1 "$nodes"); do
                 local extra_args=""
