@@ -1,4 +1,4 @@
-# Observability
+# Couchbase Monitoring and Observability Stack
 
 The intention of this repository is to provide a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster.
 * An additional requirement is to ensure we can integrate into existing observability pipelines people may already have as easily as possible.
@@ -44,7 +44,7 @@ A statement is printed out to standard output/console at start up to indicate ac
 
 A simple [helper script](./tools/build-oss-container.sh) is provided as well to build without the Couchbase Cluster monitor.
 
-# Architecture
+## Architecture
 
 A Grafana-based stack has been selected for a few reasons:
 * Already in use with Prometheus exporter and similar on Couchbase Server
@@ -68,7 +68,7 @@ They can reuse all the configuration provided, just not use Grafana for example.
 
 Configuration points are also provided to tune the various alerts, dashboards and other configuration for a particular deployment, although basic deployment will provide a configured best practice version that is fully usable.
 
-# Microlith deployment
+## Microlith deployment
 
 To support easy deployment across a variety of targets, we are providing a 'microlith' single container option.
 This is essentially the various scalable components of the Grafana stack (Loki, Prometheus, Grafana, Alert Manager) and Couchbase binaries for specific data extraction all runnable as a single multi-process container instance.
@@ -81,7 +81,7 @@ Whilst on-premise customers may primarily be using native binaries, all supporte
 
 For full details refer to the [microlith](microlith/README.md) sub-directory.
 
-## On-premise usage
+### On-premise usage
 
 A working example is [provided](examples/native/) based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
 
@@ -112,9 +112,9 @@ curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "
 We can also run with a directory containing shell scripts that do the above: `-v $PWD/microlith/dynamic/healthcheck/:/etc/healthcheck/`
 This will be re-scanned periodically and any scripts in it run.
 
-## Customisation
+### Customization
 
-Areas to support customisation:
+Areas to support customization:
 * Dashboards
   * Support providing bespoke dashboards directly by specifying at runtime.
 * Alerting rules
@@ -125,16 +125,16 @@ Areas to support customisation:
   * Support adding new cluster nodes easily
   * Support fully dynamic credentials and discovery (no need to restart to pick up a change), e.g. https://github.com/mrsiano/openshift-grafana/blob/master/prometheus-high-performance.yaml#L292
 
-In all cases we do not want to have to rebuild anything to customise it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
+In all cases we do not want to have to rebuild anything to customize it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
 
 ![Microlith configuration](/images/microlith-config.png)
 
-### Prometheus alerting rules
+#### Prometheus alerting rules
 
 There are three directories used for alerting rules:
 
 * `/etc/prometheus/alerting/couchbase`: Couchbase preset rules. Do not modify these, as your changes may be overwritten when you upgrade. Instead, use overrides (described below).
-* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with [prometheus-alert-overrider](https://github.com/lablabs/prometheus-alert-overrider), enabling you to customise our rules. For an example, see [our integration tests](https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides).
+* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with [prometheus-alert-overrider](https://github.com/lablabs/prometheus-alert-overrider), enabling you to customize our rules. For an example, see [our integration tests](https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides).
 * `/etc/prometheus/alerting/custom`: Space for your own custom rules. These will be loaded by Prometheus but will not be pre-processed in any way.
 
 There is also a fourth directory, `/etc/prometheus/alerting/generated`, where the processed rules file will be written. Do not modify this directory, as your changes may be overwritten as part of the build process.
@@ -163,17 +163,17 @@ The values of each metric represent the current status of the checker. The integ
 * 3: Info (informational only, no action required)
 * 4: Missing (checker failed to run or information was not available)
 
-# Distributed deployment
+## Distributed deployment
 
 TBD: https://github.com/couchbaselabs/observability/issues/6
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
-# Testing
+## Testing
 
 We need to verify the following key use cases:
 * Out of the box defaults provided for simple usage to give a cluster overview
-* Customisation of rules and integrate into existing pipeline
+* Customization of rules and integrate into existing pipeline
 
 In two separate infrastructures:
 * Deploying microlith to Kubernetes using CAO, automatic service discovery
@@ -218,30 +218,30 @@ Variation points:
 We use the BATS framework (reuse some SDK set up tests as well) to verify all this locally using a docker-compose stack to represent an on-premise option and a KIND cluster for a kubernetes option.
 Scale up to run tests in GKE as well using multiple nodes explicitly there.
 
-## Test configuration
+### Test configuration
 
 Testing is broken down into general `smoke` tests independent of the infrastructure we are running on, e.g. the general ones above, and `integration` tests that are cover some specific aspect for a particular infrastructure, e.g. a Kubernetes-specific test case.
 
-# Caveats and restrictions
+## Caveats and restrictions
 
 * No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
 * The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a [helper script](tools/build-oss-container.sh) that does this.
 
-# Resources
+## Resources
 * A good overview of how Prometheus and Alert Manager: https://www.fabernovel.com/en/engineering/alerting-in-prometheus-or-how-i-can-sleep-well-at-night
 * How to disable or override rules: https://medium.com/@hauskrechtmartin/how-we-solved-our-need-to-override-prometheus-alerts-b9faf9a4558c
 * Useful example rules: https://awesome-prometheus-alerts.grep.to/rules.html
 
-# Feedback
+## Feedback
 Please use our official [JIRA board](https://issues.couchbase.com/projects/CMOS/issues) to report any bugs and issues with the appropriate components. We also encourage you to use the [Couchbase Forums](https://forums.couchbase.com) for posting any questions or feedback that you might have.
 
-# Support
+## Support
 No official support is currently provided but best efforts will be made.
 
-# Release tagging and branching
+## Release tagging and branching
 Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbase/observability-stack/tags will have a matching tag in this repository that built them.
 Updates will be pushed to the `main` branch often and then tagged once released as a new image version.
 Tags will not be moved after release, even just for a documentation update - this should trigger a new release or just be available as the latest version on `main`.
 
-The branching strategy is to minimise any branches other than `main` following the standard [GitHub flow model](https://guides.github.com/introduction/flow/).
+The branching strategy is to minimize any branches other than `main` following the standard [GitHub flow model](https://guides.github.com/introduction/flow/).
