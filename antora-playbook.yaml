@@ -1,5 +1,5 @@
 site:
-  title: CMOS CI
+  title: Couchbase Monitoring and Observability Stack
   url: /cmos
   start_page: cmos::index.adoc
 content:

@@ -39,6 +39,7 @@ dist: image-artifacts
 	rm -rf $(ARTIFACTS)
 
 lint: container-lint
+	tools/asciidoc-lint.sh
 	tools/shellcheck.sh
 	tools/licence-lint.sh
 
