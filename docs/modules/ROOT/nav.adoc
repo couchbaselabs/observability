@@ -1,1 +1,13 @@
 * xref:index.adoc[Welcome]
+
+.Configuration
+* link:http://localhost:8080/promwebform.html[Prometheus Add Endpoint]
+* link:http://localhost:8080/prometheus/alerts/[Prometheus Alerts]
+* link:http://localhost:8080/prometheus/rules/[Prometheus Rules]
+* link:http://localhost:8080/prometheus/targets/[Prometheus Targets]
+
+.Tooling
+* link:http://localhost:8080/alertmanager/[Alert Manager]
+* link:http://localhost:8080/couchbase/ui/[Couchbase Cluster Monitor]
+* link:http://localhost:8080/grafana/[Grafana]
+* link:http://localhost:8080/prometheus/[Prometheus]
