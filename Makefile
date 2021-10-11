@@ -107,4 +107,5 @@ clean: container-clean
 	examples/kubernetes/stop.sh
 
 docs:
+	docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
 	docker run -u $(shell id -u) -v $$PWD:/antora:Z -e HOME=/antora --rm -t antora/antora:3.0.0-alpha.1 --to-dir microlith/html/cmos/ --clean antora-playbook.yaml
