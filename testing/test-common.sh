@@ -58,6 +58,7 @@ function run_tests() {
         run="--recursive ${TEST_ROOT}/$requested"
     else
         # Empty => everything
+        smoke=1
         run="--recursive ${TEST_ROOT}/smoke ${TEST_ROOT}/integration/${TEST_PLATFORM}"
     fi
 
