@@ -112,9 +112,9 @@ curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "
 We can also run with a directory containing shell scripts that do the above: `-v $PWD/microlith/dynamic/healthcheck/:/etc/healthcheck/`
 This will be re-scanned periodically and any scripts in it run.
 
-## Customisation
+## Customization
 
-Areas to support customisation:
+Areas to support customization:
 * Dashboards
   * Support providing bespoke dashboards directly by specifying at runtime.
 * Alerting rules
@@ -125,7 +125,7 @@ Areas to support customisation:
   * Support adding new cluster nodes easily
   * Support fully dynamic credentials and discovery (no need to restart to pick up a change), e.g. https://github.com/mrsiano/openshift-grafana/blob/master/prometheus-high-performance.yaml#L292
 
-In all cases we do not want to have to rebuild anything to customise it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
+In all cases we do not want to have to rebuild anything to customize it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
 
 ![Microlith configuration](/images/microlith-config.png)
 
@@ -134,7 +134,7 @@ In all cases we do not want to have to rebuild anything to customise it, it shou
 There are three directories used for alerting rules:
 
 * `/etc/prometheus/alerting/couchbase`: Couchbase preset rules. Do not modify these, as your changes may be overwritten when you upgrade. Instead, use overrides (described below).
-* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with [prometheus-alert-overrider](https://github.com/lablabs/prometheus-alert-overrider), enabling you to customise our rules. For an example, see [our integration tests](https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides).
+* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with [prometheus-alert-overrider](https://github.com/lablabs/prometheus-alert-overrider), enabling you to customize our rules. For an example, see [our integration tests](https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides).
 * `/etc/prometheus/alerting/custom`: Space for your own custom rules. These will be loaded by Prometheus but will not be pre-processed in any way.
 
 There is also a fourth directory, `/etc/prometheus/alerting/generated`, where the processed rules file will be written. Do not modify this directory, as your changes may be overwritten as part of the build process.
@@ -173,7 +173,7 @@ For those customers who want to scale up the deployment and/or follow a more clo
 
 We need to verify the following key use cases:
 * Out of the box defaults provided for simple usage to give a cluster overview
-* Customisation of rules and integrate into existing pipeline
+* Customization of rules and integrate into existing pipeline
 
 In two separate infrastructures:
 * Deploying microlith to Kubernetes using CAO, automatic service discovery
@@ -244,4 +244,4 @@ Every release to DockerHub will include a matching identical Git tag here, i.e. 
 Updates will be pushed to the `main` branch often and then tagged once released as a new image version.
 Tags will not be moved after release, even just for a documentation update - this should trigger a new release or just be available as the latest version on `main`.
 
-The branching strategy is to minimise any branches other than `main` following the standard [GitHub flow model](https://guides.github.com/introduction/flow/).
+The branching strategy is to minimize any branches other than `main` following the standard [GitHub flow model](https://guides.github.com/introduction/flow/).
