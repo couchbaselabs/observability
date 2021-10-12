@@ -20,7 +20,7 @@ revision = $(if $(REVISION),$(REVISION),)
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
 
-build: docs
+build: # docs # Temporarily disabled - see CMOS-86
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
