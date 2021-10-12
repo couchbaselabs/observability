@@ -150,14 +150,14 @@
 
             generate() {
               this.jsonPrometheus = JSON.stringify(
-                {
+                [{
                   targets: this.nodes.map(
                     (node) => `${node}:${this.exporterPort}`
                   ),
                   labels: {
                     cluster: this.clusterLabel,
                   },
-                },
+                }],
                 null,
                 2
               );
