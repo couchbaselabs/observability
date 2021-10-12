@@ -30,3 +30,18 @@ function ensure_variables_set() {
         exit 1
     fi
 }
+
+# Finds a random, unused port on the system and assigns it to the given variable. Exits immediately if it can't find one.
+# Parameters:
+# $1: The name of a variable to assign the port to.
+function find_unused_port() {
+    local varname="$1"
+    local portnum
+    while true; do
+        portnum=$(shuf -i 1025-65535 -n 1)
+        if ! lsof -Pi ":$portnum" -sTCP:LISTEN; then
+            declare "$varname=$portnum"
+            return 0
+        fi
+    done
+}

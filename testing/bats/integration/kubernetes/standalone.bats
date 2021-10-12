@@ -23,6 +23,7 @@ load "$BATS_DETIK_ROOT/detik.bash"
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
+load "$HELPERS_ROOT/test-helpers.bash"
 
 setup() {
     if [ "$TEST_NATIVE" == "true" ]; then
@@ -85,6 +86,7 @@ setupPortForwarding() {
 
 # Test that we can do a default deployment from scratch
 @test "Verify simple deployment from scratch" {
+    find_unused_port CMOS_PORT
     createDefaultDeployment
 
     kubectl get pods --all-namespaces
@@ -111,7 +113,7 @@ setupPortForwarding() {
     # Check the web server provides the landing page
     run curl --show-error --silent "$LOCAL_SERVICE_URL"
     assert_success
-    assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
+    assert_output --partial 'Couchbase Monitoring & Observability Stack' # Check that this string is in there
 
     local PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
 
