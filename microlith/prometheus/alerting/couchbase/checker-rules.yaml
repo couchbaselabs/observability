@@ -8,7 +8,6 @@ groups:
     annotations:
       title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
       description: "{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance }})" 
-      more_information: "https://couchbase.com/checker/{{ $labels.id }}"
     labels:
       severity: warning
       checker_id: "{{ $labels.id }}"
@@ -21,7 +20,6 @@ groups:
     annotations:
       title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
       description: "{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance }})" 
-      more_information: "https://couchbase.com/checker/{{ $labels.id }}"
     labels:
       severity: critical
       checker_id: "{{ $labels.id }}"
@@ -34,7 +32,6 @@ groups:
     annotations:
       title: Node status warning ({{ $labels.name }}) on {{ $labels.node_name }}
       description: "{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance }})" 
-      more_information: "https://couchbase.com/checker/{{ $labels.id }}"
     labels:
       severity: warning
       checker_id: "{{ $labels.id }}"
@@ -48,7 +45,6 @@ groups:
     annotations:
       title: Node status alert ({{ $labels.name }}) on {{ $labels.node_name }}
       description: "{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance }})" 
-      more_information: "https://couchbase.com/checker/{{ $labels.id }}"
     labels:
       severity: critical
       checker_id: "{{ $labels.id }}"
@@ -62,7 +58,6 @@ groups:
     annotations:
       title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
       description: "{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance }})" 
-      more_information: "https://couchbase.com/checker/{{ $labels.id }}"
     labels:
       severity: warning
       checker_id: "{{ $labels.id }}"
@@ -76,7 +71,6 @@ groups:
     annotations:
       title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
       description: "{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance }})" 
-      more_information: "https://couchbase.com/checker/{{ $labels.id }}"
     labels:
       severity: critical
       checker_id: "{{ $labels.id }}"
