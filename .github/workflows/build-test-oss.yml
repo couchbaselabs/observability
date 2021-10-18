@@ -67,10 +67,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install requirements
-        timeout-minutes: 5
+        timeout-minutes: 10
         run: |
           brew unlink bats # The version that ships with the image is outdated
           brew install podman bats-core ansible # Docker in GHA macOS runners is unreliable
+          podman machine init
           podman machine start
           # Hack - shell aliases won't work in a makefile
           ln -s $(which podman) /usr/local/bin/docker
