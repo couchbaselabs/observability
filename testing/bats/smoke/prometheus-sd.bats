@@ -22,8 +22,8 @@ load "$BATS_ASSERT_ROOT/load.bash"
 
 @test "file_sd_config finds Couchbase Server targets" {
     wait_for_url 10 "$CMOS_HOST/prometheus/-/ready"
-    # TODO: HACK - Prometheus being ready doesn't necessarily mean it's had a chance to scrape
-    sleep 10
+
+    echo "# Prometheus is ready." >&3
 
     attempt=0
     while true; do
@@ -31,12 +31,16 @@ load "$BATS_ASSERT_ROOT/load.bash"
         assert_success
 
         run jq -c '.data.activeTargets[] | select(.labels.job == "couchbase-server")' "$BATS_TEST_TMPDIR/targets.json"
+        assert_success
         if [[ "$output" == "" ]]; then
             if [ "$attempt" -lt 10 ]; then
                 attempt=$(( attempt + 1 ))
+                sleep 5
             else 
                 fail "Didn't find any targets even after $attempt attempts"
             fi
+        else
+            break
         fi
     done
 }

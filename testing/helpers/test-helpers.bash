@@ -50,7 +50,9 @@ function _create_prometheus_targets_file() {
 # Exposes a variable $CMOS_HOST with the nginx host:port.
 # All parameters will be passed on to docker before the image.
 function _start_cmos() {
-    docker run --rm -d -p '8080' --name cmos -v "$PROMETHEUS_TARGETS_FILE:/etc/prometheus/couchbase/custom/smoke.json" "$@" "$CMOS_IMAGE"
+    docker run --rm -d -p '8080' --name cmos "$@" "$CMOS_IMAGE"
+    # Can't just volume mount it because of VM shared file shenanigans
+    docker cp "$PROMETHEUS_TARGETS_FILE" cmos:/etc/prometheus/couchbase/custom/smoke.json
     local cmos_port
     cmos_port=$(docker inspect cmos -f '{{with index .NetworkSettings.Ports "8080/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
     export CMOS_HOST="localhost:$cmos_port"
