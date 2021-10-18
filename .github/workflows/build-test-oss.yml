@@ -65,16 +65,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      
+      - name: Setup Docker
+        uses: docker-practice/actions-setup-docker@master
 
       - name: Install requirements
         timeout-minutes: 15
         run: |
           brew unlink bats # The version that ships with the image is outdated
-          brew install podman bats-core ansible # Docker in GHA macOS runners is unreliable
-          podman machine init
-          podman machine start
-          # Hack - shell aliases won't work in a makefile
-          ln -s $(which podman) /usr/local/bin/docker
+          brew install bats-core ansible
  
       - name: Run ${{ matrix.server-version }} tests
         run: |
