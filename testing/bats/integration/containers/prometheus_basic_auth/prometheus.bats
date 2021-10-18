@@ -27,7 +27,7 @@ load "$HELPERS_ROOT/url-helpers.bash"
 teardown() {
     if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
-    elif [ "$TEST_NATIVE" == "true" ]; then
+    elif [ "${TEST_NATIVE:-false}" == "true" ]; then
         run docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output"
         run docker-compose --project-directory="${BATS_TEST_DIRNAME}" rm -v --force --stop
     fi
@@ -36,6 +36,7 @@ teardown() {
 @test "Verify that basic auth can be passed by environment variable" {
     # shellcheck disable=SC2076
     if [[ ! "$COUCHBASE_SERVER_IMAGE" =~ "7." ]]; then
+        # return 0
         skip "Skipping, only applicable to Server 7.x"
     fi
     docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans

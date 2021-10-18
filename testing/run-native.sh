@@ -31,4 +31,5 @@ source "${SCRIPT_DIR}/test-common.sh"
 # Anything that is not common now specified:
 export TEST_PLATFORM=native
 
+# This function will call `exit`, so any cleanup must be done inside of it.
 run_tests "${1-}"

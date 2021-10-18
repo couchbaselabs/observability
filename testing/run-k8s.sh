@@ -66,4 +66,5 @@ while IFS= read -r -d '' INPUT_FILE; do
     envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
 done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
 
+# This function will call `exit`, so any cleanup must be done inside of it.
 run_tests "${1-}"

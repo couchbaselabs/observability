@@ -117,7 +117,7 @@ function start_smoke_cluster() {
 # $SMOKE_NODES: The nubmer of nodes that were started (defaults to 3)
 function teardown_smoke_cluster() {
     local nodes=${SMOKE_NODES:-3}
-    echo "Tearing down smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
+    echo "# Tearing down smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
     case $TEST_PLATFORM in
         native)
             docker stop cmos

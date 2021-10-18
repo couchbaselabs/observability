@@ -38,6 +38,7 @@ export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 source "$HELPERS_ROOT/test-helpers.bash"
 
 # Helper function to run a set of tests based on our specific configuration
+# This function will call `exit`, so any cleanup must be done inside of it.
 function run_tests() {
     local requested=$1
     local run=""
@@ -65,7 +66,6 @@ function run_tests() {
     if [ "$smoke" -eq 1 ]; then
         export SMOKE_NODES=3
         start_smoke_cluster
-        trap teardown_smoke_cluster EXIT
     fi
 
     set +x
@@ -73,12 +73,20 @@ function run_tests() {
     echo
     echo
     echo "========================"
+    echo "Starting tests."
+    echo "========================"
     echo
     echo
 
+    set +e
     # shellcheck disable=SC2086
     bats --formatter "${BATS_FORMATTER}" $run --timing
     local bats_retval=$?
+
+    # Can't use a trap as that messes up BATS internals, see https://github.com/bats-core/bats-core/issues/364#issuecomment-827773930
+    if [ "$smoke" -eq 1 ]; then
+        teardown_smoke_cluster
+    fi
 
     echo
     echo
@@ -91,4 +99,5 @@ function run_tests() {
     echo "========================"
     echo
     echo
+    exit $bats_retval
 }
