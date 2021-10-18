@@ -75,7 +75,7 @@ examples: clean container example-kubernetes example-native
 
 # Deal with automated testing
 test-kubernetes:
-	# TODO: no smoke suite for kubernetes yet
+	# TODO (CMOS-97): no smoke suite for kubernetes yet
 	testing/run-k8s.sh integration/kubernetes
 
 test-containers:

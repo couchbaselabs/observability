@@ -111,7 +111,7 @@ setupPortForwarding() {
     # Check the web server provides the landing page
     run curl --show-error --silent "$LOCAL_SERVICE_URL"
     assert_success
-    assert_output --partial 'Couchbase Observability Stack' # Check that this string is in there
+    assert_output --partial 'Couchbase Monitoring & Observability Stack' # Check that this string is in there
 
     local PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
 
