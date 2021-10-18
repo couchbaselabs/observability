@@ -67,7 +67,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install requirements
-        timeout-minutes: 10
+        timeout-minutes: 15
         run: |
           brew unlink bats # The version that ships with the image is outdated
           brew install podman bats-core ansible # Docker in GHA macOS runners is unreliable
