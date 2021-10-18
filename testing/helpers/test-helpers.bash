@@ -52,7 +52,7 @@ function _create_prometheus_targets_file() {
 function _start_cmos() {
     docker run --rm -d -p '8080' --name cmos "$@" "$CMOS_IMAGE"
     # Can't just volume mount it because of VM shared file shenanigans
-    docker run cmos mkdir -p /etc/prometheus/couchbase/custom
+    docker exec cmos mkdir -p /etc/prometheus/couchbase/custom
     docker cp "$PROMETHEUS_TARGETS_FILE" cmos:/etc/prometheus/couchbase/custom/smoke.json
     local cmos_port
     cmos_port=$(docker inspect cmos -f '{{with index .NetworkSettings.Ports "8080/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
