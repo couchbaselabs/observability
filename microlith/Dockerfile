@@ -263,6 +263,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
+    mkdir -p /etc/prometheus/couchbase/custom && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
     chown -R couchbase:couchbase /data /priv /ui
 
