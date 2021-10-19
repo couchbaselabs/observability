@@ -1,0 +1,20 @@
+pipeline {
+  agent {
+    label 'docker'
+  }
+
+  stages {
+    stage('Build & test distribution') {
+      steps {
+        sh 'make clean test-dist'
+      }
+    }
+  }
+
+  post {
+    always {
+      sh 'make clean'
+      cleanWs()
+    }
+  }
+}
