@@ -15,7 +15,7 @@
 
 # Run all the K8S cluster tests against a KIND cluster.
 # It relies on BATS being installed, see tools/install-bats.sh
-set -ueo pipefail
+set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -66,4 +66,5 @@ while IFS= read -r -d '' INPUT_FILE; do
     envsubst "$(env | cut -d= -f1 | sed -e 's/^/$/')"  < "${INPUT_FILE}" > "${OUTPUT_FILE}"
 done < <(find "${TEST_ROOT}/" -type f -name '*-template.yaml' -print0)
 
+# This function will call `exit`, so any cleanup must be done inside of it.
 run_tests "${1-}"

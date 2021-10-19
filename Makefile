@@ -78,7 +78,8 @@ examples: clean container example-kubernetes example-native
 
 # Deal with automated testing
 test-kubernetes:
-	testing/run-k8s.sh
+	# TODO (CMOS-97): no smoke suite for kubernetes yet
+	testing/run-k8s.sh integration/kubernetes
 
 test-containers:
 	testing/run-containers.sh

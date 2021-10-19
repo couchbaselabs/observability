@@ -11,8 +11,8 @@ on:
 
 jobs:
   # TODO: split into push testing (smaller, just smoke) and PR testing (all of matrix)
-  build-test-oss:
-    name: CICD for the OSS variant
+  build-test-oss-containers-and-k8s:
+    name: CICD for the OSS variant (Containers and K8s)
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     strategy:
@@ -37,7 +37,32 @@ jobs:
       # TODO: cache single container build across matrix runs
       - name: Run ${{ matrix.server-version }} tests
         run: |
-          make container-oss test-native test-containers test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make container-oss test-containers test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+  
+  build-test-oss-native:
+    name: CICD for the OSS variant (Native)
+    runs-on: macos-10.15 # Apparently macOS is the only environment that supports nested virtualisation
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        server-version: [ '6.6.3' ] #, '7.0.1' ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Docker
+        uses: docker-practice/actions-setup-docker@master
+
+      - name: Install requirements
+        timeout-minutes: 15
+        run: |
+          brew unlink bats # The version that ships with the image is outdated
+          brew install bats-core ansible
+ 
+      - name: Run ${{ matrix.server-version }} tests
+        run: |
+          make container-oss test-native -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   linting:
     name: Run static analysis and linting tools

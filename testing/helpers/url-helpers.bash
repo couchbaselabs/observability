@@ -44,7 +44,7 @@ function wait_for_curl() {
 function wait_for_url() {
     local MAX_ATTEMPTS=$1
     local URL=$2
-    local CREDENTIALS=$3
+    local CREDENTIALS=${3-}
     local extra_args=""
     if [ -n "$CREDENTIALS" ]; then
         extra_args="-u $CREDENTIALS"
