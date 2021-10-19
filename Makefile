@@ -105,9 +105,9 @@ container-clean:
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
-	examples/native/stop.sh
+	-examples/native/stop.sh
 	rm -f examples/native/logs/*.log
-	examples/kubernetes/stop.sh
+	-examples/kubernetes/stop.sh
 
 docs-lint:
 	docker run --rm -i hadolint/hadolint < Dockerfile.docs
