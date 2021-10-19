@@ -1,20 +1,90 @@
 groups:
-- name: Couchbase-Observer
+- name: CouchbaseClusterMonitor
   rules:
-  # {{ $labels.node }} has some checker status of warn
-  - alert: NodeCheckerWarning
-    expr: multimanager_checker_status_node{status="warn"} >= 1
+
+  - alert: ClusterCheckerWarning
+    expr: count(multimanager_cluster_checker_status == 1) by (id, name, cluster_uuid, cluster_name, instance) >= 1
     for: 2m
     annotations:
-      title: Generic warning about a node status (name {{ $labels.name }}, instance {{ $labels.instance }})
-      description: "{{ $labels.node }} has condition\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+      title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
+      description: "{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance }})" 
     labels:
-      node: "{{ $labels.node }}"
-      severity: 'warning'
-      impact: "Something is failing"
-      action: "To remediate fix the broken thing"
-      dashboard: "https://grafana.com/service-dashboard"
-      # What do do when this alert triggers - a URL for more information/remediation
-      runbook: "https://wiki.com/whattodo"
-      # Link to the logs...
-      logurl: "https://grafana.com/log-explorer"
+      severity: warning
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      cluster: "{{ $labels.cluster_name }}"
+
+  - alert: ClusterCheckerAlert
+    expr: count(multimanager_cluster_checker_status == 2) by (id, name, cluster_uuid, cluster_name, instance) >= 1
+    for: 2m
+    annotations:
+      title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
+      description: "{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance }})" 
+    labels:
+      severity: critical
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      cluster: "{{ $labels.cluster_name }}"
+
+  - alert: NodeCheckerWarning
+    expr: count(multimanager_node_checker_status == 1) by (id, name, cluster_uuid, cluster_name, node_uuid, node_name, instance) >= 1
+    for: 2m
+    annotations:
+      title: Node status warning ({{ $labels.name }}) on {{ $labels.node_name }}
+      description: "{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance }})" 
+    labels:
+      severity: warning
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      cluster: "{{ $labels.cluster_name }}"
+      node: "{{ $labels.node_name }}"
+
+  - alert: NodeCheckerAlert
+    expr: count(multimanager_node_checker_status == 2) by (id, name, cluster_uuid, cluster_name, node_uuid, node_name, instance) >= 1
+    for: 2m
+    annotations:
+      title: Node status alert ({{ $labels.name }}) on {{ $labels.node_name }}
+      description: "{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance }})" 
+    labels:
+      severity: critical
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      cluster: "{{ $labels.cluster_name }}"
+      node: "{{ $labels.node_name }}"
+
+  - alert: BucketCheckerWarning
+    expr: count(multimanager_bucket_checker_status == 1) by (id, name, bucket, cluster_uuid, cluster_name, instance) >= 1
+    for: 2m
+    annotations:
+      title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
+      description: "{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance }})" 
+    labels:
+      severity: warning
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      cluster: "{{ $labels.cluster_name }}"
+      bucket: "{{ $labels.bucket }}"
+
+  - alert: BucketCheckerAlert
+    expr: count(multimanager_bucket_checker_status == 2) by (id, name, bucket, cluster_uuid, cluster_name, instance) >= 1
+    for: 2m
+    annotations:
+      title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
+      description: "{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance }})" 
+    labels:
+      severity: critical
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      cluster: "{{ $labels.cluster_name }}"
+      bucket: "{{ $labels.bucket }}"
+
+  - alert: CheckerFailureToRun
+    expr: multimanager_checker_errored >= 1
+    for: 1m
+    annotations:
+      title: Check run failure ({{ $labels.name }}, instance {{ $labels.instance }})
+      description: "Health checker {{ $labels.name }} ({{ $labels.id }}) on Cluster Monitor {{ $labels.instance }} failed to run. Check Cluster Monitor logs for details."
+    labels:
+      checker_id: "{{ $labels.id }}"
+      checker_name: "{{ $labels.name }}"
+      severity: 'critical'

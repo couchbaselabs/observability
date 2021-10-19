@@ -32,8 +32,8 @@ route:
   routes:
     - receiver: "slack"
       group_wait: 10s
-      match_re:
-        severity: critical|warning
+      matchers:
+        - severity =~ "(warning|critical)"
       continue: true
 
 receivers:
