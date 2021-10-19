@@ -4,6 +4,13 @@ FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 
+# Generate documentation and include locally as a static site
+FROM antora/antora:3.0.0-alpha.1 as antora-generator
+COPY docs/ /antora/docs/
+RUN mkdir -p /antora/cmos
+ENV HOME=/antora
+CMD ["--to-dir", "/antora/cmos/", "antora-playbook.yaml"]
+
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
 # hadolint ignore=DL3008,DL3015
@@ -218,6 +225,8 @@ COPY jaeger/ /etc/jaeger/
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
 EXPOSE 8080
+# Add generated documentation as well to Nginx
+COPY --from=antora-generator /antora/cmos /html/cmos
 
 # Couchbase cluster monitor - need these to keep OSS generic
 RUN mkdir -p /data /priv /ui

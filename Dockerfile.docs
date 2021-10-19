@@ -1,0 +1,8 @@
+FROM asciidoctor/docker-asciidoctor as markdown-generator
+
+WORKDIR /documents
+COPY *.md .
+COPY docs/ .
+
+RUN kramdoc README.md -o /documents/docs/modules/ROOT/pages/index.adoc
+CMD [ "cat", "/documents/docs/modules/ROOT/pages/index.adoc" ]

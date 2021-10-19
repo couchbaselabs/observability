@@ -15,12 +15,15 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native test-containers docs
+.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
 
-build: # docs # Temporarily disabled - see CMOS-86
+# We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
+# The other option is to tar things up and pass as the build context: tar -czh . | docker build -
+build: docs
+	cp -R docs/ microlith/docs/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
@@ -38,8 +41,7 @@ dist: image-artifacts
 	tar -C $(ARTIFACTS) -czvf dist/couchbase-observability-stack-image_$(productVersion).tgz .
 	rm -rf $(ARTIFACTS)
 
-lint: container-lint
-	tools/asciidoc-lint.sh
+lint: container-lint docs-lint
 	tools/shellcheck.sh
 	tools/licence-lint.sh
 
@@ -97,15 +99,25 @@ test-dist: dist
 # Remove our images then remove dangling ones to prevent any caching
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
+				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG}
 	docker image prune --force
 
 clean: container-clean
-	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/
+	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
 	examples/native/stop.sh
 	rm -f examples/native/logs/*.log
 	examples/kubernetes/stop.sh
 
-docs:
-	docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
-	docker run -u $(shell id -u) -v $$PWD:/antora:Z -e HOME=/antora --rm -t antora/antora:3.0.0-alpha.1 --to-dir microlith/html/cmos/ --clean antora-playbook.yaml
+docs-lint:
+	tools/asciidoc-lint.sh
+
+docs: docs-generate-markdown
+
+# Automatically convert Markdown docs to Asciidoc ones.
+# This command needs bind mount support so will not run in Couchbase build infrastructure (Docker Swarm):
+# docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
+# We therefore create a custom container for it all.
+docs-generate-markdown:
+	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} -f Dockerfile.docs .
+	docker run --rm -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} > docs/modules/ROOT/pages/index.adoc
