@@ -73,7 +73,7 @@ The [file-based service discovery](https://prometheus.io/docs/prometheus/latest/
 
 The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entrypoint adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}` directory when it is run.
 
-To add Couchbase Server end points, create a similar JSON format file to the [example](../examples/native/dynamic/prometheus/couchbase-servers/targets.json) in the `/etc/prometheus/couchbase/custom/` directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).
+To add Couchbase Server end points, create a similar JSON format file to the [example](../examples/container/dynamic/prometheus/couchbase-servers/targets.json) in the `/etc/prometheus/couchbase/custom/` directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).
 
 You can set the authentication credentials for your Couchbase Server clusters using the `$CB_SERVER_AUTH_USER` and `$CB_SERVER_AUTH_PASSWORD` environment variables, as shown above. Note that currently we do not support using different credentials for multiple clusters.
 

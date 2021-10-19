@@ -89,7 +89,7 @@ For full details refer to the xref:microlith/README.adoc[microlith] sub-director
 
 === On-premise usage
 
-A working example is link:examples/native/[provided] based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
+A working example is link:examples/container/[provided] based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
 
 The basic steps are:
 

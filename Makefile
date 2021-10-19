@@ -71,10 +71,10 @@ container-public: container
 example-kubernetes: container
 	examples/kubernetes/run.sh
 
-example-native: container
-	examples/native/run.sh
+example-container: container
+	examples/container/run.sh
 
-examples: clean container example-kubernetes example-native
+examples: clean container example-kubernetes example-container
 
 # Deal with automated testing
 test-kubernetes:
@@ -112,8 +112,8 @@ container-clean:
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
-	-examples/native/stop.sh
-	rm -f examples/native/logs/*.log
+	-examples/container/stop.sh
+	rm -f examples/container/logs/*.log
 	-examples/kubernetes/stop.sh
 
 docs-lint:
