@@ -1,0 +1,11 @@
+# Workaround for Docker Swarm lack of bind mount support
+FROM asciidoctor/docker-asciidoctor:1.12
+
+WORKDIR /documents
+# Copy in instead of bind mount
+COPY *.md .
+COPY docs/ .
+# Generate
+RUN kramdoc README.md -o /documents/docs/modules/ROOT/pages/index.adoc
+# Echo it all out so we can just forward it to the file
+CMD [ "cat", "/documents/docs/modules/ROOT/pages/index.adoc" ]

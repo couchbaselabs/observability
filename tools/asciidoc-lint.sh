@@ -75,7 +75,7 @@ while IFS= read -r -d '' DOCUMENT; do
   MISTAKES=$(${FILTER} "${DOCUMENT}" | aspell list ${CHECK_ARGS} | sort | uniq)
   if [[ ${MISTAKES} != "" ]]; then
     echo "Spell check for file ${DOCUMENT} failed:"
-  # shellcheck disable=SC2001
+    # shellcheck disable=SC2001
     echo "${MISTAKES}" | sed 's/^/    /g'
     FAIL="yes"
   fi
