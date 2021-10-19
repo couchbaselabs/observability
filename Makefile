@@ -15,7 +15,7 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint
+.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
@@ -71,10 +71,10 @@ container-public: container
 example-kubernetes: container
 	examples/kubernetes/run.sh
 
-example-container: container
-	examples/container/run.sh
+example-containers: container
+	examples/containers/run.sh
 
-examples: clean container example-kubernetes example-container
+examples: clean container example-kubernetes example-containers
 
 # Deal with automated testing
 test-kubernetes:
@@ -112,8 +112,8 @@ container-clean:
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
-	-examples/container/stop.sh
-	rm -f examples/container/logs/*.log
+	-examples/containers/stop.sh
+	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh
 
 docs-lint:
