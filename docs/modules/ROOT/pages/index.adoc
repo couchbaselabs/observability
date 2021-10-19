@@ -1,6 +1,7 @@
-# Couchbase Monitoring and Observability Stack
+= Couchbase Monitoring and Observability Stack
 
 The intention of this repository is to provide a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster.
+
 * An additional requirement is to ensure we can integrate into existing observability pipelines people may already have as easily as possible.
 * This must all support being deployed on-premise and on cloud platforms with minimal change.
 * Any bespoke software must be minimal and ideally just restricted to configuration of generic tools.
@@ -8,20 +9,21 @@ The intention of this repository is to provide a simple, out-of-the-box solution
 * A simple and often upgrade pipeline to support frequent changes and updates to the solution which are then easy to roll out for users.
 
 We essentially need to support two fairly distinct types of user:
-1. Those who have nothing and just want a simple working solution to monitor their cluster.
-2. Those who have an existing monitoring pipeline and want to integrate Couchbase monitoring into it, likely with a set of custom rules and configuration.
 
-## Quick Start
+. Those who have nothing and just want a simple working solution to monitor their cluster.
+. Those who have an existing monitoring pipeline and want to integrate Couchbase monitoring into it, likely with a set of custom rules and configuration.
 
-1. Ensure you have a Couchbase cluster running and accessible - for testing we recommend using [Vagrant](https://github.com/couchbaselabs/vagrants) or [Docker](https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html)
-2. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
-3. Part of CMOS is the proprietary Couchbase Cluster Monitor, in [this private repository](https://github.com/couchbaselabs/cbmultimanager). If you want to build CMOS to use it, [set up your local SSH agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent).
-4. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
-5. Run the microlith: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1`
-6. Browse to http://localhost:8080
-7. Click "Prometheus Add Endpoint" and follow the instructions
+== Quick Start
 
-## Components
+. Ensure you have a Couchbase cluster running and accessible - for testing we recommend using https://github.com/couchbaselabs/vagrants[Vagrant] or https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html[Docker]
+. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
+. Part of CMOS is the proprietary Couchbase Cluster Monitor, in https://github.com/couchbaselabs/cbmultimanager[this private repository]. If you want to build CMOS to use it, https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent[set up your local SSH agent].
+. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
+. Run the microlith: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1`
+. Browse to http://localhost:8080
+. Click "Prometheus Add Endpoint" and follow the instructions
+
+== Components
 
 This software uses the following components with their associated licensing also captured:
 
@@ -38,15 +40,16 @@ This software uses the following components with their associated licensing also
 
 Nginx is used as the base image for the microlith container.
 
-All licences are in the source repository and the microlith container in the [`/licenses`](microlith/licenses/) directory.
+All licences are in the source repository and the microlith container in the link:microlith/licenses/[`/licenses`] directory.
 
 A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
 
-A simple [helper script](./tools/build-oss-container.sh) is provided as well to build without the Couchbase Cluster monitor.
+A simple link:./tools/build-oss-container.sh[helper script] is provided as well to build without the Couchbase Cluster monitor.
 
-## Architecture
+== Architecture
 
 A Grafana-based stack has been selected for a few reasons:
+
 * Already in use with Prometheus exporter and similar on Couchbase Server
 * Industry standard and OSS with various integration points for other pipelines
 * Existing options to scale from single node up to cloud scale easily
@@ -59,7 +62,7 @@ This will essentially integrate Couchbase knowledge and best practices into a re
 
 Our observability stack is therefore a combination of Couchbase-specific components that provide that discrete knowledge and monitoring of the Couchbase cluster which are then plumbed into a generic Grafana pipline like below:
 
-![Overview](/images/healthcheck-blocks.png)
+image::/images/healthcheck-blocks.png[Overview]
 
 A complete working stack is provided with a Grafana UI to access it all.
 
@@ -68,39 +71,42 @@ They can reuse all the configuration provided, just not use Grafana for example.
 
 Configuration points are also provided to tune the various alerts, dashboards and other configuration for a particular deployment, although basic deployment will provide a configured best practice version that is fully usable.
 
-## Microlith deployment
+== Microlith deployment
 
 To support easy deployment across a variety of targets, we are providing a 'microlith' single container option.
 This is essentially the various scalable components of the Grafana stack (Loki, Prometheus, Grafana, Alert Manager) and Couchbase binaries for specific data extraction all runnable as a single multi-process container instance.
 
 A single container can then be run on-premise or on a Kubernetes platform very easily with minimal effort.
 
-![Microlith overview](/images/microlith-runtime.png)
+image::/images/microlith-runtime.png[Microlith overview]
 
 Whilst on-premise customers may primarily be using native binaries, all supported OS's for Couchbase Server can run containers easily. This also makes it easier to deploy as a self-contained image and easy to upgrade as well. We could produce an OS-specific package (e.g. RPM) with all necessary dependencies on the container runtime.
 
-For full details refer to the [microlith](microlith/README.md) sub-directory.
+For full details refer to the xref:microlith/README.adoc[microlith] sub-directory.
 
-### On-premise usage
+=== On-premise usage
 
-A working example is [provided](examples/native/) based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
+A working example is link:examples/native/[provided] based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
 
 The basic steps are:
-1. Install a container runtime for your platform, for example on Ubuntu details are here: https://docs.docker.com/engine/install/ubuntu/
-2. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P couchbase-observability`
-3. Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.
 
-Prometheus end points and credentials can be added to the [config file](microlith/dynamic/prometheus/couchbase/targets.json) mounted into the container above. This is periodically rescanned and new end points added.
+. Install a container runtime for your platform, for example on Ubuntu details are here: https://docs.docker.com/engine/install/ubuntu/
+. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P couchbase-observability`
+. Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.
+
+Prometheus end points and credentials can be added to the link:microlith/dynamic/prometheus/couchbase/targets.json[config file] mounted into the container above. This is periodically rescanned and new end points added.
 
 The cluster monitor currently requires configuration via a bespoke REST API:
-`curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"`
+`+curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"+`
+
 * COUCHBASE_ENDPOINT should be set to a node that you want to monitor in a Couchbase cluster.
 * COUCHBASE_USER & COUCHBASE_PWD are the credentials for accesing that cluster.
-* CLUSTER_MONITOR_ENDPOINT is the mapping to port 7196 of the container we started, e.g. `http://localhost:7196`. In the container run line above we map to dynamic ports so grab them using `docker container port couchbase-grafana 7196` and use that value in the URL.
+* CLUSTER_MONITOR_ENDPOINT is the mapping to port 7196 of the container we started, e.g. `+http://localhost:7196+`. In the container run line above we map to dynamic ports so grab them using `docker container port couchbase-grafana 7196` and use that value in the URL.
 * CLUSTER_MONITOR_USER & CLUSTER_MONITOR_PWD are the credentials for the cluster monitor tool, defaults to a `admin:password` but can be set differently using these variables when launching the container.
 
 As an example to configure a new cluster node to be monitored:
-```
+
+----
 CLUSTER_MONITOR_USER=admin
 CLUSTER_MONITOR_PWD=password
 CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port couchbase-grafana 7196)
@@ -108,44 +114,46 @@ COUCHBASE_USER=Administrator
 COUCHBASE_PWD=password
 COUCHBASE_ENDPOINT=http://db2:8091
 curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
-```
+----
+
 We can also run with a directory containing shell scripts that do the above: `-v $PWD/microlith/dynamic/healthcheck/:/etc/healthcheck/`
 This will be re-scanned periodically and any scripts in it run.
 
-### Customization
+=== Customization
 
 Areas to support customization:
+
 * Dashboards
-  * Support providing bespoke dashboards directly by specifying at runtime.
+ ** Support providing bespoke dashboards directly by specifying at runtime.
 * Alerting rules
-  * Provide custom alert rules and other metric generation (e.g. pre-calculated ones)
-  * Tweak the configuration for existing ones deployed
-  * Disable or inhibit default rules provided
+ ** Provide custom alert rules and other metric generation (e.g. pre-calculated ones)
+ ** Tweak the configuration for existing ones deployed
+ ** Disable or inhibit default rules provided
 * Cluster credentials and identities
-  * Support adding new cluster nodes easily
-  * Support fully dynamic credentials and discovery (no need to restart to pick up a change), e.g. https://github.com/mrsiano/openshift-grafana/blob/master/prometheus-high-performance.yaml#L292
+ ** Support adding new cluster nodes easily
+ ** Support fully dynamic credentials and discovery (no need to restart to pick up a change), e.g. https://github.com/mrsiano/openshift-grafana/blob/master/prometheus-high-performance.yaml#L292
 
 In all cases we do not want to have to rebuild anything to customize it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
 
-![Microlith configuration](/images/microlith-config.png)
+image::/images/microlith-config.png[Microlith configuration]
 
-#### Prometheus alerting rules
+==== Prometheus alerting rules
 
 There are three directories used for alerting rules:
 
 * `/etc/prometheus/alerting/couchbase`: Couchbase preset rules. Do not modify these, as your changes may be overwritten when you upgrade. Instead, use overrides (described below).
-* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with [prometheus-alert-overrider](https://github.com/lablabs/prometheus-alert-overrider), enabling you to customize our rules. For an example, see [our integration tests](https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides).
+* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with https://github.com/lablabs/prometheus-alert-overrider[prometheus-alert-overrider], enabling you to customize our rules. For an example, see https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides[our integration tests].
 * `/etc/prometheus/alerting/custom`: Space for your own custom rules. These will be loaded by Prometheus but will not be pre-processed in any way.
 
 There is also a fourth directory, `/etc/prometheus/alerting/generated`, where the processed rules file will be written. Do not modify this directory, as your changes may be overwritten as part of the build process.
 
 If you want to disable the pre-processing and use entirely your own ruleset, set the environment variable `DISABLE_ALERTS_PREPARE=true`.
 
-#### Cluster Monitor checker results
+==== Cluster Monitor checker results
 
 If running with the Couchbase Cluster Monitor enabled, it will output the status of its checkers to Prometheus like the following:
 
-```
+----
 # HELP multimanager_cluster_checker_status Checker results for cluster level checkers
 # TYPE multimanager_cluster_checker_status gauge
 multimanager_cluster_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="singleOrTwoNodeCluster"} 1
@@ -154,58 +162,63 @@ multimanager_cluster_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",n
 multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="nonGABuild",node="47a45d39583947823ac9866dce2a74b2"} 0
 multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="oneServicePerNode",node="47a45d39583947823ac9866dce2a74b2"} 1
 multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="supportedVersion",node="47a45d39583947823ac9866dce2a74b2"} 0
-```
+----
 
 The values of each metric represent the current status of the checker. The integer values have the following meanings:
+
 * 0: Good (everything is fine, no action required)
 * 1: Warn (potential issue, worth investigating)
 * 2: Alert (serious issue, action required)
 * 3: Info (informational only, no action required)
 * 4: Missing (checker failed to run or information was not available)
 
-## Distributed deployment
+== Distributed deployment
 
 TBD: https://github.com/couchbaselabs/observability/issues/6
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
-## Testing
+== Testing
 
 We need to verify the following key use cases:
+
 * Out of the box defaults provided for simple usage to give a cluster overview
 * Customization of rules and integrate into existing pipeline
 
 In two separate infrastructures:
+
 * Deploying microlith to Kubernetes using CAO, automatic service discovery
-  * Without CAO still possible but not tested
-  * Can also mix-and-match this with on-premise cluster (COS in k8s, Couchbase Server on premise)
+ ** Without CAO still possible but not tested
+ ** Can also mix-and-match this with on-premise cluster (COS in k8s, Couchbase Server on premise)
 * Deploying on-premise using manual configuration with the microlith
-  * Remote end point or in Vagrant as well
+ ** Remote end point or in Vagrant as well
 
 We need to test the following aspects:
+
 * Prometheus endpoint is available from the microlith
 * Adding the Couchbase Server instances to be monitored
 * Couchbase Server metrics are available (using the exporter pre 7.0) from the microlith endpoint
-  * PromQL or promcli tooling can verify this
+ ** PromQL or promcli tooling can verify this
 * Default alerting rules are triggered under appropriate failures
-  * Defaults in general just work out of the box
+ ** Defaults in general just work out of the box
 * Custom alerting rules can be provided
-  * Extend existing
-  * Replace defaults
+ ** Extend existing
+ ** Replace defaults
 * Grafana dashboards are available from the microlith
 * Custom dashboards can be provided to the microlith
-  * We can query the REST API for this information, i.e. what rules are present and firing, etc.
+ ** We can query the REST API for this information, i.e. what rules are present and firing, etc.
 * Loki endpoint is available from the microlith
-  * LogQL can verify this and that there is some data (need to ensure we send some logs)
+ ** LogQL can verify this and that there is some data (need to ensure we send some logs)
 * Components within the microlith can be enabled or disabled
-  * Repeat one of the previous tests (e.g. Loki) with the component disabled and confirm the test fails.
+ ** Repeat one of the previous tests (e.g. Loki) with the component disabled and confirm the test fails.
 * Reproducible ephemeral container with custom configuration via GitOps
-  * Configuration of cluster connection & credentials
-  * Addition of custom alerts and tuning/inhibition of those alerts, plus addition of custom dashboards
+ ** Configuration of cluster connection & credentials
+ ** Addition of custom alerts and tuning/inhibition of those alerts, plus addition of custom dashboards
 * Integration with an existing stack
-  * Use Grafana operator here to create a separate stack in another namespace and demonstrate we can use this.
+ ** Use Grafana operator here to create a separate stack in another namespace and demonstrate we can use this.
 
 Variation points:
+
 * Clusters with and without Prometheus end points
 * Clusters using CBS 7.0+ and Prometheus exporter
 * Clusters with different credentials
@@ -218,30 +231,34 @@ Variation points:
 We use the BATS framework (reuse some SDK set up tests as well) to verify all this locally using a docker-compose stack to represent an on-premise option and a KIND cluster for a kubernetes option.
 Scale up to run tests in GKE as well using multiple nodes explicitly there.
 
-### Test configuration
+=== Test configuration
 
 Testing is broken down into general `smoke` tests independent of the infrastructure we are running on, e.g. the general ones above, and `integration` tests that are cover some specific aspect for a particular infrastructure, e.g. a Kubernetes-specific test case.
 
-## Caveats and restrictions
+== Caveats and restrictions
 
 * No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
-* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a [helper script](tools/build-oss-container.sh) that does this.
+* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a link:tools/build-oss-container.sh[helper script] that does this.
 
-## Resources
+== Resources
+
 * A good overview of how Prometheus and Alert Manager: https://www.fabernovel.com/en/engineering/alerting-in-prometheus-or-how-i-can-sleep-well-at-night
 * How to disable or override rules: https://medium.com/@hauskrechtmartin/how-we-solved-our-need-to-override-prometheus-alerts-b9faf9a4558c
 * Useful example rules: https://awesome-prometheus-alerts.grep.to/rules.html
 
-## Feedback
-Please use our official [JIRA board](https://issues.couchbase.com/projects/CMOS/issues) to report any bugs and issues with the appropriate components. We also encourage you to use the [Couchbase Forums](https://forums.couchbase.com) for posting any questions or feedback that you might have.
+== Feedback
 
-## Support
+Please use our official https://issues.couchbase.com/projects/CMOS/issues[JIRA board] to report any bugs and issues with the appropriate components. We also encourage you to use the https://forums.couchbase.com[Couchbase Forums] for posting any questions or feedback that you might have.
+
+== Support
+
 No official support is currently provided but best efforts will be made.
 
-## Release tagging and branching
+== Release tagging and branching
+
 Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbase/observability-stack/tags will have a matching tag in this repository that built them.
 Updates will be pushed to the `main` branch often and then tagged once released as a new image version.
 Tags will not be moved after release, even just for a documentation update - this should trigger a new release or just be available as the latest version on `main`.
 
-The branching strategy is to minimize any branches other than `main` following the standard [GitHub flow model](https://guides.github.com/introduction/flow/).
+The branching strategy is to minimize any branches other than `main` following the standard https://guides.github.com/introduction/flow/[GitHub flow model].

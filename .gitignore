@@ -6,11 +6,14 @@ build/
 dist/
 bin/
 test-dist/
+# Documentation output
+.cache/
+microlith/html/cmos/
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
 tools/bats/
-testing/bats/kubernetes/resources/default-microlith.yaml
 testing/resources/native/vagrants
 testing/resources/native/hosts.ini
 testing/.vagrant
+testing/bats/integration/kubernetes/resources/default-microlith.yaml

@@ -1,0 +1,340 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": 6,
+    "iteration": 1633941725104,
+    "links": [],
+    "panels": [
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "Good"
+                  },
+                  "1": {
+                    "color": "orange",
+                    "index": 1,
+                    "text": "Warn"
+                  },
+                  "2": {
+                    "color": "red",
+                    "index": 2,
+                    "text": "Alert"
+                  },
+                  "3": {
+                    "color": "semi-dark-blue",
+                    "index": 3,
+                    "text": "Info"
+                  },
+                  "4": {
+                    "color": "#808080",
+                    "index": 4,
+                    "text": "Missing"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 18,
+          "w": 7,
+          "x": 0,
+          "y": 0
+        },
+        "id": 2,
+        "options": {
+          "alignValue": "left",
+          "legend": {
+            "displayMode": "hidden",
+            "placement": "bottom"
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "multimanager_cluster_checker_status{cluster=\"$cluster\"}",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{name}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Cluster Check History",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "Good"
+                  },
+                  "1": {
+                    "color": "orange",
+                    "index": 1,
+                    "text": "Warn"
+                  },
+                  "2": {
+                    "color": "red",
+                    "index": 2,
+                    "text": "Alert"
+                  },
+                  "3": {
+                    "color": "semi-dark-blue",
+                    "index": 3,
+                    "text": "Info"
+                  },
+                  "4": {
+                    "color": "#808080",
+                    "index": 4,
+                    "text": "Missing"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 18,
+          "w": 8,
+          "x": 7,
+          "y": 0
+        },
+        "id": 3,
+        "options": {
+          "alignValue": "left",
+          "legend": {
+            "displayMode": "hidden",
+            "placement": "bottom"
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "multimanager_node_checker_status{cluster=\"$cluster\"}",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{name}} / {{node}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Node Check History",
+        "type": "state-timeline"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "fillOpacity": 70,
+              "lineWidth": 0
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "Good"
+                  },
+                  "1": {
+                    "color": "orange",
+                    "index": 1,
+                    "text": "Warn"
+                  },
+                  "2": {
+                    "color": "red",
+                    "index": 2,
+                    "text": "Alert"
+                  },
+                  "3": {
+                    "color": "semi-dark-blue",
+                    "index": 3,
+                    "text": "Info"
+                  },
+                  "4": {
+                    "color": "#808080",
+                    "index": 4,
+                    "text": "Missing"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 18,
+          "w": 9,
+          "x": 15,
+          "y": 0
+        },
+        "id": 4,
+        "options": {
+          "alignValue": "left",
+          "legend": {
+            "displayMode": "hidden",
+            "placement": "bottom"
+          },
+          "mergeValues": true,
+          "rowHeight": 0.9,
+          "showValue": "auto",
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "multimanager_bucket_checker_status{cluster=\"$cluster\"}",
+            "interval": "",
+            "intervalFactor": 1,
+            "legendFormat": "{{name}} / {{bucket}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Bucket Check History",
+        "type": "state-timeline"
+      }
+    ],
+    "schemaVersion": 30,
+    "style": "dark",
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "allValue": null,
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": null,
+          "definition": "multimanager_cluster_checker_status",
+          "description": null,
+          "error": null,
+          "hide": 0,
+          "includeAll": true,
+          "label": "Cluster",
+          "multi": true,
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "query": "multimanager_cluster_checker_status",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/{cluster=\"(.+?)\"/",
+          "skipUrlSync": false,
+          "sort": 5,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Check History",
+    "uid": "3FgtRlvnk",
+    "version": 2
+  }

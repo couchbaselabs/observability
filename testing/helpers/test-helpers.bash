@@ -37,6 +37,21 @@ function ensure_variables_set() {
     fi
 }
 
+# Finds a random, unused port on the system and assigns it to the given variable. Exits immediately if it can't find one.
+# Parameters:
+# $1: The name of a variable to assign the port to.
+function find_unused_port() {
+    local varname="$1"
+    local portnum
+    while true; do
+        portnum=$(shuf -i 1025-65535 -n 1)
+        if ! lsof -Pi ":$portnum" -sTCP:LISTEN; then
+            declare "$varname=$portnum"
+            return 0
+        fi
+    done
+}
+
 # Converts the value of $COUCHBASE_SERVER_HOSTS into a file ready to feed to Prometheus file_sd.
 # Stores the name of the generated file in $PROMETHEUS_TARGETS_FILE.
 function _create_prometheus_targets_file() {
@@ -137,4 +152,3 @@ function teardown_smoke_cluster() {
             ;;
     esac
 }
-

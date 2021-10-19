@@ -15,12 +15,12 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native test-containers
+.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples test test-kubernetes test-native test-containers docs
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
 
-build:
+build: # docs # Temporarily disabled - see CMOS-86
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
@@ -39,6 +39,7 @@ dist: image-artifacts
 	rm -rf $(ARTIFACTS)
 
 lint: container-lint
+	tools/asciidoc-lint.sh
 	tools/shellcheck.sh
 	tools/licence-lint.sh
 
@@ -101,7 +102,11 @@ container-clean:
 	docker image prune --force
 
 clean: container-clean
-	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/
+	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/
 	examples/native/stop.sh
 	rm -f examples/native/logs/*.log
 	examples/kubernetes/stop.sh
+
+docs:
+	docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
+	docker run -u $(shell id -u) -v $$PWD:/antora:Z -e HOME=/antora --rm -t antora/antora:3.0.0-alpha.1 --to-dir microlith/html/cmos/ --clean antora-playbook.yaml
