@@ -96,6 +96,13 @@ test-dist: dist
 	tar -xzvf dist/couchbase-observability-stack-image_$(productVersion).tgz -C test-dist/
 	docker build -f test-dist/Dockerfile test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 
+test-dist-oss: dist
+	rm -rf test-dist/
+	mkdir -p test-dist/
+	tar -xzvf dist/couchbase-observability-stack-image_$(productVersion).tgz -C test-dist/
+	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "test-dist/Dockerfile" > "test-dist/Dockerfile.oss"
+	docker build -f test-dist/Dockerfile.oss test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
+
 # Remove our images then remove dangling ones to prevent any caching
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \

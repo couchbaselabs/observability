@@ -6,7 +6,7 @@ pipeline {
   stages {
     stage('Build & test distribution') {
       steps {
-        sh 'make clean test-dist'
+        sh 'make clean test-dist-oss'
       }
     }
   }
