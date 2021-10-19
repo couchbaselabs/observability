@@ -15,7 +15,7 @@
 
 # Run all the K8S cluster tests against a KIND cluster.
 # It relies on BATS being installed, see tools/install-bats.sh
-set -ueo pipefail
+set -eo pipefail
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 

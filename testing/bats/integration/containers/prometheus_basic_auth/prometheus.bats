@@ -36,7 +36,6 @@ teardown() {
 @test "Verify that basic auth can be passed by environment variable" {
     # shellcheck disable=SC2076
     if [[ ! "$COUCHBASE_SERVER_IMAGE" =~ "7." ]]; then
-        # return 0
         skip "Skipping, only applicable to Server 7.x"
     fi
     docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans

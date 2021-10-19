@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -ueo pipefail
+set -eo pipefail
 
 # Profile script for common variables
 TEST_COMMON_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -66,9 +66,8 @@ function run_tests() {
     if [ "$smoke" -eq 1 ]; then
         export SMOKE_NODES=3
         start_smoke_cluster
+        trap teardown_smoke_cluster ERR EXIT
     fi
-
-    set +x
 
     echo
     echo
@@ -78,15 +77,12 @@ function run_tests() {
     echo
     echo
 
-    set +e
+    # We run BATS in a subshell to prevent it from inheriting our exit/err trap, which can mess up its internals
+    # We set +exu because unbound variables can cause test failures with zero context
+    set +xeu
     # shellcheck disable=SC2086
-    bats --formatter "${BATS_FORMATTER}" $run --timing
+    (bats --formatter "${BATS_FORMATTER}" $run --timing)
     local bats_retval=$?
-
-    # Can't use a trap as that messes up BATS internals, see https://github.com/bats-core/bats-core/issues/364#issuecomment-827773930
-    if [ "$smoke" -eq 1 ]; then
-        teardown_smoke_cluster
-    fi
 
     echo
     echo

@@ -17,21 +17,21 @@
 # The intention of this file is to verify the tooling installed within the container.
 # This is so that it can then be used by actual tests.
 
+load "$HELPERS_ROOT/test-helpers.bash"
+
+ensure_variables_set TEST_NAMESPACE CMOS_PORT TEST_CUSTOM_CONFIG
+
 load "$BATS_DETIK_ROOT/utils.bash"
 load "$BATS_DETIK_ROOT/linter.bash"
 load "$BATS_DETIK_ROOT/detik.bash"
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
-load "$HELPERS_ROOT/test-helpers.bash"
 
 setup() {
-    if [ "$TEST_NATIVE" == "true" ]; then
+    if [ "${TEST_NATIVE:-false}" == "true" ]; then
         skip "Skipping kubernetes specific tests"
     fi
-    echo "Verify pre-requisites"
-    run : "${TEST_NAMESPACE?"Need to set TEST_NAMESPACE"}"
-    assert_success
 
     run kubectl delete namespace "$TEST_NAMESPACE"
     kubectl create namespace "$TEST_NAMESPACE"
@@ -40,7 +40,7 @@ setup() {
 teardown() {
     if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
-    elif [ "$TEST_NATIVE" != "true" ]; then
+    elif [ "${TEST_NATIVE:-false}" != "true" ]; then
         run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
         run kubectl delete --force --grace-period=0 --now=true -n "$TEST_NAMESPACE" -f "${BATS_TEST_DIRNAME}/resources/default-microlith.yaml"
         run kubectl delete namespace "$TEST_NAMESPACE"
@@ -191,9 +191,6 @@ createLoggingCluster() {
 }
 
 @test "Verify disabling of components in microlith" {
-    run : "${TEST_CUSTOM_CONFIG?"Need to set TEST_CUSTOM_CONFIG"}"
-    assert_success
-
     # Turn components off and confirm not available
     cat << __EOF__ | kubectl create -n "$TEST_NAMESPACE" -f -
 apiVersion: v1

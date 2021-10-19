@@ -13,7 +13,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-set -euo pipefail
+set -eo pipefail
 
 # shellcheck disable=SC1091
 source "$HELPERS_ROOT/url-helpers.bash"
@@ -31,9 +31,12 @@ function ensure_variables_set() {
         fi
     done
     if [ -n "$missing" ]; then
-        # We use exit rather than fail so that this works even if the BATS helper root is missing
-        echo "Missing required variables: $missing"
-        exit 1
+        if [[ $(type -t fail) == function ]]; then
+            fail "Missing required variables: $missing"
+        else
+            echo "Missing required variables: $missing" >&2
+            exit 1
+        fi
     fi
 }
 
@@ -121,7 +124,7 @@ function start_smoke_cluster() {
             echo "CMOS host: $CMOS_HOST"
             ;;
         kubernetes)
-            echo "TODO"
+            echo "TODO" # CMOS-97
             ;;
     esac
 }
@@ -129,7 +132,7 @@ function start_smoke_cluster() {
 # Tears down the setup from start_smoke_cluster.
 #
 # Parameters:
-# $SMOKE_NODES: The nubmer of nodes that were started (defaults to 3)
+# $SMOKE_NODES: The number of nodes that were started (defaults to 3)
 function teardown_smoke_cluster() {
     local nodes=${SMOKE_NODES:-3}
     echo "# Tearing down smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
@@ -148,7 +151,7 @@ function teardown_smoke_cluster() {
             docker network rm cmos_test
             ;;
         kubernetes)
-            echo "TODO"
+            echo "TODO" # CMOS-97
             ;;
     esac
 }

@@ -23,8 +23,6 @@ load "$BATS_ASSERT_ROOT/load.bash"
 @test "file_sd_config finds Couchbase Server targets" {
     wait_for_url 10 "$CMOS_HOST/prometheus/-/ready"
 
-    echo "# Prometheus is ready." >&3
-
     attempt=0
     while true; do
         run curl -o "$BATS_TEST_TMPDIR/targets.json" "$CMOS_HOST/prometheus/api/v1/targets"
