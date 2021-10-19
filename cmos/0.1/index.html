@@ -191,7 +191,10 @@
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Ensure you have a Couchbase cluster running and accessible - for testing we recommend using <a href="https://github.com/couchbaselabs/vagrants">Vagrant</a> or <a href="https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html">Docker</a></p>
+<p>Ensure you have a Couchbase Server cluster running and accessible - for testing we recommend using <a href="https://github.com/couchbaselabs/vagrants">Vagrant</a> or <a href="https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html">Docker</a></p>
+</li>
+<li>
+<p>Ensure you have the <a href="https://github.com/couchbase/couchbase-exporter">Couchbase Prometheus Exporter</a> set up on each of your Couchbase Server nodes</p>
 </li>
 <li>
 <p>Clone the couchbaselabs/observability repo: <code>git clone <a href="mailto:git@github.com">git@github.com</a>:couchbaselabs/observability.git</code></p>
@@ -203,7 +206,7 @@
 <p>Build the container: <code>make container</code> if you want to include the Cluster Monitor or <code>make container-oss</code> otherwise</p>
 </li>
 <li>
-<p>Run the microlith: <code>docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1</code></p>
+<p>Run the microlith: <code>docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1</code> (if your Couchbase Server is running in Docker, you may need to set <a href="https://docs.docker.com/network/">extra options</a> to permit them to communicate.)</p>
 </li>
 <li>
 <p>Browse to <a href="http://localhost:8080" class="bare">http://localhost:8080</a></p>
@@ -212,6 +215,9 @@
 <p>Click "Prometheus Add Endpoint" and follow the instructions</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>When you are done testing, run <code>docker stop cmos</code> to clean up.</p>
 </div>
 </div>
 </div>
