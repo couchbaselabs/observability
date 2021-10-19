@@ -13,7 +13,6 @@ jobs:
   # TODO: split into push testing (smaller, just smoke) and PR testing (all of matrix)
   build-test-oss-containers-and-k8s:
     name: CICD for the OSS variant (Containers and K8s)
-    needs: cancel-identical-runs
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     strategy:
@@ -42,7 +41,6 @@ jobs:
   
   build-test-oss-native:
     name: CICD for the OSS variant (Native)
-    needs: cancel-identical-runs
     runs-on: macos-10.15 # Apparently macOS is the only environment that supports nested virtualisation
     timeout-minutes: 60
     strategy:
