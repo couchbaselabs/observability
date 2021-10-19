@@ -5,11 +5,12 @@ FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 
 # Generate documentation and include locally as a static site
+# We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
 FROM antora/antora:3.0.0-alpha.1 as antora-generator
 COPY docs/ /antora/docs/
 RUN mkdir -p /antora/cmos
 ENV HOME=/antora
-CMD ["--to-dir", "/antora/cmos/", "antora-playbook.yaml"]
+RUN antora --to-dir /antora/cmos/ /antora/docs/antora-playbook.yml
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages

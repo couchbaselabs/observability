@@ -110,6 +110,7 @@ clean: container-clean
 	examples/kubernetes/stop.sh
 
 docs-lint:
+	docker run --rm -i hadolint/hadolint < Dockerfile.docs
 	tools/asciidoc-lint.sh
 
 docs: docs-generate-markdown
@@ -117,7 +118,10 @@ docs: docs-generate-markdown
 # Automatically convert Markdown docs to Asciidoc ones.
 # This command needs bind mount support so will not run in Couchbase build infrastructure (Docker Swarm):
 # docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
-# We therefore create a custom container for it all.
+# We therefore create a custom container for it all. Unfortunately this has a knock on in that forwarding can mess up line endings.
 docs-generate-markdown:
 	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} -f Dockerfile.docs .
 	docker run --rm -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} > docs/modules/ROOT/pages/index.adoc
+	tr -d "\r" < docs/modules/ROOT/pages/index.adoc > /tmp/observability-stack-docs-output.adoc
+	mv /tmp/observability-stack-docs-output.adoc docs/modules/ROOT/pages/index.adoc
+	rm -f observability-stack-docs-output.adoc

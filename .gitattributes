@@ -1,0 +1,6 @@
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Asciidoc linting fails if CRLF due to sed usage for filtering.
+*.md text eol=lf
+*.adoc text eol=lf
