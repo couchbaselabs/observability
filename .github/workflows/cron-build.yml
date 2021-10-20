@@ -3,7 +3,7 @@ name: Nightly full build and test run
 
 on:
   schedule:
-    cron: '0 4 * * *'
+    - cron: '0 4 * * *'
   workflow_dispatch:
 
 jobs:
