@@ -89,7 +89,7 @@
               "name": "Nodes"
             },
             {
-              "jsonPath": "$join($sort($distinct($[*].nodes_summary[*].services)), \", \")",
+              "jsonPath": "$map($, function($v) {$join($distinct($v.nodes_summary.services), ', ')})",
               "language": "jsonata",
               "name": "Services"
             },
