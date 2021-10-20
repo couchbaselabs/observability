@@ -44,7 +44,11 @@ function run_tests() {
     local run=""
     local smoke=0
 
-    if [[ "$requested" =~ .*\.bats$ ]]; then
+    if [[ "$requested" == "all" ]] || [ -z "$requested" ]; then
+        # Empty => everything. Alternatively, explicitly ask for it.
+        smoke=1
+        run="--recursive ${TEST_ROOT}/smoke ${TEST_ROOT}/integration/${TEST_PLATFORM}"
+    elif [[ "$requested" =~ .*\.bats$ ]]; then
         # One individual test
         run="$requested"
         if [[ "$requested" == *smoke* ]]; then
@@ -57,10 +61,6 @@ function run_tests() {
     elif [ -n "$requested" ]; then
         # Likely an individual integration suite
         run="--recursive ${TEST_ROOT}/$requested"
-    else
-        # Empty => everything
-        smoke=1
-        run="--recursive ${TEST_ROOT}/smoke ${TEST_ROOT}/integration/${TEST_PLATFORM}"
     fi
 
     if [ "$smoke" -eq 1 ]; then

@@ -10,9 +10,8 @@ on:
       - main
 
 jobs:
-  # TODO: split into push testing (smaller, just smoke) and PR testing (all of matrix)
-  build-test-oss-containers-and-k8s:
-    name: CICD for the OSS variant (Containers and K8s)
+  build-test-oss-containers:
+    name: Smoke tests - OSS - containers
     runs-on: ubuntu-20.04
     timeout-minutes: 60
     strategy:
@@ -28,41 +27,12 @@ jobs:
         run: |
           sudo npm install -g bats
 
-      - name: Create K8S Kind Cluster
-        timeout-minutes: 10
-        uses: helm/kind-action@v1.2.0
-        with:
-          cluster_name: kind-${{ github.sha }}
-
       # TODO: cache single container build across matrix runs
       - name: Run ${{ matrix.server-version }} tests
         run: |
-          make container-oss test-containers test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-  
-  build-test-oss-native:
-    name: CICD for the OSS variant (Native)
-    runs-on: macos-10.15 # Apparently macOS is the only environment that supports nested virtualisation
-    timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        server-version: [ '6.6.3' ] #, '7.0.1' ]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Setup Docker
-        uses: docker-practice/actions-setup-docker@master
+          make TEST_SUITE=smoke container-oss test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
-      - name: Install requirements
-        timeout-minutes: 15
-        run: |
-          brew unlink bats # The version that ships with the image is outdated
-          brew install bats-core ansible
- 
-      - name: Run ${{ matrix.server-version }} tests
-        run: |
-          make container-oss test-native -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+  # TODO: once CMOS-97 is done, add something similar for k8s
 
   linting:
     name: Run static analysis and linting tools
