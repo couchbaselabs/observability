@@ -1,0 +1,11 @@
+[Unit]
+Description = Couchbase Prometheus Exporter
+Requires = couchbase-server.service
+After = couchbase-server.service
+
+[Service]
+Type = simple
+ExecStart = /opt/couchbase-exporter/couchbase-exporter -server-address 0.0.0.0
+
+[Install]
+WantedBy = multi-user.target
