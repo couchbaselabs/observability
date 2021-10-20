@@ -1,4 +1,4 @@
-examples/native/logs/*.log
+examples/containers/logs/*.log
 microlith/alertmanager/slack_url
 # Build output
 git-commit.txt
