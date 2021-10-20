@@ -1,0 +1,63 @@
+# Nightly test run
+name: Nightly full build and test run
+
+on:
+  schedule:
+    - cron: '0 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-test-oss-containers-and-k8s:
+    name: Full build and test - OSS - containers and k8s
+    runs-on: ubuntu-20.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        server-version: [ '6.6.3' ] #, '7.0.1' ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install BATS
+        timeout-minutes: 5
+        run: |
+          sudo npm install -g bats
+
+      - name: Create K8S Kind Cluster
+        timeout-minutes: 10
+        uses: helm/kind-action@v1.2.0
+        with:
+          cluster_name: kind-${{ github.sha }}
+
+      # TODO: cache single container build across matrix runs
+      - name: Run ${{ matrix.server-version }} tests
+        run: |
+          make TEST_SUITE=all container-oss test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          # CMOS-97
+          make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+  
+  build-test-oss-native:
+    name: CICD for the OSS variant (Native)
+    runs-on: macos-10.15 # Apparently macOS is the only environment that supports nested virtualisation
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        server-version: [ '6.6.3' ] #, '7.0.1' ]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Setup Docker
+        uses: docker-practice/actions-setup-docker@master
+
+      - name: Install requirements
+        timeout-minutes: 15
+        run: |
+          brew unlink bats # The version that ships with the image is outdated
+          brew install bats-core ansible
+ 
+      - name: Run ${{ matrix.server-version }} tests
+        run: |
+          make TEST_SUITE=all container-oss test-native -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}

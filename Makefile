@@ -77,15 +77,16 @@ example-containers: container
 examples: clean container example-kubernetes example-containers
 
 # Deal with automated testing
+test-kubernetes: TEST_SUITE ?= integration/kubernetes
 test-kubernetes:
 	# TODO (CMOS-97): no smoke suite for kubernetes yet
-	testing/run-k8s.sh integration/kubernetes
+	testing/run-k8s.sh ${TEST_SUITE}
 
 test-containers:
-	testing/run-containers.sh
+	testing/run-containers.sh ${TEST_SUITE}
 
 test-native:
-	testing/run-native.sh
+	testing/run-native.sh ${TEST_SUITE}
 
 test: clean container-oss test-native test-containers test-kubernetes
 
