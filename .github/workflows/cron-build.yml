@@ -9,11 +9,8 @@ on:
 jobs:
   # Build an image to share across jobs
   build-oss-container:
-    name: Build PR container for testing
+    name: Build container for testing
     runs-on: ubuntu-20.04
-    permissions:
-      contents: read
-      packages: write
     timeout-minutes: 10
     steps:
       - name: Checkout code
