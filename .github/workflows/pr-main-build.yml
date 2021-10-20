@@ -28,7 +28,7 @@ jobs:
       - name: Build OSS container and export
         run: |
           make container-oss -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-          docker save --output /tmp/cmos-image.tar couchbaselabs:${{ github.sha }}
+          docker save --output /tmp/cmos-image.tar couchbaselabs/observability-stack:${{ github.sha }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
