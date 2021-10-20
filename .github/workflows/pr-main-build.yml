@@ -27,8 +27,8 @@ jobs:
 
       - name: Build OSS container and export
         run: |
-          make container-oss -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-          docker save --output /tmp/cmos-image.tar docker.io/couchbaselabs:${{ github.sha }}
+          make container-oss -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          docker save --output /tmp/cmos-image.tar couchbaselabs:${{ github.sha }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -70,7 +70,7 @@ jobs:
 
       - name: Run ${{ matrix.server-version }} tests
         run: |
-          make TEST_SUITE=smoke test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make TEST_SUITE=smoke test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   # TODO: once CMOS-97 is done, add something similar for k8s
 

@@ -24,8 +24,8 @@ jobs:
 
       - name: Build OSS container and export
         run: |
-          make container-oss -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-          docker save --output /tmp/cmos-image.tar docker.io/couchbaselabs:${{ github.sha }}
+          make container-oss -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          docker save --output /tmp/cmos-image.tar couchbaselabs:${{ github.sha }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
@@ -73,9 +73,9 @@ jobs:
 
       - name: Run ${{ matrix.server-version }} tests
         run: |
-          make TEST_SUITE=all test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make TEST_SUITE=all test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
           # CMOS-97
-          make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
   build-test-oss-native:
     name: CICD for the OSS variant (Native)
@@ -115,4 +115,4 @@ jobs:
 
       - name: Run ${{ matrix.server-version }} tests
         run: |
-          make TEST_SUITE=all test-native -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=docker.io/couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+          make TEST_SUITE=all test-native -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}

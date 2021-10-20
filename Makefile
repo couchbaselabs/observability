@@ -43,6 +43,7 @@ dist: image-artifacts
 
 lint: container-lint docs-lint
 	tools/shellcheck.sh
+	tools/ansible-lint.sh
 	tools/licence-lint.sh
 
 # NOTE: This target is only for local development.

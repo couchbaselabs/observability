@@ -13,15 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Simple script to remove proprietary components from the microlith Dockerfile and build it.
+# Lint all Ansible playbooks, requires ansible-lint to be installed:
+# https://ansible-lint.readthedocs.io/en/latest/installing.html
+
 set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-DOCKER_USER=${DOCKER_USER:-couchbase}
-DOCKER_TAG=${DOCKER_TAG:-v1}
-CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+# Find all YAML files that make a reference to ansible_env
+exitCode=0
+# We do want to read words here
+# shellcheck disable=SC2013
+for file in $(grep --include=\*.{yml,yaml} -rlw "$SCRIPT_DIR/.." -e "ansible_env"); do
+    echo "Ansible lint: .${file##$SCRIPT_DIR/..}"
+    if ! ansible-lint -c "${SCRIPT_DIR}/.ansible-lint" "$file"; then
+        exitCode=1
+    fi
+done
 
-# Remove everything between `# Couchbase proprietary start` and `# Couchbase proprietary end`
-sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "$SCRIPT_DIR/../microlith/Dockerfile" > "$SCRIPT_DIR/../microlith/Dockerfile.oss"
-echo "Building OSS image: $CMOS_IMAGE"
-docker build -t "$CMOS_IMAGE" -f "$SCRIPT_DIR/../microlith/Dockerfile.oss" "$SCRIPT_DIR/../microlith"
+exit $exitCode
