@@ -36,8 +36,6 @@ CB_VERSION=${CB_VERSION:-"6.6.3"}
 VAGRANTS_OS=${VAGRANTS_OS:-"centos7"}
 VAGRANTS_LOCATION=${VAGRANTS_LOCATION:-$HOME}
 CREATE_VAGRANTS=${CREATE_VAGRANTS:-true} # Set to false if you already have configured (correct USER/PASS) CBS vagrants running
-CLEAN_BOX=${CLEAN_BOX:-false} # Redownloads the box each time, may be required if transient issues from configuration persisting 
-# despite destroying Vagrant VMs.
 
 export VAGRANT_NODES=${VAGRANT_NODES:-3}
 export VAGRANT_CPUS=${VAGRANT_CPUS:-1}

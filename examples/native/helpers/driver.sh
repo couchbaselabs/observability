@@ -16,25 +16,6 @@
 
 source "$SCRIPT_DIR"/helpers/vagrants_up.sh
 
-declare -A BOX_NAMES
-BOX_NAMES['ubuntu10']='ubuntu-server-10044-x64-vbox4210'
-BOX_NAMES['ubuntu14']='ubuntu/trusty64'
-BOX_NAMES['ubuntu16']='puppetlabs/ubuntu-16.04-64-puppet'
-BOX_NAMES['ubuntu18']='generic/ubuntu1804'
-BOX_NAMES['ubuntu20']='generic/ubuntu2004'
-BOX_NAMES['debian7']='cargomedia/debian-7-amd64-default'
-BOX_NAMES['box_name']='centos5u8_x64'
-BOX_NAMES['centos6']='puppetlabs/centos-6.6-64-puppet'
-BOX_NAMES['centos6u4']='hansode/centos-6.4-x86_64'
-BOX_NAMES['centos7']='puppetlabs/centos-7.0-64-puppet'
-BOX_NAMES['centos8']='saphyre/centos-8-puppet-x86_64'
-BOX_NAMES['windows']='emyl/win2008r2'
-BOX_NAMES['opensuse11']='minesense/opensuse11.1'
-BOX_NAMES['opensuse12']='opensuse-12.3-64'
-BOX_NAMES['debian8']='lazyfrosch/debian-8-jessie-amd64-puppet'
-BOX_NAMES['debian9']='generic/debian9'
-BOX_NAMES['debian10']='debian/contrib-buster64'
-
 # Remove all vagrants: vagrant global-status | awk '$1 ~ /[0-9,a-f]{6}/{system("vagrant destroy -f "$1)}'
 # Remove all boxes: vagrant box list | cut -f 1 -d ' ' | xargs -L 1 vagrant box remove -f --all
 
@@ -46,16 +27,10 @@ function remove_previous_vagrants() {
 
     local CB_VERSION=$1
     local VAGRANT_OS=$2
-    local CLEAN_BOX=$3
 
     echo "Destroying all vagrants associated with Couchbase Version $CB_VERSION and Vagrants Operating System $VAGRANT_OS..."
     vagrant global-status --prune | grep "$CB_VERSION/$VAGRANT_OS" | awk '$1 ~ /[0-9,a-f]{6}/{system("vagrant destroy -f "$1)}'
-    # --prune updates cached list first
-
-    if $CLEAN_BOX; then
-        echo "[CLEANING] Removing the box for Operating System $VAGRANTS_OS"
-        vagrant box remove ${BOX_NAMES[$VAGRANTS_OS]} -f --all
-    fi
+    # --prune flag updates cached list first
 
 }
 
