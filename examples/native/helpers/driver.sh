@@ -23,14 +23,26 @@ source "$SCRIPT_DIR"/helpers/vagrants_up.sh
 # $1: The Couchbase Server version to remove
 # $2: The OS the version to remove runs on ($1 and $2 are combined to uniquely identify a Vagrants cluster)
 # $3: Boolean specifying whether the box should be destroyed and redownloaded (in case of config persistence issues)
+
 function remove_previous_vagrants() {
 
     local CB_VERSION=$1
     local VAGRANT_OS=$2
 
-    echo "Destroying all vagrants associated with Couchbase Version $CB_VERSION and Vagrants Operating System $VAGRANT_OS..."
-    vagrant global-status --prune | grep "$CB_VERSION/$VAGRANT_OS" | awk '$1 ~ /[0-9,a-f]{6}/{system("vagrant destroy -f "$1)}'
-    # --prune flag updates cached list first
+    if vagrant global-status --prune | grep -c "$CB_VERSION/$VAGRANT_OS" >/dev/null; then
+        echo "If you proceed existing vagrants running Couchbase Version $CB_VERSION on $VAGRANT_OS will be permanently destroyed. Are you sure? [y/N]: "
+    
+        read response
+        if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+            vagrant global-status --prune | grep "$CB_VERSION/$VAGRANT_OS" | awk '$1 ~ /[0-9,a-f]{6}/{system("vagrant destroy -f "$1)}'
+            # --prune flag updates cached list first
+        else
+            echo "User entered NO, exiting."
+            exit
+        fi
+    else
+        echo "No existing vagrants running Couchbase Version $CB_VERSION on $VAGRANT_OS to be cleaned. Continuing..." 
+    fi
 
 }
 

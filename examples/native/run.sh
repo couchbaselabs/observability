@@ -45,7 +45,7 @@ export VAGRANT_RAM=${VAGRANT_RAM:-1024}
 docker-compose -f "${SCRIPT_DIR}"/docker-compose.yml up -d --force-recreate
 
 if $CREATE_VAGRANTS; then
-  remove_previous_vagrants "$CB_VERSION" "$VAGRANTS_OS" "$CLEAN_BOX"
+  remove_previous_vagrants "$CB_VERSION" "$VAGRANTS_OS"
   start_vagrant_cluster "$CB_VERSION" "$VAGRANTS_OS" "$VAGRANTS_LOCATION"
   configure_servers "$CB_VERSION" "$VAGRANTS_OS" "$CLUSTER_NUMBER" "$SERVER_USER" "$SERVER_PASS"
 fi
