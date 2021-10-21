@@ -1,0 +1,52 @@
+openapi: 3.0.3
+info:
+  title: Couchbase Monitoring & Observability Stack - Configuration Service
+  description: REST API of the Configuration Service
+  version: v1
+  contact:
+    name: Couchbase, Inc.
+    url: https://couchbase.com
+    email: info@couchbase.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - description: Local Microlith
+    url: http://localhost:8080/config/api/v1
+  - description: Local Development
+    url: http://localhost:7194/api/v1
+paths:
+
+  /config:
+    get:
+      summary: Outputs the current config in YAML format.
+      description: Do not use this if you just want the cluster information.
+      responses:
+        200:
+          description: The Config Service configuration
+          content:
+            text/yaml:
+              schema:
+                type: string
+
+  /clusters:
+    get:
+      summary: Obtain the current Couchbase Clusters state.
+      responses:
+        200:
+          description: Current state of the clusters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CouchbaseCluster"
+
+components:
+  schemas:
+    CouchbaseCluster:
+      type: object
+      additionalProperties: false
+      properties:
+        nodes:
+          type: array
+          items:
+            type: string
