@@ -1,9 +1,10 @@
-name: tern-analysis
+name: tern-license-analysis
 on:
     push:
         branches: [main]
 jobs:
     tern-scan:
+        name: Carry out analysis of the container image licensing
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
