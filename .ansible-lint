@@ -1,6 +1,5 @@
 ---
 skip_list:
-  - '106'
   - line-length
   - comments       # Disable error on single space with comments
   - git-latest     # All this usage is in testing
