@@ -17,7 +17,9 @@
 # Simple support for dynamic disabling of generic commands and logging
 set -e
 
-echo "By using this software you accept the licensing agreements that can be found in /licenses/"
+# Required for legal acceptance
+echo "The software referenced by this Docker image includes software from the following under the licenses from those images."
+echo "Use of this image and the referenced software is subject to those terms, which can be found in /licenses/"
 echo "These can be viewed by running a command like so to provide a custom entrypoint: 'docker run ... cat /licenses/*'"
 
 # Expose all nested config variables to make it simple to see
