@@ -1,0 +1,11 @@
+---
+skip_list:
+  - '106'
+  - yaml
+exclude_paths:
+  - .cache/  # implicit unless exclude_paths is defined in config
+  - .github/
+  - docs/
+parseable: true
+use_default_rules: true
+verbosity: 1

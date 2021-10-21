@@ -1,8 +1,0 @@
----
-skip_list:
-- '106'
-exclude_paths:
-  - ./examples/
-parseable: true
-use_default_rules: true
-verbosity: 1
