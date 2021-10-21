@@ -1,9 +1,11 @@
 package main
 
 import (
+	"errors"
 	"flag"
 	"github.com/couchbaselabs/observability/config-svc/pkg/api"
 	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
+	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 	"log"
 )
@@ -21,9 +23,18 @@ func main() {
 
 	logger := baseLogger.Named("main").Sugar()
 
-	cfg, err := metacfg.ReadConfigFromFile(baseLogger.Named("metacfg"), *flagConfigLocation, true, true)
+	cfg, err := metacfg.ReadConfigFromFile(*flagConfigLocation, true, true)
 	if err != nil {
-		logger.Fatalw("Failed to read configuration", "err", err, "configLocation", *flagConfigLocation)
+		var validationErr validator.ValidationErrors
+		if errors.As(err, &validationErr) {
+			var errs []string
+			for _, e := range validationErr {
+				errs = append(errs, e.Error())
+			}
+			logger.Fatalw("Invalid configuration", "configLocation", *flagConfigLocation, "errors", errs)
+		} else {
+			logger.Fatalw("Failed to read configuration", "err", err, "configLocation", *flagConfigLocation)
+		}
 	}
 
 	server, err := api.NewServer(baseLogger, cfg)

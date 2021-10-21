@@ -3,7 +3,6 @@ package metacfg
 import (
 	"errors"
 	"fmt"
-	"go.uber.org/zap"
 	"io"
 	"os"
 	"sync"
@@ -33,7 +32,7 @@ func (m *EphemeralConfigManager) Set(val *Config) error {
 	return nil
 }
 
-func ReadConfigFromFile(logger *zap.Logger, filePath string, readOnly bool, allowDefault bool) (ConfigManager, error) {
+func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (ConfigManager, error) {
 	if !readOnly {
 		return nil, fmt.Errorf("non-read-only config not supported yet")
 	}
@@ -55,7 +54,7 @@ func ReadConfigFromFile(logger *zap.Logger, filePath string, readOnly bool, allo
 		if err != nil {
 			return nil, fmt.Errorf("failed to read from configuration file: %w", err)
 		}
-		initialValue, err = FromYAML(data)
+		initialValue, err = FromYAMLValidate(data)
 		if err != nil {
 			return nil, fmt.Errorf("failed to unmarshal configuration file: %w", err)
 		}
