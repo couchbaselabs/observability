@@ -17,11 +17,9 @@
         state: latest
       become: yes
     - name: Install Golang
-      shell: 
-        cmd: |
-          wget https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
-          tar -C /usr/local -xzf go{{ go_version }}.linux-amd64.tar.gz
-        creates: /usr/local/go/bin/go
+      unarchive:
+        src: https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
+        dest: /usr/local/
       become: yes
     - name: Create directory for couchbase-exporter
       file:
@@ -29,6 +27,7 @@
         state: directory
         owner: vagrant
         group: vagrant
+        mode: 0644
       become: yes
     - name: Download couchbase-exporter sources
       git:

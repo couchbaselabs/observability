@@ -1,7 +1,9 @@
 ---
 skip_list:
   - '106'
-  - yaml
+  - yaml # Ignore for now until we can auto-format it
+  - git-latest # All this usage is in testing
+  - package-latest
 exclude_paths:
   - .cache/  # implicit unless exclude_paths is defined in config
   - .github/
