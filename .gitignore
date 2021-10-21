@@ -9,6 +9,8 @@ test-dist/
 # Documentation output
 .cache/
 microlith/docs/
+tools/tern/
+tools/tern-output*
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
