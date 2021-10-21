@@ -1,8 +1,9 @@
+---
 # This is a simple compose stack to represent an example of an on-premise deployment.
 # We run the couchbase server "stuff" as a set of containers but this is just a simulation and equivalent to running natively.
 # We then run the microlith container to monitor the couchbase cluster.
 
-version: "3"
+version: '3'
 
 # Split into front-end and back-end networks although front-end is probably unnecessary
 networks:
@@ -48,23 +49,23 @@ services:
             - back
         ports:
             # Grafana
-            - "3000:3000"
+            - 3000:3000
             # Prometheus
-            - "9090:9090"
+            - 9090:9090
             # Alert manager
-            - "9093:9093"
+            - 9093:9093
             # Landing page
-            - "8080:8080"
+            - 8080:8080
             # Cluster monitor
-            - "7196:7196"
+            - 7196:7196
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
         container_name: db1
         image: couchbase/server-sandbox:7.0.0
         ports:
-            - "8091-8096:8091-8096"
-            - "11210-11211:11210-11211"
+            - 8091-8096:8091-8096
+            - 11210-11211:11210-11211
         volumes:
             - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
         networks:
@@ -101,9 +102,9 @@ services:
         container_name: exporter
         image: couchbase/exporter:1.0.5
         command:
-            - '--couchbase-address=db1'
+            - --couchbase-address=db1
         ports:
-            - "9091:9091"
+            - 9091:9091
         depends_on:
             - db1
         networks:

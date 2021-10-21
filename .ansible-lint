@@ -1,11 +1,12 @@
 ---
 skip_list:
   - '106'
-  - yaml # Ignore for now until we can auto-format it
-  - git-latest # All this usage is in testing
+  - line-length
+  - comments       # Disable error on single space with comments
+  - git-latest     # All this usage is in testing
   - package-latest
 exclude_paths:
-  - .cache/  # implicit unless exclude_paths is defined in config
+  - .cache/        # Implicit unless exclude_paths is defined in config
   - .github/
   - docs/
 parseable: true
