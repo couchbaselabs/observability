@@ -34,7 +34,7 @@ load "$BATS_ASSERT_ROOT/load.bash"
             if [ "$attempt" -lt 10 ]; then
                 attempt=$(( attempt + 1 ))
                 sleep 5
-            else 
+            else
                 fail "Didn't find any targets even after $attempt attempts"
             fi
         else

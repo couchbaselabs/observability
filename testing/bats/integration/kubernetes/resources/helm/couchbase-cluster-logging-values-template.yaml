@@ -1,23 +1,24 @@
+---
 cluster:
-  image: $COUCHBASE_SERVER_IMAGE
-  logging:
-    server:
-      enabled: true
-      manageConfiguration: false # Provide custom configuration to use
-      configurationName: fluent-bit-custom # Name of the secret to use
-      sidecar:
-        image: couchbase/fluent-bit:1.1.0
-  monitoring:
-    prometheus:
-      enabled: true
-  servers:
-    default:
-      volumeMounts:
-        default: couchbase
-  volumeClaimTemplates:
-  - metadata:
-      name: couchbase
-    spec:
-      resources:
-        requests:
-          storage: 1Gi
+    image: $COUCHBASE_SERVER_IMAGE
+    logging:
+        server:
+            enabled: true
+            manageConfiguration: false # Provide custom configuration to use
+            configurationName: fluent-bit-custom # Name of the secret to use
+            sidecar:
+                image: couchbase/fluent-bit:1.1.0
+    monitoring:
+        prometheus:
+            enabled: true
+    servers:
+        default:
+            volumeMounts:
+                default: couchbase
+    volumeClaimTemplates:
+        - metadata:
+              name: couchbase
+          spec:
+              resources:
+                  requests:
+                      storage: 1Gi

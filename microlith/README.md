@@ -108,4 +108,3 @@ The cluster manager will auto-start and configure itself with credentials suppli
 * `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`
 
 The cluster manager exposes its REST API from the container so this can be used externally to add/remove Couchbase clusters. We also support running any scripts found in `/etc/healthcheck` to do it.
-
