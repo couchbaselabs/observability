@@ -1,0 +1,106 @@
+= Licensing
+
+[abstract]
+CMOS is composed of primarily other OSS software, not linked but used directly. This page provides an overview of the relevant licensing.
+
+== Background
+
+Before diving into this page, it is worth reviewing industry and standards bodies information on container licensing.
+A good place to start is with the link:https://www.linuxfoundation.org/tools/docker-containers-what-are-the-open-source-licensing-considerations/[Linux Foundation blog post].
+
+== Components
+
+This software uses the following components with their associated licensing also captured:
+
+* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
+* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
+* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
+* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
+* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
+* Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
+* Prometheus Merge Tool: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
+* Alpine.js: MIT https://github.com/alpinejs/alpine/blob/main/LICENSE.md
+* Couchbase Cluster Monitor: Proprietary to Couchbase https://github.com/couchbaselabs/cbmultimanager/blob/master/LICENSE
+
+All licences are in the source repository and the microlith container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`] directory.
+
+A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
+
+A simple link:https://github.com/couchbaselabs/observability/blob/main/tools/build-oss-container.sh[helper script] is provided as well to build without any proprietary components.
+
+== Container layers
+
+The various external components are reused directly from the layers already published by the entities responsible (e.g. Grafana publish the Loki image layers): this container is not redistributing or repackaging them but using as-is.
+
+The container layers used in the deliverable image are:
+* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
+* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
+* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
+* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
+* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
+* Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
+
+Nginx is used as the base image for the microlith container.
+
+These can all be seen in this excerpt from the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile]:
+
+[source,Dockerfile]
+----
+FROM grafana/grafana:8.1.1 as grafana-official
+FROM grafana/loki:2.3.0 as loki-official
+FROM prom/prometheus:v2.28.1 as prometheus-official
+FROM prom/alertmanager:v0.22.2 as alertmanager-official
+FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+
+FROM nginx:alpine
+
+COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
+COPY --from=grafana-official /etc/grafana /etc/grafana
+
+COPY --from=loki-official /usr/bin/loki /usr/bin/loki
+COPY --from=loki-official /etc/loki /etc/loki
+
+COPY --from=prometheus-official /bin/prometheus /bin/prometheus
+COPY --from=prometheus-official /bin/promtool /bin/promtool
+COPY --from=prometheus-official /etc/prometheus/prometheus.yml /etc/prometheus/prometheus.yml
+COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/share/prometheus/console_libraries/
+COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
+----
+
+In each case we use or copy the contents direct from the container layer provided remotely, i.e. published by the provider.
+
+== Source configuration
+
+In addition to the container layers there is reuse of some aspects of configuration in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile] from each component, i.e. source and binary usage.
+The licensing links for all the source code are as follows:
+
+* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
+* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
+* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
+* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
+* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
+
+This is direct reuse but combined into a single file with minimal modification (e.g. addition of comments or removal of unnecessary lines).
+
+A good example is Loki configuration taken directly from the link:https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile[offical Loki Dockerfile]:
+
+[source,Dockerfile]
+----
+# LOKI:
+# From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
+RUN addgroup -g 10001 -S loki && \
+    adduser -u 10001 -S loki -G loki && \
+    mkdir -p /loki/rules && \
+    mkdir -p /loki/tmprules && \
+    mkdir -p /loki/rules-temp && \
+    chown -R loki:loki /etc/loki /loki
+
+# See https://github.com/grafana/loki/issues/1928
+RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
+
+EXPOSE 3100
+# USER loki
+----
+
+The Loki binary requires some extra configuration but this is taken directly from the official Dockerfile "recipe" for each component.
+We do comment out unnecessary aspects just to keep aligned with the original and for simpler updates.
