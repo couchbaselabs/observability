@@ -1,0 +1,26 @@
+name: tern-analysis
+on:
+    push:
+        branches: [main]
+jobs:
+    tern-scan:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Build an image from Dockerfile
+              run: |
+                  make container-oss -e CMOS_IMAGE=couchbaselabs/observability-stack:${{ github.sha }}
+
+            - uses: philips-labs/tern-action@v1.1.0
+              id: scan
+              with:
+                image: couchbaselabs/observability-stack:${{ github.sha }}
+                format: human
+                output: cmos-tern.out
+
+            - uses: actions/upload-artifact@v2
+              with:
+                name: tern
+                path: ${{ steps.scan.outputs.file }}
