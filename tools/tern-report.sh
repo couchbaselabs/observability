@@ -35,6 +35,6 @@ fi
 
 # Build the Tern container
 docker build -f docker/Dockerfile -t ternd "$SCRIPT_DIR/tern"
-# Now run it against CMOS
-docker run --privileged --device /dev/fuse -v /var/run/docker.sock:/var/run/docker.sock --rm ternd report --docker-image "$CMOS_IMAGE" > "$SCRIPT_DIR/tern-output.txt"
+# Now run it against CMOS, once to give human-readable output in the terminal and once for an HTML report we can detain.
+docker run --privileged --device /dev/fuse -v /var/run/docker.sock:/var/run/docker.sock --rm ternd report --docker-image "$CMOS_IMAGE"
 docker run --privileged --device /dev/fuse -v /var/run/docker.sock:/var/run/docker.sock --rm ternd report --report-format html --docker-image "$CMOS_IMAGE" > "$SCRIPT_DIR/tern-output.html"

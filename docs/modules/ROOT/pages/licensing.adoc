@@ -5,7 +5,7 @@ CMOS is composed of primarily other OSS software, not linked but used directly. 
 
 == Background
 
-Before diving into this page, it is worth reviewing industry and standards bodies information on container licensing.
+Before diving into this page, it is worth reviewing existing guidance and information from industry or standards organizations on container licensing.
 A good place to start is with the link:https://www.linuxfoundation.org/tools/docker-containers-what-are-the-open-source-licensing-considerations/[Linux Foundation blog post].
 
 == Components
@@ -20,19 +20,20 @@ This software uses the following components with their associated licensing also
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
 * Prometheus Merge Tool: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
 * Alpine.js: MIT https://github.com/alpinejs/alpine/blob/main/LICENSE.md
-* Couchbase Cluster Monitor: Proprietary to Couchbase https://github.com/couchbaselabs/cbmultimanager/blob/master/LICENSE
+* Couchbase Cluster Monitor: Couchbase License Agreement https://www.couchbase.com/LA03012021
 
-All licences are in the source repository and the microlith container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`] directory.
+All licences are in the source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`] directory.
 
 A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
 
 A simple link:https://github.com/couchbaselabs/observability/blob/main/tools/build-oss-container.sh[helper script] is provided as well to build without any proprietary components.
 
-== Container layers
+== Binary licensing
 
-The various external components are reused directly from the layers already published by the entities responsible (e.g. Grafana publish the Loki image layers): this container is not redistributing or repackaging them but using as-is.
+The various external components are reused directly from the container layers already published by the entities responsible (e.g. Grafana publish the Loki image layers): this container is not redistributing or repackaging them but using as-is.
 
 The container layers used in the deliverable image are:
+
 * Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
 * Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
 * Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
@@ -40,9 +41,9 @@ The container layers used in the deliverable image are:
 * Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
 
-Nginx is used as the base image for the microlith container.
+The base image for this container is the Nginx one.
 
-These can all be seen in this excerpt from the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile]:
+These can all be seen in this example excerpt from the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile]:
 
 [source,Dockerfile]
 ----
@@ -69,7 +70,7 @@ COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prome
 
 In each case we use or copy the contents direct from the container layer provided remotely, i.e. published by the provider.
 
-== Source configuration
+== Source licensing
 
 In addition to the container layers there is reuse of some aspects of configuration in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile] from each component, i.e. source and binary usage.
 The licensing links for all the source code are as follows:

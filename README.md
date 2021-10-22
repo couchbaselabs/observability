@@ -18,7 +18,7 @@ We essentially need to support two fairly distinct types of user:
 3. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
 4. Part of CMOS is the proprietary Couchbase Cluster Monitor, in [this private repository](https://github.com/couchbaselabs/cbmultimanager). If you want to build CMOS to use it, [set up your local SSH agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent).
 5. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
-6. Run the microlith: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1` (if your Couchbase Server is running in Docker, you may need to set [extra options](https://docs.docker.com/network/) to permit them to communicate.)
+6. Run the container: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1` (if your Couchbase Server is running in Docker, you may need to set [extra options](https://docs.docker.com/network/) to permit them to communicate.)
 7. Browse to http://localhost:8080
 8. Click "Prometheus Add Endpoint" and follow the instructions
 
@@ -37,15 +37,17 @@ This software uses the following components with their associated licensing also
 * Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
 * Prometheus Merge Tool: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
 * Alpine.js: MIT https://github.com/alpinejs/alpine/blob/main/LICENSE.md
-* Couchbase Cluster Monitor: Proprietary to Couchbase https://github.com/couchbaselabs/cbmultimanager/blob/master/LICENSE
+* Couchbase Cluster Monitor: Couchbase License Agreement https://www.couchbase.com/LA03012021
 
-Nginx is used as the base image for the microlith container.
+Nginx is used as the base image for the container.
 
-All licences are in the source repository and the microlith container in the [`/licenses`](microlith/licenses/) directory.
+All licences are in the source repository and the container in the [`/licenses`](https://github.com/couchbaselabs/observability/tree/main/microlith/licenses/) directory.
 
 A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
 
-A simple [helper script](./tools/build-oss-container.sh) is provided as well to build without the Couchbase Cluster monitor.
+A simple [helper script](https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh) is provided as well to build without the Couchbase Cluster monitor.
+
+We also provide a [Tern](https://github.com/tern-tools/tern) analysis [helper script](https://github.com/couchbaselabs/observability/tree/main/tools/tern-report.sh) too for licensing analysis.
 
 ## Architecture
 
@@ -57,12 +59,12 @@ A Grafana-based stack has been selected for a few reasons:
 We expose Prometheus endpoints already for node-level information on a Couchbase Server instance.
 Recently we have exposed logs using Fluent Bit, primarily for kubernetes based solutions but this can be deployed on-premise as well.
 
-There is also a project underway to provide cluster-level information via a Prometheus endpoint: https://github.com/couchbaselabs/cbmultimanager
-This will essentially integrate Couchbase knowledge and best practices into a reusable component. We can then reuse this component in the monitoring stack here as it provides a Prometheus endpoint.
+Couchbase have a proprietary project that provides cluster-level information via a Prometheus endpoint: https://github.com/couchbaselabs/cbmultimanager
+This integrates Couchbase knowledge and best practices into a reusable component. We can then reuse this component in the monitoring stack here as it provides a Prometheus endpoint.
 
 Our observability stack is therefore a combination of Couchbase-specific components that provide that discrete knowledge and monitoring of the Couchbase cluster which are then plumbed into a generic Grafana pipline like below:
 
-![Overview](/images/healthcheck-blocks.png)
+![Overview](https://github.com/couchbaselabs/observability/tree/main/images/healthcheck-blocks.png)
 
 A complete working stack is provided with a Grafana UI to access it all.
 
@@ -78,22 +80,22 @@ This is essentially the various scalable components of the Grafana stack (Loki, 
 
 A single container can then be run on-premise or on a Kubernetes platform very easily with minimal effort.
 
-![Microlith overview](/images/microlith-runtime.png)
+![Microlith overview](https://github.com/couchbaselabs/observability/tree/main/images/microlith-runtime.png)
 
 Whilst on-premise customers may primarily be using native binaries, all supported OS's for Couchbase Server can run containers easily. This also makes it easier to deploy as a self-contained image and easy to upgrade as well. We could produce an OS-specific package (e.g. RPM) with all necessary dependencies on the container runtime.
 
-For full details refer to the [microlith](microlith/README.md) sub-directory.
+For full details refer to the [microlith](https://github.com/couchbaselabs/observability/tree/main/microlith/README.md) sub-directory.
 
 ### On-premise usage
 
-A working example is [provided](examples/containers/) based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
+A working example is [provided](https://github.com/couchbaselabs/observability/tree/main/examples/containers/) based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
 
 The basic steps are:
 1. Install a container runtime for your platform, for example on Ubuntu details are here: https://docs.docker.com/engine/install/ubuntu/
 2. Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P couchbase-observability`
 3. Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.
 
-Prometheus end points and credentials can be added to the [config file](microlith/dynamic/prometheus/couchbase/targets.json) mounted into the container above. This is periodically rescanned and new end points added.
+Prometheus end points and credentials can be added to the [config file](https://github.com/couchbaselabs/observability/tree/main/microlith/dynamic/prometheus/couchbase/targets.json) mounted into the container above. This is periodically rescanned and new end points added.
 
 The cluster monitor currently requires configuration via a bespoke REST API:
 `curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"`
@@ -130,7 +132,7 @@ Areas to support customization:
 
 In all cases we do not want to have to rebuild anything to customize it, it should just be a runtime configuration. This then supports a Git-ops style deployment with easy upgrade path as we always run the container plus config so you can modify each independently, roll back, etc.
 
-![Microlith configuration](/images/microlith-config.png)
+![Microlith configuration](https://github.com/couchbaselabs/observability/tree/main/images/microlith-config.png)
 
 #### Prometheus alerting rules
 
@@ -168,7 +170,7 @@ The values of each metric represent the current status of the checker. The integ
 
 ## Distributed deployment
 
-TBD: https://github.com/couchbaselabs/observability/issues/6
+Currently not supported but on the roadmap.
 
 For those customers who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
 
@@ -195,6 +197,7 @@ We need to test the following aspects:
 * Custom alerting rules can be provided
   * Extend existing
   * Replace defaults
+  * Disable defaults
 * Grafana dashboards are available from the microlith
 * Custom dashboards can be provided to the microlith
   * We can query the REST API for this information, i.e. what rules are present and firing, etc.
@@ -227,9 +230,9 @@ Testing is broken down into general `smoke` tests independent of the infrastruct
 
 ## Caveats and restrictions
 
-* No support for data persistence is currently provided: https://github.com/couchbaselabs/observability/issues/5
+* No support for data persistence is currently other than mounting the relevant volumes into the container.
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
-* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a [helper script](tools/build-oss-container.sh) that does this.
+* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a [helper script](https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh) that does this.
 
 ## Resources
 * A good overview of how Prometheus and Alert Manager: https://www.fabernovel.com/en/engineering/alerting-in-prometheus-or-how-i-can-sleep-well-at-night
