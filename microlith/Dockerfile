@@ -1,8 +1,11 @@
+ARG CONFIG_SVC_IMAGE=couchbase/observability-config-service:latest
+
 FROM grafana/grafana:8.1.1 as grafana-official
 FROM grafana/loki:2.3.0 as loki-official
 FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+FROM ${CONFIG_SVC_IMAGE} as config-svc
 
 # Generate documentation and include locally as a static site
 # We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
@@ -222,6 +225,11 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 
+# Configuration Service
+
+COPY --from=config-svc /bin/cmoscfg /bin/cmoscfg
+COPY --from=config-svc /entrypoint.sh /entrypoints/cmoscfg.sh
+
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
@@ -274,8 +282,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
+    mkdir -p /etc/cmos && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui
+    chown -R couchbase:couchbase /data /priv /ui /etc/cmos
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
