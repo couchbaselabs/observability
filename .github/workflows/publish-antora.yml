@@ -14,7 +14,7 @@ jobs:
             - name: Run Antora
               uses: kameshsampath/antora-site-action@v0.2.4
               with:
-                  antora_playbook: docs/antora-playbook.yml
+                  antora_playbook: docs/antora-gh-playbook.yml
             - name: Publish to GitHub Pages
               uses: peaceiris/actions-gh-pages@v3
               with:

@@ -6,11 +6,24 @@ FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 
 # Generate documentation and include locally as a static site
 # We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
-FROM antora/antora:3.0.0-alpha.1 as antora-generator
-COPY docs/ /antora/docs/
+FROM antora/antora:3.0.0-alpha.9 as antora-generator
 RUN mkdir -p /antora/cmos
 ENV HOME=/antora
-RUN antora --to-dir /antora/cmos/ /antora/docs/antora-playbook.yml
+
+# Antora requires the input be a Git repo with at least one commit: https://gitlab.com/antora/antora/-/issues/284
+# No need to pin
+# hadolint ignore=DL3018
+RUN apk add --upgrade --no-cache git && \
+    git init /antora/docs && \
+    touch /antora/docs/.gitignore && \
+    git -C /antora/docs add . && \
+    git config --global user.name "ignore.me" && \
+    git config --global user.email "ignore.me" && \
+    git -C /antora/docs commit -m "ignore me"
+
+# Put the changeable stuff here
+COPY docs/ /antora/docs/
+RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -236,6 +249,7 @@ COPY --from=builder /src/github.com/couchbaselabs/observability/config-svc/entry
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
+COPY licenses/ /html/licenses/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
 COPY --from=antora-generator /antora/cmos /html/cmos

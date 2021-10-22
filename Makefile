@@ -15,7 +15,7 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint config-svc-container
+.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
@@ -143,3 +143,6 @@ docs-generate-markdown:
 	tr -d "\r" < docs/modules/ROOT/pages/index.adoc > /tmp/observability-stack-docs-output.adoc
 	mv /tmp/observability-stack-docs-output.adoc docs/modules/ROOT/pages/index.adoc
 	rm -f observability-stack-docs-output.adoc
+
+docs-license-analysis:
+	tools/tern-report.sh

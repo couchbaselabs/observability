@@ -7,6 +7,12 @@ on:
         branches: [main]
     schedule:
         - cron: 44 13 * * 4
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: Branch, tag, or commit SHA to run against
+                required: false
+                default: main
 
 jobs:
     trivy:
@@ -15,15 +21,17 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Build an image from Dockerfile
               run: |
-                  make container-oss -e CMOS_IMAGE=docker.io/couchbaselabs/observability-stack:${{ github.sha }}
+                  make container-oss -e CMOS_IMAGE=couchbaselabs/observability-stack:${{ github.sha }}
 
             - name: Run Trivy vulnerability scanner
               uses: aquasecurity/trivy-action@master
               with:
-                  image-ref: docker.io/couchbaselabs/observability-stack:${{ github.sha }}
+                  image-ref: couchbaselabs/observability-stack:${{ github.sha }}
                   format: template
                   template: '@/contrib/sarif.tpl'
                   output: trivy-results.sarif

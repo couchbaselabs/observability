@@ -7,7 +7,7 @@ skip_list:
 exclude_paths:
   - .cache/        # Implicit unless exclude_paths is defined in config
   - .github/
-  - docs/
+  - docs/          # Make sure to exclude all the Antora stuff as it picks up the playbooks
 parseable: true
 use_default_rules: true
 verbosity: 1

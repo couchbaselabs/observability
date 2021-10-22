@@ -9,6 +9,8 @@ test-dist/
 # Documentation output
 .cache/
 microlith/docs/
+tools/tern/
+tools/tern-output*
 # config-svc build
 microlith/config-svc
 # Test

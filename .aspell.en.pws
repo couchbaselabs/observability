@@ -1,4 +1,4 @@
-personal_ws-1.1 en 51
+personal_ws-1.1 en 55
 AGPL
 CAO
 CMOS
@@ -50,3 +50,7 @@ ruleset
 runnable
 runtime
 scalable
+Dockerfile
+AlertManager
+Github
+roadmap
