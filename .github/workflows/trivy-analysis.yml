@@ -15,9 +15,9 @@ on:
                 default: main
 
 jobs:
-    tern-scan:
-        name: Carry out analysis of the container image licensing
-        runs-on: ubuntu-latest
+    trivy:
+        name: Run Trivy against OSS container
+        runs-on: ubuntu-18.04
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
