@@ -9,6 +9,8 @@ test-dist/
 # Documentation output
 .cache/
 microlith/docs/
+# config-svc build
+microlith/config-svc
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
