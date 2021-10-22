@@ -1,4 +1,4 @@
-personal_ws-1.1 en 52
+personal_ws-1.1 en 55
 AGPL
 CAO
 CMOS
@@ -51,3 +51,6 @@ runnable
 runtime
 scalable
 Dockerfile
+AlertManager
+Github
+roadmap
