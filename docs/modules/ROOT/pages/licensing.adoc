@@ -28,18 +28,46 @@ A statement is printed out to standard output/console at start up to indicate ac
 
 A simple link:https://github.com/couchbaselabs/observability/blob/main/tools/build-oss-container.sh[helper script] is provided as well to build without any proprietary components.
 
+Some of the components can also provide licensing information via a specific endpoint or API call, an example would be link:https://grafana.com/docs/grafana/latest/packages_api/data/licenseinfo/[Grafana].
+
 == Binary licensing
 
 The various external components are reused directly from the container layers already published by the entities responsible (e.g. Grafana publish the Loki image layers): this container is not redistributing or repackaging them but using as-is.
 
 The container layers used in the deliverable image are:
 
-* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
-* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
-* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
-* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
-* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
-* Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
+.Container image licenses
+|===
+|Container image
+|DockerHub URL
+|License
+
+|Grafana
+|https://hub.docker.com/r/grafana/grafana
+|AGPL 3.0
+
+|Loki
+|https://hub.docker.com/r/grafana/loki|
+|AGPL 3.0
+
+|Prometheus
+|https://hub.docker.com/r/prom/prometheus
+|Apache 2.0
+
+|Alert Manager
+|https://hub.docker.com/r/prom/alertmanager
+|Apache 2.0
+
+|Jaeger
+|https://hub.docker.com/r/jaegertracing/all-in-one
+|Apache 2.0
+
+|Nginx
+|https://hub.docker.com/_/nginx
+|http://nginx.org/LICENSE
+|===
+
+See the notes below on how licensing information was extracted.
 
 The base image for this container is the Nginx one.
 
@@ -105,3 +133,69 @@ EXPOSE 3100
 
 The Loki binary requires some extra configuration but this is taken directly from the official Dockerfile "recipe" for each component.
 We do comment out unnecessary aspects just to keep aligned with the original and for simpler updates.
+
+== License analysis
+
+Licensing documentation of the various container images is not always present on the DockerHub pages or it is linked to documentation site so requires a bit of analysis to extract.
+If the container image does not provide a license then the initial assumption is it is the same as the source license.
+
+However, the whole image needs to be considered including all software it covers as this is our responsibility - rather then just relying on what the image says.
+To this end a link:https://github.com/tern-tools/tern[Tern] link:https://github.com/couchbaselabs/observability/blob/main/tools/tern-report.sh[helper script] is also available in the repository.
+
+The full link:https://github.com/tern-tools/tern[Tern] report can be found link:http://localhost:8080/tern-licensing-report.html[here].
+Note that the Tern report is a full scan of everything in the container and not necessarily how it is used or linked.
+
+=== Grafana and Loki
+
+For Grafana and Loki there is a recent blog post: https://grafana.com/blog/2021/04/20/grafana-loki-tempo-relicensing-to-agplv3/.
+This then links out to the source repositories covering the specific components within each that are still Apache 2:
+
+* https://github.com/grafana/grafana/blob/HEAD/LICENSING.md
+* https://github.com/grafana/loki/blob/HEAD/LICENSING.md
+
+In each case they indicate the default license is AGPL-3.
+
+=== Prometheus and AlertManager
+
+Both Prometheus and Alert Manager link from DockerHub to the documentation site which does cover licensing as Apache 2: https://prometheus.io/docs/introduction/faq/#what-license-is-prometheus-released-under
+Prometheus also says it explicitly on the DockerHub page with an incorrect link, presumably as the information comes directly from the Github repo with the same relative link: https://github.com/prometheus/prometheus/blob/main/LICENSE
+
+=== Jaeger
+
+The Jaeger image has no details on the DockerHub page at all.
+The source repo indicates it is Apache 2: https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE
+
+=== Nginx
+
+The Nginx image license is a custom one linked directly from DockerHub: http://nginx.org/LICENSE
+Whilst it is a specific one, it is essentially a public domain one with the requirement of copyright being included:
+
+[source,cpp]
+----
+/*
+ * Copyright (C) 2002-2021 Igor Sysoev
+ * Copyright (C) 2011-2021 Nginx, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+ ----
