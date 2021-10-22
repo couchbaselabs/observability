@@ -51,6 +51,7 @@ func NewServer(baseLogger *zap.Logger, configManager metacfg.ConfigManager) (*Se
 }
 
 func (s *Server) Serve() {
+	go s.clusters.UpdateLoop()
 	cfg := s.cfg.Get()
 	host := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
 	s.logger.Sugar().Infow("Starting HTTP server", "host", host)

@@ -6,6 +6,7 @@ require (
 	github.com/brpaz/echozap v1.1.2
 	github.com/couchbase/tools-common v0.0.0-20211021130031-35660e1b45ca
 	github.com/creasty/defaults v1.5.2
+	github.com/deepmap/oapi-codegen v1.8.3
 	github.com/getkin/kin-openapi v0.79.0
 	github.com/go-playground/validator/v10 v10.9.0
 	github.com/labstack/echo/v4 v4.6.1

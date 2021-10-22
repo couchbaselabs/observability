@@ -43,6 +43,12 @@ paths:
   /clusters:
     get:
       summary: Obtain the current Couchbase Clusters state.
+      parameters:
+        - name: includeSensitiveInfo
+          in: query
+          schema:
+            type: boolean
+            default: false
       responses:
         200:
           description: Current state of the clusters
@@ -61,3 +67,19 @@ components:
           type: array
           items:
             type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+#        couchbaseConfig:
+#          type: object
+#          properties:
+#            managementPort:
+#              type: number
+#            username:
+#              type: string
+#            password:
+#              type: string
+#          additionalProperties: false
+#          required: [managementPort]
+      required: [nodes, metadata]

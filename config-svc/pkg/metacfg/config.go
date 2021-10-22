@@ -23,7 +23,7 @@ import (
 
 type Config struct {
 	Clusters              []ClusterConfig        `yaml:"clusters" default:"[]" validate:"dive,required"`
-	ClusterUpdateInterval time.Duration          `yaml:"cluster_update_interval" default:"1m"`
+	ClusterUpdateInterval time.Duration          `yaml:"cluster_update_interval" default:"15s"`
 	PrometheusHosts       []string               `yaml:"prometheus_hosts" default:"[]" validate:"dive,url"`
 	ClusterMonitorHosts   []ClusterMonitorConfig `yaml:"cluster_monitor_hosts" default:"[]" validate:"dive,required"`
 	Immutable             bool                   `yaml:"immutable"`
@@ -49,9 +49,10 @@ type ClusterMonitorConfig struct {
 }
 
 type CouchbaseConfig struct {
-	ManagementPort int    `default:"18091" yaml:"management_port"`
-	Username       string `yaml:"username" validate:"required"`
-	Password       string `yaml:"password" validate:"required"` // TODO env var / secret
+	ManagementPort          int    `default:"18091" yaml:"management_port"`
+	Username                string `yaml:"username" validate:"required"`
+	Password                string `yaml:"password" validate:"required"` // TODO env var / secret
+	IgnoreCertificateErrors bool   `yaml:"ignore_certificate_errors_this_is_insecure"`
 }
 
 type MetricsConfig struct {
@@ -62,6 +63,10 @@ type MetricsConfig struct {
 
 type NodesProviderConfig struct {
 	Static []string `validate:"required,dive,hostname|ip"`
+}
+
+func (npc *NodesProviderConfig) GetNodes() []string {
+	return npc.Static
 }
 
 func FromYAMLValidate(data []byte) (*Config, error) {

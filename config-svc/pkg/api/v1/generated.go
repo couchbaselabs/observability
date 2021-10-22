@@ -7,25 +7,92 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
+	"net/http"
 	"net/url"
 	"path"
 	"strings"
 
+	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
 )
 
 // CouchbaseCluster defines model for CouchbaseCluster.
 type CouchbaseCluster struct {
-	Nodes *[]string `json:"nodes,omitempty"`
+	Metadata CouchbaseCluster_Metadata `json:"metadata"`
+	Nodes    []string                  `json:"nodes"`
+}
+
+// CouchbaseCluster_Metadata defines model for CouchbaseCluster.Metadata.
+type CouchbaseCluster_Metadata struct {
+	AdditionalProperties map[string]string `json:"-"`
+}
+
+// GetClustersParams defines parameters for GetClusters.
+type GetClustersParams struct {
+	IncludeSensitiveInfo *bool `json:"includeSensitiveInfo,omitempty"`
+}
+
+// Getter for additional properties for CouchbaseCluster_Metadata. Returns the specified
+// element and whether it was found
+func (a CouchbaseCluster_Metadata) Get(fieldName string) (value string, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for CouchbaseCluster_Metadata
+func (a *CouchbaseCluster_Metadata) Set(fieldName string, value string) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]string)
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for CouchbaseCluster_Metadata to handle AdditionalProperties
+func (a *CouchbaseCluster_Metadata) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]string)
+		for fieldName, fieldBuf := range object {
+			var fieldVal string
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for CouchbaseCluster_Metadata to handle AdditionalProperties
+func (a CouchbaseCluster_Metadata) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
 }
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Obtain the current Couchbase Clusters state.
 	// (GET /clusters)
-	GetClusters(ctx echo.Context) error
+	GetClusters(ctx echo.Context, params GetClustersParams) error
 	// Outputs the current config in YAML format.
 	// (GET /config)
 	GetConfig(ctx echo.Context) error
@@ -43,8 +110,17 @@ type ServerInterfaceWrapper struct {
 func (w *ServerInterfaceWrapper) GetClusters(ctx echo.Context) error {
 	var err error
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetClustersParams
+	// ------------- Optional query parameter "includeSensitiveInfo" -------------
+
+	err = runtime.BindQueryParameter("form", true, false, "includeSensitiveInfo", ctx.QueryParams(), &params.IncludeSensitiveInfo)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter includeSensitiveInfo: %s", err))
+	}
+
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetClusters(ctx)
+	err = w.Handler.GetClusters(ctx, params)
 	return err
 }
 
@@ -103,17 +179,19 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/6RUwW7bOBD9FWJ2j4qoJIvdrE41nKBwkTRBnUvR9kDTY4upRBLkyK4R+N+LoSzHiuP2",
-	"0BtFzpuZ9+aNnkG7xjuLliKUzxB1hY1Kx7FrdTVTEcd1GwkD36n53JBxVtUPwXkMZDBCuVB1xAz8wdUz",
-	"WDfvDoawSQfaeIQSIgVjl7DN+gsVgtrA9uXCzZ5QE2z5ytiFY7B2lpQmPmKjTA1lenqn+y5z7RrIwKqG",
-	"U+ybz8TE6hwyaANjKiIfSymHsG0Gc4w6GM/koIRPN9NHMXqYCLcQVKEYO7swyzYofhdTDCujETKojUYb",
-	"MfHtCo+80hWKi7w4qrler3OVnnMXlnKHjfJ2Mr75OL05YwyLYKgeUBB3zhpyrJr42hbFxb/ifhYxrNTM",
-	"1IY2YkpKfxdnJ7tcYYgdr9U5V3AerfIGSrjMi/wSMvCKqjQjqbthp48lJr15qinlZA4lvEca9zEZBIze",
-	"MQsOvCiKflRoE1R5XxudwPIpcgu9xfj0d8AFlPCXfPGg3BlQHrkvuWE4pXEbAloSkRRhP6o9AY6PbdOo",
-	"sIES7mekjO0idrAXgXtCXaY8QaVOah7oMCx+7YR1JNqIgioThVmIjWvFUxtJrJWlw2YEWzU0SQf24rGi",
-	"Xa3f6kn4g+RGNfVQyFebdazU497DvS2EPjTLa7Fa8i3FgVpdvDBWfB7d3YqOz06qnaHyfsSnjHPfxX3g",
-	"sD/0zhu/iiFlrsUbfJkXInrUZrFLxq13Ixs9TH5BvE9wGpx3dXkV08Z8ee2RW6dVLe6MDq42VA3+CKWU",
-	"NT9XLlJ5VVwVO8NJ5Y1Me/p2tmtcYe18wyqdzPff+f//7BN92/4MAAD//3KXdFHmBQAA",
+	"H4sIAAAAAAAC/6RUTW/jNhD9K8S0R62kTYp2q1MDb1C4SJqg3kuxzYGmRhFTiuSSQ6eG4f9ejD5sa71O",
+	"D71J5Lx5M2/ecAfKdd5ZtBSh2kFULXay/1y4pNq1jLgwKRIGPpN1rUk7K81jcB4DaYxQNdJEzMCfHO2g",
+	"Q5K1JHkZtgPaeoQKIgVtn2GfTQdu/YKK+MC6egjVhN2bGBmC3MJ+n0HAL0kHrKH6POKzYzVPZyQM0bZx",
+	"nFw5S1IRf2IntYGqv/pFTVrkynWQgZUdpzhIlImlVTlkkAJjWiIfq6KYw/YZ1BhV0J61gAr+uF19EjeP",
+	"S+EaQS2KhbONfk5B8r1YYdhohZCB0QptRK5qJL7xUrUorvLyjPP19TWX/XXuwnMxYmNxt1zc/r66fccY",
+	"Vk2TmbUg7p3V5FhV8Vcqy6sfxcM6YtjItTaatmJFUv0t3l2scoMhDn1t3jOD82il11DBdV7m15CBl9T2",
+	"MyzUYKn+5xl7vdkXfcplDRX8irSYYhgYZIcD4PMONJN8SRi2x1Foq0yqcYU2atIbXPJEs9HPnL/GRiZD",
+	"B7eOLlg7Z1Ba2O+f2DnRO1aLAVdlOVkCbV+i9N5o1RdZvERudXdC8H3ABir4rjhuVDGuU3G2S73r5m5Y",
+	"pBDQkogkCSdLHITi+Ji6ToYtVPCwJqntEDHCjoOchBsy5T20UP3UTvSek390wjoSKaKgVkehG7F1Sbyk",
+	"SOJVWjotRvBKhK7XgT1/PrmB6z/1JPyHiq3szFzIrzb8XKlPh12Z7CfUqSm/FiuRTxRnag3xQlvx5839",
+	"nRj6GaUajZtPI75k0Ich7jcO+5/e+caTNG+ZufiluM5LET0q3YzJuPRhZDePyzcanxJcBucDL6/8tGjz",
+	"Gu6ckkbcaxWc0dTOXp6qKAxfty5S9aH8UI6GK6TXRf8efDvbR9ygcb5jlS7m++n9zz8cEj3t/w0AAP//",
+	"nDJD37QGAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

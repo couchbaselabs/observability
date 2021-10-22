@@ -24,8 +24,19 @@ func (s *Server) GetConfig(ctx echo.Context) error {
 	return ctx.Blob(http.StatusOK, "text/yaml", s.cfg.Get().ToYAML())
 }
 
-func (s *Server) GetClusters(ctx echo.Context) error {
-	return nil
+func (s *Server) GetClusters(ctx echo.Context, _ v1.GetClustersParams) error {
+	val, err := s.clusters.GetClusters()
+	if err != nil {
+		return err
+	}
+	result := make([]v1.CouchbaseCluster, len(val))
+	for i, cluster := range val {
+		result[i] = v1.CouchbaseCluster{
+			Nodes:    cluster.Nodes,
+			Metadata: v1.CouchbaseCluster_Metadata{AdditionalProperties: cluster.Metadata},
+		}
+	}
+	return ctx.JSON(http.StatusOK, result)
 }
 
 func (s *Server) GetOpenapiJson(ctx echo.Context) error {
