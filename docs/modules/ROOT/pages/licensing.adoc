@@ -12,17 +12,39 @@ A good place to start is with the link:https://www.linuxfoundation.org/tools/doc
 
 This software uses the following components with their associated licensing also captured:
 
-* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
-* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
-* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
-* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
-* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
-* Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
-* Prometheus Merge Tool: Apache 2.0 https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE
-* Alpine.js: MIT https://github.com/alpinejs/alpine/blob/main/LICENSE.md
-* Couchbase Cluster Monitor: Couchbase License Agreement https://www.couchbase.com/LA03012021
+.Component licenses
+|===
+|Component|License
 
-All licences are in the source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`] directory.
+|Grafana
+|link:https://github.com/grafana/grafana/blob/main/LICENSE[AGPL 3.0]
+
+|Loki
+|link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0]
+
+|Prometheus
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
+
+|Alert Manager
+|link:https://github.com/prometheus/alertmanager/blob/master/LICENSE[Apache 2.0]
+
+|Jaeger
+|link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
+
+|Nginx
+|link:http://nginx.org/LICENSE[Custom]
+
+|Prometheus Merge Tool
+|link:https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE[Apache 2.0]
+
+|Alpine.js
+|link:https://github.com/alpinejs/alpine/blob/main/LICENSE.md[MIT]
+
+|Couchbase Cluster Monitor
+|link:https://www.couchbase.com/LA03012021[Couchbase License Agreement]
+|===
+
+All licences are in the CMOS source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`] directory.
 
 A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
 
@@ -38,36 +60,32 @@ The container layers used in the deliverable image are:
 
 .Container image licenses
 |===
-|Container image
-|DockerHub URL
-|License
+|Container image|DockerHub URL|License
 
 |Grafana
 |https://hub.docker.com/r/grafana/grafana
-|AGPL 3.0
+|link:https://github.com/grafana/grafana/blob/HEAD/LICENSING.md[AGPL 3.0]
 
 |Loki
-|https://hub.docker.com/r/grafana/loki|
-|AGPL 3.0
+|https://hub.docker.com/r/grafana/loki
+|link:https://github.com/grafana/loki/blob/HEAD/LICENSING.md[AGPL 3.0]
 
 |Prometheus
 |https://hub.docker.com/r/prom/prometheus
-|Apache 2.0
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
 
 |Alert Manager
 |https://hub.docker.com/r/prom/alertmanager
-|Apache 2.0
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
 
 |Jaeger
 |https://hub.docker.com/r/jaegertracing/all-in-one
-|Apache 2.0
+|link:https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
 
 |Nginx
 |https://hub.docker.com/_/nginx
-|http://nginx.org/LICENSE
+|link:http://nginx.org/LICENSE[Custom]
 |===
-
-See the notes below on how licensing information was extracted.
 
 The base image for this container is the Nginx one.
 
@@ -103,11 +121,30 @@ In each case we use or copy the contents direct from the container layer provide
 In addition to the container layers there is reuse of some aspects of configuration in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile] from each component, i.e. source and binary usage.
 The licensing links for all the source code are as follows:
 
-* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
-* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
-* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
-* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
-* Jaeger: Apache 2.0 https://github.com/jaegertracing/jaeger/blob/master/LICENSE
+.Dockerfile licenses
+|===
+|Container image|Github repository|License
+
+|Grafana
+|https://github.com/grafana/grafana
+|link:https://github.com/grafana/grafana/blob/main/LICENSE[AGPL 3.0]
+
+|Loki
+|https://github.com/grafana/loki
+|link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0]
+
+|Prometheus
+|https://github.com/prometheus/prometheus
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
+
+|Alert Manager
+|https://github.com/prometheus/alertmanager
+|link:https://github.com/prometheus/alertmanager/blob/master/LICENSE[Apache 2.0]
+
+|Jaeger
+|https://github.com/jaegertracing/jaeger
+|link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
+|===
 
 This is direct reuse but combined into a single file with minimal modification (e.g. addition of comments or removal of unnecessary lines).
 
