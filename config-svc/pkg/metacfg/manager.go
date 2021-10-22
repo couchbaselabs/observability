@@ -46,37 +46,43 @@ func (m *EphemeralConfigManager) Set(val *Config) error {
 	return nil
 }
 
+// ReadConfigFromFile reads the meta-config from a .yaml file, and returns a ConfigManager initialised with it.
+// If the file doesn't exist, and allowDefault is true, returns a ConfigManager with the default values.
+// In all other cases, returns an error.
+//
+// Note that the readOnly option is only present for future use and only `true` is currently supported.
 func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (ConfigManager, error) {
 	if !readOnly {
 		return nil, fmt.Errorf("only read-only config is supported for now")
 	}
-	var initialValue *Config
+
 	cfgFile, err := os.Open(filePath)
-	if err != nil {
-		if !errors.Is(err, os.ErrNotExist) {
-			return nil, fmt.Errorf("failed to open configuration file: %w", err)
-		}
-		// File doesn't exist, check if we can use the defaults
+
+	if errors.Is(err, os.ErrNotExist) {
+		// Config file doesn't exist
 		if allowDefault {
-			initialValue = NewDefault()
-		} else {
-			return nil, fmt.Errorf("config file doesn't exist and default forbidden: %w", err)
+			// But we can use the defaults
+			return ReadOnlyConfigManager{value: NewDefault()}, nil
 		}
-	} else {
-		defer cfgFile.Close()
-		data, err := io.ReadAll(cfgFile)
-		if err != nil {
-			return nil, fmt.Errorf("failed to read from configuration file: %w", err)
-		}
-		initialValue, err = FromYAMLValidate(data)
-		if err != nil {
-			return nil, fmt.Errorf("failed to unmarshal configuration file: %w", err)
-		}
+		return nil, fmt.Errorf("config file doesn't exist and defaults disabled")
 	}
-	if readOnly {
-		return ReadOnlyConfigManager{value: initialValue}, nil
+	if err != nil {
+		// File exists, but we can't access it
+		return nil, fmt.Errorf("failed to open configuration file: %w", err)
 	}
-	return nil, fmt.Errorf("only read-only config is supported for now")
+
+	// Config file exists, and we can open it, try reading it
+	defer cfgFile.Close()
+	data, err := io.ReadAll(cfgFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read from configuration file: %w", err)
+	}
+	initialValue, err := FromYAMLValidate(data)
+	if err != nil {
+		return nil, fmt.Errorf("failed to unmarshal configuration file: %w", err)
+	}
+
+	return ReadOnlyConfigManager{value: initialValue}, nil
 }
 
 type ReadOnlyConfigManager struct {

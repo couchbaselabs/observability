@@ -50,7 +50,7 @@ lint: config-svc-lint container-lint docs-lint
 	tools/licence-lint.sh
 
 config-svc-lint:
-	docker run --rm -i -v  ./config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
+	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
 # NOTE: This target is only for local development.
 container: build
