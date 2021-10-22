@@ -1,10 +1,9 @@
-ARG CONFIG_SVC_IMAGE=couchbase/observability-config-service:latest
-
 FROM grafana/grafana:8.1.1 as grafana-official
 FROM grafana/loki:2.3.0 as loki-official
 FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+ARG CONFIG_SVC_IMAGE=couchbase/observability-config-service:latest
 FROM ${CONFIG_SVC_IMAGE} as config-svc
 
 # Generate documentation and include locally as a static site
