@@ -15,9 +15,6 @@
 # limitations under the License.
 
 set -eu
-#
-set -x 
-#
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 source "$SCRIPT_DIR"/helpers/driver.sh
@@ -50,6 +47,4 @@ if $CREATE_VAGRANTS; then
   configure_servers "$CB_VERSION" "$VAGRANTS_OS" "$CLUSTER_NUMBER" "$SERVER_USER" "$SERVER_PASS"
 fi
 
-echo "All done. Go to: http://localhost:8080 and sign in with admin:password."
-# Open web browser automatically, go to Grafana?
-# Check rescrape of mounted dashboards works and can be refreshed without rebuilding docker container
+echo "All done. Go to: http://localhost:8080 -> Grafana"

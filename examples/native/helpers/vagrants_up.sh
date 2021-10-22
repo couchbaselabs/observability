@@ -18,8 +18,8 @@
 # Uses the variables VAGRANT_HOST, VAGRANT_CPUS, and VAGRANT_RAM to determine the cluster configuration.
 
 # Parameters:
-# $1: The Couchbase Server version to test (default: 6.6.3)
-# $2: The OS to use (default: centos7)
+# $1: The Couchbase Server version to run
+# $2: The OS to use
 # $3: The location of the CB vagrants folder
 function start_vagrant_cluster() {
 
@@ -54,5 +54,17 @@ $(seq -f "node%g" 1 "$VAGRANT_NODES")
 EOF
 
     ansible-playbook -i "$SCRIPT_DIR/hosts.ini" "$SCRIPT_DIR/playbook.yml"
-    rm "$SCRIPT_DIR"/hosts.ini
+    #rm "$SCRIPT_DIR"/hosts.ini
+}
+
+# Parameters:
+# $1: The Couchbase Server version to test (default: 6.6.3)
+# $2: The OS to use (default: centos7)
+function teardown_vagrant_cluster() {
+    CB_VERSION=$1
+    VAGRANT_OS=$2
+
+    vagrant global-status --prune | grep "$CB_VERSION/$VAGRANT_OS" | awk '$1 ~ /[0-9,a-f]{6}/{system("vagrant halt "$1)}'
+    vagrant global-status --prune | grep "$CB_VERSION/$VAGRANT_OS" | awk '$1 ~ /[0-9,a-f]{6}/{system("vagrant destroy "$1)}'
+
 }

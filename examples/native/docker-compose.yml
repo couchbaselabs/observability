@@ -13,7 +13,7 @@ services:
             - GF_INSTALL_PLUGINS=marcusolsson-json-datasource
         
         volumes:
-            - ./dynamic/grafana:/etc/grafana
+            - ./dynamic/grafana:/etc/grafana:rw
         
         ports:
             - "8080:8080"
