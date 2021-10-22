@@ -1,4 +1,4 @@
-FROM golang:1.16 AS builder
+FROM golang:1.16-alpine AS builder
 
 COPY go.mod go.sum /app/
 WORKDIR /app
@@ -6,8 +6,7 @@ RUN go mod download
 
 COPY . /app/
 
-# Statically build it to allow reuse on Alpine Linux
-RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /cmoscfg ./cmd/cmoscfg
+RUN CGO_ENABLED=0 GOOS=linux go build -o /cmoscfg ./cmd/cmoscfg
 
 FROM alpine:3.14
 
