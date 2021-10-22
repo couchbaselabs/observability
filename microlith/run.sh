@@ -21,6 +21,7 @@ set -e
 echo "The software referenced by this Docker image includes software from the following under the licenses from those images."
 echo "Use of this image and the referenced software is subject to those terms, which can be found in /licenses/"
 echo "These can be viewed by running a command like so to provide a custom entrypoint: 'docker run ... cat /licenses/*'"
+echo "If the CMOS webserver is running (it is by default), they can also be accessed from '<url>/licenses/' via a browser or curl command."
 
 # Expose all nested config variables to make it simple to see
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}

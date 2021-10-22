@@ -238,6 +238,7 @@ COPY jaeger/ /etc/jaeger/
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
+COPY licenses/ /html/licenses/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
 COPY --from=antora-generator /antora/cmos /html/cmos
