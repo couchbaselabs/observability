@@ -52,15 +52,15 @@ func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (Conf
 	}
 	var initialValue *Config
 	cfgFile, err := os.Open(filePath)
-	if err != nil { //nolint:nestif
-		if errors.Is(err, os.ErrNotExist) {
-			if allowDefault {
-				initialValue = NewDefault()
-			} else {
-				return nil, fmt.Errorf("config file doesn't exist and default forbidden: %w", err)
-			}
-		} else {
+	if err != nil {
+		if !errors.Is(err, os.ErrNotExist) {
 			return nil, fmt.Errorf("failed to open configuration file: %w", err)
+		}
+		// File doesn't exist, check if we can use the defaults
+		if allowDefault {
+			initialValue = NewDefault()
+		} else {
+			return nil, fmt.Errorf("config file doesn't exist and default forbidden: %w", err)
 		}
 	} else {
 		defer cfgFile.Close()

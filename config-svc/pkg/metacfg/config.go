@@ -88,12 +88,3 @@ func NewDefault() *Config {
 	defaults.MustSet(&result)
 	return &result
 }
-
-func (c Config) ToYAML() []byte {
-	val, err := yaml.Marshal(&c)
-	if err != nil {
-		// All our config should have sensible defaults and validation, so a failed marshaling means we've messed up
-		return nil
-	}
-	return val
-}
