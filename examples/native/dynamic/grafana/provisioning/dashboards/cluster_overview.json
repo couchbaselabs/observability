@@ -22,7 +22,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
+  "id": 1,
   "links": [],
   "panels": [
     {
@@ -34,10 +34,22 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
-            "displayMode": "auto"
+            "align": "center",
+            "displayMode": "auto",
+            "filterable": false,
+            "minWidth": 0
           },
-          "mappings": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "green",
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -52,17 +64,171 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status: Good"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "green",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status: Warning"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "gradient-gauge"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "continuous-YlRd"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status: Alert"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "green",
+                      "value": null
+                    },
+                    {
+                      "color": "red",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "None"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Status: Info"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-text"
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#625f5f",
+                  "mode": "thresholds"
+                }
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#b2b2b2",
+                      "value": null
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "0": {
+                        "index": 0,
+                        "text": "None"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Nodes"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "lcd-gauge"
+              },
+              {
+                "id": "mappings",
+                "value": []
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Host"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": null
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 9,
-        "w": 20,
+        "h": 8,
+        "w": 17,
         "x": 0,
         "y": 0
       },
       "id": 2,
       "options": {
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.1.1",
       "targets": [
@@ -79,8 +245,8 @@
               "name": "Name"
             },
             {
-              "jsonPath": "$[*].nodes_summary[0].version",
-              "language": "jsonpath",
+              "jsonPath": "$map($, function($v) {$map($v.nodes_summary[*].version, function($m) {\n    $join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")\n    \n})[0]})",
+              "language": "jsonata",
               "name": "Version"
             },
             {
@@ -89,14 +255,29 @@
               "name": "Nodes"
             },
             {
-              "jsonPath": "$map($, function($v) {$join($distinct($v.nodes_summary.services), ', ')})",
+              "jsonPath": "$map($, function($v) {$join($distinct($map($v.nodes_summary.services, function($m) {\n    $replace($replace($replace($m, \"kv\", \"Data\"), \"index\", \"Index\"), \"n1ql\", \"Query\")\n})), ', ')})",
               "language": "jsonata",
               "name": "Services"
             },
             {
-              "jsonPath": "$[*].status_summary",
+              "jsonPath": "$[*].status_summary.good",
               "language": "jsonpath",
-              "name": "Status"
+              "name": "Status: Good"
+            },
+            {
+              "jsonPath": "$[*].status_summary.warnings",
+              "language": "jsonpath",
+              "name": "Status: Warning"
+            },
+            {
+              "jsonPath": "$[*].status_summary.alerts",
+              "language": "jsonpath",
+              "name": "Status: Alert"
+            },
+            {
+              "jsonPath": "$[*].status_summary.info",
+              "language": "jsonpath",
+              "name": "Status: Info"
             }
           ],
           "method": "GET",
@@ -109,6 +290,7 @@
       "type": "table"
     }
   ],
+  "refresh": "",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -116,12 +298,12 @@
     "list": []
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Cluster Overview Dashboard",
   "uid": null,
-  "version": 0
+  "version": 1
 }
