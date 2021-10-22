@@ -2,6 +2,12 @@ name: tern-license-analysis
 on:
     push:
         branches: [main]
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: Branch, tag, or commit SHA to run against
+                required: false
+                default: main
 jobs:
     tern-scan:
         name: Carry out analysis of the container image licensing
@@ -9,6 +15,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Build an image from Dockerfile
               run: |

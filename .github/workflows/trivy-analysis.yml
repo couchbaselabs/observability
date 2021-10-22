@@ -7,14 +7,22 @@ on:
         branches: [main]
     schedule:
         - cron: 44 13 * * 4
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: Branch, tag, or commit SHA to run against
+                required: false
+                default: main
 
 jobs:
-    trivy:
-        name: Run Trivy against OSS container
-        runs-on: ubuntu-18.04
+    tern-scan:
+        name: Carry out analysis of the container image licensing
+        runs-on: ubuntu-latest
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Build an image from Dockerfile
               run: |
