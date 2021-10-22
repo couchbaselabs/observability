@@ -16,9 +16,10 @@ package metacfg
 
 import (
 	"fmt"
+	"regexp"
+
 	"github.com/creasty/defaults"
 	val "github.com/go-playground/validator/v10"
-	"regexp"
 )
 
 type Validator struct {
@@ -46,7 +47,9 @@ func (v *Validator) ValidateWithDefaults(cfg *Config) error {
 var promLabelRegex = regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_]*$`)
 
 func (v *Validator) registerCustomValidations(validate *val.Validate) {
-	validate.RegisterValidation("prometheus_label", func(fl val.FieldLevel) bool {
+	if err := validate.RegisterValidation("prometheus_label", func(fl val.FieldLevel) bool {
 		return promLabelRegex.MatchString(fl.Field().String())
-	})
+	}); err != nil {
+		panic(fmt.Errorf("failed to register validation prometheus_label: %w", err))
+	}
 }

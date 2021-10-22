@@ -17,11 +17,12 @@ package main
 import (
 	"errors"
 	"flag"
+	"log"
+
 	"github.com/couchbaselabs/observability/config-svc/pkg/api"
 	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
 	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
-	"log"
 )
 
 var flagConfigLocation = flag.String("config-path", "./config.yaml", "path to read/store the configuration")

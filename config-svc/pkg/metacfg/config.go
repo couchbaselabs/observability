@@ -16,9 +16,10 @@ package metacfg
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/creasty/defaults"
 	"gopkg.in/yaml.v3"
-	"time"
 )
 
 type Config struct {

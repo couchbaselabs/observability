@@ -16,6 +16,7 @@ package api
 
 import (
 	"fmt"
+
 	"github.com/brpaz/echozap"
 	"github.com/couchbaselabs/observability/config-svc/pkg/manager"
 	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"

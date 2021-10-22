@@ -52,7 +52,7 @@ func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (Conf
 	}
 	var initialValue *Config
 	cfgFile, err := os.Open(filePath)
-	if err != nil {
+	if err != nil { //nolint:nestif
 		if errors.Is(err, os.ErrNotExist) {
 			if allowDefault {
 				initialValue = NewDefault()
@@ -75,9 +75,8 @@ func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (Conf
 	}
 	if readOnly {
 		return ReadOnlyConfigManager{value: initialValue}, nil
-	} else {
-		return nil, fmt.Errorf("only read-only config is supported for now")
 	}
+	return nil, fmt.Errorf("only read-only config is supported for now")
 }
 
 type ReadOnlyConfigManager struct {

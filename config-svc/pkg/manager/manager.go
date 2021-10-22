@@ -19,13 +19,14 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"fmt"
-	"github.com/couchbase/tools-common/cbrest"
-	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
-	"go.uber.org/zap"
 	"io"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/couchbase/tools-common/cbrest"
+	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
+	"go.uber.org/zap"
 )
 
 type ClusterManager struct {
@@ -51,13 +52,8 @@ type pools struct {
 	UUID string `json:"uuid"`
 }
 
-type poolsDefault struct {
-	Nodes []struct {
-		Hostname string `json:"hostname"`
-	} `json:"nodes"`
-}
-
-func (m *ClusterManager) makeRequestToNode(node string, cfg metacfg.CouchbaseConfig, endpoint string, out interface{}) error {
+func (m *ClusterManager) makeRequestToNode(node string, cfg metacfg.CouchbaseConfig, endpoint string,
+	out interface{}) error {
 	req, err := http.NewRequestWithContext(m.pollingLoopCtx, http.MethodGet,
 		fmt.Sprintf("https://%s:%d%s",
 			node,

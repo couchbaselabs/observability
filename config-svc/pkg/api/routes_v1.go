@@ -16,10 +16,11 @@ package api
 
 import (
 	"fmt"
+	"net/http"
+
 	v1 "github.com/couchbaselabs/observability/config-svc/pkg/api/v1"
 	"github.com/labstack/echo/v4"
 	"gopkg.in/guregu/null.v4"
-	"net/http"
 )
 
 func (s *Server) GetConfig(ctx echo.Context) error {
@@ -68,7 +69,7 @@ func (s *Server) GetPrometheusTargets(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, result)
 }
 
-func (s *Server) GetOpenapiJson(ctx echo.Context) error {
+func (s *Server) GetOpenapiJson(ctx echo.Context) error { //nolint:revive
 	swagger, err := v1.GetSwagger()
 	if err != nil {
 		return err

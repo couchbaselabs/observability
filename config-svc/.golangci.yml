@@ -30,3 +30,6 @@ linters-settings:
     line-length: 120
   nestif:
     min-complexity: 6
+  errcheck:
+    exclude-functions:
+      - (*go.uber.org/zap.Logger).Sync
