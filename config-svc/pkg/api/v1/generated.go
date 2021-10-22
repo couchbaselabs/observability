@@ -21,12 +21,31 @@ import (
 
 // CouchbaseCluster defines model for CouchbaseCluster.
 type CouchbaseCluster struct {
-	Metadata CouchbaseCluster_Metadata `json:"metadata"`
-	Nodes    []string                  `json:"nodes"`
+	CouchbaseConfig CouchbaseServerConfig     `json:"couchbaseConfig"`
+	Metadata        CouchbaseCluster_Metadata `json:"metadata"`
+	Nodes           []string                  `json:"nodes"`
 }
 
 // CouchbaseCluster_Metadata defines model for CouchbaseCluster.Metadata.
 type CouchbaseCluster_Metadata struct {
+	AdditionalProperties map[string]string `json:"-"`
+}
+
+// CouchbaseServerConfig defines model for CouchbaseServerConfig.
+type CouchbaseServerConfig struct {
+	ManagementPort float32 `json:"managementPort"`
+	Password       *string `json:"password,omitempty"`
+	Username       *string `json:"username,omitempty"`
+}
+
+// PrometheusScrapeConfig defines model for PrometheusScrapeConfig.
+type PrometheusScrapeConfig struct {
+	Labels  PrometheusScrapeConfig_Labels `json:"labels"`
+	Targets []string                      `json:"targets"`
+}
+
+// PrometheusScrapeConfig_Labels defines model for PrometheusScrapeConfig.Labels.
+type PrometheusScrapeConfig_Labels struct {
 	AdditionalProperties map[string]string `json:"-"`
 }
 
@@ -88,6 +107,59 @@ func (a CouchbaseCluster_Metadata) MarshalJSON() ([]byte, error) {
 	return json.Marshal(object)
 }
 
+// Getter for additional properties for PrometheusScrapeConfig_Labels. Returns the specified
+// element and whether it was found
+func (a PrometheusScrapeConfig_Labels) Get(fieldName string) (value string, found bool) {
+	if a.AdditionalProperties != nil {
+		value, found = a.AdditionalProperties[fieldName]
+	}
+	return
+}
+
+// Setter for additional properties for PrometheusScrapeConfig_Labels
+func (a *PrometheusScrapeConfig_Labels) Set(fieldName string, value string) {
+	if a.AdditionalProperties == nil {
+		a.AdditionalProperties = make(map[string]string)
+	}
+	a.AdditionalProperties[fieldName] = value
+}
+
+// Override default JSON handling for PrometheusScrapeConfig_Labels to handle AdditionalProperties
+func (a *PrometheusScrapeConfig_Labels) UnmarshalJSON(b []byte) error {
+	object := make(map[string]json.RawMessage)
+	err := json.Unmarshal(b, &object)
+	if err != nil {
+		return err
+	}
+
+	if len(object) != 0 {
+		a.AdditionalProperties = make(map[string]string)
+		for fieldName, fieldBuf := range object {
+			var fieldVal string
+			err := json.Unmarshal(fieldBuf, &fieldVal)
+			if err != nil {
+				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
+			}
+			a.AdditionalProperties[fieldName] = fieldVal
+		}
+	}
+	return nil
+}
+
+// Override default JSON handling for PrometheusScrapeConfig_Labels to handle AdditionalProperties
+func (a PrometheusScrapeConfig_Labels) MarshalJSON() ([]byte, error) {
+	var err error
+	object := make(map[string]json.RawMessage)
+
+	for fieldName, field := range a.AdditionalProperties {
+		object[fieldName], err = json.Marshal(field)
+		if err != nil {
+			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
+		}
+	}
+	return json.Marshal(object)
+}
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Obtain the current Couchbase Clusters state.
@@ -99,6 +171,9 @@ type ServerInterface interface {
 	// Outputs the OpenAPI specification for this API.
 	// (GET /openapi.json)
 	GetOpenapiJson(ctx echo.Context) error
+	// Obtain the current Couchbase Prometheus monitoring hosts.
+	// (GET /prometheusTargets)
+	GetPrometheusTargets(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -142,6 +217,15 @@ func (w *ServerInterfaceWrapper) GetOpenapiJson(ctx echo.Context) error {
 	return err
 }
 
+// GetPrometheusTargets converts echo context to params.
+func (w *ServerInterfaceWrapper) GetPrometheusTargets(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetPrometheusTargets(ctx)
+	return err
+}
+
 // This is a simple interface which specifies echo.Route addition functions which
 // are present on both echo.Echo and echo.Group, since we want to allow using
 // either of them for path registration
@@ -173,25 +257,28 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.GET(baseURL+"/clusters", wrapper.GetClusters)
 	router.GET(baseURL+"/config", wrapper.GetConfig)
 	router.GET(baseURL+"/openapi.json", wrapper.GetOpenapiJson)
+	router.GET(baseURL+"/prometheusTargets", wrapper.GetPrometheusTargets)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/6RUTW/jNhD9K8S0R62kTYp2q1MDb1C4SJqg3kuxzYGmRhFTiuSSQ6eG4f9ejD5sa71O",
-	"D71J5Lx5M2/ecAfKdd5ZtBSh2kFULXay/1y4pNq1jLgwKRIGPpN1rUk7K81jcB4DaYxQNdJEzMCfHO2g",
-	"Q5K1JHkZtgPaeoQKIgVtn2GfTQdu/YKK+MC6egjVhN2bGBmC3MJ+n0HAL0kHrKH6POKzYzVPZyQM0bZx",
-	"nFw5S1IRf2IntYGqv/pFTVrkynWQgZUdpzhIlImlVTlkkAJjWiIfq6KYw/YZ1BhV0J61gAr+uF19EjeP",
-	"S+EaQS2KhbONfk5B8r1YYdhohZCB0QptRK5qJL7xUrUorvLyjPP19TWX/XXuwnMxYmNxt1zc/r66fccY",
-	"Vk2TmbUg7p3V5FhV8Vcqy6sfxcM6YtjItTaatmJFUv0t3l2scoMhDn1t3jOD82il11DBdV7m15CBl9T2",
-	"MyzUYKn+5xl7vdkXfcplDRX8irSYYhgYZIcD4PMONJN8SRi2x1Foq0yqcYU2atIbXPJEs9HPnL/GRiZD",
-	"B7eOLlg7Z1Ba2O+f2DnRO1aLAVdlOVkCbV+i9N5o1RdZvERudXdC8H3ABir4rjhuVDGuU3G2S73r5m5Y",
-	"pBDQkogkCSdLHITi+Ji6ToYtVPCwJqntEDHCjoOchBsy5T20UP3UTvSek390wjoSKaKgVkehG7F1Sbyk",
-	"SOJVWjotRvBKhK7XgT1/PrmB6z/1JPyHiq3szFzIrzb8XKlPh12Z7CfUqSm/FiuRTxRnag3xQlvx5839",
-	"nRj6GaUajZtPI75k0Ich7jcO+5/e+caTNG+ZufiluM5LET0q3YzJuPRhZDePyzcanxJcBucDL6/8tGjz",
-	"Gu6ckkbcaxWc0dTOXp6qKAxfty5S9aH8UI6GK6TXRf8efDvbR9ygcb5jlS7m++n9zz8cEj3t/w0AAP//",
-	"nDJD37QGAAA=",
+	"H4sIAAAAAAAC/6RW3W7jNhN9FYLfd6mVvEnRbnXVwBsULpLGqHNTbHMxpsYWU4nkkkO7huF3L0Z//k+7",
+	"zV1Czpkzc+Zw5K1UtnbWoKEg860MqsQamj/HNqpyDgHHVQyEns+gKDRpa6CaeuvQk8Yg8wVUARPpDo44",
+	"bw+3ZqGXfPR/jwuZy/9le86sI8wGthn6FfoOtEtkjQQFEFyn30raOJS5DOS1aUDdgZ2/oiI+MLZoQzVh",
+	"/SYGvIeN3O0S6fFr1B4LmX/p8AfVJGcNvlygvdzVtwlZg4El1mhoaj0dlG5iPUfPNA5CWFtfXOwrBvQG",
+	"arxwedLkCdOlhqbe1kglxjBTHhz+p44qmGMV3jdQAr9Ees9I+wxJX895vwzRZmFbPxsC1eiPNehK5s3V",
+	"T4MNUmVrmchW6v3kEzExKpWJjJ4xJZELeZYdw3aJLDAorx2rIXP52/3sWdxNJ8IuBJUoWp2jB74X7Cat",
+	"kEvXCk1oZtsR3zlQJYqbdHTGuV6vU2iuU+uXWYcN2cNkfP/r7P4DY1g1TdVRC+LRGk2WVRV/xNHo5nvx",
+	"NA/oVzDXlaaNmBGoP8WHq1Wu0Ie2r9VHZrAODTgtc3mbjtJbyQ6msplhptpt0/yzxEZvdkaTclLIXP6M",
+	"NO5jGOihxhbwZSs1k3yN6Df7UWijqljgDE3QpFc44Ykm3arj/AUuIFY0uLVzwdzaCsHI3e6FnROcZbUY",
+	"cDMa9ZZA05QIzlVaNUVmr4Fb3R4Q/KvF16/ZxnXHbhhH79GQCASEvSUGoTg+xLoGv5G5fJoTaNNGdLD9",
+	"IHvh2kxpA83U8IY7vY/JP1thLIkYUFCpg9ALsbFRvMZAYg2GDosR/CR83ejAnj+fXMv1j3oS/kXZBurq",
+	"WMjT/XWm1PPwVnr7CXVoylOxIrlI4UitNl5oI36/e3wQbT+dVJ1x037E1wz61Mb9wmHv9M6FlXTcMnPx",
+	"prhNRyI4VHrRJePS25HdTSdvNN4nuA7uunfD8n/eb99rEkzPgt8pxLDm33pNV75P59+CMxkfdCB+WvsM",
+	"ov9CfMMDO0DX+6VZ2kAhbVlD80ug3VYnFVgFlXjUyttKU3m0vvMsq/iaM+WfRp9G3avNwOmsWaqXs33G",
+	"FVbW8Tf9er4fPv743ZDoZfd3AAAA///TtoXLFAoAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

@@ -15,8 +15,10 @@
 package api
 
 import (
+	"fmt"
 	v1 "github.com/couchbaselabs/observability/config-svc/pkg/api/v1"
 	"github.com/labstack/echo/v4"
+	"gopkg.in/guregu/null.v4"
 	"net/http"
 )
 
@@ -24,7 +26,7 @@ func (s *Server) GetConfig(ctx echo.Context) error {
 	return ctx.Blob(http.StatusOK, "text/yaml", s.cfg.Get().ToYAML())
 }
 
-func (s *Server) GetClusters(ctx echo.Context, _ v1.GetClustersParams) error {
+func (s *Server) GetClusters(ctx echo.Context, params v1.GetClustersParams) error {
 	val, err := s.clusters.GetClusters()
 	if err != nil {
 		return err
@@ -34,6 +36,33 @@ func (s *Server) GetClusters(ctx echo.Context, _ v1.GetClustersParams) error {
 		result[i] = v1.CouchbaseCluster{
 			Nodes:    cluster.Nodes,
 			Metadata: v1.CouchbaseCluster_Metadata{AdditionalProperties: cluster.Metadata},
+			CouchbaseConfig: v1.CouchbaseServerConfig{
+				ManagementPort: float32(cluster.CouchbaseConfig.ManagementPort),
+			},
+		}
+		if null.BoolFromPtr(params.IncludeSensitiveInfo).ValueOrZero() {
+			result[i].CouchbaseConfig.Username = &cluster.CouchbaseConfig.Username
+			result[i].CouchbaseConfig.Password = &cluster.CouchbaseConfig.Password
+		}
+	}
+	return ctx.JSON(http.StatusOK, result)
+}
+
+func (s *Server) GetPrometheusTargets(ctx echo.Context) error {
+	val, err := s.clusters.GetClusters()
+	if err != nil {
+		return err
+	}
+	result := make([]v1.PrometheusScrapeConfig, len(val))
+	for i, cluster := range val {
+		result[i] = v1.PrometheusScrapeConfig{
+			Labels: v1.PrometheusScrapeConfig_Labels{
+				AdditionalProperties: cluster.Metadata,
+			},
+			Targets: make([]string, len(cluster.Nodes)),
+		}
+		for j, node := range cluster.Nodes {
+			result[i].Targets[j] = fmt.Sprintf("%s:%d", node, cluster.MetricsConfig.ExporterPort)
 		}
 	}
 	return ctx.JSON(http.StatusOK, result)

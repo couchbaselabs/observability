@@ -56,7 +56,7 @@ type CouchbaseConfig struct {
 }
 
 type MetricsConfig struct {
-	ExporterPort int    `yaml:"exporter_port"`
+	ExporterPort int    `yaml:"exporter_port" default:"9091"` // TODO CB7
 	Username     string `yaml:"username"`
 	Password     string `yaml:"password"`
 }

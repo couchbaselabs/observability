@@ -57,6 +57,19 @@ paths:
               schema:
                 $ref: "#/components/schemas/CouchbaseCluster"
 
+  /prometheusTargets:
+    get:
+      summary: Obtain the current Couchbase Prometheus monitoring hosts.
+      responses:
+        200:
+          description: List of Prometheus targets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PrometheusScrapeConfig"
+
 components:
   schemas:
     CouchbaseCluster:
@@ -71,15 +84,30 @@ components:
           type: object
           additionalProperties:
             type: string
-#        couchbaseConfig:
-#          type: object
-#          properties:
-#            managementPort:
-#              type: number
-#            username:
-#              type: string
-#            password:
-#              type: string
-#          additionalProperties: false
-#          required: [managementPort]
-      required: [nodes, metadata]
+        couchbaseConfig:
+          $ref: "#/components/schemas/CouchbaseServerConfig"
+      required: [nodes, metadata, couchbaseConfig]
+    CouchbaseServerConfig:
+      type: object
+      additionalProperties: false
+      properties:
+        managementPort:
+          type: number
+        username:
+          type: string
+        password:
+          type: string
+      required: [managementPort]
+    PrometheusScrapeConfig:
+      type: object
+      additionalProperties: false
+      properties:
+        targets:
+          type: array
+          items:
+            type: string
+        labels:
+          type: object
+          additionalProperties:
+            type: string
+      required: [targets, labels]
