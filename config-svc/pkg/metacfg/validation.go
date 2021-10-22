@@ -40,11 +40,7 @@ func (v *Validator) ValidateWithDefaults(cfg *Config) error {
 		v.validator = validator
 	}
 
-	err := v.validator.Struct(cfg)
-	if err != nil {
-		return err
-	}
-	return nil
+	return v.validator.Struct(cfg)
 }
 
 var promLabelRegex = regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_]*$`)

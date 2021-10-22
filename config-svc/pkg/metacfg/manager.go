@@ -48,7 +48,7 @@ func (m *EphemeralConfigManager) Set(val *Config) error {
 
 func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (ConfigManager, error) {
 	if !readOnly {
-		return nil, fmt.Errorf("non-read-only config not supported yet")
+		return nil, fmt.Errorf("only read-only config is supported for now")
 	}
 	var initialValue *Config
 	cfgFile, err := os.Open(filePath)
@@ -76,7 +76,7 @@ func ReadConfigFromFile(filePath string, readOnly bool, allowDefault bool) (Conf
 	if readOnly {
 		return ReadOnlyConfigManager{value: initialValue}, nil
 	} else {
-		return nil, nil // Can't happen
+		return nil, fmt.Errorf("only read-only config is supported for now")
 	}
 }
 
