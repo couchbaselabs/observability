@@ -18,13 +18,20 @@ import (
 	"fmt"
 	"net/http"
 
+	"gopkg.in/yaml.v3"
+
 	v1 "github.com/couchbaselabs/observability/config-svc/pkg/api/v1"
 	"github.com/labstack/echo/v4"
 	"gopkg.in/guregu/null.v4"
 )
 
 func (s *Server) GetConfig(ctx echo.Context) error {
-	return ctx.Blob(http.StatusOK, "text/yaml", s.cfg.Get().ToYAML())
+	cfg := s.cfg.Get()
+	yamlValue, err := yaml.Marshal(cfg)
+	if err != nil {
+		return err
+	}
+	return ctx.Blob(http.StatusOK, "text/yaml", yamlValue)
 }
 
 func (s *Server) GetClusters(ctx echo.Context, params v1.GetClustersParams) error {

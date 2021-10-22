@@ -28,12 +28,6 @@ type Config struct {
 	PrometheusHosts       []string               `yaml:"prometheus_hosts" default:"[]" validate:"dive,url"`
 	ClusterMonitorHosts   []ClusterMonitorConfig `yaml:"cluster_monitor_hosts" default:"[]" validate:"dive,required"`
 	Immutable             bool                   `yaml:"immutable"`
-	Server                ServerConfig           `yaml:"server"`
-}
-
-type ServerConfig struct {
-	Host string `yaml:"host"`
-	Port int    `yaml:"port" default:"7194" validate:"gte=0"`
 }
 
 type ClusterConfig struct {

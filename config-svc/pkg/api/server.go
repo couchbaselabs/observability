@@ -32,7 +32,7 @@ type Server struct {
 	echo       *echo.Echo
 }
 
-func NewServer(baseLogger *zap.Logger, configManager metacfg.ConfigManager) (*Server, error) {
+func NewServer(baseLogger *zap.Logger, configManager metacfg.ConfigManager, pathPrefix string) (*Server, error) {
 	mgr, err := manager.NewClusterManager(baseLogger, configManager)
 	if err != nil {
 		return nil, err
@@ -47,14 +47,13 @@ func NewServer(baseLogger *zap.Logger, configManager metacfg.ConfigManager) (*Se
 	server.echo.HideBanner = true
 	server.echo.HidePort = true
 	server.echo.Use(echozap.ZapLogger(server.logger))
-	server.registerRoutes()
+	server.registerRoutes(pathPrefix)
 	return &server, nil
 }
 
-func (s *Server) Serve() {
+func (s *Server) Serve(host string, port int) {
 	go s.clusters.UpdateLoop()
-	cfg := s.cfg.Get()
-	host := fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port)
+	listenHost := fmt.Sprintf("%s:%d", host, port)
 	s.logger.Sugar().Infow("Starting HTTP server", "host", host)
-	s.logger.Sugar().Fatalw("HTTP server exited", "err", s.echo.Start(host))
+	s.logger.Sugar().Fatalw("HTTP server exited", "err", s.echo.Start(listenHost))
 }

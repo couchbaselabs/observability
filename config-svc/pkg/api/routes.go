@@ -20,7 +20,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func (s *Server) registerRoutes() {
-	s.echo.Any("/metrics", echo.WrapHandler(promhttp.Handler()))
-	v1.RegisterHandlersWithBaseURL(s.echo, s, "/api/v1")
+func (s *Server) registerRoutes(pathPrefix string) {
+	s.echo.Any(pathPrefix+"/metrics", echo.WrapHandler(promhttp.Handler()))
+	v1.RegisterHandlersWithBaseURL(s.echo, s, pathPrefix+"/api/v1")
 }
