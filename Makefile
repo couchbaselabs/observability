@@ -15,14 +15,14 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint
+.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint config-svc-container
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
 
 # We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
-build: docs
+build: docs config-svc-container
 	cp -R docs/ microlith/docs/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
@@ -43,14 +43,20 @@ dist: image-artifacts
 
 # NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
 # Install pre-commit then run: pre-commit run --all-files
-lint: container-lint docs-lint
+lint: config-svc-lint container-lint docs-lint
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
 
+config-svc-container:
+	DOCKER_BUILDKIT=1 docker build -f config-svc/Dockerfile -t ${DOCKER_USER}/observability-config-service:${DOCKER_TAG} config-svc/
+
+config-svc-lint:
+	docker run --rm -i -v  ./config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
+
 # NOTE: This target is only for local development.
 container: build
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CONFIG_SVC_IMAGE=${DOCKER_USER}/observability-config-service:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
 container-oss: build
 	tools/build-oss-container.sh
