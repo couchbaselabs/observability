@@ -22,8 +22,9 @@ all: clean build lint container container-oss container-lint container-scan dist
 
 # We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
-build: docs config-svc-container
+build: docs
 	cp -R docs/ microlith/docs/
+	cp -R config-svc microlith/config-svc/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
@@ -48,21 +49,19 @@ lint: config-svc-lint container-lint docs-lint
 	ansible-lint
 	tools/licence-lint.sh
 
-config-svc-container:
-	DOCKER_BUILDKIT=1 docker build -f config-svc/Dockerfile -t ${DOCKER_USER}/observability-config-service:${DOCKER_TAG} config-svc/
-
 config-svc-lint:
 	docker run --rm -i -v  ./config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
 # NOTE: This target is only for local development.
 container: build
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CONFIG_SVC_IMAGE=${DOCKER_USER}/observability-config-service:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CONFIG_SVC_IMAGE=${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
 container-oss: build
 	tools/build-oss-container.sh
 
 container-lint:
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
+	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
@@ -118,7 +117,8 @@ test-dist-oss: dist
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG}
+				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
 	docker image prune --force
 
 clean: container-clean

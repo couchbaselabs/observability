@@ -3,8 +3,6 @@ FROM grafana/loki:2.3.0 as loki-official
 FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
-ARG CONFIG_SVC_IMAGE=couchbase/observability-config-service:latest
-FROM ${CONFIG_SVC_IMAGE} as config-svc
 
 # Generate documentation and include locally as a static site
 # We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
@@ -31,6 +29,12 @@ WORKDIR /src/github.com/lablabs/prometheus-alert-overrider
 RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-overrider/archive/refs/tags/$PROM_CONFIG_TOOL_VERSION.tar.gz" && \
     tar --strip-components 1 -xzvf /src/prom.tgz && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
+
+# Build the configuration service
+WORKDIR /src/github.com/couchbaselabs/observability/config-svc
+COPY config-svc/ .
+RUN go mod download && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cmoscfg ./cmd/cmoscfg
 
 # Couchbase proprietary start
 # Standalone as need to use --mount option
@@ -226,8 +230,8 @@ COPY jaeger/ /etc/jaeger/
 
 # Configuration Service
 
-COPY --from=config-svc /bin/cmoscfg /bin/cmoscfg
-COPY --from=config-svc /entrypoint.sh /entrypoints/cmoscfg.sh
+COPY --from=builder /bin/cmoscfg /bin/cmoscfg
+COPY --from=builder /src/github.com/couchbaselabs/observability/config-svc/entrypoint.sh /entrypoints/cmoscfg.sh
 
 # Simple static webserver
 COPY nginx/ /etc/nginx/
