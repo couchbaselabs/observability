@@ -15,11 +15,17 @@
                 - nss
                 - curl
                 - libcurl
+                - python2 # TODO: ideally we'd be using 3
             state: latest
         become: true
+      - name: Download Golang
+        get_url:
+            url: https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
+            dest: /tmp/golang.tar.gz
       - name: Install Golang
         unarchive:
-            src: https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
+            src: /tmp/golang.tar.gz
+            remote_src: true
             dest: /usr/local/
         become: true
       - name: Create directory for couchbase-exporter
@@ -28,7 +34,7 @@
             state: directory
             owner: vagrant
             group: vagrant
-            mode: 0644
+            mode: 0777
         become: true
       - name: Download couchbase-exporter sources
         git:
