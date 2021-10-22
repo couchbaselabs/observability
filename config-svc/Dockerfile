@@ -35,4 +35,4 @@ RUN chmod a+x /bin/cmoscfg && \
 
 EXPOSE 7194
 
-ENTRYPOINT "/entrypoint.sh"
+ENTRYPOINT ["/entrypoint.sh"]
