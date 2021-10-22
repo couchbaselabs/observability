@@ -43,6 +43,12 @@ RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-override
     tar --strip-components 1 -xzvf /src/prom.tgz && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
 
+# Build the configuration service
+WORKDIR /src/github.com/couchbaselabs/observability/config-svc
+COPY config-svc/ .
+RUN go mod download && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cmoscfg ./cmd/cmoscfg
+
 # Couchbase proprietary start
 # Standalone as need to use --mount option
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
@@ -235,6 +241,11 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 
+# Configuration Service
+
+COPY --from=builder /bin/cmoscfg /bin/cmoscfg
+COPY --from=builder /src/github.com/couchbaselabs/observability/config-svc/entrypoint.sh /entrypoints/cmoscfg.sh
+
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
@@ -288,8 +299,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
+    mkdir -p /etc/cmos && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui
+    chown -R couchbase:couchbase /data /priv /ui /etc/cmos
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/

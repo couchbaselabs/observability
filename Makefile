@@ -15,7 +15,7 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
+.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
@@ -24,6 +24,7 @@ all: clean build lint container container-oss container-lint container-scan dist
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
 build: docs
 	cp -R docs/ microlith/docs/
+	cp -R config-svc microlith/config-svc/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
@@ -43,20 +44,24 @@ dist: image-artifacts
 
 # NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
 # Install pre-commit then run: pre-commit run --all-files
-lint: container-lint docs-lint
+lint: config-svc-lint container-lint docs-lint
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
 
+config-svc-lint:
+	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
+
 # NOTE: This target is only for local development.
 container: build
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:latest microlith/
+	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CONFIG_SVC_IMAGE=${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
 container-oss: build
 	tools/build-oss-container.sh
 
 container-lint:
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
+	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
@@ -112,7 +117,8 @@ test-dist-oss: dist
 container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG}
+				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
 	docker image prune --force
 
 clean: container-clean

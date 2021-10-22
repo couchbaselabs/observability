@@ -6,6 +6,11 @@ on:
     schedule:
         - cron: 0 4 * * *
     workflow_dispatch:
+      inputs:
+        ref:
+          description: Branch, tag, or commit SHA to run the tests against
+          required: false
+          default: main
 
 jobs:
   # Build an image to share across jobs
@@ -16,6 +21,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+              with:
+                ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v1
@@ -43,6 +50,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+              with:
+                ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v1
@@ -87,6 +96,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v2
+              with:
+                ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Setup Docker
               uses: docker-practice/actions-setup-docker@master

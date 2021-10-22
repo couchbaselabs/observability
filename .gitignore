@@ -11,6 +11,8 @@ test-dist/
 microlith/docs/
 tools/tern/
 tools/tern-output*
+# config-svc build
+microlith/config-svc
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
