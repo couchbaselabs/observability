@@ -11,11 +11,11 @@ services:
 
         environment:
             - GF_INSTALL_PLUGINS=marcusolsson-json-datasource
-        
+
         volumes:
             - ./dynamic/grafana:/etc/grafana:rw
 
         network_mode: bridge
-        
+    
         ports:
             - "8080:8080"

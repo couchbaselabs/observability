@@ -78,7 +78,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "green",
+                  "fixedColor": "semi-dark-green",
                   "mode": "fixed"
                 }
               }
@@ -110,7 +110,7 @@
             "properties": [
               {
                 "id": "custom.displayMode",
-                "value": "color-text"
+                "value": "color-background"
               },
               {
                 "id": "thresholds",
@@ -118,11 +118,11 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "green",
+                      "color": "semi-dark-green",
                       "value": null
                     },
                     {
-                      "color": "red",
+                      "color": "semi-dark-red",
                       "value": 1
                     }
                   ]
@@ -213,15 +213,15 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": null
+                "value": 185
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 15,
+        "h": 5,
+        "w": 24,
         "x": 0,
         "y": 0
       },

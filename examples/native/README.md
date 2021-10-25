@@ -31,4 +31,4 @@ Non-prometheus stats are obtained using the Grafana community plugin [JSON API](
 
 ## Setting up JSON API for existing Grafana instances ##
 
-TODO. Follow [the installation instructions](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation), then configure the URL as cbmultimanager's endpoint with subpath `api/v1/clusters` (this may change, depending on scraping and CMOS microlith nginx config...), and the correct BasicAuth username/password.
+Follow [the installation instructions](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation), then configure the URL as cbmultimanager's endpoint with subpath `api/v1/clusters` (this may change, depending on scraping and CMOS microlith nginx config...), and the correct BasicAuth username/password.
