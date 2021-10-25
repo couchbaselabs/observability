@@ -3,6 +3,28 @@ FROM grafana/loki:2.3.0 as loki-official
 FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+# Requires RHEL subscription
+# FROM openshift4/ose-grafana as grafana-official
+# FROM openshift4/ose-prometheus as prometheus-official
+# FROM openshift4/ose-prometheus-alertmanager as alertmanager-official
+# FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+
+# There is no Go 1.17 toolset option plus the older option then breaks with permissions issues for extra packages
+# FROM registry.access.redhat.com/ubi8/ubi:8.4 as builder
+FROM registry.access.redhat.com/ubi8/go-toolset:1.15.14-3 as builder
+USER root
+
+RUN dnf update -y && dnf install -y curl tar && dnf clean all
+
+WORKDIR /opt/
+RUN curl -s https://dl.google.com/go/go1.17.1.linux-amd64.tar.gz | tar xz
+ENV PATH="/opt/go/bin:${PATH}"
+
+ARG PROM_CONFIG_TOOL_VERSION=v0.3.0
+WORKDIR /src/github.com/lablabs/prometheus-alert-overrider
+RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-overrider/archive/refs/tags/$PROM_CONFIG_TOOL_VERSION.tar.gz" && \
+    tar --strip-components 1 -xzvf /src/prom.tgz && \
+    CGO_ENABLED=0 GOOS=linux go build -trimpath -o /bin/prometheus_merge main.go
 
 # Generate documentation and include locally as a static site
 # We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
@@ -25,58 +47,10 @@ RUN apk add --upgrade --no-cache git && \
 COPY docs/ /antora/docs/
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
-FROM golang:1.17 as builder
-# Builder image so ignore pinning and we do want recommended packages
-# hadolint ignore=DL3008,DL3015
-RUN apt-get update && apt-get install -y sqlcipher libssl-dev openssl openssh-client && \
-    rm -rf /var/lib/apt/lists/*
-
-# Set up SSH access
-# hadolint ignore=SC2174
-RUN mkdir -p /bin /etc/couchbase && \
-    mkdir -p -m 0600 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-# Build the Prometheus merge tool so we can ensure we have a static build
-ARG PROM_CONFIG_TOOL_VERSION=v0.3.0
-WORKDIR /src/github.com/lablabs/prometheus-alert-overrider
-RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-overrider/archive/refs/tags/$PROM_CONFIG_TOOL_VERSION.tar.gz" && \
-    tar --strip-components 1 -xzvf /src/prom.tgz && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
-
-# Build the configuration service
-WORKDIR /src/github.com/couchbaselabs/observability/config-svc
-COPY config-svc/ .
-RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cmoscfg ./cmd/cmoscfg
-
-# Couchbase proprietary start
-# Standalone as need to use --mount option
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager
-RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
-
-# Output our commit information to a file we can access
-RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
-
-# Statically build it to allow reuse on Alpine Linux
-RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
-
-# TODO: golang17 version once available
-FROM node:16-alpine3.14 as ui-builder
-
-# Just copy over rather than clone
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui
-# We reverse proxy it to /couchbase/ so fix up the base and asset paths to account for this
-RUN npm install && npm run build -- --base-href=/couchbase/ui/ --deploy-url=/couchbase/ui/
-
-# Couchbase proprietary end
-
-# Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
-FROM nginx:alpine
+# Cannot use Nginx as a base so have to add it to UBI
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
 # hadolint ignore=DL3018
-RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
+RUN microdnf update && microdnf install -y bash openssl libcap shadow-utils nginx tar && microdnf clean all
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
@@ -118,7 +92,7 @@ RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
 # GRAFANA:
 # From https://github.com/grafana/grafana/blob/main/Dockerfile
 ARG GF_UID="472"
-ARG GF_GID="0"
+ARG GF_GID="472"
 
 ENV PATH="/usr/share/grafana/bin:$PATH" \
     GF_PATHS_CONFIG="/etc/grafana/grafana.ini" \
@@ -130,15 +104,11 @@ ENV PATH="/usr/share/grafana/bin:$PATH" \
 
 WORKDIR $GF_PATHS_HOME
 
-# hadolint ignore=SC2046
-RUN if [ ! $(getent group "$GF_GID") ]; then \
-      addgroup -S -g $GF_GID grafana; \
-    fi
-
 # hadolint ignore=DL3059,DL4006,SC2155
 RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
     mkdir -p "$GF_PATHS_HOME/.aws" && \
-    adduser -S -u $GF_UID -G "$GF_GID_NAME" grafana && \
+    groupadd --system -g $GF_GID grafana && \
+    useradd --system -u $GF_UID -g grafana grafana && \
     mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
              "$GF_PATHS_PROVISIONING/dashboards" \
              "$GF_PATHS_PROVISIONING/notifiers" \
@@ -159,15 +129,16 @@ WORKDIR /
 
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
-RUN addgroup -g 10001 -S loki && \
-    adduser -u 10001 -S loki -G loki && \
+RUN groupadd --system -g 10001 loki && \
+    useradd --system -u 10001 -g loki loki && \
     mkdir -p /loki/rules && \
     mkdir -p /loki/tmprules && \
     mkdir -p /loki/rules-temp && \
     chown -R loki:loki /etc/loki /loki
 
 # See https://github.com/grafana/loki/issues/1928
-RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
+# Not supported on UBI
+# RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
 EXPOSE 3100
 # USER loki
@@ -241,39 +212,15 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 
-# Configuration Service
-
-COPY --from=builder /bin/cmoscfg /bin/cmoscfg
-COPY --from=builder /src/github.com/couchbaselabs/observability/config-svc/entrypoint.sh /entrypoints/cmoscfg.sh
-
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
-COPY licenses/ /html/licenses/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
 COPY --from=antora-generator /antora/cmos /html/cmos
 
 # Couchbase cluster monitor - need these to keep OSS generic
 RUN mkdir -p /data /priv /ui
-
-# Couchbase proprietary start
-RUN openssl req -x509 -nodes -days 365 \
-    -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
-    -addext "subjectAltName=DNS:couchbase.com" \
-    -newkey rsa:2048 \
-    -keyout /priv/server.key -out /priv/server.crt;
-
-COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
-COPY --from=builder /bin/cbeventlog /bin/cbeventlog
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/entrypoint.sh /entrypoints/couchbase-cluster-monitor.sh
-COPY --from=builder /etc/couchbase/git-commit.txt /etc/couchbase-cluster-monitor-release.txt
-COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/dist/app/ /ui/
-
-RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
-
-EXPOSE 7196 7197
-# Couchbase proprietary end
 
 # Customisation for entrypoints and run as a non-root user
 COPY entrypoints/ /entrypoints/
@@ -286,22 +233,21 @@ RUN chmod a+x /run.sh /entrypoints/*
 ARG CB_UID="8453"
 ARG CB_GID="8453"
 
-RUN addgroup -g $CB_GID -S couchbase && \
-    adduser -u $CB_UID -S couchbase -G couchbase
+RUN groupadd --system -g $CB_GID couchbase && \
+    useradd --system -u $CB_UID -g couchbase couchbase
 
 # Copied from `chown` lines in the original, just substitute our user
 RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/loki /loki && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
-    chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
+    chown -R couchbase:couchbase /html /etc/nginx/ && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
-    mkdir -p /etc/cmos && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui /etc/cmos
+    chown -R couchbase:couchbase /data /priv /ui
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
@@ -311,9 +257,5 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 COPY README.md /help.1
 
-# Couchbase proprietary start
-COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
-# Couchbase proprietary end
-
 USER       $CB_UID
-ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
+# ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
