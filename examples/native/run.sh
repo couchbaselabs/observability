@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -eu
+set -eu -x
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
@@ -40,11 +40,11 @@ LOAD=${LOAD:-false}
 WAIT_TIME=${WAIT_TIME:-30}
 
 #### SCRIPT START ####
-docker-compose -f docker-compose.yml up -d --force-recreate
+docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate
 docker image build "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$CB_VERSION"
 
 # Remove all nodes matching image name "cbs_server_exp"
-docker rm "$(docker ps --filter 'ancestor=cbs_server_exp' --format '{{.ID }}')" -f
+docker ps --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
 start_new_nodes "$NODE_NUM"
 
 sleep "$WAIT_TIME" # TODO: replace with poll/event-driven (overriden mounted entrypoint)

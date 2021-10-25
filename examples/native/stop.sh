@@ -14,7 +14,7 @@
 # limitations under the License.
 set -u
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+docker-compose -f docker-compose.yml down -v --remove-orphans
 
-docker-compose -f "${SCRIPT_DIR}"/docker-compose.yml down -v --remove-orphans
-docker ps -a | awk '{ print $1,$2 }' | grep "cbs_server_exp" | awk '{print $1 }' | xargs -I {} docker rm {} -f
+# Delete all containers with the cbs_server_exp image
+docker ps --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
