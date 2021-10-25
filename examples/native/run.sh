@@ -22,6 +22,7 @@ DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 
+# shellcheck disable=SC1091
 source "$SCRIPT_DIR"/helpers/driver.sh
 
 ## Environment variables
