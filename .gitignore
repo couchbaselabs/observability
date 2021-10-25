@@ -21,3 +21,4 @@ testing/resources/native/vagrants
 testing/resources/native/hosts.ini
 testing/.vagrant
 testing/bats/integration/kubernetes/resources/default-microlith.yaml
+.DS_Store
