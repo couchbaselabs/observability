@@ -52,7 +52,7 @@ func NewServer(baseLogger *zap.Logger, configManager metacfg.ConfigManager, path
 }
 
 func (s *Server) Serve(host string, port int) {
-	go s.clusters.UpdateLoop()
+	go s.clusters.StartUpdating()
 	listenHost := fmt.Sprintf("%s:%d", host, port)
 	s.logger.Sugar().Infow("Starting HTTP server", "host", host)
 	s.logger.Sugar().Fatalw("HTTP server exited", "err", s.echo.Start(listenHost))

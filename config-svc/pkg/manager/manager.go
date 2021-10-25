@@ -16,18 +16,35 @@ package manager
 
 import (
 	"context"
-	"crypto/tls"
-	"encoding/json"
 	"fmt"
-	"io"
-	"net/http"
+	"net"
 	"sync"
 	"time"
 
-	"github.com/couchbase/tools-common/cbrest"
+	"github.com/cenkalti/backoff/v4"
 	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
+	"github.com/prometheus/client_golang/prometheus"
 	"go.uber.org/zap"
 )
+
+var (
+	activeClusterInfoStreamingConnections = prometheus.NewGauge(prometheus.GaugeOpts{
+		Namespace: "cmoscfg",
+		Subsystem: "manager",
+		Name:      "active_cluster_info_streaming_connections",
+		Help:      "Number of currently active streaming connections for cluster information",
+	})
+	streamingClusterInfoErrors = prometheus.NewCounter(prometheus.CounterOpts{
+		Namespace: "cmoscfg",
+		Subsystem: "manager",
+		Name:      "streaming_cluster_info_errors",
+		Help:      "Number of errors when streaming cluster information",
+	})
+)
+
+func init() {
+	prometheus.MustRegister(streamingClusterInfoErrors, activeClusterInfoStreamingConnections)
+}
 
 type ClusterManager struct {
 	logger *zap.SugaredLogger
@@ -36,68 +53,23 @@ type ClusterManager struct {
 	clusters       map[string]*clusterState
 	clustersMux    sync.RWMutex
 	pollingLoopCtx context.Context
+	listeners      map[ClusterInfoListener]bool
+	listenersMux   sync.RWMutex
+	backoffPolicy  backoff.BackOff
 }
+
+var defaultBackoffPolicy = backoff.NewExponentialBackOff()
 
 func NewClusterManager(baseLogger *zap.Logger, cfg metacfg.ConfigManager) (*ClusterManager, error) {
 	cm := ClusterManager{
 		logger:         baseLogger.Named("clusterManager").Sugar(),
 		cfg:            cfg,
 		clusters:       make(map[string]*clusterState),
+		listeners:      make(map[ClusterInfoListener]bool),
 		pollingLoopCtx: context.TODO(),
+		backoffPolicy:  defaultBackoffPolicy,
 	}
 	return &cm, nil
-}
-
-type pools struct {
-	UUID string `json:"uuid"`
-}
-
-func (m *ClusterManager) makeRequestToNode(node string, cfg metacfg.CouchbaseConfig, endpoint string,
-	out interface{}) error {
-	req, err := http.NewRequestWithContext(m.pollingLoopCtx, http.MethodGet,
-		fmt.Sprintf("https://%s:%d%s",
-			node,
-			cfg.ManagementPort,
-			endpoint), nil)
-	if err != nil {
-		return fmt.Errorf("failed to prepare HTTP request: %w", err)
-	}
-	req.SetBasicAuth(cfg.Username, cfg.Password)
-	client := http.DefaultClient
-	if cfg.IgnoreCertificateErrors {
-		client.Transport = &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-	}
-	resp, err := client.Do(req)
-	if err != nil {
-		return fmt.Errorf("failed to execute HTTP request: %w", err)
-	}
-	defer resp.Body.Close()
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("failed to read HTTP response body: %w", err)
-	}
-	err = json.Unmarshal(body, out)
-	if err != nil {
-		return fmt.Errorf("failed to unmarshal response body: %w", err)
-	}
-	return nil
-}
-
-func (m *ClusterManager) applyClusterConfig(uuid string, payload *cbrest.ClusterConfig) error {
-	if m.clusters[uuid].configRevision > payload.Revision {
-		return fmt.Errorf("received config too old; latest revision %d, given %d",
-			m.clusters[uuid].configRevision,
-			payload.Revision)
-	}
-	clusterNodes := make([]string, len(payload.Nodes))
-	for i, newNode := range payload.Nodes {
-		clusterNodes[i] = newNode.Hostname
-	}
-	m.clusters[uuid].configRevision = payload.Revision
-	m.clusters[uuid].currentNodes = clusterNodes
-	return nil
 }
 
 func (m *ClusterManager) initializeClusters() {
@@ -105,116 +77,163 @@ func (m *ClusterManager) initializeClusters() {
 	defer m.clustersMux.Unlock()
 	cfg := m.cfg.Get()
 	for _, cluster := range cfg.Clusters {
-		var success bool
-		for _, node := range cluster.Nodes.GetNodes() {
-			var clusterPayload pools
-			err := m.makeRequestToNode(node, cluster.CouchbaseConfig, "/pools", &clusterPayload)
-			if err != nil {
-				m.logger.Warnw("Failed to get cluster config. Trying next node.",
-					"cluster", cluster,
-					"node", node, "err", err)
-				continue
-			}
-			uuid := clusterPayload.UUID
-
-			var nodesPayload cbrest.ClusterConfig
-			err = m.makeRequestToNode(node, cluster.CouchbaseConfig, "/pools/default/nodeServices", &nodesPayload)
-			if err != nil {
-				m.logger.Warnw("Failed to get cluster config. Trying next node.",
-					"cluster", cluster,
-					"node", node,
-					"err", err)
-				continue
-			}
-			m.logger.Debugw("Got cluster config", "uuid", uuid, "node", node, "cfg", nodesPayload)
-			// applyClusterConfig will fill in the blanks
-			m.clusters[uuid] = &clusterState{
-				cfg:            &cluster,
-				configRevision: -1,
-			}
-			if err := m.applyClusterConfig(uuid, &nodesPayload); err != nil {
-				m.logger.Warnw("Failed to apply cluster config. Trying next node.",
-					"cluster", cluster,
-					"cfg", nodesPayload,
-					"err", err)
-			}
-			success = true
-			break
-		}
-		if !success {
-			m.logger.Errorw("Failed to initialize cluster",
-				"cluster", cluster)
-		}
+		m.initializeCluster(cluster)
 	}
 	m.logger.Debug("Cluster initialization complete.")
 }
 
-func (m *ClusterManager) updateClusters() {
-	m.clustersMux.Lock()
-	defer m.clustersMux.Unlock()
-	for uuid, cluster := range m.clusters {
-		var success bool
-		for _, node := range cluster.currentNodes {
-			var payload cbrest.ClusterConfig
-			err := m.makeRequestToNode(node, cluster.cfg.CouchbaseConfig, "/pools/default/nodeServices", &payload)
+func (m *ClusterManager) initializeCluster(cluster metacfg.ClusterConfig) {
+	var success bool
+	for _, node := range cluster.Nodes.GetNodes() {
+		var clusterPayload interface{}
+		err := m.makeRequestToNode(node, cluster.CouchbaseConfig, "/pools/default/terseClusterInfo",
+			&clusterPayload)
+		if err != nil {
+			m.logger.Warnw("Failed to get cluster info. Trying next node.",
+				"cluster", cluster,
+				"node", node, "err", err)
+			continue
+		}
+		var uuid string
+		switch data := clusterPayload.(type) {
+		case map[string]interface{}:
+			uuid = data["clusterUUID"].(string)
+		default:
+			m.logger.Warnw("Got unexpected clusterInfo. Trying next node.",
+				"cluster", cluster,
+				"node", node, "err", err, "info", data)
+			continue
+		}
+
+		var nodesPayload poolsDefault
+		err = m.makeRequestToNode(node, cluster.CouchbaseConfig, "/pools/default", &nodesPayload)
+		if err != nil {
+			m.logger.Warnw("Failed to get cluster nodes information. Trying next node.",
+				"cluster", cluster,
+				"node", node,
+				"err", err)
+			continue
+		}
+		m.logger.Debugw("Got cluster nodes", "uuid", uuid, "node", node, "cfg", nodesPayload)
+		// applyClusterConfig will fill in the blanks
+		m.clusters[uuid] = &clusterState{
+			cfg:          &cluster,
+			uuid:         uuid,
+			currentNodes: make([]string, len(nodesPayload.Nodes)),
+		}
+		for i, node := range nodesPayload.Nodes {
+			host, _, err := net.SplitHostPort(node.Hostname)
 			if err != nil {
-				m.logger.Warnw("Failed to get cluster config. Trying next node.",
-					"uuid", uuid,
-					"node", node, "err", err)
+				m.logger.Errorw("Couchbase API gave us an invalid hostport!",
+					"node", node,
+					"err", err)
 				continue
 			}
-			m.logger.Debugw("Got cluster config", "uuid", uuid, "node", node, "cfg", payload)
-			if err := m.applyClusterConfig(uuid, &payload); err != nil {
-				m.logger.Warnw("Failed to apply cluster config. Trying next node.",
-					"uuid", uuid,
-					"cfg", payload,
-					"err", err)
-			}
-			success = true
-			break
+			m.clusters[uuid].currentNodes[i] = host
 		}
-		if !success {
-			m.logger.Warnw("Exhausted all currently nodes for cluster. Falling back to seed nodes.",
-				"uuid", uuid)
-			for _, node := range cluster.cfg.Nodes.GetNodes() {
-				var payload cbrest.ClusterConfig
-				err := m.makeRequestToNode(node, cluster.cfg.CouchbaseConfig, "/pools/default/nodeServices", &payload)
-				if err != nil {
-					m.logger.Warnw("Failed to get cluster config. Trying next node.",
-						"uuid", uuid,
-						"node", node, "err", err)
-					continue
-				}
-				m.logger.Debugw("Got cluster config", "uuid", uuid, "node", node, "cfg", payload)
-				if err := m.applyClusterConfig(uuid, &payload); err != nil {
-					m.logger.Warnw("Failed to apply cluster config. Trying next node.",
-						"uuid", uuid,
-						"cfg", payload,
-						"err", err)
-				}
-				success = true
-				break
-			}
-			if !success {
-				m.logger.Errorw("Exhausted all known nodes for cluster.",
-					"uuid", uuid)
-			}
-		}
+		success = true
+		break
+	}
+	if !success {
+		m.logger.Errorw("Failed to initialize cluster",
+			"cluster", cluster)
+		return
 	}
 }
 
-func (m *ClusterManager) UpdateLoop() {
+func (m *ClusterManager) streamUpdatesFrom(cluster *clusterState, node string) error {
+	// We'll first make a request to terseClusterInfo to check if this node is still in the cluster
+	var terseClusterInfo interface{}
+	err := m.makeRequestToNode(node, cluster.cfg.CouchbaseConfig, "/pools/default/terseClusterInfo",
+		&terseClusterInfo)
+	if err != nil {
+		return fmt.Errorf("failed to fetch terseClusterInfo before stream from %v: %w", node, err)
+	}
+	if str, ok := terseClusterInfo.(string); ok {
+		// if this is "unknown pool" that means the node's left the cluster
+		// either way, it's not what we want
+		return fmt.Errorf("got unexpected string from terseClusterInfo of node %v: %v", node, str)
+	}
+	updates, err := m.makeStreamingRequestToNode(m.pollingLoopCtx, node, cluster.cfg.CouchbaseConfig,
+		"/poolsStreaming/default", new(poolsDefault))
+	if err != nil {
+		return fmt.Errorf("failed to initiate streaming connection to %v: %w", node, err)
+	}
+	m.logger.Debugw("Opened streaming pools connection", "node", node)
+	activeClusterInfoStreamingConnections.Inc()
+	defer activeClusterInfoStreamingConnections.Dec()
+	for in := range updates {
+		switch msg := in.(type) {
+		case error:
+			m.logger.Errorw("Received error from streaming connection",
+				"node", node,
+				"err", msg)
+			return msg
+		case *poolsDefault:
+			m.clustersMux.Lock()
+			val := clusterState{
+				uuid:         cluster.uuid,
+				currentNodes: make([]string, len(msg.Nodes)),
+				cfg:          cluster.cfg,
+			}
+			for i, node := range msg.Nodes {
+				host, _, err := net.SplitHostPort(node.Hostname)
+				if err != nil {
+					m.logger.Errorw("Couchbase API gave us an invalid hostport!",
+						"node", node,
+						"err", err)
+					continue
+				}
+				val.currentNodes[i] = host
+			}
+			m.clusters[cluster.uuid] = &val
+			m.clustersMux.Unlock()
+			m.notifyClusterStateChange(val)
+		default:
+			m.logger.Warnw("Received unknown message type",
+				"node", node,
+				"msg", msg)
+		}
+	}
+	m.logger.Infow("Streaming connection closed", "node", node)
+	return nil
+}
+
+func (m *ClusterManager) StartUpdating() {
 	m.initializeClusters()
 	m.logger.Debug("Starting update loop")
-	for {
-		m.updateClusters()
-		cfg := m.cfg.Get()
-		m.logger.Debugw("Update loop run complete", "updateInterval", cfg.ClusterUpdateInterval)
-		select {
-		case <-m.pollingLoopCtx.Done():
-			m.logger.Warnw("Cancelling update loop", "err", m.pollingLoopCtx.Err())
-		case <-time.After(cfg.ClusterUpdateInterval):
-		}
+	// Make a copy of the clusters map just in case it gets updated
+	m.clustersMux.RLock()
+	clusters := m.clusters
+	m.clustersMux.RUnlock()
+	for uuid := range clusters {
+		go func(uuid string) {
+			backoffPolicy := m.backoffPolicy
+			for {
+				err := backoff.RetryNotify(func() error {
+					m.clustersMux.RLock()
+					cluster := m.clusters[uuid]
+					m.clustersMux.RUnlock()
+					if len(cluster.currentNodes) == 0 {
+						return fmt.Errorf("cluster has no known nodes")
+					}
+					return m.streamUpdatesFrom(cluster, cluster.currentNodes[0])
+				}, backoffPolicy, func(err error, retryAfter time.Duration) {
+					if err != nil {
+						streamingClusterInfoErrors.Inc()
+					}
+					m.logger.Warnw("Streaming failed, waiting before retrying",
+						"clusterUUID", uuid,
+						"err", err,
+						"retryAfter", retryAfter)
+				})
+				if err != nil {
+					m.logger.Warnw("Failed to execute backoff",
+						"clusterUUID", uuid,
+						"err", err)
+				}
+			}
+		}(uuid)
 	}
 }
 
@@ -235,4 +254,33 @@ func (m *ClusterManager) GetClusters() ([]ClusterInfo, error) {
 		i++
 	}
 	return result, nil
+}
+
+func (m *ClusterManager) notifyClusterStateChange(val clusterState) {
+	m.logger.Debugw("Notifying about cluster state change", "clusterUUID", val.uuid, "nodes", val.currentNodes)
+	m.listenersMux.RLock()
+	defer m.listenersMux.RUnlock()
+	for listener := range m.listeners {
+		go func(l ClusterInfoListener, cs clusterState) {
+			l <- ClusterInfo{
+				UUID:            cs.uuid,
+				Nodes:           cs.currentNodes,
+				Metadata:        cs.cfg.Metadata,
+				CouchbaseConfig: cs.cfg.CouchbaseConfig,
+				MetricsConfig:   cs.cfg.MetricsConfig,
+			}
+		}(listener, val)
+	}
+}
+
+func (m *ClusterManager) Subscribe(listener ClusterInfoListener) {
+	m.listenersMux.Lock()
+	defer m.listenersMux.Unlock()
+	m.listeners[listener] = true
+}
+
+func (m *ClusterManager) Unsubscribe(listener ClusterInfoListener) {
+	m.listenersMux.Lock()
+	defer m.listenersMux.Unlock()
+	delete(m.listeners, listener)
 }

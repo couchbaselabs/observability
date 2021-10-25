@@ -27,7 +27,7 @@ import (
 
 var (
 	flagConfigLocation = flag.String("config-path", "./config.yaml", "path to read/store the configuration")
-	flagHTTPPathPrefix = flag.String("http-path-prefix", "/api/v1", "URL path to serve the API on")
+	flagHTTPPathPrefix = flag.String("http-path-prefix", "", "URL path to serve the API on")
 	flagHTTPHost       = flag.String("http-host", "0.0.0.0", "host to listen on")
 	flagHTTPPort       = flag.Int("http-port", 7194, "port to listen on")
 )
