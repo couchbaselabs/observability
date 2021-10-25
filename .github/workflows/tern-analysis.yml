@@ -22,7 +22,7 @@ jobs:
               run: |
                   make container-oss -e CMOS_IMAGE=couchbaselabs/observability-stack:${{ github.sha }}
 
-            - uses: philips-labs/tern-action@v1.1.0
+            - uses: philips-labs/tern-action@v1.2.0
               id: scan
               with:
                 image: couchbaselabs/observability-stack:${{ github.sha }}
