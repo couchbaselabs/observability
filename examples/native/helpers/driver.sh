@@ -25,7 +25,7 @@ function start_new_nodes() {
 
 }
 
-
+# Configure the specified number of nodes, partitioning them into clusters
 function configure_servers() {
 
     local NODE_NUM=$1
@@ -33,9 +33,11 @@ function configure_servers() {
     local SERVER_USER=$3
     local SERVER_PASS=$4
     local NODE_RAM=$5
+    local LOAD=$6
 
     local DATA_ALLOC 
     local INDEX_ALLOC
+    # Allocate 70% of the specified RAM quota to the service (query has no quota)
     DATA_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
     INDEX_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
@@ -61,6 +63,7 @@ function configure_servers() {
                 local x=$(( 26 - (26 - (NODE_NUM-nodes_left)) ))
                 local clust_name="Cluster ${NAMES[$x]}"
 
+                # Initialize cluster
                 docker exec "$uid" /opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name="$clust_name" --cluster-username="$SERVER_USER" \
                     --cluster-password="$SERVER_PASS" --cluster-ramsize="$DATA_ALLOC" --cluster-index-ramsize="$INDEX_ALLOC" --services=data
 
@@ -68,9 +71,9 @@ function configure_servers() {
                 docker exec "$uid" curl -X POST -u "$SERVER_USER":"$SERVER_PASS" http://"localhost:8091"/sampleBuckets/install -d '["travel-sample", "beer-sample"]'
                 docker exec cmos curl -u admin:password -X POST -d "{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PASS\", \"host\":\"http://$ip:8091\"}" \
                         'http://localhost:8080/couchbase/api/v1/clusters'
-                # Start cbpillowfight to simulate a non-zero load (NOT stress test)
                 
                 if $LOAD; then
+                    # Start cbpillowfight to simulate a non-zero load (NOT stress test)
                     (sleep 20 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U couchbase://localhost/beer-sample \
                         -B 100 -I 1000 --rate-limit 100 &)
 
@@ -79,7 +82,7 @@ function configure_servers() {
                 fi
 
             else
-                # Add server to existing cluster
+                # Initalize node and add to existing cluster
                 local to_add_ip
                 to_add_ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)
 
@@ -89,7 +92,7 @@ function configure_servers() {
             fi
         done
 
-        # Rebalance fully provisioned cluster
+        # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
             docker exec "$uid" /opt/couchbase/bin/couchbase-cli rebalance --cluster "$to_add_ip" --username "$SERVER_USER" --password "$SERVER_PASS" \
             --no-progress-bar --no-wait
