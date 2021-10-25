@@ -15,8 +15,8 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
-
+.PHONY: all build dist lint config-svc-lint container container-oss container-lint  container-scan container-public example-containers example-native \
+    examples test-kubernetes test-containers test-native test test-dist container-clean clean docs-lint docs docs-generate-markdown docs-license-analysis
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
 
@@ -82,7 +82,10 @@ example-kubernetes: container
 example-containers: container
 	examples/containers/run.sh
 
-examples: clean container example-kubernetes example-containers
+example-native: container
+	examples/native/run.sh
+
+examples: clean container example-kubernetes example-containers example-native
 
 # Deal with automated testing
 test-kubernetes: TEST_SUITE ?= integration/kubernetes
