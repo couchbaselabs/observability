@@ -19,6 +19,9 @@ This software uses the following components with their associated licensing also
 |Grafana
 |link:https://github.com/grafana/grafana/blob/main/LICENSE[AGPL 3.0]
 
+|Grafana JSON API Plugin
+|link:https://github.com/marcusolsson/grafana-json-datasource/blob/main/
+
 |Loki
 |link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0]
 
