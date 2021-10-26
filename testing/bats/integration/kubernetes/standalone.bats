@@ -160,6 +160,7 @@ setupPortForwarding() {
     assert_success
 
     pkill -F "${pid_file}"
+    rm -f "${pid_file}"
 }
 
 createCouchbaseCluster() {
