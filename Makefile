@@ -129,6 +129,7 @@ clean: container-clean
 	-examples/containers/stop.sh
 	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh
+	-examples/native/stop.sh
 
 docs-lint:
 	docker run --rm -i hadolint/hadolint < Dockerfile.docs
