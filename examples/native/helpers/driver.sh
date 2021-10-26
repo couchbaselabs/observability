@@ -24,7 +24,7 @@ function start_new_nodes() {
     done
 
     # Simple block until all nodes ready
-    SLEEP_TIME=$((1 * NODE_NUM))
+    SLEEP_TIME=$(( 5 + (1 * NODE_NUM) ))
     while true;
     do
         sleep $SLEEP_TIME
@@ -36,7 +36,7 @@ function start_new_nodes() {
                 ready=false
                 echo "Node $i not ready yet, waiting"
             fi
-            sleep 0.1
+            sleep 1
         done
 
         if $ready; then
@@ -80,7 +80,7 @@ function configure_servers() {
                 # Create and configure new cluster
                 local ip
                 ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)
-                local clust_name="Cluster $((NODE_NUM-nodes_left))}"
+                local clust_name="Cluster $((NODE_NUM-nodes_left))"
 
                 # Initialize cluster
                 docker exec "$uid" /opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name="$clust_name" --cluster-username="$SERVER_USER" \

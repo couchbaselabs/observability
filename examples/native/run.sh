@@ -47,4 +47,4 @@ docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs dock
 start_new_nodes "$NODE_NUM"
 configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NODE_RAM" "$LOAD"
 
-echo "All done. Go to: http://localhost:8080/grafana/."
+echo "All done. Go to: http://localhost:8080."
