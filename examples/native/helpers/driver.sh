@@ -23,6 +23,28 @@ function start_new_nodes() {
         docker run -d --name "node$i" "cbs_server_exp"
     done
 
+    # Simple block until all nodes ready
+    SLEEP_TIME=$((1 * NODE_NUM))
+    while true;
+    do
+        sleep $SLEEP_TIME
+
+        ready=true
+        for ((i=0; i<NODE_NUM; i++))
+        do
+            if ! docker exec "node$i" curl -fs localhost:8091; then
+                ready=false
+                echo "Node $i not ready yet, waiting"
+            fi
+            sleep 0.1
+        done
+
+        if $ready; then
+            echo "All nodes ready, continuing"
+            break
+        fi
+    done
+
 }
 
 # Configure the specified number of nodes, partitioning them into clusters
@@ -41,7 +63,6 @@ function configure_servers() {
     DATA_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
     INDEX_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
-    local NAMES=(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z)
     local nodes_left=$NODE_NUM
 
     for ((i=0; i<CLUSTER_NUM; i++))
@@ -59,17 +80,15 @@ function configure_servers() {
                 # Create and configure new cluster
                 local ip
                 ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)
-
-                local x=$(( 26 - (26 - (NODE_NUM-nodes_left)) ))
-                local clust_name="Cluster ${NAMES[$x]}"
+                local clust_name="Cluster $((NODE_NUM-nodes_left))}"
 
                 # Initialize cluster
                 docker exec "$uid" /opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name="$clust_name" --cluster-username="$SERVER_USER" \
                     --cluster-password="$SERVER_PASS" --cluster-ramsize="$DATA_ALLOC" --cluster-index-ramsize="$INDEX_ALLOC" --services=data
 
                 # Load sample buckets and register cluster with CBMM
-                docker exec "$uid" curl -X POST -u "$SERVER_USER":"$SERVER_PASS" http://"localhost:8091"/sampleBuckets/install -d '["travel-sample", "beer-sample"]'
-                docker exec cmos curl -u admin:password -X POST -d "{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PASS\", \"host\":\"http://$ip:8091\"}" \
+                docker exec "$uid" curl -s -X POST -u "$SERVER_USER":"$SERVER_PASS" http://"localhost:8091"/sampleBuckets/install -d '["travel-sample", "beer-sample"]'
+                docker exec cmos curl -s -u admin:password -X POST -d "{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PASS\", \"host\":\"http://$ip:8091\"}" \
                         'http://localhost:8080/couchbase/api/v1/clusters'
                 
                 if $LOAD; then
