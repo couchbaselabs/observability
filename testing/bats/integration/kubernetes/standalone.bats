@@ -28,6 +28,11 @@ load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
+setup_file() {
+    # Parallel execution of port forwarding *may* cause problems so force serial (current default anyway)
+    export BATS_NO_PARALLELIZE_WITHIN_FILE=true
+}
+
 setup() {
     if [ "${TEST_NATIVE:-false}" == "true" ]; then
         skip "Skipping kubernetes specific tests"
@@ -41,6 +46,7 @@ teardown() {
     if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
     elif [ "${TEST_NATIVE:-false}" != "true" ]; then
+        run pkill kubectl # Ensure we remove all port forwarding
         run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
         run kubectl delete --force --grace-period=0 --now=true -n "$TEST_NAMESPACE" -f "${BATS_TEST_DIRNAME}/resources/default-microlith.yaml"
         run kubectl delete namespace "$TEST_NAMESPACE"
@@ -77,6 +83,7 @@ setupPortForwarding() {
     until curl -s -o /dev/null "$local_service_url"; do
         # shellcheck disable=SC2086
         if [[ $attempts -gt $max_attempts ]]; then
+            run pkill -F "${pid_file}"
             fail "unable to communicate with CMOS on $local_service_url after $attempts attempts"
         fi
         attempts=$((attempts+1))
@@ -87,7 +94,6 @@ setupPortForwarding() {
 
 # Test that we can do a default deployment from scratch
 @test "Verify simple deployment from scratch" {
-    find_unused_port local_port
     createDefaultDeployment
 
     kubectl get pods --all-namespaces
@@ -108,8 +114,9 @@ setupPortForwarding() {
     # Port forward into the K8S cluster
     local pid_file
     pid_file=$(mktemp)
+    local local_port=$(find_unused_port)
     setupPortForwarding "${pid_file}" "${local_port}"
-    local local_service_url="localhost:$local_port"
+    local local_service_url="localhost:${local_port}"
 
     # Check the web server provides the landing page
     run curl --show-error --silent "$local_service_url"
@@ -192,7 +199,6 @@ createLoggingCluster() {
 }
 
 @test "Verify disabling of components in microlith" {
-    find_unused_port local_port
     # Turn components off and confirm not available
     cat << __EOF__ | kubectl create -n "$TEST_NAMESPACE" -f -
 apiVersion: v1
@@ -216,8 +222,9 @@ __EOF__
     # Port forward into the K8S cluster
     local pid_file
     pid_file=$(mktemp)
+    local local_port=$(find_unused_port)
     setupPortForwarding "${pid_file}" "${local_port}"
-    local local_service_url="localhost:$local_port"
+    local local_service_url="localhost:${local_port}"
 
     # Attempt to hit the endpoints as well
     run curl --show-error --silent "$local_service_url"
