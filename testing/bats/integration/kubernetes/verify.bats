@@ -14,6 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load "$HELPERS_ROOT/test-helpers.bash"
+
+ensure_variables_set TEST_PLATFORM
+
 @test 'Verify we are kubernetes' {
     [ "$TEST_PLATFORM" == "kubernetes" ]
 }
