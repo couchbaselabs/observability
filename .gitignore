@@ -1,4 +1,3 @@
-examples/containers/logs/*.log
 microlith/alertmanager/slack_url
 # Build output
 git-commit.txt
@@ -21,3 +20,5 @@ testing/resources/native/vagrants
 testing/resources/native/hosts.ini
 testing/.vagrant
 testing/bats/integration/kubernetes/resources/default-microlith.yaml
+.DS_Store
+*.log

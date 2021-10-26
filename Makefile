@@ -80,7 +80,7 @@ example-kubernetes: container
 	examples/kubernetes/run.sh
 
 example-containers: container
-	examples/containers/run.sh
+	examples/container/run.sh
 
 examples: clean container example-kubernetes example-containers
 
@@ -123,8 +123,8 @@ container-clean:
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
-	-examples/containers/stop.sh
-	rm -f examples/containers/logs/*.log
+	-examples/container/stop.sh
+	rm -f examples/container/logs/*.log
 	-examples/kubernetes/stop.sh
 
 docs-lint:
