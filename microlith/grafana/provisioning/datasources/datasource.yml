@@ -38,3 +38,9 @@ datasources:
       type: jaeger
       access: proxy
       url: http://localhost:16686/
+    - name: JSON API
+      type: marcusolsson-json-datasource
+      url: http://localhost:7196/api/v1
+      basicAuth: true
+      basicAuthUser: ${CB_MULTI_ADMIN_USER}
+      basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
