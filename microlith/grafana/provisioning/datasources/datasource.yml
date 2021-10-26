@@ -40,9 +40,7 @@ datasources:
       url: http://localhost:16686/
     - name: JSON API
       type: marcusolsson-json-datasource
-      access: proxy
       url: http://localhost:7196/api/v1
       basicAuth: true
       basicAuthUser: ${CB_MULTI_ADMIN_USER}
-      secureJsonData:
-        basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
+      basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
