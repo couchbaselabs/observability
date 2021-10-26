@@ -73,6 +73,10 @@ setupPortForwarding() {
     # Port forward into the K8S cluster
     local pid_file=$1
     local local_port=$2
+    # Some sanity checks, there could be more but ultimately the kubectl command will reject them
+    if [[ -z "${local_port}" || $local_port -lt 0 ]]; then
+        fail "invalid local port ($local_port) provided for port forwarding"
+    fi
     kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$local_port:$CMOS_PORT" &
     echo "$!" > "${pid_file}"
 
