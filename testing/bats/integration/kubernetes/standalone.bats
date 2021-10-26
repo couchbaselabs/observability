@@ -28,6 +28,11 @@ load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 load "$BATS_FILE_ROOT/load.bash"
 
+setup_file() {
+    # Parallel execution of port forwarding *may* cause problems so force serial (current default anyway)
+    export BATS_NO_PARALLELIZE_WITHIN_FILE=true
+}
+
 setup() {
     if [ "${TEST_NATIVE:-false}" == "true" ]; then
         skip "Skipping kubernetes specific tests"
@@ -41,6 +46,7 @@ teardown() {
     if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
     elif [ "${TEST_NATIVE:-false}" != "true" ]; then
+        run pkill kubectl # Ensure we remove all port forwarding
         run helm uninstall --namespace "${TEST_NAMESPACE}" couchbase
         run kubectl delete --force --grace-period=0 --now=true -n "$TEST_NAMESPACE" -f "${BATS_TEST_DIRNAME}/resources/default-microlith.yaml"
         run kubectl delete namespace "$TEST_NAMESPACE"
@@ -65,28 +71,33 @@ createDefaultDeployment() {
 # Aim to use locals in case we want to parallelise to prevent overwriting globals
 setupPortForwarding() {
     # Port forward into the K8S cluster
-    local PORT_FORWARD_PID_FILE=$1
-    kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$CMOS_PORT:8080" &
-    echo "$!" > "${PORT_FORWARD_PID_FILE}"
+    local pid_file=$1
+    local local_port=$2
+    # Some sanity checks, there could be more but ultimately the kubectl command will reject them
+    if [[ -z "${local_port}" || $local_port -lt 0 ]]; then
+        fail "invalid local port ($local_port) provided for port forwarding"
+    fi
+    kubectl -n "$TEST_NAMESPACE" port-forward svc/couchbase-grafana-http "$local_port:$CMOS_PORT" &
+    echo "$!" > "${pid_file}"
 
     # Takes a little while to actually set up
-    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
-    local ATTEMPTS=0
-    local MAX_ATTEMPTS=6
-    until curl -s -o /dev/null "$LOCAL_SERVICE_URL"; do
+    local local_service_url="localhost:$local_port"
+    local attempts=0
+    local max_attempts=6
+    until curl -s -o /dev/null "$local_service_url"; do
         # shellcheck disable=SC2086
-        if [[ $ATTEMPTS -gt $MAX_ATTEMPTS ]]; then
-            fail "unable to communicate with CMOS on $LOCAL_SERVICE_URL after $ATTEMPTS attempts"
+        if [[ $attempts -gt $max_attempts ]]; then
+            run pkill -F "${pid_file}"
+            fail "unable to communicate with CMOS on $local_service_url after $attempts attempts"
         fi
-        ATTEMPTS=$((ATTEMPTS+1))
-        echo "Attempt $ATTEMPTS of $MAX_ATTEMPTS for CMOS on $LOCAL_SERVICE_URL"
+        attempts=$((attempts+1))
+        echo "Attempt $attempts of $max_attempts for CMOS on $local_service_url"
         sleep 10
     done
 }
 
 # Test that we can do a default deployment from scratch
 @test "Verify simple deployment from scratch" {
-    find_unused_port CMOS_PORT
     createDefaultDeployment
 
     kubectl get pods --all-namespaces
@@ -105,53 +116,55 @@ setupPortForwarding() {
     verify "'port' is '3100' for services named 'loki'"
 
     # Port forward into the K8S cluster
-    local PID_FILE
-    PID_FILE=$(mktemp)
-    setupPortForwarding "${PID_FILE}"
-    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    local pid_file
+    pid_file=$(mktemp)
+    local local_port=$(find_unused_port)
+    setupPortForwarding "${pid_file}" "${local_port}"
+    local local_service_url="localhost:${local_port}"
 
     # Check the web server provides the landing page
-    run curl --show-error --silent "$LOCAL_SERVICE_URL"
+    run curl --show-error --silent "$local_service_url"
     assert_success
     assert_output --partial 'Couchbase Monitoring & Observability Stack' # Check that this string is in there
 
-    local PROMETHEUS_URL="$LOCAL_SERVICE_URL/prometheus"
+    local prometheus_url="$local_service_url/prometheus"
 
     # Check we have a valid prometheus end point exposed and it is healthy
-    curl --show-error --silent "$PROMETHEUS_URL/-/healthy"
+    curl --show-error --silent "$prometheus_url/-/healthy"
 
     # Check we have loaded the right config: https://prometheus.io/docs/prometheus/latest/querying/api/#config
-    run curl --show-error --silent "$PROMETHEUS_URL/api/v1/status/config"
+    run curl --show-error --silent "$prometheus_url/api/v1/status/config"
     assert_success
     assert_output --partial 'couchbase-kubernetes-pods' # The default config does not contain this - we could diff as well
 
     # TODO:
     # Check we have no Couchbase targets but all the internal ones
     # https://prometheus.io/docs/prometheus/latest/querying/api/#targets
-    run curl --show-error --silent "$PROMETHEUS_URL/api/v1/targets?state=active"
+    run curl --show-error --silent "$prometheus_url/api/v1/targets?state=active"
     assert_success
     # Check that alerts and rules are set up, with defaults only
     # https://prometheus.io/docs/prometheus/latest/querying/api/#rules
-    run curl --show-error --silent "$PROMETHEUS_URL/api/v1/rules"
+    run curl --show-error --silent "$prometheus_url/api/v1/rules"
     assert_success
     # https://prometheus.io/docs/prometheus/latest/querying/api/#alerts
-    run curl --show-error --silent "$PROMETHEUS_URL/api/v1/alerts"
+    run curl --show-error --silent "$prometheus_url/api/v1/alerts"
     assert_success
     # Check that default dashboards are available
-    local GRAFANA_URL="$LOCAL_SERVICE_URL/grafana"
+    local grafana_url="$local_service_url/grafana"
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#gets-the-home-dashboard
     # https://grafana.com/docs/grafana/latest/http_api/dashboard/#get-dashboard-by-uid
-    run curl --show-error --silent "$GRAFANA_URL/api/search"
+    run curl --show-error --silent "$grafana_url/api/search"
     assert_success
-    run curl --show-error --silent "$GRAFANA_URL/api/dashboards/home"
+    run curl --show-error --silent "$grafana_url/api/dashboards/home"
     assert_success
 
     # Check Loki is up
-    local LOKI_URL="$LOCAL_SERVICE_URL/loki"
-    run curl --show-error --silent "$LOKI_URL/ready"
+    local loki_url="$local_service_url/loki"
+    run curl --show-error --silent "$loki_url/ready"
     assert_success
 
-    pkill -F "${PID_FILE}"
+    pkill -F "${pid_file}"
+    rm -f "${pid_file}"
 }
 
 createCouchbaseCluster() {
@@ -212,23 +225,24 @@ __EOF__
     assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
 
     # Port forward into the K8S cluster
-    local PID_FILE
-    PID_FILE=$(mktemp)
-    setupPortForwarding "${PID_FILE}"
-    local LOCAL_SERVICE_URL="localhost:$CMOS_PORT"
+    local pid_file
+    pid_file=$(mktemp)
+    local local_port=$(find_unused_port)
+    setupPortForwarding "${pid_file}" "${local_port}"
+    local local_service_url="localhost:${local_port}"
 
     # Attempt to hit the endpoints as well
-    run curl --show-error --silent "$LOCAL_SERVICE_URL"
+    run curl --show-error --silent "$local_service_url"
     assert_success
 
     # https://grafana.com/docs/loki/latest/api/#get-ready
-    run curl --show-error --silent "$LOCAL_SERVICE_URL/loki/ready"
+    run curl --show-error --silent "$local_service_url/loki/ready"
     # assert_failure
     # Nginx reverse proxy gives us a page for a 404
     assert_output --partial "404 Not Found"
 
-    pkill -F "${PID_FILE}"
-    rm -f "${PID_FILE}"
+    pkill -F "${pid_file}"
+    rm -f "${pid_file}"
 }
 
 @test "Verify customisation by adding" {
