@@ -283,7 +283,7 @@
             "method": "GET",
             "queryParams": "",
             "refId": "A",
-            "urlPath": ""
+            "urlPath": "/clusters"
           }
         ],
         "title": "Cluster overview",
