@@ -255,7 +255,7 @@
               "name": "Nodes"
             },
             {
-              "jsonPath": "$map($, function($v) {$join($distinct($map($v.nodes_summary.services, function($m) {\n    $replace($replace($replace($m, \"kv\", \"Data\"), \"index\", \"Index\"), \"n1ql\", \"Query\")\n})), ', ')})",
+              "jsonPath": "$map($, function($v) {$join($sort($distinct($map($v.nodes_summary.services, function($m) {\n    $replace($replace($replace($m, \"kv\", \"Data\"), \"index\", \"Index\"), \"n1ql\", \"Query\")\n}))), ', ')})",
               "language": "jsonata",
               "name": "Services"
             },
