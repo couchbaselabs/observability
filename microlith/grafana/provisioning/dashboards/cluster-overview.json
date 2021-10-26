@@ -216,6 +216,24 @@
                 "value": 185
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Links"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": false,
+                    "title": "Cluster overview dashboard",
+                    "url": "/grafana/d/cL8993dnz/single-cluster-overview?var-cluster=${__data.fields.Name}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -278,6 +296,11 @@
               "jsonPath": "$[*].status_summary.info",
               "language": "jsonpath",
               "name": "Status: Info"
+            },
+            {
+              "jsonPath": "$map($, function($_) {\"Cluster Overview\"})",
+              "language": "jsonata",
+              "name": "Links"
             }
           ],
           "method": "GET",
