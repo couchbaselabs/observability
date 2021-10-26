@@ -17,14 +17,7 @@ RUN mkdir -p /opt/couchbase-exporter && \
 WORKDIR /opt/couchbase-exporter
 RUN go build -o ./couchbase-exporter . && chmod +x couchbase-exporter && chown -R couchbase:couchbase /opt/couchbase-exporter
 
-COPY <<EOF /etc/service/couchbase-exporter/run
-#!/usr/bin/env bash
-    exec 2>&1
-    while ! curl -fs -u Administrator:password http://localhost:8091/pools/default ; do
-        sleep 1
-    done
-    exec /opt/couchbase-exporter/couchbase-exporter
-EOF
+COPY ./run_exporter_when_up.sh /etc/service/couchbase-exporter/run
 
 RUN chown -R couchbase:couchbase /etc/service && \
     chmod +x /etc/service/couchbase-exporter/run
