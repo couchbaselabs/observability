@@ -1,6 +1,6 @@
 # Example: native #
 
-This is an extended version of /examples/container, allowing for multiple nodes and clusters to be run. It is ideally suited for Grafana dashboard development.
+This is an extended version of /examples/container, allowing for multiple nodes and clusters to be run. It is ideally suited to show off the CMOS stack, or for developing any of the components (as it is a full stack deployment).
 
 ## Running the example ##
 
@@ -19,10 +19,11 @@ There are various environment variables you can configure:
 
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas.
+- `LOAD`, a Boolean denoting whether a light load should be thrown at the cluster using `cbpillowfight`. Defaults to `false`.
 
 ## Grafana Dashboard development ##
 
-The dashboards are currently under development. The local directory `./dynamic/grafana` is mounted in the CMOS Docker container, with any changes appearing upon refreshing the Grafana webpage.
+The dashboards are currently under development. The directory `/microlith/grafana` is mounted in the CMOS Docker container, with any changes appearing upon refreshing the Grafana webpage.
 
 Non-prometheus stats are obtained using the Grafana community plugin [JSON API](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/), which supports both JSONPath and JSONata. The latter is more heavily used, as it is more expressive.
 
@@ -31,4 +32,4 @@ Non-prometheus stats are obtained using the Grafana community plugin [JSON API](
 
 ## Setting up JSON API for existing Grafana instances ##
 
-Follow [the installation instructions](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation), then configure the URL as cbmultimanager's endpoint with subpath `api/v1/clusters` (this may change, depending on scraping and CMOS microlith nginx config...), and the correct BasicAuth username/password.
+Follow [the installation instructions](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation), then configure the URL as cbmultimanager's endpoint with subpath `api/v1`, and the correct BasicAuth username/password for the CMOS stack.
