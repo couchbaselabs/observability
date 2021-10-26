@@ -17,4 +17,4 @@ set -u
 docker-compose -f docker-compose.yml down -v --remove-orphans
 
 # Delete all containers with the cbs_server_exp image
-docker ps --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
+docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f

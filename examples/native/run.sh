@@ -37,18 +37,14 @@ CB_VERSION=${CB_VERSION:-"enterprise-6.6.3"}
 NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-false}
 
-WAIT_TIME=${WAIT_TIME:-30}
-
 #### SCRIPT START ####
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate
 docker image build "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$CB_VERSION"
 
 # Remove all nodes matching image name "cbs_server_exp"
-docker ps --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
+docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
+
 start_new_nodes "$NODE_NUM"
-
-sleep "$WAIT_TIME" # TODO: replace with poll/event-driven (overriden mounted entrypoint)
-
 configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NODE_RAM" "$LOAD"
 
-echo "All done. Go to: http://localhost:8080/grafana."
+echo "All done. Go to: http://localhost:8080/grafana/."
