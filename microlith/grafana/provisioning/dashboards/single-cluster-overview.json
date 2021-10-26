@@ -21,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 8,
-  "iteration": 1635240130478,
+  "id": 5,
+  "iteration": 1635242143478,
   "links": [],
   "panels": [
     {
@@ -171,7 +171,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/$cluster_uuid"
+          "urlPath": "/clusters/$cluster_uuid"
         }
       ],
       "title": "Nodes",
@@ -299,7 +299,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/$cluster_uuid"
+          "urlPath": "/clusters/$cluster_uuid"
         }
       ],
       "title": "Buckets",
@@ -892,7 +892,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "floor(\nmin(sum by (instance) (cbnode_healthy{cluster=\"$cluster\"})) / \nmax(sum by (instance) (cbnode_cluster_membership{cluster=\"$cluster\"}))\n)",
+          "expr": "floor(\nmin(sum by (instance) (cbnode_healthy{cluster=~\"${cluster:regex}\"})) / \nmax(sum by (instance) (cbnode_cluster_membership{cluster=~\"${cluster:regex}\"}))\n)",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -950,7 +950,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(count by (instance) (cbnode_healthy{cluster=\"$cluster\"} == 1))",
+          "expr": "max(count by (instance) (cbnode_healthy{cluster=~\"${cluster:regex}\"} == 1))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -1020,7 +1020,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster) (cbpernodebucket_curr_connections{cluster=\"$cluster\"})",
+          "expr": "sum by (cluster) (cbpernodebucket_curr_connections{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "Connections",
           "refId": "A"
@@ -1103,7 +1103,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (cbpernodebucket_ops{cluster=\"$cluster\"})",
+          "expr": "sum by (instance) (cbpernodebucket_ops{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "{{ instance }}",
           "refId": "A"
@@ -1181,7 +1181,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_get{cluster=\"$cluster\"})",
+          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_get{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "{{ instance}}",
           "refId": "A"
@@ -1259,7 +1259,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_set{cluster=\"$cluster\"})",
+          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_set{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "{{ instance}}",
           "refId": "A"
@@ -1341,7 +1341,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (bucket) (cbbucketstat_ep_cache_miss_rate{cluster=\"$cluster\"})",
+          "expr": "avg by (bucket) (cbbucketstat_ep_cache_miss_rate{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -1397,7 +1397,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster) (cbbucketstat_curr_items_tot{cluster=\"$cluster\"})",
+          "expr": "sum by (cluster) (cbbucketstat_curr_items_tot{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "{{cluster}}",
           "refId": "A"
@@ -1478,7 +1478,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cbquery_requests{cluster=\"$cluster\"}",
+          "expr": "cbquery_requests{cluster=~\"${cluster:regex}\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1556,7 +1556,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cbquery_avg_req_time{cluster=\"$cluster\"}",
+          "expr": "cbquery_avg_req_time{cluster=~\"${cluster:regex}\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1642,7 +1642,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cbindex_memory_used{cluster=\"$cluster\"} / cbindex_memory_quota{cluster=\"$cluster\"}",
+          "expr": "cbindex_memory_used{cluster=~\"${cluster:regex}\"} / cbindex_memory_quota{cluster=~\"${cluster:regex}\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1696,7 +1696,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(4, cbindex_avg_scan_latency{cluster=\"$cluster\"})",
+          "expr": "topk(4, cbindex_avg_scan_latency{cluster=~\"${cluster:regex}\"})",
           "interval": "",
           "legendFormat": "{{keyspace}} @ {{instance}}",
           "refId": "A"
@@ -1768,7 +1768,7 @@
           ],
           "method": "GET",
           "queryParams": "",
-          "urlPath": ""
+          "urlPath": "/clusters"
         },
         "refresh": 1,
         "regex": "",
@@ -1798,5 +1798,5 @@
   "timezone": "",
   "title": "Single Cluster Information",
   "uid": "cL8993dnz",
-  "version": 15
+  "version": 1
 }
