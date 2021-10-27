@@ -14,8 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-while ! curl -fs -u Administrator:password http://localhost:8091/pools/default ; do
-    echo "Checking" >> test.txt
-    sleep 1
-done
+# Start the couchbase-exporter. Couchbase Server may or may not be running already
 exec /opt/couchbase-exporter/couchbase-exporter

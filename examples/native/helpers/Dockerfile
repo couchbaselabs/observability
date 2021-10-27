@@ -16,8 +16,4 @@ RUN mkdir -p /opt/couchbase-exporter && \
 
 WORKDIR /opt/couchbase-exporter
 RUN go build -o ./couchbase-exporter . && chmod +x couchbase-exporter && chown -R couchbase:couchbase /opt/couchbase-exporter
-
-COPY ./run_exporter_when_up.sh /etc/service/couchbase-exporter/run
-
-RUN chown -R couchbase:couchbase /etc/service && \
-    chmod +x /etc/service/couchbase-exporter/run
+COPY --chown=couchbase:couchbase --chmod=777 ./run_exporter.sh /etc/service/couchbase-exporter/run
