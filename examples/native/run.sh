@@ -14,7 +14,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#####
+
+# Pre-conditions: 
+#   - No containers named "cmos" or "node$i" where $i is an integer up to the number
+#     of nodes desired in the cluster ($NODE_NUM). (handled by the user, via "make clean")
+#   - The couchbase/observability-stack Docker image built (handled by the Makefile)
+
+# Post-conditions: 
+#   - A single container named "cmos" with the CMOS Microlith running. 
+#   - A total of $NODE_NUM containers with the specified Couchbase Server version
+#     and Prometheus exporter installed, partitioned as evenly as possible into $CLUSTER_NUM
+#   - cbmultimanager configured to monitor all clusters
+#   - Grafana configured to retrieve statistics from CBMM API for dashboards
 set -eu -x
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
@@ -38,13 +52,21 @@ NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-false}
 
 #### SCRIPT START ####
-docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate
-docker image build "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$CB_VERSION"
+docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate # CMOS container
+docker image build "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$CB_VERSION" # Couchbase Server/exporter container
 
-# Remove all nodes matching image name "cbs_server_exp"
-docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
+# Remove ALL nodes matching image name "cbs_server_exp"
+if docker ps -a --filter 'ancestor=cbs_server_exp' | grep -c '' >/dev/null; then
+  echo "There are existing node\$i containers. Please verify they can be destroyed, and then run \
+  'make clean' in the top-level Makefile"
+  exit 1
+fi
 
-start_new_nodes "$NODE_NUM"
-configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NODE_RAM" "$LOAD"
+# Create $NODE_NUM containers running Couchbase Server $VERSION and the exporter
+start_new_nodes "$NODE_NUM" 
+
+# Initialise and partition nodes as evenly as possible into $CLUSTER_NUM clusters, register them with CBMM
+# and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
+configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NODE_RAM" "$LOAD" 
 
 echo "All done. Go to: http://localhost:8080."

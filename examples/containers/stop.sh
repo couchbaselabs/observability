@@ -15,5 +15,4 @@
 set -u
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
 docker-compose -f "${SCRIPT_DIR}"/docker-compose.yml down -v --remove-orphans

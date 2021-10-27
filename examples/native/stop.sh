@@ -17,5 +17,5 @@ set -u
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
 
-# Delete all containers with the cbs_server_exp image
+# Delete ALL containers with the cbs_server_exp image
 docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f

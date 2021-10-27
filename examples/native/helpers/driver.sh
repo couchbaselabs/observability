@@ -14,6 +14,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#########################
+# Pre-conditions:
+#   - The cbs_server_exp Docker image built (handled by the run.sh entrypoint)
+#   - A non-zero $NODE_NUM (a default is specified in the run.sh entrypoint)
+
+# Post-conditions:
+#   - $NODE_NUM Couchbase Server/exporter containers with Couchbase Server ready
+#     to receive requests
 function start_new_nodes() {
 
     local NODE_NUM=$1
@@ -47,7 +55,16 @@ function start_new_nodes() {
 
 }
 
-# Configure the specified number of nodes, partitioning them into clusters
+#########################
+# Pre-conditions: 
+#   - $NODE_NUM containers running Couchbase Server (uninitialised)/exporter 
+
+# Post-conditions: 
+#   - All CBS/exporter nodes initialised and partitioned as evenly as possible into 
+#     $CLUSTER_NUM clusters, with a rebalance occurring after the last node is added
+#   - $CLUSTER_NUM nodes will be running the Data Service, the rest Index/Query, with quotas
+#     specified by $DATA_ALLOC and $INDEX_ALLOC
+#   - Every cluster registered for monitoring with the cbmultimanager
 function configure_servers() {
 
     local NODE_NUM=$1
@@ -68,6 +85,7 @@ function configure_servers() {
     for ((i=0; i<CLUSTER_NUM; i++))
     do
 
+        # Calculate the number of nodes to provision in this cluster
         local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # This is always integer division, Bash does not support decimals
         local start=$(( NODE_NUM - nodes_left ))
         
