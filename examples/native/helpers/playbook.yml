@@ -10,7 +10,7 @@
   tasks:
 
     - name: Install required packages
-      package:
+      yum:
         name:
           - git
           - wget
@@ -18,8 +18,9 @@
           - curl
           - libcurl
         state: latest
+        skip_broken: yes
       become: yes
-
+      
     - name: Install Golang
       shell: 
         cmd: |
