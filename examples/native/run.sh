@@ -18,7 +18,9 @@
 
 # Pre-conditions: 
 #   - No containers named "cmos" or "node$i" where $i is an integer up to the number
-#     of nodes desired in the cluster ($NODE_NUM). (handled by the user, via "make clean")
+#     of nodes desired in the cluster ($NODE_NUM). Checked by the script and handled by 
+#     the user, either via destroying them manually (e.g., make clean) or agreeing to them
+#     being removed by the script.
 #   - The couchbase/observability-stack Docker image built (handled by the Makefile)
 
 # Post-conditions: 
@@ -30,6 +32,7 @@
 set -eu -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CBS_EXP_IMAGE_NAME="cbs_server_exp"
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
@@ -52,15 +55,30 @@ NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-false}
 
 #### SCRIPT START ####
-docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate # CMOS container
-docker image build "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$CB_VERSION" # Couchbase Server/exporter container
 
-# Remove ALL nodes matching image name "cbs_server_exp"
-if docker ps -a --filter 'ancestor=cbs_server_exp' | grep -c '' >/dev/null; then
-  echo "There are existing node\$i containers. Please verify they can be destroyed, and then run \
-  'make clean' in the top-level Makefile"
-  exit 1
+# Determine if there are any nodes with conflicting names
+nodes_matching=$(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" | grep -c '')
+if (( nodes_matching > 1 )) ; then
+
+  echo "------------------"
+  echo "There are $nodes_matching existing containers with \
+image '$CBS_EXP_IMAGE_NAME': ($(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" \
+    --format '{{.Names}}' | paste -s -d, -))"
+
+  read -r -p "These (and the CMOS container) must be destroyed to continue. Are you sure? [y/N]: " response
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+        "$SCRIPT_DIR"/stop.sh
+        echo "Completed."
+    else
+        exit
+    fi
+
 fi
+
+# Build CMOS container
+docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
+# Build Couchbase Server/exporter container
+docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$CB_VERSION" 
 
 # Create $NODE_NUM containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NODE_NUM" 

@@ -13,8 +13,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 set -u
-
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# Remove the CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
 
 # Delete ALL containers with the cbs_server_exp image
