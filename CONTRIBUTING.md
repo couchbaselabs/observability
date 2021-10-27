@@ -51,7 +51,7 @@ Please follow this format for your commit messages, as this means they will auto
 
 Before committing your changes, it's a good idea to run through this checklist. All of this is also enforced by automated CI, so you will not be able to submit your changes unless this passes, but running it locally may save you time.
 
-* Does it work? (`make container`, then run the built image and test your feature / bug fix)
+* Does it work? (`make container`, then run the built image and test your feature / bug fix - note that if you do not have access to the couchbaselabs GitHub organisation you may not be able to do this, in this case skip this step and a maintainer can test it for you)
 * Does it work in the OSS build (i.e. without the proprietary Couchbase Cluster Monitor)? (Run `make container-oss` and repeat the above)
 * Do the linters pass? (`make lint`)
 * Do the tests pass? (See below)
