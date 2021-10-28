@@ -62,7 +62,7 @@ Before committing your changes, it's a good idea to run through this checklist. 
 * If you have left any TODO comments, have you filed an associated CMOS issue? (Otherwise they may get forgotten.)
 * If you have made changes to the build or packaging infrastructure, have you validated they will work with Couchbase's internal build infrastructure? (If you're not sure what this means, just ask a maintainer, and they'll help you out.)
 * If you update the README file, have you updated the AsciiDoc version to go with it? (Run `make docs` and check in the changes)
-* If you have made any changes to Grafana dashboards, have you included a screenshot? (It means we don't need to start up an instance just to see how it looks.)
+* If you have made any changes to Grafana dashboards, have you included a screenshot? If appropriate, highlight any areas you have changed. (It means we don't need to start up an instance just to see how it looks.)
 
 Once all the above can be ticked off, go ahead and file a pull request! If you are not a member of the couchbaselabs GitHub organization, you may need to fork the repository - the process is explained on this [GitHub help article](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
 
