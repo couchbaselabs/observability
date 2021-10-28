@@ -43,6 +43,9 @@ CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 source "$SCRIPT_DIR"/helpers/driver.sh
 
 # Environment variables
+COUCHBASE_SERVER_VERSION=${COUCHBASE_SERVER_VERSION:-6.6.3}
+COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:$COUCHBASE_SERVER_VERSION}
+
 CLUSTER_NUM=${CLUSTER_NUM:-3}
 NODE_NUM=${NODE_NUM:-8}
 WAIT_TIME=${WAIT_TIME:-60}
@@ -50,7 +53,6 @@ WAIT_TIME=${WAIT_TIME:-60}
 SERVER_USER=${SERVER_USER:-"Administrator"}
 SERVER_PASS=${SERVER_PASS:-"password"}
 
-CB_VERSION=${CB_VERSION:-"enterprise-6.6.3"}
 NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-false}
 
@@ -77,8 +79,22 @@ fi
 
 # Build CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
+
+# Extend and copy JSON config file to CMOS Prometheus config
+arr=($(seq 0 "$NODE_NUM"))        # arr: 0 1 2 ...
+nodes=(${arr[@]/#/\"node})        # arr: 'node0 'node1 ...
+nodes=(${nodes[@]/%/:9091\"})     # arr: 'node0:9091' 'node0:9091'  ...
+bar=$(IFS=, ; echo "${nodes[*]}") # str: 'node0:9091','node1:9091', ...
+
+temp_dir=$(mktemp -d) && cp "$SCRIPT_DIR"/helpers/target_template.json "$temp_dir"/targets.json
+
+new_file=$(jq -n ".[0].targets |= [$bar]" "$temp_dir"/targets.json)
+echo "$new_file" > "$temp_dir"/targets.json
+
+docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom.json
+
 # Build Couchbase Server/exporter container
-docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$CB_VERSION" 
+docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_VERSION" 
 
 # Create $NODE_NUM containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NODE_NUM" 
@@ -88,3 +104,6 @@ start_new_nodes "$NODE_NUM"
 configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NODE_RAM" "$LOAD" 
 
 echo "All done. Go to: http://localhost:8080."
+
+# Rename and put under subpath /containers 
+# Rewrite wait_until code
