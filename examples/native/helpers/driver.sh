@@ -98,7 +98,7 @@ function configure_servers() {
                 # Create and configure new cluster
                 local ip
                 ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)
-                local clust_name="Cluster $((NODE_NUM-nodes_left))"
+                local clust_name="Cluster $i"
 
                 # Initialize cluster
                 docker exec "$uid" /opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name="$clust_name" --cluster-username="$SERVER_USER" \
@@ -112,10 +112,10 @@ function configure_servers() {
                 if $LOAD; then
                     # Start cbpillowfight to simulate a non-zero load (NOT stress test)
                     (sleep 20 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U couchbase://localhost/beer-sample \
-                        -B 100 -I 1000 --rate-limit 100 &)
+                        -B 100 -I 1000 --rate-limit 100)
 
                     (sleep 30 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U couchbase://localhost/travel-sample \
-                        -B 100 -I 1000 --rate-limit 100 &)
+                        -B 100 -I 1000 --rate-limit 100)
                 fi
 
             else

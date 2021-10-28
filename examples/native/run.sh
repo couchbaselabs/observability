@@ -65,7 +65,7 @@ if (( nodes_matching > 1 )) ; then
 image '$CBS_EXP_IMAGE_NAME': ($(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" \
     --format '{{.Names}}' | paste -s -d, -))"
 
-  read -r -p "These (and the CMOS container) must be destroyed to continue. Are you sure? [y/N]: " response
+  read -r -p "These nodes and the CMOS container must be destroyed to continue. Are you sure? [y/N]: " response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         "$SCRIPT_DIR"/stop.sh
         echo "Completed."
