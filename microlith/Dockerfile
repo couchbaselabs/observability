@@ -47,7 +47,7 @@ RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-override
 WORKDIR /src/github.com/couchbaselabs/observability/config-svc
 COPY config-svc/ .
 RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cmoscfg ./cmd/cmoscfg
+    CGO_ENABLED=0 GOOS=linux go build -trimpath -a -o /bin/cmoscfg -tags netgo ./cmd/cmoscfg
 
 # Couchbase proprietary start
 # Standalone as need to use --mount option
