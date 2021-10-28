@@ -60,7 +60,7 @@ LOAD=${LOAD:-false}
 
 # Determine if there are any nodes with conflicting names
 nodes_matching=$(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" | grep -c '')
-if (( nodes_matching > 1 )) ; then
+if (( nodes_matching > 1 )); then
 
   echo "------------------"
   echo "There are $nodes_matching existing containers with \
@@ -106,4 +106,3 @@ configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NOD
 echo "All done. Go to: http://localhost:8080."
 
 # Rename and put under subpath /containers 
-# Rewrite wait_until code

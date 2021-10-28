@@ -21,36 +21,31 @@
 
 # Post-conditions:
 #   - $NODE_NUM Couchbase Server/exporter containers with Couchbase Server ready
-#     to receive requests
+#     to receive requests, and the exporter actively exporting data
 function start_new_nodes() {
 
     local NODE_NUM=$1
+    local NODE_READY=() 
 
-    for ((i=0; i<NODE_NUM; i++))
-    do
+    for ((i=0; i<NODE_NUM; i++)); do
         docker run -d --name "node$i" "cbs_server_exp"
+        NODE_READY+=(false)
     done
 
     # Simple block until all nodes ready
-    SLEEP_TIME=$(( 5 + (1 * NODE_NUM) ))
-    while true;
-    do
-        sleep $SLEEP_TIME
-
-        ready=true
-        for ((i=0; i<NODE_NUM; i++))
-        do
-            if ! docker exec "node$i" curl -fs localhost:8091; then
-                ready=false
-                echo "Node $i not ready yet, waiting"
+    while true; do
+        for ((i=0; i<NODE_NUM; i++)); do
+            if ! ${NODE_READY[$i]}; then
+                if docker exec "node$i" curl -fs localhost:8091; then
+                    NODE_READY[$i]=true
+                    echo "Node $i ready..."
+                fi
             fi
-            sleep 1
         done
 
-        if $ready; then
-            echo "All nodes ready, continuing"
-            break
-        fi
+        ready=true
+        for b in "${NODE_READY[@]}"; do if ! $b; then ready=false; fi; done
+        if $ready; then break; else sleep 5; fi
     done
 
 }
@@ -82,15 +77,13 @@ function configure_servers() {
 
     local nodes_left=$NODE_NUM
 
-    for ((i=0; i<CLUSTER_NUM; i++))
-    do
+    for ((i=0; i<CLUSTER_NUM; i++)); do
 
         # Calculate the number of nodes to provision in this cluster
         local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # This is always integer division, Bash does not support decimals
         local start=$(( NODE_NUM - nodes_left ))
         
-        for ((j=start; j<start+to_provision; j++))
-        do 
+        for ((j=start; j<start+to_provision; j++)); do 
 
             local uid="node$j"
 
