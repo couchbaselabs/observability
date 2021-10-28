@@ -94,7 +94,7 @@ echo "$new_file" > "$temp_dir"/targets.json
 docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom.json
 
 # Build Couchbase Server/exporter container
-docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_VERSION" 
+docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_IMAGE" 
 
 # Create $NODE_NUM containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NODE_NUM" 
