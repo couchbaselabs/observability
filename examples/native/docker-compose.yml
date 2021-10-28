@@ -10,8 +10,14 @@ services:
             # Unfortunately Docker Compose does not use locally built images, it tries to pull them  unless you specify 'build'
             context: ../../microlith/
 
-        # Use bridge network otherwise the CMOS container would be on a different network to the CB Server and exporter containers,
-        # and would not be able to communicate with them (docker-compose defaults to a different network to docker CLI)
-        network_mode: bridge
+        
         ports:
             - "8080:8080"
+
+        # Add to custom network so CMOS and server/exporter containers can communicate and resolve container names to IPs
+        networks:
+         - shared_network
+
+networks:
+    shared_network:
+

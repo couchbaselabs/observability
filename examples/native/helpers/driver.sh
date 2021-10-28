@@ -28,7 +28,7 @@ function start_new_nodes() {
     local NODE_READY=() 
 
     for ((i=0; i<NODE_NUM; i++)); do
-        docker run -d --name "node$i" "cbs_server_exp"
+        docker run -d --name "node$i" --network=native_shared_network "cbs_server_exp"
         NODE_READY+=(false)
     done
 
@@ -87,10 +87,8 @@ function configure_servers() {
 
             local uid="node$j"
 
-            if (( j == start )); then
-                # Create and configure new cluster
-                local ip
-                ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)
+            if (( j == start )); then # Create and configure new cluster
+                
                 local clust_name="Cluster $i"
 
                 # Initialize cluster
