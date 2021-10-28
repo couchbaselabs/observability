@@ -1,19 +1,18 @@
-# syntax=docker/dockerfile:1.3-labs
-ARG version=enterprise-6.6.3
-FROM couchbase:$version
+# Change 
+ARG couchbase_server_image=couchbase/server:enterprise-6.6.3
 
-RUN apt-get update && \
-    apt-get install -y git curl
-
-RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz && \
-    rm -rf /usr/local/go && tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz
-
-ENV PATH="${PATH}:/usr/local/go/bin"
-ENV GOROOT="/usr/local/go"
-
-RUN mkdir -p /opt/couchbase-exporter && \
-    git clone https://github.com/couchbase/couchbase-exporter.git /opt/couchbase-exporter
+# Build the exporter
+FROM golang:1.17.2 as go_build
+RUN git clone https://github.com/couchbase/couchbase-exporter.git /opt/couchbase-exporter
 
 WORKDIR /opt/couchbase-exporter
-RUN go build -o ./couchbase-exporter . && chmod +x couchbase-exporter && chown -R couchbase:couchbase /opt/couchbase-exporter
+RUN CGO=0 go build -o ./couchbase-exporter .
+
+# Add to Couchbase Server
+FROM $couchbase_server_image
+
 COPY --chown=couchbase:couchbase --chmod=777 ./run_exporter.sh /etc/service/couchbase-exporter/run
+COPY --from=go_build --chmod=777 /opt/couchbase-exporter /opt/couchbase-exporter
+RUN  chown -R couchbase:couchbase /opt/couchbase-exporter
+
+
