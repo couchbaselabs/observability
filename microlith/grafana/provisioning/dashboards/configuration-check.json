@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 9,
-  "iteration": 1635422336490,
+  "iteration": 1635432042706,
   "links": [],
   "panels": [
     {
@@ -181,7 +181,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 6,
         "w": 6,
         "x": 6,
         "y": 5
@@ -230,21 +230,21 @@
           "color": {
             "mode": "thresholds"
           },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "green",
                 "value": null
               },
               {
-                "color": "yellow",
-                "value": 1
-              },
-              {
-                "color": "green",
-                "value": 3
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -253,13 +253,171 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 3,
         "x": 12,
         "y": 5
       },
-      "id": 14,
+      "id": 22,
       "options": {
-        "colorMode": "value",
+        "showHeader": true
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nunless\ncount by (cluster) (cbnode_up)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Value",
+          "refId": "A"
+        }
+      ],
+      "title": "Clusters Without Prometheus Exporter",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "{cluster=\"Dev Kicks with 6.6\"}": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "cluster": "Clusters"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 3,
+        "x": 15,
+        "y": 5
+      },
+      "id": 23,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count by (cluster) (cbnode_up) unless count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Value",
+          "refId": "A"
+        }
+      ],
+      "title": "Clusters Missing from Cluster Monitor",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "{cluster=\"Dev Kicks with 6.6\"}": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "cluster": "Clusters"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "from": 1,
+                "result": {
+                  "color": "green",
+                  "index": 0,
+                  "text": "Yes"
+                },
+                "to": 999999999
+              },
+              "type": "range"
+            },
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "No"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 6,
+        "y": 11
+      },
+      "id": 26,
+      "options": {
+        "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -277,21 +435,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(cbbucketinfo_up)",
+          "expr": "count(\ncount by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nand\ncount by (cluster) (cbnode_up)\n)",
           "interval": "",
-          "legendFormat": "Prometheus Exporter",
+          "legendFormat": "",
           "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node_uuid) (multimanager_node_checker_status))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Couchbase Cluster Monitor",
-          "refId": "B"
         }
       ],
-      "title": "Configured Nodes",
+      "title": "All Clusters Registered + Exporter Configured?",
       "type": "stat"
     },
     {
@@ -305,8 +455,8 @@
       },
       "id": 8,
       "panels": [],
-      "repeat": "exporter_clusters",
-      "title": "Couchbase Prometheus Exporter ($exporter_clusters)",
+      "repeat": "clusters",
+      "title": "Couchbase Prometheus Exporter ($clusters)",
       "type": "row"
     },
     {
@@ -375,8 +525,8 @@
         ]
       },
       "gridPos": {
-        "h": 13,
-        "w": 10,
+        "h": 12,
+        "w": 4,
         "x": 0,
         "y": 15
       },
@@ -389,7 +539,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbbucketinfo_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbbucketinfo_up{cluster=${clusters:doublequote}}))",
           "instant": true,
           "interval": "",
           "legendFormat": "cbbucketinfo",
@@ -397,7 +547,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbbucketstat_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbbucketstat_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -406,7 +556,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbcbas_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbcbas_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -415,7 +565,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbeventing_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbeventing_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -424,7 +574,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbfts_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbfts_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -433,7 +583,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbindex_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbindex_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -442,7 +592,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbnode_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbnode_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -451,7 +601,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbpernode_bucketstats_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -460,7 +610,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbquery_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbquery_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -469,7 +619,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (node) (cbtask_up{cluster=${exporter_clusters:doublequote}}))",
+          "expr": "count(count by (instance) (cbtask_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -508,11 +658,161 @@
     },
     {
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
         "h": 6,
-        "w": 3,
-        "x": 10,
+        "w": 5,
+        "x": 4,
         "y": 15
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(cbbucketinfo_up{cluster=${clusters:doublequote}})",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Prometheus Exporter",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node_uuid) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Couchbase Cluster Monitor",
+          "refId": "B"
+        }
+      ],
+      "title": "Configured Nodes",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 3,
+        "x": 9,
+        "y": 15
+      },
+      "id": 24,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count by (node) (\nlabel_replace(count by (node_name) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}), \"node\", \"$1\", \"node_name\", \"(.*?)(?::[0-9]*)$\")\n)\nunless\ncount by (node) (\nlabel_replace(cbnode_up{cluster=${clusters:doublequote}}, \"node\", \"$1\", \"instance\", \"(.*?)(?::[0-9]*)$\")\n)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Value",
+          "refId": "A"
+        }
+      ],
+      "title": "Nodes Without Prometheus Exporter",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true,
+              "{cluster=\"Dev Kicks with 6.6\"}": true,
+              "{node=\"35.223.87.116:18091\"}": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "cluster": "Clusters",
+              "node": "Node"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 6,
+        "w": 5,
+        "x": 4,
+        "y": 21
       },
       "id": 12,
       "options": {
@@ -532,25 +832,25 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "Dev Kicks with 6.6",
-          "value": "Dev Kicks with 6.6"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": null,
-        "definition": "label_values(cbnode_up,cluster)",
+        "definition": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
         "description": null,
         "error": null,
         "hide": 2,
-        "includeAll": false,
+        "includeAll": true,
         "label": null,
         "multi": false,
-        "name": "exporter_clusters",
+        "name": "clusters",
         "options": [],
         "query": {
-          "query": "label_values(cbnode_up,cluster)",
+          "query": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "",
+        "regex": "/{cluster=\"(.+?)\"/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -558,12 +858,12 @@
     ]
   },
   "time": {
-    "from": "now-6h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Configuration Check",
-  "uid": "gxjE6nKnk",
-  "version": 13
+  "uid": "BaBzF4Knz",
+  "version": 15
 }
