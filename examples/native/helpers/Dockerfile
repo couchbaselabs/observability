@@ -9,6 +9,7 @@ WORKDIR /opt/couchbase-exporter
 RUN CGO=0 go build -o ./couchbase-exporter .
 
 # Add to Couchbase Server
+# hadolint ignore=DL3006
 FROM $couchbase_server_image
 
 COPY --chown=couchbase:couchbase --chmod=777 ./run_exporter.sh /etc/service/couchbase-exporter/run
