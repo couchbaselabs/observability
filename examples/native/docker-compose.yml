@@ -15,8 +15,7 @@ services:
 
         # Add to custom network so CMOS and server/exporter containers can communicate and resolve container names to IPs
         networks:
-         - shared_network
+            - shared_network
 
 networks:
     shared_network:
-
