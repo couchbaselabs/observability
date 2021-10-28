@@ -1,0 +1,569 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "gnetId": null,
+  "graphTooltip": 0,
+  "id": 9,
+  "iteration": 1635422336490,
+  "links": [],
+  "panels": [
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 4,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 19,
+      "options": {
+        "content": "# Configuration Check\n\nIf all the checks below report OK, and the number of nodes and clusters is right, you're all set! Head over to the [Cluster Overview Dashboard](/d/g-waunKnz/cluster-overview-dashboard) to get started.\n\nIf any report a problem, or the number of nodes does not match your expectations, review the [setup instructions](https://docs.couchbase.com).",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.1.1",
+      "type": "text"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "id": 10,
+      "panels": [],
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "red",
+                  "index": 0,
+                  "text": "Problem"
+                },
+                "1": {
+                  "color": "green",
+                  "index": 1,
+                  "text": "OK"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "OK?"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "custom.width",
+                "value": 190
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 0,
+        "y": 5
+      },
+      "id": 2,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "min by (job) (up)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Prometheus Scrape Targets",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value": "OK?",
+              "job": "Job"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 6,
+        "y": 5
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(count by (cluster) (cbbucketinfo_up))",
+          "interval": "",
+          "legendFormat": "Prometheus Exporter",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (cluster_uuid) (multimanager_cluster_checker_status))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Couchbase Cluster Monitor",
+          "refId": "B"
+        }
+      ],
+      "title": "Configured Clusters",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 6,
+        "x": 12,
+        "y": 5
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(cbbucketinfo_up)",
+          "interval": "",
+          "legendFormat": "Prometheus Exporter",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node_uuid) (multimanager_node_checker_status))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Couchbase Cluster Monitor",
+          "refId": "B"
+        }
+      ],
+      "title": "Configured Nodes",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 8,
+      "panels": [],
+      "repeat": "exporter_clusters",
+      "title": "Couchbase Prometheus Exporter ($exporter_clusters)",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 3
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background"
+              },
+              {
+                "id": "mappings",
+                "value": []
+              },
+              {
+                "id": "custom.width",
+                "value": 125
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Configured Nodes"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 158
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 10,
+        "x": 0,
+        "y": 15
+      },
+      "id": 20,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.1.1",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbbucketinfo_up{cluster=${exporter_clusters:doublequote}}))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbbucketinfo",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbbucketstat_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbnode",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbcbas_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbcbas",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbeventing_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbeventing_up",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbfts_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbfts_up",
+          "refId": "E"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbindex_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbindex_up",
+          "refId": "F"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbnode_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbnode_up",
+          "refId": "G"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbpernode_bucketstats_up",
+          "refId": "H"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbquery_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbquery_up",
+          "refId": "I"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node) (cbtask_up{cluster=${exporter_clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "cbtask_up",
+          "refId": "J"
+        }
+      ],
+      "title": "Couchbase Exporter Checks",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "cluster": true,
+              "cluster_label": true,
+              "instance": false,
+              "job": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Configured Nodes",
+              "__name__": "Metric Group",
+              "cluster": "Cluster",
+              "cluster_label": "Cluster Label",
+              "instance": "Node"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 10,
+        "y": 15
+      },
+      "id": 12,
+      "options": {
+        "content": "**Note:** If the number of nodes for a particular service does not equal the total number of nodes in the cluster, this may be because that node is not configured to run the respective service. In this case, the discrepancy can be ignored.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.1.1",
+      "type": "text"
+    }
+  ],
+  "schemaVersion": 30,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "Dev Kicks with 6.6",
+          "value": "Dev Kicks with 6.6"
+        },
+        "datasource": null,
+        "definition": "label_values(cbnode_up,cluster)",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "exporter_clusters",
+        "options": [],
+        "query": {
+          "query": "label_values(cbnode_up,cluster)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "Configuration Check",
+  "uid": "gxjE6nKnk",
+  "version": 13
+}
