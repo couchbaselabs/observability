@@ -91,7 +91,7 @@ temp_dir=$(mktemp -d) && cp "$SCRIPT_DIR"/helpers/target_template.json "$temp_di
 new_file=$(jq -n ".[0].targets |= [$bar]" "$temp_dir"/targets.json)
 echo "$new_file" > "$temp_dir"/targets.json
 
-docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom.json
+docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom/targets.json
 
 # Build Couchbase Server/exporter container
 docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_IMAGE" 
