@@ -84,11 +84,11 @@ function configure_servers() {
         local start=$(( NODE_NUM - nodes_left ))
         
         for ((j=start; j<start+to_provision; j++)); do 
-
             local uid="node$j"
-
+            
             if (( j == start )); then # Create and configure new cluster
-                
+                local ip
+                ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)#
                 local clust_name="Cluster $i"
 
                 # Initialize cluster

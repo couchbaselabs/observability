@@ -65,7 +65,7 @@ if (( nodes_matching > 1 )); then
   echo "------------------"
   echo "There are $nodes_matching existing containers with \
 image '$CBS_EXP_IMAGE_NAME': ($(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" \
-    --format '{{.Names}}' | paste -s -d, -))"
+    --format '{{.Names}}' | tac | paste -s -d, -))"
 
   read -r -p "These nodes and the CMOS container must be destroyed to continue. Are you sure? [y/N]: " response
     if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
@@ -81,9 +81,9 @@ fi
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
 # Extend and copy JSON config file to CMOS Prometheus config
-arr=($(seq 0 "$NODE_NUM"))        # arr: 0 1 2 ...
-nodes=(${arr[@]/#/\"node})        # arr: 'node0 'node1 ...
-nodes=(${nodes[@]/%/:9091\"})     # arr: 'node0:9091' 'node0:9091'  ...
+arr=("$(seq 0 "$NODE_NUM")")        # arr: 0 1 2 ...
+nodes=("${arr[@]/#/\"node}")        # arr: 'node0 'node1 ...
+nodes=("${nodes[@]/%/:9091\"}")     # arr: 'node0:9091' 'node0:9091'  ...
 bar=$(IFS=, ; echo "${nodes[*]}") # str: 'node0:9091','node1:9091', ...
 
 temp_dir=$(mktemp -d) && cp "$SCRIPT_DIR"/helpers/target_template.json "$temp_dir"/targets.json
@@ -105,4 +105,6 @@ configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NOD
 
 echo "All done. Go to: http://localhost:8080."
 
+## TODO:
 # Rename and put under subpath /containers 
+# Rework /driver.sh configure_servers func to use container name rather than getting IP

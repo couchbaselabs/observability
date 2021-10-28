@@ -10,7 +10,6 @@ services:
             # Unfortunately Docker Compose does not use locally built images, it tries to pull them  unless you specify 'build'
             context: ../../microlith/
 
-        
         ports:
             - "8080:8080"
 
