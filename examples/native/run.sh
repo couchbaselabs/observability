@@ -81,9 +81,12 @@ fi
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
 # Extend and copy JSON config file to CMOS Prometheus config
-arr=("$(seq 0 "$NODE_NUM")")        # arr: 0 1 2 ...
-nodes=("${arr[@]/#/\"node}")        # arr: 'node0 'node1 ...
-nodes=("${nodes[@]/%/:9091\"}")     # arr: 'node0:9091' 'node0:9091'  ...
+# shellcheck disable=SC2206,SC2207
+arr=($(seq 0 "$NODE_NUM"))        # arr: 0 1 2 ...
+# shellcheck disable=SC2206,SC2207
+nodes=(${arr[@]/#/\"node})        # arr: 'node0 'node1 ...
+# shellcheck disable=SC2206,SC2207
+nodes=(${nodes[@]/%/:9091\"})     # arr: 'node0:9091' 'node0:9091'  ...
 bar=$(IFS=, ; echo "${nodes[*]}") # str: 'node0:9091','node1:9091', ...
 
 temp_dir=$(mktemp -d) && cp "$SCRIPT_DIR"/helpers/target_template.json "$temp_dir"/targets.json
@@ -107,4 +110,9 @@ echo "All done. Go to: http://localhost:8080."
 
 ## TODO:
 # Rename and put under subpath /containers 
+# Fix linting issues line 84-87
 # Rework /driver.sh configure_servers func to use container name rather than getting IP
+#  - be careful as docker-compose names networks prefixed with parent folder name, this will change from native -> something else
+# Fix Prometheus exporter not starting issue with local Dockerfile
+#  from a node: bash-5.1$ exec /opt/couchbase-exporter/couchbase-exporter
+#  bash: /opt/couchbase-exporter/couchbase-exporter: No such file or directory

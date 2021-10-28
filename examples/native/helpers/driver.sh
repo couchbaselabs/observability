@@ -85,10 +85,10 @@ function configure_servers() {
         
         for ((j=start; j<start+to_provision; j++)); do 
             local uid="node$j"
-            
+
             if (( j == start )); then # Create and configure new cluster
                 local ip
-                ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)#
+                ip=$(docker container inspect -f '{{ .NetworkSettings.Networks.native_shared_network.IPAddress }}' $uid)
                 local clust_name="Cluster $i"
 
                 # Initialize cluster
@@ -112,7 +112,7 @@ function configure_servers() {
             else
                 # Initalize node and add to existing cluster
                 local to_add_ip
-                to_add_ip=$(docker container inspect -f '{{ .NetworkSettings.IPAddress }}' $uid)
+                to_add_ip=$(docker container inspect -f '{{ .NetworkSettings.Networks.native_shared_network.IPAddress }}' $uid)
 
                 docker exec "$uid" /opt/couchbase/bin/couchbase-cli node-init --cluster "$ip" --username "$SERVER_USER" --password "$SERVER_PASS"
                 docker exec "$uid" /opt/couchbase/bin/couchbase-cli server-add -c "$ip" --username "$SERVER_USER" --password "$SERVER_PASS" \
