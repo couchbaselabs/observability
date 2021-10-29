@@ -28,6 +28,6 @@ load "$BATS_ASSERT_ROOT/load.bash"
     assert_success
     run jq -c '.[] | select(.signatureType == "community")' "$BATS_TEST_TMPDIR/output.json"
     [ -n "$output" ]
-    # Add any specific plugins we user here
+    # Add any specific plugins we use here
     assert_line -p 'marcusolsson-json-datasource'
 }
