@@ -35,9 +35,6 @@ export ALERTMANAGER_URL_SUBPATH=${ALERTMANAGER_URL_SUBPATH-/alertmanager/}
 
 export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 
-# TODO (CMOS-115): this should be done at build time
-export GF_INSTALL_PLUGINS=${GF_INSTALL_PLUGINS:-marcusolsson-json-datasource}
-
 export JAEGER_URL_SUBPATH=${JAEGER_URL_SUBPATH-/jaeger}
 export JAEGER_CONFIG_FILE=${JAEGER_CONFIG_FILE:-/etc/jaeger/config.json}
 export SPAN_STORAGE_TYPE=${SPAN_STORAGE_TYPE:-memory}

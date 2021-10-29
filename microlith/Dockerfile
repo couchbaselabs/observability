@@ -237,6 +237,16 @@ COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
 ENV GF_SECURITY_ADMIN_PASSWORD=password
 ENV GF_USERS_ALLOW_SIGN_UP=false
 
+# Ensure we install Grafana plugins at build time, not at runtime
+ARG GF_INSTALL_PLUGINS=marcusolsson-json-datasource=1.3.0
+COPY ./scripts/install-grafana-plugins.sh /scripts/install-grafana-plugins.sh
+RUN chmod +x /scripts/install-grafana-plugins.sh && \
+    /scripts/install-grafana-plugins.sh \
+# Blank out the environment variable to prevent trying to install the plugins again at runtime
+# End-users can still override it to install additional plugins, but this should prevent startup
+# failures in an air-gapped environment
+ENV GF_INSTALL_PLUGINS=""
+
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
