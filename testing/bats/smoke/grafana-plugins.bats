@@ -22,11 +22,12 @@ ensure_variables_set CMOS_HOST BATS_SUPPORT_ROOT BATS_ASSERT_ROOT
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 
-# The list of plugins will vary, so we only test if at least one is present
 @test "community Grafana plugins present" {
     wait_for_url 10 "$CMOS_HOST/grafana/api/health"
     run curl -fs -o "$BATS_TEST_TMPDIR/output.json" "$CMOS_HOST/grafana/api/plugins"
     assert_success
     run jq -c '.[] | select(.signatureType == "community")' "$BATS_TEST_TMPDIR/output.json"
     [ -n "$output" ]
+    # Add any specific plugins we user here
+    assert_line -p 'marcusolsson-json-datasource'
 }
