@@ -22,7 +22,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 9,
-  "iteration": 1635432042706,
+  "iteration": 1635495009676,
   "links": [],
   "panels": [
     {
@@ -181,7 +181,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 9,
         "w": 6,
         "x": 6,
         "y": 5
@@ -252,7 +252,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 3,
         "x": 12,
         "y": 5
@@ -268,7 +268,7 @@
           "expr": "count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nunless\ncount by (cluster) (cbnode_up)",
           "instant": true,
           "interval": "",
-          "legendFormat": "Value",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -323,7 +323,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 9,
+        "h": 7,
         "w": 3,
         "x": 15,
         "y": 5
@@ -339,7 +339,7 @@
           "expr": "count by (cluster) (cbnode_up) unless count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))",
           "instant": true,
           "interval": "",
-          "legendFormat": "Value",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -410,10 +410,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
+        "h": 2,
         "w": 6,
-        "x": 6,
-        "y": 11
+        "x": 12,
+        "y": 12
       },
       "id": 26,
       "options": {
@@ -479,12 +479,8 @@
                 "value": null
               },
               {
-                "color": "#EAB839",
-                "value": 1
-              },
-              {
                 "color": "green",
-                "value": 3
+                "value": 1
               }
             ]
           }
@@ -539,7 +535,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbbucketinfo_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbbucketinfo_up{cluster=${clusters:doublequote}}))",
           "instant": true,
           "interval": "",
           "legendFormat": "cbbucketinfo",
@@ -547,7 +543,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbbucketstat_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbbucketstat_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -556,74 +552,74 @@
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbcbas_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbcbas_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbcbas",
+          "legendFormat": "cbcbas (Analytics)",
           "refId": "C"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbeventing_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbeventing_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbeventing_up",
+          "legendFormat": "cbeventing (Eventing)",
           "refId": "D"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbfts_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbfts_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbfts_up",
+          "legendFormat": "cbfts (Search)",
           "refId": "E"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbindex_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbindex_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbindex_up",
+          "legendFormat": "cbindex (Index)",
           "refId": "F"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbnode_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbnode_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbnode_up",
+          "legendFormat": "cbnode",
           "refId": "G"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbpernode_bucketstats_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbpernode_bucketstats_up",
+          "legendFormat": "cbpernode_bucketstats (Data)",
           "refId": "H"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbquery_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbquery_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbquery_up",
+          "legendFormat": "cbquery (Query)",
           "refId": "I"
         },
         {
           "exemplar": true,
-          "expr": "count(count by (instance) (cbtask_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbtask_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "cbtask_up",
+          "legendFormat": "cbtask",
           "refId": "J"
         }
       ],
@@ -673,12 +669,8 @@
                 "value": null
               },
               {
-                "color": "yellow",
-                "value": 1
-              },
-              {
                 "color": "green",
-                "value": 3
+                "value": 1
               }
             ]
           }
@@ -734,6 +726,7 @@
     },
     {
       "datasource": null,
+      "description": "If nodes appear in this panel despite both being added to the Cluster Monitor and Prometheus, check if alternate addresses are enabled. If so, ensure you are using the alternate address to refer to the node in your Prometheus service discovery configuration.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -774,10 +767,10 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count by (node) (\nlabel_replace(count by (node_name) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}), \"node\", \"$1\", \"node_name\", \"(.*?)(?::[0-9]*)$\")\n)\nunless\ncount by (node) (\nlabel_replace(cbnode_up{cluster=${clusters:doublequote}}, \"node\", \"$1\", \"instance\", \"(.*?)(?::[0-9]*)$\")\n)",
+          "expr": "count by (node) (label_replace(count by (node_name) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}), \"node\", \"$1\", \"node_name\", \"(.*)(?::[0-9]*$)\")) unless count by (instance) (cbnode_up)",
           "instant": true,
           "interval": "",
-          "legendFormat": "Value",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
@@ -786,6 +779,15 @@
         {
           "id": "labelsToFields",
           "options": {}
+        },
+        {
+          "disabled": true,
+          "id": "filterFieldsByName",
+          "options": {
+            "include": {
+              "pattern": "^\\{"
+            }
+          }
         },
         {
           "id": "organize",
@@ -864,6 +866,6 @@
   "timepicker": {},
   "timezone": "",
   "title": "Configuration Check",
-  "uid": "BaBzF4Knz",
-  "version": 15
+  "uid": "nu7dhVF7k",
+  "version": 7
 }
