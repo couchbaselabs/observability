@@ -19,6 +19,8 @@ set -eo pipefail
 source "$HELPERS_ROOT/url-helpers.bash"
 # shellcheck disable=SC1091
 source "$HELPERS_ROOT/native-helpers.bash"
+# shellcheck disable=SC1091
+source "$HELPERS_ROOT/couchbase-helpers.bash"
 
 # Verifies if all the given variables are set, and exits otherwise
 # Parameters:
@@ -95,9 +97,11 @@ function start_smoke_cluster() {
     case $TEST_PLATFORM in
         native)
             export VAGRANT_NODES=$nodes
-            # TODO: move this into the matrix
             start_vagrant_cluster "$COUCHBASE_SERVER_VERSION" "centos7"
-            wait_for_url 10 "$(echo "$COUCHBASE_SERVER_HOSTS" | head -n1)/ui"
+            while IFS= read -r host; do
+              wait_for_url 10 "$host/ui"
+            done <<< "$COUCHBASE_SERVER_HOSTS"
+            initialize_couchbase_cluster "docker run --rm -i --network host $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
             _create_prometheus_targets_file
             _start_cmos
             ;;
@@ -112,7 +116,8 @@ function start_smoke_cluster() {
                     extra_args="-p 8091"
                 fi
                 # shellcheck disable=SC2086
-                docker run --rm -d --name "test_couchbase$i" --network-alias="couchbase$i.local" $extra_args "$COUCHBASE_SERVER_IMAGE"
+                docker run --rm -d --name "test_couchbase$i" --network cmos_test --network-alias="couchbase$i.local" \
+                  $extra_args "$COUCHBASE_SERVER_IMAGE"
             done
             COUCHBASE_SERVER_HOSTS=$(seq -f "couchbase%g.local" 1 "$nodes")
             export COUCHBASE_SERVER_HOSTS
@@ -120,9 +125,9 @@ function start_smoke_cluster() {
             local mgmt_port
             mgmt_port=$(docker inspect test_couchbase1 -f '{{with index .NetworkSettings.Ports "8091/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
             wait_for_url 10 "http://localhost:$mgmt_port/ui"
+            initialize_couchbase_cluster "docker run --rm -i --network cmos_test $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
             _create_prometheus_targets_file
             _start_cmos --network=cmos_test
-            echo "CMOS host: $CMOS_HOST"
             ;;
         kubernetes)
             echo "TODO" # CMOS-97

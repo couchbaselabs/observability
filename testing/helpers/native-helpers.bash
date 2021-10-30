@@ -77,6 +77,6 @@ function teardown_vagrant_cluster() {
     local cb_version=${1:-6.6.3}
     local os=${2:-centos7}
     pushd "$RESOURCES_ROOT/native/vagrants/$cb_version/$os" || return
-        vagrant halt --no-tty
+        vagrant destroy --no-tty -f
     popd || return
 }
