@@ -80,7 +80,7 @@ You can run each platform's tests by running `make test-native`, `make test-cont
 
 To run each platform's tests, you will need:
 
-* Native: [Vagrant](http://vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/)
+* Native: [Vagrant](http://vagrantup.com/), [VirtualBox](https://www.virtualbox.org/), and [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
 * Containers: a Docker daemon (on Windows or macOS you can use Docker Desktop)
 * Kubernetes: same as above, plus either a running Kubernetes cluster or [kind](https://kind.sigs.k8s.io/)
   * If you use the latter, set the environment variable `SKIP_CLUSTER_CREATION=no` and the tests will take care of starting up an isolated cluster.
