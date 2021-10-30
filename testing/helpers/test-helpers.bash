@@ -63,7 +63,9 @@ function find_unused_port() {
 function _create_prometheus_targets_file() {
     local tmp
     tmp=$(mktemp -d)
-    echo "$COUCHBASE_SERVER_HOSTS" | jq -R -s '[split("\n")[:-1][] | sub(":8091"; ":9091")] | [{"targets": ., "labels": {"job":"couchbase-server","cluster":"smoke"}}]' > "$tmp/smoke.json"
+    echo "$COUCHBASE_SERVER_HOSTS" \
+      | jq -R -s '[split("\n")[:-1][] | sub("(:8091)?$"; ":9091")] | [{"targets": ., "labels": {"job":"couchbase-server","cluster":"smoke"}}]' \
+      > "$tmp/smoke.json"
     export PROMETHEUS_TARGETS_FILE="$tmp/smoke.json"
 }
 
@@ -108,6 +110,11 @@ function start_smoke_cluster() {
         containers)
             ensure_variables_set CMOS_IMAGE
             ensure_variables_set COUCHBASE_SERVER_IMAGE
+            # Build a new image, containing the Exporter
+            docker build -t "$COUCHBASE_SERVER_IMAGE-exporter" \
+             --build-arg COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE" \
+              -f "$RESOURCES_ROOT/containers/cb-with-exporter.Dockerfile" "$RESOURCES_ROOT/containers"
+            export COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE-exporter"
             # We're creating these manually instead of using Compose because we need to support a variable number of nodes.
             docker network create cmos_test
             for i in $(seq 1 "$nodes"); do
@@ -140,6 +147,10 @@ function start_smoke_cluster() {
 # Parameters:
 # $SMOKE_NODES: The number of nodes that were started (defaults to 3)
 function teardown_smoke_cluster() {
+    if [ "${SKIP_TEARDOWN:-}" == "true" ]; then
+      echo "# Skipping teardown"
+      return 0
+    fi
     local nodes=${SMOKE_NODES:-3}
     echo "# Tearing down smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
     case $TEST_PLATFORM in
