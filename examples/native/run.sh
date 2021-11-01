@@ -18,14 +18,14 @@
 
 # Pre-conditions: 
 #   - No containers named "cmos" or "node$i" where $i is an integer up to the number
-#     of nodes desired in the cluster ($NODE_NUM). Checked by the script and handled by 
+#     of nodes desired in the cluster ($NUM_NODES). Checked by the script and handled by 
 #     the user, either via destroying them manually (e.g., make clean) or agreeing to them
 #     being removed by the script.
 #   - The couchbase/observability-stack Docker image built (handled by the Makefile)
 
 # Post-conditions: 
 #   - A single container named "cmos" with the CMOS Microlith running. 
-#   - A total of $NODE_NUM containers with the specified Couchbase Server version
+#   - A total of $NUM_NODES containers with the specified Couchbase Server version
 #     and Prometheus exporter installed, partitioned as evenly as possible into $CLUSTER_NUM
 #   - cbmultimanager configured to monitor all clusters
 #   - Grafana configured to retrieve statistics from CBMM API for dashboards
@@ -47,7 +47,7 @@ COUCHBASE_SERVER_VERSION=${COUCHBASE_SERVER_VERSION:-6.6.3}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:$COUCHBASE_SERVER_VERSION}
 
 CLUSTER_NUM=${CLUSTER_NUM:-3}
-NODE_NUM=${NODE_NUM:-8}
+NUM_NODES=${NUM_NODES:-8}
 WAIT_TIME=${WAIT_TIME:-60}
 
 CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
@@ -85,7 +85,7 @@ docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate
 
 # Extend and copy JSON config file to CMOS Prometheus config
 declare -a nodes
-for ((i=0; i<NODE_NUM; i++)); do
+for ((i=0; i<NUM_NODES; i++)); do
   nodes+=("\"node$i.local:9091\"")
 done
 
@@ -100,12 +100,12 @@ docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom/targets
 # Build Couchbase Server/exporter container
 docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
 
-# Create $NODE_NUM containers running Couchbase Server $VERSION and the exporter
-start_new_nodes "$NODE_NUM" 
+# Create $NUM_NODES containers running Couchbase Server $VERSION and the exporter
+start_new_nodes "$NUM_NODES" 
 
 # Initialise and partition nodes as evenly as possible into $CLUSTER_NUM clusters, register them with CBMM
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
-configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" 
+configure_servers "$NUM_NODES" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" 
 
 echo "All done. Go to: http://localhost:8080."
 

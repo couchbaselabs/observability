@@ -17,25 +17,25 @@
 #########################
 # Pre-conditions:
 #   - The cbs_server_exp Docker image built (handled by the run.sh entrypoint)
-#   - A non-zero $NODE_NUM (a default is specified in the run.sh entrypoint)
+#   - A non-zero $NUM_NODES (a default is specified in the run.sh entrypoint)
 
 # Post-conditions:
-#   - $NODE_NUM Couchbase Server/exporter containers with Couchbase Server ready
+#   - $NUM_NODES Couchbase Server/exporter containers with Couchbase Server ready
 #     to receive requests, and the exporter actively exporting data
 function start_new_nodes() {
 
-    local NODE_NUM=$1
+    local NUM_NODES=$1
     local NODE_READY=() 
 
-    for ((i=0; i<NODE_NUM; i++)); do
+    for ((i=0; i<NUM_NODES; i++)); do
         docker run -d --name "node$i" --hostname="node$i.local" --network=native_shared_network "cbs_server_exp"
         NODE_READY+=(false)
     done
 
     # Simple block until all nodes ready
-    echo "Waiting for nodes to come up..." && sleep "$NODE_NUM"
+    echo "Waiting for nodes to come up..." && sleep "$NUM_NODES"
     while true; do
-        for ((i=0; i<NODE_NUM; i++)); do
+        for ((i=0; i<NUM_NODES; i++)); do
             if ! ${NODE_READY[$i]}; then
                 if docker exec "node$i" curl -fs localhost:8091; then
                     NODE_READY[$i]=true
@@ -68,7 +68,7 @@ function _docker_exec_with_retry() {
 
 }
 # Pre-conditions: 
-#   - $NODE_NUM containers running Couchbase Server (uninitialised)/exporter 
+#   - $NUM_NODES containers running Couchbase Server (uninitialised)/exporter 
 
 # Post-conditions: 
 #   - All CBS/exporter nodes initialised and partitioned as evenly as possible into 
@@ -78,7 +78,7 @@ function _docker_exec_with_retry() {
 #   - Every cluster registered for monitoring with the cbmultimanager
 function configure_servers() {
 
-    local NODE_NUM=$1
+    local NUM_NODES=$1
     local CLUSTER_NUM=$2
     local SERVER_USER=$3
     local SERVER_PWD=$4
@@ -91,13 +91,13 @@ function configure_servers() {
     DATA_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
     INDEX_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
-    local nodes_left=$NODE_NUM
+    local nodes_left=$NUM_NODES
 
     for ((i=0; i<CLUSTER_NUM; i++)); do
 
         # Calculate the number of nodes to provision in this cluster
         local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # This is always integer division, Bash does not support decimals
-        local start=$(( NODE_NUM - nodes_left ))
+        local start=$(( NUM_NODES - nodes_left ))
 
         # Create and initialize cluster
         local uid="node$start"
