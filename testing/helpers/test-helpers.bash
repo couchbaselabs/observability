@@ -111,7 +111,7 @@ function start_smoke_cluster() {
             ensure_variables_set CMOS_IMAGE
             ensure_variables_set COUCHBASE_SERVER_IMAGE
             # Build a new image, containing the Exporter
-            docker build -t "$COUCHBASE_SERVER_IMAGE-exporter" \
+            DOCKER_BUILDKIT=1 docker build -t "$COUCHBASE_SERVER_IMAGE-exporter" \
              --build-arg COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE" \
               -f "$RESOURCES_ROOT/containers/cb-with-exporter.Dockerfile" "$RESOURCES_ROOT/containers"
             export COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE-exporter"
