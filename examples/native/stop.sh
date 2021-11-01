@@ -23,3 +23,7 @@ docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs dock
 # Remove the CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
 
+# Transient "Error response from daemon: error while removing network: ... has active endpoints"
+# - only fix is to restart Docker daemon (hanging endpoint but zero exist in inspect output so 
+# cannot be manually removed)
+
