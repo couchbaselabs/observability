@@ -21,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 5,
-  "iteration": 1635242143478,
+  "id": 6,
+  "iteration": 1635415648270,
   "links": [],
   "panels": [
     {
@@ -406,6 +406,30 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
           }
         ]
       },
@@ -417,7 +441,8 @@
       },
       "id": 6,
       "options": {
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.1.1",
       "targets": [
@@ -551,6 +576,54 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Name"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 223
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Node"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 239
+              }
+            ]
           }
         ]
       },
@@ -562,7 +635,8 @@
       },
       "id": 7,
       "options": {
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.1.1",
       "targets": [
@@ -701,6 +775,30 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
           }
         ]
       },
@@ -712,7 +810,8 @@
       },
       "id": 8,
       "options": {
-        "showHeader": true
+        "showHeader": true,
+        "sortBy": []
       },
       "pluginVersion": "8.1.1",
       "targets": [
@@ -756,6 +855,7 @@
             "renameByName": {
               "Value": "State",
               "id": "ID",
+              "multimanager_bucket_checker_status{bucket=\"charlie\", cluster_name=\"Dev Kicks with 6.6\", cluster_uuid=\"1854ec0786317e83b4302bbee5fbdc6d\", id=\"CB90010\", instance=\"localhost:7196\", job=\"couchbase-cluster-monitor\", name=\"missingReplicaVBuckets\"}": "State",
               "name": "Name",
               "node_name": "Node"
             }
@@ -892,7 +992,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "floor(\nmin(sum by (instance) (cbnode_healthy{cluster=~\"${cluster:regex}\"})) / \nmax(sum by (instance) (cbnode_cluster_membership{cluster=~\"${cluster:regex}\"}))\n)",
+          "expr": "floor(\nmin(sum by (instance) (cbnode_healthy{cluster=${cluster:doublequote}})) / \nmax(sum by (instance) (cbnode_cluster_membership{cluster=${cluster:doublequote}}))\n)",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -916,8 +1016,16 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "red",
                 "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 1
+              },
+              {
+                "color": "green",
+                "value": 3
               }
             ]
           }
@@ -932,7 +1040,7 @@
       },
       "id": 40,
       "options": {
-        "colorMode": "none",
+        "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -950,7 +1058,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(count by (instance) (cbnode_healthy{cluster=~\"${cluster:regex}\"} == 1))",
+          "expr": "max(count by (instance) (cbnode_healthy{cluster=${cluster:doublequote}} == 1))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -1020,7 +1128,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster) (cbpernodebucket_curr_connections{cluster=~\"${cluster:regex}\"})",
+          "expr": "sum by (cluster) (cbpernodebucket_curr_connections{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "Connections",
           "refId": "A"
@@ -1103,7 +1211,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (cbpernodebucket_ops{cluster=~\"${cluster:regex}\"})",
+          "expr": "sum by (instance) (cbpernodebucket_ops{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "{{ instance }}",
           "refId": "A"
@@ -1181,7 +1289,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_get{cluster=~\"${cluster:regex}\"})",
+          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_get{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "{{ instance}}",
           "refId": "A"
@@ -1259,7 +1367,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_set{cluster=~\"${cluster:regex}\"})",
+          "expr": "sum by (cluster, instance) (cbbucketstat_cmd_set{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "{{ instance}}",
           "refId": "A"
@@ -1341,7 +1449,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg by (bucket) (cbbucketstat_ep_cache_miss_rate{cluster=~\"${cluster:regex}\"})",
+          "expr": "avg by (bucket) (cbbucketstat_ep_cache_miss_rate{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -1397,7 +1505,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (cluster) (cbbucketstat_curr_items_tot{cluster=~\"${cluster:regex}\"})",
+          "expr": "sum by (cluster) (cbbucketstat_curr_items_tot{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "{{cluster}}",
           "refId": "A"
@@ -1478,7 +1586,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cbquery_requests{cluster=~\"${cluster:regex}\"}",
+          "expr": "cbquery_requests{cluster=${cluster:doublequote}}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1556,7 +1664,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cbquery_avg_req_time{cluster=~\"${cluster:regex}\"}",
+          "expr": "cbquery_avg_req_time{cluster=${cluster:doublequote}}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1642,7 +1750,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "cbindex_memory_used{cluster=~\"${cluster:regex}\"} / cbindex_memory_quota{cluster=~\"${cluster:regex}\"}",
+          "expr": "cbindex_memory_used{cluster=${cluster:doublequote}} / cbindex_memory_quota{cluster=${cluster:doublequote}}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1696,7 +1804,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(4, cbindex_avg_scan_latency{cluster=~\"${cluster:regex}\"})",
+          "expr": "topk(4, cbindex_avg_scan_latency{cluster=${cluster:doublequote}})",
           "interval": "",
           "legendFormat": "{{keyspace}} @ {{instance}}",
           "refId": "A"
@@ -1714,30 +1822,26 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "CMOS Test Cluster"
-          ],
-          "value": [
-            "CMOS Test Cluster"
-          ]
+          "selected": false,
+          "text": "CMOS Test Cluster",
+          "value": "CMOS Test Cluster"
         },
         "datasource": null,
-        "definition": "cbtask_up",
+        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
         "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
-        "multi": true,
+        "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "cbtask_up",
+          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/{cluster=\"(.+?)\"/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -1746,11 +1850,11 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "015064e58e979ec589c9ca85e799695d",
-          "value": "015064e58e979ec589c9ca85e799695d"
+          "text": "1854ec0786317e83b4302bbee5fbdc6d",
+          "value": "1854ec0786317e83b4302bbee5fbdc6d"
         },
-        "datasource": "JSON API",
-        "definition": "$[?(@.name=='$cluster')].uuid",
+        "datasource": null,
+        "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
         "description": null,
         "error": null,
         "hide": 2,
@@ -1760,18 +1864,11 @@
         "name": "cluster_uuid",
         "options": [],
         "query": {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$[?(@.name=='$cluster')].uuid"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "urlPath": "/clusters"
+          "query": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
+          "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "",
+        "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -1798,5 +1895,5 @@
   "timezone": "",
   "title": "Single Cluster Information",
   "uid": "cL8993dnz",
-  "version": 1
+  "version": 5
 }
