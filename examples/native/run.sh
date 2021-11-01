@@ -50,6 +50,8 @@ CLUSTER_NUM=${CLUSTER_NUM:-3}
 NODE_NUM=${NODE_NUM:-8}
 WAIT_TIME=${WAIT_TIME:-60}
 
+CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
+CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 SERVER_USER=${SERVER_USER:-"Administrator"}
 SERVER_PASS=${SERVER_PASS:-"password"}
 
@@ -60,7 +62,8 @@ LOAD=${LOAD:-false}
 
 # Determine if there are any nodes with conflicting names
 nodes_matching=$(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" | grep -c '')
-if (( nodes_matching > 1 )); then
+nodes_matching=$((nodes_matching-1))
+if (( nodes_matching > 0 )); then
 
   echo "------------------"
   echo "There are $nodes_matching existing containers with \
