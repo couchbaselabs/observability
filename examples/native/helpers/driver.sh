@@ -28,24 +28,25 @@ function start_new_nodes() {
     local NODE_READY=() 
 
     for ((i=0; i<NODE_NUM; i++)); do
-        docker run -d --name "node$i" --network=native_shared_network "cbs_server_exp"
+        docker run -d --name "node$i" --hostname="node$i.local" --network=native_shared_network "cbs_server_exp"
         NODE_READY+=(false)
     done
 
     # Simple block until all nodes ready
+    echo "Waiting for nodes to come up..." && sleep $((3 + NODE_NUM))
     while true; do
         for ((i=0; i<NODE_NUM; i++)); do
             if ! ${NODE_READY[$i]}; then
                 if docker exec "node$i" curl -fs localhost:8091; then
                     NODE_READY[$i]=true
-                    echo "Node $i ready..."
+                    echo "Node $i ready!"
                 fi
             fi
         done
 
         ready=true
         for b in "${NODE_READY[@]}"; do if ! $b; then ready=false; fi; done
-        if $ready; then break; else sleep 5; fi
+        if $ready; then break; else echo "..." && sleep 5; fi
     done
 
 }
@@ -82,51 +83,43 @@ function configure_servers() {
         # Calculate the number of nodes to provision in this cluster
         local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # This is always integer division, Bash does not support decimals
         local start=$(( NODE_NUM - nodes_left ))
+
+        # Create and initialize cluster
+        local uid="node$start"
+        local clust_name="Cluster $i"
+        docker exec "$uid" /opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name="$clust_name" --cluster-username="$SERVER_USER" \
+            --cluster-password="$SERVER_PASS" --cluster-ramsize="$DATA_ALLOC" --cluster-index-ramsize="$INDEX_ALLOC" --services=data
+
+        # Load sample buckets and register cluster with CBMM
+        docker exec "$uid" curl -s -X POST -u "$SERVER_USER":"$SERVER_PASS" "http://localhost:8091/sampleBuckets/install" -d '["travel-sample", "beer-sample"]'
+        docker exec cmos curl -s -u admin:password -X POST -d "{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PASS\", \"host\":\"http://$uid:8091\"}" \
+                'http://localhost:8080/couchbase/api/v1/clusters'
         
-        for ((j=start; j<start+to_provision; j++)); do 
-            local uid="node$j"
+        if $LOAD; then
+            # Start cbpillowfight to simulate a non-zero load (NOT stress test)
+            sleep 20 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U http://localhost:8091/beer-sample \
+                -B 100 -I 1000 --rate-limit 100 &
 
-            if (( j == start )); then # Create and configure new cluster
-                local ip
-                ip=$(docker container inspect -f '{{ .NetworkSettings.Networks.native_shared_network.IPAddress }}' $uid)
-                local clust_name="Cluster $i"
+            sleep 30 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U http://localhost:8091/travel-sample \
+                -B 100 -I 1000 --rate-limit 100 &
+        fi
 
-                # Initialize cluster
-                docker exec "$uid" /opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name="$clust_name" --cluster-username="$SERVER_USER" \
-                    --cluster-password="$SERVER_PASS" --cluster-ramsize="$DATA_ALLOC" --cluster-index-ramsize="$INDEX_ALLOC" --services=data
-
-                # Load sample buckets and register cluster with CBMM
-                docker exec "$uid" curl -s -X POST -u "$SERVER_USER":"$SERVER_PASS" http://"localhost:8091"/sampleBuckets/install -d '["travel-sample", "beer-sample"]'
-                docker exec cmos curl -s -u admin:password -X POST -d "{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PASS\", \"host\":\"http://$ip:8091\"}" \
-                        'http://localhost:8080/couchbase/api/v1/clusters'
-                
-                if $LOAD; then
-                    # Start cbpillowfight to simulate a non-zero load (NOT stress test)
-                    (sleep 20 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U couchbase://localhost/beer-sample \
-                        -B 100 -I 1000 --rate-limit 100)
-
-                    (sleep 30 && docker exec "$uid" /opt/couchbase/bin/cbc-pillowfight -u "$SERVER_USER" -P "$SERVER_PASS" -U couchbase://localhost/travel-sample \
-                        -B 100 -I 1000 --rate-limit 100)
-                fi
-
-            else
-                # Initalize node and add to existing cluster
-                local to_add_ip
-                to_add_ip=$(docker container inspect -f '{{ .NetworkSettings.Networks.native_shared_network.IPAddress }}' $uid)
-
-                docker exec "$uid" /opt/couchbase/bin/couchbase-cli node-init --cluster "$ip" --username "$SERVER_USER" --password "$SERVER_PASS"
-                docker exec "$uid" /opt/couchbase/bin/couchbase-cli server-add -c "$ip" --username "$SERVER_USER" --password "$SERVER_PASS" \
-                    --server-add "$to_add_ip" --server-add-username "$SERVER_USER" --server-add-password "$SERVER_PASS" --services index,query
-            fi
+        # Initialize and add the required nodes to the existing cluster
+        for ((j=start+1; j<start+to_provision; j++)); do 
+                local node="node$j"
+                docker exec $node /opt/couchbase/bin/couchbase-cli node-init --cluster "http://$uid:8091" --username "$SERVER_USER" --password "$SERVER_PASS"
+                docker exec "$uid" /opt/couchbase/bin/couchbase-cli server-add --cluster "http://$uid:8091" --username "$SERVER_USER" --password "$SERVER_PASS" \
+                    --server-add "http://$node.local:8091" --server-add-username "$SERVER_USER" --server-add-password "$SERVER_PASS" --services index,query
         done
 
         # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
-            docker exec "$uid" /opt/couchbase/bin/couchbase-cli rebalance --cluster "$to_add_ip" --username "$SERVER_USER" --password "$SERVER_PASS" \
+            docker exec "$uid" /opt/couchbase/bin/couchbase-cli rebalance --cluster "$uid" --username "$SERVER_USER" --password "$SERVER_PASS" \
             --no-progress-bar --no-wait
         fi
 
         local nodes_left=$((nodes_left - to_provision))
+
     done
 
 }
