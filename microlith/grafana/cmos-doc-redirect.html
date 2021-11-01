@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Redirecting, please wait...</title>
+</head>
+<body>
+You will be redirected to the requested page shortly. If nothing happens, <a id="docsLink">click here</a>.
+<script>
+    const target = window.location.origin + window.location.hash.replace(/^#/, "");
+    document.getElementById("docsLink").setAttribute("href", target);
+    window.location.replace(target);
+</script>
+</body>
+</html>

@@ -21,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 6,
-  "iteration": 1635415648270,
+  "id": 4,
+  "iteration": 1635786860242,
   "links": [],
   "panels": [
     {
@@ -428,6 +428,16 @@
               {
                 "id": "custom.width",
                 "value": 100
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/checkers.html#${__data.fields.ID}"
+                  }
+                ]
               }
             ]
           }
@@ -598,6 +608,16 @@
               {
                 "id": "custom.width",
                 "value": 100
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/checkers.html#${__data.fields.ID}"
+                  }
+                ]
               }
             ]
           },
@@ -797,6 +817,16 @@
               {
                 "id": "custom.width",
                 "value": 100
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/checkers.html#${__data.fields.ID}"
+                  }
+                ]
               }
             ]
           }
@@ -1850,8 +1880,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1854ec0786317e83b4302bbee5fbdc6d",
-          "value": "1854ec0786317e83b4302bbee5fbdc6d"
+          "text": "015064e58e979ec589c9ca85e799695d",
+          "value": "015064e58e979ec589c9ca85e799695d"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -1895,5 +1925,5 @@
   "timezone": "",
   "title": "Single Cluster Information",
   "uid": "cL8993dnz",
-  "version": 5
+  "version": 1
 }

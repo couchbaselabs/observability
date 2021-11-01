@@ -237,6 +237,7 @@ ENV JAEGER_AGENT_HOST=localhost
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
 COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
+COPY grafana/cmos-doc-redirect.html /usr/share/grafana/public/
 ENV GF_SECURITY_ADMIN_PASSWORD=password
 ENV GF_USERS_ALLOW_SIGN_UP=false
 
