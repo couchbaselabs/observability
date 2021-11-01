@@ -62,9 +62,9 @@ function _docker_exec_with_retry() {
     output=$WAIT_ERROR
     until [[ $output != *$WAIT_ERROR* ]]; do
         output=$(docker exec "$CONTAINER" /usr/bin/env bash -c "$COMMAND")
-        echo "Server error returned, retrying..."
         sleep 2
     done
+    echo "$output"
 
 }
 # Pre-conditions: 
@@ -121,7 +121,8 @@ function configure_servers() {
             for bucket in "${sample_buckets[@]}"; do
                 get_url="http://localhost:8091/pools/default/buckets/$bucket"
                 # Attempt to GET the bucket - when this returns status 200 pillowfight starts 
-                d_cmd="if ! (curl -sS -X POST $get_url); then echo \"NOT_READY\" else /opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
+                d_cmd="if ! (curl -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" $get_url); then echo \"NOT_READY\" \
+                  else /opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
                   -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100 & fi"
                 
                 _docker_exec_with_retry "$uid" "$d_cmd" "NOT_READY"
