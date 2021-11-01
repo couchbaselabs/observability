@@ -62,6 +62,7 @@ function _docker_exec_with_retry() {
     output=$WAIT_ERROR
     until [[ $output != *$WAIT_ERROR* ]]; do
         output=$(docker exec "$CONTAINER" /usr/bin/env bash -c "$COMMAND")
+        echo "Server error returned, retrying..."
         sleep 2
     done
 
@@ -106,9 +107,9 @@ function configure_servers() {
             --cluster-index-ramsize=$INDEX_ALLOC --services=data"
 
         # Load sample buckets and register cluster with CBMM
-        _docker_exec_with_retry "$uid" "curl -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" \"http://localhost:8091/sampleBuckets/install\" -d '[\"travel-sample\", \"beer-sample\"]'"
+        _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" \"http://localhost:8091/sampleBuckets/install\" -d '[\"travel-sample\", \"beer-sample\"]'"
         
-        local cmos_cmd="curl -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \
+        local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \
           \"host\":\"http://$uid:8091\"}' 'http://localhost:8080/couchbase/api/v1/clusters'"
         _docker_exec_with_retry "cmos" "$cmos_cmd"
         
@@ -120,7 +121,7 @@ function configure_servers() {
             for bucket in "${sample_buckets[@]}"; do
                 get_url="http://localhost:8091/pools/default/buckets/$bucket"
                 # Attempt to GET the bucket - when this returns status 200 pillowfight starts 
-                d_cmd="if ! (curl -X POST $get_url); then echo \"NOT_READY\" else /opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
+                d_cmd="if ! (curl -sS -X POST $get_url); then echo \"NOT_READY\" else /opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
                   -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100 & fi"
                 
                 _docker_exec_with_retry "$uid" "$d_cmd" "NOT_READY"
