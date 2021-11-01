@@ -53,7 +53,7 @@ WAIT_TIME=${WAIT_TIME:-60}
 CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
 CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
 SERVER_USER=${SERVER_USER:-"Administrator"}
-SERVER_PASS=${SERVER_PASS:-"password"}
+SERVER_PWD=${SERVER_PWD:-"password"}
 
 NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-false}
@@ -105,7 +105,7 @@ start_new_nodes "$NODE_NUM"
 
 # Initialise and partition nodes as evenly as possible into $CLUSTER_NUM clusters, register them with CBMM
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
-configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PASS" "$NODE_RAM" "$LOAD" 
+configure_servers "$NODE_NUM" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" 
 
 echo "All done. Go to: http://localhost:8080."
 

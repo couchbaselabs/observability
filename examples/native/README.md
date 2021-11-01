@@ -15,7 +15,7 @@ There are various environment variables you can configure:
 - `NODE_NUM`, the number of nodes to create. Defaults to 3.
 
 - `SERVER_USER`, the admin username to configure for all Couchbase Server nodes. Defaults to "Administrator".
-- `SERVER_PASS`, the password for $SERVER_USER to configure for all Couchbase Server nodes. Defaults to "couchbase".
+- `SERVER_PWD`, the password for $SERVER_USER to configure for all Couchbase Server nodes. Defaults to "couchbase".
 
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas.
