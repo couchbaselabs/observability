@@ -18,11 +18,11 @@
       }
     ]
   },
-  "description": "Overview of all clusters known to this instance",
+  "description": "Overview of all Couchbase clusters known to this instance",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 2,
   "links": [],
   "panels": [
     {
@@ -219,6 +219,7 @@
                 "id": "links",
                 "value": [
                   {
+                    "targetBlank": true,
                     "title": "Go to Couchbase UI",
                     "url": "${__data.fields.Cluster}"
                   }
@@ -305,11 +306,6 @@
               "jsonPath": "$[*].status_summary.info",
               "language": "jsonpath",
               "name": "Info Alerts"
-            },
-            {
-              "jsonPath": "$map($, function($_) {\"Cluster Overview\"})",
-              "language": "jsonata",
-              "name": "Dashboard"
             }
           ],
           "method": "GET",
@@ -319,26 +315,7 @@
         }
       ],
       "title": "Inventory of Couchbase Clusters",
-      "transformations": [
-        {
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "names": [
-                "Name",
-                "Version",
-                "Nodes",
-                "Services",
-                "Critical",
-                "Warnings",
-                "Successful",
-                "Info Alerts",
-                "Cluster"
-              ]
-            }
-          }
-        }
-      ],
+      "transformations": [],
       "type": "table"
     }
   ],
@@ -355,7 +332,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Cluster Overview Dashboard",
+  "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 7
+  "version": 3
 }
