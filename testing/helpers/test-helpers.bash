@@ -90,6 +90,7 @@ function _start_cmos() {
 # This function will set the following variables with its results:
 # $COUCHBASE_SERVER_HOSTS: the hostname/IP and management port of every CBS node, separated by newlines
 #   (Note that they may not be accessible from localhost, e.g. if running in a container - they'll be accessible to CMOS though)
+# $COUCHBASE_SERVER_NODES: the number of nodes running
 # $CMOS_HOST: the hostname/IP and nginx port of the running CMOS container
 #
 # Note: do not call this function using BATS run! Otherwise its variables will not be set.
@@ -99,6 +100,7 @@ function start_smoke_cluster() {
     case $TEST_PLATFORM in
         native)
             export VAGRANT_NODES=$nodes
+            export COUCHBASE_SERVER_NODES=$nodes
             start_vagrant_cluster "$COUCHBASE_SERVER_VERSION" "centos7"
             while IFS= read -r host; do
               wait_for_url 10 "$host/ui"
@@ -128,6 +130,7 @@ function start_smoke_cluster() {
             done
             COUCHBASE_SERVER_HOSTS=$(seq -f "couchbase%g.local" 1 "$nodes")
             export COUCHBASE_SERVER_HOSTS
+            export COUCHBASE_SERVER_NODES=$nodes
             # Can't just use COUCHBASE_SERVER_HOSTS as they won't be accessible outside the container network
             local mgmt_port
             mgmt_port=$(docker inspect test_couchbase1 -f '{{with index .NetworkSettings.Ports "8091/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
