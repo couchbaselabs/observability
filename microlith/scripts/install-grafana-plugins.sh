@@ -15,14 +15,20 @@ set -euo pipefail
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Install the Grafana plugins given in GF_INSTALL_PLUGINS.
+# Follows the exact same format as expected by the official Grafana Docker image - a comma-separated list of plugins,
+# optionally with the version, space-separated. For example, `marcusolsson-json-datasource 1.3.0,other-test-plugin`.
+# Note that the ZIP URL syntax is currently not supported, so only plugins from grafana.com can be installed.
+# Upstream docs: https://grafana.com/docs/grafana/latest/installation/docker/#install-official-and-community-grafana-plugins
+
 if [ -n "$GF_INSTALL_PLUGINS" ]; then
   old_ifs=$IFS
   IFS=','
   tmp_dir=$(mktemp -d)
   for plugin_arg in ${GF_INSTALL_PLUGINS}; do
     IFS=$old_ifs
-    # Can be just the bare name (for the latest version) or name=version
-    if [[ "$plugin_arg" =~ ^(.*)=(.*)$ ]]; then
+    # Can be just the bare name (for the latest version) or `name version`
+    if [[ "$plugin_arg" =~ ^(.*)[[:space:]](.*)$ ]]; then
       plugin_name="${BASH_REMATCH[1]}"
       plugin_version="${BASH_REMATCH[2]}"
     else
