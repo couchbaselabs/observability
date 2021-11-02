@@ -14,5 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Start the couchbase-exporter. Couchbase Server may or may not be running already
+# Start the couchbase-exporter.
+# Both this and CBS will be started by runsvdir-start concurrently, so it is possible that
+# the exporter starts before CBS starts. As of https://github.com/couchbase/couchbase-exporter/commit/61914d56c15580b59910cca97eaedaed4aafbcff
+# this should be safe.
 exec /opt/couchbase-exporter
