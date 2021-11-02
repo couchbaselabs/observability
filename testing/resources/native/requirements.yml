@@ -1,1 +1,5 @@
---- []
+---
+- name: couchbaselabs.couchbase_exporter
+  src: https://github.com/couchbaselabs/ansible-couchbase-exporter.git
+  # TODO: replace with main (or a tagged version) once https://github.com/couchbaselabs/ansible-couchbase-exporter/pull/3 is merged
+  version: download-directory
