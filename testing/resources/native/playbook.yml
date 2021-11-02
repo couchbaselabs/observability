@@ -8,7 +8,7 @@
         state: latest
     become: true
   roles:
-    - role: couchbaselabs.couchbase_exporter
-      vars:
-        # TODO: once https://issues.couchbase.com/browse/PE-56 is done, replace this with a tagged version
-        couchbase_exporter_verison: 61914d56c15580b59910cca97eaedaed4aafbcff
+      - role: couchbaselabs.couchbase_exporter
+        vars:
+          # TODO: once https://issues.couchbase.com/browse/PE-56 is done, replace this with a tagged version
+          couchbase_exporter_verison: 61914d56c15580b59910cca97eaedaed4aafbcff
