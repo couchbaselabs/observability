@@ -97,6 +97,7 @@ function configure_servers() {
     local DATA_ALLOC 
     local INDEX_ALLOC
     # Allocate 70% of the specified RAM quota to the service (query has no quota)
+    # awk used as bash does not support operations with decimals
     DATA_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
     INDEX_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
@@ -109,7 +110,7 @@ function configure_servers() {
     for ((i; i<CLUSTER_NUM; i++)); do
 
         # Calculate the number of nodes to provision in this cluster
-        local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # This is always integer division, Bash does not support decimals
+        local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # (Integer division, Bash does not support decimals)
         local start=$(( NUM_NODES - nodes_left ))
         
         # Create and initialize cluster
@@ -163,8 +164,8 @@ function configure_servers() {
         local nodes_left=$((nodes_left - to_provision))
 
         # Add cluster to CMOS' Prometheus JSON config file
-        bar=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
-        new_file=$(jq ". |= .+ [{\"targets\":[$bar], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
+        csv=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
+        new_file=$(jq ". |= .+ [{\"targets\":[$csv], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
         echo "$new_file" > "$temp_dir"/targets.json
 
     done
