@@ -80,6 +80,10 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v2
 
+            - name: Install Ansible Galaxy roles
+              run: |
+                ansible-galaxy install -r testing/resources/native/requirements.yml
+
             - name: Run linting
               run: |
                   sudo apt install aspell
