@@ -1,0 +1,15 @@
+# Dashboard exports from Grafana will clash with this, let's keep it how Grafana likes it to avoid unnecessary diffs
+microlith/grafana/provisioning/dashboards/*
+
+# Doesn't support AsciiDoc
+docs/
+!docs/**/*.{yml,yaml}
+
+# Auto-generated
+testing/resources/native/vagrants/
+tools/bats/
+microlith/html/tern-licensing-report.html
+microlith/docs/
+
+# Minified code, no point reformatting it
+**/*.min.js
