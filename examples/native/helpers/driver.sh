@@ -148,7 +148,7 @@ function configure_servers() {
                 _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://$uid:8091\" --username \"$SERVER_USER\" --password \"$SERVER_PWD\" \
                     --server-add \"http://$node.local:8091\" --server-add-username \"$SERVER_USER\" --server-add-password \"$SERVER_PWD\" --services index,query || echo 'failed'" "SUCCESS: "
 
-                nodes+=(\""$node".local:8091\")
+                nodes+=(\""$node".local:9091\")
         done
 
         # Rebalance newly-added nodes into the fully provisioned cluster
