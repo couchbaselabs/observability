@@ -29,7 +29,7 @@ function start_new_nodes() {
 
     local i=0
     for ((i; i<NUM_NODES; i++)); do
-        docker run -d --rm --name "node$i" --hostname="node$i.local" --network=native_shared_network "cbs_server_exp"
+        docker run -d --rm --name "node$i" --hostname="node$i.local" --network=native_shared_network -p $((8091+i)):8091 "cbs_server_exp"
         NODE_READY+=(false)
     done
 
@@ -124,7 +124,9 @@ function configure_servers() {
         _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" \"http://localhost:8091/sampleBuckets/install\" \
           -d '[\"travel-sample\", \"beer-sample\"]'" "[]"
         
-        local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \"host\":\"http://$uid:8091\"}' 'http://localhost:8080/couchbase/api/v1/clusters'"
+        local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
+          '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \"host\":\"http://$uid:8091\"}' \
+          'http://localhost:8080/couchbase/api/v1/clusters'"
         _docker_exec_with_retry "cmos" "$cmos_cmd"
         
         if $LOAD; then
@@ -133,10 +135,8 @@ function configure_servers() {
             local sample_buckets=("travel-sample" "beer-sample")
 
             for bucket in "${sample_buckets[@]}"; do
-                #get_url="http://localhost:8091/pools/default/buckets/$bucket"
-                # Attempt to GET the bucket - when this returns status 200 pillowfight starts 
-                #d_cmd="if (curl -fs -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" $get_url); then echo \"SUCCESS\" \
-                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100" "Running..." > /dev/null & 
+                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
+                  -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100" "Running..." > /dev/null & 
             done
         fi
 
@@ -144,17 +144,20 @@ function configure_servers() {
         local j=$((start+1))
         for ((j; j<start+to_provision; j++)); do 
                 local node="node$j"
-                _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://$uid:8091\" --username \"$SERVER_USER\" --password \"$SERVER_PWD\" || echo 'failed'" "SUCCESS: "
-                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://$uid:8091\" --username \"$SERVER_USER\" --password \"$SERVER_PWD\" \
-                    --server-add \"http://$node.local:8091\" --server-add-username \"$SERVER_USER\" --server-add-password \"$SERVER_PWD\" --services index,query || echo 'failed'" "SUCCESS: "
+                _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://$uid:8091\" \
+                   --username \"$SERVER_USER\" --password \"$SERVER_PWD\" || echo 'failed'" "SUCCESS: "
+                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://$uid:8091\" \
+                  --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --server-add \"http://$node.local:8091\" \
+                  --server-add-username \"$SERVER_USER\" --server-add-password \"$SERVER_PWD\" --services index,query \
+                  || echo 'failed'" "SUCCESS: "
 
                 nodes+=(\""$node".local:9091\")
         done
 
         # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
-            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" --username \"$SERVER_USER\" --password \"$SERVER_PWD\" \
-            --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
+            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" \
+              --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
         fi
 
         local nodes_left=$((nodes_left - to_provision))
@@ -163,10 +166,6 @@ function configure_servers() {
         bar=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
         new_file=$(jq ". |= .+ [{\"targets\":[$bar], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
         echo "$new_file" > "$temp_dir"/targets.json
-
-        #
-        cat "$temp_dir"/targets.json
-        #
 
     done
 
