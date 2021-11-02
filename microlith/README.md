@@ -9,16 +9,20 @@ A simple Nginx web server is exposed on port 80 to provide a landing page.
 This uses an SSH mount to access a private git repository during the container build so make sure your SSH keys are set up for git locally and ssh agent is running with them to provide it.
 
 To build and run:
+
 ```
 docker build -t couchbase-observability .
 docker run --name=couchbase-grafana --rm -d -P couchbase-observability
 ```
+
 Use `docker ps` or `docker inspect X` to see the local ports exposed, the mapping to `3000` is the Grafana one so to get this:
+
 ```
 docker container port couchbase-grafana 3000
 0.0.0.0:55124
 :::55124
 ```
+
 Browse to `localhost:55124` and log in with the default creds of `admin:password` for Grafana.
 
 # Configuration options
@@ -69,6 +73,7 @@ This is handled by mounting the configuration you want into the container, e.g. 
 Note that to pick up changes to configuration we may need to reload config files via the `reload` endpoint: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration
 
 ### End points
+
 The [file-based service discovery](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config) approach is used to support adding/removing end points to scrape metrics for dynamically.
 
 The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entrypoint adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}` directory when it is run.
@@ -80,10 +85,12 @@ You can set the authentication credentials for your Couchbase Server clusters us
 ### Alerting rules
 
 We want to be able to override in two specific ways:
+
 1. Extend: provide Couchbase default rules and add custom ones.
 2. Replace: only provide custom rules.
 
 To support this there are two locations to be used:
+
 1. /etc/prometheus/alerting/custom/
 2. /etc/prometheus/alerting/
 
@@ -101,10 +108,11 @@ From a Prometheus perspective we always assume there is a local Alert Manager ta
 Additional alert managers can be specified by adding using the same `<file_sd_config>` [syntax](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config) to the `/etc/prometheus/alertmanager/custom/` directory.
 
 ## Health check
+
 The cluster manager will auto-start and configure itself with credentials supplied via the following environment variables:
 
-* `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`
-* `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`
-* `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`
+- `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`
+- `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`
+- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`
 
 The cluster manager exposes its REST API from the container so this can be used externally to add/remove Couchbase clusters. We also support running any scripts found in `/etc/healthcheck` to do it.

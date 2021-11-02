@@ -1,10 +1,8 @@
 [
-    {
-        "labels": {
-            "job": "couchbase-server"
-        },
-        "targets": [
-            "cb1:8091"
-        ]
-    }
+  {
+    "labels": {
+      "job": "couchbase-server"
+    },
+    "targets": ["cb1:8091"]
+  }
 ]

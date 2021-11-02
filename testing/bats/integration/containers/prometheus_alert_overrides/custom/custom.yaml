@@ -1,6 +1,6 @@
 ---
 groups:
-    - name: Custom
-      rules:
-          - alert: TestCustom
-            expr: custom
+  - name: Custom
+    rules:
+      - alert: TestCustom
+        expr: custom

@@ -16,7 +16,6 @@ servers:
   - description: Local Development
     url: http://localhost:7194/api/v1
 paths:
-
   /openapi.json:
     get:
       summary: Outputs the OpenAPI specification for this API.

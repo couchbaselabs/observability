@@ -3,112 +3,111 @@
 # We run the couchbase server "stuff" as a set of containers but this is just a simulation and equivalent to running natively.
 # We then run the microlith container to monitor the couchbase cluster.
 
-version: '3'
+version: "3"
 
 # Split into front-end and back-end networks although front-end is probably unnecessary
 networks:
-    front:
-    back:
+  front:
+  back:
 
 services:
+  # This first section is the main thrust of the microlith, it runs the all-in-one container up
+  couchbase-grafana:
+    # Build using build kit so we can do ssh mounts for private repo, do not build here.
+    # Unfortunately Docker Compose does not use locally built images, it tries to pull them unless you specify 'build'
+    build:
+      context: ../../microlith/
+    # image: couchbase-observability:v1
+    container_name: couchbase-grafana
+    # Note an environment file can be used as well, this is likely better for production
+    environment:
+      # Disable various components as an example
+      - DISABLE_LOKI=true
+      # - DISABLE_JAEGER=true
+      # Log to local files rather than stdout
+      - ENABLE_LOG_TO_FILE=true
+      # Grafana password (default)
+      # - GF_SECURITY_ADMIN_PASSWORD=password
+      # Now to tune some rules for Prometheus: http://localhost:8080/prometheus/rules#Couchbase-Server
+      - COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=75 # default is 100
+    volumes:
+      # This location stores any dynamic Prometheus info (e.g. targets to scrape)
+      # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
+      # http://localhost:8080/prometheus/service-discovery
+      - ./dynamic/prometheus/couchbase-servers/:/etc/prometheus/couchbase/custom/:ro
+      - ./dynamic/prometheus/custom-alertmanagers/:/etc/prometheus/alertmanager/custom/:ro
+      # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
+      - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
+      # Currently there's no good way to disable a default rule (see https://issues.couchbase.com/browse/CMOS-72)
+      # You can override the entire rules file to disable all rules in it, like so:
+      # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
+      # Log output here to help
+      - ./logs:/logs:rw
+    networks:
+      - front
+      - back
+    ports:
+      # Grafana
+      - 3000:3000
+      # Prometheus
+      - 9090:9090
+      # Alert manager
+      - 9093:9093
+      # Landing page
+      - 8080:8080
+      # Cluster monitor
+      - 7196:7196
 
-    # This first section is the main thrust of the microlith, it runs the all-in-one container up
-    couchbase-grafana:
-        # Build using build kit so we can do ssh mounts for private repo, do not build here.
-        # Unfortunately Docker Compose does not use locally built images, it tries to pull them unless you specify 'build'
-        build:
-            context: ../../microlith/
-        # image: couchbase-observability:v1
-        container_name: couchbase-grafana
-        # Note an environment file can be used as well, this is likely better for production
-        environment:
-            # Disable various components as an example
-            - DISABLE_LOKI=true
-            # - DISABLE_JAEGER=true
-            # Log to local files rather than stdout
-            - ENABLE_LOG_TO_FILE=true
-            # Grafana password (default)
-            # - GF_SECURITY_ADMIN_PASSWORD=password
-            # Now to tune some rules for Prometheus: http://localhost:8080/prometheus/rules#Couchbase-Server
-            - COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=75 # default is 100
-        volumes:
-            # This location stores any dynamic Prometheus info (e.g. targets to scrape)
-            # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
-            # http://localhost:8080/prometheus/service-discovery
-            - ./dynamic/prometheus/couchbase-servers/:/etc/prometheus/couchbase/custom/:ro
-            - ./dynamic/prometheus/custom-alertmanagers/:/etc/prometheus/alertmanager/custom/:ro
-            # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
-            - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
-            # Currently there's no good way to disable a default rule (see https://issues.couchbase.com/browse/CMOS-72)
-            # You can override the entire rules file to disable all rules in it, like so:
-            # - ./dynamic/prometheus/custom-alerts/:/etc/prometheus/alerting/:ro
-            # Log output here to help
-            - ./logs:/logs:rw
-        networks:
-            - front
-            - back
-        ports:
-            # Grafana
-            - 3000:3000
-            # Prometheus
-            - 9090:9090
-            # Alert manager
-            - 9093:9093
-            # Landing page
-            - 8080:8080
-            # Cluster monitor
-            - 7196:7196
+  # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
+  db1:
+    container_name: db1
+    image: couchbase/server-sandbox:7.0.0
+    ports:
+      - 8091-8096:8091-8096
+      - 11210-11211:11210-11211
+    volumes:
+      - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
+    networks:
+      - back
 
-    # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
-    db1:
-        container_name: db1
-        image: couchbase/server-sandbox:7.0.0
-        ports:
-            - 8091-8096:8091-8096
-            - 11210-11211:11210-11211
-        volumes:
-            - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
-        networks:
-            - back
+  # Logging disabled
+  # permission-fixer:
+  #     image: bash
+  #     # CB server forces this on us as the permissions for the rebalance directory as well as logs are not for all
+  #     # https://issues.couchbase.com/browse/MB-46485
+  #     command: sh -c "mkdir -p /opt/couchbase/var/lib/couchbase/logs/rebalance; while true; do sleep 30;chmod -R a+r /opt/couchbase/var/lib/couchbase/logs/; done"
+  #     user: root
+  #     volumes:
+  #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
 
-    # Logging disabled
-    # permission-fixer:
-    #     image: bash
-    #     # CB server forces this on us as the permissions for the rebalance directory as well as logs are not for all
-    #     # https://issues.couchbase.com/browse/MB-46485
-    #     command: sh -c "mkdir -p /opt/couchbase/var/lib/couchbase/logs/rebalance; while true; do sleep 30;chmod -R a+r /opt/couchbase/var/lib/couchbase/logs/; done"
-    #     user: root
-    #     volumes:
-    #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
+  # logging:
+  #     container_name: logging
+  #     image: couchbase/fluent-bit:1.1.0
+  #     ports:
+  #         # Metrics
+  #         - "2020:2020"
+  #     depends_on:
+  #         - db1
+  #         - couchbase-grafana
+  #     environment:
+  #         - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
+  #     volumes:
+  #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
+  #         - ../../microlith/fluent-bit/fluent-bit.conf.server:/fluent-bit/config/fluent-bit.conf:ro
+  #     networks:
+  #         - back
 
-    # logging:
-    #     container_name: logging
-    #     image: couchbase/fluent-bit:1.1.0
-    #     ports:
-    #         # Metrics
-    #         - "2020:2020"
-    #     depends_on:
-    #         - db1
-    #         - couchbase-grafana
-    #     environment:
-    #         - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
-    #     volumes:
-    #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
-    #         - ../../microlith/fluent-bit/fluent-bit.conf.server:/fluent-bit/config/fluent-bit.conf:ro
-    #     networks:
-    #         - back
-
-    exporter:
-        container_name: exporter
-        image: couchbase/exporter:1.0.5
-        command:
-            - --couchbase-address=db1
-        ports:
-            - 9091:9091
-        depends_on:
-            - db1
-        networks:
-            - back
+  exporter:
+    container_name: exporter
+    image: couchbase/exporter:1.0.5
+    command:
+      - --couchbase-address=db1
+    ports:
+      - 9091:9091
+    depends_on:
+      - db1
+    networks:
+      - back
 
 volumes:
-    log-volume:
+  log-volume:

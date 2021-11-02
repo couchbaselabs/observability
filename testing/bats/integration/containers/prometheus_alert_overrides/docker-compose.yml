@@ -1,12 +1,12 @@
 ---
-version: '3.8'
+version: "3.8"
 services:
-    cmos:
+  cmos:
     # Docker Compose doesn't support passing ssh into builds, so we need to pre-build the image
-        image: ${CMOS_IMAGE}
-        ports:
-            - '9090'
-        volumes:
-            - ./couchbase:/etc/prometheus/alerting/couchbase
-            - ./overrides:/etc/prometheus/alerting/overrides
-            - ./custom:/etc/prometheus/alerting/custom
+    image: ${CMOS_IMAGE}
+    ports:
+      - "9090"
+    volumes:
+      - ./couchbase:/etc/prometheus/alerting/couchbase
+      - ./overrides:/etc/prometheus/alerting/overrides
+      - ./custom:/etc/prometheus/alerting/custom

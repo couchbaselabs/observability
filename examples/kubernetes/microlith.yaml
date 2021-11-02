@@ -3,102 +3,115 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-    name: monitoring-endpoints-role
-    labels:
-        rbac.couchbase.observability.com/aggregate-to-monitoring: 'true'
+  name: monitoring-endpoints-role
+  labels:
+    rbac.couchbase.observability.com/aggregate-to-monitoring: "true"
 rules:
-    - apiGroups: ['']
-      resources: [services, endpoints, pods, secrets]
-      verbs: [get, list, watch]
-    - apiGroups: [couchbase.com]
-      resources: [couchbaseclusters]
-      verbs: [get, list, watch]
+  - apiGroups: [""]
+    resources: [services, endpoints, pods, secrets]
+    verbs: [get, list, watch]
+  - apiGroups: [couchbase.com]
+    resources: [couchbaseclusters]
+    verbs: [get, list, watch]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-    name: monitoring-role-binding
+  name: monitoring-role-binding
 roleRef:
-    kind: ClusterRole
-    name: monitoring-endpoints-role
-    apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: monitoring-endpoints-role
+  apiGroup: rbac.authorization.k8s.io
 subjects:
-    - kind: Group
-      name: system:serviceaccounts
-      apiGroup: rbac.authorization.k8s.io
+  - kind: Group
+    name: system:serviceaccounts
+    apiGroup: rbac.authorization.k8s.io
 ---
 # Our actual container to run
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: couchbase-grafana
+  name: couchbase-grafana
 spec:
-    selector:
-        matchLabels:
-            run: couchbase-grafana
-    replicas: 1
-    template:
-        metadata:
-            labels:
-                run: couchbase-grafana
-        spec:
-            containers:
-                - name: couchbase-grafana
-                  image: couchbase/observability-stack:v1
-                  ports:
-                      - name: http
-                        containerPort: 8080
-                      - name: loki # So we can push logs to it
-                        containerPort: 3100
-                  env:
-                      - name: KUBERNETES_DEPLOYMENT
-                        value: 'true'
-                      - name: ENABLE_LOG_TO_FILE
-                        value: 'true'
-                      - name: PROMETHEUS_CONFIG_FILE
-                        value: /etc/prometheus/custom/prometheus-k8s.yml
-                      - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
-                        value: ignore
-                  volumeMounts:
-                      - name: prometheus-config-volume
-                        mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
-      # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
-                - name: prometheus-config-watcher
-                  image: weaveworks/watch:master-9199bf5
-                  args: [-v, -t, -p=/etc/prometheus/custom, curl, -X, POST, --fail, -o, '-', -sS, http://localhost:8080/prometheus/-/reload]
-                  volumeMounts:
-                      - name: prometheus-config-volume
-                        mountPath: /etc/prometheus/custom
-            volumes:
-                - name: prometheus-config-volume
-                  configMap:
-                      name: prometheus-config
+  selector:
+    matchLabels:
+      run: couchbase-grafana
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: couchbase-grafana
+    spec:
+      containers:
+        - name: couchbase-grafana
+          image: couchbase/observability-stack:v1
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: loki # So we can push logs to it
+              containerPort: 3100
+          env:
+            - name: KUBERNETES_DEPLOYMENT
+              value: "true"
+            - name: ENABLE_LOG_TO_FILE
+              value: "true"
+            - name: PROMETHEUS_CONFIG_FILE
+              value: /etc/prometheus/custom/prometheus-k8s.yml
+            - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
+              value: ignore
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
+        # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
+        - name: prometheus-config-watcher
+          image: weaveworks/watch:master-9199bf5
+          args:
+            [
+              -v,
+              -t,
+              -p=/etc/prometheus/custom,
+              curl,
+              -X,
+              POST,
+              --fail,
+              -o,
+              "-",
+              -sS,
+              http://localhost:8080/prometheus/-/reload,
+            ]
+          volumeMounts:
+            - name: prometheus-config-volume
+              mountPath: /etc/prometheus/custom
+      volumes:
+        - name: prometheus-config-volume
+          configMap:
+            name: prometheus-config
 ---
 apiVersion: v1
 kind: Service
 metadata:
-    name: couchbase-grafana-http
-    labels:
-        run: couchbase-grafana
+  name: couchbase-grafana-http
+  labels:
+    run: couchbase-grafana
 spec:
-    ports:
-        - port: 8080
-          protocol: TCP
-    selector:
-        run: couchbase-grafana
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    run: couchbase-grafana
 ---
 # To allow us to send to Loki we need this
 apiVersion: v1
 kind: Service
 metadata:
-    name: loki
-    labels:
-        run: couchbase-grafana
+  name: loki
+  labels:
+    run: couchbase-grafana
 spec:
-    ports:
-        - port: 3100
-          protocol: TCP
-    selector:
-        run: couchbase-grafana
+  ports:
+    - port: 3100
+      protocol: TCP
+  selector:
+    run: couchbase-grafana
 ---
-...
+

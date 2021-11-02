@@ -1,10 +1,10 @@
 ---
 groups:
-    - name: Base
-      rules:
-          - alert: TestUntouched
-            expr: untouched
-          - alert: TestExprOverride
-            expr: overridden{}
-          - alert: TestDisabled
-            expr: disabled{}
+  - name: Base
+    rules:
+      - alert: TestUntouched
+        expr: untouched
+      - alert: TestExprOverride
+        expr: overridden{}
+      - alert: TestDisabled
+        expr: disabled{}

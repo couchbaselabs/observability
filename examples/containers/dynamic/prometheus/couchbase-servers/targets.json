@@ -1,11 +1,9 @@
 [
-    {
-      "targets": [
-        "exporter:9091"
-      ],
-      "labels": {
-        "job": "db1",
-        "container": "exporter"
-      }
+  {
+    "targets": ["exporter:9091"],
+    "labels": {
+      "job": "db1",
+      "container": "exporter"
     }
+  }
 ]

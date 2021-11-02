@@ -3,6 +3,7 @@ Update the `targets.json` file with any additional targets to scrape dynamically
 See: https://prometheus.io/docs/guides/file-sd/
 
 As an example to get logging metrics requires a separate path:
+
 ```
 [
     {
