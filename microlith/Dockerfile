@@ -72,7 +72,7 @@ RUN apk add --upgrade --no-cache git && \
 # Put the changeable stuff here
 COPY docs/ /antora/docs/
 # Couchbase proprietary start
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/modules/couchbase-cluster-monitor/pages/
 # Couchbase proprietary end
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
