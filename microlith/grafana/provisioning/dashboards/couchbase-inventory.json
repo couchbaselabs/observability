@@ -18,16 +18,16 @@
       }
     ]
   },
-  "description": "Overview of all clusters known to this instance",
+  "description": "Overview of all Couchbase clusters known to this instance",
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 1,
+  "id": 2,
   "links": [],
   "panels": [
     {
       "datasource": "JSON API",
-      "description": "A description for the Cluster Overview.",
+      "description": "A summary view of all Couchbase Clusters within the estate.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -68,7 +68,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Status: Good"
+              "options": "Successful"
             },
             "properties": [
               {
@@ -87,7 +87,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Status: Warning"
+              "options": "Warnings"
             },
             "properties": [
               {
@@ -105,7 +105,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Status: Alert"
+              "options": "Critical"
             },
             "properties": [
               {
@@ -147,7 +147,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Status: Info"
+              "options": "Info Alerts"
             },
             "properties": [
               {
@@ -208,19 +208,29 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Host"
+              "options": "Cluster"
             },
             "properties": [
               {
                 "id": "custom.width",
                 "value": 185
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Go to Couchbase UI",
+                    "url": "${__data.fields.Cluster}"
+                  }
+                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Links"
+              "options": "Name"
             },
             "properties": [
               {
@@ -255,7 +265,7 @@
           "fields": [
             {
               "jsonPath": "$[*].nodes_summary[0].host",
-              "name": "Host"
+              "name": "Cluster"
             },
             {
               "jsonPath": "$[*].name",
@@ -278,29 +288,24 @@
               "name": "Services"
             },
             {
-              "jsonPath": "$[*].status_summary.good",
+              "jsonPath": "$[*].status_summary.alerts",
               "language": "jsonpath",
-              "name": "Status: Good"
+              "name": "Critical"
             },
             {
               "jsonPath": "$[*].status_summary.warnings",
               "language": "jsonpath",
-              "name": "Status: Warning"
+              "name": "Warnings"
             },
             {
-              "jsonPath": "$[*].status_summary.alerts",
+              "jsonPath": "$[*].status_summary.good",
               "language": "jsonpath",
-              "name": "Status: Alert"
+              "name": "Successful"
             },
             {
               "jsonPath": "$[*].status_summary.info",
               "language": "jsonpath",
-              "name": "Status: Info"
-            },
-            {
-              "jsonPath": "$map($, function($_) {\"Cluster Overview\"})",
-              "language": "jsonata",
-              "name": "Links"
+              "name": "Info Alerts"
             }
           ],
           "method": "GET",
@@ -309,7 +314,8 @@
           "urlPath": "/clusters"
         }
       ],
-      "title": "Cluster overview",
+      "title": "Inventory of Couchbase Clusters",
+      "transformations": [],
       "type": "table"
     }
   ],
@@ -326,7 +332,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Cluster Overview Dashboard",
-  "uid": null,
-  "version": 1
+  "title": "Couchbase Inventory",
+  "uid": "ldfS-1F7z",
+  "version": 3
 }
