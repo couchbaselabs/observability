@@ -1,14 +1,29 @@
 repos:
-  - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.21.0
+  - repo: https://github.com/ansible-community/ansible-lint.git
+    rev: v5.2.1 # put latest release tag from https://github.com/ansible-community/ansible-lint/releases/
     hooks:
-      - id: yamllint
-        args: [--format, parsable, --strict]
+      - id: ansible-lint
 
-  - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
-    rev: 0.0.11
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: "v2.4.1"
     hooks:
-      - id: yamlfmt
+      - id: prettier
+
+  - repo: local
+    hooks:
+      - id: shellcheck
+        name: shellcheck
+        language: script
+        entry: tools/shellcheck.sh
+      - id: licence-lint
+        name: licence-lint
+        language: script
+        entry: tools/licence-lint.sh
+
+  - repo: https://github.com/golangci/golangci-lint
+    rev: "v1.42.1"
+    hooks:
+      - id: golangci-lint
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1

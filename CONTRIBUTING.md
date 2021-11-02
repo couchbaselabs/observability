@@ -12,7 +12,7 @@ When filing an issue, please set the appropriate type (bug / improvement / new f
 
 As CMOS is an amalgamation of various other projects, as well as some code of our own, we use various languages and tools.
 
-The majority of these standards are enforced by linters - you can run all the linters by running `make lint`. If this passes, your code is probably good to go!
+The majority of these standards are enforced by linters - you can run all the linters by running `make lint`. If this passes, your code is probably good to go! We also have [pre-commit](https://pre-commit.com/) hooks set up to enforce these, so it may be helpful to install it, as it'll ensure the various linters pass before you commit your code.
 
 ### Golang (Configuration Service)
 
@@ -26,7 +26,7 @@ By convention, use `lower_snake_case` for variables that only live inside the cu
 
 ### YAML (configuration files and Ansible playbooks)
 
-Run yamllint and yamlfmt over your code, this will ensure it adheres to the style.
+Run yamllint and prettier over your code, this will ensure it adheres to the style.
 
 ### Dockerfiles
 
