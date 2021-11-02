@@ -1,3 +1,5 @@
+exclude: microlith/html/tern-licensing-report.html
+
 repos:
   - repo: https://github.com/ansible-community/ansible-lint.git
     rev: v5.2.1 # put latest release tag from https://github.com/ansible-community/ansible-lint/releases/
@@ -8,6 +10,7 @@ repos:
     rev: "v2.4.1"
     hooks:
       - id: prettier
+        types_or: [yaml, json, markdown]
 
   - repo: local
     hooks:
@@ -29,6 +32,8 @@ repos:
     rev: v4.0.1
     hooks:
       - id: trailing-whitespace
+        # This will conflict with Grafana's exported files - avoid fighting and unnecessary diffs
+        exclude: ^microlith/grafana/provisioning/dashboards/.*\.json$
       - id: check-case-conflict
       - id: check-executables-have-shebangs
       - id: check-json
