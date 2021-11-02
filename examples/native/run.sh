@@ -83,20 +83,6 @@ fi
 # Build CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
-# Extend and copy JSON config file to CMOS Prometheus config
-declare -a nodes
-for ((i=0; i<NUM_NODES; i++)); do
-  nodes+=("\"node$i.local:9091\"")
-done
-
-bar=$(IFS=, ; echo "${nodes[*]}") # str: "node0:9091","node1:9091", ...
-
-temp_dir=$(mktemp -d) && cp "$SCRIPT_DIR"/helpers/target_template.json "$temp_dir"/targets.json
-new_file=$(jq -n ".[0].targets |= [$bar]" "$temp_dir"/targets.json)
-echo "$new_file" > "$temp_dir"/targets.json
-
-docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom/targets.json
-
 # Build Couchbase Server/exporter container
 docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
 
@@ -112,5 +98,5 @@ echo "All done. Go to: http://localhost:8080."
 ## TODO:
 # Rename and put under subpath /containers 
   # Be careful as docker-compose named networks prefixed with parent folder name, this will change from native -> something else
-# Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling
-# Factor out docker exec commands into function which is passed string "cmd", allows for retry logic
+# Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling, and have an entrypoint script for each container (parallel)
+# Move targets generation and add proper cluster config
