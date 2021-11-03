@@ -100,10 +100,10 @@ echo "All done. Go to: http://localhost:8080."
 # Rename and put under subpath /containers 
   # Be careful as docker-compose named networks prefixed with parent folder name, this will change from native -> something else
   # The only current dependency on this name is the --network arg passed to the docker run command for the server/exporter image
-# Improve enduser UX
+
 # Rewrite: 
 # - Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling
 # - have an entrypoint script for each container (parallel)
 
-
-# Finish UX thing "please try again?", exponential wait time for nodes failing command
+# Add terminal allowing for manually failing nodes etc, demo of certain things?
+# Add in meta-graph showing internal Prometheus etc. server usage?
