@@ -1,17 +1,17 @@
-ARG couchbase_server_image=couchbase/server:enterprise-6.6.3
+ARG COUCHBASE_SERVER_IMAGE="couchbase/server:enterprise-6.6.3"
 
 # Build the exporter
 FROM golang:1.17.2 as go_build
 RUN git clone https://github.com/couchbase/couchbase-exporter.git /opt/couchbase-exporter
 
 WORKDIR /opt/couchbase-exporter
-ARG exporter_version=master
-RUN git checkout "$exporter_version" &&\
+ARG COUCHBASE_EXPORTER_VERSION=master
+RUN git checkout "$COUCHBASE_EXPORTER_VERSION" &&\
     CGO_ENABLED=0 go build -o ./couchbase-exporter .
 
 # Add to Couchbase Server
 # hadolint ignore=DL3006
-FROM $couchbase_server_image
+FROM $COUCHBASE_SERVER_IMAGE
 EXPOSE 9091
 
 COPY --chown=couchbase:couchbase --chmod=777 ./run_exporter.sh /etc/service/couchbase-exporter/run
