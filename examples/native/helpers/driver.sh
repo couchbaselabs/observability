@@ -157,11 +157,12 @@ function configure_servers() {
             # Currently broken as & doesn't pass output with docker exec for some reason
 
             for bucket in "${sample_buckets[@]}"; do
-                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
-                  -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100" "Running..." > /dev/null & 
+                { 
+                  _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
+                    -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
+                } 1>/dev/null 2>&1
+                echo "  - cbc-pillowfight started against $bucket"
             done
-
-            echo "  - cbc-pillowfight started against $bucket"
         fi
 
         local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
