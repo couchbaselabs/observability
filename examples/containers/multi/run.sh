@@ -32,7 +32,6 @@
 set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-CBS_EXP_IMAGE_NAME=${CBS_EXP_IMAGE_NAME:-"cbs_server_exp"}
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
@@ -61,13 +60,13 @@ LOAD=${LOAD:-true}
 #### SCRIPT START ####
 
 # Determine if there are any nodes with conflicting names
-NODES_MATCHING=$(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" | grep -c '')
+NODES_MATCHING=$(docker ps -a --filter "ancestor=cbs_server_exp" | grep -c '')
 NODES_MATCHING=$((NODES_MATCHING-1))
 if (( NODES_MATCHING > 0 )); then
 
   echo "------------------"
   echo "There are $NODES_MATCHING existing containers with \
-image '$CBS_EXP_IMAGE_NAME': ($(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" \
+image 'cbs_server_exp': ($(docker ps -a --filter "ancestor=cbs_server_exp" \
     --format '{{.Names}}' | tac | paste -s -d, -))"
 
   read -r -p "These nodes and the CMOS container must be destroyed to continue. Are you sure? [y/N]: " RESPONSE
@@ -85,10 +84,10 @@ fi
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
 # Build Couchbase Server/exporter container
-docker image build "$SCRIPT_DIR"/helpers -t "$CBS_EXP_IMAGE_NAME" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
+docker image build "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
 
 # Create $NUM_NODES containers running Couchbase Server $VERSION and the exporter
-start_new_nodes "$NUM_NODES" "$CBS_EXP_IMAGE_NAME"
+start_new_nodes "$NUM_NODES" "cbs_server_exp"
 
 # Initialise and partition nodes as evenly as possible into $NUM_CLUSTERS clusters, register them with CBMM
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight

@@ -25,7 +25,6 @@
 function start_new_nodes() {
 
     local num_nodes=$1
-    local cbs_exp_image_name=$2
     local nodes_ready=() 
 
     echo "---- Starting $num_nodes Couchbase Server and Exporter nodes ----"
@@ -33,7 +32,7 @@ function start_new_nodes() {
     local i=0
     for ((i; i<num_nodes; i++)); do
         docker run -d --rm --name "node$i" --hostname="node$i.local" --network=multi_shared_network \
-        -p $((8091+i)):8091 "$cbs_exp_image_name" > /dev/null
+        -p $((8091+i)):8091 "cbs_server_exp" > /dev/null
         nodes_ready+=(false)
     done
 

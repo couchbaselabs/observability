@@ -19,13 +19,9 @@ CBS_EXP_IMAGE_NAME=${CBS_EXP_IMAGE_NAME:-"cbs_server_exp"}
 # Delete ALL containers with the cbs_server_exp image
 # This needs to be first because docker-compose down attempts to remove the network
 # and if these containers are still up and connected to it that won't be allowed (?)
-docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" --format '{{.ID }}' | xargs docker rm -f > /dev/null
-echo "All $CBS_EXP_IMAGE_NAME containers deleted successfully."
+docker ps -a --filter "ancestor=cbs_server_exp" --format '{{.ID }}' | xargs docker rm -f > /dev/null
+echo "All cbs_server_exp containers deleted successfully."
 
 # Remove the CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
-
-# Transient "Error response from daemon: error while removing network: ... has active endpoints"
-# - only fix is to restart Docker daemon (hanging endpoint but zero exist in inspect output so 
-# cannot be manually removed)
 
