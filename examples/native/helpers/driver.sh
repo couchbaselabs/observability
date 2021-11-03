@@ -36,7 +36,7 @@ function start_new_nodes() {
         NODES_READY+=(0)
     done
 
-    # Block until all nodes ready
+    # Simple block until all nodes ready
     echo "Waiting for nodes to come up..." && sleep "$NUM_NODES"
     while true; do
         local j=0
