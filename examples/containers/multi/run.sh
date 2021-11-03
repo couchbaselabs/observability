@@ -61,17 +61,17 @@ LOAD=${LOAD:-true}
 #### SCRIPT START ####
 
 # Determine if there are any nodes with conflicting names
-nodes_matching=$(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" | grep -c '')
-nodes_matching=$((nodes_matching-1))
-if (( nodes_matching > 0 )); then
+NODES_MATCHING=$(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" | grep -c '')
+NODES_MATCHING=$((NODES_MATCHING-1))
+if (( NODES_MATCHING > 0 )); then
 
   echo "------------------"
-  echo "There are $nodes_matching existing containers with \
+  echo "There are $NODES_MATCHING existing containers with \
 image '$CBS_EXP_IMAGE_NAME': ($(docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" \
     --format '{{.Names}}' | tac | paste -s -d, -))"
 
-  read -r -p "These nodes and the CMOS container must be destroyed to continue. Are you sure? [y/N]: " response
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]; then
+  read -r -p "These nodes and the CMOS container must be destroyed to continue. Are you sure? [y/N]: " RESPONSE
+    if [[ "$RESPONSE" =~ ^([yY][eE][sS]|[yY])$ ]]; then
         "$SCRIPT_DIR"/stop.sh
         echo "Completed."
     else
@@ -85,7 +85,7 @@ fi
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
 # Build Couchbase Server/exporter container
-docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
+docker image build "$SCRIPT_DIR"/helpers -t "$CBS_EXP_IMAGE_NAME" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
 
 # Create $NUM_NODES containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NUM_NODES" "$CBS_EXP_IMAGE_NAME"

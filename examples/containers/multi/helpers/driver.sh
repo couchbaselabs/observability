@@ -16,7 +16,7 @@
 
 #########################
 # Pre-conditions:
-#   - The CBS_EXP_IMAGE_NAME Docker image built (handled by the run.sh entrypoint)
+#   - The cbs_exp_image_name Docker image built (handled by the run.sh entrypoint)
 #   - A non-zero $NUM_NODES (a default is specified in the run.sh entrypoint)
 
 # Post-conditions:
@@ -24,34 +24,34 @@
 #     to receive requests, and the exporter actively exporting data
 function start_new_nodes() {
 
-    local NUM_NODES=$1
-    local CBS_EXP_IMAGE_NAME=$2
-    local NODES_READY=() 
+    local num_nodes=$1
+    local cbs_exp_image_name=$2
+    local nodes_ready=() 
 
-    echo "---- Starting $NUM_NODES Couchbase Server and Exporter nodes ----"
+    echo "---- Starting $num_nodes Couchbase Server and Exporter nodes ----"
 
     local i=0
-    for ((i; i<NUM_NODES; i++)); do
+    for ((i; i<num_nodes; i++)); do
         docker run -d --rm --name "node$i" --hostname="node$i.local" --network=multi_shared_network \
-        -p $((8091+i)):8091 "$CBS_EXP_IMAGE_NAME" > /dev/null
-        NODES_READY+=(false)
+        -p $((8091+i)):8091 "$cbs_exp_image_name" > /dev/null
+        nodes_ready+=(false)
     done
 
     # Simple block until all nodes ready
-    echo "Waiting for nodes to come up..." && sleep "$NUM_NODES"
+    echo "Waiting for nodes to come up..." && sleep "$num_nodes"
     while true; do
         local j=0
-        for ((j; j<NUM_NODES; j++)); do
-            if ! ${NODES_READY[$j]}; then
+        for ((j; j<num_nodes; j++)); do
+            if ! ${nodes_ready[$j]}; then
                 if docker exec "node$j" curl -fs localhost:8091 > /dev/null; then
-                    NODES_READY[$j]=true
+                    nodes_ready[$j]=true
                     echo "Node $j ready!"
                 fi
             fi
         done
 
         ready=true
-        for b in "${NODES_READY[@]}"; do if ! $b; then ready=false; fi; done
+        for b in "${nodes_ready[@]}"; do if ! $b; then ready=false; fi; done
         if $ready; then break; else echo "..." && sleep 5; fi
         # Bash does not support boolean operators on true/false and the evaluation of 0 or 1 as true/false changes 
         # depending on the context and would be much harder to understand
@@ -63,59 +63,59 @@ function start_new_nodes() {
 # Pre-conditions:
 # - The passed docker container name/ID is valid and running
 # - The command passed is a valid bash command to be executed inside the container
-# - $SUCCESS_MSG is returned by the command upon successful execution
+# - $success_msg is returned by the command upon successful execution
 
 # Post-conditions:
 # - The command is executed successfully with no error code; OR
-# - The command fails $RETRY_COUNT times in a row and the program exits
+# - The command fails $retry_count times in a row and the program exits
 function _docker_exec_with_retry() {
 
-    local RETRY_COUNT=5
-    local RETRY_TIME=(2 4 8 15 30)
+    local retry_count=5
+    local retry_time=(2 4 8 15 30)
 
-    local CONTAINER=$1
-    local COMMAND=$2
-    local SUCCESS_MSG=${3:-""}
+    local container=$1
+    local command=$2
+    local success_msg=${3:-""}
 
     local i=0
-    for ((i; i<RETRY_COUNT; i++)); do
-        output=$(docker exec "$CONTAINER" /usr/bin/env bash -c "$COMMAND")
-        if [[ $output == *$SUCCESS_MSG* ]]; then
+    for ((i; i<retry_count; i++)); do
+        output=$(docker exec "$container" /usr/bin/env bash -c "$command")
+        if [[ $output == *$success_msg* ]]; then
             return
         else
-            echo "Command failed, waiting ${RETRY_TIME[$i]} seconds before retrying..."
-            sleep "${RETRY_TIME[$i]}"
+            echo "Command failed, waiting ${retry_time[$i]} seconds before retrying..."
+            sleep "${retry_time[$i]}"
             
         fi
     done
-    echo "Max retries reached while executing $COMMAND, $CONTAINER failed for reason: $output"
+    echo "Max retries reached while executing $command, $container failed for reason: $output"
     exit 1
 
 }
 # Pre-conditions: 
-#   - $NUM_NODES containers running Couchbase Server (uninitialised)/exporter 
+#   - $num_nodes containers running Couchbase Server (uninitialised)/exporter 
 
 # Post-conditions: 
 #   - All CBS/exporter nodes initialised and partitioned as evenly as possible into 
-#     $NUM_CLUSTERS clusters, with a rebalance occurring after the last node is added
-#   - $NUM_CLUSTERS nodes will be running the Data Service, the rest Index/Query, with quotas
-#     specified by $DATA_ALLOC and $INDEX_ALLOC
+#     $num_clusters clusters, with a rebalance occurring after the last node is added
+#   - $num_clusters nodes will be running the Data Service, the rest Index/Query, with quotas
+#     specified by $data_alloc and $index_alloc
 #   - Every cluster registered for monitoring with the cbmultimanager
 function configure_servers() {
 
-    local NUM_NODES=$1
-    local NUM_CLUSTERS=$2
-    local SERVER_USER=$3
-    local SERVER_PWD=$4
-    local NODE_RAM=$5
-    local LOAD=$6
+    local num_nodes=$1
+    local num_clusters=$2
+    local server_user=$3
+    local server_pwd=$4
+    local node_ram=$5
+    local load=$6
 
-    local DATA_ALLOC 
-    local INDEX_ALLOC
+    local data_alloc 
+    local index_alloc
     # Allocate 70% of the specified RAM quota to the service (query has no quota)
     # awk used as bash does not support operations with decimals
-    DATA_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
-    INDEX_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
+    data_alloc=$(awk -v n="$node_ram" 'BEGIN {printf "%.0f\n", (n*0.7)}')
+    index_alloc=$(awk -v n="$node_ram" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
     local sample_buckets=(\"travel-sample\" \"beer-sample\") # Only used if LOAD is true
 
@@ -124,41 +124,41 @@ function configure_servers() {
     echo '[]' > "$temp_dir"/targets.json
 
     echo "----- START CONFIGURING NODES -----"
-    echo "Partitioning $NUM_NODES nodes into $NUM_CLUSTERS clusters..."
+    echo "Partitioning $num_nodes nodes into $num_clusters clusters..."
     echo ""
 
-    local nodes_left=$NUM_NODES
+    local nodes_left=$num_nodes
     local i=0
-    for ((i; i<NUM_CLUSTERS; i++)); do
+    for ((i; i<num_clusters; i++)); do
 
         # Calculate the number of nodes to provision in this cluster
-        local to_provision=$(( nodes_left / (NUM_CLUSTERS - i) )) # (Integer division, Bash does not support decimals)
-        local start=$(( NUM_NODES - nodes_left ))
+        local to_provision=$(( nodes_left / (num_clusters - i) )) # (Integer division, Bash does not support decimals)
+        local start=$(( num_nodes - nodes_left ))
         
         # Create and initialize cluster
         local uid="node$start"
         local clust_name="Cluster $i"
         _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name=\"$clust_name\" \
-            --cluster-username=\"$SERVER_USER\" --cluster-password=\"$SERVER_PWD\" --cluster-ramsize=$DATA_ALLOC \
-            --cluster-index-ramsize=$INDEX_ALLOC --services=data || echo 'failed'" "SUCCESS: "
+            --cluster-username=\"$server_user\" --cluster-password=\"$server_pwd\" --cluster-ramsize=$data_alloc \
+            --cluster-index-ramsize=$index_alloc --services=data || echo 'failed'" "SUCCESS: "
         local nodes=(\"node"$start".local:9091\")
 
         echo "** $clust_name created **"
 
         # Load sample buckets and register cluster with CBMM
         sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
-        _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" \"http://localhost:8091/sampleBuckets/install\" \
+        _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
           -d '[$sample_buckets_json]'" "[]"
 
         echo "- Sample buckets ${sample_buckets_json} loaded"
         
-        if $LOAD; then
+        if $load; then
             # Start cbpillowfight to simulate a non-zero load (NOT stress test)
             # Currently broken as & doesn't pass output with docker exec for some reason
 
             for bucket in "${sample_buckets[@]}"; do
                 { 
-                  _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
+                  _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
                     -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
                 } 1>/dev/null 2>&1
                 echo "  - cbc-pillowfight started against $bucket"
@@ -166,7 +166,7 @@ function configure_servers() {
         fi
 
         local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
-          '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \"host\":\"http://$uid:8091\"}' \
+          '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid:8091\"}' \
           'http://localhost:8080/couchbase/api/v1/clusters'"
         _docker_exec_with_retry "cmos" "$cmos_cmd"
 
@@ -181,10 +181,10 @@ function configure_servers() {
         for ((j; j<start+to_provision; j++)); do 
                 local node="node$j"
                 _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://$uid:8091\" \
-                   --username \"$SERVER_USER\" --password \"$SERVER_PWD\" || echo 'failed'" "SUCCESS: "
+                   --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
                 _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://$uid:8091\" \
-                  --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --server-add \"http://$node.local:8091\" \
-                  --server-add-username \"$SERVER_USER\" --server-add-password \"$SERVER_PWD\" --services index,query \
+                  --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
+                  --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query \
                   || echo 'failed'" "SUCCESS: "
 
                 nodes+=(\""$node".local:9091\")
@@ -194,6 +194,7 @@ function configure_servers() {
         echo "All nodes added successfully."
 
         # Add cluster to CMOS' Prometheus JSON config file
+        local csv, new_file
         csv=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
         new_file=$(jq ". |= .+ [{\"targets\":[$csv], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
         echo "$new_file" > "$temp_dir"/targets.json
@@ -204,7 +205,7 @@ function configure_servers() {
         # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
             _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" \
-              --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
+              --username \"$server_user\" --password \"$server_pwd\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
         fi
 
         echo "- Rebalance started"
