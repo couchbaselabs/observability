@@ -96,7 +96,7 @@ function _start_cmos() {
 # Note: do not call this function using BATS run! Otherwise its variables will not be set.
 function start_smoke_cluster() {
     local nodes=${SMOKE_NODES:-3}
-    echo "# Starting smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
+    echo "# Starting smoke cluster for platform $TEST_PLATFORM with $nodes nodes of CB $COUCHBASE_SERVER_IMAGE"
     case $TEST_PLATFORM in
         native)
             export VAGRANT_NODES=$nodes
