@@ -56,7 +56,7 @@ SERVER_USER=${SERVER_USER:-"Administrator"}
 SERVER_PWD=${SERVER_PWD:-"password"}
 
 NODE_RAM=${NODE_RAM:-1024}
-LOAD=${LOAD:-false}
+LOAD=${LOAD:-true}
 
 #### SCRIPT START ####
 

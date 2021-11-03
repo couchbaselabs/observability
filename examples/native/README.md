@@ -19,7 +19,7 @@ There are various environment variables you can configure:
 
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas.
-- `LOAD`, a Boolean denoting whether a light load should be thrown at the cluster using `cbc-pillowfight`. Defaults to `false`.
+- `LOAD`, a Boolean denoting whether a very light load should be thrown at the cluster using `cbc-pillowfight`, simulating cluster use. Defaults to `true`.
 
 ## Grafana Dashboard development ##
 
