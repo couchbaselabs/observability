@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # Simple script take dashboard screenshots from CMOS.
-set -eux
+set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
@@ -26,6 +26,9 @@ CMOS_CONTAINER_NAME=${CMOS_CONTAINER_NAME:-screenshot-cmos}
 
 # Remove anything with the same name including all volumes
 docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
+
+# Remove any previous screenshots
+rm -fv "${SCRIPT_DIR}/*.png"
 
 "${SCRIPT_DIR}/build-oss-container.sh"
 docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" "$CMOS_IMAGE"
