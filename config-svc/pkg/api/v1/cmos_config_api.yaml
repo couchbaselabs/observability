@@ -21,93 +21,71 @@ paths:
     get:
       summary: Outputs the OpenAPI specification for this API.
       responses:
-        200:
+        '200':
           description: OpenAPI 3.0 specification for this API
           content:
             application/json:
               schema:
                 type: object
 
-  /config:
-    get:
-      summary: Outputs the current config in YAML format.
-      description: Do not use this if you just want the cluster information.
+  /addPrometheusTarget:
+    post:
+      summary: Add a Prometheus target to this CMOS instance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [name, labels, targets]
+              properties:
+                name:
+                  type: string
+                nameLabel:
+                  type: string
+                overwrite:
+                  type: boolean
+                  default: false
+                labels:
+                  type: object
+                  additionalProperties:
+                    type: string
+                targets:
+                  type: array
+                  items:
+                    type: string
       responses:
-        200:
-          description: The Config Service configuration
-          content:
-            text/yaml:
-              schema:
-                type: string
-
-  /clusters:
-    get:
-      summary: Obtain the current Couchbase Clusters state.
-      parameters:
-        - name: includeSensitiveInfo
-          in: query
-          schema:
-            type: boolean
-            default: false
-      responses:
-        200:
-          description: Current state of the clusters
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CouchbaseCluster"
-
-  /prometheusTargets:
-    get:
-      summary: Obtain the current Couchbase Prometheus monitoring hosts.
-      responses:
-        200:
-          description: List of Prometheus targets
+        '200':
+          description: Prometheus target was added
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/PrometheusScrapeConfig"
+                $ref: "#/components/schemas/StandardResponse"
+        '409':
+          description: Target already exists and overwrite was not specified
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StandardResponse"
 
 components:
   schemas:
-    CouchbaseCluster:
-      type: object
-      additionalProperties: false
-      properties:
-        nodes:
-          type: array
-          items:
-            type: string
-        metadata:
-          type: object
-          additionalProperties:
-            type: string
-        couchbaseConfig:
-          $ref: "#/components/schemas/CouchbaseServerConfig"
-      required: [nodes, metadata, couchbaseConfig]
-    CouchbaseServerConfig:
-      type: object
-      additionalProperties: false
-      properties:
-        managementPort:
-          type: number
-        username:
-          type: string
-        password:
-          type: string
-      required: [managementPort]
-    PrometheusScrapeConfig:
-      type: object
-      additionalProperties: false
-      properties:
-        targets:
-          type: array
-          items:
-            type: string
-        labels:
-          type: object
-          additionalProperties:
-            type: string
-      required: [targets, labels]
+    StandardResponse:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [ok]
+          properties:
+            ok:
+              type: boolean
+              enum: [true]
+        - type: object
+          additionalProperties: false
+          required: [ok, error]
+          properties:
+            ok:
+              type: boolean
+              enum: [false]
+            error:
+              type: string
