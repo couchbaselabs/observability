@@ -15,27 +15,33 @@
 package main
 
 import (
-	"errors"
 	"flag"
 	"log"
+	"os"
 
 	"github.com/couchbaselabs/observability/config-svc/pkg/api"
-	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
-	"github.com/go-playground/validator/v10"
 	"go.uber.org/zap"
 )
 
 var (
-	flagConfigLocation = flag.String("config-path", "./config.yaml", "path to read/store the configuration")
 	flagHTTPPathPrefix = flag.String("http-path-prefix", "", "URL path to serve the API on")
 	flagHTTPHost       = flag.String("http-host", "0.0.0.0", "host to listen on")
 	flagHTTPPort       = flag.Int("http-port", 7194, "port to listen on")
+	flagDevelopment    = flag.Bool("development", true, "enable development logging and file paths")
 )
 
 func main() {
 	flag.Parse()
 
-	baseLogger, err := zap.NewDevelopment()
+	var (
+		baseLogger *zap.Logger
+		err        error
+	)
+	if *flagDevelopment {
+		baseLogger, err = zap.NewDevelopment()
+	} else {
+		baseLogger, err = zap.NewProduction()
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,21 +49,13 @@ func main() {
 
 	logger := baseLogger.Named("main").Sugar()
 
-	cfg, err := metacfg.ReadConfigFromFile(*flagConfigLocation, true, true)
-	if err != nil {
-		var validationErr validator.ValidationErrors
-		if errors.As(err, &validationErr) {
-			var errs []string
-			for _, e := range validationErr {
-				errs = append(errs, e.Error())
-			}
-			logger.Fatalw("Invalid configuration", "configLocation", *flagConfigLocation, "errors", errs)
-		} else {
-			logger.Fatalw("Failed to read configuration", "err", err, "configLocation", *flagConfigLocation)
+	if *flagDevelopment {
+		if err := os.MkdirAll("./targets", 0o777); err != nil {
+			baseLogger.Sugar().Fatalw("Failed to create targets directory", "err", err)
 		}
 	}
 
-	server, err := api.NewServer(baseLogger, cfg, *flagHTTPPathPrefix)
+	server, err := api.NewServer(baseLogger, *flagHTTPPathPrefix, !*flagDevelopment)
 	if err != nil {
 		logger.Fatalw("Failed to create API server", "err", err)
 	}
