@@ -28,7 +28,7 @@ CMOS_CONTAINER_NAME=${CMOS_CONTAINER_NAME:-screenshot-cmos}
 docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
 
 # Remove any previous screenshots
-rm -fv "${SCRIPT_DIR}/*.png"
+rm -fv "${SCRIPT_DIR}/../testing/screenshots/*.png"
 
 "${SCRIPT_DIR}/build-oss-container.sh"
 docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" "$CMOS_IMAGE"
