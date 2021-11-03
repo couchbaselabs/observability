@@ -14,6 +14,7 @@
 # limitations under the License.
 
 # Simple script to remove proprietary components from the microlith Dockerfile and build it.
+# Make sure to copy in the config service code prior to this
 set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 

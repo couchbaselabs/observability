@@ -30,7 +30,7 @@ docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
 # Remove any previous screenshots
 rm -fv "${SCRIPT_DIR}/../testing/screenshots/*.png"
 
-"${SCRIPT_DIR}/build-oss-container.sh"
+# Run CMOS
 docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" "$CMOS_IMAGE"
 
 # shellcheck disable=SC1091

@@ -99,7 +99,7 @@ test-native:
 test: clean container-oss test-native test-containers test-kubernetes
 
 # Runs up the CMOS and takes screenshots
-generate-screenshots:
+generate-screenshots: container-oss
 	tools/generate-screenshots.sh
 
 # Special target to verify the internal release pipeline will work as well
