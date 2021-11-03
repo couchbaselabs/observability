@@ -14,11 +14,13 @@
 # limitations under the License.
 set -u
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+CBS_EXP_IMAGE_NAME=${CBS_EXP_IMAGE_NAME:-"cbs_server_exp"}
 
 # Delete ALL containers with the cbs_server_exp image
 # This needs to be first because docker-compose down attempts to remove the network
 # and if these containers are still up and connected to it that won't be allowed (?)
-docker ps -a --filter 'ancestor=cbs_server_exp' --format '{{.ID }}' | xargs docker rm -f
+docker ps -a --filter "ancestor=$CBS_EXP_IMAGE_NAME" --format '{{.ID }}' | xargs docker rm -f > /dev/null
+echo "All $CBS_EXP_IMAGE_NAME containers deleted successfully."
 
 # Remove the CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
