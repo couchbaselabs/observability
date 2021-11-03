@@ -42,7 +42,7 @@ function start_new_nodes() {
         local j=0
         for ((j; j<NUM_NODES; j++)); do
             if ! ${NODE_READY[$j]}; then
-                if docker exec "node$j" curl -fs localhost:8091; then
+                if docker exec "node$j" curl -fs localhost:8091 > /dev/null; then
                     NODE_READY[$j]=true
                     echo "Node $j ready!"
                 fi
