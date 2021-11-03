@@ -211,6 +211,7 @@ function configure_servers() {
 
         echo "- Rebalance started"
         echo "Cluster configuration complete."
+        echo "---------------------------------"
         echo ""
 
         local nodes_left=$((nodes_left - to_provision))
