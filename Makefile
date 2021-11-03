@@ -105,6 +105,10 @@ test-native:
 
 test: clean container-oss test-native test-containers test-kubernetes
 
+# Runs up the CMOS and takes screenshots
+generate-screenshots:
+	tools/generate-screenshots.sh
+
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
 test-dist: dist

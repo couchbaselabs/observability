@@ -4,27 +4,6 @@ FROM prom/prometheus:v2.28.1 as prometheus-official
 FROM prom/alertmanager:v0.22.2 as alertmanager-official
 FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 
-# Generate documentation and include locally as a static site
-# We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
-FROM antora/antora:3.0.0-alpha.9 as antora-generator
-RUN mkdir -p /antora/cmos
-ENV HOME=/antora
-
-# Antora requires the input be a Git repo with at least one commit: https://gitlab.com/antora/antora/-/issues/284
-# No need to pin
-# hadolint ignore=DL3018
-RUN apk add --upgrade --no-cache git && \
-    git init /antora/docs && \
-    touch /antora/docs/.gitignore && \
-    git -C /antora/docs add . && \
-    git config --global user.name "ignore.me" && \
-    git config --global user.email "ignore.me" && \
-    git -C /antora/docs commit -m "ignore me"
-
-# Put the changeable stuff here
-COPY docs/ /antora/docs/
-RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
-
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
 # hadolint ignore=DL3008,DL3015
@@ -47,7 +26,7 @@ RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-override
 WORKDIR /src/github.com/couchbaselabs/observability/config-svc
 COPY config-svc/ .
 RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cmoscfg ./cmd/cmoscfg
+    CGO_ENABLED=0 GOOS=linux go build -trimpath -a -o /bin/cmoscfg -tags netgo ./cmd/cmoscfg
 
 # Couchbase proprietary start
 # Standalone as need to use --mount option
@@ -72,6 +51,30 @@ WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui
 RUN npm install && npm run build -- --base-href=/couchbase/ui/ --deploy-url=/couchbase/ui/
 
 # Couchbase proprietary end
+
+# Generate documentation and include locally as a static site
+# We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
+FROM antora/antora:3.0.0-alpha.9 as antora-generator
+RUN mkdir -p /antora/cmos
+ENV HOME=/antora
+
+# Antora requires the input be a Git repo with at least one commit: https://gitlab.com/antora/antora/-/issues/284
+# No need to pin
+# hadolint ignore=DL3018
+RUN apk add --upgrade --no-cache git && \
+    git init /antora/docs && \
+    touch /antora/docs/.gitignore && \
+    git -C /antora/docs add . && \
+    git config --global user.name "ignore.me" && \
+    git config --global user.email "ignore.me" && \
+    git -C /antora/docs commit -m "ignore me"
+
+# Put the changeable stuff here
+COPY docs/ /antora/docs/
+# Couchbase proprietary start
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/modules/couchbase-cluster-monitor/pages/
+# Couchbase proprietary end
+RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
@@ -234,8 +237,21 @@ ENV JAEGER_AGENT_HOST=localhost
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
 COPY grafana/cblogo.png /usr/share/grafana/public/img/cblogo.png
+COPY grafana/cmos-doc-redirect.html /usr/share/grafana/public/
 ENV GF_SECURITY_ADMIN_PASSWORD=password
 ENV GF_USERS_ALLOW_SIGN_UP=false
+
+# Ensure we install Grafana plugins at build time, not at runtime
+# We use a slightly different syntax of GF_INSTALL_PLUGINS to allow pinning versions:
+# should be a comma-separated list of plugins, optionally with a space and a version to download that version.
+# If no version is given, use the latest.
+ARG GF_INSTALL_PLUGINS="marcusolsson-json-datasource 1.3.0"
+COPY ./scripts/install-grafana-plugins.sh /scripts/install-grafana-plugins.sh
+RUN /bin/bash /scripts/install-grafana-plugins.sh \
+# Blank out the environment variable to prevent trying to install the plugins again at runtime
+# End-users can still override it to install additional plugins, but this should prevent startup
+# failures in an air-gapped environment
+ENV GF_INSTALL_PLUGINS=""
 
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/

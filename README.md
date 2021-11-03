@@ -176,6 +176,8 @@ For those customers who want to scale up the deployment and/or follow a more clo
 
 ## Testing
 
+For more details on how the tests are implemented, see [CONTRIBUTING.md](/CONTRIBUTING.md#testing).
+
 We need to verify the following key use cases:
 * Out of the box defaults provided for simple usage to give a cluster overview
 * Customization of rules and integrate into existing pipeline
@@ -220,13 +222,6 @@ Variation points:
 * With and without the useful extras like kube-state-metrics and eventrouter
 * CE and EE clusters (not with CAO though for EE)
 * On-prem and CAO clusters mixed together for monitoring
-
-We use the BATS framework (reuse some SDK set up tests as well) to verify all this locally using a docker-compose stack to represent an on-premise option and a KIND cluster for a kubernetes option.
-Scale up to run tests in GKE as well using multiple nodes explicitly there.
-
-### Test configuration
-
-Testing is broken down into general `smoke` tests independent of the infrastructure we are running on, e.g. the general ones above, and `integration` tests that are cover some specific aspect for a particular infrastructure, e.g. a Kubernetes-specific test case.
 
 ## Caveats and restrictions
 
