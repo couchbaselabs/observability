@@ -39,7 +39,7 @@ jobs:
             - name: Generate screenshots
               run: |
                   make generate-screenshots -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-                  tar -czvf /tmp/cmos-screenshots.tar -C testing/screenshots/ *.png
+                  tar -czvf /tmp/cmos-screenshots.tar testing/screenshots/*.png
 
             - name: Upload screenshots
               uses: actions/upload-artifact@v2
