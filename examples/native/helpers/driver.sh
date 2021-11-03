@@ -16,7 +16,7 @@
 
 #########################
 # Pre-conditions:
-#   - The cbs_server_exp Docker image built (handled by the run.sh entrypoint)
+#   - The CBS_EXP_IMAGE_NAME Docker image built (handled by the run.sh entrypoint)
 #   - A non-zero $NUM_NODES (a default is specified in the run.sh entrypoint)
 
 # Post-conditions:
@@ -25,15 +25,16 @@
 function start_new_nodes() {
 
     local NUM_NODES=$1
+    local CBS_EXP_IMAGE_NAME=$2
     local NODES_READY=() 
 
-    echo "Starting $NUM_NODES nodes"
+    echo "---- Starting $NUM_NODES Couchbase Server and Exporter nodes ----"
 
     local i=0
     for ((i; i<NUM_NODES; i++)); do
         docker run -d --rm --name "node$i" --hostname="node$i.local" --network=native_shared_network \
-        -p $((8091+i)):8091 "cbs_server_exp" > /dev/null
-        NODES_READY+=(0)
+        -p $((8091+i)):8091 "$CBS_EXP_IMAGE_NAME" > /dev/null
+        NODES_READY+=(false)
     done
 
     # Simple block until all nodes ready
@@ -41,16 +42,16 @@ function start_new_nodes() {
     while true; do
         local j=0
         for ((j; j<NUM_NODES; j++)); do
-            if ! ${NODE_READY[$j]}; then
+            if ! ${NODES_READY[$j]}; then
                 if docker exec "node$j" curl -fs localhost:8091 > /dev/null; then
-                    NODE_READY[$j]=true
+                    NODES_READY[$j]=true
                     echo "Node $j ready!"
                 fi
             fi
         done
 
         ready=true
-        for b in "${NODE_READY[@]}"; do if ! $b; then ready=false; fi; done
+        for b in "${NODES_READY[@]}"; do if ! $b; then ready=false; fi; done
         if $ready; then break; else echo "..." && sleep 5; fi
         # Bash does not support boolean operators on true/false and the evaluation of 0 or 1 as true/false changes 
         # depending on the context and would be much harder to understand
@@ -70,6 +71,7 @@ function start_new_nodes() {
 function _docker_exec_with_retry() {
 
     local RETRY_COUNT=5
+    local RETRY_TIME=(2 4 8 15 30)
 
     local CONTAINER=$1
     local COMMAND=$2
@@ -81,11 +83,12 @@ function _docker_exec_with_retry() {
         if [[ $output == *$SUCCESS_MSG* ]]; then
             return
         else
-            sleep 2
-            echo "Retrying..."
+            echo "Command failed, waiting ${RETRY_TIME[$i]} seconds before retrying..."
+            sleep "${RETRY_TIME[$i]}"
+            
         fi
     done
-    echo "Max retries reached, $CONTAINER failed for reason: $output"
+    echo "Max retries reached while executing $COMMAND, $CONTAINER failed for reason: $output"
     exit 1
 
 }
@@ -121,7 +124,8 @@ function configure_servers() {
     echo '[]' > "$temp_dir"/targets.json
 
     echo "----- START CONFIGURING NODES -----"
-    echo "Partitioning $NUM_NODES nodes into $NUM_CLUSTERS clusters"
+    echo "Partitioning $NUM_NODES nodes into $NUM_CLUSTERS clusters..."
+    echo ""
 
     local nodes_left=$NUM_NODES
     local i=0
@@ -139,21 +143,14 @@ function configure_servers() {
             --cluster-index-ramsize=$INDEX_ALLOC --services=data || echo 'failed'" "SUCCESS: "
         local nodes=(\"node"$start".local:9091\")
 
-        echo "  $clust_name created"
+        echo "** $clust_name created **"
 
         # Load sample buckets and register cluster with CBMM
         sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
         _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" \"http://localhost:8091/sampleBuckets/install\" \
           -d '[$sample_buckets_json]'" "[]"
 
-        echo "    Sample buckets ${sample_buckets[*]} loaded"
-        
-        local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
-          '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \"host\":\"http://$uid:8091\"}' \
-          'http://localhost:8080/couchbase/api/v1/clusters'"
-        _docker_exec_with_retry "cmos" "$cmos_cmd"
-
-        echo "    Registered $clust_name with Cluster Monitor (cbmultimanager)"
+        echo "- Sample buckets ${sample_buckets_json} loaded"
         
         if $LOAD; then
             # Start cbpillowfight to simulate a non-zero load (NOT stress test)
@@ -164,10 +161,21 @@ function configure_servers() {
                   -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100" "Running..." > /dev/null & 
             done
 
-            echo "      - cbc-pillowfight started against $bucket"
+            echo "  - cbc-pillowfight started against $bucket"
         fi
 
+        local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
+          '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \"host\":\"http://$uid:8091\"}' \
+          'http://localhost:8080/couchbase/api/v1/clusters'"
+        _docker_exec_with_retry "cmos" "$cmos_cmd"
+
+        echo "- Registered with Cluster Monitor"
+
         # Initialize and add the required nodes to the existing cluster
+        echo ""
+        echo "Adding $((to_provision)) nodes to cluster"
+        echo " - node$start added"
+
         local j=$((start+1))
         for ((j; j<start+to_provision; j++)); do 
                 local node="node$j"
@@ -179,16 +187,18 @@ function configure_servers() {
                   || echo 'failed'" "SUCCESS: "
 
                 nodes+=(\""$node".local:9091\")
+                echo " - $node added"
         done
 
-        echo "    All $to_provision nodes (node$start through node$((start+to_provision))) added to the cluster"
+        echo "All nodes added successfully."
 
         # Add cluster to CMOS' Prometheus JSON config file
         csv=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
         new_file=$(jq ". |= .+ [{\"targets\":[$csv], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
         echo "$new_file" > "$temp_dir"/targets.json
 
-        echo "    Nodes added to Prometheus scrape config under $clust_name"
+        echo ""
+        echo "- Nodes added to Prometheus scrape config under the cluster"
 
         # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
@@ -196,11 +206,11 @@ function configure_servers() {
               --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
         fi
 
-        echo "  Rebalance started"
+        echo "- Rebalance started"
+        echo "Cluster configuration complete."
+        echo ""
 
         local nodes_left=$((nodes_left - to_provision))
-
-        echo "------$nodes_left to provision!------"
 
     done
 
