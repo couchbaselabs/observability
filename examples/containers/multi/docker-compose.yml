@@ -4,7 +4,7 @@ services:
     cmos:
 
         container_name: cmos
-        image: couchbase-observability:v1
+        image: couchbase-observability-stack:v1
         build:
             # Build using build kit so we can do ssh mounts for private repo, do not build here.
             # Unfortunately Docker Compose does not use locally built images, it tries to pull them  unless you specify 'build'
