@@ -96,11 +96,6 @@ configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NO
 
 echo "All done. Go to: http://localhost:8080."
 
-## TODO:
-# Rename and put under subpath /containers 
-  # Be careful as docker-compose named networks prefixed with parent folder name, this will change from native -> something else
-  # The only current dependency on this name is the --network arg passed to the docker run command for the server/exporter image
-
 # Rewrite: 
 # - Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling
 # - have an entrypoint script for each container (parallel)

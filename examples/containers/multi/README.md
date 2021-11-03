@@ -4,7 +4,7 @@ This is an extended version of /examples/container, allowing for multiple nodes 
 
 ## Running the example ##
 
-To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-native`. Like other examples deploying the CMOS stack, this uses an SSH mount to access a private git repository during the container build so make sure your SSH keys are set up for git locally and ssh agent is running with them to provide it.
+To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-multi`. Like other examples deploying the CMOS stack, this uses an SSH mount to access a private git repository during the container build so make sure your SSH keys are set up for git locally and ssh agent is running with them to provide it.
 
 This will spin up the configured number of nodes (with Prometheus exporter installed) in Vagrant, partitioning them into the specified number of clusters. It will also build and start the all-in-one observability container and configure it to talk to the clusters automatically.
 

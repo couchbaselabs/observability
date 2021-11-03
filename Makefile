@@ -17,7 +17,7 @@ revision = $(if $(REVISION),$(REVISION),)
 
 .PHONY: all build clean config-svc-lint container container-clean container-lint container-oss \
 		container-public container-scan dist docs docs-generate-markdown docs-license-analysis \
-		docs-lint example-containers example-native examples lint test test-containers test-dist \
+		docs-lint example-containers example-multi examples lint test test-containers test-dist \
 		test-kubernetes test-native
 
 # TODO: add 'test examples'
@@ -65,7 +65,7 @@ container-oss: build
 container-lint:
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
 	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
-	docker run --rm -i hadolint/hadolint < examples/native/helpers/Dockerfile
+	docker run --rm -i hadolint/hadolint < examples/containers/multi/helpers/Dockerfile
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
@@ -86,10 +86,10 @@ example-kubernetes: container
 example-containers: container
 	examples/containers/run.sh
 
-example-native: container
-	examples/native/run.sh
+example-multi: container
+	examples/containers/multi/run.sh
 
-examples: clean container example-kubernetes example-containers example-native
+examples: clean container example-kubernetes example-containers example-multi
 
 # Deal with automated testing
 test-kubernetes: TEST_SUITE ?= integration/kubernetes
@@ -133,7 +133,7 @@ clean: container-clean
 	-examples/containers/stop.sh
 	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh
-	-examples/native/stop.sh
+	-examples/containers/multi/stop.sh
 
 docs-lint:
 	docker run --rm -i hadolint/hadolint < Dockerfile.docs
