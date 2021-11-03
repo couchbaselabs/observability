@@ -23,6 +23,10 @@ There are various environment variables you can configure:
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas for the Data and Index service (the Query service does not have a quota).
 - `LOAD`, a Boolean denoting whether a very light load should be thrown at the cluster using `cbc-pillowfight`, simulating cluster use. Defaults to `true`.
 
+## Stopping the example ##
+
+You may run `make clean`or alternatively `examples/containers/multi/stop.sh`.
+
 ## Grafana Dashboard development ##
 
 The dashboards are currently under development. The directory `/microlith/grafana` is mounted in the CMOS Docker container, with any changes appearing upon refreshing the Grafana webpage.
