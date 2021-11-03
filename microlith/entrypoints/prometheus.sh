@@ -26,6 +26,9 @@ PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/promethe
 PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
 PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
 
+# Promtheus is a bit funny about it's CLI flags, you cannot have empty space apparently
+PROMETHEUS_EXTRA_ARGS=${PROMETHEUS_EXTRA_ARGS:---}
+
 # Example variables to tune with - it would be nicer to include defaults in the file but envsubst does not support that:
 export COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=${COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD:-100}
 export COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_DURATION=${COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_DURATION:-1m}
@@ -45,12 +48,11 @@ bash /etc/prometheus/scripts/alerts_prepare.sh
 # From: https://prometheus.io/docs/prometheus/latest/configuration/configuration/
 # A configuration reload is triggered by sending a SIGHUP to the Prometheus process or
 # sending a HTTP POST request to the /-/reload endpoint.
-
 /bin/prometheus --config.file="${PROMETHEUS_CONFIG_FILE}" \
                 --storage.tsdb.path="${PROMETHEUS_STORAGE_PATH}" \
                 --web.console.libraries=/usr/share/prometheus/console_libraries \
                 --web.console.templates=/usr/share/prometheus/consoles \
                 --web.external-url="${PROMETHEUS_URL_SUBPATH}" \
-                --web.enable-lifecycle
+                --web.enable-lifecycle "${PROMETHEUS_EXTRA_ARGS}"
 
 # https://www.robustperception.io/using-external-urls-and-proxies-with-prometheus

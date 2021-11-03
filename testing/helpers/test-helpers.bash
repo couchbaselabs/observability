@@ -19,6 +19,8 @@ set -eo pipefail
 source "$HELPERS_ROOT/url-helpers.bash"
 # shellcheck disable=SC1091
 source "$HELPERS_ROOT/native-helpers.bash"
+# shellcheck disable=SC1091
+source "$HELPERS_ROOT/couchbase-helpers.bash"
 
 # Verifies if all the given variables are set, and exits otherwise
 # Parameters:
@@ -61,7 +63,9 @@ function find_unused_port() {
 function _create_prometheus_targets_file() {
     local tmp
     tmp=$(mktemp -d)
-    echo "$COUCHBASE_SERVER_HOSTS" | jq -R -s '[split("\n")[:-1][] | sub(":8091"; ":9091")] | [{"targets": ., "labels": {"job":"couchbase-server","cluster":"smoke"}}]' > "$tmp/smoke.json"
+    echo "$COUCHBASE_SERVER_HOSTS" \
+      | jq -R -s '[split("\n")[:-1][] | sub("(:8091)?$"; ":9091")] | [{"targets": ., "labels": {"job":"couchbase-server","cluster":"smoke"}}]' \
+      > "$tmp/smoke.json"
     export PROMETHEUS_TARGETS_FILE="$tmp/smoke.json"
 }
 
@@ -86,24 +90,33 @@ function _start_cmos() {
 # This function will set the following variables with its results:
 # $COUCHBASE_SERVER_HOSTS: the hostname/IP and management port of every CBS node, separated by newlines
 #   (Note that they may not be accessible from localhost, e.g. if running in a container - they'll be accessible to CMOS though)
+# $COUCHBASE_SERVER_NODES: the number of nodes running
 # $CMOS_HOST: the hostname/IP and nginx port of the running CMOS container
 #
 # Note: do not call this function using BATS run! Otherwise its variables will not be set.
 function start_smoke_cluster() {
     local nodes=${SMOKE_NODES:-3}
-    echo "# Starting smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
+    echo "# Starting smoke cluster for platform $TEST_PLATFORM with $nodes nodes of CB $COUCHBASE_SERVER_IMAGE"
     case $TEST_PLATFORM in
         native)
             export VAGRANT_NODES=$nodes
-            # TODO: move this into the matrix
+            export COUCHBASE_SERVER_NODES=$nodes
             start_vagrant_cluster "$COUCHBASE_SERVER_VERSION" "centos7"
-            wait_for_url 10 "$(echo "$COUCHBASE_SERVER_HOSTS" | head -n1)/ui"
+            while IFS= read -r host; do
+              wait_for_url 10 "$host/ui"
+            done <<< "$COUCHBASE_SERVER_HOSTS"
+            initialize_couchbase_cluster "docker run --rm -i --network host $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
             _create_prometheus_targets_file
             _start_cmos
             ;;
         containers)
             ensure_variables_set CMOS_IMAGE
             ensure_variables_set COUCHBASE_SERVER_IMAGE
+            # Build a new image, containing the Exporter
+            DOCKER_BUILDKIT=1 docker build -t "$COUCHBASE_SERVER_IMAGE-exporter" \
+             --build-arg COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE" \
+              -f "$RESOURCES_ROOT/containers/cb-with-exporter.Dockerfile" "$RESOURCES_ROOT/containers"
+            export COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE-exporter"
             # We're creating these manually instead of using Compose because we need to support a variable number of nodes.
             docker network create cmos_test
             for i in $(seq 1 "$nodes"); do
@@ -112,17 +125,19 @@ function start_smoke_cluster() {
                     extra_args="-p 8091"
                 fi
                 # shellcheck disable=SC2086
-                docker run --rm -d --name "test_couchbase$i" --network-alias="couchbase$i.local" $extra_args "$COUCHBASE_SERVER_IMAGE"
+                docker run --rm -d --name "test_couchbase$i" --network cmos_test --network-alias="couchbase$i.local" \
+                  $extra_args "$COUCHBASE_SERVER_IMAGE"
             done
             COUCHBASE_SERVER_HOSTS=$(seq -f "couchbase%g.local" 1 "$nodes")
             export COUCHBASE_SERVER_HOSTS
+            export COUCHBASE_SERVER_NODES=$nodes
             # Can't just use COUCHBASE_SERVER_HOSTS as they won't be accessible outside the container network
             local mgmt_port
             mgmt_port=$(docker inspect test_couchbase1 -f '{{with index .NetworkSettings.Ports "8091/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
             wait_for_url 10 "http://localhost:$mgmt_port/ui"
+            initialize_couchbase_cluster "docker run --rm -i --network cmos_test $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
             _create_prometheus_targets_file
             _start_cmos --network=cmos_test
-            echo "CMOS host: $CMOS_HOST"
             ;;
         kubernetes)
             echo "TODO" # CMOS-97
@@ -135,6 +150,10 @@ function start_smoke_cluster() {
 # Parameters:
 # $SMOKE_NODES: The number of nodes that were started (defaults to 3)
 function teardown_smoke_cluster() {
+    if [ "${SKIP_TEARDOWN:-}" == "true" ]; then
+      echo "# Skipping teardown"
+      return 0
+    fi
     local nodes=${SMOKE_NODES:-3}
     echo "# Tearing down smoke cluster for platform $TEST_PLATFORM with $nodes nodes"
     case $TEST_PLATFORM in
