@@ -50,7 +50,7 @@ function start_new_nodes() {
         done
 
         ready=true
-        for b in "${NODE_READY[@]}"; do ready=$((ready && b)); done
+        for b in "${NODE_READY[@]}"; do if ! $b; then ready=false; fi; done
         if $ready; then break; else echo "..." && sleep 5; fi
     done
 
