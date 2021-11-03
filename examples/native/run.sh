@@ -26,10 +26,10 @@
 # Post-conditions: 
 #   - A single container named "cmos" with the CMOS Microlith running. 
 #   - A total of $NUM_NODES containers with the specified Couchbase Server version
-#     and Prometheus exporter installed, partitioned as evenly as possible into $CLUSTER_NUM
+#     and Prometheus exporter installed, partitioned as evenly as possible into $NUM_CLUSTERS
 #   - cbmultimanager configured to monitor all clusters
 #   - Grafana configured to retrieve statistics from CBMM API for dashboards
-set -eu -x
+set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 CBS_EXP_IMAGE_NAME="cbs_server_exp"
@@ -46,7 +46,7 @@ source "$SCRIPT_DIR"/helpers/driver.sh
 COUCHBASE_SERVER_VERSION=${COUCHBASE_SERVER_VERSION:-6.6.3}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:$COUCHBASE_SERVER_VERSION}
 
-CLUSTER_NUM=${CLUSTER_NUM:-3}
+NUM_CLUSTERS=${NUM_CLUSTERS:-3}
 NUM_NODES=${NUM_NODES:-8}
 WAIT_TIME=${WAIT_TIME:-60}
 
@@ -89,14 +89,20 @@ docker image build "$SCRIPT_DIR"/helpers -t $CBS_EXP_IMAGE_NAME --build-arg VERS
 # Create $NUM_NODES containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NUM_NODES" 
 
-# Initialise and partition nodes as evenly as possible into $CLUSTER_NUM clusters, register them with CBMM
+# Initialise and partition nodes as evenly as possible into $NUM_CLUSTERS clusters, register them with CBMM
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
-configure_servers "$NUM_NODES" "$CLUSTER_NUM" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" 
+configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" 
 
 echo "All done. Go to: http://localhost:8080."
 
 ## TODO:
 # Rename and put under subpath /containers 
   # Be careful as docker-compose named networks prefixed with parent folder name, this will change from native -> something else
-# Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling, and have an entrypoint script for each container (parallel)
-# Move targets generation and add proper cluster config
+  # The only current dependency on this name is the --network arg passed to the docker run command for the server/exporter image
+# Improve enduser UX
+# Rewrite: 
+# - Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling
+# - have an entrypoint script for each container (parallel)
+
+
+# Finish UX thing "please try again?", exponential wait time for nodes failing command

@@ -11,7 +11,7 @@ This will spin up the configured number of nodes (with Prometheus exporter insta
 ## Environment Variables ##
 
 There are various environment variables you can configure:
-- `CLUSTER_NUM`, the number of clusters to partition the nodes into. Defaults to 2.
+- `NUM_CLUSTERS`, the number of clusters to partition the nodes into. Defaults to 2.
 - `NUM_NODES`, the number of nodes to create. Defaults to 3.
 
 - `SERVER_USER`, the admin username to configure for all Couchbase Server nodes. Defaults to "Administrator".

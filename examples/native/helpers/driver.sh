@@ -25,12 +25,15 @@
 function start_new_nodes() {
 
     local NUM_NODES=$1
-    local NODE_READY=() 
+    local NODES_READY=() 
+
+    echo "Starting $NUM_NODES nodes"
 
     local i=0
     for ((i; i<NUM_NODES; i++)); do
-        docker run -d --rm --name "node$i" --hostname="node$i.local" --network=native_shared_network -p $((8091+i)):8091 "cbs_server_exp"
-        NODE_READY+=(false)
+        docker run -d --rm --name "node$i" --hostname="node$i.local" --network=native_shared_network \
+        -p $((8091+i)):8091 "cbs_server_exp" > /dev/null
+        NODES_READY+=(0)
     done
 
     # Block until all nodes ready
@@ -54,7 +57,14 @@ function start_new_nodes() {
 }
 
 #########################
+# Pre-conditions:
+# - The passed docker container name/ID is valid and running
+# - The command passed is a valid bash command to be executed inside the container
+# - $SUCCESS_MSG is returned by the command upon successful execution
 
+# Post-conditions:
+# - The command is executed successfully with no error code; OR
+# - The command fails $RETRY_COUNT times in a row and the program exits
 function _docker_exec_with_retry() {
 
     local RETRY_COUNT=5
@@ -73,7 +83,8 @@ function _docker_exec_with_retry() {
             echo "Retrying..."
         fi
     done
-    echo "Max retries reached, $CONTAINER failed"
+    echo "Max retries reached, $CONTAINER failed for reason: $output"
+    exit 1
 
 }
 # Pre-conditions: 
@@ -81,14 +92,14 @@ function _docker_exec_with_retry() {
 
 # Post-conditions: 
 #   - All CBS/exporter nodes initialised and partitioned as evenly as possible into 
-#     $CLUSTER_NUM clusters, with a rebalance occurring after the last node is added
-#   - $CLUSTER_NUM nodes will be running the Data Service, the rest Index/Query, with quotas
+#     $NUM_CLUSTERS clusters, with a rebalance occurring after the last node is added
+#   - $NUM_CLUSTERS nodes will be running the Data Service, the rest Index/Query, with quotas
 #     specified by $DATA_ALLOC and $INDEX_ALLOC
 #   - Every cluster registered for monitoring with the cbmultimanager
 function configure_servers() {
 
     local NUM_NODES=$1
-    local CLUSTER_NUM=$2
+    local NUM_CLUSTERS=$2
     local SERVER_USER=$3
     local SERVER_PWD=$4
     local NODE_RAM=$5
@@ -101,16 +112,21 @@ function configure_servers() {
     DATA_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
     INDEX_ALLOC=$(awk -v n="$NODE_RAM" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
+    local sample_buckets=(\"travel-sample\" \"beer-sample\") # Only used if LOAD is true
+
     local temp_dir
     temp_dir=$(mktemp -d)
     echo '[]' > "$temp_dir"/targets.json
 
+    echo "----- START CONFIGURING NODES -----"
+    echo "Partitioning $NUM_NODES nodes into $NUM_CLUSTERS clusters"
+
     local nodes_left=$NUM_NODES
     local i=0
-    for ((i; i<CLUSTER_NUM; i++)); do
+    for ((i; i<NUM_CLUSTERS; i++)); do
 
         # Calculate the number of nodes to provision in this cluster
-        local to_provision=$(( nodes_left / (CLUSTER_NUM - i) )) # (Integer division, Bash does not support decimals)
+        local to_provision=$(( nodes_left / (NUM_CLUSTERS - i) )) # (Integer division, Bash does not support decimals)
         local start=$(( NUM_NODES - nodes_left ))
         
         # Create and initialize cluster
@@ -121,24 +137,32 @@ function configure_servers() {
             --cluster-index-ramsize=$INDEX_ALLOC --services=data || echo 'failed'" "SUCCESS: "
         local nodes=(\"node"$start".local:9091\")
 
+        echo "  $clust_name created"
+
         # Load sample buckets and register cluster with CBMM
+        sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
         _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$SERVER_USER\":\"$SERVER_PWD\" \"http://localhost:8091/sampleBuckets/install\" \
-          -d '[\"travel-sample\", \"beer-sample\"]'" "[]"
+          -d '[$sample_buckets_json]'" "[]"
+
+        echo "    Sample buckets ${sample_buckets[*]} loaded"
         
         local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
           '{\"user\":\"$SERVER_USER\",\"password\":\"$SERVER_PWD\", \"host\":\"http://$uid:8091\"}' \
           'http://localhost:8080/couchbase/api/v1/clusters'"
         _docker_exec_with_retry "cmos" "$cmos_cmd"
+
+        echo "    Registered $clust_name with Cluster Monitor (cbmultimanager)"
         
         if $LOAD; then
             # Start cbpillowfight to simulate a non-zero load (NOT stress test)
             # Currently broken as & doesn't pass output with docker exec for some reason
-            local sample_buckets=("travel-sample" "beer-sample")
 
             for bucket in "${sample_buckets[@]}"; do
                 _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$SERVER_USER\" -P \"$SERVER_PWD\" \
                   -U http://localhost/$bucket -B 100 -I 1000 --rate-limit 100" "Running..." > /dev/null & 
             done
+
+            echo "      - cbc-pillowfight started against $bucket"
         fi
 
         # Initialize and add the required nodes to the existing cluster
@@ -155,20 +179,29 @@ function configure_servers() {
                 nodes+=(\""$node".local:9091\")
         done
 
-        # Rebalance newly-added nodes into the fully provisioned cluster
-        if (( to_provision > 1 )); then
-            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" \
-              --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
-        fi
-
-        local nodes_left=$((nodes_left - to_provision))
+        echo "    All $to_provision nodes (node$start through node$((start+to_provision))) added to the cluster"
 
         # Add cluster to CMOS' Prometheus JSON config file
         csv=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
         new_file=$(jq ". |= .+ [{\"targets\":[$csv], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
         echo "$new_file" > "$temp_dir"/targets.json
 
+        echo "    Nodes added to Prometheus scrape config under $clust_name"
+
+        # Rebalance newly-added nodes into the fully provisioned cluster
+        if (( to_provision > 1 )); then
+            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" \
+              --username \"$SERVER_USER\" --password \"$SERVER_PWD\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
+        fi
+
+        echo "  Rebalance started"
+
+        local nodes_left=$((nodes_left - to_provision))
+
+        echo "------$nodes_left to provision!------"
+
     done
 
+    # Copy finished targets.json into CMOS container
     docker cp "$temp_dir"/targets.json cmos:/etc/prometheus/couchbase/custom/targets.json
 }
