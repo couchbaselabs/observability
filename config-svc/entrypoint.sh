@@ -17,10 +17,15 @@ set -euo pipefail
 
 export CMOS_CFG_BIN=${CMOS_CFG_BIN:-/cmoscfg}
 
-export CMOS_CFG_PATH=${CMOS_CFG_PATH:-/etc/cmos/config.yaml}
+export CMOS_CFG_DEVELOPMENT=${CMOS_CFG_DEVELOPMENT:-false}
 export CMOS_CFG_HTTP_PATH_PREFIX=${CMOS_CFG_HTTP_PATH_PREFIX:-}
 export CMOS_CFG_HTTP_HOST=${CMOS_CFG_HTTP_HOST:-0.0.0.0}
 export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
+
+dev_arg=""
+if [[ "$CMOS_CFG_DEVELOPMENT" == "true" ]]; then
+  dev_arg="-development"
+fi
 
 if [[ $# -gt 0 ]]; then
     echo "Running custom: $*"
@@ -29,10 +34,10 @@ else
   if [[ -x "${CMOS_CFG_BIN}" ]]; then
           # Making all parameters explicit so people can see how to configure the CLI.
           "${CMOS_CFG_BIN}" \
-            -config-path "${CMOS_CFG_PATH}" \
             -http-path-prefix "${CMOS_CFG_HTTP_PATH_PREFIX}" \
             -http-host "${CMOS_CFG_HTTP_HOST}" \
-            -http-port "${CMOS_CFG_HTTP_PORT}"
+            -http-port "${CMOS_CFG_HTTP_PORT}" \
+            ${dev_arg}
       else
           echo "ERROR: No executable to run: CMOS_CFG_BIN=${CMOS_CFG_BIN}"
       fi

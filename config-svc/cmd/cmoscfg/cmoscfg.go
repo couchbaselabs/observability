@@ -27,7 +27,7 @@ var (
 	flagHTTPPathPrefix = flag.String("http-path-prefix", "", "URL path to serve the API on")
 	flagHTTPHost       = flag.String("http-host", "0.0.0.0", "host to listen on")
 	flagHTTPPort       = flag.Int("http-port", 7194, "port to listen on")
-	flagDevelopment    = flag.Bool("development", true, "enable development logging and file paths")
+	flagDevelopment    = flag.Bool("development", false, "enable development logging and file paths")
 )
 
 func main() {
