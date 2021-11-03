@@ -2,17 +2,63 @@
 <html lang="en-US">
   <head>
     <meta charset="utf-8" />
-    <title>Generate Prometheus Endpoint Configuration</title>
+    <title>Add Cluster | CMOS</title>
   </head>
   <body>
     <h1>Configuration</h1>
     <div x-data="generator">
       <form name="inputForm" id="inputForm">
-        <div>
-          <label for="endpoint">Cluster label:</label>
-          <input type="text" x-model="clusterLabel" required pattern="[a-zA-Z_][a-zA-Z0-9_]*" title="Permitted: ASCII letters, numbers, underscores." />
-          <em>Permitted: ASCII letters, numbers, underscores.</em>
-        </div>
+        <fieldset>
+          <div>
+            <label for="name"><strong>Cluster Name:</strong></label>
+            <input
+              type="text"
+              name="name"
+              x-model="name"
+              required
+              pattern="[a-zA-Z_][a-zA-Z0-9_]*"
+              title="Permitted: ASCII letters, numbers, underscores."
+            />
+            <em>Permitted: ASCII letters, numbers, underscores.</em>
+          </div>
+          <div>
+            <label for="serverUser">Couchbase Server Username:</label>
+            <input
+              type="text"
+              id="serverUser"
+              x-model="serverUsername"
+              placeholder="Administrator"
+              required
+            />
+          </div>
+          <div>
+            <label for="serverPwd">Couchbase Server Password:</label>
+            <input
+              type="password"
+              id="serverPwd"
+              x-model="serverPassword"
+              placeholder="password"
+              required
+            />
+          </div>
+          <div>
+            <label for="managementPort"
+              >Couchbase Server Management Port:</label
+            >
+            <input
+              type="text"
+              id="managementPort"
+              x-model="managementPort"
+              required
+            />
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" x-model="doPrometheus" />
+              <strong>Add Nodes to Prometheus?</strong>
+            </label>
+          </div>
+        </fieldset>
         <h2>Couchbase Server nodes</h2>
         <template x-for="(_, index) in nodes">
           <fieldset>
@@ -23,7 +69,11 @@
               placeholder="127.0.0.1"
               required
             />
-            <button type="button" @click="nodes.splice(index, 1)">
+            <button
+              type="button"
+              @click="nodes.splice(index, 1)"
+              x-show="nodes.length > 1"
+            >
               Remove
             </button>
           </fieldset>
@@ -33,6 +83,35 @@
         </div>
         <fieldset>
           <legend>
+            <h2>Couchbase Healthchecker configuration</h2>
+          </legend>
+          <div>
+            <div>
+              <label for="cbmmUsername"
+                >Couchbase Cluster Monitor username:</label
+              >
+              <input
+                type="text"
+                id="cbmmUsername"
+                x-model="cbmmUsername"
+                required
+              />
+            </div>
+            <div>
+              <label for="cbmmPassword"
+                >Couchbase Cluster Monitor password:</label
+              >
+              <input
+                type="password"
+                id="cbmmPassword"
+                x-model="cbmmPassword"
+                required
+              />
+            </div>
+          </div>
+        </fieldset>
+        <fieldset x-show="doPrometheus">
+          <legend>
             <h2>Prometheus endpoint configuration</h2>
           </legend>
           <div>
@@ -41,80 +120,43 @@
           </div>
         </fieldset>
         <fieldset>
-          <legend>
-            <h2>Couchbase Healthchecker configuration</h2>
-          </legend>
-          <div>
-            <div>
-              <label for="serverUser">Couchbase Server Username:</label>
-              <input
-                type="text"
-                id="serverUser"
-                x-model="serverUsername"
-                placeholder="Administrator"
-                required
-              />
-            </div>
-            <div>
-              <label for="serverPwd">Couchbase Server Password:</label>
-              <input
-                type="password"
-                id="serverPwd"
-                x-model="serverPassword"
-                placeholder="password"
-                required
-              />
-            </div>
-            <div>
-              <label for="serverUrl">Couchbase Server Management Port:</label>
-              <input
-                type="text"
-                id="serverUrl"
-                x-model="managementPort"
-                required
-              />
-            </div>
-            <hr />
-            <div>
-              <label for="serverUrl">Couchbase Cluster Monitor host:</label>
-              <input type="text" id="serverUrl" x-model="cbmmHost" required />
-            </div>
-            <div>
-              <label for="serverUrl">Couchbase Cluster Monitor username:</label>
-              <input
-                type="text"
-                id="serverUrl"
-                x-model="cbmmUsername"
-                required
-              />
-            </div>
-            <div>
-              <label for="serverUrl">Couchbase Cluster Monitor password:</label>
-              <input
-                type="password"
-                id="serverUrl"
-                x-model="cbmmPassword"
-                required
-              />
-            </div>
-          </div>
+          <label>
+            <input type="checkbox" x-model="overwrite" />
+            <strong>Overwrite if already present?</strong>
+          </label>
         </fieldset>
         <div>
-          <button type="submit" @click.prevent="generate()">Generate</button>
+          <button type="submit" @click.prevent="configure()">
+            Add Cluster
+          </button>
+          <button type="submit" @click.prevent="generate()">
+            Show Configuration
+          </button>
         </div>
       </form>
-      <h2>Prometheus configuration</h2>
-      <div>
-        <p x-show="jsonPrometheus.length > 0">
-          Save the below JSON to a file and place it in <code>/etc/prometheus/couchbase/custom/<span x-text="clusterLabel"></span>.json</code>.
-          For example: <code>docker cp <span x-text="clusterLabel"></span>.json cmos:/etc/prometheus/couchbase/custom/<span x-text="clusterLabel"></span>.json</code> (substitute <code>cmos</code> for the name of your running container).
-          Once saved, check the "Targets" page in Prometheus to see if it has picked it up. If it does not, wait 30-60 seconds and check again, as the process is not instant.
+      <div x-show="jsonPrometheus.length > 0 && doPrometheus">
+        <h2>Prometheus configuration</h2>
+        <p>
+          Save the below JSON to a file and place it in
+          <code
+            >/etc/prometheus/couchbase/custom/<span x-text="name"></span
+            >.json</code
+          >. For example:
+          <code
+            >docker cp <span x-text="name"></span>.json
+            cmos:/etc/prometheus/couchbase/custom/<span x-text="name"></span
+            >.json</code
+          >
+          (substitute <code>cmos</code> for the name of your running container).
+          Once saved, check the "Targets" page in Prometheus to see if it has
+          picked it up. If it does not, wait 30-60 seconds and check again, as
+          the process is not instant.
         </p>
         <pre id="jsonPrometheus" x-text="jsonPrometheus"></pre>
       </div>
-      <h2>Couchbase Healthcheck configuration</h2>
-      <div>
-        <p x-show="healthcheckCommand.length > 0">
+      <div x-show="healthcheckCommand.length > 0">
+        <h2>Couchbase Healthcheck configuration</h2>
+        <p>
           Execute this command to register a Couchbase Server cluster with the
           local Cluster Monitor process.
         </p>
@@ -128,36 +170,53 @@
           readonly
         ></textarea>
       </div>
+      <div x-show="loading">Loading, please wait&hellip;</div>
+      <div x-show="success">
+        Cluster successfully added! Go to
+        <a href="/grafana/?orgId=1">Grafana</a> to see its health. Please note
+        that it may take up to 30 seconds for all data to be available.
+      </div>
+      <div x-show="error.length > 0" x-text="error"></div>
     </div>
     <script defer src="/alpine-3.4.2.min.js"></script>
     <script>
       document.addEventListener("alpine:init", function () {
         Alpine.data("generator", function () {
           return {
-            clusterLabel: "",
+            name: "",
             nodes: [""],
+            overwrite: false,
+
+            labels: {},
+
             exporterPort: "9091",
             managementPort: "8091",
             serverUsername: "Administrator",
             serverPassword: "password",
+            doPrometheus: true,
 
             cbmmUsername: "admin",
             cbmmPassword: "password",
-            cbmmHost: "localhost:8080/couchbase",
 
             jsonPrometheus: "",
             healthcheckCommand: "",
 
+            success: false,
+            error: "",
+            loading: false,
+
             generate() {
               this.jsonPrometheus = JSON.stringify(
-                [{
-                  targets: this.nodes.map(
-                    (node) => `${node}:${this.exporterPort}`
-                  ),
-                  labels: {
-                    cluster: this.clusterLabel,
+                [
+                  {
+                    targets: this.nodes.map(
+                      (node) => `${node}:${this.exporterPort}`
+                    ),
+                    labels: {
+                      cluster: this.name,
+                    },
                   },
-                }],
+                ],
                 null,
                 2
               );
@@ -166,7 +225,120 @@
                 password: this.serverPassword,
                 host: this.nodes[0] + ":" + this.managementPort,
               });
-              this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://${this.cbmmHost}/api/v1/clusters'`;
+              this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://localhost/api/v1/clusters'`;
+            },
+            async configure() {
+              this.error = "";
+              this.success = false;
+              this.loading = true;
+              try {
+                if (this.doPrometheus) {
+                  await fetch("/config/api/v1/addPrometheusTarget", {
+                    method: "post",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      name: this.name,
+                      targets: this.nodes.map(
+                        (node) => `${node}:${this.exporterPort}`
+                      ),
+                      labels: {
+                        cluster: this.name,
+                      },
+                      overwrite: this.overwrite,
+                    }),
+                  })
+                    .then(async (resp) => {
+                      if (resp.status !== 200) {
+                        const data = await resp.json();
+                        throw new Error(
+                          `received unexpected status ${resp.status}: ${
+                            "err" in data ? data.err : JSON.stringify(data)
+                          }`
+                        );
+                      }
+                    })
+                    .catch((e) =>
+                      Promise.reject(
+                        `Failed to add node to Prometheus: ${String(e)}`
+                      )
+                    );
+                }
+
+                await fetch("/couchbase/api/v1/clusters", {
+                  method: "post",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization:
+                      "Basic " +
+                      btoa(`${this.cbmmUsername}:${this.cbmmPassword}`),
+                  },
+                  body: JSON.stringify({
+                    user: this.serverUsername,
+                    password: this.serverPassword,
+                    host: this.nodes[0] + ":" + this.managementPort,
+                  }),
+                })
+                  .then(async (resp) => {
+                    if (resp.status !== 200) {
+                      switch (resp.headers.get("Content-Type")) {
+                        case "application/json":
+                          const data = await resp.json();
+                          if ("extras" in data) {
+                            throw new Error(
+                              `received unexpected status ${resp.status} with extras: ${data.extras}`
+                            );
+                          } else if ("msg" in data) {
+                            throw new Error(
+                              `received unexpected status ${resp.status} with msg: ${data.msg}`
+                            );
+                          } else {
+                            throw new Error(
+                              `received unexpected status ${resp.status} with data: ` +
+                                JSON.stringify(data)
+                            );
+                          }
+                        default:
+                          throw new Error(
+                            `received unexpected status ${resp.status}: ` +
+                              (await resp.text())
+                          );
+                      }
+                    }
+                  })
+                  .catch((e) =>
+                    Promise.reject(
+                      `Failed to register node with Cluster Monitor: ${String(
+                        e
+                      )}`
+                    )
+                  );
+
+                await fetch("/prometheus/-/reload", { method: "post" })
+                  .then((resp) => {
+                    if (resp.status !== 200) {
+                      return Promise.reject(
+                        `Failed to reload Prometheus: ${String(
+                          e
+                        )} (note that the cluster was successfully added)`
+                      );
+                    }
+                  })
+                  .catch((e) =>
+                    Promise.reject(
+                      `Failed to reload Prometheus: ${String(
+                        e
+                      )} (note that the cluster was successfully added)`
+                    )
+                  );
+
+                this.success = true;
+                this.loading = false;
+              } catch (e) {
+                this.loading = false;
+                this.error = String(e);
+              }
             },
           };
         });

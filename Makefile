@@ -24,6 +24,7 @@ all: clean build lint container container-oss container-lint container-scan dist
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
 build: docs
 	cp -R docs/ microlith/docs/
+	rm -rf microlith/config-svc/
 	cp -R config-svc microlith/config-svc/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
