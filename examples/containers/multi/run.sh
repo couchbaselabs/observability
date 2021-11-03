@@ -96,6 +96,9 @@ configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NO
 
 echo "All done. Go to: http://localhost:8080."
 
+# Todo:
+# - Allow greater service config / all services
+
 # Rewrite: 
 # - Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling
 # - have an entrypoint script for each container (parallel)

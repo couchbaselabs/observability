@@ -1,4 +1,4 @@
-# Example: native #
+# Example: multi #
 
 This is an extended version of /examples/container, allowing for multiple nodes and clusters to be run. It is ideally suited to show off the CMOS stack, or for developing any of the components (as it is a full stack deployment).
 
@@ -7,6 +7,8 @@ This is an extended version of /examples/container, allowing for multiple nodes 
 To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-multi`. Like other examples deploying the CMOS stack, this uses an SSH mount to access a private git repository during the container build so make sure your SSH keys are set up for git locally and ssh agent is running with them to provide it.
 
 This will spin up the configured number of nodes (with Prometheus exporter installed) in Vagrant, partitioning them into the specified number of clusters. It will also build and start the all-in-one observability container and configure it to talk to the clusters automatically.
+
+Each node exposes port `:8091` to the host on port `:8091+i` where `i` is from the container name `node$i`, allowing for debugging or testing (e.g., failing over a node) via the Couchbase Server UI.
 
 ## Environment Variables ##
 
@@ -18,7 +20,7 @@ There are various environment variables you can configure:
 - `SERVER_PWD`, the password for $SERVER_USER to configure for all Couchbase Server nodes. Defaults to "password".
 
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
-- `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas.
+- `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas for the Data and Index service (the Query service does not have a quota).
 - `LOAD`, a Boolean denoting whether a very light load should be thrown at the cluster using `cbc-pillowfight`, simulating cluster use. Defaults to `true`.
 
 ## Grafana Dashboard development ##
