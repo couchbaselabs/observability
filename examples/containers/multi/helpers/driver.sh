@@ -194,7 +194,8 @@ function configure_servers() {
         echo "All nodes added successfully."
 
         # Add cluster to CMOS' Prometheus JSON config file
-        local csv, new_file
+        local csv
+        local new_file
         csv=$(IFS=, ; echo "${nodes[*]}") # arr -> str: "node0.local:9091","node1.local:9091", ...
         new_file=$(jq ". |= .+ [{\"targets\":[$csv], \"labels\":{\"cluster\":\"$clust_name\"}}]" "$temp_dir"/targets.json)
         echo "$new_file" > "$temp_dir"/targets.json
