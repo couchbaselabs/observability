@@ -11,11 +11,11 @@ This will spin up the configured number of nodes (with Prometheus exporter insta
 ## Environment Variables ##
 
 There are various environment variables you can configure:
-- `NUM_CLUSTERS`, the number of clusters to partition the nodes into. Defaults to 2.
+- `NUM_CLUSTERS`, the number of clusters to partition the nodes into. Defaults to 3.
 - `NUM_NODES`, the number of nodes to create. Defaults to 3.
 
 - `SERVER_USER`, the admin username to configure for all Couchbase Server nodes. Defaults to "Administrator".
-- `SERVER_PWD`, the password for $SERVER_USER to configure for all Couchbase Server nodes. Defaults to "couchbase".
+- `SERVER_PWD`, the password for $SERVER_USER to configure for all Couchbase Server nodes. Defaults to "password".
 
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas.
