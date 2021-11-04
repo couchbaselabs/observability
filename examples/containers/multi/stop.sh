@@ -14,14 +14,20 @@
 # limitations under the License.
 set -u
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-CBS_EXP_IMAGE_NAME=${CBS_EXP_IMAGE_NAME:-"cbs_server_exp"}
 
 # Delete ALL containers with the cbs_server_exp image
-# This needs to be first because docker-compose down attempts to remove the network
-# and if these containers are still up and connected to it that won't be allowed (?)
-docker ps -a --filter "ancestor=cbs_server_exp" --format '{{.ID }}' | xargs docker rm -f > /dev/null
+docker ps -a --filter "ancestor=cbs_server_exp" --format '{{.ID }}' | xargs docker rm -f
 echo "All cbs_server_exp containers deleted successfully."
+
+# Delete the cbs_server_exp image - this needs to be here as we are using the CLI and so have no
+# reference to containers to be able to stop them without the image name. container-clean removes the 
+# tag. By moving to docker-compose for nodes this will be avoided.
+docker rmi "cbs_server_exp" -f && docker image prune --force
 
 # Remove the CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
+
+# Tidy up dev variables if they exist
+DIR="$SCRIPT_DIR/../../../microlith/grafana/provisioning/dashboards"
+mv -f "$DIR"/dashboard.yml.bak "$DIR"/dashboard.yml > /dev/null 2>&1
 

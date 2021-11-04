@@ -22,6 +22,7 @@ There are various environment variables you can configure:
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas for the Data and Index service (the Query service does not have a quota).
 - `LOAD`, a Boolean denoting whether a very light load should be thrown at the cluster using `cbc-pillowfight`, simulating cluster use. Defaults to `true`.
+- `DEV`, a Boolean denoting whether to change the Grafana dashboard update time interval to 10 seconds (from every hour). NOT to be used in production, for facilitating easier dashboard development only. The development changes are reverted upon `make clean`, and should not be committed to the repository.
 
 ## Stopping the example ##
 
@@ -39,3 +40,7 @@ Non-prometheus stats are obtained using the Grafana community plugin [JSON API](
 ## Setting up JSON API for existing Grafana instances ##
 
 Follow [the installation instructions](https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation), then configure the URL as cbmultimanager's endpoint with subpath `api/v1`, and the correct BasicAuth username/password for the CMOS stack.
+
+# Requirements #
+
+- `jq`, which can be installed on macOS with `brew install jq`
