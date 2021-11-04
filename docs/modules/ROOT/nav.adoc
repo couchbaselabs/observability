@@ -2,7 +2,7 @@
 * xref:licensing.adoc[Licensing]
 
 .Configuration
-* link:http://localhost:8080/promwebform.html[Prometheus Add Endpoint]
+* link:http://localhost:8080/promwebform.html[Add Cluster]
 * link:http://localhost:8080/prometheus/alerts/[Prometheus Alerts]
 * link:http://localhost:8080/prometheus/rules/[Prometheus Rules]
 * link:http://localhost:8080/prometheus/targets/[Prometheus Targets]
