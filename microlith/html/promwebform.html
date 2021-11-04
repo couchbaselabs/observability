@@ -213,7 +213,7 @@
                       (node) => `${node}:${this.exporterPort}`
                     ),
                     labels: {
-                      cluster: this.name,
+                      cluster_label: this.name,
                     },
                   },
                 ],
@@ -227,6 +227,7 @@
               });
               this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://localhost/api/v1/clusters'`;
             },
+
             async configure() {
               this.error = "";
               this.success = false;
@@ -243,10 +244,9 @@
                       targets: this.nodes.map(
                         (node) => `${node}:${this.exporterPort}`
                       ),
-                      labels: {
-                        cluster: this.name,
-                      },
+                      labels: {},
                       overwrite: this.overwrite,
+                      nameLabel: "cluster_label",
                     }),
                   })
                     .then(async (resp) => {
