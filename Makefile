@@ -129,7 +129,7 @@ container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
 	docker image prune --force
 
 clean: container-clean
