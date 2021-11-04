@@ -45,6 +45,9 @@ func (s *Server) PostAddPrometheusTarget(ctx echo.Context) error {
 	}
 
 	labels := data.Labels.AdditionalProperties
+	if labels == nil {
+		labels = make(map[string]string)
+	}
 	if data.NameLabel != nil {
 		labels[*data.NameLabel] = data.Name
 	}
