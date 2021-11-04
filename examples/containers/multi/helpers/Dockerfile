@@ -1,8 +1,8 @@
-# Change 
 ARG couchbase_server_image=couchbase/server:enterprise-6.6.3
+ARG golang_version=1.17.2
 
 # Build the exporter
-FROM golang:1.17.2 as go_build
+FROM golang:$golang_version as go_build
 RUN git clone https://github.com/couchbase/couchbase-exporter.git /opt/couchbase-exporter
 
 WORKDIR /opt/couchbase-exporter

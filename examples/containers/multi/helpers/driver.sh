@@ -153,7 +153,6 @@ function configure_servers() {
         
         if $load; then
             # Start cbpillowfight to simulate a non-zero load (NOT stress test)
-            # Currently broken as & doesn't pass output with docker exec for some reason
 
             for bucket in "${sample_buckets[@]}"; do
                 { 
