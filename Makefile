@@ -17,8 +17,9 @@ revision = $(if $(REVISION),$(REVISION),)
 
 .PHONY: all build clean config-svc-lint container container-clean container-lint container-oss \
 		container-public container-scan dist docs docs-generate-markdown docs-license-analysis \
-		docs-lint example-containers example-multi examples lint test test-containers test-dist \
-		test-kubernetes test-native
+		docs-lint example-kubernetes example-containers example-multi example-kubernetes-oss \
+		example-containers-oss example-multi-oss lint test test-containers test-dist test-kubernetes \
+		test-native
 
 # TODO: add 'test examples'
 all: build clean container container-lint container-oss container-scan dist lint test-dist
@@ -87,6 +88,15 @@ example-containers: container
 	examples/containers/run.sh
 
 example-multi: container
+	examples/containers/multi/run.sh
+
+example-kubernetes-oss: container-oss
+	examples/kubernetes/run.sh
+
+example-containers-oss: container-oss
+	examples/containers/run.sh
+
+example-multi-oss: container-oss
 	examples/containers/multi/run.sh
 
 # Deal with automated testing
