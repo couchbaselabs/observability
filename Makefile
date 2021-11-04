@@ -89,8 +89,6 @@ example-containers: container
 example-multi: container
 	examples/containers/multi/run.sh
 
-examples: clean container example-kubernetes example-containers example-multi
-
 # Deal with automated testing
 test-kubernetes: TEST_SUITE ?= integration/kubernetes
 test-kubernetes:
