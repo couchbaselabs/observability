@@ -97,10 +97,3 @@ echo "All done. Go to: http://localhost:8080."
 
 # Todo:
 # - Allow greater service config / all services
-
-# Rewrite: 
-# - Rework /driver.sh configure_servers func to use another CBS instance to provision, decoupling
-# - have an entrypoint script for each container (parallel)
-
-# Add terminal allowing for manually failing nodes etc, demo of certain things?
-# Add in meta-graph showing internal Prometheus etc. server usage?

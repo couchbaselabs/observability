@@ -42,4 +42,5 @@ Follow [the installation instructions](https://grafana.com/grafana/plugins/marcu
 
 # Requirements #
 
-- `jq`, which can be installed on macOS with `brew install jq`
+All of the requirements of the main stack, as well as:
+- `jq`, which may be pre-installed. If not, use your favourite package manager, e.g. on macOS use `brew install jq`.
