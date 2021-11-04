@@ -50,8 +50,17 @@ function start_new_nodes() {
         done
 
         ready=true
-        for b in "${nodes_ready[@]}"; do if ! $b; then ready=false; fi; done
-        if $ready; then break; else echo "..." && sleep 5; fi
+        for b in "${nodes_ready[@]}"; do
+            if ! $b; then
+                ready=false
+            fi
+        done
+        if $ready; then
+            break
+        else
+            echo "..."
+            sleep 5
+        fi
         # Bash does not support boolean operators on true/false and the evaluation of 0 or 1 as true/false changes 
         # depending on the context and would be much harder to understand
     done
