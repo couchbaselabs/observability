@@ -84,7 +84,7 @@ fi
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
 # Build Couchbase Server/exporter container
-docker build -f "$SCRIPT_DIR"/../../../testing/resources/containers/cb-with-exporter.Dockerfile $SCRIPT_DIR/helpers -t "cbs_server_exp" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
+docker build -f "$SCRIPT_DIR"/../../../testing/resources/containers/cb-with-exporter.Dockerfile "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
 
 # Create $NUM_NODES containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NUM_NODES" "cbs_server_exp"
