@@ -27,7 +27,3 @@ docker rmi "cbs_server_exp" -f && docker image prune --force
 # Remove the CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml down -v --remove-orphans
 
-# Tidy up dev variables if they exist
-DIR="$SCRIPT_DIR/../../../microlith/grafana/provisioning/dashboards"
-mv -f "$DIR"/dashboard.yml.bak "$DIR"/dashboard.yml > /dev/null 2>&1
-

@@ -57,8 +57,6 @@ SERVER_PWD=${SERVER_PWD:-"password"}
 NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-true}
 
-DEV=${DEV:-false}
-
 #### SCRIPT START ####
 
 # Determine if there are any nodes with conflicting names
@@ -82,11 +80,7 @@ image 'cbs_server_exp': ($(docker ps -a --filter "ancestor=cbs_server_exp" \
 
 fi
 
-# Build CMOS container, with lower dashboard refresh time
-if $DEV; then
-  sed -i.bak -e 's/updateIntervalSeconds: 3600/updateIntervalSeconds: 10/' \
-    "$SCRIPT_DIR/../../../microlith/grafana/provisioning/dashboards/dashboard.yml"
-fi
+# Build CMOS container
 docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
 
 # Build Couchbase Server/exporter container

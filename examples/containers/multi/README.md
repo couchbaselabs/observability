@@ -22,7 +22,6 @@ There are various environment variables you can configure:
 - `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas for the Data and Index service (the Query service does not have a quota).
 - `LOAD`, a Boolean denoting whether a very light load should be thrown at the cluster using `cbc-pillowfight`, simulating cluster use. Defaults to `true`.
-- `DEV`, a Boolean denoting whether to change the Grafana dashboard update time interval to 10 seconds (from every hour). NOT to be used in production, for facilitating easier dashboard development only. The development changes are reverted upon `make clean`, and should not be committed to the repository.
 
 ## Stopping the example ##
 
