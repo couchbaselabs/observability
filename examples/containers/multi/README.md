@@ -26,7 +26,7 @@ There are various environment variables you can configure:
 
 ## Stopping the example ##
 
-You may run `make clean`or alternatively `examples/containers/multi/stop.sh`.
+You may run `make clean` or alternatively `examples/containers/multi/stop.sh`.
 
 ## Grafana Dashboard development ##
 
