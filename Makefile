@@ -66,7 +66,7 @@ container-oss: build
 container-lint:
 	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
 	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
-	docker run --rm -i hadolint/hadolint < examples/containers/multi/helpers/Dockerfile
+	docker run --rm -i hadolint/hadolint < testing/resources/containers
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
