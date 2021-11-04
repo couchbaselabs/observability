@@ -42,7 +42,7 @@ function start_vagrant_cluster() {
         git clone --depth=1 https://github.com/couchbaselabs/vagrants.git "$RESOURCES_ROOT/native/vagrants"
     fi
 
-    ansible-galaxy install -r "$RESOURCES_ROOT/native/requirements.yml"
+    ansible-galaxy install --force -r "$RESOURCES_ROOT/native/requirements.yml"
 
     temporary_dir=$(mktemp -d)
 
