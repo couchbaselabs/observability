@@ -44,6 +44,9 @@ pushd "${SCRIPT_DIR}/../testing/screenshots"
     npm install
     node index.js all
 popd
+pwd
+ls -l "${SCRIPT_DIR}/../testing/screenshots/*.png"
+tar -czvf /tmp/cmos-screenshots.tar "${SCRIPT_DIR}/../testing/screenshots/*.png"
 
 # Clean up
 docker stop "$CMOS_CONTAINER_NAME"
