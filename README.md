@@ -20,7 +20,7 @@ We essentially need to support two fairly distinct types of user:
 5. Build the container: `make container` if you want to include the Cluster Monitor or `make container-oss` otherwise
 6. Run the container: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1` (if your Couchbase Server is running in Docker, you may need to set [extra options](https://docs.docker.com/network/) to permit them to communicate.)
 7. Browse to http://localhost:8080
-8. Click "Prometheus Add Endpoint" and follow the instructions
+8. Click "Add Cluster" and follow the instructions
 
 When you are done testing, run `docker stop cmos` to clean up.
 
