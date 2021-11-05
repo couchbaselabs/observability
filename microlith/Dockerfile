@@ -273,6 +273,8 @@ COPY --from=antora-generator /antora/cmos /html/cmos
 RUN mkdir -p /data /priv /ui
 
 # Couchbase proprietary start
+# Cannot consolidate into single RUN as need to wrap in start/end tags
+# hadolint ignore=DL3059
 RUN openssl req -x509 -nodes -days 365 \
     -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
     -addext "subjectAltName=DNS:couchbase.com" \
