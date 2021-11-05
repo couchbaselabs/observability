@@ -16,7 +16,7 @@ on:
                 default: main
 
 jobs:
-    build-oss-container:
+    screenshot-oss-container:
         name: Build OSS container for testing
         runs-on: ubuntu-20.04
         timeout-minutes: 15
@@ -39,10 +39,9 @@ jobs:
             - name: Generate screenshots
               run: |
                   make generate-screenshots -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-                  tar -czvf /tmp/cmos-screenshots.tar testing/screenshots/*.png
 
             - name: Upload screenshots
               uses: actions/upload-artifact@v2
               with:
                   name: cmos-screenshots
-                  path: /tmp/cmos-screenshots.tar
+                  path: testing/screenshots/*.png
