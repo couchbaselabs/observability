@@ -30,8 +30,11 @@ docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
 # Remove any previous screenshots
 rm -fv "${SCRIPT_DIR}/../testing/screenshots/*.png"
 
-# Run CMOS
-docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" "$CMOS_IMAGE"
+# Build custom container with data included
+TEMP_DATA_DIR=$(mktemp -d)
+echo "Using Prometheus data directory: $TEMP_DATA_DIR"
+unzip "${SCRIPT_DIR}/../testing/screenshots/data/prometheus_data_snapshot.zip" -d "$TEMP_DATA_DIR"
+docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" -v "$TEMP_DATA_DIR:/data_snapshot/" -e PROMETHEUS_STORAGE_PATH="/data_snapshot/" "$CMOS_IMAGE"
 
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../testing/helpers/url-helpers.bash"
@@ -51,5 +54,6 @@ pushd "${SCRIPT_DIR}/../testing/screenshots"
     fi
 popd
 
-# Clean up
+# Clean up and ignore errors now
 docker stop "$CMOS_CONTAINER_NAME"
+rm -rf "$TEMP_DATA_DIR"
