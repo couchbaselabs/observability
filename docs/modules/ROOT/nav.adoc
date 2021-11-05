@@ -9,6 +9,5 @@
 
 .Tooling
 * link:http://localhost:8080/alertmanager/[Alert Manager]
-* link:http://localhost:8080/couchbase/ui/[Couchbase Cluster Monitor]
 * link:http://localhost:8080/grafana/[Grafana]
 * link:http://localhost:8080/prometheus/[Prometheus]
