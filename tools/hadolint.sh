@@ -18,12 +18,12 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 docker pull hadolint/hadolint
 
 # Find all Dockerfiles assuming a certain naming convention
-exitCode=0
+exit_code=0
 while IFS= read -r -d '' file; do
     echo "Hadolint: .${file##$SCRIPT_DIR/..}"
     if ! docker run --rm -i hadolint/hadolint < "$file"; then
-        exitCode=1
+        exit_code=1
     fi
 done < <(find "${SCRIPT_DIR}/.." -type d -path "*/tools/tern" -prune -o -type f -name '*dockerignore' -prune -o -type f -name 'Dockerfile*' -print0)
 
-exit $exitCode
+exit $exit_code

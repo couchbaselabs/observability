@@ -25,12 +25,12 @@ docker pull koalaman/shellcheck:stable
 # find "${SCRIPT_DIR}/../" \
 #     -type d -path "*/go" -prune -o \
 #     -type f \( -name '*.sh' -o -name '*.bash' \) -exec sh -c 'echo Shellcheck "$1"; docker run -i --rm koalaman/shellcheck:stable - < "$1"' sh {} \;
-exitCode=0
+exit_code=0
 while IFS= read -r -d '' file; do
     echo "Shellcheck: .${file##$SCRIPT_DIR/..}"
     if ! docker run -i --rm koalaman/shellcheck:stable - < "$file"; then
-        exitCode=1
+        exit_code=1
     fi
 done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type d -path "*/bats" -prune -o -type f \( -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 
-exit $exitCode
+exit $exit_code
