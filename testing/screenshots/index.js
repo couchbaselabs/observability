@@ -58,13 +58,23 @@ function getOptions() {
         const definition = require(absolute);
         const uid = definition.uid;
 
-        const page = await browser.newPage();
-        await page.setViewport({ width: 1440, height: 1080 });
-        await page.goto(`http://localhost:8080/grafana/d/${uid}`);
-        await page.waitForNetworkIdle();
-        const ssPath = path.join(__dirname, `${base}.png`);
-        await page.screenshot({ path: ssPath });
-        screenshots.push(ssPath);
+        // Recommended resolution is 1920x1080
+        const recommendedPage = await browser.newPage();
+        await recommendedPage.setViewport({ width: 1920, height: 1080 });
+        await recommendedPage.goto(`http://localhost:8080/grafana/d/${uid}`);
+        await recommendedPage.waitForNetworkIdle();
+        const recommendedScreenshotPath = path.join(__dirname, `${base}-1920x1080.png`);
+        await recommendedPage.screenshot({ path: recommendedScreenshotPath });
+        screenshots.push(recommendedScreenshotPath);
+
+        // Minimum resolution is 1366x768
+        const minimumSizePage = await browser.newPage();
+        await minimumSizePage.setViewport({ width: 1366, height: 768 });
+        await minimumSizePage.goto(`http://localhost:8080/grafana/d/${uid}`);
+        await minimumSizePage.waitForNetworkIdle();
+        const minimumScreenshotPath = path.join(__dirname, `${base}-1366x768.png`);
+        await minimumSizePage.screenshot({ path: minimumScreenshotPath });
+        screenshots.push(minimumScreenshotPath);
     }));
 
     await browser.close();

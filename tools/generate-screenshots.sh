@@ -42,7 +42,13 @@ wait_for_url 60 "$CMOS_HOST/grafana/api/health"
 # Build and run the screenshot utility
 pushd "${SCRIPT_DIR}/../testing/screenshots"
     npm install
-    node index.js all
+    if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then
+        echo "Running outside of an action so generating all screenshots"
+        node index.js all
+    else
+        echo "Running under action"
+        node index.js
+    fi
 popd
 
 # Clean up
