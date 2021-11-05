@@ -12,6 +12,8 @@ tools/tern/
 tools/tern-output*
 # config-svc build
 microlith/config-svc
+# cluster monitor build
+microlith/cluster-monitor
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss

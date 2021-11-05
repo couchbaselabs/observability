@@ -15,7 +15,9 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
+CLUSTER_MONITOR_VERSION = v0.1-pre1
+
+.PHONY: all build lint checkout-cluster-monitor container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
@@ -31,7 +33,7 @@ build: docs
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
 	echo "Git commit: $(GIT_REVISION)" >> microlith/git-commit.txt
 
-image-artifacts: build
+image-artifacts: build checkout-cluster-monitor
 	mkdir -p $(ARTIFACTS)
 	cp -rv microlith/* $(ARTIFACTS)
 
@@ -54,8 +56,12 @@ config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
 # NOTE: This target is only for local development.
-container: build
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CONFIG_SVC_IMAGE=${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+container: build checkout-cluster-monitor
+	DOCKER_BUILDKIT=1 docker build \
+		-f microlith/Dockerfile \
+		--build-arg CLUSTER_MONITOR_IMAGE=${DOCKER_USER}/cluster-manager:${CLUSTER_MONITOR_VERSION} \
+		-t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
+		microlith/
 
 container-oss: build
 	tools/build-oss-container.sh
@@ -74,6 +80,12 @@ container-scan: container
 # 	make container-public -e DOCKER_USER=couchbase DOCKER_TAG=2.0.0
 container-public: container
 	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
+
+checkout-cluster-monitor:
+	@rm -rf microlith/cluster-monitor || true # don't fail the build if it doesn't exist
+# Not a shallow clone as this would prohibit checking out tags
+	git clone git@github.com:couchbaselabs/cbmultimanager.git microlith/cluster-monitor
+	cd microlith/cluster-monitor && git checkout ${CLUSTER_MONITOR_VERSION}
 
 # Build and run the examples
 example-kubernetes: container
