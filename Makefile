@@ -60,8 +60,7 @@ container-oss: build
 	tools/build-oss-container.sh
 
 container-lint:
-	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
-	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
+	tools/hadolint.sh
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
