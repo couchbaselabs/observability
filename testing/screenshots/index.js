@@ -84,13 +84,13 @@ function getOptions() {
         console.log("Screenshotting", grafanaUrl)
 
         await recommendedPage.goto(grafanaUrl);
-        await recommendedPage.waitForNetworkIdle();
+        await recommendedPage.waitForNetworkIdle({timeout: 0, idleTime:5000});
         const recommendedScreenshotPath = path.join(__dirname, `${base}-1920x1080.png`);
         await recommendedPage.screenshot({ path: recommendedScreenshotPath });
         screenshots.push(recommendedScreenshotPath);
 
         await minimumSizePage.goto(grafanaUrl);
-        await minimumSizePage.waitForNetworkIdle();
+        await minimumSizePage.waitForNetworkIdle({timeout: 0, idleTime:5000});
         const minimumScreenshotPath = path.join(__dirname, `${base}-1366x768.png`);
         await minimumSizePage.screenshot({ path: minimumScreenshotPath });
         screenshots.push(minimumScreenshotPath);
