@@ -20,7 +20,7 @@ docker pull hadolint/hadolint
 # Find all Dockerfiles assuming a certain naming convention
 exit_code=0
 while IFS= read -r -d '' file; do
-    echo "Hadolint: .${file##$SCRIPT_DIR/..}"
+    echo "Hadolint: .${file##"$SCRIPT_DIR/.."}"
     if ! docker run --rm -i hadolint/hadolint < "$file"; then
         exit_code=1
     fi

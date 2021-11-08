@@ -99,6 +99,13 @@ jobs:
               with:
                 ref: ${{ github.event.inputs.ref || 'main' }}
 
+            - name: Downgrade VirtualBox as a workaround for networking issues
+              # TODO (CMOS-134, CMOS-135): this is horrible. Remove this when we have a long-term solution.
+              run: |
+                brew uninstall virtualbox
+                wget https://raw.githubusercontent.com/Homebrew/homebrew-cask/318f6ffc79a42f394bb91c5f27ec8507b69929b1/Casks/virtualbox.rb
+                brew install --HEAD -s virtualbox.rb
+
             - name: Setup Docker
               uses: docker-practice/actions-setup-docker@master
 

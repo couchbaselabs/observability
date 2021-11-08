@@ -27,7 +27,7 @@ docker pull koalaman/shellcheck:stable
 #     -type f \( -name '*.sh' -o -name '*.bash' \) -exec sh -c 'echo Shellcheck "$1"; docker run -i --rm koalaman/shellcheck:stable - < "$1"' sh {} \;
 exit_code=0
 while IFS= read -r -d '' file; do
-    echo "Shellcheck: .${file##$SCRIPT_DIR/..}"
+    echo "Shellcheck: .${file##"$SCRIPT_DIR/.."}"
     if ! docker run -i --rm koalaman/shellcheck:stable - < "$file"; then
         exit_code=1
     fi
