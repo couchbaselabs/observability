@@ -30,11 +30,16 @@ docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
 # Remove any previous screenshots
 rm -fv "${SCRIPT_DIR}"/../testing/screenshots/*.png
 
-# Build custom container with data included
+# Extract data snapshot and run up CMOS with it
 TEMP_DATA_DIR=$(mktemp -d)
 echo "Using Prometheus data directory: $TEMP_DATA_DIR"
 unzip "${SCRIPT_DIR}/../testing/screenshots/data/prometheus_data_snapshot.zip" -d "$TEMP_DATA_DIR"
-docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" -v "$TEMP_DATA_DIR:/data_snapshot/" -e PROMETHEUS_STORAGE_PATH="/data_snapshot/" -e PROMETHEUS_RETENTION_TIME="1y" "$CMOS_IMAGE"
+docker run --rm -d --name "$CMOS_CONTAINER_NAME" \
+        -p "$CMOS_PORT:8080" \
+        -v "$TEMP_DATA_DIR:/data_snapshot/" \
+        -e PROMETHEUS_STORAGE_PATH="/data_snapshot/" \
+        -e PROMETHEUS_RETENTION_TIME="1y" \
+        "$CMOS_IMAGE"
 
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../testing/helpers/url-helpers.bash"
@@ -44,6 +49,8 @@ wait_for_url 60 "$CMOS_HOST/grafana/api/health"
 
 # Build and run the screenshot utility
 pushd "${SCRIPT_DIR}/../testing/screenshots"
+    # Any extra stuff we need to add to the Grafana URL, e.g. time period. Set empty to disable, e.g. for local testing with live data.
+    export ADDITIONAL_QUERY_ARGS=${ADDITIONAL_QUERY_ARGS:-"?from=1635496105747&to=1635510441609"}
     npm install
     if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then
         echo "Running outside of an action so generating all screenshots"
