@@ -25,7 +25,8 @@ function getOptions() {
         } else {
             const base = context.payload.pull_request.base.sha;
             const head = context.payload.pull_request.head.sha;
-            const changedFiles = child_process.execSync(`git diff --name-only ${base} ${head}`, { encoding: "ascii" }).trim().split("\n");
+            // Ignore deleted files
+            const changedFiles = child_process.execSync(`git diff --diff-filter=d --name-only ${base} ${head}`, { encoding: "ascii" }).trim().split("\n");
             return {
                 files: changedFiles,
                 pullRequest: context.payload.pull_request.number
