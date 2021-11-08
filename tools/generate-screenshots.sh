@@ -34,12 +34,22 @@ rm -fv "${SCRIPT_DIR}"/../testing/screenshots/*.png
 TEMP_DATA_DIR=$(mktemp -d)
 echo "Using Prometheus data directory: $TEMP_DATA_DIR"
 unzip "${SCRIPT_DIR}/../testing/screenshots/data/prometheus_data_snapshot.zip" -d "$TEMP_DATA_DIR"
-docker run --rm -d --name "$CMOS_CONTAINER_NAME" \
+
+# Make sure to run it with sufficient configuration to include your actual data within the retention policy
+docker run -d --name "$CMOS_CONTAINER_NAME" \
         -p "$CMOS_PORT:8080" \
         -v "$TEMP_DATA_DIR:/data_snapshot/" \
         -e PROMETHEUS_STORAGE_PATH="/data_snapshot/" \
         -e PROMETHEUS_RETENTION_TIME="1y" \
         "$CMOS_IMAGE"
+
+# Define a custom fail function for use with the BATS framework calls below - useful when it just bombs out in the container.
+function fail() {
+    echo "CMOS screenshotting FAILED"
+    docker ps
+    docker logs "$CMOS_CONTAINER_NAME"
+    exit 1
+}
 
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../testing/helpers/url-helpers.bash"
@@ -62,5 +72,5 @@ pushd "${SCRIPT_DIR}/../testing/screenshots"
 popd
 
 # Clean up and ignore errors now
-docker stop "$CMOS_CONTAINER_NAME"
+docker container rm --force --volumes "$CMOS_CONTAINER_NAME"
 rm -rf "$TEMP_DATA_DIR"
