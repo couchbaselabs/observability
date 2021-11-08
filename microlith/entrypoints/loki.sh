@@ -34,4 +34,4 @@ cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/loki.json << __EOF__
 ]
 __EOF__
 
-/usr/bin/loki -config.file="${LOKI_CONFIG_FILE}"
+/usr/bin/loki -config.file="${LOKI_CONFIG_FILE}" -print-config-stderr

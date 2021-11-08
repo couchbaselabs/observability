@@ -24,7 +24,9 @@ export CB_SERVER_AUTH_PASSWORD=${CB_SERVER_AUTH_PASSWORD:-password}
 PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
 PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
-PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
+PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-data/}
+PROMETHEUS_STORAGE_MAX_SIZE=${PROMETHEUS_STORAGE_MAX_SIZE:-512MB}
+PROMETHEUS_RETENTION_TIME=${PROMETHEUS_RETENTION_TIME:-15d}
 
 # Promtheus is a bit funny about it's CLI flags, you cannot have empty space apparently
 PROMETHEUS_EXTRA_ARGS=${PROMETHEUS_EXTRA_ARGS:---}
@@ -49,7 +51,10 @@ bash /etc/prometheus/scripts/alerts_prepare.sh
 # A configuration reload is triggered by sending a SIGHUP to the Prometheus process or
 # sending a HTTP POST request to the /-/reload endpoint.
 /bin/prometheus --config.file="${PROMETHEUS_CONFIG_FILE}" \
+                --enable-feature=memory-snapshot-on-shutdown \
                 --storage.tsdb.path="${PROMETHEUS_STORAGE_PATH}" \
+                --storage.tsdb.retention.size="${PROMETHEUS_STORAGE_MAX_SIZE}" \
+                --storage.tsdb.retention.time="${PROMETHEUS_RETENTION_TIME}" \
                 --web.console.libraries=/usr/share/prometheus/console_libraries \
                 --web.console.templates=/usr/share/prometheus/consoles \
                 --web.external-url="${PROMETHEUS_URL_SUBPATH}" \
