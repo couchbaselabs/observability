@@ -25,21 +25,17 @@ CMOS_HOST=${CMOS_HOST:-localhost:$CMOS_PORT}
 CMOS_CONTAINER_NAME=${CMOS_CONTAINER_NAME:-screenshot-cmos}
 
 # Remove anything with the same name including all volumes
-docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
+docker container rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
 
 # Remove any previous screenshots
 rm -fv "${SCRIPT_DIR}"/../testing/screenshots/*.png
 
-# Extract data snapshot and run up CMOS with it
-TEMP_DATA_DIR=$(mktemp -d)
-echo "Using Prometheus data directory: $TEMP_DATA_DIR"
-unzip "${SCRIPT_DIR}/../testing/screenshots/data/prometheus_data_snapshot.zip" -d "$TEMP_DATA_DIR"
-
 # Make sure to run it with sufficient configuration to include your actual data within the retention policy
 docker run -d --name "$CMOS_CONTAINER_NAME" \
         -p "$CMOS_PORT:8080" \
-        -v "$TEMP_DATA_DIR:/data_snapshot/" \
-        -e PROMETHEUS_STORAGE_PATH="/data_snapshot/" \
+        -v "${SCRIPT_DIR}/../testing/screenshots/data/prometheus_data_snapshot.zip:/data_snapshot/prometheus_data_snapshot.zip:ro" \
+        -v "$SCRIPT_DIR/generate-screenshots-entrypoint.sh:/entrypoints/generate-screenshots-entrypoint.sh:ro" \
+        -e DISABLE_PROMETHEUS="true" \
         -e PROMETHEUS_RETENTION_TIME="1y" \
         "$CMOS_IMAGE"
 
@@ -73,4 +69,3 @@ popd
 
 # Clean up and ignore errors now
 docker container rm --force --volumes "$CMOS_CONTAINER_NAME"
-rm -rf "$TEMP_DATA_DIR"
