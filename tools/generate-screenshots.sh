@@ -45,7 +45,7 @@ docker run -d --name "$CMOS_CONTAINER_NAME" \
 
 # Define a custom fail function for use with the BATS framework calls below - useful when it just bombs out in the container.
 function fail() {
-    echo "CMOS screenshotting FAILED"
+    echo "CMOS screenshot extraction FAILED"
     docker ps
     docker logs "$CMOS_CONTAINER_NAME"
     exit 1
