@@ -55,7 +55,7 @@ function fail() {
 source "${SCRIPT_DIR}/../testing/helpers/url-helpers.bash"
 
 # Ignore the BATS fail usage that will trigger a failure anyway
-wait_for_url 60 "$CMOS_HOST/grafana/api/health"
+wait_for_url 120 "$CMOS_HOST/grafana/api/health"
 
 # Build and run the screenshot utility
 pushd "${SCRIPT_DIR}/../testing/screenshots"
