@@ -23,7 +23,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 #     -type f \( -name '*.sh' -o -name '*.bash' \) -exec sh -c 'echo Shellcheck "$1"; docker run -i --rm koalaman/shellcheck:stable - < "$1"' sh {} \;
 exitCode=0
 while IFS= read -r -d '' file; do
-    echo "Shellcheck: .${file##$SCRIPT_DIR/..}"
+    echo "Shellcheck: .${file##"$SCRIPT_DIR/.."}"
     if ! docker run -i --rm koalaman/shellcheck:stable - < "$file"; then
         exitCode=1
     fi
