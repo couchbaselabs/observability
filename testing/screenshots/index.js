@@ -5,7 +5,7 @@ const puppeteer = require("puppeteer");
 
 function getOptions() {
     const dashboardsBase = path.resolve(".", "../../microlith/grafana/provisioning/dashboards");
-    if ("GITHUB_TOKEN" in process.env) {
+    if ("GITHUB_ACTIONS" in process.env) {
         const context = require("@actions/github").context;
         if ("inputs" in context.payload) {
             let files;
