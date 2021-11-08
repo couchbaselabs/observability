@@ -50,7 +50,8 @@ function fail() {
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../testing/helpers/url-helpers.bash"
 
-# Ignore the BATS fail usage that will trigger a failure anyway
+# Ensure both Prometheus and Grafana are up
+wait_for_url 120 "$CMOS_HOST/prometheus/-/ready"
 wait_for_url 120 "$CMOS_HOST/grafana/api/health"
 
 # Build and run the screenshot utility
