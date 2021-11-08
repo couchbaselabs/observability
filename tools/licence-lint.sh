@@ -21,7 +21,7 @@ exit_code=0
 while IFS= read -r -d '' SOURCE
 do
     if head "${SOURCE}" | grep -q '^// Code generated .* DO NOT EDIT.$'; then
-        echo "Skipping licence check for auto-generated file .${SOURCE##"$SCRIPT_DIR"}"
+        echo "Skipping licence check for auto-generated file .${SOURCE##"$SCRIPT_DIR/.."}"
         continue
     fi
     echo "Licence check: .${SOURCE##"$SCRIPT_DIR/.."}"
