@@ -15,65 +15,91 @@
 package api
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
+	"io/fs"
 	"net/http"
+	"os"
 
-	"gopkg.in/yaml.v3"
+	"github.com/kennygrant/sanitize"
 
 	v1 "github.com/couchbaselabs/observability/config-svc/pkg/api/v1"
 	"github.com/labstack/echo/v4"
-	"gopkg.in/guregu/null.v4"
 )
 
-func (s *Server) GetConfig(ctx echo.Context) error {
-	cfg := s.cfg.Get()
-	yamlValue, err := yaml.Marshal(cfg)
-	if err != nil {
-		return err
-	}
-	return ctx.Blob(http.StatusOK, "text/yaml", yamlValue)
+const (
+	prometheusTargetsPathDevelopment = "./targets/%s.json"
+	prometheusTargetsPathProduction  = "/etc/prometheus/couchbase/custom/%s.json"
+)
+
+type prometheusTargets []struct {
+	Targets []string          `json:"targets"`
+	Labels  map[string]string `json:"labels"`
 }
 
-func (s *Server) GetClusters(ctx echo.Context, params v1.GetClustersParams) error {
-	val, err := s.clusters.GetClusters()
-	if err != nil {
+func (s *Server) PostAddPrometheusTarget(ctx echo.Context) error {
+	var data v1.PostAddPrometheusTargetJSONBody
+	if err := ctx.Bind(&data); err != nil {
 		return err
 	}
-	result := make([]v1.CouchbaseCluster, len(val))
-	for i, cluster := range val {
-		result[i] = v1.CouchbaseCluster{
-			Nodes:    cluster.Nodes,
-			Metadata: v1.CouchbaseCluster_Metadata{AdditionalProperties: cluster.Metadata},
-			CouchbaseConfig: v1.CouchbaseServerConfig{
-				ManagementPort: float32(cluster.CouchbaseConfig.ManagementPort),
-			},
-		}
-		if null.BoolFromPtr(params.IncludeSensitiveInfo).ValueOrZero() {
-			result[i].CouchbaseConfig.Username = &cluster.CouchbaseConfig.Username
-			result[i].CouchbaseConfig.Password = &cluster.CouchbaseConfig.Password
-		}
-	}
-	return ctx.JSON(http.StatusOK, result)
-}
 
-func (s *Server) GetPrometheusTargets(ctx echo.Context) error {
-	val, err := s.clusters.GetClusters()
+	labels := data.Labels.AdditionalProperties
+	if labels == nil {
+		labels = make(map[string]string)
+	}
+	if data.NameLabel != nil {
+		labels[*data.NameLabel] = data.Name
+	}
+	value := prometheusTargets{
+		{
+			Targets: data.Targets,
+			Labels:  labels,
+		},
+	}
+	if value[0].Labels == nil {
+		value[0].Labels = make(map[string]string)
+	}
+	valueJSON, err := json.Marshal(value)
 	if err != nil {
 		return err
 	}
-	result := make([]v1.PrometheusScrapeConfig, len(val))
-	for i, cluster := range val {
-		result[i] = v1.PrometheusScrapeConfig{
-			Labels: v1.PrometheusScrapeConfig_Labels{
-				AdditionalProperties: cluster.Metadata,
-			},
-			Targets: make([]string, len(cluster.Nodes)),
-		}
-		for j, node := range cluster.Nodes {
-			result[i].Targets[j] = fmt.Sprintf("%s:%d", node, cluster.MetricsConfig.ExporterPort)
+
+	var path string
+	if s.production {
+		path = prometheusTargetsPathProduction
+	} else {
+		path = prometheusTargetsPathDevelopment
+	}
+	path = fmt.Sprintf(path, sanitize.Name(data.Name))
+
+	if data.Overwrite == nil || !*data.Overwrite {
+		_, err := os.Stat(path)
+		if err == nil {
+			return echo.NewHTTPError(http.StatusConflict, "target already exists")
+		} else if errors.Is(err, fs.ErrNotExist) {
+			// Ignore it
+		} else {
+			return err
 		}
 	}
-	return ctx.JSON(http.StatusOK, result)
+
+	outFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o664)
+	if err != nil {
+		return err
+	}
+	if _, err = outFile.Seek(0, 0); err != nil {
+		return err
+	}
+	if _, err = outFile.Write(valueJSON); err != nil {
+		return err
+	}
+	if err = outFile.Close(); err != nil {
+		return err
+	}
+	return ctx.JSON(http.StatusOK, map[string]interface{}{
+		"ok": true,
+	})
 }
 
 func (s *Server) GetOpenapiJson(ctx echo.Context) error { //nolint:revive

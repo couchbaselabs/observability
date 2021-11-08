@@ -12,11 +12,17 @@ FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
 # There is no Go 1.17 toolset option plus the older option then breaks with permissions issues for extra packages
 # FROM registry.access.redhat.com/ubi8/ubi:8.4 as builder
 FROM registry.access.redhat.com/ubi8/go-toolset:1.15.14-3 as builder
+# Required for building
+# hadolint ignore=DL3002
 USER root
 
+# Do not want to pin in a builder image
+# hadolint ignore=DL3041
 RUN dnf update -y && dnf install -y curl tar && dnf clean all
 
 WORKDIR /opt/
+# UBI base so no need to worry about shell pipe failing options
+# hadolint ignore=DL4006
 RUN curl -s https://dl.google.com/go/go1.17.1.linux-amd64.tar.gz | tar xz
 ENV PATH="/opt/go/bin:${PATH}"
 
@@ -104,7 +110,11 @@ ENV PATH="/usr/share/grafana/bin:$PATH" \
 
 WORKDIR $GF_PATHS_HOME
 
-# hadolint ignore=DL3059,DL4006,SC2155
+# Ignore the Hadolint errors triggered here as this is copied from upstream
+# DL4006: Pipefail is not required for UBI images
+# SC2155: declare and assign separately to avoid masking return values - we're using the working upstream
+# DL3046: high UID is fine and required to match upstream - image size is irrelevant for bloated microlith and then even more so with UBI
+# hadolint ignore=DL4006,SC2155,DL3046
 RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
     mkdir -p "$GF_PATHS_HOME/.aws" && \
     groupadd --system -g $GF_GID grafana && \
@@ -233,6 +243,7 @@ RUN chmod a+x /run.sh /entrypoints/*
 ARG CB_UID="8453"
 ARG CB_GID="8453"
 
+# hadolint ignore=DL3046
 RUN groupadd --system -g $CB_GID couchbase && \
     useradd --system -u $CB_UID -g couchbase couchbase
 

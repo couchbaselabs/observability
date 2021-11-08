@@ -24,6 +24,7 @@ all: clean build lint container container-oss container-lint container-scan dist
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
 build: docs
 	cp -R docs/ microlith/docs/
+	rm -rf microlith/config-svc/
 	cp -R config-svc microlith/config-svc/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
@@ -60,8 +61,7 @@ container-oss: build
 	tools/build-oss-container.sh
 
 container-lint:
-	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
-	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
+	tools/hadolint.sh
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
@@ -97,6 +97,10 @@ test-native:
 	testing/run-native.sh ${TEST_SUITE}
 
 test: clean container-oss test-native test-containers test-kubernetes
+
+# Runs up the CMOS and takes screenshots
+generate-screenshots: container-oss
+	tools/generate-screenshots.sh
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on

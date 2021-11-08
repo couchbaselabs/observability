@@ -17,7 +17,7 @@
 set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-exitCode=0
+exit_code=0
 while IFS= read -r -d '' SOURCE
 do
     if head "${SOURCE}" | grep -q '^// Code generated .* DO NOT EDIT.$'; then
@@ -36,4 +36,4 @@ do
 done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 # Make sure we prune out any local Go installation directory
 
-exit $exitCode
+exit $exit_code

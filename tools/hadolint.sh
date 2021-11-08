@@ -12,17 +12,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# Simple script to remove proprietary components from the microlith Dockerfile and build it.
-# Make sure to copy in the config service code prior to this
 set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+# Ensure we always have latest version
+docker pull hadolint/hadolint
 
-DOCKER_USER=${DOCKER_USER:-couchbase}
-DOCKER_TAG=${DOCKER_TAG:-v1}
-CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+# Find all Dockerfiles assuming a certain naming convention
+exit_code=0
+while IFS= read -r -d '' file; do
+    echo "Hadolint: .${file##$SCRIPT_DIR/..}"
+    if ! docker run --rm -i hadolint/hadolint < "$file"; then
+        exit_code=1
+    fi
+done < <(find "${SCRIPT_DIR}/.." -type d -path "*/tools/tern" -prune -o -type f -name '*dockerignore' -prune -o -type f -name 'Dockerfile*' -print0)
 
-# Remove everything between `# Couchbase proprietary start` and `# Couchbase proprietary end`
-sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "$SCRIPT_DIR/../microlith/Dockerfile" > "$SCRIPT_DIR/../microlith/Dockerfile.oss"
-echo "Building OSS image: $CMOS_IMAGE"
-docker build -t "$CMOS_IMAGE" -f "$SCRIPT_DIR/../microlith/Dockerfile.oss" "$SCRIPT_DIR/../microlith"
+exit $exit_code
