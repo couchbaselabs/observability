@@ -27,11 +27,11 @@ do
     echo "Licence check: .${SOURCE##"$SCRIPT_DIR/.."}"
     if ! head "${SOURCE}" | grep -q Copyright; then
         echo ".${SOURCE##"$SCRIPT_DIR/.."}: Missing copyright"
-        exitCode=1
+        exit_code=1
     fi
     if ! head "${SOURCE}" | grep -q 'Apache License, Version 2.0'; then
         echo ".${SOURCE##"$SCRIPT_DIR/.."}: Missing licence"
-        exitCode=1
+        exit_code=1
     fi
 done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 # Make sure we prune out any local Go installation directory
