@@ -57,7 +57,7 @@ function getOptions() {
     const browser = await puppeteer.launch({ headless: true });
     const screenshots = [];
 
-    var additionalQueryArgs = process.env.ADDITIONAL_QUERY_ARGS
+    var additionalQueryArgs = process.env.GRAFANA_ADDITIONAL_QUERY_ARGS
     if ( additionalQueryArgs.length > 0 && !additionalQueryArgs.startsWith(`?`) ) {
         additionalQueryArgs = `?` + additionalQueryArgs
     }
