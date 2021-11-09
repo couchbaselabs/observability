@@ -1,5 +1,5 @@
 FROM grafana/grafana:8.2.3 as grafana-official
-FROM grafana/loki:2.3.0 as loki-official
+FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.0 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
 FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
@@ -93,7 +93,7 @@ COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/sh
 COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
 
 # Support scripted access to kubernetes API, e.g. to get credentials from Secrets
-ARG KUBECTL_VERSION=v1.22.0
+ARG KUBECTL_VERSION=v1.22.3
 ENV KUBECTL_VERSION=$KUBECTL_VERSION
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
 	chmod +x kubectl && \
@@ -107,7 +107,7 @@ COPY --from=builder /bin/prometheus_merge /bin/prometheus_merge
 RUN chmod a+x /bin/prometheus_merge
 
 # Helm - to support deployment from this container of custom tools
-ARG HELM_VERSION=v3.7.0
+ARG HELM_VERSION=v3.7.1
 ENV HELM_VERSION=$HELM_VERSION
 RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
 	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
@@ -164,7 +164,6 @@ WORKDIR /
 RUN addgroup -g 10001 -S loki && \
     adduser -u 10001 -S loki -G loki && \
     mkdir -p /loki/rules && \
-    mkdir -p /loki/tmprules && \
     mkdir -p /loki/rules-temp && \
     chown -R loki:loki /etc/loki /loki
 
