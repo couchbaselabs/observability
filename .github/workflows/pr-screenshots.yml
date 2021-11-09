@@ -14,6 +14,10 @@ on:
                 description: Branch, tag, or commit SHA to run against
                 required: false
                 default: main
+            files:
+                description: The dashboards to screenshot
+                required: false
+                default: all
 
 jobs:
     screenshot-oss-container:

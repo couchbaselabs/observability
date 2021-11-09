@@ -5,7 +5,7 @@ const puppeteer = require("puppeteer");
 
 function getOptions() {
     const dashboardsBase = path.resolve(".", "../../microlith/grafana/provisioning/dashboards");
-    if ("GITHUB_TOKEN" in process.env) {
+    if ("GITHUB_ACTIONS" in process.env) {
         const context = require("@actions/github").context;
         if ("inputs" in context.payload) {
             let files;
@@ -25,7 +25,8 @@ function getOptions() {
         } else {
             const base = context.payload.pull_request.base.sha;
             const head = context.payload.pull_request.head.sha;
-            const changedFiles = child_process.execSync(`git diff --name-only ${base} ${head}`, { encoding: "ascii" }).trim().split("\n");
+            // Ignore deleted files
+            const changedFiles = child_process.execSync(`git diff --diff-filter=d --name-only ${base} ${head}`, { encoding: "ascii" }).trim().split("\n");
             return {
                 files: changedFiles,
                 pullRequest: context.payload.pull_request.number
@@ -46,11 +47,20 @@ function getOptions() {
 }
 
 (async function(){
+    process.argv.forEach((val, index) => {
+        console.log(`${index}: ${val}`);
+      });
+
     const {files, pullRequest} = getOptions();
     console.log("Taking screenshots of", files);
 
     const browser = await puppeteer.launch({ headless: true });
     const screenshots = [];
+
+    var additionalQueryArgs = process.env.GRAFANA_ADDITIONAL_QUERY_ARGS
+    if ( additionalQueryArgs.length > 0 && !additionalQueryArgs.startsWith(`?`) ) {
+        additionalQueryArgs = `?` + additionalQueryArgs
+    }
 
     await Promise.all(files.map(async file => {
         const absolute = path.resolve(__dirname, "../..", file);
@@ -58,13 +68,32 @@ function getOptions() {
         const definition = require(absolute);
         const uid = definition.uid;
 
-        const page = await browser.newPage();
-        await page.setViewport({ width: 1440, height: 1080 });
-        await page.goto(`http://localhost:8080/grafana/d/${uid}`);
-        await page.waitForNetworkIdle();
-        const ssPath = path.join(__dirname, `${base}.png`);
-        await page.screenshot({ path: ssPath });
-        screenshots.push(ssPath);
+        if (uid == null) {
+            console.error("Missing UID for", absolute)
+            return
+        }
+
+        // Recommended resolution is 1920x1080
+        const recommendedPage = await browser.newPage();
+        await recommendedPage.setViewport({ width: 1920, height: 1080 });
+        // Minimum resolution is 1366x768
+        const minimumSizePage = await browser.newPage();
+        await minimumSizePage.setViewport({ width: 1366, height: 768 });
+
+        const grafanaUrl = `http://localhost:8080/grafana/d/${uid}/${base}${additionalQueryArgs}`
+        console.log("Screenshotting", grafanaUrl)
+
+        await recommendedPage.goto(grafanaUrl);
+        await recommendedPage.waitForNetworkIdle({timeout: 0, idleTime:5000});
+        const recommendedScreenshotPath = path.join(__dirname, `${base}-1920x1080.png`);
+        await recommendedPage.screenshot({ path: recommendedScreenshotPath });
+        screenshots.push(recommendedScreenshotPath);
+
+        await minimumSizePage.goto(grafanaUrl);
+        await minimumSizePage.waitForNetworkIdle({timeout: 0, idleTime:5000});
+        const minimumScreenshotPath = path.join(__dirname, `${base}-1366x768.png`);
+        await minimumSizePage.screenshot({ path: minimumScreenshotPath });
+        screenshots.push(minimumScreenshotPath);
     }));
 
     await browser.close();

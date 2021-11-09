@@ -25,25 +25,48 @@ CMOS_HOST=${CMOS_HOST:-localhost:$CMOS_PORT}
 CMOS_CONTAINER_NAME=${CMOS_CONTAINER_NAME:-screenshot-cmos}
 
 # Remove anything with the same name including all volumes
-docker rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
+docker container rm --force --volumes "$CMOS_CONTAINER_NAME" &> /dev/null
 
 # Remove any previous screenshots
-rm -fv "${SCRIPT_DIR}/../testing/screenshots/*.png"
+rm -fv "${SCRIPT_DIR}"/../testing/screenshots/*.png
 
-# Run CMOS
-docker run --rm -d --name "$CMOS_CONTAINER_NAME" -p "$CMOS_PORT:8080" "$CMOS_IMAGE"
+# Make sure to run it with sufficient configuration to include your actual data within the retention policy
+docker run -d --name "$CMOS_CONTAINER_NAME" \
+        -p "$CMOS_PORT:8080" \
+        -v "${SCRIPT_DIR}/../testing/screenshots/data/prometheus_data_snapshot.zip:/data_snapshot/prometheus_data_snapshot.zip:ro" \
+        -v "$SCRIPT_DIR/generate-screenshots-entrypoint.sh:/entrypoints/generate-screenshots-entrypoint.sh:ro" \
+        -e DISABLE_PROMETHEUS="true" \
+        -e PROMETHEUS_RETENTION_TIME="1y" \
+        "$CMOS_IMAGE"
+
+# Define a custom fail function for use with the BATS framework calls below - useful when it just bombs out in the container.
+function fail() {
+    echo "CMOS screenshot extraction FAILED"
+    docker ps
+    docker logs "$CMOS_CONTAINER_NAME"
+    exit 1
+}
 
 # shellcheck disable=SC1091
 source "${SCRIPT_DIR}/../testing/helpers/url-helpers.bash"
 
-# Ignore the BATS fail usage that will trigger a failure anyway
-wait_for_url 60 "$CMOS_HOST/grafana/api/health"
+# Ensure both Prometheus and Grafana are up
+wait_for_url 120 "$CMOS_HOST/prometheus/-/ready"
+wait_for_url 120 "$CMOS_HOST/grafana/api/health"
 
 # Build and run the screenshot utility
 pushd "${SCRIPT_DIR}/../testing/screenshots"
+    # Any extra stuff we need to add to the Grafana URL, e.g. time period. Set empty to disable, e.g. for local testing with live data.
+    export GRAFANA_ADDITIONAL_QUERY_ARGS=${GRAFANA_ADDITIONAL_QUERY_ARGS:-"?from=1635496105747&to=1635510441609"}
     npm install
-    node index.js all
+    if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then
+        echo "Running outside of an action so generating all screenshots"
+        node index.js all
+    else
+        echo "Running under action"
+        node index.js
+    fi
 popd
 
-# Clean up
-docker stop "$CMOS_CONTAINER_NAME"
+# Clean up and ignore errors now
+docker container rm --force --volumes "$CMOS_CONTAINER_NAME"
