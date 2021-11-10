@@ -239,7 +239,7 @@
                   {
                     "targetBlank": false,
                     "title": "Cluster overview dashboard",
-                    "url": "/grafana/d/cL8993dnz/single-cluster-overview?var-cluster=${__data.fields.Name}"
+                    "url": "/grafana/d/UEZRQMc7z/single-cluster-overview?var-cluster=${__data.fields.Name}"
                   }
                 ]
               }
