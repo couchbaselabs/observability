@@ -33,7 +33,7 @@ do
         echo ".${SOURCE##"$SCRIPT_DIR/.."}: Missing licence"
         exit_code=1
     fi
-done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type d -path "*/tools/tern" -prune -o -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
+done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type d -path "*/tools/tern" -prune -o -type d -path "*/testing/screenshots/node_modules" -prune -o -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 # Make sure we prune out any local Go installation directory
 
 exit $exit_code
