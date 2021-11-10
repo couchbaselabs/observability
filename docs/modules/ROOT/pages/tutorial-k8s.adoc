@@ -1,0 +1,66 @@
+= CMOS Kubernetes Deployment
+
+== Overview
+
+== Deployment
+
+=== kube-state-metrics
+A prerequisite to configuring CMOS is to install kube-state-metrics. This can be done via helm.
+
+
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
+
+=== Prometheues
+We want to configure our own promethues config so first delete the existing config:
+
+kubectl delete configmap prometheus-config || true
+
+Now create config using the below yaml:
+
+## Add yaml as code snippet
+kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
+
+=== Microlith
+## Add yaml as code snippet
+
+kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
+
+# Set up ingress
+INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
+kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"
+
+# Create the secret for Fluent Bit customisation
+kubectl delete secret fluent-bit-custom 2>/dev/null || true
+kubectl create secret generic fluent-bit-custom --from-file="${SCRIPT_DIR}/fluent-bit.conf"
+
+# Output the contents of the secret so we can verify
+# shellcheck disable=SC2016
+kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+
+# Add Couchbase via helm chart
+if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; then
+  if ! helm repo list|grep couchbase|grep -q https://couchbase-partners.github.io/helm-charts ; then
+    echo "Unable to add Couchbase helm repository, remove the current 'couchbase' entry using 'helm repo remove couchbase' then re-run this script"
+    helm repo list|grep couchbase
+    exit 1
+  fi
+fi
+helm repo update
+helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
+
+# Wait for deployment to complete
+echo "Waiting for CB to start up..."
+until [[ $(kubectl get pods --field-selector=status.phase=Running --selector='app=couchbase' --no-headers 2>/dev/null |wc -l) -eq 3 ]]; do
+    echo -n '.'
+    sleep 2
+done
+echo "CB running"
+
+echo "To monitor go to http://localhost/"
