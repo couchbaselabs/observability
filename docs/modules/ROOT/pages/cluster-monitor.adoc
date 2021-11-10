@@ -5,12 +5,13 @@ If running with the Couchbase Cluster Monitor enabled, it will output the status
 ----
 # HELP multimanager_cluster_checker_status Checker results for cluster level checkers
 # TYPE multimanager_cluster_checker_status gauge
-multimanager_cluster_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="singleOrTwoNodeCluster"} 1
+multimanager_cluster_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90002",name="singleOrTwoNodeCluster"} 0
 # HELP multimanager_node_checker_status Checker results for node level checkers
 # TYPE multimanager_node_checker_status gauge
-multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="nonGABuild",node="47a45d39583947823ac9866dce2a74b2"} 0
-multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="oneServicePerNode",node="47a45d39583947823ac9866dce2a74b2"} 1
-multimanager_node_checker_status{cluster="961b7464aca17a7db150fb0e44be5849",name="supportedVersion",node="47a45d39583947823ac9866dce2a74b2"} 0
+multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90001",name="oneServicePerNode",node_name="10.145.212.101:18091",node_uuid="730c37dace488f37f47c397f376c1c05"} 1
+# HELP multimanager_bucket_checker_status Checker results for bucket level checkers
+# TYPE multimanager_bucket_checker_status gauge
+multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2
 ----
 
 The values of each metric represent the current status of the checker. The integer values have the following meanings:
