@@ -38,7 +38,7 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	}
 
 	scheme := "http"
-	var useTLS bool
+	useTLS := false
 	if data.CouchbaseConfig.UseTLS != nil && *data.CouchbaseConfig.UseTLS {
 		useTLS = true
 		scheme = "https"
