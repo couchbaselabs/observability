@@ -71,3 +71,23 @@ func TestConfigAddNewScrape(t *testing.T) {
           labels: {}
 `, string(marshaled))
 }
+
+func TestInvalidYAML(t *testing.T) {
+	var value Configuration
+	err := yaml.Unmarshal([]byte(`foo: bar; invalid`), &value)
+	require.Error(t, err)
+}
+
+func TestInvalidScrapeConfigs(t *testing.T) {
+	var value Configuration
+	err := yaml.Unmarshal([]byte(`global:
+    foo: bar
+    qux: quux
+scrape_configs:
+    # CMOS managed
+    - job_name: 1234
+      nonsense: field
+      static_configs: {}
+`), &value)
+	require.Error(t, err, "expected failure to parse %+v", value)
+}

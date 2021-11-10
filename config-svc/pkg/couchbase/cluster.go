@@ -63,13 +63,9 @@ func (n Node) ResolveHostPort(secure bool) (string, int, error) {
 	return hostname, mgmtPort, nil
 }
 
-func FetchCouchbaseClusterInfo(hostname string, port int, secure bool, username, password string) (*PoolsDefault,
+func FetchCouchbaseClusterInfo(scheme, hostname string, port int, username, password string) (*PoolsDefault,
 	error) {
 	// First, fetch the list of targets from CBS
-	scheme := "http"
-	if secure {
-		scheme = "https"
-	}
 	req, err := http.NewRequest(
 		http.MethodGet,
 		fmt.Sprintf("%s://%s:%d/pools/default", scheme, hostname, port),

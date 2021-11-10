@@ -73,7 +73,7 @@ components:
               type: string
             password:
               type: string
-            secure:
+            useTLS:
               type: boolean
         hostname:
           type: string

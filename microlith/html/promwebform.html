@@ -52,7 +52,7 @@
           </div>
           <div>
             <label>
-              <input type="checkbox" x-model="secure" />
+              <input type="checkbox" x-model="useTLS" />
               <strong>Use TLS?</strong>
             </label>
           </div>
@@ -128,7 +128,7 @@
       <div x-show="success">
         Cluster successfully added! Go to
         <a href="/grafana/?orgId=1">Grafana</a> to see its health. Please note
-        that it may take up to 30 seconds for all data to be available.
+        that it may take up to 60 seconds for all data to be available.
       </div>
       <div x-show="error.length > 0" x-text="error"></div>
     </div>
@@ -138,7 +138,7 @@
         Alpine.data("generator", function () {
           return {
             managementPort: "8091",
-            secure: false,
+            useTLS: false,
             hostname: "",
             serverUsername: "",
             serverPassword: "",
@@ -155,9 +155,9 @@
 
             init() {
               this.$watch('secure', () => {
-                if (this.managementPort === '8091' && this.secure) {
+                if (this.managementPort === '8091' && this.useTLS) {
                   this.managementPort = '18091';
-                } else if (this.managementPort === '18091' && !this.secure) {
+                } else if (this.managementPort === '18091' && !this.useTLS) {
                   this.managementPort = '8091';
                 }
               })

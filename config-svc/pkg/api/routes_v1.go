@@ -37,46 +37,35 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 		return err
 	}
 
-	secure := false
-	if data.CouchbaseConfig.Secure != nil && *data.CouchbaseConfig.Secure {
-		secure = true
+	scheme := "http"
+	var useTLS bool
+	if data.CouchbaseConfig.UseTLS != nil && *data.CouchbaseConfig.UseTLS {
+		useTLS = true
+		scheme = "https"
 	}
 	mgmtPort := 8091
 	if data.CouchbaseConfig.ManagementPort != nil {
 		mgmtPort = int(*data.CouchbaseConfig.ManagementPort)
 	}
 	cluster, err := couchbase.FetchCouchbaseClusterInfo(
+		scheme,
 		data.Hostname,
 		mgmtPort,
-		secure,
 		data.CouchbaseConfig.Username,
 		data.CouchbaseConfig.Password,
 	)
 	if err != nil {
-		return err
+		return fmt.Errorf("unable to get cluster info: %w", err)
 	}
 
-	staticConfig := prometheus.StaticConfig{
-		Targets: make([]string, len(cluster.Nodes)),
-		Labels: map[string]string{
-			"cluster": cluster.ClusterName,
-		},
-	}
-
-	var anyNodeCB7 bool
-
-	for i, node := range cluster.Nodes {
-		hostname, mgmtPort, err := node.ResolveHostPort(secure)
-		if err != nil {
-			return err
-		}
-		if node.Version.AtLeast(cbvalue.Version7_0_0) {
-			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
-			anyNodeCB7 = true
-		} else {
-			// TODO: allow customising this
-			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, 9091)
-		}
+	scrapeConfig, err := createScrapeConfigForCluster(
+		cluster,
+		useTLS,
+		data.CouchbaseConfig.Username,
+		data.CouchbaseConfig.Password,
+	)
+	if err != nil {
+		return fmt.Errorf("could not create scrape config: %w", err)
 	}
 
 	cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
@@ -97,21 +86,10 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 		return fmt.Errorf("failed to parse Prometheus config: %w", err)
 	}
 
-	scrapeConfig := prometheus.ScrapeConfig{
-		// Job name needs to be unique
-		JobName:       fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1),
-		StaticConfigs: []prometheus.StaticConfig{staticConfig},
-	}
-	if anyNodeCB7 {
-		scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
-			BasicAuth: prometheus.BasicAuthConfig{
-				Username: data.CouchbaseConfig.Username,
-				Password: data.CouchbaseConfig.Password,
-			},
-		}
-	}
+	// Job name needs to be unique
+	scrapeConfig.JobName = fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1)
 
-	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, &scrapeConfig)
+	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, scrapeConfig)
 
 	configYaml, err := yaml.Marshal(&cfg)
 	if err != nil {
@@ -126,6 +104,46 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, map[string]interface{}{
 		"ok": true,
 	})
+}
+
+func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username,
+	password string) (*prometheus.ScrapeConfig, error) {
+	staticConfig := prometheus.StaticConfig{
+		Targets: make([]string, len(cluster.Nodes)),
+		Labels: map[string]string{
+			"cluster": cluster.ClusterName,
+		},
+	}
+
+	var anyNodeCB7 bool
+
+	for i, node := range cluster.Nodes {
+		hostname, mgmtPort, err := node.ResolveHostPort(useTLS)
+		if err != nil {
+			return nil, err
+		}
+		if node.Version.AtLeast(cbvalue.Version7_0_0) {
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
+			anyNodeCB7 = true
+		} else {
+			// TODO (CMOS-106): allow customizing this
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, 9091)
+		}
+	}
+
+	scrapeConfig := prometheus.ScrapeConfig{
+		StaticConfigs: []prometheus.StaticConfig{staticConfig},
+	}
+	if anyNodeCB7 {
+		scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
+			BasicAuth: prometheus.BasicAuthConfig{
+				Username: username,
+				Password: password,
+			},
+		}
+	}
+
+	return &scrapeConfig, nil
 }
 
 func overwriteFileContents(file *os.File, contents []byte) error {
