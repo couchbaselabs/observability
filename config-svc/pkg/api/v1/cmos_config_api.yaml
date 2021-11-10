@@ -80,10 +80,10 @@ components:
     ErrorResponse:
       type: object
       additionalProperties: false
-      required: [ ok, error ]
+      required: [ok, error]
       properties:
         ok:
           type: boolean
-          enum: [ false ]
+          enum: [false]
         error:
           type: string
