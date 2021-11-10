@@ -15,7 +15,7 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-generate-markdown docs-lint docs-license-analysis
+.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-lint docs-license-analysis
 
 # TODO: add 'test examples'
 all: clean build lint container container-oss container-lint container-scan dist test-dist
@@ -135,18 +135,7 @@ docs-lint:
 	docker run --rm -i hadolint/hadolint < Dockerfile.docs
 	tools/asciidoc-lint.sh
 
-docs: docs-generate-markdown
-
-# Automatically convert Markdown docs to Asciidoc ones.
-# This command needs bind mount support so will not run in Couchbase build infrastructure (Docker Swarm):
-# docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
-# We therefore create a custom container for it all. Unfortunately this has a knock on in that forwarding can mess up line endings.
-docs-generate-markdown:
-	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} -f Dockerfile.docs .
-	docker run --rm -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} > docs/modules/ROOT/pages/index.adoc
-	tr -d "\r" < docs/modules/ROOT/pages/index.adoc > /tmp/observability-stack-docs-output.adoc
-	mv /tmp/observability-stack-docs-output.adoc docs/modules/ROOT/pages/index.adoc
-	rm -f observability-stack-docs-output.adoc
+docs:
 
 docs-license-analysis:
 	tools/tern-report.sh
