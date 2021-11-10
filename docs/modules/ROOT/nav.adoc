@@ -25,5 +25,6 @@
 * link:http://localhost:8080/prometheus/[Prometheus^]
 
 .Further Information
+* xref:prerequisite-and-setup.adoc[Pre-requisites]
 * xref:licensing.adoc[Licensing]
 * xref:support.adoc[Support]
