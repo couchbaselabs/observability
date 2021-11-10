@@ -10,6 +10,16 @@
       <form name="inputForm" id="inputForm">
         <fieldset>
           <div>
+            <label for="serverHost">Couchbase Server Hostname:</label>
+            <input
+                    type="text"
+                    id="serverHost"
+                    x-model="hostname"
+                    placeholder=""
+                    required
+            />
+          </div>
+          <div>
             <label for="serverUser">Couchbase Server Username:</label>
             <input
               type="text"
@@ -42,36 +52,14 @@
           </div>
           <div>
             <label>
-              <input type="checkbox" x-model="doPrometheus" />
-              <strong>Add Nodes to Prometheus?</strong>
+              <input type="checkbox" x-model="useTLS" />
+              <strong>Use TLS?</strong>
             </label>
           </div>
         </fieldset>
-        <h2>Couchbase Server nodes</h2>
-        <template x-for="(_, index) in nodes">
-          <fieldset>
-            <label :for="'node' + index">Hostname / IP Address:</label>
-            <input
-              :id="'node' + index"
-              x-model="nodes[index]"
-              placeholder="127.0.0.1"
-              required
-            />
-            <button
-              type="button"
-              @click="nodes.splice(index, 1)"
-              x-show="nodes.length > 1"
-            >
-              Remove
-            </button>
-          </fieldset>
-        </template>
-        <div>
-          <button type="button" @click="nodes.push('')">Add Node</button>
-        </div>
         <fieldset>
           <legend>
-            <h2>Couchbase Healthchecker configuration</h2>
+            <h2>Couchbase Cluster Monitor configuration</h2>
           </legend>
           <div>
             <div>
@@ -97,21 +85,6 @@
               />
             </div>
           </div>
-        </fieldset>
-        <fieldset x-show="doPrometheus">
-          <legend>
-            <h2>Prometheus endpoint configuration</h2>
-          </legend>
-          <div>
-            <label for="endpoint">Prometheus Exporter port:</label>
-            <input type="text" x-model="exporterPort" required />
-          </div>
-        </fieldset>
-        <fieldset>
-          <label>
-            <input type="checkbox" x-model="overwrite" />
-            <strong>Overwrite if already present?</strong>
-          </label>
         </fieldset>
         <div>
           <button type="submit" @click.prevent="configure()">
@@ -155,7 +128,7 @@
       <div x-show="success">
         Cluster successfully added! Go to
         <a href="/grafana/?orgId=1">Grafana</a> to see its health. Please note
-        that it may take up to 30 seconds for all data to be available.
+        that it may take up to 60 seconds for all data to be available.
       </div>
       <div x-show="error.length > 0" x-text="error"></div>
     </div>
@@ -164,16 +137,11 @@
       document.addEventListener("alpine:init", function () {
         Alpine.data("generator", function () {
           return {
-            nodes: [""],
-            overwrite: false,
-
-            labels: {},
-
-            exporterPort: "9091",
             managementPort: "8091",
-            serverUsername: "Administrator",
-            serverPassword: "password",
-            doPrometheus: true,
+            useTLS: false,
+            hostname: "",
+            serverUsername: "",
+            serverPassword: "",
 
             cbmmUsername: "admin",
             cbmmPassword: "password",
@@ -185,13 +153,21 @@
             error: "",
             loading: false,
 
+            init() {
+              this.$watch('secure', () => {
+                if (this.managementPort === '8091' && this.useTLS) {
+                  this.managementPort = '18091';
+                } else if (this.managementPort === '18091' && !this.useTLS) {
+                  this.managementPort = '8091';
+                }
+              })
+            },
+
             generate() {
               this.jsonPrometheus = JSON.stringify(
                 [
                   {
-                    targets: this.nodes.map(
-                      (node) => `${node}:${this.exporterPort}`
-                    ),
+                    targets: [this.hostname + ":8091"],
                     labels: {},
                   },
                 ],
@@ -201,7 +177,7 @@
               const serverConfig = JSON.stringify({
                 user: this.serverUsername,
                 password: this.serverPassword,
-                host: this.nodes[0] + ":" + this.managementPort,
+                host: this.hostname + ":" + this.managementPort,
               });
               this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://localhost/api/v1/clusters'`;
             },
@@ -211,38 +187,36 @@
               this.success = false;
               this.loading = true;
               try {
-                if (this.doPrometheus) {
-                  await fetch("/config/api/v1/addPrometheusTarget", {
-                    method: "post",
-                    headers: {
-                      "Content-Type": "application/json",
+                await fetch("/config/api/v1/clusters/add", {
+                  method: "post",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                    hostname: this.hostname,
+                    couchbaseConfig: {
+                      username: this.serverUsername,
+                      password: this.serverPassword,
+                      managementPort: parseInt(this.managementPort, 10),
+                      secure: this.secure,
                     },
-                    body: JSON.stringify({
-                      // Remove all characters invalid in file names
-                      name: this.nodes[0].replace(/[^a-zA-Z0-9\-_.]/g, "-"),
-                      targets: this.nodes.map(
-                        (node) => `${node}:${this.exporterPort}`
-                      ),
-                      labels: {},
-                      overwrite: this.overwrite,
-                    }),
+                  }),
+                })
+                  .then(async (resp) => {
+                    if (resp.status !== 200) {
+                      const data = await resp.json();
+                      throw new Error(
+                        `received unexpected status ${resp.status}: ${
+                          "err" in data ? data.err : JSON.stringify(data)
+                        }`
+                      );
+                    }
                   })
-                    .then(async (resp) => {
-                      if (resp.status !== 200) {
-                        const data = await resp.json();
-                        throw new Error(
-                          `received unexpected status ${resp.status}: ${
-                            "err" in data ? data.err : JSON.stringify(data)
-                          }`
-                        );
-                      }
-                    })
-                    .catch((e) =>
-                      Promise.reject(
-                        `Failed to add node to Prometheus: ${String(e)}`
-                      )
-                    );
-                }
+                  .catch((e) =>
+                    Promise.reject(
+                      `Failed to add node to Prometheus: ${String(e)}`
+                    )
+                  );
 
                 await fetch("/couchbase/api/v1/clusters", {
                   method: "post",
@@ -255,7 +229,7 @@
                   body: JSON.stringify({
                     user: this.serverUsername,
                     password: this.serverPassword,
-                    host: this.nodes[0] + ":" + this.managementPort,
+                    host: this.hostname + ":" + this.managementPort,
                   }),
                 })
                   .then(async (resp) => {

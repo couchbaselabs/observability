@@ -60,6 +60,6 @@ func (s *Server) handleError(err error, ctx echo.Context) {
 
 func (s *Server) Serve(host string, port int) {
 	listenHost := fmt.Sprintf("%s:%d", host, port)
-	s.logger.Sugar().Infow("Starting HTTP server", "host", host)
+	s.logger.Sugar().Infow("Starting HTTP server", "host", listenHost)
 	s.logger.Sugar().Fatalw("HTTP server exited", "err", s.echo.Start(listenHost))
 }

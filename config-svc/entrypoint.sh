@@ -22,6 +22,9 @@ export CMOS_CFG_HTTP_PATH_PREFIX=${CMOS_CFG_HTTP_PATH_PREFIX:-}
 export CMOS_CFG_HTTP_HOST=${CMOS_CFG_HTTP_HOST:-0.0.0.0}
 export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
 
+# Re-export to make sure we pick it up
+export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/config.yml}
+
 dev_arg=""
 if [[ "$CMOS_CFG_DEVELOPMENT" == "true" ]]; then
   dev_arg="-development"
