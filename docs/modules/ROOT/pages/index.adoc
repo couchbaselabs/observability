@@ -17,11 +17,11 @@ We essentially need to support two fairly distinct types of user:
 
 * No support for data persistence is currently other than mounting the relevant volumes into the container.
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
-* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh[helper script] that does this.
+* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh[helper script^] that does this.
 
 == Feedback and support
 
-Please use our official [JIRA board](https://issues.couchbase.com/projects/CMOS/issues) to report any bugs and issues with the appropriate components. We also encourage you to use the [Couchbase Forums](https://forums.couchbase.com) for posting any questions or feedback that you might have.
+Please use our official link:https://issues.couchbase.com/projects/CMOS/issues[JIRA board^] to report any bugs and issues with the appropriate components. We also encourage you to use the link:https://forums.couchbase.com[Couchbase Forums^] for posting any questions or feedback that you might have.
 
 No official support is currently provided but best efforts will be made and we are keen to hear of any issues.
 

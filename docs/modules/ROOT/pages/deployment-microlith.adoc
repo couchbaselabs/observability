@@ -34,7 +34,7 @@ image::microlith-config.png[]
 There are three directories used for alerting rules:
 
 * `/etc/prometheus/alerting/couchbase`: Couchbase preset rules. Do not modify these, as your changes may be overwritten when you upgrade. Instead, use overrides (described below).
-* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with https://github.com/lablabs/prometheus-alert-overrider[prometheus-alert-overrider], enabling you to customize our rules. For an example, see https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides[our integration tests].
+* `/etc/prometheus/alerting/overrides`: Space for your overrides of the Couchbase rules. These will be pre-processed with https://github.com/lablabs/prometheus-alert-overrider[prometheus-alert-overrider^], enabling you to customize our rules. For an example, see https://github.com/couchbaselabs/observability/tree/main/testing/microlith-test/integration/prometheus_alert_overrides[our integration tests^].
 * `/etc/prometheus/alerting/custom`: Space for your own custom rules. These will be loaded by Prometheus but will not be pre-processed in any way.
 
 There is also a fourth directory, `/etc/prometheus/alerting/generated`, where the processed rules file will be written. Do not modify this directory, as your changes may be overwritten as part of the build process.

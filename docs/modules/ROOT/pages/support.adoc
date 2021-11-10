@@ -1,11 +1,11 @@
 = Feedback and support
 
-Please use our official [JIRA board](https://issues.couchbase.com/projects/CMOS/issues) to report any bugs and issues with the appropriate components. We also encourage you to use the [Couchbase Forums](https://forums.couchbase.com) for posting any questions or feedback that you might have.
+Please use our official link:https://issues.couchbase.com/projects/CMOS/issues[JIRA board^] to report any bugs and issues with the appropriate components. We also encourage you to use the link:https://forums.couchbase.com[Couchbase Forums^] for posting any questions or feedback that you might have.
 
 No official support is currently provided but best efforts will be made and we are keen to hear of any issues.
 
 == Reporting a Vulnerability
 
-Refer to https://www.couchbase.com/resources/security#VulnerabilityHandling for full details of the security policy provided by Couchbase.
+Refer to the link:https://www.couchbase.com/resources/security#VulnerabilityHandling[Couchbase security policy^] for full details.
 
 Please contact security@couchbase.com with details of any vulnerabilities found.

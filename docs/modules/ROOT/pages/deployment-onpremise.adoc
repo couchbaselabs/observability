@@ -1,6 +1,6 @@
 = On-premise usage
 
-A working example is https://github.com/couchbaselabs/observability/tree/main/examples/containers/[provided] based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
+A working example is https://github.com/couchbaselabs/observability/tree/main/examples/containers/[provided^] based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
 
 The basic steps are:
 
@@ -8,7 +8,7 @@ The basic steps are:
 . Run the microlith container up: `docker run --name=couchbase-grafana --rm -d -P couchbase-observability`
 . Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.
 
-Prometheus end points and credentials can be added to the https://github.com/couchbaselabs/observability/tree/main/microlith/dynamic/prometheus/couchbase/targets.json[config file] mounted into the container above. This is periodically rescanned and new end points added.
+Prometheus end points and credentials can be added to the https://github.com/couchbaselabs/observability/tree/main/microlith/dynamic/prometheus/couchbase/targets.json[config file^] mounted into the container above. This is periodically rescanned and new end points added.
 
 [source, yaml]
 ----
