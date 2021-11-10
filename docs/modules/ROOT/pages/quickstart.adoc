@@ -1,6 +1,6 @@
 = Quick Start
 
-You will need a Docker daemon - on Linux use your respective package manager, on MacOS or Windows you can use https://www.docker.com/products/docker-desktop[Docker Desktop^].
+You will need a Docker daemon - on Linux use your respective package manager, on macOS or Windows you can use https://www.docker.com/products/docker-desktop[Docker Desktop^].
 
 You will also need a Couchbase Server cluster running and accessible - for testing we recommend using https://github.com/couchbaselabs/vagrants[Vagrant^] or https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html[Docker^]. If you are using Couchbase Server 6.6, you will need the https://github.com/couchbase/couchbase-exporter[Couchbase Prometheus Exporter^] set up on each of your Couchbase Server nodes.
 
