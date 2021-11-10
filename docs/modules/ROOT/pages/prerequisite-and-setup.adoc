@@ -17,6 +17,8 @@ This release supports the monitoring of the following Couchbase software:
 | 6.6, 7.0
 |===
 
+If you are using Couchbase Server 6.6, you will need the https://github.com/couchbase/couchbase-exporter[Couchbase Prometheus Exporter^] set up on each of your Couchbase Server nodes.
+
 == CPU and Memory Requirements
 
 Using this feature will require:
@@ -42,4 +44,8 @@ CMOS does not need to monitor the host it is running on.
 == Container Requirements
 
 CMOS is deployed as a container instance even on-premise so requires a functional container runtime to be installed and configured appropriately.
+We recommend using https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html[Docker^].
+
 The container runtime will need access to the CMOS container from an appropriate registry or pre-loaded directly on to the node running the container.
+
+If your Couchbase Server is running in Docker, you may need to set https://docs.docker.com/network/[extra options^] to permit them to communicate with CMOS.
