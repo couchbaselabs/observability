@@ -52,19 +52,6 @@ FILTER="${FILTER} -e s/kbd:\[[^\]*\]//g"
 # CHECK_ARGS is the spell checking command to run.
 CHECK_ARGS="-l en_US --home-dir=$SCRIPT_DIR/../"
 
-# Before we spell check, ensure that the docs are generated...
-make docs -C "$SCRIPT_DIR/../"
-
-GIT_STATUS="$(git status --short)"
-if [[ ${GIT_STATUS} != "" ]]; then
-  echo "Documentation has not been generated and committed:"
-  echo "${GIT_STATUS}"
-  git diff
-  echo
-  echo "Run 'make docs' and commit the result."
-  exit 1
-fi
-
 # For each asciidoc we find in the documentation, filter out the
 # stuff that isn't real text and spell check the remainder.  For now
 # only look in the top-level directory, anything outside of it is

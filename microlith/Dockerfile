@@ -325,7 +325,7 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
 # Add all useful and required information
 COPY licenses/* /licenses/
-COPY README.md /help.1
+COPY docs/modules/ROOT/pages/support.adoc /help.1
 
 # Couchbase proprietary start
 COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
