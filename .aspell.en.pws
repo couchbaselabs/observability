@@ -1,4 +1,4 @@
-personal_ws-1.1 en 56
+personal_ws-1.1 en 59
 AGPL
 CAO
 CMOS
@@ -55,3 +55,6 @@ AlertManager
 Github
 roadmap
 macOS
+CPUs
+MiB
+RBAC
