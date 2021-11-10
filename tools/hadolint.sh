@@ -24,6 +24,8 @@ while IFS= read -r -d '' file; do
     if ! docker run --rm -i hadolint/hadolint < "$file"; then
         exit_code=1
     fi
-done < <(find "${SCRIPT_DIR}/.." -type d -path "*/tools/tern" -prune -o -type f -name '*dockerignore' -prune -o -type f -name 'Dockerfile*' -print0)
+done < <(find "${SCRIPT_DIR}/.." \
+            -type d -path "*/tools/tern" -prune -o \
+            -type f -name '*dockerignore' -prune -o -type f -name 'Dockerfile*' -print0)
 
 exit $exit_code
