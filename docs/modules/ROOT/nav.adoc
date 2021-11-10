@@ -1,5 +1,5 @@
 * xref:index.adoc[Home]
-* xref:quickstart.adoc[Quickstart guide]
+* xref:quickstart.adoc[Quick start guide]
 
 .Architecture
 * xref:architecture.adoc[Architecture overview]

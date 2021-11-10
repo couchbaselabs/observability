@@ -7,7 +7,7 @@ image::microlith-runtime.png[]
 
 == Usage
 
-To run refer to the xref:quickstart.adoc[quickstart guide] for full details:
+To run refer to the xref:quickstart.adoc[quick start guide] for full details:
 
 [source, console]
 ----
@@ -23,7 +23,7 @@ docker container port couchbase-grafana 3000
 :::55124
 ----
 
-Browse to `localhost:55124` and log in with the default creds of `admin:password` for Grafana.
+Browse to `localhost:55124` and log in with the default credentials of `admin:password` for Grafana.
 
 == Configuration options
 
@@ -70,14 +70,14 @@ export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/p
 === Prometheus
 
 Prometheus has various configuration options exposed, almost entirely via files unfortunately but that is the only real way.
-This is handled by mounting the configuration you want into the container, e.g. from a ConfigMap in Kubernetes or volumes/bind mounts locally.
+This is handled by mounting the configuration you want into the container, e.g. from a `ConfigMap` in Kubernetes or volumes/bind mounts locally.
 
 Note that to pick up changes to configuration we may need to reload config files via the `reload` endpoint: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration
 
 ==== End points
 The [file-based service discovery](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config) approach is used to support adding/removing end points to scrape metrics for dynamically.
 
-The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entrypoint adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}` directory when it is run.
+The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entry point adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}` directory when it is run.
 
 To add Couchbase Server end points, create a similar JSON format file to the link:https://github.com/couchbaselabs/observability/blob/main/examples/containers/dynamic/prometheus/couchbase-servers/targets.json[example^] in the `/etc/prometheus/couchbase/custom/` directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).
 
