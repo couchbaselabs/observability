@@ -28,64 +28,62 @@ paths:
               schema:
                 type: object
 
-  /addPrometheusTarget:
+  /clusters/add:
     post:
-      summary: Add a Prometheus target to this CMOS instance
+      summary: Add a new Couchbase cluster to Prometheus
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              type: object
-              additionalProperties: false
-              required: [name, labels, targets]
-              properties:
-                name:
-                  type: string
-                nameLabel:
-                  type: string
-                overwrite:
-                  type: boolean
-                  default: false
-                labels:
-                  type: object
-                  additionalProperties:
-                    type: string
-                targets:
-                  type: array
-                  items:
-                    type: string
+              $ref: "#/components/schemas/Cluster"
       responses:
         '200':
-          description: Prometheus target was added
+          description: Cluster added successfully
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StandardResponse"
-        '409':
-          description: Target already exists and overwrite was not specified
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/StandardResponse"
+                type: object
+                additionalProperties: false
+                required: [ok]
+                properties:
+                  ok:
+                    type: boolean
+                    enum: [true]
+
 
 components:
   schemas:
-    StandardResponse:
-      oneOf:
-        - type: object
+    Cluster:
+      type: object
+      additionalProperties: false
+      required: [couchbaseConfig, hostname]
+      properties:
+        name:
+          type: string
+        couchbaseConfig:
+          type: object
           additionalProperties: false
-          required: [ok]
+          required: [username, password]
           properties:
-            ok:
-              type: boolean
-              enum: [true]
-        - type: object
-          additionalProperties: false
-          required: [ok, error]
-          properties:
-            ok:
-              type: boolean
-              enum: [false]
-            error:
+            managementPort:
+              type: number
+              default: 8091
+            username:
               type: string
+            password:
+              type: string
+            secure:
+              type: boolean
+        hostname:
+          type: string
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required: [ ok, error ]
+      properties:
+        ok:
+          type: boolean
+          enum: [ false ]
+        error:
+          type: string

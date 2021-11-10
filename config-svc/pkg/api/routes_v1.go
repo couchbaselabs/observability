@@ -15,91 +15,135 @@
 package api
 
 import (
-	"encoding/json"
-	"errors"
 	"fmt"
-	"io/fs"
+	"io"
 	"net/http"
 	"os"
 
-	"github.com/kennygrant/sanitize"
+	"github.com/couchbase/tools-common/cbvalue"
+	"github.com/couchbaselabs/observability/config-svc/pkg/couchbase"
+	"github.com/couchbaselabs/observability/config-svc/pkg/prometheus"
+	"gopkg.in/yaml.v3"
 
 	v1 "github.com/couchbaselabs/observability/config-svc/pkg/api/v1"
 	"github.com/labstack/echo/v4"
 )
 
-const (
-	prometheusTargetsPathDevelopment = "./targets/%s.json"
-	prometheusTargetsPathProduction  = "/etc/prometheus/couchbase/custom/%s.json"
-)
+const defaultPrometheusConfigPath = "/etc/prometheus/prometheus.yml"
 
-type prometheusTargets []struct {
-	Targets []string          `json:"targets"`
-	Labels  map[string]string `json:"labels"`
-}
-
-func (s *Server) PostAddPrometheusTarget(ctx echo.Context) error {
-	var data v1.PostAddPrometheusTargetJSONBody
+func (s *Server) PostClustersAdd(ctx echo.Context) error {
+	var data v1.PostClustersAddJSONRequestBody
 	if err := ctx.Bind(&data); err != nil {
 		return err
 	}
 
-	labels := data.Labels.AdditionalProperties
-	if labels == nil {
-		labels = make(map[string]string)
+	secure := false
+	if data.CouchbaseConfig.Secure != nil && *data.CouchbaseConfig.Secure {
+		secure = true
 	}
-	if data.NameLabel != nil {
-		labels[*data.NameLabel] = data.Name
+	mgmtPort := 8091
+	if data.CouchbaseConfig.ManagementPort != nil {
+		mgmtPort = int(*data.CouchbaseConfig.ManagementPort)
 	}
-	value := prometheusTargets{
-		{
-			Targets: data.Targets,
-			Labels:  labels,
-		},
-	}
-	if value[0].Labels == nil {
-		value[0].Labels = make(map[string]string)
-	}
-	valueJSON, err := json.Marshal(value)
+	cluster, err := couchbase.FetchCouchbaseClusterInfo(
+		data.Hostname,
+		mgmtPort,
+		secure,
+		data.CouchbaseConfig.Username,
+		data.CouchbaseConfig.Password,
+	)
 	if err != nil {
 		return err
 	}
 
-	var path string
-	if s.production {
-		path = prometheusTargetsPathProduction
-	} else {
-		path = prometheusTargetsPathDevelopment
+	staticConfig := prometheus.StaticConfig{
+		Targets: make([]string, len(cluster.Nodes)),
+		Labels: map[string]string{
+			"cluster": cluster.ClusterName,
+		},
 	}
-	path = fmt.Sprintf(path, sanitize.Name(data.Name))
 
-	if data.Overwrite == nil || !*data.Overwrite {
-		_, err := os.Stat(path)
-		if err == nil {
-			return echo.NewHTTPError(http.StatusConflict, "target already exists")
-		} else if errors.Is(err, fs.ErrNotExist) {
-			// Ignore it
-		} else {
+	var anyNodeCB7 bool
+
+	for i, node := range cluster.Nodes {
+		hostname, mgmtPort, err := node.ResolveHostPort(secure)
+		if err != nil {
 			return err
+		}
+		if node.Version.AtLeast(cbvalue.Version7_0_0) {
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
+			anyNodeCB7 = true
+		} else {
+			// TODO: allow customising this
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, 9091)
 		}
 	}
 
-	outFile, err := os.OpenFile(path, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0o664)
+	cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
+	if cfgPath == "" {
+		cfgPath = defaultPrometheusConfigPath
+	}
+	cfgFile, err := os.OpenFile(cfgPath, os.O_RDWR, 0)
+	if err != nil {
+		return fmt.Errorf("failed to open Prometheus config: %w", err)
+	}
+	defer cfgFile.Close()
+	existingConfig, err := io.ReadAll(cfgFile)
+	if err != nil {
+		return fmt.Errorf("failed to read Prometheus config: %w", err)
+	}
+	var cfg prometheus.Configuration
+	if err := yaml.Unmarshal(existingConfig, &cfg); err != nil {
+		return fmt.Errorf("failed to parse Prometheus config: %w", err)
+	}
+
+	scrapeConfig := prometheus.ScrapeConfig{
+		// Job name needs to be unique
+		JobName:       fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1),
+		StaticConfigs: []prometheus.StaticConfig{staticConfig},
+	}
+	if anyNodeCB7 {
+		scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
+			BasicAuth: prometheus.BasicAuthConfig{
+				Username: data.CouchbaseConfig.Username,
+				Password: data.CouchbaseConfig.Password,
+			},
+		}
+	}
+
+	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, &scrapeConfig)
+
+	configYaml, err := yaml.Marshal(&cfg)
+	if err != nil {
+		return fmt.Errorf("failed to marshal Prometheus config: %w", err)
+	}
+
+	err = overwriteFileContents(cfgFile, configYaml)
 	if err != nil {
 		return err
 	}
-	if _, err = outFile.Seek(0, 0); err != nil {
-		return err
-	}
-	if _, err = outFile.Write(valueJSON); err != nil {
-		return err
-	}
-	if err = outFile.Close(); err != nil {
-		return err
-	}
+
 	return ctx.JSON(http.StatusOK, map[string]interface{}{
 		"ok": true,
 	})
+}
+
+func overwriteFileContents(file *os.File, contents []byte) error {
+	if err := file.Truncate(0); err != nil {
+		return fmt.Errorf("failed to truncate Prometheus config: err")
+	}
+
+	if _, err := file.Seek(0, 0); err != nil {
+		return fmt.Errorf("failed to seek Prometheus config: %w", err)
+	}
+
+	if _, err := file.Write(contents); err != nil {
+		return fmt.Errorf("failed to write Prometheus config: %w", err)
+	}
+	if err := file.Close(); err != nil {
+		return fmt.Errorf("failed to close Prometheus config: %w", err)
+	}
+	return nil
 }
 
 func (s *Server) GetOpenapiJson(ctx echo.Context) error { //nolint:revive

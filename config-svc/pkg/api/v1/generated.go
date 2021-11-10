@@ -7,7 +7,6 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/url"
 	"path"
@@ -17,84 +16,29 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// StandardResponse defines model for StandardResponse.
-type StandardResponse interface{}
-
-// PostAddPrometheusTargetJSONBody defines parameters for PostAddPrometheusTarget.
-type PostAddPrometheusTargetJSONBody struct {
-	Labels    PostAddPrometheusTargetJSONBody_Labels `json:"labels"`
-	Name      string                                 `json:"name"`
-	NameLabel *string                                `json:"nameLabel,omitempty"`
-	Overwrite *bool                                  `json:"overwrite,omitempty"`
-	Targets   []string                               `json:"targets"`
+// Cluster defines model for Cluster.
+type Cluster struct {
+	CouchbaseConfig struct {
+		ManagementPort *float32 `json:"managementPort,omitempty"`
+		Password       string   `json:"password"`
+		Secure         *bool    `json:"secure,omitempty"`
+		Username       string   `json:"username"`
+	} `json:"couchbaseConfig"`
+	Hostname string  `json:"hostname"`
+	Name     *string `json:"name,omitempty"`
 }
 
-// PostAddPrometheusTargetJSONBody_Labels defines parameters for PostAddPrometheusTarget.
-type PostAddPrometheusTargetJSONBody_Labels struct {
-	AdditionalProperties map[string]string `json:"-"`
-}
+// PostClustersAddJSONBody defines parameters for PostClustersAdd.
+type PostClustersAddJSONBody Cluster
 
-// PostAddPrometheusTargetJSONRequestBody defines body for PostAddPrometheusTarget for application/json ContentType.
-type PostAddPrometheusTargetJSONRequestBody = PostAddPrometheusTargetJSONBody
-
-// Getter for additional properties for PostAddPrometheusTargetJSONBody_Labels. Returns the specified
-// element and whether it was found
-func (a PostAddPrometheusTargetJSONBody_Labels) Get(fieldName string) (value string, found bool) {
-	if a.AdditionalProperties != nil {
-		value, found = a.AdditionalProperties[fieldName]
-	}
-	return
-}
-
-// Setter for additional properties for PostAddPrometheusTargetJSONBody_Labels
-func (a *PostAddPrometheusTargetJSONBody_Labels) Set(fieldName string, value string) {
-	if a.AdditionalProperties == nil {
-		a.AdditionalProperties = make(map[string]string)
-	}
-	a.AdditionalProperties[fieldName] = value
-}
-
-// Override default JSON handling for PostAddPrometheusTargetJSONBody_Labels to handle AdditionalProperties
-func (a *PostAddPrometheusTargetJSONBody_Labels) UnmarshalJSON(b []byte) error {
-	object := make(map[string]json.RawMessage)
-	err := json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if len(object) != 0 {
-		a.AdditionalProperties = make(map[string]string)
-		for fieldName, fieldBuf := range object {
-			var fieldVal string
-			err := json.Unmarshal(fieldBuf, &fieldVal)
-			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
-			}
-			a.AdditionalProperties[fieldName] = fieldVal
-		}
-	}
-	return nil
-}
-
-// Override default JSON handling for PostAddPrometheusTargetJSONBody_Labels to handle AdditionalProperties
-func (a PostAddPrometheusTargetJSONBody_Labels) MarshalJSON() ([]byte, error) {
-	var err error
-	object := make(map[string]json.RawMessage)
-
-	for fieldName, field := range a.AdditionalProperties {
-		object[fieldName], err = json.Marshal(field)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
-		}
-	}
-	return json.Marshal(object)
-}
+// PostClustersAddJSONRequestBody defines body for PostClustersAdd for application/json ContentType.
+type PostClustersAddJSONRequestBody = PostClustersAddJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Add a Prometheus target to this CMOS instance
-	// (POST /addPrometheusTarget)
-	PostAddPrometheusTarget(ctx echo.Context) error
+	// Add a new Couchbase cluster to Prometheus
+	// (POST /clusters/add)
+	PostClustersAdd(ctx echo.Context) error
 	// Outputs the OpenAPI specification for this API.
 	// (GET /openapi.json)
 	GetOpenapiJson(ctx echo.Context) error
@@ -105,12 +49,12 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
-// PostAddPrometheusTarget converts echo context to params.
-func (w *ServerInterfaceWrapper) PostAddPrometheusTarget(ctx echo.Context) error {
+// PostClustersAdd converts echo context to params.
+func (w *ServerInterfaceWrapper) PostClustersAdd(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.PostAddPrometheusTarget(ctx)
+	err = w.Handler.PostClustersAdd(ctx)
 	return err
 }
 
@@ -151,7 +95,7 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.POST(baseURL+"/addPrometheusTarget", wrapper.PostAddPrometheusTarget)
+	router.POST(baseURL+"/clusters/add", wrapper.PostClustersAdd)
 	router.GET(baseURL+"/openapi.json", wrapper.GetOpenapiJson)
 
 }
@@ -159,19 +103,18 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
