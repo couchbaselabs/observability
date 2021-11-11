@@ -46,7 +46,7 @@ function getOptions() {
             return { files, pullRequest: undefined };
         }
     } catch(e) {
-        console.log("Error detected so defaulting to all dashboards", e);
+        console.error("Error detected so defaulting to all dashboards", e);
         files = fs.readdirSync(dashboardsBase).map(x => path.join(dashboardsBase, x)).filter(x => /\.json$/.test(x));
         return { files, pullRequest: undefined };
     }
