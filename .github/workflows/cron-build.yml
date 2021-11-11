@@ -98,6 +98,7 @@ jobs:
 
             - name: Apply VirtualBox workaround for networking issues # (https://www.virtualbox.org/ticket/20636#comment:20)
               run: |
+                mkdir -p /etc/vbox/
                 echo "* 0.0.0.0/0 ::/0" >> /etc/vbox/networks.conf
 
             - name: Setup Docker
