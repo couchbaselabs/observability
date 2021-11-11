@@ -6,61 +6,346 @@
 
 === kube-state-metrics
 A prerequisite to configuring CMOS is to install kube-state-metrics. This can be done via helm.
-
-
+----
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
+----
 
 === Prometheues
 We want to configure our own promethues config so first delete the existing config:
-
+----
 kubectl delete configmap prometheus-config || true
+----
 
-Now create config using the below yaml:
+Now create config with the below contents. Save the below content in a file called `prometheus-k8s.yml`
+[source,yaml]
+----
+# This is a template file we use so we can substitute environment variables at launch
+global:
+    scrape_interval: 30s
+    evaluation_interval: 30s
+  # scrape_timeout is set to the global default (10s).
 
-## Add yaml as code snippet
-kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+    external_labels:
+        monitor: couchbase-observability-stack
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  # All Couchbase default rules go here
+    - /etc/prometheus/alerting/couchbase/*.yaml
+    - /etc/prometheus/alerting/couchbase/*.yml
+  # All custom rules can go here: relative to this file
+    - alerting/*.yaml
+    - alerting/*.yml
+
+alerting:
+    alertmanagers:
+        - scheme: http
+    # tls_config:
+    #   ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    # bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+          path_prefix: /alertmanager/
+    # Assumption is we always have AlertManager with Prometheus
+          static_configs:
+              - targets:
+                    - localhost:9093
+    # Discover alert manager instances using K8s service discovery
+    # kubernetes_sd_configs:
+    #   - role: pod
+    # relabel_configs:
+    # - source_labels: [__meta_kubernetes_namespace]
+    #   regex: monitoring
+    #   action: keep
+    # - source_labels: [__meta_kubernetes_pod_label_app]
+    #   regex: prometheus
+    #   action: keep
+    # - source_labels: [__meta_kubernetes_pod_label_component]
+    #   regex: alertmanager
+    #   action: keep
+    # - source_labels: [__meta_kubernetes_pod_container_port_number]
+    #   regex:
+    #   action: drop
+
+scrape_configs:
+    - job_name: prometheus
+      metrics_path: /prometheus/metrics
+      static_configs:
+          - targets: [localhost:9090]
+
+    - job_name: couchbase-grafana
+      file_sd_configs:
+          - files:
+                - /etc/prometheus/couchbase/monitoring/*.json
+            refresh_interval: 30s
+
+  # TODO: add unauthenticated endpoint
+    - job_name: couchbase-cluster-monitor
+      basic_auth:
+          username: admin
+          password: password
+      metrics_path: /api/v1/_prometheus
+    # For basic auth we cannot use file_sd
+      static_configs:
+          - targets: [localhost:7196]
+
+  # Used for kubernetes deployment as we can discover the end points to scrape from the API
+    - job_name: couchbase-kubernetes-pods
+      kubernetes_sd_configs:
+          - role: pod
+      relabel_configs:
+      # Scrape pods labelled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: couchbase
+          - source_labels: [__meta_kubernetes_pod_container_port_number]
+            action: keep
+            regex: (9091|2020)
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+
+  # Kube-state-metrics default service to scrape
+    - job_name: kube-state-metrics
+      static_configs:
+          - targets: [kube-state-metrics:8080]
+----
+
+Run the below command to create the prometheus config.
+----
+kubectl delete configmap prometheus-config || true
+kubectl create configmap prometheus-config --from-file="prometheus-k8s.yml"
+----
 
 === Microlith
-## Add yaml as code snippet
 
-kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
+==== RBAC
+Create the rbac in kubernetes cluster, Save the below content in `rbac.yaml`.
+[source, yaml]
+----
+# Prometheus service discovery via the K8S API requires some permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: monitoring-endpoints-role
+    labels:
+        rbac.couchbase.observability.com/aggregate-to-monitoring: 'true'
+rules:
+    - apiGroups: ['']
+      resources: [services, endpoints, pods, secrets]
+      verbs: [get, list, watch]
+    - apiGroups: [couchbase.com]
+      resources: [couchbaseclusters]
+      verbs: [get, list, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: monitoring-role-binding
+roleRef:
+    kind: ClusterRole
+    name: monitoring-endpoints-role
+    apiGroup: rbac.authorization.k8s.io
+subjects:
+    - kind: Group
+      name: system:serviceaccounts
+      apiGroup: rbac.authorization.k8s.io
+----
 
-# Set up ingress
+Execute the below command to create rbac in cluster
+----
+kubectl apply -f "rbac.yaml"
+----
+
+==== Monitoring
+[source,yaml]
+----
+# Our actual container to run
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: couchbase-grafana
+spec:
+    selector:
+        matchLabels:
+            run: couchbase-grafana
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                run: couchbase-grafana
+        spec:
+            containers:
+                - name: couchbase-grafana
+                  image: couchbase/observability-stack:v1
+                  ports:
+                      - name: http
+                        containerPort: 8080
+                      - name: loki # So we can push logs to it
+                        containerPort: 3100
+                  env:
+                      - name: KUBERNETES_DEPLOYMENT
+                        value: 'true'
+                      - name: ENABLE_LOG_TO_FILE
+                        value: 'true'
+                      - name: PROMETHEUS_CONFIG_FILE
+                        value: /etc/prometheus/custom/prometheus-k8s.yml
+                      - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
+                        value: ignore
+                  volumeMounts:
+                      - name: prometheus-config-volume
+                        mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
+      # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
+                - name: prometheus-config-watcher
+                  image: weaveworks/watch:master-9199bf5
+                  args: [-v, -t, -p=/etc/prometheus/custom, curl, -X, POST, --fail, -o, '-', -sS, http://localhost:8080/prometheus/-/reload]
+                  volumeMounts:
+                      - name: prometheus-config-volume
+                        mountPath: /etc/prometheus/custom
+            volumes:
+                - name: prometheus-config-volume
+                  configMap:
+                      name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: couchbase-grafana-http
+    labels:
+        run: couchbase-grafana
+spec:
+    ports:
+        - port: 8080
+          protocol: TCP
+    selector:
+        run: couchbase-grafana
+---
+# To allow us to send to Loki we need this
+apiVersion: v1
+kind: Service
+metadata:
+    name: loki
+    labels:
+        run: couchbase-grafana
+spec:
+    ports:
+        - port: 3100
+          protocol: TCP
+    selector:
+        run: couchbase-grafana
+----
+
+=== Set up ingress
+
+==== Ingress Controller
+----
 INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
 kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=120s
-kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"
+kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
+----
 
-# Create the secret for Fluent Bit customisation
+==== Ingress
+Save the below content in a file called `ingress.yaml`
+[source,yaml]
+----
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: couchbase-ingress
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+        nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+    rules:
+        - http:
+              paths:
+                  - path: /(.*)(/|$)
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: couchbase-grafana-http
+                            port:
+                                number: 8080
+----
+
+Apply the ingress the k8s cluster using below command.
+----
+kubectl apply -f ingress.yaml
+----
+
+=== Create the secret for Fluent Bit customisation
+
+Save the below content in `fluent-bit.conf`
+----
+@include /fluent-bit/etc/fluent-bit.conf
+
+# The following needs a 'loki' host
+@include /fluent-bit/etc/couchbase/out-loki.conf
+----
+
+Create the fluent-bit secret in kubernetes cluster
+----
 kubectl delete secret fluent-bit-custom 2>/dev/null || true
-kubectl create secret generic fluent-bit-custom --from-file="${SCRIPT_DIR}/fluent-bit.conf"
+kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
+----
 
-# Output the contents of the secret so we can verify
-# shellcheck disable=SC2016
+=== verify
+
+The output of below command should match with the content of `fluent-bit.conf`
+----
 kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
+----
 
-# Add Couchbase via helm chart
-if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; then
-  if ! helm repo list|grep couchbase|grep -q https://couchbase-partners.github.io/helm-charts ; then
-    echo "Unable to add Couchbase helm repository, remove the current 'couchbase' entry using 'helm repo remove couchbase' then re-run this script"
-    helm repo list|grep couchbase
-    exit 1
-  fi
-fi
+=== Install Couchbase via helm chart
+Add the couchbase repository in helm.
+----
+helm repo add couchbase https://couchbase-partners.github.io/helm-charts
 helm repo update
-helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
+----
+Save the below content in file called `custom-values.yaml`
+[source,yaml]
+----
+---
+cluster:
+    logging:
+        server:
+            enabled: true
+            manageConfiguration: false # Provide custom configuration to use
+            configurationName: fluent-bit-custom # Name of the secret to use
+            sidecar:
+                image: couchbase/fluent-bit:1.1.1
+    monitoring:
+        prometheus:
+            enabled: true
+    servers:
+        default:
+            volumeMounts:
+                default: couchbase
+    volumeClaimTemplates:
+        - metadata:
+              name: couchbase
+          spec:
+              resources:
+                  requests:
+                      storage: 1Gi
+----
 
-# Wait for deployment to complete
-echo "Waiting for CB to start up..."
-until [[ $(kubectl get pods --field-selector=status.phase=Running --selector='app=couchbase' --no-headers 2>/dev/null |wc -l) -eq 3 ]]; do
-    echo -n '.'
-    sleep 2
-done
-echo "CB running"
+Run the below helm upgrade command to upgrade/install it.
+----
+helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="couchbase/server:6.6.3" --values="custom-values.yaml"
+----
 
-echo "To monitor go to http://localhost/"
+Wait for the couchbase operator to be in Running state, you can check it via below command.
+----
+kubectl get pods --field-selector=status.phase=Running --selector='app=couchbase'
+----
+
+Once the couchbase will be in Running state you can monitor http://localhost/
