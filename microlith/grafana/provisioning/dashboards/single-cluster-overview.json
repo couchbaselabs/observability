@@ -23,7 +23,22 @@
   "graphTooltip": 2,
   "id": 4,
   "iteration": 1635786860242,
-  "links": [],
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "couchbase-inventory"
+      ],
+      "targetBlank": false,
+      "title": "Couchbase Inventory",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "panels": [
     {
       "collapsed": false,

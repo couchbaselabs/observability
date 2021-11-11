@@ -22,8 +22,22 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "links": [],
+  "id": 5,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Add Cluster",
+      "tooltip": "",
+      "type": "link",
+      "url": "/public/cmos-doc-redirect.html#/promwebform.html"
+    }
+  ],
+  "liveNow": false,
   "panels": [
     {
       "datasource": "JSON API",
@@ -320,14 +334,17 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 30,
+  "schemaVersion": 31,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "couchbase",
+    "couchbase-inventory"
+  ],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-15m",
     "to": "now"
   },
   "timepicker": {},

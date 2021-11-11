@@ -22,9 +22,24 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 2,
-  "iteration": 1636552598772,
-  "links": [],
+  "id": 6,
+  "iteration": 1636626119419,
+  "links": [
+    {
+      "asDropdown": false,
+      "icon": "external link",
+      "includeVars": false,
+      "keepTime": true,
+      "tags": [
+        "couchbase-inventory"
+      ],
+      "targetBlank": false,
+      "title": "Couchbase Inventory",
+      "tooltip": "",
+      "type": "dashboards",
+      "url": ""
+    }
+  ],
   "liveNow": false,
   "panels": [
     {
@@ -1603,5 +1618,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 1
+  "version": 2
 }
