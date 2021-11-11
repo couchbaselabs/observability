@@ -10,6 +10,18 @@ on:
         branches:
             - main
 jobs:
+  # Ensure we always run unit tests
+    run-unit-tests:
+      name: Run PR unit tests
+      runs-on: ubuntu-latest
+      timeout-minutes: 5
+      steps:
+          - name: Checkout code
+            uses: actions/checkout@v2
+
+          - name: Run makefile target for unit tests
+            run: |
+                make test-unit
 
   # Build an image to share across jobs
     build-oss-container:

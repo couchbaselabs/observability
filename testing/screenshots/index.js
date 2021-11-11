@@ -5,43 +5,49 @@ const puppeteer = require("puppeteer");
 
 function getOptions() {
     const dashboardsBase = path.resolve(".", "../../microlith/grafana/provisioning/dashboards");
-    if ("GITHUB_ACTIONS" in process.env) {
-        const context = require("@actions/github").context;
-        if ("inputs" in context.payload) {
+    try {
+        if ("GITHUB_ACTIONS" in process.env) {
             let files;
-            if (context.payload.inputs.files === "all") {
+            const context = require("@actions/github").context;
+            if ("inputs" in context.payload) {
+                if (context.payload.inputs.files === "all") {
+                    files = fs.readdirSync(dashboardsBase).map(x => path.join(dashboardsBase, x)).filter(x => /\.json$/.test(x));
+                } else {
+                    files = context.payload.inputs.files.split(/,\s?/).map(x => path.resolve(dashboardsBase, x + ".json"));
+                }
+                let pullRequest;
+                if (context.payload.inputs.pr) {
+                    pullRequest = parseInt(context.payload.inputs.pr);
+                }
+                return {
+                    files,
+                    pullRequest
+                };
+            } else {
+                const base = context.payload.pull_request.base.sha;
+                const head = context.payload.pull_request.head.sha;
+                // Ignore deleted files
+                const changedFiles = child_process.execSync(`git diff --diff-filter=d --name-only ${base} ${head} `, { encoding: "ascii" }).trim().split("\n");
+                return {
+                    files: changedFiles,
+                    pullRequest: context.payload.pull_request.number
+                };
+            }
+        } else {
+            if (process.argv.length < 3) {
+                throw new Error("Insufficient arguments. Usage: node index.js [comma-separated-files | 'all']");
+            }
+            const filesInput = process.argv[2];
+            if (filesInput.trim() === "all") {
                 files = fs.readdirSync(dashboardsBase).map(x => path.join(dashboardsBase, x)).filter(x => /\.json$/.test(x));
             } else {
-                files = context.payload.inputs.files.split(/,\s?/).map(x => path.resolve(dashboardsBase, x + ".json"));
+                files = filesInput.split(/,\s?/).map(x => path.resolve(dashboardsBase, x + ".json"));
             }
-            let pullRequest;
-            if (context.payload.inputs.pr) {
-                pullRequest = parseInt(context.payload.inputs.pr);
-            }
-            return {
-                files,
-                pullRequest
-            };
-        } else {
-            const base = context.payload.pull_request.base.sha;
-            const head = context.payload.pull_request.head.sha;
-            // Ignore deleted files
-            const changedFiles = child_process.execSync(`git diff --diff-filter=d --name-only ${base} ${head}`, { encoding: "ascii" }).trim().split("\n");
-            return {
-                files: changedFiles,
-                pullRequest: context.payload.pull_request.number
-            };
+            return { files, pullRequest: undefined };
         }
-    } else {
-        if (process.argv.length < 3) {
-            throw new Error("Insufficient arguments. Usage: node index.js [comma-separated-files | 'all'");
-        }
-        const filesInput = process.argv[2];
-        if (filesInput.trim() === "all") {
-            files = fs.readdirSync(dashboardsBase).map(x => path.join(dashboardsBase, x)).filter(x => /\.json$/.test(x));
-        } else {
-            files = filesInput.split(/,\s?/).map(x => path.resolve(dashboardsBase, x + ".json"));
-        }
+    } catch(e) {
+        console.error("Error detected so defaulting to all dashboards", e);
+        files = fs.readdirSync(dashboardsBase).map(x => path.join(dashboardsBase, x)).filter(x => /\.json$/.test(x));
         return { files, pullRequest: undefined };
     }
 }

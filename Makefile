@@ -15,10 +15,9 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss config-svc-container container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers docs docs-lint docs-license-analysis
+.PHONY: all build lint container container-oss config-svc-build config-svc-container config-svc-test-unit container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers test-unit docs docs-lint docs-license-analysis
 
-# TODO: add 'test examples'
-all: clean build lint container container-oss container-lint container-scan dist test-dist
+all: clean build lint test-unit container container-oss container-lint container-scan dist test-dist
 
 # We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
@@ -49,6 +48,12 @@ lint: config-svc-lint container-lint docs-lint
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
+
+config-svc-build:
+	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} config-svc/
+
+config-svc-test-unit:
+	DOCKER_BUILDKIT=1 docker build --target=unit-test config-svc/
 
 config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
@@ -96,6 +101,8 @@ test-containers:
 test-native:
 	testing/run-native.sh ${TEST_SUITE}
 
+test-unit: config-svc-test-unit
+
 test: clean container-oss test-native test-containers test-kubernetes
 
 # Runs up the CMOS and takes screenshots
@@ -123,7 +130,7 @@ container-clean:
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
-	docker image prune --force
+	docker image prune --force --volumes
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
