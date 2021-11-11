@@ -6,14 +6,16 @@
 
 === kube-state-metrics
 A prerequisite to configuring CMOS is to install kube-state-metrics. This can be done via helm.
+[source,console]
 ----
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 ----
 
-=== Prometheues
+=== Prometheus
 We want to configure our own promethues config so first delete the existing config:
+[source,console]
 ----
 kubectl delete configmap prometheus-config || true
 ----
@@ -119,12 +121,12 @@ scrape_configs:
 ----
 
 Run the below command to create the prometheus config.
+[source,console]
 ----
-kubectl delete configmap prometheus-config || true
 kubectl create configmap prometheus-config --from-file="prometheus-k8s.yml"
 ----
 
-=== Microlith
+=== Observability Stack
 
 ==== RBAC
 Create the rbac in kubernetes cluster, Save the below content in `rbac.yaml`.
@@ -159,12 +161,15 @@ subjects:
       apiGroup: rbac.authorization.k8s.io
 ----
 
-Execute the below command to create rbac in cluster
+Execute the below command to create rbac in the cluster
+[source,console]
 ----
 kubectl apply -f "rbac.yaml"
 ----
 
-==== Monitoring
+==== Monitoring Dashboard
+
+Create the observability in kubernetes cluster, Save the below content in `dashboard.yaml`.
 [source,yaml]
 ----
 # Our actual container to run
@@ -242,48 +247,16 @@ spec:
         run: couchbase-grafana
 ----
 
-=== Set up ingress
-
-==== Ingress Controller
+Execute the below command to create monitoring dashboard in the cluster
+[source,console]
 ----
-INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
-kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
-kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=120s
+kubectl apply -f "dashboard.yaml"
 ----
 
-==== Ingress
-Save the below content in a file called `ingress.yaml`
-[source,yaml]
-----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-    name: couchbase-ingress
-    annotations:
-        kubernetes.io/ingress.class: nginx
-        nginx.ingress.kubernetes.io/rewrite-target: /$1$2
-        nginx.ingress.kubernetes.io/use-regex: 'true'
-spec:
-    rules:
-        - http:
-              paths:
-                  - path: /(.*)(/|$)
-                    pathType: Prefix
-                    backend:
-                        service:
-                            name: couchbase-grafana-http
-                            port:
-                                number: 8080
-----
-
-Apply the ingress the k8s cluster using below command.
-----
-kubectl apply -f ingress.yaml
-----
-
-=== Create the secret for Fluent Bit customisation
+=== Fluent Bit
 
 Save the below content in `fluent-bit.conf`
+[source,console]
 ----
 @include /fluent-bit/etc/fluent-bit.conf
 
@@ -291,21 +264,29 @@ Save the below content in `fluent-bit.conf`
 @include /fluent-bit/etc/couchbase/out-loki.conf
 ----
 
-Create the fluent-bit secret in kubernetes cluster
+Create the fluent-bit secret in kubernetes cluster.
+Note: Before creating, We need to first delete the existing fluent-bit-custom secret if exists. 
+[source,console]
 ----
 kubectl delete secret fluent-bit-custom 2>/dev/null || true
+----
+
+[source,console]
+----
 kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
 ----
 
 === verify
 
 The output of below command should match with the content of `fluent-bit.conf`
+[source,console]
 ----
 kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
 ----
 
 === Install Couchbase via helm chart
 Add the couchbase repository in helm.
+[source,console]
 ----
 helm repo add couchbase https://couchbase-partners.github.io/helm-charts
 helm repo update
@@ -339,13 +320,27 @@ cluster:
 ----
 
 Run the below helm upgrade command to upgrade/install it.
+[source,console]
 ----
 helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="couchbase/server:6.6.3" --values="custom-values.yaml"
 ----
 
 Wait for the couchbase operator to be in Running state, you can check it via below command.
+[source,console]
 ----
 kubectl get pods --field-selector=status.phase=Running --selector='app=couchbase'
 ----
 
-Once the couchbase will be in Running state you can monitor http://localhost/
+=== Accessing the Observability Dashboard
+
+Dashboard can be accessibe directly via link:https://kubernetes.io/docs/concepts/services-networking/service/#nodeport[NodePort] or via link:https://kubernetes.io/docs/concepts/services-networking/ingress/[Ingress].
+
+==== For accessing it via NodePort you need to update the `couchbase-grafana-http` service type to `NodePort` via below command then use the nodePort IP to access it.
+[source,console]
+----
+kubectl patch svc couchbase-grafana-http -p '{"spec": {"type": "NodePort"}}'
+----
+
+==== For accessing it via Ingress you can follow the below approach.
+
+Setup any load balancer and map `couchbase-grafana-http` service to it.
