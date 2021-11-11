@@ -96,10 +96,13 @@ jobs:
               with:
                 ref: ${{ github.event.inputs.ref || 'main' }}
 
-            - name: Apply VirtualBox workaround for networking issues # (https://www.virtualbox.org/ticket/20636#comment:20)
+            - name: Apply VirtualBox workaround for networking issues
+              # (https://www.virtualbox.org/ticket/20636#comment:20)
+              # Ensure anyone can read it who needs to as well.
               run: |
-                mkdir -p /etc/vbox/
-                echo "* 0.0.0.0/0 ::/0" >> /etc/vbox/networks.conf
+                sudo mkdir -p /etc/vbox/
+                sudo sh -c 'echo "* 0.0.0.0/0 ::/0" >> /etc/vbox/networks.conf'
+                sudo chmod a+r /etc/vbox/networks.conf
 
             - name: Setup Docker
               uses: docker-practice/actions-setup-docker@master
