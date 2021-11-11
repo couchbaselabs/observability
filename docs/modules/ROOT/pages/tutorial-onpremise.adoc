@@ -1,32 +1,39 @@
-= On-premise example
-
-[abstract]
-CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server exposed on port 8080 to provide a landing page.
-
-include::partial$tutorial.adoc[]
+= CMOS On Premise Deployment
 
 .Microlith overview
 image::microlith-runtime.png[]
 
-== Usage
+CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server exposed on port 8080 to provide a landing page.
 
-To run refer to the xref:quickstart.adoc[quick start guide] for full details:
+== Deployment
+
+At this moment we only support deployment using docker. You can get started by deploying the docker container:
+[source, console]
+----
+$ docker run --name=cmos --rm -d -P couchbase/observability-stack
+----
+There are 2 ways we can access different services.
+
+Use `docker ps` or `docker inspect X` to see the local ports exposed, there are multiple services running inside the container and each service has it's own port. For example, the mapping to `3000` is the Grafana, to get the port of the host machine use this:
 
 [source, console]
 ----
-docker run --name=cmos --rm -d -P couchbase-observability-stack
+$ docker container port cmos 3000
+----
+----
+0.0.0.0:49283
+:::49283
 ----
 
-Use `docker ps` or `docker inspect X` to see the local ports exposed, the mapping to `3000` is the Grafana one so to get this:
-
+A simple Nginx web server is exposed on port 8080, it exposes  different services in different paths. You can navigate to any service from here.
 [source, console]
 ----
-docker container port couchbase-grafana 3000
-0.0.0.0:55124
-:::55124
+$ docker container port cmos 8080
 ----
-
-Browse to `localhost:55124` and log in with the default credentials of `admin:password` for Grafana.
+----
+0.0.0.0:49278
+:::49278
+----
 
 == Configuration options
 
@@ -132,6 +139,21 @@ The cluster manager will auto-start and configure itself with credentials suppli
 * `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`
 
 The cluster manager exposes its REST API from the container so this can be used externally to add/remove Couchbase clusters. We also support running any scripts found in `/etc/healthcheck` to do it.
+
+=== Couchbase Cluster
+
+In the hosted Nginx on 8080 you can find an option for add couchbase cluster to monitor.
+
+Also you can add a cluster via API call.
+----
+CLUSTER_MONITOR_USER=admin
+CLUSTER_MONITOR_PWD=password
+CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port cmos 7196)
+COUCHBASE_USER=Administrator
+COUCHBASE_PWD=password
+COUCHBASE_ENDPOINT=http://<hostname/IP>:8091
+curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
+---- 
 
 == Next steps
 
