@@ -1,4 +1,4 @@
-FROM golang:1.16-alpine AS builder
+FROM golang:1.17-alpine AS builder
 
 COPY go.mod go.sum /app/
 WORKDIR /app
@@ -7,6 +7,13 @@ RUN go mod download
 COPY . /app/
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o /cmoscfg ./cmd/cmoscfg
+
+# We require various GCC stuff for tests
+FROM golang:1.17 AS unit-test
+COPY . /app/
+WORKDIR /app
+RUN go mod download && \
+    go test -trimpath -timeout 120s -v ./...
 
 FROM alpine:3.14
 
