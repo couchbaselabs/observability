@@ -53,7 +53,7 @@ config-svc-build:
 	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} config-svc/
 
 config-svc-test-unit:
-	DOCKER_BUILDKIT=1 docker build --target=unit-test -t ${DOCKER_USER}/observability-stack-config-service-test:${DOCKER_TAG} config-svc/
+	DOCKER_BUILDKIT=1 docker build --target=unit-test config-svc/
 
 config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
@@ -129,8 +129,7 @@ container-clean:
 	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-config-service-test:${DOCKER_TAG}
+				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
 	docker image prune --force --volumes
 
 clean: container-clean

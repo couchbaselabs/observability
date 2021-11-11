@@ -26,7 +26,6 @@ const testYaml = `global:
     qux: quux
 scrape_configs:
     - job_name: test
-      follow_redirects: false
       static_configs:
         - targets:
             - test1
@@ -64,7 +63,9 @@ func TestConfigAddNewScrape(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, testYaml+`    # CMOS managed
     - job_name: added
-      follow_redirects: false
+      basic_auth:
+        username: ""
+        password: ""
       static_configs:
         - targets:
             - test

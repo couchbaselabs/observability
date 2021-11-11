@@ -1,19 +1,17 @@
-FROM golang:1.17-alpine AS builder
-
+FROM golang:1.17 AS codebase
+# Cache Go dependencies as separate layer
 COPY go.mod go.sum /app/
 WORKDIR /app
 RUN go mod download
-
+# Now add rest of source
 COPY . /app/
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /cmoscfg ./cmd/cmoscfg
+FROM codebase AS builder
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -a -o /cmoscfg -tags netgo ./cmd/cmoscfg
 
+FROM codebase AS unit-test
 # We require various GCC stuff for tests
-FROM golang:1.17 AS unit-test
-COPY . /app/
-WORKDIR /app
-RUN go mod download && \
-    go test -trimpath -timeout 120s -v ./...
+RUN go test -trimpath -timeout 120s -v ./...
 
 FROM alpine:3.14
 
@@ -23,23 +21,19 @@ RUN apk add --upgrade --no-cache ca-certificates bash openssl
 
 # Ensure we include licensing information
 COPY ./LICENSE /licenses/cmoscfg.txt
-
 COPY ./entrypoint.sh /entrypoint.sh
-
 COPY --from=builder /cmoscfg /bin/cmoscfg
 
 # Provide a configurable user to run as and for ownership
 ARG CB_UID="8453"
 ARG CB_GID="8453"
 
-RUN addgroup -g $CB_GID -S couchbase && \
-    adduser -u $CB_UID -S couchbase -G couchbase
-
 # Ensure we have everything we need set up with correct permissions
-RUN chmod a+x /bin/cmoscfg && \
+RUN addgroup -g $CB_GID -S couchbase && \
+    adduser -u $CB_UID -S couchbase -G couchbase && \
+    chmod a+x /bin/cmoscfg && \
     chmod a+x /entrypoint.sh && \
     chmod -R a+r /licenses
 
 EXPOSE 7194
-
 ENTRYPOINT ["/entrypoint.sh"]
