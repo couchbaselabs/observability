@@ -21,4 +21,6 @@ DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 
 rm -rf "${SCRIPT_DIR}"/logs/*.log
-docker-compose -f "${SCRIPT_DIR}"/docker-compose.yml up -d --force-recreate
+pushd "${SCRIPT_DIR}" || exit 1
+    docker-compose up -d --force-recreate
+popd || exit
