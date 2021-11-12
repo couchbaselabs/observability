@@ -42,7 +42,7 @@ nodes:
 - role: worker
 ----
 
-Once you have a KIND cluster up then it may be useful to preload the various container images you want to use but this is not required.
+Once you have a KIND cluster up then it may be useful to load the various container images you want to use but this is not required.
 Any images not present will attempt to be pulled from a container registry so be aware of that - images available locally are not automatically served to KIND.
 
 [source,console]
@@ -285,7 +285,7 @@ There are two aspects required here:
 For a production system it is likely an `Ingress` controller will already be deployed.
 The example also just forwards all traffic whereas a non-local cluster really should just target CMOS traffic as other traffic likely has `Ingress` rules already.
 
-We follow the KIND documebtation to deploy Nginx.
+We follow the https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx[KIND documentation^] to deploy Nginx.
 
 [source,console]
 ----
@@ -347,7 +347,7 @@ image::prometheus-failing-targets.png[]
 [NOTE]
 ====
 Unfortunately cluster monitor is currently designed for an on-premise solution so will not cope with auto-discovery on Kubernetes yet.
-Without this the various Grafana dashbaords will not function correctly so you have to do it manually for now.
+Without this the various Grafana dashboards will not function correctly so you have to do it manually for now.
 ====
 
 Kubernetes support is on the roadmap but, in the meantime, to manually add the cluster details you will need the credentials for accessing the REST API and a pod name for one of the Couchbase Server pods in the cluster (it will bootstrap the rest).
@@ -358,4 +358,4 @@ Make sure to disable the `Add Nodes to Prometheus` option as this is handled alr
 .Add cluster screenshot
 image::add-cluster-example.png[]
 
-Once this is added then the other Grafana dashbaords should spring to life.
+Once this is added then the other Grafana dashboards should spring to life.
