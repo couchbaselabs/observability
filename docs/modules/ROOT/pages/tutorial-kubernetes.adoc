@@ -1,0 +1,354 @@
+= Kubernetes example
+
+[abstract]
+A simple working example from scratch locally using https://kind.sigs.k8s.io/[Kubernetes-IN-Docker (KIND)^] with the https://docs.couchbase.com/operator/current/overview.html[Couchbase Autonomous Operator (CAO)^] deploying Couchbase Server then being monitored by CMOS.
+
+include::partial$tutorial.adoc[]
+
+[NOTE]
+====
+All the commands are intended to be run from the https://github.com/couchbaselabs/observability/tree/main/examples[`examples/kubernetes`^] directory.
+====
+
+== Cluster creation
+
+We use KIND to create a local cluster for testing, this step can be skipped if you have your own cluster to work with but the following sections all assume this.
+
+In the example, we have a script that creates a test cluster using a single worker node and control node.
+Resources are shared between all KIND nodes so unless you have anti-affinity rules or similar reasons for wanting multiple nodes then you can likely just use a single node.
+In this case we also want to set up some port mappings to manage the Ingress from our host.
+Refer to the https://kind.sigs.k8s.io/docs/user/ingress/[KIND documentation^] for full details on this.
+
+[source,console]
+----
+$ kind create cluster --config - <<EOF
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker
+----
+
+Once you have a KIND cluster up then it may be useful to preload the various container images you want to use but this is not required.
+Any images not present will attempt to be pulled from a container registry so be aware of that - images available locally are not automatically served to KIND.
+
+[source,console]
+----
+$ docker pull couchbase/server:7.0.2
+$ kind load docker-image couchbase/server:7.0.2
+----
+
+== Deploy CMOS
+
+RBAC set up is required to allow CMOS to function correctly, this is currently all handled for you via the example YAML file.
+
+[source,yaml]
+----
+---
+# Prometheus service discovery via the K8S API requires some permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: monitoring-endpoints-role
+    labels:
+        rbac.couchbase.observability.com/aggregate-to-monitoring: 'true'
+rules:
+    - apiGroups: ['']
+      resources: [services, endpoints, pods, secrets]
+      verbs: [get, list, watch]
+    - apiGroups: [couchbase.com]
+      resources: [couchbaseclusters]
+      verbs: [get, list, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: monitoring-role-binding
+roleRef:
+    kind: ClusterRole
+    name: monitoring-endpoints-role
+    apiGroup: rbac.authorization.k8s.io
+subjects:
+    - kind: Group
+      name: system:serviceaccounts
+      apiGroup: rbac.authorization.k8s.io
+---
+# Our actual container to run
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: couchbase-grafana
+spec:
+    selector:
+        matchLabels:
+            run: couchbase-grafana
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                run: couchbase-grafana
+        spec:
+            containers:
+                - name: couchbase-grafana
+                  image: couchbase/observability-stack:v1
+                  ports:
+                      - name: http
+                        containerPort: 8080
+                      - name: loki # So we can push logs to it
+                        containerPort: 3100
+                  env:
+                      - name: KUBERNETES_DEPLOYMENT
+                        value: 'true'
+                      - name: ENABLE_LOG_TO_FILE
+                        value: 'true'
+                      - name: PROMETHEUS_CONFIG_FILE
+                        value: /etc/prometheus/custom/prometheus-k8s.yml
+                      - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
+                        value: ignore
+                      # Hardcode the login credentials for cluster monitor, in practice these should
+                      # be auto-generated as a Secret and used that way.
+                      - name: CB_MULTI_ADMIN_USER
+                        value: admin
+                      - name: CB_MULTI_ADMIN_PASSWORD
+                        value: password
+                  volumeMounts:
+                      - name: prometheus-config-volume
+                        mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
+      # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
+                - name: prometheus-config-watcher
+                  image: weaveworks/watch:master-9199bf5
+                  args: [-v, -t, -p=/etc/prometheus/custom, curl, -X, POST, --fail, -o, '-', -sS, http://localhost:8080/prometheus/-/reload]
+                  volumeMounts:
+                      - name: prometheus-config-volume
+                        mountPath: /etc/prometheus/custom
+            volumes:
+                - name: prometheus-config-volume
+                  configMap:
+                      name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: couchbase-grafana-http
+    labels:
+        run: couchbase-grafana
+spec:
+    ports:
+        - port: 8080
+          protocol: TCP
+    selector:
+        run: couchbase-grafana
+---
+# To allow us to send to Loki we need this
+apiVersion: v1
+kind: Service
+metadata:
+    name: loki
+    labels:
+        run: couchbase-grafana
+spec:
+    ports:
+        - port: 3100
+          protocol: TCP
+    selector:
+        run: couchbase-grafana
+---
+----
+
+We provide Prometheus configuration via a Kubernetes `ConfigMap` which contains all the details for credentials, scrape targets, etc.
+The example includes sample configuration to get everything working with our local cluster.
+
+[source,console]
+----
+$ kubectl create configmap prometheus-config --from-file=./prometheus/custom/
+$ kubectl apply -f microlith.yaml
+----
+
+Specifically we use the `kubernetes_sd_config` to automatically discover Couchbase Server pods to scrape the metrics from.
+
+[source,yaml]
+----
+  # Used for kubernetes deployment as we can discover the end points to scrape from the API
+    - job_name: couchbase-kubernetes-pods
+      # Server 7 requires authentication
+      basic_auth:
+          username: admin
+          password: password
+      kubernetes_sd_configs:
+          - role: pod
+      relabel_configs:
+      # Scrape pods labelled with app=couchbase and then only port 8091 (server 7), 9091 (exporter) or 2020 (fluent bit)
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: couchbase
+          - source_labels: [__meta_kubernetes_pod_container_port_number]
+            action: keep
+            regex: (8091|9091|2020)
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name
+----
+
+Currently unfortunately you still need to configure the cluster monitor manually with the pod details.
+
+== Deploy Couchbase
+
+The https://docs.couchbase.com/operator/current/helm-setup-guide.html[Couchbase Helm chart^] is used to deploy CAO and a default configuration for the Couchbase Server pods.
+
+This is a very simple process to use defaults, to modify any of the values to configure it for your needs please refer to the https://docs.couchbase.com/operator/current/helm-setup-guide.html#custom-installation[Helm documentation^].
+
+We provide an example to show how to set up https://docs.couchbase.com/operator/current/howto-couchbase-log-forwarding.html[log forwarding^] simply to CMOS via Kubernetes annotations on the pod.
+
+[source,yaml]
+----
+---
+cluster:
+    logging:
+        server:
+            enabled: true
+            sidecar:
+                image: couchbase/fluent-bit:1.1.2
+    monitoring:
+        prometheus:
+            enabled: false # We're using server 7 metrics directly
+    security:
+        # To simplify for scraping we hardcode the passwords.
+        # They should be auto-generated really and the Secret value
+        # used by mounting into CMOS (or getting it to retrieve during
+        # startup).
+        username: admin
+        password: password
+    servers:
+        # We use custom annotations to forward to CMOS Loki
+        default:
+            size: 3
+            pod:
+                metadata:
+                    annotations:
+                        # Match all logs
+                        fluentbit.couchbase.com/loki_match: "*"
+                        # Send to this SVC
+                        fluentbit.couchbase.com/loki_host: loki.default
+            volumeMounts:
+                default: couchbase
+    volumeClaimTemplates:
+        - metadata:
+              name: couchbase
+          spec:
+              resources:
+                  requests:
+                      storage: 1Gi
+---
+----
+
+With the configuration above saved in a `custom-values.yaml` file, we can deploy using a nominated Couchbase Server version very easily.
+
+[source,console]
+----
+$ helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image=couchbase/server:7.0.2 --values=custom-values.yaml
+----
+
+This will deploy the entire Couchbase operator and server set of pods all fully managed.
+
+== Deploy Ingress
+
+To allow us to access the cluster we set up a Kubernetes `Ingress` to forward traffic from our local host to the appropriate parts of the cluster.
+There are two aspects required here:
+. Provide an Ingress controller, Nginx in this case.
+. Set up Ingress to forward to our CMOS deployment.
+
+For a production system it is likely an `Ingress` controller will already be deployed.
+The example also just forwards all traffic whereas a non-local cluster really should just target CMOS traffic as other traffic likely has `Ingress` rules already.
+
+We follow the KIND documebtation to deploy Nginx.
+
+[source,console]
+----
+$ INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
+$ kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
+$ kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+$ kubectl apply -f ingress.yaml
+----
+
+The last step deploys the actual `Ingress` configuration as below.
+
+[source,yaml]
+----
+---
+# Ingress to forward to our web server including sub-paths: we should just forward what we need but for local testing just sending it all.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: couchbase-ingress
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+        nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+    rules:
+        - http:
+              paths:
+                  - path: /(.*)(/|$)
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: couchbase-grafana-http
+                            port:
+                                number: 8080
+---
+----
+
+== Using CMOS
+
+Once this is all deployed, which can be automated using a https://github.com/couchbaselabs/observability/blob/main/examples/kubernetes/run.sh[fully scripted version^], then you should be able to browse to http://localhost (or wherever you are deploying it with the appropriate `Ingress`).
+
+You should then hit the landing page which includes links to this documentation.
+
+You can verify all the Prometheus targets are set up.
+
+.Successful Prometheus discovery
+image::prometheus-successful-targets.png[]
+
+Whilst the pods are coming up, some may report as failing but these will resolve once the pods are running.
+
+.Failing targets during startup
+image::prometheus-failing-targets.png[]
+
+=== CMOS cluster configuration
+
+[NOTE]
+====
+Unfortunately cluster monitor is currently designed for an on-premise solution so will not cope with auto-discovery on Kubernetes yet.
+Without this the various Grafana dashbaords will not function correctly so you have to do it manually for now.
+====
+
+Kubernetes support is on the roadmap but, in the meantime, to manually add the cluster details you will need the credentials for accessing the REST API and a pod name for one of the Couchbase Server pods in the cluster (it will bootstrap the rest).
+
+These can then be added via the `Add Cluster` link on the landing page.
+Make sure to disable the `Add Nodes to Prometheus` option as this is handled already.
+
+.Add cluster screenshot
+image::add-cluster-example.png[]
+
+Once this is added then the other Grafana dashbaords should spring to life.

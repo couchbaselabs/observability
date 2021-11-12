@@ -72,6 +72,10 @@ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metric
 kubectl delete configmap prometheus-config || true
 kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
 
+if [[ "${SKIP_CMOS_BUILD:-yes}" != "yes" ]]; then
+  make -C "${SCRIPT_DIR}/../../" "${CMOS_BUILD_TARGET:-container}"
+fi
+
 # Deploy the microlith
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"

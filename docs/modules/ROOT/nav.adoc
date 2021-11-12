@@ -12,6 +12,7 @@
 
 .Tutorials
 * xref:tutorial-onpremise.adoc[On-premise example]
+* xref:tutorial-kubernetes.adoc[Kubernetes example]
 
 .Configuration
 * link:http://localhost:8080/promwebform.html[Add Cluster^]
