@@ -2,6 +2,10 @@
 
 == Overview
 
+CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster.
+
+* An additional requirement is to ensure we can integrate into existing observability pipelines people may already have as easily as possible.
+
 == Deployment
 
 === kube-state-metrics
@@ -14,10 +18,10 @@ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metric
 ----
 
 === Prometheus
-We want to configure our own promethues config so first delete the existing config:
+Note: Before creating a new config, first delete the existing configmap `prometheus-config` if exists. 
 [source,console]
 ----
-kubectl delete configmap prometheus-config || true
+kubectl delete configmap prometheus-config
 ----
 
 Now create config with the below contents. Save the below content in a file called `prometheus-k8s.yml`
@@ -129,19 +133,19 @@ kubectl create configmap prometheus-config --from-file="prometheus-k8s.yml"
 === Observability Stack
 
 ==== RBAC
-Create the rbac in kubernetes cluster, Save the below content in `rbac.yaml`.
+Before creating the Observability Stack, we need to create RBAC permissions for the Prometheus service. Save the below content in `rbac.yaml`.
 [source, yaml]
 ----
 # Prometheus service discovery via the K8S API requires some permissions
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-    name: monitoring-endpoints-role
+    name: monitoring-endpoints-role # <.>
     labels:
         rbac.couchbase.observability.com/aggregate-to-monitoring: 'true'
 rules:
     - apiGroups: ['']
-      resources: [services, endpoints, pods, secrets]
+      resources: [services, endpoints, pods, secrets] # <.>
       verbs: [get, list, watch]
     - apiGroups: [couchbase.com]
       resources: [couchbaseclusters]
@@ -150,7 +154,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-    name: monitoring-role-binding
+    name: monitoring-role-binding # <.>
 roleRef:
     kind: ClusterRole
     name: monitoring-endpoints-role
@@ -160,6 +164,10 @@ subjects:
       name: system:serviceaccounts
       apiGroup: rbac.authorization.k8s.io
 ----
+
+<.> ClusterRole name: monitoring-endpoints-role
+<.> Required permission.
+<.> ClusterRoleBinding name: monitoring-role-binding
 
 Execute the below command to create rbac in the cluster
 [source,console]
@@ -172,11 +180,10 @@ kubectl apply -f "rbac.yaml"
 Create the observability in kubernetes cluster, Save the below content in `dashboard.yaml`.
 [source,yaml]
 ----
-# Our actual container to run
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: couchbase-grafana
+    name: couchbase-grafana # <.>
 spec:
     selector:
         matchLabels:
@@ -189,7 +196,7 @@ spec:
         spec:
             containers:
                 - name: couchbase-grafana
-                  image: couchbase/observability-stack:v1
+                  image: couchbase/observability-stack:v1 # <.>
                   ports:
                       - name: http
                         containerPort: 8080
@@ -247,6 +254,9 @@ spec:
         run: couchbase-grafana
 ----
 
+<.> Deployment name of observability dashboard: couchbase-grafana
+<.> Image of observability dashboard: couchbase/observability-stack:v1
+
 Execute the below command to create monitoring dashboard in the cluster
 [source,console]
 ----
@@ -255,7 +265,7 @@ kubectl apply -f "dashboard.yaml"
 
 === Fluent Bit
 
-Save the below content in `fluent-bit.conf`
+For setting up the Fluent Bit, Save the below content in a file called `fluent-bit.conf`
 [source,console]
 ----
 @include /fluent-bit/etc/fluent-bit.conf
@@ -264,21 +274,21 @@ Save the below content in `fluent-bit.conf`
 @include /fluent-bit/etc/couchbase/out-loki.conf
 ----
 
-Create the fluent-bit secret in kubernetes cluster.
-Note: Before creating, We need to first delete the existing fluent-bit-custom secret if exists. 
+Create the fluent-bit secret.
+Note: Before creating, We need to first delete the existing `fluent-bit-custom` secret if exists. 
 [source,console]
 ----
-kubectl delete secret fluent-bit-custom 2>/dev/null || true
+kubectl delete secret fluent-bit-custom
 ----
-
+Run the below command to create a fluent-bit secret.
 [source,console]
 ----
 kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
 ----
 
-=== verify
+==== verify
 
-The output of below command should match with the content of `fluent-bit.conf`
+Verify the created fluent bit secret. The output of below command should match with the content of `fluent-bit.conf` file.
 [source,console]
 ----
 kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
