@@ -1,6 +1,9 @@
-= CMOS deployment on-premise tutorial
+= On-premise example
 
-A simple Nginx web server is exposed on port 8080 to provide a landing page.
+[abstract]
+CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server exposed on port 8080 to provide a landing page.
+
+include::partial$tutorial.adoc[]
 
 .Microlith overview
 image::microlith-runtime.png[]

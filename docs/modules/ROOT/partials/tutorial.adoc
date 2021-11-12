@@ -1,0 +1,7 @@
+[WARNING]
+====
+Tutorials are accurate at the time of writing but rely heavily on third party software.
+Tutorials are provided to demonstrate how a particular problem may be solved.
+Use of third party software is not supported by Couchbase.
+For further help in the event of a problem, contact the relevant software maintainer.
+====
