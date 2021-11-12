@@ -16,10 +16,6 @@ set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-DOCKER_USER=${DOCKER_USER:-couchbase}
-DOCKER_TAG=${DOCKER_TAG:-v1}
-CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
-
 rm -rf "${SCRIPT_DIR}"/logs/*.log
 pushd "${SCRIPT_DIR}" || exit 1
     docker-compose up -d --force-recreate

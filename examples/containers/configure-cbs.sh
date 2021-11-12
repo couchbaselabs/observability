@@ -21,6 +21,7 @@ rm -rf /opt/couchbase/var/lib/couchbase/logs/*
 mkdir -p /opt/couchbase/var/lib/couchbase/{config,data,stats,logs}
 
 echo "Run up Couchbase Server"
+# The actual command to run CB server based on the server image entrypoint.
 /opt/couchbase/bin/couchbase-server -- -kernel global_enable_tracing false -noinput &
 
 echo "Wait for it to be ready"

@@ -61,7 +61,7 @@ services:
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
         container_name: db1
-        image: ${SERVER_IMAGE}
+        image: ${COUCHBASE_SERVER_IMAGE}
         ports:
             - 8091-8096:8091-8096
             - 11210-11211:11210-11211
@@ -71,21 +71,10 @@ services:
         networks:
             - back
 
-    # Logging disabled if not using the custom entrypoint above.
-    # permission-fixer:
-    #     image: bash
-    #     # CB server forces this on us as the permissions for the rebalance directory as well as logs are not for all
-    #     # https://issues.couchbase.com/browse/MB-46485
-    #     command: sh -c "mkdir -p /opt/couchbase/var/lib/couchbase/logs/rebalance; while true; do sleep 30;chmod -R a+r /opt/couchbase/var/lib/couchbase/logs/; done"
-    #     user: root
-    #     volumes:
-    #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
-
     logging:
         container_name: logging
         image: ${FLUENT_BIT_IMAGE}
         ports:
-            # Metrics
             - "2020:2020"
         depends_on:
             - db1
@@ -97,19 +86,6 @@ services:
             - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
         networks:
             - back
-
-    # Exporter required for server <7
-    # exporter:
-    #     container_name: exporter
-    #     image: couchbase/exporter:1.0.5
-    #     command:
-    #         - --couchbase-address=db1
-    #     ports:
-    #         - 9091:9091
-    #     depends_on:
-    #         - db1
-    #     networks:
-    #         - back
 
 volumes:
     log-volume:
