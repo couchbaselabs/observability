@@ -71,16 +71,20 @@ scrape_configs:
 
   # Used for kubernetes deployment as we can discover the end points to scrape from the API
     - job_name: couchbase-kubernetes-pods
+      # Server 7 requires authentication
+      basic_auth:
+          username: admin
+          password: password
       kubernetes_sd_configs:
           - role: pod
       relabel_configs:
-      # Scrape pods labelled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
+      # Scrape pods labelled with app=couchbase and then only port 8091 (server 7), 9091 (exporter) or 2020 (fluent bit)
           - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
             regex: couchbase
           - source_labels: [__meta_kubernetes_pod_container_port_number]
             action: keep
-            regex: (9091|2020)
+            regex: (8091|9091|2020)
           - action: labelmap
             regex: __meta_kubernetes_pod_label_(.+)
           - source_labels: [__meta_kubernetes_namespace]

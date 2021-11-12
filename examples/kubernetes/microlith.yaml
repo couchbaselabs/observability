@@ -59,6 +59,12 @@ spec:
                         value: /etc/prometheus/custom/prometheus-k8s.yml
                       - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
                         value: ignore
+                      # Hardcode the login credentials for cluster monitor, in practice these should
+                      # be auto-generated as a Secret and used that way.
+                      - name: CB_MULTI_ADMIN_USER
+                        value: admin
+                      - name: CB_MULTI_ADMIN_PASSWORD
+                        value: password
                   volumeMounts:
                       - name: prometheus-config-volume
                         mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
@@ -101,4 +107,3 @@ spec:
     selector:
         run: couchbase-grafana
 ---
-...

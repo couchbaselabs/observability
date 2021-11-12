@@ -16,20 +16,24 @@ set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
-SKIP_CLUSTER_CREATION=${SKIP_CLUSTER_CREATION:-no}
-COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:6.6.3}
+CLUSTER_NAME=${CLUSTER_NAME:-kind}
+COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.2}
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 
-if [[ "${SKIP_CLUSTER_CREATION}" != "yes" ]]; then
+if [[ "${SKIP_CLUSTER_CREATION:-no}" != "yes" ]]; then
   echo "Recreating full cluster"
 
   kind delete cluster --name="${CLUSTER_NAME}"
 
-  # Simple script to deal with running up a test cluster for KIND for developing logging updates for.
+  # Simple script to deal with running up a test cluster for KIND.
+  # We use a single worker and control node here to show how to add more.
+  # Locally resources are shared anyway between all nodes so unless you
+  # have anti-affinity rules or similar reasons for wanting multiple nodes
+  # then there is not much point.
+  # We also need to set up some port mappings for ingress.
   kind create cluster --name="${CLUSTER_NAME}" --config - <<EOF
 kind: Cluster
 apiVersion: kind.x-k8s.io/v1alpha4
@@ -49,8 +53,6 @@ nodes:
     hostPort: 443
     protocol: TCP
 - role: worker
-- role: worker
-- role: worker
 EOF
 
   # Wait for cluster to come up
@@ -59,6 +61,9 @@ EOF
 fi #SKIP_CLUSTER_CREATION
 
 # Deploy kube-state-metrics via helm chart
+# TODO: this should all be part of CMOS to auto-deploy via a checkbox as we have Helm in the container so it is just RBAC to sort.
+# https://issues.couchbase.com/browse/CMOS-47
+# https://issues.couchbase.com/browse/CMOS-80
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
 helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
@@ -80,14 +85,6 @@ kubectl wait --namespace ingress-nginx \
   --timeout=120s
 kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"
 
-# Create the secret for Fluent Bit customisation
-kubectl delete secret fluent-bit-custom 2>/dev/null || true
-kubectl create secret generic fluent-bit-custom --from-file="${SCRIPT_DIR}/fluent-bit.conf"
-
-# Output the contents of the secret so we can verify
-# shellcheck disable=SC2016
-kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
-
 # Add Couchbase via helm chart
 if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; then
   if ! helm repo list|grep couchbase|grep -q https://couchbase-partners.github.io/helm-charts ; then
@@ -99,12 +96,11 @@ fi
 helm repo update
 helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
 
-# Wait for deployment to complete
+# Wait for deployment to complete, the Helm defaults are for a 3 pod cluster in the default namespace.
 echo "Waiting for CB to start up..."
 until [[ $(kubectl get pods --field-selector=status.phase=Running --selector='app=couchbase' --no-headers 2>/dev/null |wc -l) -eq 3 ]]; do
     echo -n '.'
     sleep 2
 done
 echo "CB running"
-
 echo "To monitor go to http://localhost/"
