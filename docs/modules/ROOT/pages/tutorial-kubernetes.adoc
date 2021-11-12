@@ -86,6 +86,13 @@ subjects:
       name: system:serviceaccounts
       apiGroup: rbac.authorization.k8s.io
 ---
+----
+
+Now we need to provide the actual CMOS deployment to run along with the supporting services for it.
+
+[source,yaml]
+----
+---
 # Our actual container to run
 apiVersion: apps/v1
 kind: Deployment
@@ -127,7 +134,7 @@ spec:
                   volumeMounts:
                       - name: prometheus-config-volume
                         mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
-      # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
+                # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
                 - name: prometheus-config-watcher
                   image: weaveworks/watch:master-9199bf5
                   args: [-v, -t, -p=/etc/prometheus/custom, curl, -X, POST, --fail, -o, '-', -sS, http://localhost:8080/prometheus/-/reload]
