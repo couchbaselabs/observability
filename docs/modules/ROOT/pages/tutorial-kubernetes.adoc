@@ -1,19 +1,20 @@
 = CMOS Kubernetes Deployment
 
-[abstract]
-A simple working example from scratch in kubernetes cluster with the https://docs.couchbase.com/operator/current/overview.html[Couchbase Autonomous Operator (CAO)^] deploying Couchbase Server then being monitored by CMOS.
-
 include::partial$tutorial.adoc[]
 
 == Overview
 
-CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster.
+CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster. xref:architecture.adoc[Architecture overview]
 
-== Deploy CMOS
+CMOS can be deployed to monitor the Couchbase clusters deployed via Couchbase Autonomous Operator.
+
+== Deployment CMOS
+
+CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, services etc. Following sections describe how to deploy these standard objects.
 
 === kube-state-metrics
 
-A prerequisite to configuring CMOS is to install kube-state-metrics. This can be done via helm.
+A prerequisite to configuring CMOS is to install kube-state-metrics. If not already installed you can install it using the following commands.
 
 [source,console]
 ----
@@ -26,17 +27,7 @@ $ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metr
 
 We provide Prometheus configuration via a Kubernetes `ConfigMap` which contains all the details for credentials, scrape targets, etc.
 
-[NOTE]
-====
-Before creating a new config, first delete the existing configmap `prometheus-config` if exists. 
-====
-
-[source,console]
-----
-$ kubectl delete configmap prometheus-config
-----
-
-Now create config with the below contents. Save the below content in a file called `prometheus-k8s.yml`
+Save the below content in a file called `prometheus-config.yml`
 
 [source,yaml]
 
@@ -145,7 +136,7 @@ Run the below command to create the prometheus config.
 [source,console]
 
 ----
-kubectl create configmap prometheus-config --from-file="prometheus-k8s.yml"
+kubectl create configmap prometheus-config-cmos --from-file="prometheus-config.yml"
 ----
 
 === Observability Stack
@@ -247,7 +238,7 @@ spec:
             volumes:
                 - name: prometheus-config-volume
                   configMap:
-                      name: prometheus-config
+                      name: prometheus-config-cmos
 ---
 apiVersion: v1
 kind: Service
@@ -299,16 +290,6 @@ For setting up the Fluent Bit, Save the below content in a file called `fluent-b
 
 Create the fluent-bit secret.
 
-[NOTE]
-====
-Before creating, We need to first delete the existing `fluent-bit-custom` secret if exists. 
-====
-
-[source,console]
-----
-$ kubectl delete secret fluent-bit-custom
-----
-Run the below command to create a fluent-bit secret.
 [source,console]
 ----
 $ kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
