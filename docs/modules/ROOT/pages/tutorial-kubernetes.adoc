@@ -4,17 +4,17 @@ include::partial$tutorial.adoc[]
 
 == Overview
 
-CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster. xref:architecture.adoc[Architecture overview]
+CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster. You can refer to xref:architecture.adoc[Architecture overview] section to learn more.
 
 CMOS can be deployed to monitor the Couchbase clusters deployed via Couchbase Autonomous Operator.
 
-== Deployment CMOS
+== Deployment
 
-CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, services etc. Following sections describe how to deploy these standard objects.
+CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, Services etc. Following sections describe how to deploy these standard objects.
 
-=== kube-state-metrics
+=== Kube State Metrics
 
-A prerequisite to configuring CMOS is to install kube-state-metrics. If not already installed you can install it using the following commands.
+A prerequisite to configuring CMOS is to install https://github.com/kubernetes/kube-state-metrics[kube-state-metrics^]. If not already installed you can install it using the following commands.
 
 [source,console]
 ----
@@ -27,7 +27,7 @@ $ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metr
 
 We provide Prometheus configuration via a Kubernetes `ConfigMap` which contains all the details for credentials, scrape targets, etc.
 
-Save the below content in a file called `prometheus-config.yml`
+Save the below content in a file called `prometheus-config.yaml`
 
 [source,yaml]
 
@@ -44,7 +44,7 @@ global:
         monitor: couchbase-observability-stack
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
-rule_files:
+rule_files: # <.>
   # All Couchbase default rules go here
     - /etc/prometheus/alerting/couchbase/*.yaml
     - /etc/prometheus/alerting/couchbase/*.yml
@@ -52,7 +52,7 @@ rule_files:
     - alerting/*.yaml
     - alerting/*.yml
 
-alerting:
+alerting: # <.>
     alertmanagers:
         - scheme: http
     # tls_config:
@@ -80,7 +80,7 @@ alerting:
     #   regex:
     #   action: drop
 
-scrape_configs:
+scrape_configs: # <.>
     - job_name: prometheus
       metrics_path: /prometheus/metrics
       static_configs:
@@ -129,14 +129,18 @@ scrape_configs:
           - targets: [kube-state-metrics:8080]
 ----
 
-Currently unfortunately you still need to configure the cluster monitor manually with the pod details.
+<.> We want to be able to override in two specific ways: [[alert_rules]]
+    ** Extend: provide Couchbase default rules and add custom ones.
+    ** Replace: only provide custom rules.
+<.> Alert Manager: The https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager^] handles alerts sent by client applications such as the Prometheus server
+<.> Scrape Config: Hold the configuration about fetching the metrics detail. [[Grafana_Section]]
 
 Run the below command to create the prometheus config.
 
 [source,console]
 
 ----
-kubectl create configmap prometheus-config-cmos --from-file="prometheus-config.yml"
+kubectl create configmap prometheus-config-cmos --from-file=prometheus-config.yaml
 ----
 
 === Observability Stack
@@ -151,21 +155,21 @@ RBAC set up is required to allow CMOS to function correctly, this is currently a
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-    name: monitoring-endpoints-role # <.>
+    name: monitoring-endpoints-role
     labels:
         rbac.couchbase.observability.com/aggregate-to-monitoring: 'true'
 rules:
-    - apiGroups: ['']
-      resources: [services, endpoints, pods, secrets] # <.>
+    - apiGroups: [''] # <.>
+      resources: [services, endpoints, pods, secrets] 
       verbs: [get, list, watch]
-    - apiGroups: [couchbase.com]
+    - apiGroups: [couchbase.com] # <.>
       resources: [couchbaseclusters]
       verbs: [get, list, watch]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-    name: monitoring-role-binding # <.>
+    name: monitoring-role-binding
 roleRef:
     kind: ClusterRole
     name: monitoring-endpoints-role
@@ -176,16 +180,17 @@ subjects:
       apiGroup: rbac.authorization.k8s.io
 ----
 
-<.> ClusterRole name: monitoring-endpoints-role
-<.> Required permission.
-<.> ClusterRoleBinding name: monitoring-role-binding
+By taking a quick look at this configuration file, you can see that it defines a cluster role by specifying the following permissions.
 
-Execute the below command to create rbac in the cluster
+<.> Get, List, Watch Permissions for resources: `services, endpoints, pods, secrets`
+<.> Get, List, Watch Permissions for resources: `couchbaseclusters`
+
+Execute the below command to create user roles in the cluster
 
 [source,console]
 
 ----
-$ kubectl apply -f "rbac.yaml"
+$ kubectl apply -f rbac.yaml
 ----
 
 ==== Monitoring Dashboard
@@ -197,7 +202,7 @@ Now we need to provide the actual CMOS deployment to run along with the supporti
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-    name: couchbase-grafana # <.>
+    name: couchbase-grafana
 spec:
     selector:
         matchLabels:
@@ -222,9 +227,11 @@ spec:
                       - name: ENABLE_LOG_TO_FILE
                         value: 'true'
                       - name: PROMETHEUS_CONFIG_FILE
-                        value: /etc/prometheus/custom/prometheus-k8s.yml
+                        value: /etc/prometheus/custom/prometheus-config.yaml
                       - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
                         value: ignore
+                    # - name: DISABLE_LOKI
+                    #   value: "true"
                   volumeMounts:
                       - name: prometheus-config-volume
                         mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
@@ -239,7 +246,24 @@ spec:
                 - name: prometheus-config-volume
                   configMap:
                       name: prometheus-config-cmos
----
+----
+
+<.> Image of observability dashboard: `couchbase/observability-stack:v1`
+
+To disable various services from being run, set a environment variable called `DISABLE_X` where `X` is an uppercase version of their entry point name (minus any .sh suffix). For example, to disable Loki you would set `DISABLE_LOKI`.
+
+Logs can be either provided to `stdout` by default or too service-based logs by setting `ENABLE_LOG_TO_FILE`, these will then appear into the `/logs/` directory which can be exposed via a volume or bind mount externally if needs be.
+
+Execute the below command to create monitoring dashboard in the cluster
+[source,console]
+----
+$ kubectl apply -f monitoring-dashboard.yaml
+----
+
+Once the observability dashboard is deployed then we need to create a service to access the dashboard. Save the below content in a file called `monitoring-service.yaml`
+
+[source,yaml]
+----
 apiVersion: v1
 kind: Service
 metadata:
@@ -248,12 +272,25 @@ metadata:
         run: couchbase-grafana
 spec:
     ports:
-        - port: 8080
+        - port: 8080 # <.>
           protocol: TCP
     selector:
         run: couchbase-grafana
----
-# To allow us to send to Loki we need this
+----
+
+<.> The observability monitoring service is running on port 8080
+
+Execute the below command to create monitoring service in the cluster.
+
+[source,console]
+----
+$ kubectl apply -f monitoring-service.yaml
+----
+
+Create a service for accessing the Loki, Save the below content in a file called `loki-service.yaml`
+
+[source,yaml]
+----
 apiVersion: v1
 kind: Service
 metadata:
@@ -268,18 +305,17 @@ spec:
         run: couchbase-grafana
 ----
 
-<.> Deployment name of observability dashboard: couchbase-grafana
-<.> Image of observability dashboard: couchbase/observability-stack:v1
+Execute the below command to create Loki service in the cluster.
 
-Execute the below command to create monitoring dashboard in the cluster
 [source,console]
 ----
-$ kubectl apply -f "monitoring-dashboard.yaml"
+$ kubectl apply -f loki-service.yaml
 ----
 
 === Fluent Bit
 
-For setting up the Fluent Bit, Save the below content in a file called `fluent-bit.conf`
+Setup the Fluent Bit, which is used for collecting the logs. Save the below content in a file called `fluent-bit.conf`
+
 [source,console]
 ----
 @include /fluent-bit/etc/fluent-bit.conf
@@ -288,14 +324,14 @@ For setting up the Fluent Bit, Save the below content in a file called `fluent-b
 @include /fluent-bit/etc/couchbase/out-loki.conf
 ----
 
-Create the fluent-bit secret.
+Execute the below command to create fluent bit secret in the cluster.
 
 [source,console]
 ----
-$ kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
+$ kubectl create secret generic fluent-bit-custom --from-file=fluent-bit.conf
 ----
 
-==== verify
+==== Verify
 
 Verify the created fluent bit secret. The output of below command should match with the content of `fluent-bit.conf` file.
 [source,console]
@@ -308,8 +344,6 @@ kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{p
 The https://docs.couchbase.com/operator/current/helm-setup-guide.html[Couchbase Helm chart^] is used to deploy CAO and a default configuration for the Couchbase Server pods.
 
 This is a very simple process to use defaults, to modify any of the values to configure it for your needs please refer to the https://docs.couchbase.com/operator/current/helm-setup-guide.html#custom-installation[Helm documentation^].
-
-We provide an example to show how to set up https://docs.couchbase.com/operator/current/howto-couchbase-log-forwarding.html[log forwarding^] simply to CMOS via Kubernetes annotations on the pod.
 
 [source,yaml]
 ----
@@ -354,16 +388,19 @@ cluster:
 
 With the configuration above saved in a `custom-values.yaml` file, we can deploy using a nominated Couchbase Server version very easily.
 
+[NOTE]
+====
+If you have the couchbase operator already deployed using helm or deploying new couchbase operator then below command can be used with custom values to enable the CMOS. If it is deployed through command line tools then you need to update the existing service through https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/[kubectl patch^] with custom values mentioned above.
+====
+
 [source,console]
 ----
 $ helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image=couchbase/server:7.0.2 --values=custom-values.yaml
 ----
 
-This will deploy the entire Couchbase operator and server set of pods all fully managed.
-
 == Deploy Ingress
 
-To allow us to access the cluster we set up a Kubernetes `Ingress` to forward traffic from our localhost to the appropriate parts of the cluster.
+To allow us to access the cluster we set up a Kubernetes `Ingress` to forward traffic from our `localhost` to the appropriate parts of the cluster.
 There are two aspects required here:
 . Provide an Ingress controller, Nginx in this case.
 . Set up Ingress to forward to our CMOS deployment.
@@ -371,19 +408,9 @@ There are two aspects required here:
 For a production system it is likely an `Ingress` controller will already be deployed.
 The example also just forwards all traffic whereas a non-local cluster really should just target CMOS traffic as other traffic likely has `Ingress` rules already.
 
-We follow the https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx[KIND documentation^] to deploy Nginx.
+Follow this https://kubernetes.github.io/ingress-nginx/deploy/[Nginx Ingress Controller^] guideline to setup it.
 
-[source,console]
-----
-$ INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
-$ kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
-$ kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=120s
-----
-
-The last step deploys the actual `Ingress` configuration as below.
+Once the Ingress controller is installed and ready then the last step deploys the actual `Ingress` configuration as below. Save the below content in a file called `ingress.yaml`
 
 [source,yaml]
 ----
@@ -411,6 +438,8 @@ spec:
 ---
 ----
 
+Execute the below command to create ingress in the cluster.
+
 [source,console]
 ----
 $ kubectl apply -f ingress.yaml
@@ -418,7 +447,7 @@ $ kubectl apply -f ingress.yaml
 
 == Using CMOS
 
-Once this is all deployed, which can be automated using a https://github.com/couchbaselabs/observability/blob/main/examples/kubernetes/run.sh[fully scripted version^], then you should be able to browse to http://localhost (or wherever you are deploying it with the appropriate `Ingress`).
+Once this is all deployed then you should be able to browse to http://localhost (or wherever you are deploying it with the appropriate `Ingress`).
 
 You should then hit the landing page which includes links to this documentation.
 
@@ -452,11 +481,13 @@ Once this is added then the other Grafana dashboards should spring to life.
 
 === Grafana
 
+While setting up the prometheus config Grafana is also getting configured, refer <<Grafana_Section>> to see the configurations.
+
 All the components are already configured and linked while setup. So the metrics can be accessible on respective endpoints.
 
 ==== Couchbase Exporter metrics
 
-The couchbase Exporter Metrics is accssible on `http://localhost/grafana/d/Au2tCFknk/couchbase-exporter`
+Couchbase Exporter Metrics dashboard can be accessible on Grafana with name as: `couchbase-exporter`
 
 .Couchbase Exporter Metrics screenshot
 image::couchbase-exporter.png[]
@@ -464,14 +495,16 @@ image::couchbase-exporter.png[]
 
 ==== Couchbase Kubernetes metrics
 
-The couchbase Exporter Metrics is accssible on `http://localhost/grafana/d/QpALMugZz/couchbase-kubernetes`
+Couchbase Kubernetes Metrics dashboard can be accessible on Grafana with name as: `couchbase-kubernetes`
 
 .Couchbase Kubernetes Metrics screenshot
 image::couchbase-kubernetes.png[]
 
 ==== Alerting
 
-Alerting rule is configured can be seen on `http://localhost/grafana/d/eea-9_sik/prometheus-alerts`
+While setting up the prometheus config alerting is also getting configured, refer <<alert_rules>> to see the configuration
+
+Alerting dashboard can be accessible on Grafana with name as: `prometheus-alerts`
 
 .Prometheus Alerting screenshot
 image::prometheus-alert.png[]
