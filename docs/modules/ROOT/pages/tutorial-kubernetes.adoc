@@ -1,5 +1,8 @@
 = CMOS Kubernetes Deployment
 
+[abstract]
+A simple working example from scratch in kubernetes cluster with the https://docs.couchbase.com/operator/current/overview.html[Couchbase Autonomous Operator (CAO)^] deploying Couchbase Server then being monitored by CMOS.
+
 include::partial$tutorial.adoc[]
 
 == Overview
@@ -14,23 +17,23 @@ A prerequisite to configuring CMOS is to install kube-state-metrics. This can be
 
 [source,console]
 ----
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
+$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm repo update
+$ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 ----
 
 === Prometheus
 
 We provide Prometheus configuration via a Kubernetes `ConfigMap` which contains all the details for credentials, scrape targets, etc.
 
-[Note]
-===
+[NOTE]
+====
 Before creating a new config, first delete the existing configmap `prometheus-config` if exists. 
-===
+====
 
 [source,console]
 ----
-kubectl delete configmap prometheus-config
+$ kubectl delete configmap prometheus-config
 ----
 
 Now create config with the below contents. Save the below content in a file called `prometheus-k8s.yml`
@@ -191,12 +194,12 @@ Execute the below command to create rbac in the cluster
 [source,console]
 
 ----
-kubectl apply -f "rbac.yaml"
+$ kubectl apply -f "rbac.yaml"
 ----
 
 ==== Monitoring Dashboard
 
-Now we need to provide the actual CMOS deployment to run along with the supporting services for it. Save the below content in `dashboard.yaml`.
+Now we need to provide the actual CMOS deployment to run along with the supporting services for it. Save the below content in `monitoring-dashboard.yaml`.
 
 [source,yaml]
 ----
@@ -280,7 +283,7 @@ spec:
 Execute the below command to create monitoring dashboard in the cluster
 [source,console]
 ----
-kubectl apply -f "dashboard.yaml"
+$ kubectl apply -f "monitoring-dashboard.yaml"
 ----
 
 === Fluent Bit
@@ -295,15 +298,20 @@ For setting up the Fluent Bit, Save the below content in a file called `fluent-b
 ----
 
 Create the fluent-bit secret.
-Note: Before creating, We need to first delete the existing `fluent-bit-custom` secret if exists. 
+
+[NOTE]
+====
+Before creating, We need to first delete the existing `fluent-bit-custom` secret if exists. 
+====
+
 [source,console]
 ----
-kubectl delete secret fluent-bit-custom
+$ kubectl delete secret fluent-bit-custom
 ----
 Run the below command to create a fluent-bit secret.
 [source,console]
 ----
-kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
+$ kubectl create secret generic fluent-bit-custom --from-file="fluent-bit.conf"
 ----
 
 ==== verify
@@ -392,7 +400,6 @@ $ kubectl wait --namespace ingress-nginx \
   --for=condition=ready pod \
   --selector=app.kubernetes.io/component=controller \
   --timeout=120s
-$ kubectl apply -f ingress.yaml
 ----
 
 The last step deploys the actual `Ingress` configuration as below.
@@ -421,6 +428,11 @@ spec:
                             port:
                                 number: 8080
 ---
+----
+
+[source,console]
+----
+$ kubectl apply -f ingress.yaml
 ----
 
 == Using CMOS
@@ -456,3 +468,29 @@ Make sure to disable the `Add Nodes to Prometheus` option as this is handled alr
 image::add-cluster-example.png[]
 
 Once this is added then the other Grafana dashboards should spring to life.
+
+=== Grafana
+
+All the components are already configured and linked while setup. So the metrics can be accessible on respective endpoints.
+
+==== Couchbase Exporter metrics
+
+The couchbase Exporter Metrics is accssible on `http://localhost/grafana/d/Au2tCFknk/couchbase-exporter`
+
+.Couchbase Exporter Metrics screenshot
+image::couchbase-exporter.png[]
+
+
+==== Couchbase Kubernetes metrics
+
+The couchbase Exporter Metrics is accssible on `http://localhost/grafana/d/QpALMugZz/couchbase-kubernetes`
+
+.Couchbase Kubernetes Metrics screenshot
+image::couchbase-kubernetes.png[]
+
+==== Alerting
+
+Alerting rule is configured can be seen on `http://localhost/grafana/d/eea-9_sik/prometheus-alerts`
+
+.Prometheus Alerting screenshot
+image::prometheus-alert.png[]
