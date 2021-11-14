@@ -10,7 +10,7 @@ CMOS can be deployed to monitor the Couchbase clusters deployed via xref:operato
 
 == Deployment
 
-CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, Services etc. Following sections describe how to deploy these standard objects.
+CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, Services etc. Following sections describe how to deploy these standard objects. They also include information on configuring these services.
 
 === Kube State Metrics
 
@@ -427,8 +427,9 @@ $ helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.im
 ----
 
 
-== Deploy Ingress
+== Accessing CMOS
 
+=== Deploying Ingress
 To allow us to access the cluster we set up a Kubernetes `Ingress` to forward traffic from our `localhost` to the appropriate parts of the cluster.
 There are two aspects required here:
 . Provide an Ingress controller, Nginx in this case.
@@ -478,8 +479,9 @@ $ kubectl apply -f ingress.yaml
 
 Once this is all deployed then you should be able to browse to http://localhost (or wherever you are deploying it with the appropriate `Ingress`).
 
-You should then hit the landing page which includes links to this documentation.
+You should then hit the landing page which includes links to documentation, cluster manager service and various other services of CMOS.
 
+=== Verify Prometheus Targets
 You can verify all the Prometheus targets are set up.
 
 .Successful Prometheus discovery
@@ -510,9 +512,8 @@ Once this is added then the other Grafana dashboards should spring to life.
 
 === Grafana
 
-While setting up the prometheus config Grafana is also getting configured, refer <<Grafana_Section>> to see the configurations.
-
-All the components are already configured and linked while setup. So the metrics can be accessible on respective endpoints.
+Various dashboard to monitor couchbase cluster is shipped out of the box in Grafana. Connect a couchbase cluster and navigate to Grafana to see the graphs. You can list all the dashboards using the https://grafana.com/docs/grafana/latest/dashboards/search/#dashboard-search[search dashboard option^]. You may create https://grafana.com/docs/grafana/latest/getting-started/getting-started/#step-3-create-a-dashboard[additional dashboards^] as per your needs. Post successful completion of the setup you should be able to see metrics in your grafana dashboard:
+Following are some dashboards readily available.
 
 ==== Couchbase Exporter metrics
 
@@ -520,7 +521,6 @@ Couchbase Exporter Metrics dashboard can be accessible on Grafana with name as: 
 
 .Couchbase Exporter Metrics screenshot
 image::couchbase-exporter.png[]
-
 
 ==== Couchbase Kubernetes metrics
 
@@ -537,3 +537,6 @@ Alerting dashboard can be accessible on Grafana with name as: `prometheus-alerts
 
 .Prometheus Alerting screenshot
 image::prometheus-alert.png[]
+
+=== Alert Manager
+TODO: Add screenshot of alert manager
