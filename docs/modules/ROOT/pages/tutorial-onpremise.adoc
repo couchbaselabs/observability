@@ -1,4 +1,6 @@
-= CMOS VM Deployment
+= Virtual Machine Deployment
+
+include::partial$tutorial.adoc[]
 
 == Overview
 CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster. You can refer to xref:architecture.adoc[Architecture overview] section to learn more.
@@ -10,7 +12,7 @@ CMOS can be deployed in a virtual machine using docker to monitor a VM based clu
 At this moment we only support deployment using docker. Use docker command to start the CMOS container.
 [source, console]
 ----
-$ docker run --name=CMOS --rm -d -P couchbase/observability-stack
+$ docker run --name=CMOS --rm -d -P couchbase/observability-stack:0.1
 ----
 
 === Configuration Options
@@ -189,7 +191,7 @@ Of course you can also just specify files rather than the full directory which c
 
 We also support tuning of rules by environment variable.
 When Prometheus is launched, it will run `envsubst` on the files with all available environment variables then substitute.
-You can see available environment variables in the [entrypoint of prometheus service](https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh).
+You can see available environment variables in the https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh[entrypoint of prometheus service^].
 
 === Alert manager
 From a Prometheus perspective we always assume there is a local Alert Manager target so this may report as failed if alert manager is disabled.
