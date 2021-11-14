@@ -1,4 +1,4 @@
-= CMOS Kubernetes Deployment
+= Kubernetes Deployment
 
 include::partial$tutorial.adoc[]
 
@@ -6,7 +6,7 @@ include::partial$tutorial.adoc[]
 
 CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster. You can refer to xref:architecture.adoc[Architecture overview] section to learn more.
 
-CMOS can be deployed to monitor the Couchbase clusters deployed via Couchbase Autonomous Operator.
+CMOS can be deployed to monitor the Couchbase clusters deployed via xref:operator:overview.adoc[Couchbase Autonomous Operator] on a kubernetes cluster.
 
 == Deployment
 
@@ -23,11 +23,11 @@ $ helm repo update
 $ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 ----
 
-=== Prometheus
+=== Prometheus Configuration
 
-We provide Prometheus configuration via a Kubernetes `ConfigMap` which contains all the details for credentials, scrape targets, etc.
+We provide Prometheus configuration via a Kubernetes `ConfigMap` which contains all the details for credentials, scrape targets, etc. The prometheus configuration file is a standard way of configuring prometheus server.
 
-Save the below content in a file called `prometheus-config.yaml`
+Below is an example configuration file content which has default configuration for CMOS prometheus for it to work out of the box. Save the contents to a file `prometheus-config.yaml`.
 
 [source,yaml]
 
@@ -107,7 +107,7 @@ scrape_configs: # <.>
       kubernetes_sd_configs:
           - role: pod
       relabel_configs:
-      # Scrape pods labelled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
+      # Scrape pods labeled with app=couchbase and then only port 9091 (exporter) or 2020 (fluent bit)
           - source_labels: [__meta_kubernetes_pod_label_app]
             action: keep
             regex: couchbase
@@ -129,11 +129,9 @@ scrape_configs: # <.>
           - targets: [kube-state-metrics:8080]
 ----
 
-<.> We want to be able to override in two specific ways: [[alert_rules]]
-    ** Extend: provide Couchbase default rules and add custom ones.
-    ** Replace: only provide custom rules.
-<.> Alert Manager: The https://prometheus.io/docs/alerting/latest/alertmanager/[Alertmanager^] handles alerts sent by client applications such as the Prometheus server
-<.> Scrape Config: Hold the configuration about fetching the metrics detail. [[Grafana_Section]]
+<.> `rule_files`: Promethues is configured to load rules via rule_files. You can extend the rules by adding rule files under `alerting/` directory. Note that the `alerting/` directory is a relative path to the prometheus configuration file. By default the complete path is `/etc/prometheus/custom/alerting/`. Refer to the [Monitoring Dashboard] section for volume mounts.
+<.> `alerting`: Alert manager is shipped and enabled by default in the CMOS. This section has various configurations of alert manager.
+<.> `scrape_configs`: All the targets to scrape metrics are defined here. This includes prometheus, couchbase-grafana, couchbase cluster, couchbase-kubernetes-pods and kube-state-metrics. We try to discover the couchbase pods using labels.
 
 Run the below command to create the prometheus config.
 
@@ -147,8 +145,7 @@ kubectl create configmap prometheus-config-cmos --from-file=prometheus-config.ya
 
 ==== RBAC
 
-RBAC set up is required to allow CMOS to function correctly, this is currently all handled for you via the example YAML file. Save the below content in `rbac.yaml`.
-
+Kubernetes controls access to its reource via RBAC. The CMOS deployment requires communication with couchbase cluster and its discovery in order to monitor it. Save the contents of below section in `rbac.yaml`.
 [source, yaml]
 ----
 # Prometheus service discovery via the K8S API requires some permissions
@@ -169,7 +166,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-    name: monitoring-role-binding
+    name: monitoring-role-binding <.>
 roleRef:
     kind: ClusterRole
     name: monitoring-endpoints-role
@@ -182,10 +179,11 @@ subjects:
 
 By taking a quick look at this configuration file, you can see that it defines a cluster role by specifying the following permissions.
 
-<.> Get, List, Watch Permissions for resources: `services, endpoints, pods, secrets`
-<.> Get, List, Watch Permissions for resources: `couchbaseclusters`
+<.> Access to standard Kubernetes resources: CMOS requires get, list and watch permissions to `services, endpoints, pods, secrets` resources.
+<.> Couchbase Custom Resource Definition: CMOS requires get, list and watch permissions to `couchbaseclusters` resource.
+<.> `monitoring-role-binding`: This role binding is required to give the permissions created in ClusterRole to service account of CMOS.
 
-Execute the below command to create user roles in the cluster
+Execute the below command to create the roles in the cluster
 
 [source,console]
 
@@ -193,9 +191,9 @@ Execute the below command to create user roles in the cluster
 $ kubectl apply -f rbac.yaml
 ----
 
-==== Monitoring Dashboard
+==== CMOS Workload
 
-Now we need to provide the actual CMOS deployment to run along with the supporting services for it. Save the below content in `monitoring-dashboard.yaml`.
+The actual CMOS workload runs as a kubernetes deployment along with other supporting services. Save the below content in `cmos-workload.yaml`.
 
 [source,yaml]
 ----
@@ -224,13 +222,13 @@ spec:
                   env:
                       - name: KUBERNETES_DEPLOYMENT
                         value: 'true'
-                      - name: ENABLE_LOG_TO_FILE
+                      - name: ENABLE_LOG_TO_FILE <.>
                         value: 'true'
                       - name: PROMETHEUS_CONFIG_FILE
                         value: /etc/prometheus/custom/prometheus-config.yaml
                       - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
                         value: ignore
-                    # - name: DISABLE_LOKI
+                    # - name: DISABLE_LOKI <.>
                     #   value: "true"
                   volumeMounts:
                       - name: prometheus-config-volume
@@ -245,21 +243,46 @@ spec:
             volumes:
                 - name: prometheus-config-volume
                   configMap:
-                      name: prometheus-config-cmos
+                      name: prometheus-config-cmos <.>
 ----
 
-<.> Image of observability dashboard: `couchbase/observability-stack:v1`
+<.> `spec.template.spec.containers[0].image`: This is the CMOS image that we wish to run.
+<.> Refer to the logging section for more information
+<.> Refer to the disabling services section for more information
 
-To disable various services from being run, set a environment variable called `DISABLE_X` where `X` is an uppercase version of their entry point name (minus any .sh suffix). For example, to disable Loki you would set `DISABLE_LOKI`.
-
-Logs can be either provided to `stdout` by default or too service-based logs by setting `ENABLE_LOG_TO_FILE`, these will then appear into the `/logs/` directory which can be exposed via a volume or bind mount externally if needs be.
-
-Execute the below command to create monitoring dashboard in the cluster
+Execute the below command to deploy cmos in the cluster
 [source,console]
 ----
-$ kubectl apply -f monitoring-dashboard.yaml
+$ kubectl apply -f cmos-workload.yaml
 ----
 
+==== Disabling Service
+By default all the service of CMOS stack are enabled. You can choose to disable a service from being run, this is achieved by setting environment variables of the container. The naming convention to be followed to disable a service is `DISABLE_X`, where X is the name of the service.
+[source, console]
+----
+# To disable Alert Manager
+DISABLE_ALERT_MANAGER
+
+# To disable Grafana
+DISABLE_GRAFANA
+
+# To disable Jaeger
+DISABLE_JAEGER
+
+# To disable Loki
+DISABLE_LOKI
+
+# To disable Prometheus
+DISABLE_PROMETHEUS
+
+# To disable Webserver (The nginx proxy to serve landing page and other components)
+DISABLE_WEBSERVER
+----
+
+==== Logging
+Logs can be either provided to `stdout` by default or to service-based logs by setting `ENABLE_LOG_TO_FILE`. With latter logs will appear into the `/logs/` directory. You can further expose the logs externally via https://kubernetes.io/docs/concepts/storage/volumes/[kubernetes volume^].
+
+==== Kubernetes Services
 Once the observability dashboard is deployed then we need to create a service to access the dashboard. Save the below content in a file called `monitoring-service.yaml`
 
 [source,yaml]
@@ -287,7 +310,7 @@ Execute the below command to create monitoring service in the cluster.
 $ kubectl apply -f monitoring-service.yaml
 ----
 
-Create a service for accessing the Loki, Save the below content in a file called `loki-service.yaml`
+Create a service for accessing the Loki, save the below content in a file called `loki-service.yaml`
 
 [source,yaml]
 ----
@@ -339,11 +362,11 @@ Verify the created fluent bit secret. The output of below command should match w
 kubectl get secret fluent-bit-custom -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}'
 ----
 
-== Deploy Couchbase
+== Configure Couchbase
 
-The https://docs.couchbase.com/operator/current/helm-setup-guide.html[Couchbase Helm chart^] is used to deploy CAO and a default configuration for the Couchbase Server pods.
+The https://docs.couchbase.com/operator/current/helm-setup-guide.html[Couchbase Helm chart^] is used to deploy Couchbase Autonomous Operator and a default configuration for the Couchbase Server pods.
 
-This is a very simple process to use defaults, to modify any of the values to configure it for your needs please refer to the https://docs.couchbase.com/operator/current/helm-setup-guide.html#custom-installation[Helm documentation^].
+CMOS requires the operator installation with certain configuration. This configuration enables the integration of CMOS with Couchbase clusters. Save the content below in a file called `custom-values.yaml`.
 
 [source,yaml]
 ----
@@ -386,17 +409,23 @@ cluster:
                       storage: 1Gi
 ----
 
-With the configuration above saved in a `custom-values.yaml` file, we can deploy using a nominated Couchbase Server version very easily.
+You can learn more about above configuration on https://docs.couchbase.com/operator/current/helm-setup-guide.html#custom-installation[Helm documentation^] page.
 
 [NOTE]
 ====
 If you have the couchbase operator already deployed using helm or deploying new couchbase operator then below command can be used with custom values to enable the CMOS. If it is deployed through command line tools then you need to update the existing service through https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/[kubectl patch^] with custom values mentioned above.
 ====
 
+The command below tries to upgrade the existing version of deployed couchbase operator. If the operator is not already installed it will install it.
+[WARNING]
+====
+Please be extremely cautious when upgrading an installed version of operator. Misconfigured `custom-values.yaml` can cause issues in the operator installation.
+====
 [source,console]
 ----
 $ helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image=couchbase/server:7.0.2 --values=custom-values.yaml
 ----
+
 
 == Deploy Ingress
 
@@ -445,7 +474,7 @@ Execute the below command to create ingress in the cluster.
 $ kubectl apply -f ingress.yaml
 ----
 
-== Using CMOS
+== Accessing CMOS
 
 Once this is all deployed then you should be able to browse to http://localhost (or wherever you are deploying it with the appropriate `Ingress`).
 
