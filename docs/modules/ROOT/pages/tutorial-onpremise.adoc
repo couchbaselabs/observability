@@ -1,16 +1,16 @@
-= CMOS On Premise Deployment
+= CMOS VM Deployment
 
 == Overview
 CMOS is a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster. You can refer to xref:architecture.adoc[Architecture overview] section to learn more.
 
-CMOS can be deployed in virtual machine using docker to monitor an on-premise cluster.
+CMOS can be deployed in a virtual machine using docker to monitor a VM based cluster.
 
 == Deployment
 === Installation
-At this moment we only support deployment using docker. You can get started by deploying the docker container:
+At this moment we only support deployment using docker. Use docker command to start the CMOS container.
 [source, console]
 ----
-$ docker run --name=cmos --rm -d -P couchbase/observability-stack
+$ docker run --name=CMOS --rm -d -P couchbase/observability-stack
 ----
 
 === Configuration Options
@@ -18,53 +18,79 @@ $ docker run --name=cmos --rm -d -P couchbase/observability-stack
 .Microlith configuration
 image::microlith-config.png[]
 
-CMOS gives fine grained control to configure various services. As shown in the diagram there are some default values and it provides ways to override these values using environment variables and native configuration files of each services.
+CMOS gives fine grained control to configure various services of its stack. As shown in the above diagram you can customize the installation using overrides through environment variables and native configuration file format of each service.
 
-==== Disable Services
-To disable various services from being run, set a variable (`docker run -e var ...`) called `DISABLE_X` where X is an uppercase version of their link:https://github.com/couchbaselabs/observability/tree/main/microlith/entrypoints[entrypoint name^] (minus any `.sh` suffix). For example, to disable link:https://github.com/couchbaselabs/observability/tree/main/microlith/entrypoints/loki.sh[Loki^] you would set `DISABLE_LOKI`.
-
-==== Log
-Logs can be either provided to `stdout` by default or too service-based logs by setting `ENABLE_LOG_TO_FILE`, these will then appear into the `/logs/` directory which can be exposed via a volume or bind mount externally if needs be.
-
-To mount files into a container use the `docker -v <source>:<destination>` syntax, ideally as read-only.
-Refer to the official documentation for options available: https://docs.docker.com/storage/volumes/ or https://docs.docker.com/storage/bind-mounts/
-
-==== Cluster Monitor
-The cluster manager will auto-start and configure itself with credentials supplied via the following environment variables:
-
-* `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`
-* `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`
-* `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`
-
-The cluster manager exposes its REST API from the container so this can be used externally to add/remove Couchbase clusters. We also support running any scripts found in `/etc/healthcheck` to do it.
-
-==== Prometheus
-
-Prometheus has various configuration options exposed, almost entirely via files unfortunately but that is the only real way.
-This is handled by mounting the configuration you want into the container, e.g. from a `ConfigMap` in Kubernetes or volumes/bind mounts locally.
-
-Note that to pick up changes to configuration we may need to reload config files via the `reload` endpoint: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration
-
-Here are some environment variables used for Prometheus configuration.
+==== Disabling Service
+By default all the service of CMOS stack are enabled. You can choose to disable a service from being run, this is achieved by setting environment variables of the docker container. The naming convention to be followed to disable a service is `DISABLE_X`, where X is the name of the service.
 
 [source, console]
 ----
-# Prometheus configuration
-export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
-export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
-export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
-export PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
+# To disable Alert Manager
+DISABLE_ALERT_MANAGER
+
+# To disable Grafana
+DISABLE_GRAFANA
+
+# To disable Jaeger
+DISABLE_JAEGER
+
+# To disable Loki
+DISABLE_LOKI
+
+# To disable Prometheus
+DISABLE_PROMETHEUS
+
+# To disable Webserver (The nginx proxy to serve landing page and other components)
+DISABLE_WEBSERVER
+----
+
+==== Logging
+Logs can be either provided to `stdout` by default or to service-based logs by setting `ENABLE_LOG_TO_FILE`. With latter logs will appear into the `/logs/` directory. You can further expose the logs externally via a volume or bind mount if desired.
+
+To mount files into a container use the `docker -v <source>:<destination>`, ideally as read-only.
+Refer to the official documentation for options available: https://docs.docker.com/storage/volumes/ or https://docs.docker.com/storage/bind-mounts/
+
+==== Cluster Monitor
+The cluster manager service of the CMOS stack will auto-start and configure itself to monitor a couchbase cluster with configuration supplied via the following environment variables:
+
+* `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`: The username of couchbase cluster to monitor.
+* `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`: The password of couchbase cluster to monitor.
+* `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`: The endpoint of couchbase cluster to monitor.
+
+The cluster manager also exposes a REST API from the container so this can be used externally to add/remove Couchbase clusters. It also support running any scripts found in `/etc/healthcheck` to configure the cluster monitoring. Refer to the <<connecting-couchbase-cluster>> section to learn more.
+
+==== Prometheus
+
+Prometheus has various configuration options exposed, almost entirely via files. You can mount configuration files to the CMOS container using https://docs.docker.com/storage/volumes/[docker volumes^] or https://docs.docker.com/storage/bind-mounts/[bind mounts^]
+
+Note that to pick up changes to configuration we may need to reload config files via the `reload` endpoint.
+
+Here are the environment variables used for Prometheus configuration. You can further read on prometheus configuration on the https://prometheus.io/docs/prometheus/latest/configuration/configuration/[official documentation website^].
+
+[source, console]
+----
+# Prometheus configuration file
+PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
+
+# Prometheus configuration file template
+PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
+
+# Prometheus url sub path
+PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
+
+# Prometheus storage path
+PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
 
 # Microlith configuration
-export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
+PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 ----
 
 ===== End points
-The link:https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[file-based service discovery^] approach is used to support adding/removing end points to scrape metrics for dynamically.
+The link:https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[file-based service discovery^] approach is used to support adding/removing end points to scrape metrics dynamically.
 
-The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entry point adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}` directory when it is run.
+The microlith will construct a set of dynamic end points to monitor internally based on which services are enabled. These endpoints are created for each service by adding a JSON file to the `${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}`.
 
-To add Couchbase Server end points, create a similar JSON format file to the link:https://github.com/couchbaselabs/observability/blob/main/examples/containers/dynamic/prometheus/couchbase-servers/targets.json[example^] in the `/etc/prometheus/couchbase/custom/` directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).
+To add Couchbase Server end points, create a similar JSON format file to the link:https://prometheus.io/docs/guides/file-sd/#installing-configuring-and-running-prometheus[example^] in the `/etc/prometheus/couchbase/custom/` directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).
 
 [source, yaml]
 ----
@@ -84,28 +110,28 @@ To add Couchbase Server end points, create a similar JSON format file to the lin
 You can set the authentication credentials for your Couchbase Server clusters using the `$CB_SERVER_AUTH_USER` and `$CB_SERVER_AUTH_PASSWORD` environment variables. Note that currently we do not support using different credentials for multiple clusters.
 
 ==== Loki
-Configuration file for log aggregation system Loki is present on `/etc/loki/local-config.yaml` inside the container. Update the environment to change the config file location or update the config file to change property of Loki accordingly.
+Configuration file for log aggregation system Loki is present on `/etc/loki/local-config.yaml` inside the container. Update the environment variable to change the config file location or update the config file to change property of Loki accordingly.
 
 [source, console]
 ----
 # Loki configuration
-export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
+LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 ----
 
 ==== Grafana
-To configure Grafana refer to <<configure_Grafana>> section.
+To configure Grafana refer to <<configure_grafana>> section.
 
 ==== Alert
 To configure Alerting refer to <<configure_alert>> section.
 
 === Accessing The Deployed Services
-There are 2 ways to access different services.
+There are 2 ways to access different services available in the deployed CMOS stack.
 
 ==== Using Nginx Service
 A landing page provided by the CMOS stack through Nginx. It has links to all the deployed services. You can navigate to any service from here. To get the port of your host machine use this:
 [source, console]
 ----
-$ docker container port cmos 8080
+$ docker container port CMOS 8080
 ----
 ----
 0.0.0.0:49278
@@ -114,11 +140,11 @@ $ docker container port cmos 8080
 From host machine open http://0.0.0.0:49278 to access it.
 
 ==== Direct Use Of Port Of Virtual Machine
-Use `docker ps` or `docker inspect X` to see the local ports exposed, there are multiple services running inside the container and each service has it's own port. For example, the mapping to `3000` is the Grafana, to get the port of the host machine use this. To get the port of your host machine use this:
+Use `docker ps` or `docker inspect X` to see the local ports exposed, there are multiple services running inside the container and each service has it's own port. For example, the mapping to `3000` is the Grafana, to get the port of the host machine use this:
 
 [source, console]
 ----
-$ docker container port cmos 3000
+$ docker container port CMOS 3000
 ----
 ----
 0.0.0.0:49283
@@ -128,52 +154,56 @@ Then from host machine open http://0.0.0.0:49283 to access Grafana. Same applies
 
 === Connecting Couchbase Cluster
 
-You can connect a couchbase cluster using API call as well as add cluster option given on Nginx service. Use this API call to connect a couchbase cluster:
+You can connect a couchbase cluster using API call as well as add cluster option given on the UI. Use this API call to connect a couchbase cluster:
 
 ----
 CLUSTER_MONITOR_USER=admin
 CLUSTER_MONITOR_PWD=password
-CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port cmos 7196)
+CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port CMOS 7196)
 COUCHBASE_USER=Administrator
 COUCHBASE_PWD=password
 COUCHBASE_ENDPOINT=http://<hostname/IP>:8091
+
+# Make the api call via curl. You can use any other tool to make this API call
 curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
 ----
 
-== Configure Grafana [[configure_Grafana]]
-Dashboard to monitor couchbase cluster is already installed in Grafana. Connect a couchbase cluster and navigate to Grafana to see the graphs.
+== Configure Grafana [[configure_grafana]]
+Various dashboard to monitor couchbase cluster is shipped out of the box in Grafana. Connect a couchbase cluster and navigate to Grafana to see the graphs. You can list all the dashboards using the https://grafana.com/docs/grafana/latest/dashboards/search/#dashboard-search[search dashboard option^]. You may create https://grafana.com/docs/grafana/latest/getting-started/getting-started/#step-3-create-a-dashboard[additional dashboards^] as per your needs.
 
 == Configure Alerting Via Prometheus [[configure_alert]]
 === Alerting rules
 
-We want to be able to override in two specific ways:
+The installation of CMOS comes with default alerting rules. There would be two use cases to override the default rules:
 
 . Extend: provide Couchbase default rules and add custom ones.
 . Replace: only provide custom rules.
 
-To support this there are two locations to be used:
+This is supported by use of two locations in the CMOS container:
 
 . `/etc/prometheus/alerting/custom/`
 . `/etc/prometheus/alerting/`
 
-The first only adds whilst the second will replace the defaults.
+The first only adds new rules whilst the second will replaces the default values.
 Of course you can also just specify files rather than the full directory which can be useful to inhibit default rules by removing them from the file.
 
 We also support tuning of rules by environment variable.
-When Prometheus is launched, it will run `envsubst` on the files with all available environment variables then substituted.
-Be aware that if you use a variable then you cannot currently default it other than providing that default to the link:https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh[entrypoint^] script for substitution: a variable must be defined.
+When Prometheus is launched, it will run `envsubst` on the files with all available environment variables then substitute.
+You can see available environment variables in the [entrypoint of prometheus service](https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh).
 
 === Alert manager
-From a Prometheus perspective we always assume there is a local Alert Manager target so this may report as failed if disabled.
+From a Prometheus perspective we always assume there is a local Alert Manager target so this may report as failed if alert manager is disabled.
 
-Additional alert managers can be specified by adding using the same `<file_sd_config>` link:https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[syntax^] to the `/etc/prometheus/alertmanager/custom/` directory.
+Additional alert managers can be specified by using the same `<file_sd_config>` link:https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[syntax^] to the `/etc/prometheus/alertmanager/custom/` directory.
 
-Here are some environment variables used for Alert manager configuration.
+Here are environment variables used for Alert manager configuration.
 [source, console]
 ----
-# Alert manager configuration
-export ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
-export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
+# Alert manager configuration file
+ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
+
+# Alert manager storage path
+ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
 ----
 
 == Other Environment Variables
