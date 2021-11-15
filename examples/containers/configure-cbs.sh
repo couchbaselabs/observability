@@ -35,12 +35,12 @@ couchbase-cli cluster-init -c 127.0.0.1 \
     --cluster-username Administrator \
     --cluster-password password \
     --services data,index,query,fts,analytics \
-    --cluster-ramsize 2048 \
-    --cluster-index-ramsize 1024 \
-    --cluster-eventing-ramsize 1024 \
-    --cluster-fts-ramsize 1024 \
+    --cluster-ramsize 1024 \
+    --cluster-index-ramsize 512 \
+    --cluster-eventing-ramsize 512 \
+    --cluster-fts-ramsize 512 \
     --cluster-analytics-ramsize 1024 \
-    --cluster-fts-ramsize 1024 \
+    --cluster-fts-ramsize 512 \
     --cluster-name "CMOS container test" \
     --index-storage-setting default
 
