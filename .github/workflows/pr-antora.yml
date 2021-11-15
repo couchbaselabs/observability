@@ -8,23 +8,14 @@ on:
         paths:
             - docs/**
 
-    workflow_dispatch:
-        inputs:
-            ref:
-                description: Branch, tag, or commit SHA to run against
-                required: false
-                default: main
-
 jobs:
     pr-doc-generation:
-        name: Build OSS container for testing
+        name: Generate documentation for review
         runs-on: ubuntu-latest
         timeout-minutes: 5
         steps:
             - name: Checkout repository
               uses: actions/checkout@v2
-              with:
-                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Run Antora
               uses: kameshsampath/antora-site-action@v0.2.4

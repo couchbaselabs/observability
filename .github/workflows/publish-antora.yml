@@ -24,12 +24,11 @@ jobs:
               uses: kameshsampath/antora-site-action@v0.2.4
               with:
                   antora_playbook: docs/antora-gh-playbook.yml
-                  antora_docsearch_enabled: 'true'
 
             - name: Deploy to GitHub Pages
               uses: JamesIves/github-pages-deploy-action@3.2.1
               with:
                     GITHUB_TOKEN: "${{ github.token}}"
-                    FOLDER: build/site
+                    FOLDER: docs/build/site/
                     BRANCH: 'gh-pages'
                     COMMIT_MESSAGE: "[CI] Publish Documentation for ${{ github.sha }}"
