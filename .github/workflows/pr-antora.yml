@@ -1,0 +1,38 @@
+---
+name: PR - Generate documentation for review
+
+on:
+    pull_request:
+        branches:
+            - main
+        paths:
+            - docs/**
+
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: Branch, tag, or commit SHA to run against
+                required: false
+                default: main
+
+jobs:
+    pr-doc-generation:
+        name: Build OSS container for testing
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v2
+              with:
+                  ref: ${{ github.event.inputs.ref || 'main' }}
+
+            - name: Run Antora
+              uses: kameshsampath/antora-site-action@v0.2.4
+              with:
+                  antora_playbook: docs/antora-container-playbook.yml
+
+            - name: Upload documentation
+              uses: actions/upload-artifact@v2
+              with:
+                  name: cmos-documentation
+                  path: build/site
