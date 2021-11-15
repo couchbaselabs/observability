@@ -1,19 +1,6 @@
 * xref:index.adoc[Home]
 * xref:quickstart.adoc[Quick start guide]
 
-.Architecture
-* xref:architecture.adoc[Architecture overview]
-* xref:deployment-microlith.adoc[Microlith container deployment]
-* xref:cluster-monitor.adoc[Couchbase Cluster Monitor component]
-* xref:deployment-distributed.adoc[Distributed microservices deployment]
-
-.Deployment
-* xref:deployment-onpremise.adoc[On-premise deployment]
-
-.Tutorials
-* xref:tutorial-onpremise.adoc[On-premise example]
-* xref:tutorial-kubernetes.adoc[Kubernetes example]
-
 .Configuration
 * link:http://localhost:8080/promwebform.html[Add Cluster^]
 * link:http://localhost:8080/prometheus/alerts/[Prometheus Alerts^]
@@ -24,6 +11,21 @@
 * link:http://localhost:8080/alertmanager/[Alert Manager^]
 * link:http://localhost:8080/grafana/[Grafana^]
 * link:http://localhost:8080/prometheus/[Prometheus^]
+
+.Architecture
+* xref:architecture.adoc[Architecture overview]
+* xref:deployment-microlith.adoc[Microlith container deployment]
+* xref:cluster-monitor.adoc[Couchbase Cluster Monitor component]
+* xref:deployment-distributed.adoc[Distributed microservices deployment]
+
+.Deployment
+* xref:deployment-onpremise.adoc[On-premise deployment]
+* xref:deployment-fluentbit.adoc[Fluent Bit deployment]
+* xref:deployment-exporter.adoc[Prometheus Exporter deployment]
+
+.Tutorials
+* xref:tutorial-onpremise.adoc[On-premise example]
+* xref:tutorial-kubernetes.adoc[Kubernetes example]
 
 .Further Information
 * xref:prerequisite-and-setup.adoc[Pre-requisites]

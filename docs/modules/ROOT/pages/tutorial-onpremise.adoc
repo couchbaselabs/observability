@@ -5,6 +5,10 @@ CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server
 
 include::partial$tutorial.adoc[]
 
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
 .Microlith overview
 image::microlith-runtime.png[]
 
