@@ -1,0 +1,21 @@
+= Prometheus
+
+[abstract]
+The Couchbase Prometheus Server can be used to collect cloud-native metrics from Couchbase Servers.
+
+== Overview
+
+https://prometheus.io/[Prometheus^] is a leading open-source monitoring solution. As a https://www.cncf.io/projects/prometheus/[graduated project^] of the Cloud Native Computing Foundation, it has become the industry standard for metrics collection and alert generation on cloud platforms.
+
+Monitoring Couchbase is a critical aspect of production use case. Couchbase exposes detailed metrics that can be collected for visualization and other forms of monitoring. Prometheus fits perfectly as a monitoring solution for these exposed metrics to develop alerts for system issues, identify maintenance windows and other valuable business intelligence insights.
+
+image::component-prometheus.png[]
+
+== Get Started
+
+The Couchbase Prometheus Server is managed by the xref:architecture.adoc[Couchbase Monitoring Observability Stack]. Prometheus server is enabled by default as part of CMOS and it can be configured to monitor Couchbase cluster both for a Kubernetes based deployment done via Couchbase Operator Docs or for a Virtual Machine based deployment done via docker containers.
+
+=== Links
+
+* Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
+* On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
