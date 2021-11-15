@@ -1,0 +1,27 @@
+= Loki
+
+Loki can be used to process and visualize collected Couchbase logs.
+
+== Overview
+
+Loki is the Prometheus-inspired open source logging system. Loki is used to process and visualize collected Couchbase logs.
+
+.Loki Architecture
+image::loki_architecture.png[]
+
+It has 2 data paths one is to write the logs and another is to read the logs. In the write path Distributor and Ingester are involved. In the read path Querier and Ingester are involved.
+
+=== Distributor.
+Once Fluent Bit collects and sends the logs to Loki, the distributor is the first component to receive them. Write of the data happens via building compressed chunks of the data, by gzipping logs as they come in. It contacts Ingester to perform the write.
+
+=== Ingester
+Ingester receives the entries and starts building chunks. This is basically gzipping the logs and appending them. Once the chunk “fills up”, we flush it to the database. After flushing a chunk, the ingester then creates a new empty chunk and adds the new entries into that chunk.
+
+.Loki Write Path
+image::loki_write.png[]
+
+=== Querier
+The read path is quite simple and has the querier doing most of the heavy lifting. Given a time-range and label selectors, it looks at the index to figure out which chunks match, and greps through them to give you the results. It also talks to the ingester to get the recent data that has not been flushed yet.
+
+.Loki Read Path
+image::loki_read.png[]
