@@ -20,9 +20,10 @@
   },
   "description": "Overview of all Couchbase clusters known to this instance",
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 5,
+  "id": 6,
   "links": [
     {
       "asDropdown": false,
@@ -272,10 +273,10 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.3",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$[*].nodes_summary[0].host",
@@ -351,5 +352,5 @@
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 3
+  "version": 2
 }

@@ -3,6 +3,7 @@ FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.0 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
 FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
+FROM couchbase/cluster-manager:demo as cbmultimanager
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -280,8 +281,8 @@ RUN openssl req -x509 -nodes -days 365 \
     -newkey rsa:2048 \
     -keyout /priv/server.key -out /priv/server.crt;
 
-COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
-COPY --from=builder /bin/cbeventlog /bin/cbeventlog
+COPY --from=cbmultimanager /bin/cbmultimanager /bin/cbmultimanager
+COPY --from=cbmultimanager /bin/cbeventlog /bin/cbeventlog
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/entrypoint.sh /entrypoints/couchbase-cluster-monitor.sh
 COPY --from=builder /etc/couchbase/git-commit.txt /etc/couchbase-cluster-monitor-release.txt
 COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/dist/app/ /ui/

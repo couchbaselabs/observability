@@ -3,22 +3,22 @@ groups:
     - name: CouchbaseClusterMonitor
       rules:
 
-          - alert: ClusterCheckerWarning
-            expr: count(multimanager_cluster_checker_status == 1) by (id, name, cluster_uuid, cluster_name, instance) >= 1
-            for: 2m
-            annotations:
-                title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
-                description: '{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance
-                    }})'
-            labels:
-                severity: warning
-                checker_id: '{{ $labels.id }}'
-                checker_name: '{{ $labels.name }}'
-                cluster: '{{ $labels.cluster_name }}'
+#          - alert: ClusterCheckerWarning
+#            expr: count(multimanager_cluster_checker_status == 1) by (id, name, cluster_uuid, cluster_name, instance) >= 1
+#            for: 10s
+#            annotations:
+#                title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
+#                description: '{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance
+#                    }})'
+#            labels:
+#                severity: warning
+#                checker_id: '{{ $labels.id }}'
+#                checker_name: '{{ $labels.name }}'
+#                cluster: '{{ $labels.cluster_name }}'
 
           - alert: ClusterCheckerAlert
             expr: count(multimanager_cluster_checker_status == 2) by (id, name, cluster_uuid, cluster_name, instance) >= 1
-            for: 2m
+            for: 10s
             annotations:
                 title: Cluster status warning ({{ $labels.name }}) on {{ $labels.cluster_name }}
                 description: '{{ $labels.cluster_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance
@@ -29,23 +29,23 @@ groups:
                 checker_name: '{{ $labels.name }}'
                 cluster: '{{ $labels.cluster_name }}'
 
-          - alert: NodeCheckerWarning
-            expr: count(multimanager_node_checker_status == 1) by (id, name, cluster_uuid, cluster_name, node_uuid, node_name, instance) >= 1
-            for: 2m
-            annotations:
-                title: Node status warning ({{ $labels.name }}) on {{ $labels.node_name }}
-                description: '{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance
-                    }})'
-            labels:
-                severity: warning
-                checker_id: '{{ $labels.id }}'
-                checker_name: '{{ $labels.name }}'
-                cluster: '{{ $labels.cluster_name }}'
-                node: '{{ $labels.node_name }}'
+#          - alert: NodeCheckerWarning
+#            expr: count(multimanager_node_checker_status == 1) by (id, name, cluster_uuid, cluster_name, node_uuid, node_name, instance) >= 1
+#            for: 10s
+#            annotations:
+#                title: Node status warning ({{ $labels.name }}) on {{ $labels.node_name }}
+#                description: '{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance
+#                    }})'
+#            labels:
+#                severity: warning
+#                checker_id: '{{ $labels.id }}'
+#                checker_name: '{{ $labels.name }}'
+#                cluster: '{{ $labels.cluster_name }}'
+#                node: '{{ $labels.node_name }}'
 
           - alert: NodeCheckerAlert
             expr: count(multimanager_node_checker_status == 2) by (id, name, cluster_uuid, cluster_name, node_uuid, node_name, instance) >= 1
-            for: 2m
+            for: 10s
             annotations:
                 title: Node status alert ({{ $labels.name }}) on {{ $labels.node_name }}
                 description: '{{ $labels.node_name }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance
@@ -57,23 +57,23 @@ groups:
                 cluster: '{{ $labels.cluster_name }}'
                 node: '{{ $labels.node_name }}'
 
-          - alert: BucketCheckerWarning
-            expr: count(multimanager_bucket_checker_status == 1) by (id, name, bucket, cluster_uuid, cluster_name, instance) >= 1
-            for: 2m
-            annotations:
-                title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
-                description: '{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance
-                    }})'
-            labels:
-                severity: warning
-                checker_id: '{{ $labels.id }}'
-                checker_name: '{{ $labels.name }}'
-                cluster: '{{ $labels.cluster_name }}'
-                bucket: '{{ $labels.bucket }}'
+#          - alert: BucketCheckerWarning
+#            expr: count(multimanager_bucket_checker_status == 1) by (id, name, bucket, cluster_uuid, cluster_name, instance) >= 1
+#            for: 10s
+#            annotations:
+#                title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
+#                description: '{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Warn state (on Cluster Monitor {{ $labels.instance
+#                    }})'
+#            labels:
+#                severity: warning
+#                checker_id: '{{ $labels.id }}'
+#                checker_name: '{{ $labels.name }}'
+#                cluster: '{{ $labels.cluster_name }}'
+#                bucket: '{{ $labels.bucket }}'
 
           - alert: BucketCheckerAlert
             expr: count(multimanager_bucket_checker_status == 2) by (id, name, bucket, cluster_uuid, cluster_name, instance) >= 1
-            for: 2m
+            for: 10s
             annotations:
                 title: Bucket status warning ({{ $labels.name }}) on {{ $labels.bucket }}
                 description: '{{ $labels.bucket }}: checker {{ $labels.name }} ({{ $labels.id }}) is in Alert state (on Cluster Monitor {{ $labels.instance

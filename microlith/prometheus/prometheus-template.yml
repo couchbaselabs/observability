@@ -1,8 +1,8 @@
 ---
 # This is a template file we use so we can substitute environment variables at launch
 global:
-    scrape_interval: 30s
-    evaluation_interval: 30s
+    scrape_interval: 5s
+    evaluation_interval: 5s
   # scrape_timeout is set to the global default (10s).
 
   # Attach these labels to any time series or alerts when communicating with
