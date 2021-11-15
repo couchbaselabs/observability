@@ -5,7 +5,7 @@ site:
     start_page: cmos::index.adoc
 content:
     sources:
-        - url: ./
+        - url: ../workspace/
           branches: HEAD
           start_path: docs
 ui:
