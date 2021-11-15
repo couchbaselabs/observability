@@ -1,0 +1,79 @@
+= Fluent Bit deployment
+
+[abstract]
+Fluent Bit is the recommended way to forward logs to CMOS from Couchbase Server instances.
+
+== Kubernetes usage
+
+Couchbase Autonomous Operator (CAO) versions 2.2 onwards already support Fluent Bit log forwarding.
+Refer to the link:https://docs.couchbase.com/operator/current/concept-couchbase-logging.html#log-forwarding[CAO documentation] for the full details.
+
+The main configuration required is providing the CMOS Loki endpoint as part of the link:https://docs.couchbase.com/operator/current/resource/couchbasecluster.html#couchbaseclusters-spec-servers-pod[Couchbase cluster configuration].
+To do this, use Couchbase Fluent Bit link:https://github.com/couchbase/couchbase-fluent-bit#releases[versions 1.1.2 or greater] and supply the following annotations with appropriate values.
+
+[source,yaml]
+----
+            pod:
+                metadata:
+                    annotations:
+                        # Match all logs
+                        fluentbit.couchbase.com/loki_match: "*"
+                        # Send to this SVC
+                        fluentbit.couchbase.com/loki_host: loki.default
+----
+
+A full example of integrating is available as part of the xref:tutorial-kubernetes.adoc[Kubernetes example].
+
+== On-premise usage
+
+Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platforms[already provides various supported targets] so is straightfoward to install on-premise.
+For full details here, please refer to the official documentation for installation.
+
+For CMOS needs we must do the following:
+. Install Fluent Bit.
+. Configure Fluent Bit.
+
+Step one can is deploying the binary and providing a startup script to launch it with Couchbase Server in whatever the preferred OS format is.
+Refer to the installation instructions from Fluent Bit for this.
+
+Step two can be satisfied by cloning (or otherwise just copying) the link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/conf[configuration] provided by the official Couchbase Fluent Bit image.
+The key is to get all the configuration into the expected location for the local Fluent Bit to use, refer to the deployment guide from Fluent Bit for full details for the specific targets.
+Whilst this is not officially supported on-premise, it is intended primarily for CAO deployments, it will function correctly on-premise as well.
+
+[source,console]
+----
+$ git clone --depth 1 https://github.com/couchbase/couchbase-fluent-bit.git
+$ cp -R conf/* <config directory for Fluent Bit on this OS>
+----
+
+=== Container deployment
+
+A simplified solution would be to deploy the container solution explicitly with local volume mounts for the Couchbase Server logs.
+An link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack[existing example] and blog post is available in the Couchbase Fluent Bit repository to show a complete stack.
+An link:[existing example] and blog post is available in the Couchbase Fluent Bit repository to show a complete stack.
+
+[source,console]
+----
+$ docker run --rm -d --name logger -v /opt/couchbase/var/lib/couchbase/logs/:/opt/couchbase/var/lib/couchbase/logs/:ro -e COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/ -e LOKI_MATCH="*" -e LOKI_HOST="127.0.0.1" couchbase/fluent-bit:1.1.2
+----
+
+Replace `LOKI_HOST` here with your actual hostname or IP address for CMOS.
+
+=== Loki configuration for Fluent Bit
+
+Similar to the Kubernetes set up, make sure to set the environment variables to the appropriate values when Fluent Bit is launched.
+
+.Loki configuration for Fluent Bit
+|===
+|Variable name|Description
+
+|LOKI_HOST
+|The hostname to send the logs to, i.e. where CMOS is running or another Loki stack if you want to integrate with that.
+
+|LOKI_PORT
+|The port open on `LOKI_HOST` for Loki to receive logs, defaults to 3100 if not provided.
+
+|LOKI_MATCH
+|The set of logs to match to send to Loki, this can be a wildcard or specific logs in the format `couchbase.log.<file>`.
+
+|===
