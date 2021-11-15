@@ -39,7 +39,7 @@ Refer to the installation instructions from Fluent Bit for this.
 
 Step two can be satisfied by cloning (or otherwise just copying) the link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/conf[configuration] provided by the official Couchbase Fluent Bit image.
 The key is to get all the configuration into the expected location for the local Fluent Bit to use, refer to the deployment guide from Fluent Bit for full details for the specific targets.
-Whilst this is not officially supported on-premise, it is intended primarily for CAO deployments, it will function correctly on-premise as well.
+Whilst this is intended primarily for CAO deployments and not officially supported on-premise, it will function there as well.
 
 [source,console]
 ----
