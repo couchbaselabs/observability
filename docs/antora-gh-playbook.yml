@@ -5,8 +5,8 @@ site:
     start_page: cmos::index.adoc
 content:
     sources:
-        - url: https://github.com/couchbaselabs/observability.git
-          branches: main
+        - url: ../
+          branches: HEAD
           start_path: docs
 ui:
     bundle:
