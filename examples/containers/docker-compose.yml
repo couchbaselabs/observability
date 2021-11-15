@@ -13,17 +13,13 @@ networks:
 services:
 
     # This first section is the main thrust of the microlith, it runs the all-in-one container up
-    couchbase-grafana:
-        # Build using build kit so we can do ssh mounts for private repo, do not build here.
-        # Unfortunately Docker Compose does not use locally built images, it tries to pull them unless you specify 'build'
-        build:
-            context: ../../microlith/
-        # image: couchbase-observability:v1
-        container_name: couchbase-grafana
+    couchbase-cmos:
+        image: ${CMOS_IMAGE}
+        container_name: couchbase-cmos
         # Note an environment file can be used as well, this is likely better for production
         environment:
             # Disable various components as an example
-            - DISABLE_LOKI=true
+            # - DISABLE_LOKI=true
             # - DISABLE_JAEGER=true
             # Log to local files rather than stdout
             - ENABLE_LOG_TO_FILE=true
@@ -35,7 +31,8 @@ services:
             # This location stores any dynamic Prometheus info (e.g. targets to scrape)
             # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
             # http://localhost:8080/prometheus/service-discovery
-            - ./dynamic/prometheus/couchbase-servers/:/etc/prometheus/couchbase/custom/:ro
+            # No longer required with new config service unless you want to detain and maintain.
+            # - ./dynamic/prometheus/couchbase-servers/:/etc/prometheus/couchbase/custom/:ro
             - ./dynamic/prometheus/custom-alertmanagers/:/etc/prometheus/alertmanager/custom/:ro
             # Custom alerts can be provided like so: http://localhost:8080/prometheus/rules#Custom
             - ./dynamic/prometheus/custom-alert-rules/:/etc/prometheus/alerting/custom/:ro
@@ -58,55 +55,35 @@ services:
             - 8080:8080
             # Cluster monitor
             - 7196:7196
+            # Loki
+            - 3100:3100
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
         container_name: db1
-        image: couchbase/server-sandbox:7.0.0
+        image: ${COUCHBASE_SERVER_IMAGE}
         ports:
             - 8091-8096:8091-8096
             - 11210-11211:11210-11211
         volumes:
+            - ./configure-cbs.sh:/entrypoint.sh
             - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
         networks:
             - back
 
-    # Logging disabled
-    # permission-fixer:
-    #     image: bash
-    #     # CB server forces this on us as the permissions for the rebalance directory as well as logs are not for all
-    #     # https://issues.couchbase.com/browse/MB-46485
-    #     command: sh -c "mkdir -p /opt/couchbase/var/lib/couchbase/logs/rebalance; while true; do sleep 30;chmod -R a+r /opt/couchbase/var/lib/couchbase/logs/; done"
-    #     user: root
-    #     volumes:
-    #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:rw
-
-    # logging:
-    #     container_name: logging
-    #     image: couchbase/fluent-bit:1.1.0
-    #     ports:
-    #         # Metrics
-    #         - "2020:2020"
-    #     depends_on:
-    #         - db1
-    #         - couchbase-grafana
-    #     environment:
-    #         - COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs
-    #     volumes:
-    #         - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
-    #         - ../../microlith/fluent-bit/fluent-bit.conf.server:/fluent-bit/config/fluent-bit.conf:ro
-    #     networks:
-    #         - back
-
-    exporter:
-        container_name: exporter
-        image: couchbase/exporter:1.0.5
-        command:
-            - --couchbase-address=db1
+    logging:
+        container_name: logging
+        image: ${FLUENT_BIT_IMAGE}
         ports:
-            - 9091:9091
+            - "2020:2020"
         depends_on:
             - db1
+            - couchbase-cmos
+        environment:
+            - LOKI_HOST=couchbase-cmos
+            - LOKI_MATCH=*
+        volumes:
+            - log-volume:/opt/couchbase/var/lib/couchbase/logs/:ro
         networks:
             - back
 
