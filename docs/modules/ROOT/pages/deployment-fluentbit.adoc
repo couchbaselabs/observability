@@ -77,3 +77,10 @@ Similar to the Kubernetes set up, make sure to set the environment variables to 
 |The set of logs to match to send to Loki, this can be a wildcard or specific logs in the format `couchbase.log.<file>`.
 
 |===
+
+[IMPORTANT]
+====
+In addition to the above Loki specific configuration make sure to set the link:https://github.com/couchbase/couchbase-fluent-bit#configuration[environment variables Fluent Bit requires].
+
+The link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack[example] and link:https://blog.couchbase.com/using-fluent-bit-for-log-forwarding-processing-with-couchbase-server/[blog post] cover this as well in more detail.
+====
