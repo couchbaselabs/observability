@@ -26,7 +26,7 @@ A full example of integrating is available as part of the xref:tutorial-kubernet
 
 == On-premise usage
 
-Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platforms[already provides various supported targets] so is straightfoward to install on-premise.
+Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platforms[already provides various supported targets] so is straightforward to install on-premise.
 For full details here, please refer to the official documentation for installation.
 
 For CMOS needs we must do the following:
@@ -57,7 +57,7 @@ An link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-s
 $ docker run --rm -d --name logger -v /opt/couchbase/var/lib/couchbase/logs/:/opt/couchbase/var/lib/couchbase/logs/:ro -e COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/ -e LOKI_MATCH="*" -e LOKI_HOST="127.0.0.1" couchbase/fluent-bit:1.1.2
 ----
 
-Replace `LOKI_HOST` here with your actual hostname or IP address for CMOS.
+Replace `LOKI_HOST` here with your actual DNS name or IP address for CMOS.
 
 === Loki configuration for Fluent Bit
 
@@ -68,7 +68,7 @@ Similar to the Kubernetes set up, make sure to set the environment variables to 
 |Variable name|Description
 
 |LOKI_HOST
-|The hostname to send the logs to, i.e. where CMOS is running or another Loki stack if you want to integrate with that.
+|The (resolvable) hostname to send the logs to, i.e. where CMOS is running or another Loki stack if you want to integrate with that.
 
 |LOKI_PORT
 |The port open on `LOKI_HOST` for Loki to receive logs, defaults to 3100 if not provided.
