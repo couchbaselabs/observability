@@ -1,7 +1,7 @@
 = Fluent Bit deployment
 
 [abstract]
-Fluent Bit is the recommended way to forward logs to CMOS from Couchbase Server instances.
+link:https://fluentbit.io/[Fluent Bit] is the recommended way to forward logs to CMOS from Couchbase Server instances.
 
 == Kubernetes usage
 
@@ -30,6 +30,7 @@ Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platform
 For full details here, please refer to the official documentation for installation.
 
 For CMOS needs we must do the following:
+
 . Install Fluent Bit.
 . Configure Fluent Bit.
 
@@ -49,8 +50,7 @@ $ cp -R conf/* <config directory for Fluent Bit on this OS>
 === Container deployment
 
 A simplified solution would be to deploy the container solution explicitly with local volume mounts for the Couchbase Server logs.
-An link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack[existing example] and blog post is available in the Couchbase Fluent Bit repository to show a complete stack.
-An link:[existing example] and blog post is available in the Couchbase Fluent Bit repository to show a complete stack.
+An link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack[existing example] and link:https://blog.couchbase.com/using-fluent-bit-for-log-forwarding-processing-with-couchbase-server/[blog post] is available in the Couchbase Fluent Bit repository to show a complete stack.
 
 [source,console]
 ----
