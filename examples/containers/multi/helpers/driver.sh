@@ -117,6 +117,7 @@ function configure_servers() {
     local server_pwd=$4
     local node_ram=$5
     local load=$6
+    local oss_flag=$7
 
     local data_alloc 
     local index_alloc
@@ -153,7 +154,7 @@ function configure_servers() {
 
         echo "** $clust_name created **"
 
-        # Load sample buckets and register cluster with CBMM
+        # Load sample buckets
         sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
         _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
           -d '[$sample_buckets_json]'" "[]"
@@ -172,12 +173,17 @@ function configure_servers() {
             done
         fi
 
-        local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
-          '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid:8091\"}' \
-          'http://localhost:8080/couchbase/api/v1/clusters'"
-        _docker_exec_with_retry "cmos" "$cmos_cmd"
+        # Register cluster with CBMM if non-OSS build
+        if ! $oss_flag; then 
+            local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
+            '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid:8091\"}' \
+            'http://localhost:8080/couchbase/api/v1/clusters'"
+            _docker_exec_with_retry "cmos" "$cmos_cmd"
 
-        echo "- Registered with Cluster Monitor"
+            echo "- Registered with Cluster Monitor"
+        else
+            echo "- Skipped registering with Cluster Monitor (oss-build)."
+        fi
 
         # Initialize and add the required nodes to the existing cluster
         echo ""

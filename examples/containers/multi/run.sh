@@ -36,6 +36,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+export CMOS_IMAGE # This is required for reference in the docker-compose file
 
 # Disable check as checked elsewhere
 # shellcheck disable=SC1091
@@ -56,6 +57,12 @@ SERVER_PWD=${SERVER_PWD:-"password"}
 
 NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-true}
+
+OSS_FLAG=${OSS_FLAG:-false}
+oss_warning=
+"The homepage of Grafana will show no data as the Cluster Manager is not part of the OSS \
+container, and so the cluster overview cannot be shown. Any dashboard containing Prometheus \
+metrics will still display information."
 
 #### SCRIPT START ####
 
@@ -81,7 +88,9 @@ image 'cbs_server_exp': ($(docker ps -a --filter "ancestor=cbs_server_exp" \
 fi
 
 # Build CMOS container
-docker-compose -f "$SCRIPT_DIR"/docker-compose.yml up -d --force-recreate 
+pushd "${SCRIPT_DIR}" || exit 1
+    docker-compose up -d --force-recreate
+popd || exit
 
 # Build Couchbase Server/exporter container
 docker build -f "$SCRIPT_DIR"/../../../testing/resources/containers/cb-with-exporter.Dockerfile "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
@@ -91,9 +100,10 @@ start_new_nodes "$NUM_NODES" "cbs_server_exp"
 
 # Initialise and partition nodes as evenly as possible into $NUM_CLUSTERS clusters, register them with CBMM
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
-configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" 
+configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" "$OSS_FLAG" 
 
 echo "All done. Go to: http://localhost:8080."
 
-# Todo:
-# - Allow greater service config / all services
+if $OSS_FLAG; then
+  echo "$oss_warning"
+fi

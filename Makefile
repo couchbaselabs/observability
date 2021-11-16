@@ -97,7 +97,7 @@ example-containers-oss: container-oss
 	examples/containers/run.sh
 
 example-multi-oss: container-oss
-	examples/containers/multi/run.sh
+	OSS_FLAG=true examples/containers/multi/run.sh
 
 # Deal with automated testing
 test-kubernetes: TEST_SUITE ?= integration/kubernetes
