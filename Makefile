@@ -132,7 +132,7 @@ container-clean:
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
-	docker image prune --force --volumes
+	docker image prune --force
 
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
