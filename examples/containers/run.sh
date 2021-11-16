@@ -20,10 +20,9 @@ COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.2}
 
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
+# Ensure we build the container locally first otherwise make
+# sure one is tagged as above CMOS_IMAGE for use in the .env file.
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
-
-# Ensure we built the container locally first
-make -C "${SCRIPT_DIR}/../.." container
 
 rm -rf "${SCRIPT_DIR}"/logs/*.log
 pushd "${SCRIPT_DIR}" || exit 1
