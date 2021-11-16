@@ -10,3 +10,5 @@ Add additional clusters by running up a new Couchbase Server image and either at
 It demonstrates how to mount in custom rules and end points to scrape.
 
 Make sure nothing else is using port 8080 already locally.
+
+Make sure to build the CMOS container before using the local [`run.sh`](./run.sh) script via a call to `make container` or `make container-oss` as appropriate.

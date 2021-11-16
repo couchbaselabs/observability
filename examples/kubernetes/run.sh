@@ -23,6 +23,13 @@ DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 
+# Ensure we build the container locally first otherwise make
+# sure one is tagged as above CMOS_IMAGE for use in the config.
+if [[ "${SKIP_CONTAINER_BUILD:-yes}" != "yes" ]]; then
+    echo "Building CMOS container"
+    make -C "${SCRIPT_DIR}/../.." container
+fi
+
 if [[ "${SKIP_CLUSTER_CREATION:-no}" != "yes" ]]; then
   echo "Recreating full cluster"
 
