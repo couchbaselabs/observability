@@ -27,17 +27,17 @@ A full example of integrating is available as part of the xref:tutorial-kubernet
 == On-premise usage
 
 Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platforms[already provides various supported targets] so on-premise installation is straight forward.
-For full details here, please refer to the official documentation for installation.
+For full details, please refer to the https://docs.fluentbit.io/manual/installation/getting-started-with-fluent-bit[official documentation].
 
 For CMOS needs we must do the following:
 
 . Install Fluent Bit.
 . Configure Fluent Bit.
 
-Step one can is deploying the binary and providing a startup script to launch it with Couchbase Server in whatever the preferred OS format is.
-Refer to the installation instructions from Fluent Bit for this.
+Step one is deploying the Fluent Bit binary with Couchbase Server and providing a startup script to launch it.
+Refer to the installation instructions above from Fluent Bit for this.
 
-Step two is configuring fluent bit with https://github.com/couchbase/couchbase-fluent-bit/tree/main/conf[configuration] provided by the official Couchbase Fluent Bit image. You can either clone the repo or just copy over the configuration file.
+Step two is configuring fluent bit with the https://github.com/couchbase/couchbase-fluent-bit/tree/main/conf[configuration] provided by the official Couchbase Fluent Bit image. You can either clone the repository or just copy over the configuration file.
 The key is to get all the configuration into the expected location for the local Fluent Bit to use, refer to the deployment guide from Fluent Bit for full details for the specific targets.
 Whilst this is intended primarily for CAO deployments and not officially supported on-premise, it will function there as well.
 

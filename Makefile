@@ -139,7 +139,6 @@ clean: container-clean
 	-examples/kubernetes/stop.sh
 
 docs-lint:
-	docker run --rm -i hadolint/hadolint < Dockerfile.docs
 	tools/asciidoc-lint.sh
 
 docs:
