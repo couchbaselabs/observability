@@ -26,7 +26,7 @@ A full example of integrating is available as part of the xref:tutorial-kubernet
 
 == On-premise usage
 
-Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platforms[already provides various supported targets] so is straightforward to install on-premise.
+Fluent Bit link:https://docs.fluentbit.io/manual/installation/supported-platforms[already provides various supported targets] so on-premise installation is straight forward.
 For full details here, please refer to the official documentation for installation.
 
 For CMOS needs we must do the following:
