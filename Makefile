@@ -22,6 +22,7 @@ all: clean build lint test-unit container container-oss container-lint container
 # We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
 build:
+	rm -rf microlith/docs/
 	cp -R docs/ microlith/docs/
 	rm -rf microlith/config-svc/
 	cp -R config-svc microlith/config-svc/
@@ -131,10 +132,11 @@ container-clean:
 				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
 				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
-	docker image prune --force --volumes
+	docker image prune --force
 
 clean: container-clean
-	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
+	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
+	rm -f microlith/git-commit.txt
 	-examples/containers/stop.sh
 	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh

@@ -16,6 +16,15 @@ set -eu
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
+COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:7.0.2}
+
+DOCKER_USER=${DOCKER_USER:-couchbase}
+DOCKER_TAG=${DOCKER_TAG:-v1}
+CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+
+# Ensure we built the container locally first
+make -C "${SCRIPT_DIR}/../.." container
+
 rm -rf "${SCRIPT_DIR}"/logs/*.log
 pushd "${SCRIPT_DIR}" || exit 1
     docker-compose up -d --force-recreate
