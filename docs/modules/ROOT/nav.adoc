@@ -21,7 +21,6 @@
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
 * xref:deployment-fluentbit.adoc[Fluent Bit deployment]
-* xref:deployment-exporter.adoc[Prometheus Exporter deployment]
 
 .Tutorials
 * xref:tutorial-onpremise.adoc[On-premise example]
