@@ -5,6 +5,10 @@ A simple working example from scratch locally using https://kind.sigs.k8s.io/[Ku
 
 include::partial$tutorial.adoc[]
 
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
 [NOTE]
 ====
 All the commands are intended to be run from the https://github.com/couchbaselabs/observability/tree/main/examples[`examples/kubernetes`^] directory.

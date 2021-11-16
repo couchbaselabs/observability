@@ -1,6 +1,5 @@
 ---
-# Main workflow
-name: Build and test changes ready for PR signoff
+name: PR - Build and test changes
 
 on:
     push:

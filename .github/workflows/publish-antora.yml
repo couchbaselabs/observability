@@ -25,8 +25,10 @@ jobs:
               with:
                   antora_playbook: docs/antora-gh-playbook.yml
 
-            - name: Publish to GitHub Pages
-              uses: peaceiris/actions-gh-pages@v3
+            - name: Deploy to GitHub Pages
+              uses: JamesIves/github-pages-deploy-action@3.2.1
               with:
-                  github_token: ${{ secrets.GITHUB_TOKEN }}
-                  publish_dir: build/site
+                    GITHUB_TOKEN: "${{ github.token}}"
+                    FOLDER: docs/build/site/
+                    BRANCH: 'gh-pages'
+                    COMMIT_MESSAGE: "[CI] Publish Documentation for ${{ github.sha }}"

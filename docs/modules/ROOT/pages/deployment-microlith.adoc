@@ -1,5 +1,9 @@
 = Microlith deployment
 
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
 To support easy deployment across a variety of targets, we are providing a 'microlith' single container option.
 This is essentially the various scalable components of the Grafana stack (Loki, Prometheus, Grafana, Alert Manager) and Couchbase binaries for specific data extraction all runnable as a single multi-process container instance.
 

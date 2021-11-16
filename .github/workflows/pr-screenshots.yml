@@ -1,5 +1,6 @@
 ---
-name: Automatically create and attach screenshots for PRs that affect dashboards
+name: PR - Screenshots generation
+# Automatically create and attach screenshots for PRs that affect dashboards
 
 on:
     pull_request:

@@ -1,5 +1,9 @@
 = Architecture
 
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
 A Grafana-based stack has been selected for a few reasons:
 
 * Already in use with Prometheus exporter and similar on Couchbase Server
