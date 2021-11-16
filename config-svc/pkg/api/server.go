@@ -16,10 +16,9 @@ package api
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/brpaz/echozap"
-	"github.com/couchbaselabs/observability/config-svc/pkg/manager"
-	"github.com/couchbaselabs/observability/config-svc/pkg/metacfg"
 	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
 )
@@ -27,33 +26,40 @@ import (
 type Server struct {
 	baseLogger *zap.Logger
 	logger     *zap.Logger
-	cfg        metacfg.ConfigManager
-	clusters   *manager.ClusterManager
 	echo       *echo.Echo
+	production bool
 }
 
-func NewServer(baseLogger *zap.Logger, configManager metacfg.ConfigManager, pathPrefix string) (*Server, error) {
-	mgr, err := manager.NewClusterManager(baseLogger, configManager)
-	if err != nil {
-		return nil, err
-	}
+func NewServer(baseLogger *zap.Logger, pathPrefix string, production bool) (*Server, error) {
 	server := Server{
 		baseLogger: baseLogger,
-		cfg:        configManager,
 		logger:     baseLogger.Named("server"),
 		echo:       echo.New(),
-		clusters:   mgr,
+		production: production,
 	}
 	server.echo.HideBanner = true
 	server.echo.HidePort = true
 	server.echo.Use(echozap.ZapLogger(server.logger))
+	server.echo.HTTPErrorHandler = server.handleError
 	server.registerRoutes(pathPrefix)
 	return &server, nil
 }
 
+func (s *Server) handleError(err error, ctx echo.Context) {
+	code := http.StatusInternalServerError
+	msg := err.Error()
+	if httpErr, ok := err.(*echo.HTTPError); ok {
+		code = httpErr.Code
+		msg = fmt.Sprintf("%v", httpErr.Message)
+	}
+	_ = ctx.JSON(code, map[string]interface{}{
+		"ok":  false,
+		"err": msg,
+	})
+}
+
 func (s *Server) Serve(host string, port int) {
-	go s.clusters.StartUpdating()
 	listenHost := fmt.Sprintf("%s:%d", host, port)
-	s.logger.Sugar().Infow("Starting HTTP server", "host", host)
+	s.logger.Sugar().Infow("Starting HTTP server", "host", listenHost)
 	s.logger.Sugar().Fatalw("HTTP server exited", "err", s.echo.Start(listenHost))
 }

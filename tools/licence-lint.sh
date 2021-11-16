@@ -17,23 +17,27 @@
 set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-exitCode=0
+exit_code=0
 while IFS= read -r -d '' SOURCE
 do
     if head "${SOURCE}" | grep -q '^// Code generated .* DO NOT EDIT.$'; then
-        echo "Skipping licence check for auto-generated file .${SOURCE##$SCRIPT_DIR/..}"
+        echo "Skipping licence check for auto-generated file .${SOURCE##"$SCRIPT_DIR/.."}"
         continue
     fi
-    echo "Licence check: .${SOURCE##$SCRIPT_DIR/..}"
+    echo "Licence check: .${SOURCE##"$SCRIPT_DIR/.."}"
     if ! head "${SOURCE}" | grep -q Copyright; then
-        echo ".${SOURCE##$SCRIPT_DIR/..}: Missing copyright"
-        exitCode=1
+        echo ".${SOURCE##"$SCRIPT_DIR/.."}: Missing copyright"
+        exit_code=1
     fi
     if ! head "${SOURCE}" | grep -q 'Apache License, Version 2.0'; then
-        echo ".${SOURCE##$SCRIPT_DIR/..}: Missing licence"
-        exitCode=1
+        echo ".${SOURCE##"$SCRIPT_DIR/.."}: Missing licence"
+        exit_code=1
     fi
-done < <(find "${SCRIPT_DIR}/.." -type d -path "*/go" -prune -o -type d -path "*/tools/bats" -prune -o -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
-# Make sure we prune out any local Go installation directory
+done < <(find "${SCRIPT_DIR}/.." \
+            -type d -path "*/go" -prune -o \
+            -type d -path "*/tools/bats" -prune -o \
+            -type d -path "*/tools/tern" -prune -o \
+            -type d -path "*/testing/screenshots/node_modules" -prune -o \
+            -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 
-exit $exitCode
+exit $exit_code

@@ -6,4 +6,6 @@ Currently this is a developer preview repository so no versions are officially s
 
 ## Reporting a Vulnerability
 
-https://docs.couchbase.com/server/current/introduction/contact-couchbase.html
+https://www.couchbase.com/resources/security#VulnerabilityHandling
+
+Please contact security@couchbase.com with details.

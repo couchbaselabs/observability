@@ -1,8 +1,8 @@
-FROM grafana/grafana:8.1.1 as grafana-official
-FROM grafana/loki:2.3.0 as loki-official
-FROM prom/prometheus:v2.28.1 as prometheus-official
-FROM prom/alertmanager:v0.22.2 as alertmanager-official
-FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+FROM grafana/grafana:8.2.3 as grafana-official
+FROM grafana/loki:2.4.1 as loki-official
+FROM prom/prometheus:v2.31.0 as prometheus-official
+FROM prom/alertmanager:v0.23.0 as alertmanager-official
+FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -41,7 +41,6 @@ RUN go mod download && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
     CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
 
-# TODO: golang17 version once available
 FROM node:16-alpine3.14 as ui-builder
 
 # Just copy over rather than clone
@@ -94,7 +93,7 @@ COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/sh
 COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
 
 # Support scripted access to kubernetes API, e.g. to get credentials from Secrets
-ARG KUBECTL_VERSION=v1.22.0
+ARG KUBECTL_VERSION=v1.22.3
 ENV KUBECTL_VERSION=$KUBECTL_VERSION
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
 	chmod +x kubectl && \
@@ -108,7 +107,7 @@ COPY --from=builder /bin/prometheus_merge /bin/prometheus_merge
 RUN chmod a+x /bin/prometheus_merge
 
 # Helm - to support deployment from this container of custom tools
-ARG HELM_VERSION=v3.7.0
+ARG HELM_VERSION=v3.7.1
 ENV HELM_VERSION=$HELM_VERSION
 RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
 	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
@@ -165,7 +164,6 @@ WORKDIR /
 RUN addgroup -g 10001 -S loki && \
     adduser -u 10001 -S loki -G loki && \
     mkdir -p /loki/rules && \
-    mkdir -p /loki/tmprules && \
     mkdir -p /loki/rules-temp && \
     chown -R loki:loki /etc/loki /loki
 
@@ -274,6 +272,8 @@ COPY --from=antora-generator /antora/cmos /html/cmos
 RUN mkdir -p /data /priv /ui
 
 # Couchbase proprietary start
+# Cannot consolidate into single RUN as need to wrap in start/end tags
+# hadolint ignore=DL3059
 RUN openssl req -x509 -nodes -days 365 \
     -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
     -addext "subjectAltName=DNS:couchbase.com" \
@@ -325,7 +325,7 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
 # Add all useful and required information
 COPY licenses/* /licenses/
-COPY README.md /help.1
+COPY docs/modules/ROOT/pages/support.adoc /help.1
 
 # Couchbase proprietary start
 COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt

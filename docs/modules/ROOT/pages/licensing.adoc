@@ -6,7 +6,7 @@ CMOS is composed of primarily other OSS software, not linked but used directly. 
 == Background
 
 Before diving into this page, it is worth reviewing existing guidance and information from industry or standards organizations on container licensing.
-A good place to start is with the link:https://www.linuxfoundation.org/tools/docker-containers-what-are-the-open-source-licensing-considerations/[Linux Foundation blog post].
+A good place to start is with the link:https://www.linuxfoundation.org/tools/docker-containers-what-are-the-open-source-licensing-considerations/[Linux Foundation blog post^].
 
 == Components
 
@@ -17,43 +17,43 @@ This software uses the following components with their associated licensing also
 |Component|License
 
 |Grafana
-|link:https://github.com/grafana/grafana/blob/main/LICENSE[AGPL 3.0]
+|link:https://github.com/grafana/grafana/blob/main/LICENSE[AGPL 3.0^]
 
 |Grafana JSON API Plugin
 |link:https://github.com/marcusolsson/grafana-json-datasource/blob/main/LICENSE[Apache 2.0]
 
 |Loki
-|link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0]
+|link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0^]
 
 |Prometheus
-|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0^]
 
 |Alert Manager
-|link:https://github.com/prometheus/alertmanager/blob/master/LICENSE[Apache 2.0]
+|link:https://github.com/prometheus/alertmanager/blob/master/LICENSE[Apache 2.0^]
 
 |Jaeger
-|link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
+|link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0^]
 
 |Nginx
-|link:http://nginx.org/LICENSE[Custom]
+|link:http://nginx.org/LICENSE[Custom^]
 
 |Prometheus Merge Tool
-|link:https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE[Apache 2.0]
+|link:https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE[Apache 2.0^]
 
 |Alpine.js
-|link:https://github.com/alpinejs/alpine/blob/main/LICENSE.md[MIT]
+|link:https://github.com/alpinejs/alpine/blob/main/LICENSE.md[MIT^]
 
 |Couchbase Cluster Monitor
-|link:https://www.couchbase.com/LA03012021[Couchbase License Agreement]
+|link:https://www.couchbase.com/LA03012021[Couchbase License Agreement^]
 |===
 
-All licences are in the CMOS source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`] directory.
+All licences are in the CMOS source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`^] directory.
 
 A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
 
-A simple link:https://github.com/couchbaselabs/observability/blob/main/tools/build-oss-container.sh[helper script] is provided as well to build without any proprietary components.
+A simple link:https://github.com/couchbaselabs/observability/blob/main/tools/build-oss-container.sh[helper script^] is provided as well to build without any proprietary components.
 
-Some of the components can also provide licensing information via a specific endpoint or API call, an example would be link:https://grafana.com/docs/grafana/latest/packages_api/data/licenseinfo/[Grafana].
+Some of the components can also provide licensing information via a specific endpoint or API call, an example would be link:https://grafana.com/docs/grafana/latest/packages_api/data/licenseinfo/[Grafana^].
 
 == Binary licensing
 
@@ -67,27 +67,27 @@ The container layers used in the deliverable image are:
 
 |Grafana
 |https://hub.docker.com/r/grafana/grafana
-|link:https://github.com/grafana/grafana/blob/HEAD/LICENSING.md[AGPL 3.0]
+|link:https://github.com/grafana/grafana/blob/HEAD/LICENSING.md[AGPL 3.0^]
 
 |Loki
 |https://hub.docker.com/r/grafana/loki
-|link:https://github.com/grafana/loki/blob/HEAD/LICENSING.md[AGPL 3.0]
+|link:https://github.com/grafana/loki/blob/HEAD/LICENSING.md[AGPL 3.0^]
 
 |Prometheus
 |https://hub.docker.com/r/prom/prometheus
-|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0^]
 
 |Alert Manager
 |https://hub.docker.com/r/prom/alertmanager
-|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0]
+|link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0^]
 
 |Jaeger
 |https://hub.docker.com/r/jaegertracing/all-in-one
-|link:https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
+|link:https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0^]
 
 |Nginx
 |https://hub.docker.com/_/nginx
-|link:http://nginx.org/LICENSE[Custom]
+|link:http://nginx.org/LICENSE[Custom^]
 |===
 
 The base image for this container is the Nginx one.
@@ -121,7 +121,7 @@ In each case we use or copy the contents direct from the container layer provide
 
 == Source licensing
 
-In addition to the container layers there is reuse of some aspects of configuration in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile] from each component, i.e. source and binary usage.
+In addition to the container layers there is reuse of some aspects of configuration in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile[Dockerfile^] from each component, i.e. source and binary usage.
 The licensing links for all the source code are as follows:
 
 .Dockerfile licenses
@@ -151,7 +151,7 @@ The licensing links for all the source code are as follows:
 
 This is direct reuse but combined into a single file with minimal modification (e.g. addition of comments or removal of unnecessary lines).
 
-A good example is Loki configuration taken directly from the link:https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile[offical Loki Dockerfile]:
+A good example is Loki configuration taken directly from the link:https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile[offical Loki Dockerfile^]:
 
 [source,Dockerfile]
 ----
@@ -180,9 +180,9 @@ Licensing documentation of the various container images is not always present on
 If the container image does not provide a license then the initial assumption is it is the same as the source license.
 
 However, the whole image needs to be considered including all software it covers as this is our responsibility - rather then just relying on what the image says.
-To this end a link:https://github.com/tern-tools/tern[Tern] link:https://github.com/couchbaselabs/observability/blob/main/tools/tern-report.sh[helper script] is also available in the repository.
+To this end a link:https://github.com/tern-tools/tern[Tern^] link:https://github.com/couchbaselabs/observability/blob/main/tools/tern-report.sh[helper script^] is also available in the repository.
 
-The full link:https://github.com/tern-tools/tern[Tern] report can be found link:http://localhost:8080/tern-licensing-report.html[here].
+The full Tern report can be found link:http://localhost:8080/tern-licensing-report.html[here].
 Note that the Tern report is a full scan of everything in the container and not necessarily how it is used or linked.
 
 === Grafana and Loki

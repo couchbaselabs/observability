@@ -1,0 +1,22 @@
+---
+# This is a simple compose stack to handle Couchbase Server 6 Prometheus monitoring using the exporter.
+# It is intended to be run alongside the Couchbase Server stack with CMOS in this directory.
+# For example: docker-compose up -f docker-compose.yml -f docker-compose-exporter.yml
+version: '3'
+
+networks:
+    back:
+
+services:
+    # Exporter required for server <7
+    exporter:
+        container_name: exporter
+        image: couchbase/exporter:1.0.5
+        command:
+            - --couchbase-address=db1
+        ports:
+            - 9091:9091
+        depends_on:
+            - db1
+        networks:
+            - back

@@ -26,8 +26,10 @@ all: build clean container container-lint container-oss container-scan dist lint
 
 # We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
-build: docs
+build:
+	rm -rf microlith/docs/
 	cp -R docs/ microlith/docs/
+	rm -rf microlith/config-svc/
 	cp -R config-svc microlith/config-svc/
 	echo "Version: $(version)" >> microlith/git-commit.txt
 	echo "Build: $(productVersion)" > microlith/git-commit.txt
@@ -48,10 +50,17 @@ dist: image-artifacts
 
 # NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
 # Install pre-commit then run: pre-commit run --all-files
-lint: config-svc-lint container-lint docs-lint
+lint: config-svc-lint container-lint
+	tools/asciidoc-lint.sh
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
+
+config-svc-build:
+	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} config-svc/
+
+config-svc-test-unit:
+	DOCKER_BUILDKIT=1 docker build --target=unit-test config-svc/
 
 config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
@@ -64,9 +73,7 @@ container-oss: build
 	tools/build-oss-container.sh
 
 container-lint:
-	docker run --rm -i hadolint/hadolint < microlith/Dockerfile
-	docker run --rm -i hadolint/hadolint < config-svc/Dockerfile
-	docker run --rm -i hadolint/hadolint < testing/resources/containers
+	tools/hadolint.sh
 
 container-scan: container
 	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
@@ -111,10 +118,12 @@ test-containers:
 test-native:
 	testing/run-native.sh ${TEST_SUITE}
 
+test-unit: config-svc-test-unit
+
 test: clean container-oss test-native test-containers test-kubernetes
 
 # Runs up the CMOS and takes screenshots
-generate-screenshots:
+generate-screenshots: container-oss
 	tools/generate-screenshots.sh
 
 # Special target to verify the internal release pipeline will work as well
@@ -141,28 +150,12 @@ container-clean:
 	docker image prune --force
 
 clean: container-clean
-	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/
+	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
+	rm -f microlith/git-commit.txt
 	-examples/containers/stop.sh
 	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh
 	-examples/containers/multi/stop.sh
-
-docs-lint:
-	docker run --rm -i hadolint/hadolint < Dockerfile.docs
-	tools/asciidoc-lint.sh
-
-docs: docs-generate-markdown
-
-# Automatically convert Markdown docs to Asciidoc ones.
-# This command needs bind mount support so will not run in Couchbase build infrastructure (Docker Swarm):
-# docker run -u $(shell id -u) -v $$PWD:/documents asciidoctor/docker-asciidoctor kramdoc README.md -o docs/modules/ROOT/pages/index.adoc
-# We therefore create a custom container for it all. Unfortunately this has a knock on in that forwarding can mess up line endings.
-docs-generate-markdown:
-	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} -f Dockerfile.docs .
-	docker run --rm -t ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} > docs/modules/ROOT/pages/index.adoc
-	tr -d "\r" < docs/modules/ROOT/pages/index.adoc > /tmp/observability-stack-docs-output.adoc
-	mv /tmp/observability-stack-docs-output.adoc docs/modules/ROOT/pages/index.adoc
-	rm -f observability-stack-docs-output.adoc
 
 docs-license-analysis:
 	tools/tern-report.sh

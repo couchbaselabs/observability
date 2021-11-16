@@ -70,7 +70,56 @@ When your pull request is in, it will automatically have a battery of automatic 
 
 ## Testing
 
-The testing philosophy of this project is described in [README.md](/README.md#testing) - it is somewhat unconventional, since the project is not a single piece of code but rather an amalgamation of various other tools all plumbed together.
+The testing philosophy of this project is described below - it is somewhat unconventional, since the project is not a single piece of code but rather an amalgamation of various other tools all plumbed together.
+
+We need to verify the following key use cases:
+
+* Out of the box defaults provided for simple usage to give a cluster overview
+* Customization of rules and integrate into existing pipeline
+
+In two separate infrastructures:
+
+* Deploying microlith to Kubernetes using CAO, automatic service discovery
+ ** Without CAO still possible but not tested
+ ** Can also mix-and-match this with on-premise cluster (COS in k8s, Couchbase Server on premise)
+* Deploying on-premise using manual configuration with the microlith
+ ** Remote end point or in Vagrant as well
+
+We need to test the following aspects:
+
+* Prometheus endpoint is available from the microlith
+* Adding the Couchbase Server instances to be monitored
+* Couchbase Server metrics are available (using the exporter pre 7.0) from the microlith endpoint
+ ** PromQL or promcli tooling can verify this
+* Default alerting rules are triggered under appropriate failures
+ ** Defaults in general just work out of the box
+* Custom alerting rules can be provided
+ ** Extend existing
+ ** Replace defaults
+ ** Disable defaults
+* Grafana dashboards are available from the microlith
+* Custom dashboards can be provided to the microlith
+ ** We can query the REST API for this information, i.e. what rules are present and firing, etc.
+* Loki endpoint is available from the microlith
+ ** LogQL can verify this and that there is some data (need to ensure we send some logs)
+* Components within the microlith can be enabled or disabled
+ ** Repeat one of the previous tests (e.g. Loki) with the component disabled and confirm the test fails.
+* Reproducible ephemeral container with custom configuration via GitOps
+ ** Configuration of cluster connection & credentials
+ ** Addition of custom alerts and tuning/inhibition of those alerts, plus addition of custom dashboards
+* Integration with an existing stack
+ ** Use Grafana operator here to create a separate stack in another namespace and demonstrate we can use this.
+
+Variation points:
+
+* Clusters with and without Prometheus end points
+* Clusters using CBS 7.0+ and Prometheus exporter
+* Clusters with different credentials
+* Clusters using different versions of Couchbase Server
+* In same namespace and separate namespaces
+* With and without the useful extras like kube-state-metrics and eventrouter
+* CE and EE clusters (not with CAO though for EE)
+* On-prem and CAO clusters mixed together for monitoring
 
 Our tests are implemented in Bash using the [BATS framework](https://bats-core.readthedocs.io/en/stable/).
 

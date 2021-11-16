@@ -7,173 +7,41 @@ import (
 	"bytes"
 	"compress/gzip"
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"net/url"
 	"path"
 	"strings"
 
-	"github.com/deepmap/oapi-codegen/pkg/runtime"
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/labstack/echo/v4"
 )
 
-// CouchbaseCluster defines model for CouchbaseCluster.
-type CouchbaseCluster struct {
-	CouchbaseConfig CouchbaseServerConfig     `json:"couchbaseConfig"`
-	Metadata        CouchbaseCluster_Metadata `json:"metadata"`
-	Nodes           []string                  `json:"nodes"`
+// Cluster defines model for Cluster.
+type Cluster struct {
+	CouchbaseConfig struct {
+		ManagementPort *float32 `json:"managementPort,omitempty"`
+		Password       string   `json:"password"`
+		UseTLS         *bool    `json:"useTLS,omitempty"`
+		Username       string   `json:"username"`
+	} `json:"couchbaseConfig"`
+	Hostname string  `json:"hostname"`
+	Name     *string `json:"name,omitempty"`
 }
 
-// CouchbaseCluster_Metadata defines model for CouchbaseCluster.Metadata.
-type CouchbaseCluster_Metadata struct {
-	AdditionalProperties map[string]string `json:"-"`
-}
+// PostClustersAddJSONBody defines parameters for PostClustersAdd.
+type PostClustersAddJSONBody Cluster
 
-// CouchbaseServerConfig defines model for CouchbaseServerConfig.
-type CouchbaseServerConfig struct {
-	ManagementPort float32 `json:"managementPort"`
-	Password       *string `json:"password,omitempty"`
-	Username       *string `json:"username,omitempty"`
-}
-
-// PrometheusScrapeConfig defines model for PrometheusScrapeConfig.
-type PrometheusScrapeConfig struct {
-	Labels  PrometheusScrapeConfig_Labels `json:"labels"`
-	Targets []string                      `json:"targets"`
-}
-
-// PrometheusScrapeConfig_Labels defines model for PrometheusScrapeConfig.Labels.
-type PrometheusScrapeConfig_Labels struct {
-	AdditionalProperties map[string]string `json:"-"`
-}
-
-// GetClustersParams defines parameters for GetClusters.
-type GetClustersParams struct {
-	IncludeSensitiveInfo *bool `json:"includeSensitiveInfo,omitempty"`
-}
-
-// Getter for additional properties for CouchbaseCluster_Metadata. Returns the specified
-// element and whether it was found
-func (a CouchbaseCluster_Metadata) Get(fieldName string) (value string, found bool) {
-	if a.AdditionalProperties != nil {
-		value, found = a.AdditionalProperties[fieldName]
-	}
-	return
-}
-
-// Setter for additional properties for CouchbaseCluster_Metadata
-func (a *CouchbaseCluster_Metadata) Set(fieldName string, value string) {
-	if a.AdditionalProperties == nil {
-		a.AdditionalProperties = make(map[string]string)
-	}
-	a.AdditionalProperties[fieldName] = value
-}
-
-// Override default JSON handling for CouchbaseCluster_Metadata to handle AdditionalProperties
-func (a *CouchbaseCluster_Metadata) UnmarshalJSON(b []byte) error {
-	object := make(map[string]json.RawMessage)
-	err := json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if len(object) != 0 {
-		a.AdditionalProperties = make(map[string]string)
-		for fieldName, fieldBuf := range object {
-			var fieldVal string
-			err := json.Unmarshal(fieldBuf, &fieldVal)
-			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
-			}
-			a.AdditionalProperties[fieldName] = fieldVal
-		}
-	}
-	return nil
-}
-
-// Override default JSON handling for CouchbaseCluster_Metadata to handle AdditionalProperties
-func (a CouchbaseCluster_Metadata) MarshalJSON() ([]byte, error) {
-	var err error
-	object := make(map[string]json.RawMessage)
-
-	for fieldName, field := range a.AdditionalProperties {
-		object[fieldName], err = json.Marshal(field)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
-		}
-	}
-	return json.Marshal(object)
-}
-
-// Getter for additional properties for PrometheusScrapeConfig_Labels. Returns the specified
-// element and whether it was found
-func (a PrometheusScrapeConfig_Labels) Get(fieldName string) (value string, found bool) {
-	if a.AdditionalProperties != nil {
-		value, found = a.AdditionalProperties[fieldName]
-	}
-	return
-}
-
-// Setter for additional properties for PrometheusScrapeConfig_Labels
-func (a *PrometheusScrapeConfig_Labels) Set(fieldName string, value string) {
-	if a.AdditionalProperties == nil {
-		a.AdditionalProperties = make(map[string]string)
-	}
-	a.AdditionalProperties[fieldName] = value
-}
-
-// Override default JSON handling for PrometheusScrapeConfig_Labels to handle AdditionalProperties
-func (a *PrometheusScrapeConfig_Labels) UnmarshalJSON(b []byte) error {
-	object := make(map[string]json.RawMessage)
-	err := json.Unmarshal(b, &object)
-	if err != nil {
-		return err
-	}
-
-	if len(object) != 0 {
-		a.AdditionalProperties = make(map[string]string)
-		for fieldName, fieldBuf := range object {
-			var fieldVal string
-			err := json.Unmarshal(fieldBuf, &fieldVal)
-			if err != nil {
-				return fmt.Errorf("error unmarshaling field %s: %w", fieldName, err)
-			}
-			a.AdditionalProperties[fieldName] = fieldVal
-		}
-	}
-	return nil
-}
-
-// Override default JSON handling for PrometheusScrapeConfig_Labels to handle AdditionalProperties
-func (a PrometheusScrapeConfig_Labels) MarshalJSON() ([]byte, error) {
-	var err error
-	object := make(map[string]json.RawMessage)
-
-	for fieldName, field := range a.AdditionalProperties {
-		object[fieldName], err = json.Marshal(field)
-		if err != nil {
-			return nil, fmt.Errorf("error marshaling '%s': %w", fieldName, err)
-		}
-	}
-	return json.Marshal(object)
-}
+// PostClustersAddJSONRequestBody defines body for PostClustersAdd for application/json ContentType.
+type PostClustersAddJSONRequestBody = PostClustersAddJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
-	// Obtain the current Couchbase Clusters state.
-	// (GET /clusters)
-	GetClusters(ctx echo.Context, params GetClustersParams) error
-	// Outputs the current config in YAML format.
-	// (GET /config)
-	GetConfig(ctx echo.Context) error
+	// Add a new Couchbase cluster to Prometheus
+	// (POST /clusters/add)
+	PostClustersAdd(ctx echo.Context) error
 	// Outputs the OpenAPI specification for this API.
 	// (GET /openapi.json)
 	GetOpenapiJson(ctx echo.Context) error
-	// Obtain the current Couchbase Prometheus monitoring hosts.
-	// (GET /prometheusTargets)
-	GetPrometheusTargets(ctx echo.Context) error
 }
 
 // ServerInterfaceWrapper converts echo contexts to parameters.
@@ -181,30 +49,12 @@ type ServerInterfaceWrapper struct {
 	Handler ServerInterface
 }
 
-// GetClusters converts echo context to params.
-func (w *ServerInterfaceWrapper) GetClusters(ctx echo.Context) error {
-	var err error
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetClustersParams
-	// ------------- Optional query parameter "includeSensitiveInfo" -------------
-
-	err = runtime.BindQueryParameter("form", true, false, "includeSensitiveInfo", ctx.QueryParams(), &params.IncludeSensitiveInfo)
-	if err != nil {
-		return echo.NewHTTPError(http.StatusBadRequest, fmt.Sprintf("Invalid format for parameter includeSensitiveInfo: %s", err))
-	}
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetClusters(ctx, params)
-	return err
-}
-
-// GetConfig converts echo context to params.
-func (w *ServerInterfaceWrapper) GetConfig(ctx echo.Context) error {
+// PostClustersAdd converts echo context to params.
+func (w *ServerInterfaceWrapper) PostClustersAdd(ctx echo.Context) error {
 	var err error
 
 	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetConfig(ctx)
+	err = w.Handler.PostClustersAdd(ctx)
 	return err
 }
 
@@ -214,15 +64,6 @@ func (w *ServerInterfaceWrapper) GetOpenapiJson(ctx echo.Context) error {
 
 	// Invoke the callback with all the unmarshalled arguments
 	err = w.Handler.GetOpenapiJson(ctx)
-	return err
-}
-
-// GetPrometheusTargets converts echo context to params.
-func (w *ServerInterfaceWrapper) GetPrometheusTargets(ctx echo.Context) error {
-	var err error
-
-	// Invoke the callback with all the unmarshalled arguments
-	err = w.Handler.GetPrometheusTargets(ctx)
 	return err
 }
 
@@ -254,31 +95,26 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
-	router.GET(baseURL+"/clusters", wrapper.GetClusters)
-	router.GET(baseURL+"/config", wrapper.GetConfig)
+	router.POST(baseURL+"/clusters/add", wrapper.PostClustersAdd)
 	router.GET(baseURL+"/openapi.json", wrapper.GetOpenapiJson)
-	router.GET(baseURL+"/prometheusTargets", wrapper.GetPrometheusTargets)
 
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"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",
+	"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",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
