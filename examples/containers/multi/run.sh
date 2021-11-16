@@ -59,8 +59,8 @@ NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-true}
 
 OSS_FLAG=${OSS_FLAG:-false}
-oss_warning=
-"The homepage of Grafana will show no data as the Cluster Manager is not part of the OSS \
+OSS_WARNING="\
+The homepage of Grafana will show no data as the Cluster Manager is not part of the OSS \
 container, and so the cluster overview cannot be shown. Any dashboard containing Prometheus \
 metrics will still display information."
 
@@ -105,5 +105,5 @@ configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NO
 echo "All done. Go to: http://localhost:8080."
 
 if $OSS_FLAG; then
-  echo "$oss_warning"
+  echo "$OSS_WARNING"
 fi
