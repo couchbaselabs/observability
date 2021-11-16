@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Licensing :: Couchbase Monitoring and Observability Stack</title>
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/cmos">Couchbase Monitoring and Observability Stack</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Resource A</a>
+            <a class="navbar-item" href="#">Resource B</a>
+            <a class="navbar-item" href="#">Resource C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="cmos" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Couchbase Monitoring and Observability Stack</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="quickstart.html">Quick start guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/promwebform.html" target="_blank" rel="noopener">Add Cluster</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/alerts/" target="_blank" rel="noopener">Prometheus Alerts</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/rules/" target="_blank" rel="noopener">Prometheus Rules</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/targets/" target="_blank" rel="noopener">Prometheus Targets</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tooling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/alertmanager/" target="_blank" rel="noopener">Alert Manager</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/grafana/" target="_blank" rel="noopener">Grafana</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/" target="_blank" rel="noopener">Prometheus</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architecture</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-onpremise.html">On-premise example</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-kubernetes.html">Kubernetes example</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Further Information</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="prerequisite-and-setup.html">Pre-requisites</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="licensing.html">Licensing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="support.html">Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Couchbase Monitoring and Observability Stack</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">Couchbase Monitoring and Observability Stack</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
+    <li>Further Information</li>
+    <li><a href="licensing.html">Licensing</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/licensing.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Licensing</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+CMOS is composed of primarily other OSS software, not linked but used directly. This page provides an overview of the relevant licensing.
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_background"><a class="anchor" href="#_background"></a>Background</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Before diving into this page, it is worth reviewing existing guidance and information from industry or standards organizations on container licensing.
+A good place to start is with the <a href="https://www.linuxfoundation.org/tools/docker-containers-what-are-the-open-source-licensing-considerations/" target="_blank" rel="noopener">Linux Foundation blog post</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_components"><a class="anchor" href="#_components"></a>Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This software uses the following components with their associated licensing also captured:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Component licenses</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Component</th>
+<th class="tableblock halign-left valign-top">License</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Grafana</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/grafana/blob/main/LICENSE" target="_blank" rel="noopener">AGPL 3.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Loki</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki/blob/main/LICENSE" target="_blank" rel="noopener">AGPL 3.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prometheus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/prometheus/blob/main/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alert Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/alertmanager/blob/master/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jaeger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/jaegertracing/jaeger/blob/master/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nginx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://nginx.org/LICENSE" target="_blank" rel="noopener">Custom</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prometheus Merge Tool</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/lablabs/prometheus-alert-overrider/blob/master/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alpine.js</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/alpinejs/alpine/blob/main/LICENSE.md" target="_blank" rel="noopener">MIT</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Couchbase Cluster Monitor</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.couchbase.com/LA03012021" target="_blank" rel="noopener">Couchbase License Agreement</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>All licences are in the CMOS source repository and the container in the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/" target="_blank" rel="noopener"><code>/licenses</code></a> directory.</p>
+</div>
+<div class="paragraph">
+<p>A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.</p>
+</div>
+<div class="paragraph">
+<p>A simple <a href="https://github.com/couchbaselabs/observability/blob/main/tools/build-oss-container.sh" target="_blank" rel="noopener">helper script</a> is provided as well to build without any proprietary components.</p>
+</div>
+<div class="paragraph">
+<p>Some of the components can also provide licensing information via a specific endpoint or API call, an example would be <a href="https://grafana.com/docs/grafana/latest/packages_api/data/licenseinfo/" target="_blank" rel="noopener">Grafana</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_binary_licensing"><a class="anchor" href="#_binary_licensing"></a>Binary licensing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The various external components are reused directly from the container layers already published by the entities responsible (e.g. Grafana publish the Loki image layers): this container is not redistributing or repackaging them but using as-is.</p>
+</div>
+<div class="paragraph">
+<p>The container layers used in the deliverable image are:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. Container image licenses</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Container image</th>
+<th class="tableblock halign-left valign-top">DockerHub URL</th>
+<th class="tableblock halign-left valign-top">License</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Grafana</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/r/grafana/grafana" class="bare">https://hub.docker.com/r/grafana/grafana</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/grafana/blob/HEAD/LICENSING.md" target="_blank" rel="noopener">AGPL 3.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Loki</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/r/grafana/loki" class="bare">https://hub.docker.com/r/grafana/loki</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki/blob/HEAD/LICENSING.md" target="_blank" rel="noopener">AGPL 3.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prometheus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/r/prom/prometheus" class="bare">https://hub.docker.com/r/prom/prometheus</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/prometheus/blob/main/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alert Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/r/prom/alertmanager" class="bare">https://hub.docker.com/r/prom/alertmanager</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/prometheus/blob/main/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jaeger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/r/jaegertracing/all-in-one" class="bare">https://hub.docker.com/r/jaegertracing/all-in-one</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nginx</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/_/nginx" class="bare">https://hub.docker.com/_/nginx</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://nginx.org/LICENSE" target="_blank" rel="noopener">Custom</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The base image for this container is the Nginx one.</p>
+</div>
+<div class="paragraph">
+<p>These can all be seen in this example excerpt from the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile">Dockerfile</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Dockerfile hljs" data-lang="Dockerfile">FROM grafana/grafana:8.1.1 as grafana-official
+FROM grafana/loki:2.3.0 as loki-official
+FROM prom/prometheus:v2.28.1 as prometheus-official
+FROM prom/alertmanager:v0.22.2 as alertmanager-official
+FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+
+FROM nginx:alpine
+
+COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
+COPY --from=grafana-official /etc/grafana /etc/grafana
+
+COPY --from=loki-official /usr/bin/loki /usr/bin/loki
+COPY --from=loki-official /etc/loki /etc/loki
+
+COPY --from=prometheus-official /bin/prometheus /bin/prometheus
+COPY --from=prometheus-official /bin/promtool /bin/promtool
+COPY --from=prometheus-official /etc/prometheus/prometheus.yml /etc/prometheus/prometheus.yml
+COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/share/prometheus/console_libraries/
+COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In each case we use or copy the contents direct from the container layer provided remotely, i.e. published by the provider.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_source_licensing"><a class="anchor" href="#_source_licensing"></a>Source licensing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In addition to the container layers there is reuse of some aspects of configuration in the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/Dockerfile" target="_blank" rel="noopener">Dockerfile</a> from each component, i.e. source and binary usage.
+The licensing links for all the source code are as follows:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Dockerfile licenses</caption>
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Container image</th>
+<th class="tableblock halign-left valign-top">Github repository</th>
+<th class="tableblock halign-left valign-top">License</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Grafana</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/grafana" class="bare">https://github.com/grafana/grafana</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/grafana/blob/main/LICENSE">AGPL 3.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Loki</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki" class="bare">https://github.com/grafana/loki</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki/blob/main/LICENSE">AGPL 3.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Prometheus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/prometheus" class="bare">https://github.com/prometheus/prometheus</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/prometheus/blob/main/LICENSE">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Alert Manager</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/alertmanager" class="bare">https://github.com/prometheus/alertmanager</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/alertmanager/blob/master/LICENSE">Apache 2.0</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jaeger</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/jaegertracing/jaeger" class="bare">https://github.com/jaegertracing/jaeger</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/jaegertracing/jaeger/blob/master/LICENSE">Apache 2.0</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>This is direct reuse but combined into a single file with minimal modification (e.g. addition of comments or removal of unnecessary lines).</p>
+</div>
+<div class="paragraph">
+<p>A good example is Loki configuration taken directly from the <a href="https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile" target="_blank" rel="noopener">offical Loki Dockerfile</a>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-Dockerfile hljs" data-lang="Dockerfile"># LOKI:
+# From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
+RUN addgroup -g 10001 -S loki &amp;&amp; \
+    adduser -u 10001 -S loki -G loki &amp;&amp; \
+    mkdir -p /loki/rules &amp;&amp; \
+    mkdir -p /loki/tmprules &amp;&amp; \
+    mkdir -p /loki/rules-temp &amp;&amp; \
+    chown -R loki:loki /etc/loki /loki
+
+# See https://github.com/grafana/loki/issues/1928
+RUN [ ! -e /etc/nsswitch.conf ] &amp;&amp; echo 'hosts: files dns' &gt; /etc/nsswitch.conf
+
+EXPOSE 3100
+# USER loki</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The Loki binary requires some extra configuration but this is taken directly from the official Dockerfile "recipe" for each component.
+We do comment out unnecessary aspects just to keep aligned with the original and for simpler updates.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_license_analysis"><a class="anchor" href="#_license_analysis"></a>License analysis</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Licensing documentation of the various container images is not always present on the DockerHub pages or it is linked to documentation site so requires a bit of analysis to extract.
+If the container image does not provide a license then the initial assumption is it is the same as the source license.</p>
+</div>
+<div class="paragraph">
+<p>However, the whole image needs to be considered including all software it covers as this is our responsibility - rather then just relying on what the image says.
+To this end a <a href="https://github.com/tern-tools/tern" target="_blank" rel="noopener">Tern</a> <a href="https://github.com/couchbaselabs/observability/blob/main/tools/tern-report.sh" target="_blank" rel="noopener">helper script</a> is also available in the repository.</p>
+</div>
+<div class="paragraph">
+<p>The full Tern report can be found <a href="http://localhost:8080/tern-licensing-report.html">here</a>.
+Note that the Tern report is a full scan of everything in the container and not necessarily how it is used or linked.</p>
+</div>
+<div class="sect2">
+<h3 id="_grafana_and_loki"><a class="anchor" href="#_grafana_and_loki"></a>Grafana and Loki</h3>
+<div class="paragraph">
+<p>For Grafana and Loki there is a recent blog post: <a href="https://grafana.com/blog/2021/04/20/grafana-loki-tempo-relicensing-to-agplv3/" class="bare">https://grafana.com/blog/2021/04/20/grafana-loki-tempo-relicensing-to-agplv3/</a>.
+This then links out to the source repositories covering the specific components within each that are still Apache 2:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://github.com/grafana/grafana/blob/HEAD/LICENSING.md" class="bare">https://github.com/grafana/grafana/blob/HEAD/LICENSING.md</a></p>
+</li>
+<li>
+<p><a href="https://github.com/grafana/loki/blob/HEAD/LICENSING.md" class="bare">https://github.com/grafana/loki/blob/HEAD/LICENSING.md</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In each case they indicate the default license is AGPL-3.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prometheus_and_alertmanager"><a class="anchor" href="#_prometheus_and_alertmanager"></a>Prometheus and AlertManager</h3>
+<div class="paragraph">
+<p>Both Prometheus and Alert Manager link from DockerHub to the documentation site which does cover licensing as Apache 2: <a href="https://prometheus.io/docs/introduction/faq/#what-license-is-prometheus-released-under" class="bare">https://prometheus.io/docs/introduction/faq/#what-license-is-prometheus-released-under</a>
+Prometheus also says it explicitly on the DockerHub page with an incorrect link, presumably as the information comes directly from the Github repo with the same relative link: <a href="https://github.com/prometheus/prometheus/blob/main/LICENSE" class="bare">https://github.com/prometheus/prometheus/blob/main/LICENSE</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jaeger"><a class="anchor" href="#_jaeger"></a>Jaeger</h3>
+<div class="paragraph">
+<p>The Jaeger image has no details on the DockerHub page at all.
+The source repo indicates it is Apache 2: <a href="https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE" class="bare">https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nginx"><a class="anchor" href="#_nginx"></a>Nginx</h3>
+<div class="paragraph">
+<p>The Nginx image license is a custom one linked directly from DockerHub: <a href="http://nginx.org/LICENSE" class="bare">http://nginx.org/LICENSE</a>
+Whilst it is a specific one, it is essentially a public domain one with the requirement of copyright being included:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-cpp hljs" data-lang="cpp">/*
+ * Copyright (C) 2002-2021 Igor Sysoev
+ * Copyright (C) 2011-2021 Nginx, Inc.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>On-premise example :: Couchbase Monitoring and Observability Stack</title>
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/cmos">Couchbase Monitoring and Observability Stack</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Resource A</a>
+            <a class="navbar-item" href="#">Resource B</a>
+            <a class="navbar-item" href="#">Resource C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="cmos" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Couchbase Monitoring and Observability Stack</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="quickstart.html">Quick start guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/promwebform.html" target="_blank" rel="noopener">Add Cluster</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/alerts/" target="_blank" rel="noopener">Prometheus Alerts</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/rules/" target="_blank" rel="noopener">Prometheus Rules</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/targets/" target="_blank" rel="noopener">Prometheus Targets</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tooling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/alertmanager/" target="_blank" rel="noopener">Alert Manager</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/grafana/" target="_blank" rel="noopener">Grafana</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/" target="_blank" rel="noopener">Prometheus</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architecture</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="tutorial-onpremise.html">On-premise example</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-kubernetes.html">Kubernetes example</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Further Information</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="prerequisite-and-setup.html">Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="licensing.html">Licensing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="support.html">Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Couchbase Monitoring and Observability Stack</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">Couchbase Monitoring and Observability Stack</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
+    <li>Tutorials</li>
+    <li><a href="tutorial-onpremise.html">On-premise example</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/tutorial-onpremise.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">On-premise example</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server exposed on port 8080 to provide a landing page.
+</blockquote>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Tutorials are accurate at the time of writing but rely heavily on third party software.
+Tutorials are provided to demonstrate how a particular problem may be solved.
+Use of third party software is not supported by Couchbase.
+For further help in the event of a problem, contact the relevant software maintainer.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/microlith-runtime.png" alt="microlith runtime">
+</div>
+<div class="title">Figure 1. Microlith overview</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_usage"><a class="anchor" href="#_usage"></a>Usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To run refer to the <a href="quickstart.html" class="page">quick start guide</a> for full details:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker run --name=cmos --rm -d -P couchbase-observability-stack</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Use <code>docker ps</code> or <code>docker inspect X</code> to see the local ports exposed, the mapping to <code>3000</code> is the Grafana one so to get this:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker container port couchbase-grafana 3000
+0.0.0.0:55124
+:::55124</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Browse to <code>localhost:55124</code> and log in with the default credentials of <code>admin:password</code> for Grafana.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration_options"><a class="anchor" href="#_configuration_options"></a>Configuration options</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="_images/microlith-config.png" alt="microlith config">
+</div>
+<div class="title">Figure 2. Microlith configuration</div>
+</div>
+<div class="paragraph">
+<p>To disable various services from being run, set a variable (<code>docker run -e var &#8230;&#8203;</code>) called <code>DISABLE_X</code> where X is an uppercase version of their <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/entrypoints" target="_blank" rel="noopener">entrypoint name</a> (minus any <code>.sh</code> suffix). For example, to disable <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/entrypoints/loki.sh" target="_blank" rel="noopener">Loki</a> you would set <code>DISABLE_LOKI</code>.</p>
+</div>
+<div class="paragraph">
+<p>Logs can be either provided to <code>stdout</code> by default or too service-based logs by setting <code>ENABLE_LOG_TO_FILE</code>, these will then appear into the <code>/logs/</code> directory which can be exposed via a volume or bind mount externally if needs be.</p>
+</div>
+<div class="paragraph">
+<p>To mount files into a container use the <code>docker -v &lt;source&gt;:&lt;destination&gt;</code> syntax, ideally as read-only.
+Refer to the official documentation for options available: <a href="https://docs.docker.com/storage/volumes/" class="bare">https://docs.docker.com/storage/volumes/</a> or <a href="https://docs.docker.com/storage/bind-mounts/" class="bare">https://docs.docker.com/storage/bind-mounts/</a></p>
+</div>
+<div class="sect2">
+<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"># Health check specific configuration
+export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
+export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
+export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}
+
+# Prometheus configuration
+export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
+export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
+export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
+export PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
+
+# Couchbase Server scrape credentials
+export CB_SERVER_AUTH_USER=${CB_SERVER_AUTH_USER:-Administrator}
+export CB_SERVER_AUTH_PASSWORD=${CB_SERVER_AUTH_PASSWORD:-password}
+
+# Alert manager configuration
+export ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
+export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
+
+# Loki configuration
+export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
+
+# Microlith configuration
+export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prometheus"><a class="anchor" href="#_prometheus"></a>Prometheus</h3>
+<div class="paragraph">
+<p>Prometheus has various configuration options exposed, almost entirely via files unfortunately but that is the only real way.
+This is handled by mounting the configuration you want into the container, e.g. from a <code>ConfigMap</code> in Kubernetes or volumes/bind mounts locally.</p>
+</div>
+<div class="paragraph">
+<p>Note that to pick up changes to configuration we may need to reload config files via the <code>reload</code> endpoint: <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration" class="bare">https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration</a></p>
+</div>
+<div class="sect3">
+<h4 id="_end_points"><a class="anchor" href="#_end_points"></a>End points</h4>
+<div class="paragraph">
+<p>The [file-based service discovery](<a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config" class="bare">https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config</a>) approach is used to support adding/removing end points to scrape metrics for dynamically.</p>
+</div>
+<div class="paragraph">
+<p>The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entry point adding a JSON file to the <code>${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}</code> directory when it is run.</p>
+</div>
+<div class="paragraph">
+<p>To add Couchbase Server end points, create a similar JSON format file to the <a href="https://github.com/couchbaselabs/observability/blob/main/examples/containers/dynamic/prometheus/couchbase-servers/targets.json" target="_blank" rel="noopener">example</a> in the <code>/etc/prometheus/couchbase/custom/</code> directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">[
+    {
+      "targets": [
+        "exporter:9091"
+      ],
+      "labels": {
+        "job": "db1",
+        "container": "exporter"
+      }
+    }
+]</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can set the authentication credentials for your Couchbase Server clusters using the <code>$CB_SERVER_AUTH_USER</code> and <code>$CB_SERVER_AUTH_PASSWORD</code> environment variables. Note that currently we do not support using different credentials for multiple clusters.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_alerting_rules"><a class="anchor" href="#_alerting_rules"></a>Alerting rules</h4>
+<div class="paragraph">
+<p>We want to be able to override in two specific ways:
+. Extend: provide Couchbase default rules and add custom ones.
+. Replace: only provide custom rules.</p>
+</div>
+<div class="paragraph">
+<p>To support this there are two locations to be used:
+. <code>/etc/prometheus/alerting/custom/</code>
+. <code>/etc/prometheus/alerting/</code></p>
+</div>
+<div class="paragraph">
+<p>The first only adds whilst the second will replace the defaults.
+Of course you can also just specify files rather than the full directory which can be useful to inhibit default rules by removing them from the file.</p>
+</div>
+<div class="paragraph">
+<p>We also support tuning of rules by environment variable.
+When Prometheus is launched, it will run <code>envsubst</code> on the files with all available environment variables then substituted.
+Be aware that if you use a variable then you cannot currently default it other than providing that default to the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh" target="_blank" rel="noopener">entrypoint</a> script for substitution: a variable must be defined.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_alert_manager"><a class="anchor" href="#_alert_manager"></a>Alert manager</h3>
+<div class="paragraph">
+<p>From a Prometheus perspective we always assume there is a local Alert Manager target so this may report as failed if disabled.</p>
+</div>
+<div class="paragraph">
+<p>Additional alert managers can be specified by adding using the same <code>&lt;file_sd_config&gt;</code> <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config" target="_blank" rel="noopener">syntax</a> to the <code>/etc/prometheus/alertmanager/custom/</code> directory.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_cluster_monitor"><a class="anchor" href="#_cluster_monitor"></a>Cluster Monitor</h3>
+<div class="paragraph">
+<p>The cluster manager will auto-start and configure itself with credentials supplied via the following environment variables:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}</code></p>
+</li>
+<li>
+<p><code>CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}</code></p>
+</li>
+<li>
+<p><code>CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}</code></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>The cluster manager exposes its REST API from the container so this can be used externally to add/remove Couchbase clusters. We also support running any scripts found in <code>/etc/healthcheck</code> to do it.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next steps</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="architecture.html" class="page">Architecture overview</a></p>
+</li>
+<li>
+<p><a href="deployment-microlith.html" class="page">Microlith container deployment</a></p>
+</li>
+<li>
+<p><a href="cluster-monitor.html" class="page">Couchbase Cluster Monitor component</a></p>
+</li>
+<li>
+<p><a href="deployment-onpremise.html" class="page">On-premise deployment</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

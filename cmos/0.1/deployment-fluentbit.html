@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Fluent Bit deployment :: Couchbase Monitoring and Observability Stack</title>
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/cmos">Couchbase Monitoring and Observability Stack</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Resource A</a>
+            <a class="navbar-item" href="#">Resource B</a>
+            <a class="navbar-item" href="#">Resource C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="cmos" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Couchbase Monitoring and Observability Stack</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="quickstart.html">Quick start guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/promwebform.html" target="_blank" rel="noopener">Add Cluster</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/alerts/" target="_blank" rel="noopener">Prometheus Alerts</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/rules/" target="_blank" rel="noopener">Prometheus Rules</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/targets/" target="_blank" rel="noopener">Prometheus Targets</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tooling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/alertmanager/" target="_blank" rel="noopener">Alert Manager</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/grafana/" target="_blank" rel="noopener">Grafana</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/" target="_blank" rel="noopener">Prometheus</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architecture</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-onpremise.html">On-premise example</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-kubernetes.html">Kubernetes example</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Further Information</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="prerequisite-and-setup.html">Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="licensing.html">Licensing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="support.html">Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Couchbase Monitoring and Observability Stack</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">Couchbase Monitoring and Observability Stack</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
+    <li>Deployment</li>
+    <li><a href="deployment-fluentbit.html">Fluent Bit deployment</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/deployment-fluentbit.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Fluent Bit deployment</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+<a href="https://fluentbit.io/">Fluent Bit</a> is the recommended way to forward logs to CMOS from Couchbase Server instances.
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_kubernetes_usage"><a class="anchor" href="#_kubernetes_usage"></a>Kubernetes usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Couchbase Autonomous Operator (CAO) versions 2.2 and greater already support Fluent Bit log forwarding.
+Refer to the <a href="https://docs.couchbase.com/operator/current/concept-couchbase-logging.html#log-forwarding">CAO documentation</a> for the full details.</p>
+</div>
+<div class="paragraph">
+<p>The main configuration required is providing the CMOS Loki endpoint as part of the <a href="https://docs.couchbase.com/operator/current/resource/couchbasecluster.html#couchbaseclusters-spec-servers-pod">Couchbase cluster configuration</a>.
+To do this, use Couchbase Fluent Bit <a href="https://github.com/couchbase/couchbase-fluent-bit#releases">versions 1.1.2 or greater</a> and supply the following annotations with appropriate values.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">            pod:
+                metadata:
+                    annotations:
+                        # Match all logs
+                        fluentbit.couchbase.com/loki_match: "*"
+                        # Send to this SVC
+                        fluentbit.couchbase.com/loki_host: loki.default</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>A full example of integrating is available as part of the <a href="tutorial-kubernetes.html" class="page">Kubernetes example</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_on_premise_usage"><a class="anchor" href="#_on_premise_usage"></a>On-premise usage</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fluent Bit <a href="https://docs.fluentbit.io/manual/installation/supported-platforms">already provides various supported targets</a> so on-premise installation is straight forward.
+For full details, please refer to the <a href="https://docs.fluentbit.io/manual/installation/getting-started-with-fluent-bit">official documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>For CMOS needs we must do the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install Fluent Bit.</p>
+</li>
+<li>
+<p>Configure Fluent Bit.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Step one is deploying the Fluent Bit binary with Couchbase Server and providing a startup script to launch it.
+Refer to the installation instructions above from Fluent Bit for this.</p>
+</div>
+<div class="paragraph">
+<p>Step two is configuring fluent bit with the <a href="https://github.com/couchbase/couchbase-fluent-bit/tree/main/conf">configuration</a> provided by the official Couchbase Fluent Bit image. You can either clone the repository or just copy over the configuration file.
+The key is to get all the configuration into the expected location for the local Fluent Bit to use, refer to the deployment guide from Fluent Bit for full details for the specific targets.
+Whilst this is intended primarily for CAO deployments and not officially supported on-premise, it will function there as well.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ git clone --depth 1 https://github.com/couchbase/couchbase-fluent-bit.git
+$ cp -R conf/* &lt;config directory for Fluent Bit on this OS&gt;</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_container_deployment"><a class="anchor" href="#_container_deployment"></a>Container deployment</h3>
+<div class="paragraph">
+<p>A simplified solution would be to deploy the container solution explicitly with local volume mounts for the Couchbase Server logs.
+An <a href="https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack">existing example</a> and <a href="https://blog.couchbase.com/using-fluent-bit-for-log-forwarding-processing-with-couchbase-server/">blog post</a> is available in the Couchbase Fluent Bit repository to show a complete stack.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ docker run --rm -d --name logger -v /opt/couchbase/var/lib/couchbase/logs/:/opt/couchbase/var/lib/couchbase/logs/:ro -e COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/ -e LOKI_MATCH="*" -e LOKI_HOST="127.0.0.1" couchbase/fluent-bit:1.1.2</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Replace <code>LOKI_HOST</code> here with your actual DNS name or IP address for CMOS.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_loki_configuration_for_fluent_bit"><a class="anchor" href="#_loki_configuration_for_fluent_bit"></a>Loki configuration for Fluent Bit</h3>
+<div class="paragraph">
+<p>Similar to the Kubernetes set up, make sure to set the environment variables to the appropriate values when Fluent Bit is launched.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 1. Loki configuration for Fluent Bit</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Variable name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOKI_HOST</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The (resolvable) hostname to send the logs to, i.e. where CMOS is running or another Loki stack if you want to integrate with that.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOKI_PORT</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The port open on <code>LOKI_HOST</code> for Loki to receive logs, defaults to 3100 if not provided.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">LOKI_MATCH</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The set of logs to match to send to Loki, this can be a wildcard or specific logs in the format <code>couchbase.log.&lt;file&gt;</code>.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In addition to the above Loki specific configuration make sure to set the <a href="https://github.com/couchbase/couchbase-fluent-bit#configuration">environment variables Fluent Bit requires</a>.</p>
+</div>
+<div class="paragraph">
+<p>The <a href="https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack">example</a> and <a href="https://blog.couchbase.com/using-fluent-bit-for-log-forwarding-processing-with-couchbase-server/">blog post</a> cover this as well in more detail.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>

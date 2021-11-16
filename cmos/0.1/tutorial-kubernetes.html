@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Kubernetes example :: Couchbase Monitoring and Observability Stack</title>
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/cmos">Couchbase Monitoring and Observability Stack</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Resources</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Resource A</a>
+            <a class="navbar-item" href="#">Resource B</a>
+            <a class="navbar-item" href="#">Resource C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="cmos" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Couchbase Monitoring and Observability Stack</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="quickstart.html">Quick start guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/promwebform.html" target="_blank" rel="noopener">Add Cluster</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/alerts/" target="_blank" rel="noopener">Prometheus Alerts</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/rules/" target="_blank" rel="noopener">Prometheus Rules</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/targets/" target="_blank" rel="noopener">Prometheus Targets</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tooling</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/alertmanager/" target="_blank" rel="noopener">Alert Manager</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/grafana/" target="_blank" rel="noopener">Grafana</a></span>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <span class="nav-text"><a href="http://localhost:8080/prometheus/" target="_blank" rel="noopener">Prometheus</a></span>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architecture</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-onpremise.html">On-premise example</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="tutorial-kubernetes.html">Kubernetes example</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Further Information</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="prerequisite-and-setup.html">Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="licensing.html">Licensing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="support.html">Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Couchbase Monitoring and Observability Stack</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">Couchbase Monitoring and Observability Stack</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
+    <li>Tutorials</li>
+    <li><a href="tutorial-kubernetes.html">Kubernetes example</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/tutorial-kubernetes.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Kubernetes example</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+A simple working example from scratch locally using <a href="https://kind.sigs.k8s.io/" target="_blank" rel="noopener">Kubernetes-IN-Docker (KIND)</a> with the <a href="https://docs.couchbase.com/operator/current/overview.html" target="_blank" rel="noopener">Couchbase Autonomous Operator (CAO)</a> deploying Couchbase Server then being monitored by CMOS.
+</blockquote>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Tutorials are accurate at the time of writing but rely heavily on third party software.
+Tutorials are provided to demonstrate how a particular problem may be solved.
+Use of third party software is not supported by Couchbase.
+For further help in the event of a problem, contact the relevant software maintainer.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>All the commands are intended to be run from the <a href="https://github.com/couchbaselabs/observability/tree/main/examples" target="_blank" rel="noopener"><code>examples/kubernetes</code></a> directory.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cluster_creation"><a class="anchor" href="#_cluster_creation"></a>Cluster creation</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We use KIND to create a local cluster for testing, this step can be skipped if you have your own cluster to work with but the following sections all assume this.</p>
+</div>
+<div class="paragraph">
+<p>In the example, we have a script that creates a test cluster using a single worker node and control node.
+Resources are shared between all KIND nodes so unless you have anti-affinity rules or similar reasons for wanting multiple nodes then you can likely just use a single node.
+In this case we also want to set up some port mappings to manage the Ingress from our host.
+Refer to the <a href="https://kind.sigs.k8s.io/docs/user/ingress/" target="_blank" rel="noopener">KIND documentation</a> for full details on this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ kind create cluster --config - &lt;&lt;EOF
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+- role: worker</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once you have a KIND cluster up then it may be useful to load the various container images you want to use but this is not required.
+Any images not present will attempt to be pulled from a container registry so be aware of that - images available locally are not automatically served to KIND.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ docker pull couchbase/server:7.0.2
+$ kind load docker-image couchbase/server:7.0.2</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_cmos"><a class="anchor" href="#_deploy_cmos"></a>Deploy CMOS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>RBAC set up is required to allow CMOS to function correctly, this is currently all handled for you via the example YAML file.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+# Prometheus service discovery via the K8S API requires some permissions
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+    name: monitoring-endpoints-role
+    labels:
+        rbac.couchbase.observability.com/aggregate-to-monitoring: 'true'
+rules:
+    - apiGroups: ['']
+      resources: [services, endpoints, pods, secrets]
+      verbs: [get, list, watch]
+    - apiGroups: [couchbase.com]
+      resources: [couchbaseclusters]
+      verbs: [get, list, watch]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+    name: monitoring-role-binding
+roleRef:
+    kind: ClusterRole
+    name: monitoring-endpoints-role
+    apiGroup: rbac.authorization.k8s.io
+subjects:
+    - kind: Group
+      name: system:serviceaccounts
+      apiGroup: rbac.authorization.k8s.io
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we need to provide the actual CMOS deployment to run along with the supporting services for it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+# Our actual container to run
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: couchbase-grafana
+spec:
+    selector:
+        matchLabels:
+            run: couchbase-grafana
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                run: couchbase-grafana
+        spec:
+            containers:
+                - name: couchbase-grafana
+                  image: couchbase/observability-stack:v1
+                  ports:
+                      - name: http
+                        containerPort: 8080
+                      - name: loki # So we can push logs to it
+                        containerPort: 3100
+                  env:
+                      - name: KUBERNETES_DEPLOYMENT
+                        value: 'true'
+                      - name: ENABLE_LOG_TO_FILE
+                        value: 'true'
+                      - name: PROMETHEUS_CONFIG_FILE
+                        value: /etc/prometheus/custom/prometheus-k8s.yml
+                      - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
+                        value: ignore
+                      # Hardcode the login credentials for cluster monitor, in practice these should
+                      # be auto-generated as a Secret and used that way.
+                      - name: CB_MULTI_ADMIN_USER
+                        value: admin
+                      - name: CB_MULTI_ADMIN_PASSWORD
+                        value: password
+                  volumeMounts:
+                      - name: prometheus-config-volume
+                        mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
+                # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
+                - name: prometheus-config-watcher
+                  image: weaveworks/watch:master-9199bf5
+                  args: [-v, -t, -p=/etc/prometheus/custom, curl, -X, POST, --fail, -o, '-', -sS, http://localhost:8080/prometheus/-/reload]
+                  volumeMounts:
+                      - name: prometheus-config-volume
+                        mountPath: /etc/prometheus/custom
+            volumes:
+                - name: prometheus-config-volume
+                  configMap:
+                      name: prometheus-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: couchbase-grafana-http
+    labels:
+        run: couchbase-grafana
+spec:
+    ports:
+        - port: 8080
+          protocol: TCP
+    selector:
+        run: couchbase-grafana
+---
+# To allow us to send to Loki we need this
+apiVersion: v1
+kind: Service
+metadata:
+    name: loki
+    labels:
+        run: couchbase-grafana
+spec:
+    ports:
+        - port: 3100
+          protocol: TCP
+    selector:
+        run: couchbase-grafana
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We provide Prometheus configuration via a Kubernetes <code>ConfigMap</code> which contains all the details for credentials, scrape targets, etc.
+The example includes sample configuration to get everything working with our local cluster.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ kubectl create configmap prometheus-config --from-file=./prometheus/custom/
+$ kubectl apply -f microlith.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Specifically we use the <code>kubernetes_sd_config</code> to automatically discover Couchbase Server pods to scrape the metrics from.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">  # Used for kubernetes deployment as we can discover the end points to scrape from the API
+    - job_name: couchbase-kubernetes-pods
+      # Server 7 requires authentication
+      basic_auth:
+          username: admin
+          password: password
+      kubernetes_sd_configs:
+          - role: pod
+      relabel_configs:
+      # Scrape pods labelled with app=couchbase and then only port 8091 (server 7), 9091 (exporter) or 2020 (fluent bit)
+          - source_labels: [__meta_kubernetes_pod_label_app]
+            action: keep
+            regex: couchbase
+          - source_labels: [__meta_kubernetes_pod_container_port_number]
+            action: keep
+            regex: (8091|9091|2020)
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            action: replace
+            target_label: kubernetes_namespace
+          - source_labels: [__meta_kubernetes_pod_name]
+            action: replace
+            target_label: kubernetes_pod_name</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Currently unfortunately you still need to configure the cluster monitor manually with the pod details.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_couchbase"><a class="anchor" href="#_deploy_couchbase"></a>Deploy Couchbase</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <a href="https://docs.couchbase.com/operator/current/helm-setup-guide.html" target="_blank" rel="noopener">Couchbase Helm chart</a> is used to deploy CAO and a default configuration for the Couchbase Server pods.</p>
+</div>
+<div class="paragraph">
+<p>This is a very simple process to use defaults, to modify any of the values to configure it for your needs please refer to the <a href="https://docs.couchbase.com/operator/current/helm-setup-guide.html#custom-installation" target="_blank" rel="noopener">Helm documentation</a>.</p>
+</div>
+<div class="paragraph">
+<p>We provide an example to show how to set up <a href="https://docs.couchbase.com/operator/current/howto-couchbase-log-forwarding.html" target="_blank" rel="noopener">log forwarding</a> simply to CMOS via Kubernetes annotations on the pod.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+cluster:
+    logging:
+        server:
+            enabled: true
+            sidecar:
+                image: couchbase/fluent-bit:1.1.2
+    monitoring:
+        prometheus:
+            enabled: false # We're using server 7 metrics directly
+    security:
+        # To simplify for scraping we hardcode the passwords.
+        # They should be auto-generated really and the Secret value
+        # used by mounting into CMOS (or getting it to retrieve during
+        # startup).
+        username: admin
+        password: password
+    servers:
+        # We use custom annotations to forward to CMOS Loki
+        default:
+            size: 3
+            pod:
+                metadata:
+                    annotations:
+                        # Match all logs
+                        fluentbit.couchbase.com/loki_match: "*"
+                        # Send to this SVC
+                        fluentbit.couchbase.com/loki_host: loki.default
+            volumeMounts:
+                default: couchbase
+    volumeClaimTemplates:
+        - metadata:
+              name: couchbase
+          spec:
+              resources:
+                  requests:
+                      storage: 1Gi
+---</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>With the configuration above saved in a <code>custom-values.yaml</code> file, we can deploy using a nominated Couchbase Server version very easily.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image=couchbase/server:7.0.2 --values=custom-values.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will deploy the entire Couchbase operator and server set of pods all fully managed.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_deploy_ingress"><a class="anchor" href="#_deploy_ingress"></a>Deploy Ingress</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To allow us to access the cluster we set up a Kubernetes <code>Ingress</code> to forward traffic from our local host to the appropriate parts of the cluster.
+There are two aspects required here:
+. Provide an Ingress controller, Nginx in this case.
+. Set up Ingress to forward to our CMOS deployment.</p>
+</div>
+<div class="paragraph">
+<p>For a production system it is likely an <code>Ingress</code> controller will already be deployed.
+The example also just forwards all traffic whereas a non-local cluster really should just target CMOS traffic as other traffic likely has <code>Ingress</code> rules already.</p>
+</div>
+<div class="paragraph">
+<p>We follow the <a href="https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx" target="_blank" rel="noopener">KIND documentation</a> to deploy Nginx.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
+$ kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
+$ kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=120s
+$ kubectl apply -f ingress.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The last step deploys the actual <code>Ingress</code> configuration as below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">---
+# Ingress to forward to our web server including sub-paths: we should just forward what we need but for local testing just sending it all.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+    name: couchbase-ingress
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        nginx.ingress.kubernetes.io/rewrite-target: /$1$2
+        nginx.ingress.kubernetes.io/use-regex: 'true'
+spec:
+    rules:
+        - http:
+              paths:
+                  - path: /(.*)(/|$)
+                    pathType: Prefix
+                    backend:
+                        service:
+                            name: couchbase-grafana-http
+                            port:
+                                number: 8080
+---</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_cmos"><a class="anchor" href="#_using_cmos"></a>Using CMOS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once this is all deployed, which can be automated using a <a href="https://github.com/couchbaselabs/observability/blob/main/examples/kubernetes/run.sh" target="_blank" rel="noopener">fully scripted version</a>, then you should be able to browse to <a href="http://localhost" class="bare">http://localhost</a> (or wherever you are deploying it with the appropriate <code>Ingress</code>).</p>
+</div>
+<div class="paragraph">
+<p>You should then hit the landing page which includes links to this documentation.</p>
+</div>
+<div class="paragraph">
+<p>You can verify all the Prometheus targets are set up.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-successful-targets.png" alt="prometheus successful targets">
+</div>
+<div class="title">Figure 1. Successful Prometheus discovery</div>
+</div>
+<div class="paragraph">
+<p>Whilst the pods are coming up, some may report as failing but these will resolve once the pods are running.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-failing-targets.png" alt="prometheus failing targets">
+</div>
+<div class="title">Figure 2. Failing targets during startup</div>
+</div>
+<div class="sect2">
+<h3 id="_cmos_cluster_configuration"><a class="anchor" href="#_cmos_cluster_configuration"></a>CMOS cluster configuration</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Unfortunately cluster monitor is currently designed for an on-premise solution so will not cope with auto-discovery on Kubernetes yet.
+Without this the various Grafana dashboards will not function correctly so you have to do it manually for now.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Kubernetes support is on the roadmap but, in the meantime, to manually add the cluster details you will need the credentials for accessing the REST API and a pod name for one of the Couchbase Server pods in the cluster (it will bootstrap the rest).</p>
+</div>
+<div class="paragraph">
+<p>These can then be added via the <code>Add Cluster</code> link on the landing page.
+Make sure to disable the <code>Add Nodes to Prometheus</code> option as this is handled already.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/add-cluster-example.png" alt="add cluster example">
+</div>
+<div class="title">Figure 3. Add cluster screenshot</div>
+</div>
+<div class="paragraph">
+<p>Once this is added then the other Grafana dashboards should spring to life.</p>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
