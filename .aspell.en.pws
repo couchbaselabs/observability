@@ -1,4 +1,4 @@
-personal_ws-1.1 en 60
+personal_ws-1.1 en 62
 AGPL
 CAO
 CMOS
@@ -59,3 +59,5 @@ CPUs
 MiB
 RBAC
 YAML
+DNS
+hostname

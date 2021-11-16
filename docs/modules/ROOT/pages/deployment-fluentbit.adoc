@@ -5,7 +5,7 @@ link:https://fluentbit.io/[Fluent Bit] is the recommended way to forward logs to
 
 == Kubernetes usage
 
-Couchbase Autonomous Operator (CAO) versions 2.2 onwards already support Fluent Bit log forwarding.
+Couchbase Autonomous Operator (CAO) versions 2.2 and greater already support Fluent Bit log forwarding.
 Refer to the link:https://docs.couchbase.com/operator/current/concept-couchbase-logging.html#log-forwarding[CAO documentation] for the full details.
 
 The main configuration required is providing the CMOS Loki endpoint as part of the link:https://docs.couchbase.com/operator/current/resource/couchbasecluster.html#couchbaseclusters-spec-servers-pod[Couchbase cluster configuration].
