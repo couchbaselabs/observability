@@ -15,13 +15,13 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build lint container container-oss config-svc-build config-svc-container config-svc-test-unit container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers test-unit docs docs-license-analysis
+.PHONY: all build lint container container-oss config-svc-build config-svc-container config-svc-test-unit container-public container-lint container-scan dist test-dist container-clean clean examples example-containers test test-kubernetes test-native test-containers test-unit docs-license-analysis
 
 all: clean build lint test-unit container container-oss container-lint container-scan dist test-dist
 
 # We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
 # The other option is to tar things up and pass as the build context: tar -czh . | docker build -
-build: docs
+build:
 	cp -R docs/ microlith/docs/
 	rm -rf microlith/config-svc/
 	cp -R config-svc microlith/config-svc/
@@ -138,8 +138,6 @@ clean: container-clean
 	-examples/containers/stop.sh
 	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh
-
-docs:
 
 docs-license-analysis:
 	tools/tern-report.sh
