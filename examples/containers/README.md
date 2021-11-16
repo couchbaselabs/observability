@@ -1,6 +1,6 @@
 An example of using the microlith image locally and CMOS is then available via http://localhost:8080.
 
-To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-containers`
+To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-containers`.
 
 This will spin up a Couchbase cluster (single node) and CMOS.
 The `Add Cluster` page can be used to add the `db1` host with default credentials of `Administrator:password`.
