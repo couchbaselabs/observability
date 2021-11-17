@@ -1,6 +1,5 @@
 services:
     cmos:
-
         container_name: cmos
         image: "${CMOS_IMAGE}"
         
