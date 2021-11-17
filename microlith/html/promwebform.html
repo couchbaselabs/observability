@@ -12,11 +12,11 @@
           <div>
             <label for="serverHost">Couchbase Server Hostname:</label>
             <input
-                    type="text"
-                    id="serverHost"
-                    x-model="hostname"
-                    placeholder=""
-                    required
+              type="text"
+              id="serverHost"
+              x-model="hostname"
+              placeholder=""
+              required
             />
           </div>
           <div>
@@ -58,6 +58,20 @@
           </div>
         </fieldset>
         <fieldset>
+          <div>
+            <label>
+              <input type="checkbox" x-model="doProm" />
+              Add to Prometheus?
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" x-model="doCBMM" />
+              Add to Couchbase Cluster Monitor?
+            </label>
+          </div>
+        </fieldset>
+        <fieldset x-show="doCBMM">
           <legend>
             <h2>Couchbase Cluster Monitor configuration</h2>
           </legend>
@@ -87,28 +101,27 @@
           </div>
         </fieldset>
         <div>
-          <button type="submit" @click.prevent="configure()">
+          <button type="submit" @click.prevent="configure()" :disabled="!(doProm || doCBMM)">
             Add Cluster
           </button>
-          <button type="submit" @click.prevent="generate()">
-            Show Configuration
+          <button type="submit" @click.prevent="generate()" :disabled="!(doProm || doCBMM)">
+            Show Manual Configuration Steps
           </button>
         </div>
       </form>
-      <div x-show="jsonPrometheus.length > 0 && doPrometheus">
+      <div x-show="yamlPrometheus.length > 0 && doProm">
         <h2>Prometheus configuration</h2>
         <p>
-          Save the below JSON to a file and place it in
-          <code>/etc/prometheus/couchbase/custom/cluster-name.json</code>. For example:
-          <code>docker cp cluster-name.json cmos:/etc/prometheus/couchbase/custom/cluster-name.json</code>
-          (substitute <code>cmos</code> for the name of your running container).
+          Add the following fragment of YAML to <code>/etc/prometheus/prometheus.runtime.yml</code>, in the
+          <code>scrape_configs</code> section. Make sure to replace <code>&lt;cluster name&gt;</code> with the name of
+          the cluster (as reported in the Couchbase Web Console).
           Once saved, check the "Targets" page in Prometheus to see if it has
           picked it up. If it does not, wait 30-60 seconds and check again, as
           the process is not instant.
         </p>
-        <pre id="jsonPrometheus" x-text="jsonPrometheus"></pre>
+        <pre id="jsonPrometheus" x-text="yamlPrometheus"></pre>
       </div>
-      <div x-show="healthcheckCommand.length > 0">
+      <div x-show="healthcheckCommand.length > 0 && doCBMM">
         <h2>Couchbase Healthcheck configuration</h2>
         <p>
           Execute this command to register a Couchbase Server cluster with the
@@ -146,40 +159,51 @@
             cbmmUsername: "admin",
             cbmmPassword: "password",
 
-            jsonPrometheus: "",
+            yamlPrometheus: "",
             healthcheckCommand: "",
+
+            doProm: true,
+            doCBMM: true,
 
             success: false,
             error: "",
             loading: false,
 
             init() {
-              this.$watch('secure', () => {
-                if (this.managementPort === '8091' && this.useTLS) {
-                  this.managementPort = '18091';
-                } else if (this.managementPort === '18091' && !this.useTLS) {
-                  this.managementPort = '8091';
+              this.$watch("useTLS", () => {
+                if (this.managementPort === "8091" && this.useTLS) {
+                  this.managementPort = "18091";
+                } else if (this.managementPort === "18091" && !this.useTLS) {
+                  this.managementPort = "8091";
                 }
-              })
+              });
             },
 
             generate() {
-              this.jsonPrometheus = JSON.stringify(
-                [
-                  {
-                    targets: [this.hostname + ":8091"],
-                    labels: {},
-                  },
-                ],
-                null,
-                2
-              );
-              const serverConfig = JSON.stringify({
-                user: this.serverUsername,
-                password: this.serverPassword,
-                host: this.hostname + ":" + this.managementPort,
-              });
-              this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://localhost/api/v1/clusters'`;
+              if (this.doProm) {
+                this.yamlPrometheus = `    - job_name: couchbase-server-<cluster name>
+      static_config:
+        targets:
+          - '${this.hostname}:${this.managementPort}'
+          # Add the other nodes in the cluster here
+        labels:
+          cluster: <cluster name>
+      basic_auth:
+        username: '${this.serverUsername}'
+        password: '${this.serverPassword}'`
+              } else {
+                this.yamlPrometheus = "";
+              }
+              if (this.doCBMM) {
+                const serverConfig = JSON.stringify({
+                  user: this.serverUsername,
+                  password: this.serverPassword,
+                  host: this.hostname + ":" + this.managementPort,
+                });
+                this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://localhost/api/v1/clusters'`;
+              } else {
+                this.healthcheckCommand = "";
+              }
             },
 
             async configure() {
@@ -187,85 +211,89 @@
               this.success = false;
               this.loading = true;
               try {
-                await fetch("/config/api/v1/clusters/add", {
-                  method: "post",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    hostname: this.hostname,
-                    couchbaseConfig: {
-                      username: this.serverUsername,
-                      password: this.serverPassword,
-                      managementPort: parseInt(this.managementPort, 10),
-                      secure: this.secure,
+                if (this.doProm) {
+                  await fetch("/config/api/v1/clusters/add", {
+                    method: "post",
+                    headers: {
+                      "Content-Type": "application/json",
                     },
-                  }),
-                })
-                  .then(async (resp) => {
-                    if (resp.status !== 200) {
-                      const data = await resp.json();
-                      throw new Error(
-                        `received unexpected status ${resp.status}: ${
-                          "err" in data ? data.err : JSON.stringify(data)
-                        }`
-                      );
-                    }
+                    body: JSON.stringify({
+                      hostname: this.hostname,
+                      couchbaseConfig: {
+                        username: this.serverUsername,
+                        password: this.serverPassword,
+                        managementPort: parseInt(this.managementPort, 10),
+                        secure: this.secure,
+                      },
+                    }),
                   })
-                  .catch((e) =>
-                    Promise.reject(
-                      `Failed to add node to Prometheus: ${String(e)}`
-                    )
-                  );
-
-                await fetch("/couchbase/api/v1/clusters", {
-                  method: "post",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization:
-                      "Basic " +
-                      btoa(`${this.cbmmUsername}:${this.cbmmPassword}`),
-                  },
-                  body: JSON.stringify({
-                    user: this.serverUsername,
-                    password: this.serverPassword,
-                    host: this.hostname + ":" + this.managementPort,
-                  }),
-                })
-                  .then(async (resp) => {
-                    if (resp.status !== 200) {
-                      switch (resp.headers.get("Content-Type")) {
-                        case "application/json":
-                          const data = await resp.json();
-                          if ("extras" in data) {
-                            throw new Error(
-                              `received unexpected status ${resp.status} with extras: ${data.extras}`
-                            );
-                          } else if ("msg" in data) {
-                            throw new Error(
-                              `received unexpected status ${resp.status} with msg: ${data.msg}`
-                            );
-                          } else {
-                            throw new Error(
-                              `received unexpected status ${resp.status} with data: ` +
-                                JSON.stringify(data)
-                            );
-                          }
-                        default:
-                          throw new Error(
-                            `received unexpected status ${resp.status}: ` +
-                              (await resp.text())
-                          );
+                    .then(async (resp) => {
+                      if (resp.status !== 200) {
+                        const data = await resp.json();
+                        throw new Error(
+                          `received unexpected status ${resp.status}: ${
+                            "err" in data ? data.err : JSON.stringify(data)
+                          }`
+                        );
                       }
-                    }
+                    })
+                    .catch((e) =>
+                      Promise.reject(
+                        `Failed to add node to Prometheus: ${String(e)}`
+                      )
+                    );
+                }
+
+                if (this.doCBMM) {
+                  await fetch("/couchbase/api/v1/clusters", {
+                    method: "post",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization:
+                        "Basic " +
+                        btoa(`${this.cbmmUsername}:${this.cbmmPassword}`),
+                    },
+                    body: JSON.stringify({
+                      user: this.serverUsername,
+                      password: this.serverPassword,
+                      host: this.hostname + ":" + this.managementPort,
+                    }),
                   })
-                  .catch((e) =>
-                    Promise.reject(
-                      `Failed to register node with Cluster Monitor: ${String(
-                        e
-                      )}`
-                    )
-                  );
+                    .then(async (resp) => {
+                      if (resp.status !== 200) {
+                        switch (resp.headers.get("Content-Type")) {
+                          case "application/json":
+                            const data = await resp.json();
+                            if ("extras" in data) {
+                              throw new Error(
+                                `received unexpected status ${resp.status} with extras: ${data.extras}`
+                              );
+                            } else if ("msg" in data) {
+                              throw new Error(
+                                `received unexpected status ${resp.status} with msg: ${data.msg}`
+                              );
+                            } else {
+                              throw new Error(
+                                `received unexpected status ${resp.status} with data: ` +
+                                  JSON.stringify(data)
+                              );
+                            }
+                          default:
+                            throw new Error(
+                              `received unexpected status ${resp.status}: ` +
+                                (await resp.text())
+                            );
+                        }
+                      }
+                    })
+                    .catch((e) =>
+                      Promise.reject(
+                        `Failed to register node with Cluster Monitor: ${String(
+                          e
+                        )}`
+                      )
+                    );
+                }
 
                 await fetch("/prometheus/-/reload", { method: "post" })
                   .then((resp) => {
