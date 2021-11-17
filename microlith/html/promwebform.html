@@ -101,10 +101,10 @@
           </div>
         </fieldset>
         <div>
-          <button type="submit" @click.prevent="configure()">
+          <button type="submit" @click.prevent="configure()" :disabled="!(doProm || doCBMM)">
             Add Cluster
           </button>
-          <button type="submit" @click.prevent="generate()">
+          <button type="submit" @click.prevent="generate()" :disabled="!(doProm || doCBMM)">
             Show Manual Configuration Steps
           </button>
         </div>
