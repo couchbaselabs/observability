@@ -73,7 +73,7 @@ scrape_configs:
     - job_name: couchbase-kubernetes-pods
       # Server 7 requires authentication
       basic_auth:
-          username: admin
+          username: Administrator
           password: password
       kubernetes_sd_configs:
           - role: pod
@@ -93,10 +93,11 @@ scrape_configs:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
+          - source_labels: [__meta_kubernetes_pod_label_couchbase_cluster]
+            action: replace
+            target_label: cluster
 
   # Kube-state-metrics default service to scrape
     - job_name: kube-state-metrics
       static_configs:
           - targets: [kube-state-metrics:8080]
-
-# TODO: add scrapes for annotations
