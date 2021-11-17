@@ -16,6 +16,7 @@
               id="serverHost"
               x-model="hostname"
               placeholder=""
+              pattern="^\s*[^\S]+\s*$"
               required
             />
           </div>
@@ -143,7 +144,7 @@
         <a href="/grafana/?orgId=1">Grafana</a> to see its health. Please note
         that it may take up to 60 seconds for all data to be available.
       </div>
-      <div x-show="error.length > 0" x-text="error"></div>
+      <div x-show="error.length > 0" x-text="error" style="color: red; font-weight: bold;"></div>
     </div>
     <script defer src="/alpine-3.4.2.min.js"></script>
     <script>
@@ -169,6 +170,24 @@
             error: "",
             loading: false,
 
+            validate() {
+              if (this.hostname.trim().length === 0) {
+                this.error = "Hostname invalid";
+                return false;
+              }
+              if (this.serverUsername.length === 0 || this.serverPassword.length === 0) {
+                this.error = "Server username or password missing";
+                return false;
+              }
+              if (this.doCBMM) {
+                if (this.cbmmUsername.length === 0 || this.cbmmPassword.length === 0) {
+                  this.error = "Couchbase Cluster Monitor username or password missing";
+                  return false;
+                }
+              }
+              return true;
+            },
+
             init() {
               this.$watch("useTLS", () => {
                 if (this.managementPort === "8091" && this.useTLS) {
@@ -180,6 +199,11 @@
             },
 
             generate() {
+              this.error = "";
+              this.success = false;
+              if (!this.validate()) {
+                return;
+              }
               if (this.doProm) {
                 this.yamlPrometheus = `    - job_name: couchbase-server-<cluster name>
       static_config:
@@ -198,7 +222,7 @@
                 const serverConfig = JSON.stringify({
                   user: this.serverUsername,
                   password: this.serverPassword,
-                  host: this.hostname + ":" + this.managementPort,
+                  host: this.hostname.trim() + ":" + this.managementPort.trim(),
                 });
                 this.healthcheckCommand = `curl -u ${this.cbmmUsername}:${this.cbmmPassword} -X POST -d '${serverConfig}' 'http://localhost/api/v1/clusters'`;
               } else {
@@ -209,6 +233,9 @@
             async configure() {
               this.error = "";
               this.success = false;
+              if (!this.validate()) {
+                return;
+              }
               this.loading = true;
               try {
                 if (this.doProm) {
