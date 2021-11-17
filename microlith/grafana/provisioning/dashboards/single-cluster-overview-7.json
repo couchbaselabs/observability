@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 6,
-  "iteration": 1636626119419,
+  "id": 3,
+  "iteration": 1637078832534,
   "links": [
     {
       "asDropdown": false,
@@ -162,6 +162,23 @@
                 "value": 154
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Hostname"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Node Overview Dashboard",
+                    "url": "/d/Dx-2iOc7k/node-overview-7-x?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}&var-node=${__data.fields.Hostname}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -216,6 +233,11 @@
               "jsonPath": "$map($.nodes_summary, function ($node) {\n  $round((1 - ($node.mem_free / $node.mem_total)) * 100, 2) & \"%\"\n})",
               "language": "jsonata",
               "name": "RAM Usage"
+            },
+            {
+              "jsonPath": "$.nodes_summary[*].node_uuid",
+              "language": "jsonpath",
+              "name": "uuid"
             }
           ],
           "method": "GET",
@@ -248,7 +270,8 @@
           "id": "organize",
           "options": {
             "excludeByName": {
-              "Time": true
+              "Time": true,
+              "uuid": true
             },
             "indexByName": {},
             "renameByName": {
@@ -399,6 +422,23 @@
                 "value": 113
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bucket"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Overview Dashboard",
+                    "url": "/d/H8M3rE5nk/bucket-overview?${cluster:queryparam}﻿&var-bucket=${__data.fields.Bucket}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
@@ -417,7 +457,7 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "cacheDurationSeconds": 30,
+          "cacheDurationSeconds": 0,
           "datasource": "JSON API",
           "fields": [
             {
@@ -524,7 +564,8 @@
             "renameByName": {
               "Value #CheckWarnings": "Health Check Warnings",
               "Value #NumIndexes": "# Indexes",
-              "Value #ResidentRatio": "Active Resident Ratio"
+              "Value #ResidentRatio": "Active Resident Ratio",
+              "bucket": "Bucket"
             }
           }
         }
@@ -669,7 +710,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 5,
+        "w": 12,
         "x": 0,
         "y": 9
       },
@@ -1050,7 +1091,7 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "cacheDurationSeconds": 30,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$.connections[*].sdk_name",
@@ -1536,18 +1577,22 @@
       "type": "bargauge"
     }
   ],
-  "refresh": "15s",
+  "refresh": "5s",
   "schemaVersion": 31,
   "style": "dark",
-  "tags": [],
+  "tags": [
+    "couchbase",
+    "couchbase-7",
+    "couchbase-cluster"
+  ],
   "templating": {
     "list": [
       {
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "CMOS 7 Test",
-          "value": "CMOS 7 Test"
+          "text": "cb7",
+          "value": "cb7"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -1572,9 +1617,10 @@
       {
         "allValue": null,
         "current": {
+          "isNone": true,
           "selected": false,
-          "text": "7ce7c09b3514e83792724b8a530b66e0",
-          "value": "7ce7c09b3514e83792724b8a530b66e0"
+          "text": "None",
+          "value": ""
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -1599,11 +1645,12 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
+      "5s",
       "15s",
       "30s",
       "1m",
