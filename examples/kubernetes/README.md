@@ -2,7 +2,8 @@ This example runs up a local KIND cluster (3 worker nodes), deploys Couchbase to
 
 By default, it gives you the command to handle port-forwarding to the CMOS service on http://localhost:8080/.
 
-An ingress is optionally created (`SKIP_INGRESS=no`) to allow you to access it all via http://localhost/ but this can trigger forwarding issues in some of the CMOS documentation.
+An ingress can be optionally created (set `SKIP_INGRESS=no`) to allow you to access it all via http://localhost/ but this can trigger forwarding issues in some of the CMOS documentation.
+This is not created by default though to also allow multiple local clusters.
 
 To run a full stack use the `Makefile` at the top of this repo and just execute the target: `make example-kubernetes`.
 
