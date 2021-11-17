@@ -14,12 +14,18 @@
 # limitations under the License.
 set -u
 
+################
+# This script stops and deletes all containers with the "cbs_server_exp" image, removes the image itself,
+# and prunes any hanging images. Because these containers are started with the '--rm' flag, any associated
+# anonymous volumes are also removed. 
+# Finally the CMOS container is removed, with its network and volumes deleted.
+################
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_IMAGE # This is required for reference in the docker-compose file
-
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Delete ALL containers with the cbs_server_exp image
 docker ps -a --filter "ancestor=cbs_server_exp" --format '{{.ID }}' | xargs docker rm -f > /dev/null

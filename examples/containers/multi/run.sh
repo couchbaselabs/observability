@@ -58,11 +58,7 @@ SERVER_PWD=${SERVER_PWD:-"password"}
 NODE_RAM=${NODE_RAM:-1024}
 LOAD=${LOAD:-true}
 
-OSS_FLAG=${OSS_FLAG:-false}
-OSS_WARNING="\
-The homepage of Grafana will show no data as the Cluster Manager is not part of the OSS \
-container, and so the cluster overview cannot be shown. Any dashboard containing Prometheus \
-metrics will still display information."
+OSS_FLAG=${OSS_FLAG:-false} # This must be set to true to allow the use of this helper with the OSS build
 
 #### SCRIPT START ####
 
@@ -115,7 +111,3 @@ start_new_nodes "$NUM_NODES" "cbs_server_exp"
 configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" "$OSS_FLAG"
 
 echo "All done. Go to: http://localhost:8080."
-
-if $OSS_FLAG; then
-  echo "$OSS_WARNING"
-fi
