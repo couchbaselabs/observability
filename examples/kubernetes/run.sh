@@ -62,51 +62,52 @@ EOF
   kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
 fi #SKIP_CLUSTER_CREATION
 
+# Set up Helm repos required in this script - final / can be missing or present and is treated as a unique entity so attempt both in case one is already there.
+# If these commands fail then remove the current chart repos for `prometheus-community` and/or `couchbase`.
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts || helm repo add prometheus-community https://prometheus-community.github.io/helm-charts/
+helm repo add couchbase https://couchbase-partners.github.io/helm-charts || helm repo add couchbase https://couchbase-partners.github.io/helm-charts/
+helm repo update
+
 # Deploy kube-state-metrics via helm chart
 # TODO: this should all be part of CMOS to auto-deploy via a checkbox as we have Helm in the container so it is just RBAC to sort.
 # https://issues.couchbase.com/browse/CMOS-47
 # https://issues.couchbase.com/browse/CMOS-80
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
 helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 
-# Prometheus configuration is all pulled from this directory
-kubectl delete configmap prometheus-config || true
+# CMOS Prometheus configuration is all pulled from this directory
+kubectl delete configmap prometheus-config &> /dev/null || true
 kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
 
-if [[ "${SKIP_CMOS_BUILD:-yes}" != "yes" ]]; then
-  make -C "${SCRIPT_DIR}/../../" "${CMOS_BUILD_TARGET:-container}"
-fi
-
-# Deploy the microlith
+# Deploy the CMOS microlith and services
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
-# Set up ingress
-INGRESS_VERSION=$(curl https://raw.githubusercontent.com/kubernetes/ingress-nginx/master/stable.txt)
-kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/${INGRESS_VERSION}/deploy/static/provider/kind/deploy.yaml"
-kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=120s
-kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"
-
 # Add Couchbase via helm chart
-if ! helm repo add couchbase https://couchbase-partners.github.io/helm-charts; then
-  if ! helm repo list|grep couchbase|grep -q https://couchbase-partners.github.io/helm-charts ; then
-    echo "Unable to add Couchbase helm repository, remove the current 'couchbase' entry using 'helm repo remove couchbase' then re-run this script"
-    helm repo list|grep couchbase
-    exit 1
-  fi
-fi
-helm repo update
 helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}" --values="${SCRIPT_DIR}/custom-values.yaml"
 
 # Wait for deployment to complete, the Helm defaults are for a 3 pod cluster in the default namespace.
-echo "Waiting for CB to start up..."
+echo "Waiting for Couchbase Server pods to start up..."
 until [[ $(kubectl get pods --field-selector=status.phase=Running --selector='app=couchbase' --no-headers 2>/dev/null |wc -l) -eq 3 ]]; do
     echo -n '.'
     sleep 2
 done
-echo "CB running"
-echo "To monitor go to http://localhost/"
+echo "Couchbase Server pods running"
+
+# Set up ingress at the end if required
+if [[ "${SKIP_INGRESS:-yes}" != "yes" ]]; then
+  echo "Deploying Ingress, to skip set SKIP_INGRESS=yes"
+  kubectl apply -f "https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml"
+  kubectl wait --namespace ingress-nginx \
+    --for=condition=ready pod \
+    --selector=app.kubernetes.io/component=controller \
+    --timeout=120s
+  until kubectl apply -f "${SCRIPT_DIR}/ingress.yaml"; do
+    echo "Re-attempting Ingress configuration"
+    sleep 5
+  done
+  echo "To monitor go to http://localhost/"
+else
+  echo "No Ingress deployed, to enable set SKIP_INGRESS=no"
+  echo "To monitor, run the following and go to http://localhost:8080/"
+  echo "kubectl port-forward svc/couchbase-grafana-http 8080:8080"
+fi

@@ -9,11 +9,11 @@ cluster:
         prometheus:
             enabled: false # We're using server 7 metrics directly
     security:
-        # To simplify for scraping we hardcode the passwords.
+        # To simplify for scraping we hardcode the credentials.
         # They should be auto-generated really and the Secret value
         # used by mounting into CMOS (or getting it to retrieve during
         # startup).
-        username: admin
+        username: Administrator
         password: password
     servers:
         # We use custom annotations to forward to CMOS Loki
