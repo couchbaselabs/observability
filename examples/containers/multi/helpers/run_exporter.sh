@@ -14,5 +14,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Start the couchbase-exporter. Couchbase Server may or may not be running already
-exec /opt/couchbase-exporter/couchbase-exporter
+# Start the couchbase-exporter (used for Couchbase Server < 7 only). Couchbase Server may or may not be running already.
+exec /opt/couchbase-exporter

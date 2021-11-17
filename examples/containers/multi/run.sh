@@ -38,12 +38,12 @@ DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
 export CMOS_IMAGE # This is required for reference in the docker-compose file
 
-# Disable check as checked elsewhere
+# Disable check as checked elsewhere (CI/CD)
 # shellcheck disable=SC1091
 source "$SCRIPT_DIR"/helpers/driver.sh
 
 # Environment variables
-COUCHBASE_SERVER_VERSION=${COUCHBASE_SERVER_VERSION:-6.6.3}
+COUCHBASE_SERVER_VERSION=${COUCHBASE_SERVER_VERSION:-7.0.2}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:$COUCHBASE_SERVER_VERSION}
 
 NUM_CLUSTERS=${NUM_CLUSTERS:-3}
@@ -89,18 +89,30 @@ fi
 
 # Build CMOS container
 pushd "${SCRIPT_DIR}" || exit 1
-    docker-compose up -d --force-recreate
+    docker-compose up -d --force-recreate 
 popd || exit
 
-# Build Couchbase Server/exporter container
-docker build -f "$SCRIPT_DIR"/../../../testing/resources/containers/cb-with-exporter.Dockerfile "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg VERSION="$COUCHBASE_SERVER_IMAGE"
+# Tag image to be used as node image, if vers 7 or later then just use the Couchbase Server docker image.
+# Otherwise we must build and tag the 'cb-with-exporter' Dockerfile.
+if [[ "${COUCHBASE_SERVER_VERSION:0:1}" == "7" ]]; then
+  echo "Using pure $COUCHBASE_SERVER_IMAGE image"
+  docker pull "$COUCHBASE_SERVER_IMAGE"
+  docker image tag "$COUCHBASE_SERVER_IMAGE" "cbs_server_exp"
+else
+  echo "Building exporter into $COUCHBASE_SERVER_IMAGE image"
+  docker build -f "$SCRIPT_DIR"/../../../testing/resources/containers/cb-with-exporter.Dockerfile \
+    "$SCRIPT_DIR"/helpers -t "cbs_server_exp" --build-arg COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE"
+  echo "------------------------"
+  echo "Default Grafana dashboard Prometheus queries target Couchbase Server version 7 and above."
+  echo "Therefore, some panels will show no data for older versions of Couchbase Server."
+fi
 
 # Create $NUM_NODES containers running Couchbase Server $VERSION and the exporter
 start_new_nodes "$NUM_NODES" "cbs_server_exp"
 
 # Initialise and partition nodes as evenly as possible into $NUM_CLUSTERS clusters, register them with CBMM
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
-configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" "$OSS_FLAG" 
+configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" "$OSS_FLAG"
 
 echo "All done. Go to: http://localhost:8080."
 

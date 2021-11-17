@@ -19,7 +19,7 @@ There are various environment variables you can configure:
 - `SERVER_USER`, the admin username to configure for all Couchbase Server nodes. Defaults to "Administrator".
 - `SERVER_PWD`, the password for $SERVER_USER to configure for all Couchbase Server nodes. Defaults to "password".
 
-- `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-6.6.3.
+- `CB_VERSION`, the Couchbase Server version (tag on DockerHub) to run on all nodes. Defaults to enterprise-7.0.2.
 - `NODE_RAM` (in MiB). Defaults to 1024, and is used to calculate service quotas for the Data and Index service (the Query service does not have a quota).
 - `LOAD`, a Boolean denoting whether a very light load should be thrown at the cluster using `cbc-pillowfight`, simulating cluster use. Defaults to `true`.
 

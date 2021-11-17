@@ -17,6 +17,8 @@ set -u
 DOCKER_USER=${DOCKER_USER:-couchbase}
 DOCKER_TAG=${DOCKER_TAG:-v1}
 CMOS_IMAGE=${CMOS_IMAGE:-$DOCKER_USER/observability-stack:$DOCKER_TAG}
+export CMOS_IMAGE # This is required for reference in the docker-compose file
+
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 # Delete ALL containers with the cbs_server_exp image
