@@ -22,7 +22,11 @@ echo "Starting collect-information.sh..."
 tmpdir=${TEMPORARY_DIRECTORY:-$(mktemp -d)}
 exec &> >(tee -a "$tmpdir/collect-information.sh.log")
 
+cp /etc/couchbase-cluster-monitor-release.txt "$tmpdir"
 cp /etc/cmos-release.txt "$tmpdir"
+
+# Environment
+env > "$tmpdir/env.txt"
 
 # Copy over all logs
 mkdir -p "$tmpdir/logs"
@@ -47,6 +51,22 @@ done <<EOF
 /etc/loki/
 /etc/nginx/
 EOF
+
+# Entry points
+mkdir -p "$tmpdir/entrypoints"
+cp /entrypoints/* "$tmpdir/entrypoints/"
+
+# Misc scripts
+mkdir -p "$tmpdir/scripts"
+cp -r /scripts "$tmpdir/scripts/"
+cp /run.sh "$tmpdir/scripts/"
+cp /collect-information.sh "$tmpdir/scripts/"
+
+# Grafana plugins
+mkdir -p "$tmpdir/grafana-plugins"
+for d in /var/lib/grafana/plugins/*; do
+  cp "$d/plugin.json" "$tmpdir/grafana-plugins/$(basename "$d").json"
+done
 
 # Tar it up and copy it to /support
 output="/tmp/support/cmosinfo-$(date -u +"%Y-%m-%dT%H:%M:%SZ").tar"

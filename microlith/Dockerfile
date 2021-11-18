@@ -328,9 +328,7 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 COPY docs/modules/ROOT/pages/support.adoc /help.1
 
-# Couchbase proprietary start
-COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
-# Couchbase proprietary end
+COPY git-commit.txt /etc/cmos-release.txt
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
