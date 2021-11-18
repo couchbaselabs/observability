@@ -52,6 +52,12 @@ done <<EOF
 /etc/nginx/
 EOF
 
+# Grab various overridden paths
+mkdir -p "$tmpdir/dynamic-config"
+for override_var in PROMETHEUS_CONFIG_FILE PROMETHEUS_CONFIG_TEMPLATE_FILE JAEGER_CONFIG_FILE LOKI_CONFIG_FILE ALERTMANAGER_CONFIG_FILE; do
+  cp "${!override_var}" "$tmpdir/dynamic-config/$(basename "${!override_var}")"
+done
+
 # Entry points
 mkdir -p "$tmpdir/entrypoints"
 cp /entrypoints/* "$tmpdir/entrypoints/"
@@ -67,6 +73,32 @@ mkdir -p "$tmpdir/grafana-plugins"
 for d in /var/lib/grafana/plugins/*; do
   cp "$d/plugin.json" "$tmpdir/grafana-plugins/$(basename "$d").json"
 done
+
+# Prometheus stats snapshot
+snapshot_file_name=$(curl -X POST http://localhost:9090/prometheus/api/v1/admin/tsdb/snapshot | jq -r '.data.name')
+cp -r "$PROMETHEUS_STORAGE_PATH/$snapshot_file_name" "$tmpdir/prometheus-snapshot"
+
+# Prom/Loki dynamic endpoints
+curl -sS -o "$tmpdir/loki-buildinfo.json" "http://localhost:3100/loki/api/v1/status/buildinfo"
+curl -sS -o "$tmpdir/loki-config.yml" "http://localhost:3100/config"
+
+curl -sS -o "$tmpdir/prom-buildinfo.json" "http://localhost:9090/prometheus/api/v1/status/buildinfo"
+curl -sS -o "$tmpdir/prom-runtimeinfo.json" "http://localhost:9090/prometheus/api/v1/status/runtimeinfo"
+curl -sS -o "$tmpdir/prom-flags.json" "http://localhost:9090/prometheus/api/v1/status/flags"
+curl -sS -o "$tmpdir/prom-tsdb-status.json" "http://localhost:9090/prometheus/api/v1/status/tsdb"
+
+curl -sS -o "$tmpdir/prom-config.json" "http://localhost:9090/prometheus/api/v1/status/config"
+curl -sS -o "$tmpdir/prom-targets.json" "http://localhost:9090/prometheus/api/v1/targets"
+
+# Cluster Monitor endpoints
+if [ -f "/bin/cbmultimanager" ]; then
+  curl -sS -u "$CB_MULTI_ADMIN_USER:$CB_MULTI_ADMIN_PASSWORD" -o "$tmpdir/couchbase-cluster-monitor-self.json" "http://localhost:7196/api/v1/self"
+  curl -sS -u "$CB_MULTI_ADMIN_USER:$CB_MULTI_ADMIN_PASSWORD" -o "$tmpdir/couchbase-clusters.json" "http://localhost:7196/api/v1/clusters"
+  curl -sS -u "$CB_MULTI_ADMIN_USER:$CB_MULTI_ADMIN_PASSWORD" -o "$tmpdir/couchbase-checkers.json" "http://localhost:7196/api/v1/checkers"
+  curl -sS -u "$CB_MULTI_ADMIN_USER:$CB_MULTI_ADMIN_PASSWORD" -o "$tmpdir/couchbase-dismissals.json" "http://localhost:7196/api/v1/dismissals"
+else
+  touch "$tmpdir/no-cluster-monitor"
+fi
 
 # Tar it up and copy it to /support
 output="/tmp/support/cmosinfo-$(date -u +"%Y-%m-%dT%H:%M:%SZ").tar"
