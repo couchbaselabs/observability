@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 2,
-  "iteration": 1637252393328,
+  "id": 10,
+  "iteration": 1637258105803,
   "links": [
     {
       "asDropdown": false,
@@ -1714,10 +1714,9 @@
       {
         "allValue": null,
         "current": {
-            "isNone": true,
-            "selected": false,
-            "text": "None",
-             "value": ""
+          "selected": false,
+          "text": "5b823489e7915a8965157faf9794ad98",
+          "value": "5b823489e7915a8965157faf9794ad98"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -1762,5 +1761,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 28
+  "version": 1
 }
