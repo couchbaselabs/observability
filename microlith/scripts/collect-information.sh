@@ -94,6 +94,9 @@ curl -sS -o "$tmpdir/prom-tsdb-status.json" "http://localhost:9090/prometheus/ap
 curl -sS -o "$tmpdir/prom-config.json" "http://localhost:9090/prometheus/api/v1/status/config"
 curl -sS -o "$tmpdir/prom-targets.json" "http://localhost:9090/prometheus/api/v1/targets"
 
+# Important Prometheus series
+curl -sS -o "$tmpdir/prom-series.json" "http://localhost:9090/prometheus/api/v1/series?match[]=multimanager_cluster_checker_status&match[]=multimanager_node_checker_status&match[]=multimanager_bucket_checker_status&match[]=cm_rest_request_enters_total&match[]=cbnode_up"
+
 # These ones use `curl -v` instead, because the actual endpoints don't give us much info
 curl -sv "http://localhost:3100/ready" > "$tmpdir/loki-health.txt" 2>&1
 curl -sv "http://localhost:9090/prometheus/-/healthy" > "$tmpdir/prom-health.txt" 2>&1
