@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Fluent Bit deployment :: Couchbase Monitoring and Observability Stack</title>
+    <title>Loki :: Couchbase Monitoring and Observability Stack</title>
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -128,7 +128,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Components</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="component-loki.html">Loki</a>
   </li>
 </ul>
@@ -140,7 +140,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
   </li>
 </ul>
@@ -201,152 +201,66 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
-    <li>Deployment</li>
-    <li><a href="deployment-fluentbit.html">Fluent Bit deployment</a></li>
+    <li>Components</li>
+    <li><a href="component-loki.html">Loki</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/deployment-fluentbit.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/component-loki.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Fluent Bit deployment</h1>
+<h1 class="page">Loki</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="quoteblock abstract">
 <blockquote>
-<a href="https://fluentbit.io/">Fluent Bit</a> is the recommended way to forward logs to CMOS from Couchbase Server instances.
+Loki can be used to process and store Couchbase logs.
 </blockquote>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_kubernetes_usage"><a class="anchor" href="#_kubernetes_usage"></a>Kubernetes usage</h2>
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase Autonomous Operator (CAO) versions 2.2 and greater already support Fluent Bit log forwarding.
-Refer to the <a href="https://docs.couchbase.com/operator/current/concept-couchbase-logging.html#log-forwarding">CAO documentation</a> for the full details.</p>
+<p><a href="https://grafana.com/oss/Loki/" target="_blank" rel="noopener">Loki</a> is a <a href="https://prometheus.io/" target="_blank" rel="noopener">Prometheus</a>-inspired open source, multi-tenant log aggregation system.
+Loki is used to process and store collected Couchbase logs.</p>
 </div>
 <div class="paragraph">
-<p>The main configuration required is providing the CMOS Loki endpoint as part of the <a href="https://docs.couchbase.com/operator/current/resource/couchbasecluster.html#couchbaseclusters-spec-servers-pod">Couchbase cluster configuration</a>.
-To do this, use Couchbase Fluent Bit <a href="https://github.com/couchbase/couchbase-fluent-bit#releases">versions 1.1.2 or greater</a> and supply the following annotations with appropriate values.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">            pod:
-                metadata:
-                    annotations:
-                        # Match all logs
-                        fluentbit.couchbase.com/loki_match: "*"
-                        # Send to this SVC
-                        fluentbit.couchbase.com/loki_host: loki.default</code></pre>
-</div>
+<p><span class="image"><img src="_images/component-loki.png" alt="component loki"></span></p>
 </div>
 <div class="paragraph">
-<p>A full example of integrating is available as part of the <a href="tutorial-kubernetes.html" class="page">Kubernetes example</a>.</p>
+<p>Couchbase cluster generates logs of various operations which is important for monitoring and investigation purposes.
+Loki provides the option to parse the logs enabling search and aggregation based on keys.
+Logs are pushed to Loki by various tools, we recommend <a href="deployment-fluentbit.html" class="page">Fluent Bit</a> and provide a method to deploy it.</p>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_on_premise_usage"><a class="anchor" href="#_on_premise_usage"></a>On-premise usage</h2>
+<h2 id="_get_started"><a class="anchor" href="#_get_started"></a>Get Started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Fluent Bit <a href="https://docs.fluentbit.io/manual/installation/supported-platforms">already provides various supported targets</a> so on-premise installation is straight forward.
-For full details, please refer to the <a href="https://docs.fluentbit.io/manual/installation/getting-started-with-fluent-bit">official documentation</a>.</p>
-</div>
-<div class="paragraph">
-<p>For CMOS needs we must do the following:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install Fluent Bit.</p>
-</li>
-<li>
-<p>Configure Fluent Bit.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Step one is deploying the Fluent Bit binary with Couchbase Server and providing a startup script to launch it.
-Refer to the installation instructions above from Fluent Bit for this.</p>
-</div>
-<div class="paragraph">
-<p>Step two is configuring fluent bit with the <a href="https://github.com/couchbase/couchbase-fluent-bit/tree/main/conf">configuration</a> provided by the official Couchbase Fluent Bit image. You can either clone the repository or just copy over the configuration file.
-The key is to get all the configuration into the expected location for the local Fluent Bit to use, refer to the deployment guide from Fluent Bit for full details for the specific targets.
-Whilst this is intended primarily for CAO deployments and not officially supported on-premise, it will function there as well.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ git clone --depth 1 https://github.com/couchbase/couchbase-fluent-bit.git
-$ cp -R conf/* &lt;config directory for Fluent Bit on this OS&gt;</code></pre>
-</div>
+<p>Loki is managed by the <a href="architecture.html" class="page">Couchbase Monitoring Observability Stack</a>(CMOS).
+Loki is enabled by default in the CMOS, however, Fluent Bit needs to be configured for the logs to reach Loki.
+Depending upon the type of deployment you need to enable Fluent Bit.</p>
 </div>
 <div class="sect2">
-<h3 id="_container_deployment"><a class="anchor" href="#_container_deployment"></a>Container deployment</h3>
-<div class="paragraph">
-<p>A simplified solution would be to deploy the container solution explicitly with local volume mounts for the Couchbase Server logs.
-An <a href="https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack">existing example</a> and <a href="https://blog.couchbase.com/using-fluent-bit-for-log-forwarding-processing-with-couchbase-server/">blog post</a> is available in the Couchbase Fluent Bit repository to show a complete stack.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ docker run --rm -d --name logger -v /opt/couchbase/var/lib/couchbase/logs/:/opt/couchbase/var/lib/couchbase/logs/:ro -e COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/ -e LOKI_MATCH="*" -e LOKI_HOST="127.0.0.1" couchbase/fluent-bit:1.1.2</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Replace <code>LOKI_HOST</code> here with your actual DNS name or IP address for CMOS.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_loki_configuration_for_fluent_bit"><a class="anchor" href="#_loki_configuration_for_fluent_bit"></a>Loki configuration for Fluent Bit</h3>
-<div class="paragraph">
-<p>Similar to the Kubernetes set up, make sure to set the environment variables to the appropriate values when Fluent Bit is launched.</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 1. Loki configuration for Fluent Bit</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Variable name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LOKI_HOST</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The (resolvable) hostname to send the logs to, i.e. where CMOS is running or another Loki stack if you want to integrate with that.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LOKI_PORT</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The port open on <code>LOKI_HOST</code> for Loki to receive logs, defaults to 3100 if not provided.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">LOKI_MATCH</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">The set of logs to match to send to Loki, this can be a wildcard or specific logs in the format <code>couchbase.log.&lt;file&gt;</code>.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="admonitionblock important">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-important" title="Important"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>In addition to the above Loki specific configuration make sure to set the <a href="https://github.com/couchbase/couchbase-fluent-bit#configuration">environment variables Fluent Bit requires</a>.</p>
-</div>
-<div class="paragraph">
-<p>The <a href="https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-stack">example</a> and <a href="https://blog.couchbase.com/using-fluent-bit-for-log-forwarding-processing-with-couchbase-server/">blog post</a> cover this as well in more detail.</p>
-</div>
-</td>
-</tr>
-</table>
+<h3 id="_links"><a class="anchor" href="#_links"></a>Links</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Kubernetes Tutorial: <a href="tutorial-kubernetes.html" class="page">Deploy CMOS on Kubernetes</a></p>
+</li>
+<li>
+<p>On Premise Tutorial: <a href="tutorial-onpremise.html" class="page">Deploy CMOS on Premise</a></p>
+</li>
+<li>
+<p>Fluent Bit Deployment: <a href="deployment-fluentbit.html" class="page">Fluent Bit Deployment for Couchbase</a></p>
+</li>
+</ul>
 </div>
 </div>
 </div>
