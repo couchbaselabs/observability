@@ -78,7 +78,7 @@ RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 # hadolint ignore=DL3018
-RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
+RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext jq
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana

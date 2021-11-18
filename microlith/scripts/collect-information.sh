@@ -23,10 +23,12 @@ tmpdir=${TEMPORARY_DIRECTORY:-$(mktemp -d)}
 exec &> >(tee -a "$tmpdir/collect-information.sh.log")
 
 cp /etc/couchbase-cluster-monitor-release.txt "$tmpdir"
-cp /etc/cmos-release.txt "$tmpdir"
 
 # Environment
 env > "$tmpdir/env.txt"
+
+# Running processes
+ps > "$tmpdir/ps.txt"
 
 # Copy over all logs
 mkdir -p "$tmpdir/logs"
@@ -75,10 +77,12 @@ for d in /var/lib/grafana/plugins/*; do
 done
 
 # Prometheus stats snapshot
-snapshot_file_name=$(curl -X POST http://localhost:9090/prometheus/api/v1/admin/tsdb/snapshot | jq -r '.data.name')
-cp -r "$PROMETHEUS_STORAGE_PATH/$snapshot_file_name" "$tmpdir/prometheus-snapshot"
+snapshot_file_name=$(curl -sS -X POST http://localhost:9090/prometheus/api/v1/admin/tsdb/snapshot | jq -r '.data.name')
+cp -r "$PROMETHEUS_STORAGE_PATH/snapshots/$snapshot_file_name" "$tmpdir/prometheus-snapshot"
 
 # Prom/Loki dynamic endpoints
+curl -sS -o "$tmpdir/grafana-frontend-settings.json" "http://localhost:3000/grafana/api/frontend/settings"
+
 curl -sS -o "$tmpdir/loki-buildinfo.json" "http://localhost:3100/loki/api/v1/status/buildinfo"
 curl -sS -o "$tmpdir/loki-config.yml" "http://localhost:3100/config"
 
@@ -89,6 +93,14 @@ curl -sS -o "$tmpdir/prom-tsdb-status.json" "http://localhost:9090/prometheus/ap
 
 curl -sS -o "$tmpdir/prom-config.json" "http://localhost:9090/prometheus/api/v1/status/config"
 curl -sS -o "$tmpdir/prom-targets.json" "http://localhost:9090/prometheus/api/v1/targets"
+
+# These ones use `curl -v` instead, because the actual endpoints don't give us much info
+curl -sv "http://localhost:3100/ready" > "$tmpdir/loki-health.txt" 2>&1
+curl -sv "http://localhost:9090/prometheus/-/healthy" > "$tmpdir/prom-health.txt" 2>&1
+curl -sv "http://localhost:9093/alertmanager/-/healthy" > "$tmpdir/am-health.txt" 2>&1
+curl -sv "http://localhost:14269" > "$tmpdir/jaeger-health.txt" 2>&1
+curl -sv "http://localhost:3000/grafana/api/health" > "$tmpdir/grafana-health.txt" 2>&1
+curl -sv "http://localhost:8080/_meta/status" > "$tmpdir/nginx-status.txt" 2>&1
 
 # Cluster Monitor endpoints
 if [ -f "/bin/cbmultimanager" ]; then
@@ -102,17 +114,19 @@ fi
 
 # Tar it up and copy it to /support
 output="/tmp/support/cmosinfo-$(date -u +"%Y-%m-%dT%H:%M:%SZ").tar"
-# shellcheck disable=SC2164
-pushd "$tmpdir"
-  tar cvf "$output" ./*
-# shellcheck disable=SC2164
-popd
+tar -cvf "$output" -C "$tmpdir" .
+tar_exitcode=$?
 
 set +x
 
-echo "Collected support information at $output."
-echo "If the CMOS web server is enabled, it can also be downloaded from http://<cmos-host>:8080/support/$(basename "$output")."
-echo
-echo "!!! WARNING !!!"
-echo "Currently, NO REDACTION is performed on the collected files."
-echo "We recommend you inspect them and remove any sensitive information before sending to Couchbase Support."
+if [ "$tar_exitcode" -eq 0 ]; then
+  echo "Collected support information at $output."
+  echo "If the CMOS web server is enabled, it can also be downloaded from http://<cmos-host>:8080/support/$(basename "$output")."
+  echo
+  echo "!!! WARNING !!!"
+  echo "Currently, NO REDACTION is performed on the collected files."
+  echo "We recommend you inspect them and remove any sensitive information before sending to Couchbase Support."
+else
+  echo "An error occurred and the diagnostics archive could not be collected."
+  echo "Please inspect the output above for details."
+fi
