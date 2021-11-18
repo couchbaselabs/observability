@@ -30,16 +30,6 @@ env > "$tmpdir/env.txt"
 # Running processes
 ps > "$tmpdir/ps.txt"
 
-# Copy over all logs
-mkdir -p "$tmpdir/logs"
-cp /logs/* "$tmpdir/logs/"
-
-# Do not copy /var/log/nginx/*, because they get mapped to stdout/stderr and cp will hang forever
-# shellcheck disable=SC2043
-for var_log in grafana; do
-  for f in /var/log/"$var_log"/*; do cp "$f" "$tmpdir/logs/$var_log.$(basename "$f")"; done
-done
-
 # Configuration
 mkdir -p "$tmpdir/config"
 
@@ -114,6 +104,17 @@ if [ -f "/bin/cbmultimanager" ]; then
 else
   touch "$tmpdir/no-cluster-monitor"
 fi
+
+# Copy over all logs
+# Do this at the end, so anything logged because of what we do is captured
+mkdir -p "$tmpdir/logs"
+cp /logs/* "$tmpdir/logs/"
+
+# Do not copy /var/log/nginx/*, because they get mapped to stdout/stderr and cp will hang forever
+# shellcheck disable=SC2043
+for var_log in grafana; do
+  for f in /var/log/"$var_log"/*; do cp "$f" "$tmpdir/logs/$var_log.$(basename "$f")"; done
+done
 
 # Tar it up and copy it to /support
 output="/tmp/support/cmosinfo-$(date -u +"%Y-%m-%dT%H:%M:%SZ").tar"
