@@ -217,7 +217,7 @@ Every document *must*:
 * Have a title that corresponds to a nav entry with the same name
 * Have an abstract
 * Use white space to separate elements e.g. don't butt titles and paragraphs together
-* Use one source line per line, this aids in diffing and code review
+* Use one source line per sentence, this aids in diffing and code review
 * Accompany tables and images with a title
 * Use block syntax for admonitions
 * Use attributes for versions where appropriate, so they update automatically over time
