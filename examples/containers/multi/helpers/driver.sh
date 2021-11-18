@@ -27,7 +27,7 @@ function start_new_nodes() {
     local num_nodes=$1
     local nodes_ready=() 
 
-    echo "---- Starting $num_nodes Couchbase Server and Exporter nodes ----"
+    echo "---- Starting $num_nodes nodes ----"
 
     local i=0
     for ((i; i<num_nodes; i++)); do
@@ -251,5 +251,7 @@ function configure_servers() {
 
     # Reload Prometheus to start scraping the added clusters
     _docker_exec_with_retry "cmos" "curl -fs -X POST localhost:9090/prometheus/-/reload" ""
+    echo "Refreshed Prometheus to start scraping."
+    echo ""
 
 }
