@@ -14,6 +14,6 @@
 # limitations under the License.
 set -u
 
-CLUSTER_NAME=${CLUSTER_NAME:-microlith-test}
+CLUSTER_NAME=${CLUSTER_NAME:-kind}
 
 kind delete cluster --name="${CLUSTER_NAME}"
