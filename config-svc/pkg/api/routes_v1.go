@@ -30,8 +30,10 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const defaultPrometheusConfigPath = "/etc/prometheus/prometheus.yml"
-const collectInfoPath = "/collect-information.sh"
+const (
+	defaultPrometheusConfigPath = "/etc/prometheus/prometheus.yml"
+	collectInfoPath             = "/collect-information.sh"
+)
 
 func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	var data v1.PostClustersAddJSONRequestBody
