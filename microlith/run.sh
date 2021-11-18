@@ -17,6 +17,12 @@
 # Simple support for dynamic disabling of generic commands and logging
 set -e
 
+# Required for legal acceptance
+echo "The software referenced by this Docker image includes software from the following under the licenses from those images."
+echo "Use of this image and the referenced software is subject to those terms, which can be found in /licenses/"
+echo "These can be viewed by running a command like so to provide a custom entrypoint: 'docker run ... cat /licenses/*'"
+echo "If the CMOS webserver is running (it is by default), they can also be accessed from '<url>/licenses/' via a browser or curl command."
+
 # Helper function to print our output to entrypoint.log
 # Can't use redirection as that would also redirect the output of the processes we spawn into entrypoint.log
 function log() {
