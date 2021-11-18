@@ -1,0 +1,19 @@
+---
+# This is a simple compose stack to use cbworkload-gen to exercise the Couchbase Server a little.
+# It is intended to be run alongside the Couchbase Server stack with CMOS in this directory.
+# For example: docker-compose -f docker-compose.yml -f docker-compose-workload-gen.yml up -d
+version: '3'
+
+networks:
+    back:
+
+services:
+    workload:
+        container_name: workload
+        image: ${COUCHBASE_SERVER_IMAGE}
+        volumes:
+            - ./workload-gen.sh:/entrypoint.sh
+        depends_on:
+            - db1
+        networks:
+            - back
