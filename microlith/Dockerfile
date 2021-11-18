@@ -297,7 +297,8 @@ COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 
 ENV TINI_SUBREAPER=
 COPY run.sh /run.sh
-RUN chmod a+x /run.sh /entrypoints/*
+COPY scripts/collect-information.sh /collect-information.sh
+RUN chmod a+x /run.sh /collect-information.sh /entrypoints/*
 
 ARG CB_UID="8453"
 ARG CB_GID="8453"
@@ -315,9 +316,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
-    mkdir -p /etc/cmos && \
+    mkdir -p /etc/cmos /tmp/support && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui /etc/cmos
+    chown -R couchbase:couchbase /data /priv /ui /etc/cmos /tmp/support
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
