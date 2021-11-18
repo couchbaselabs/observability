@@ -78,7 +78,7 @@ RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 # hadolint ignore=DL3018
-RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext
+RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext jq
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
@@ -297,7 +297,8 @@ COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 
 ENV TINI_SUBREAPER=
 COPY run.sh /run.sh
-RUN chmod a+x /run.sh /entrypoints/*
+COPY scripts/collect-information.sh /collect-information.sh
+RUN chmod a+x /run.sh /collect-information.sh /entrypoints/*
 
 ARG CB_UID="8453"
 ARG CB_GID="8453"
@@ -315,9 +316,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
-    mkdir -p /etc/cmos && \
+    mkdir -p /etc/cmos /tmp/support && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui /etc/cmos
+    chown -R couchbase:couchbase /data /priv /ui /etc/cmos /tmp/support
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
@@ -327,9 +328,7 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 COPY docs/modules/ROOT/pages/support.adoc /help.1
 
-# Couchbase proprietary start
-COPY --from=builder /etc/couchbase/git-commit.txt /etc/cmos-release.txt
-# Couchbase proprietary end
+COPY git-commit.txt /etc/cmos-release.txt
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
