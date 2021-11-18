@@ -18,6 +18,9 @@
 * xref:cluster-monitor.adoc[Couchbase Cluster Monitor component]
 * xref:deployment-distributed.adoc[Distributed microservices deployment]
 
+.Components
+* xref:component-loki.adoc[Loki]
+
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
 * xref:deployment-fluentbit.adoc[Fluent Bit deployment]

@@ -1,0 +1,30 @@
+= Loki
+
+[abstract]
+Loki can be used to process and store Couchbase logs.
+
+== Overview
+
+https://grafana.com/oss/Loki/[Loki^] is a https://prometheus.io/[Prometheus^]-inspired open source, multi-tenant log aggregation system.
+Loki is used to process and store collected Couchbase logs.
+
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+image:component-loki.png[]
+
+Couchbase cluster generates logs of various operations which is important for monitoring and investigation purposes.
+Loki provides the option to parse the logs enabling search and aggregation based on keys.
+Logs are pushed to Loki by various tools, we recommend xref:deployment-fluentbit.adoc[Fluent Bit] and provide a method to deploy it.
+
+== Get Started
+
+Loki is managed by the xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS).
+Loki is enabled by default in the CMOS, however, Fluent Bit needs to be configured for the logs to reach Loki.
+Depending upon the type of deployment you need to enable Fluent Bit.
+
+=== Links
+
+* Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
+* On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
+* Fluent Bit Deployment: xref:deployment-fluentbit.adoc[Fluent Bit Deployment for Couchbase]

@@ -1,4 +1,4 @@
-personal_ws-1.1 en 62
+personal_ws-1.1 en 63
 AGPL
 CAO
 CMOS
@@ -61,3 +61,4 @@ RBAC
 YAML
 DNS
 hostname
+Loki
