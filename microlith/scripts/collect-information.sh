@@ -22,7 +22,7 @@ echo "Starting collect-information.sh..."
 tmpdir=${TEMPORARY_DIRECTORY:-$(mktemp -d)}
 exec &> >(tee -a "$tmpdir/collect-information.sh.log")
 
-cp /etc/couchbase-cluster-monitor-release.txt "$tmpdir"
+cp /etc/*-release.txt "$tmpdir"
 
 # Environment
 env > "$tmpdir/env.txt"
