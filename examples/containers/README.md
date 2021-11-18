@@ -10,6 +10,9 @@ The `Add Cluster` [page](http://localhost:8080/promwebform.html) can be used to 
 **Do not use localhost or 127.0.0.1 as the IP/hostname as this will resolve to the CMOS container itself.**
 
 Add additional clusters by running up a new Couchbase Server image and either attaching it to an existing cluster or creating a new one.
+
+https://docs.couchbase.com/server/current/install/getting-started-docker.html#multi-node-cluster-one-host
+
 Remember to use the container local IP or if using a compose stack then you can [use the service name](https://docs.docker.com/compose/networking/).
 
 To get the local IP of a container, in this case the `db1` container:
