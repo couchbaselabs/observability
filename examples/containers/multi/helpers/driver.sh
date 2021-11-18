@@ -129,7 +129,8 @@ function _load_sample_buckets() {
     local load=$2
     local server_user=$3
     local server_pwd=$4
-    local sample_buckets=$5
+    shift 4 # Bash passes each element in the array as another $i, so we must shift previous arguments so only array args are left
+    local sample_buckets=("$@") # Then we are able to capture all remaining args in a new array
 
     sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
         _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
@@ -176,7 +177,7 @@ function configure_servers() {
     data_alloc=$(awk -v n="$node_ram" 'BEGIN {printf "%.0f\n", (n*0.7)}')
     index_alloc=$(awk -v n="$node_ram" 'BEGIN {printf "%.0f\n", (n*0.7)}')
 
-    local sample_buckets=(\"travel-sample\" \"beer-sample\") # Only used if LOAD is true
+    local sample_buckets=(\"travel-sample\" \"beer-sample\")
 
     echo "----- START CONFIGURING NODES -----"
     echo "Partitioning $num_nodes nodes into $num_clusters clusters..."
