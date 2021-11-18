@@ -193,7 +193,7 @@ Finally the `nav` defines the navigation menu for the repository.
 * [`docs/user/modules/ROOT/assets/images/`](docs/modules/ROOT/assets/images/)
   * These define any images included in documentation.
   * The formatting is defined below.
-  * To ensure these are rendered correctly, any page using them should set up Github variables:
+  * To ensure these are rendered correctly, any page using them should include the below snippet at the top:
   ```
   ifdef::env-github[]
   :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
