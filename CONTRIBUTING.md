@@ -167,7 +167,6 @@ Ensure that the documnetation looks correct when viewed via the landing page.
 If there are certain aspects of the documentation that are only relevant when packaged inside the container, use `ifdef::env-packaged[]` to delimit these.
 For example:
 
-[pass]
 ```asciidoc
 ifdef::env-packaged[]
 This text will only appear inside the container. It will not appear on docs.couchbase.com.
@@ -177,7 +176,6 @@ endif::env-packaged[]
 Similarly, you can use `ifndef` to hide certain content when inside the container.
 For example:
 
-[pass]
 ```asciidoc
 ifndef::env-packaged[]
 This text will only appear on docs.couchbase.com and on GitHub. It will not appear inside the container.
