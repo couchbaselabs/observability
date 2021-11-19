@@ -232,6 +232,25 @@ ENV JAEGER_AGENT_HOST=localhost
 # VOLUME ["/tmp"]
 # ENTRYPOINT ["/go/bin/all-in-one-linux"]
 
+# PROMTAIL
+# Promtail currently has a dependency on systemd and no Alpine image
+COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
+COPY --from=promtail-official /etc/promtail /etc/promtail
+# Taken from: https://github.com/grafana/loki/issues/838#issuecomment-963052919
+# Without this you get a helpful "no such file or directory" error if you try to run the binary
+RUN wget -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.34-r0/glibc-2.34-r0.apk && \
+    apk add --no-cache --force-non-repo glibc-2.34-r0.apk && \
+    rm glibc-2.34-r0.apk
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libsystemd.so /usr/local/lib/libsystemd.so
+COPY --from=promtail-official /lib/x86_64-linux-gnu/liblzma.so.5 /usr/local/lib/liblzma.so.5
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libzstd.so.1 /usr/local/lib/libzstd.so.1
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/liblz4.so.1 /usr/local/lib/liblz4.so.1
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libgcrypt.so.20 /usr/local/lib/libgcrypt.so.20
+COPY --from=promtail-official /lib/x86_64-linux-gnu/libgpg-error.so.0 /usr/local/lib/libgpg-error.so.0
+# Promtail HTTP server
+EXPOSE 9080
+
 # Add support for auto-provisioning now
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
@@ -255,24 +274,7 @@ ENV GF_INSTALL_PLUGINS=""
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
-
-# Promtail currently has a dependency on systemd
-# Taken from: https://github.com/grafana/loki/issues/838#issuecomment-963052919
-RUN wget -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.34-r0/glibc-2.34-r0.apk && \
-    apk add --no-cache --force-non-repo glibc-2.34-r0.apk && \
-    rm glibc-2.34-r0.apk
-COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
-COPY --from=promtail-official /etc/promtail /etc/promtail
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libsystemd.so /usr/local/lib/libsystemd.so
-COPY --from=promtail-official /lib/x86_64-linux-gnu/liblzma.so.5 /usr/local/lib/liblzma.so.5
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libzstd.so.1 /usr/local/lib/libzstd.so.1
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/liblz4.so.1 /usr/local/lib/liblz4.so.1
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libgcrypt.so.20 /usr/local/lib/libgcrypt.so.20
-COPY --from=promtail-official /lib/x86_64-linux-gnu/libgpg-error.so.0 /usr/local/lib/libgpg-error.so.0
-# Our custom configuration
 COPY promtail/ /etc/promtail/
-EXPOSE 9080
 ENV CMOS_LOGS=/logs
 
 # Configuration Service

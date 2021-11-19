@@ -10,6 +10,12 @@ clients:
 
 scrape_configs:
 - job_name: promtail-cmos
+  # Attempt to add a level to all data
+  pipeline_stages:
+  - regex:
+      expression: '(level|lvl|severity)=(?P<level>\\w+)'
+  - labels:
+      level:
   static_configs:
   - targets:
       - localhost
