@@ -12,7 +12,8 @@ This can be disabled by setting the environment variable `LOG_TO_STDOUT` to `fal
 
 === Collecting Information
 
-Use the link:/collect-info.html[Collect Information] form to create a tar-ball of all CMOS logs and configuration.
+ifdef::env-packaged[Use the link:/collect-info.html[Collect Information] form to create a tar-ball of all CMOS logs and configuration.]
+ifndef::env-packaged[If the CMOS web server is enabled, visit `/collect-info.html` to create a tar-ball of all CMOS logs and configuration.]
 If you cannot access the web server or it is disabled, the same can be done by running `/collect-information.sh` in the container.
 The output will be saved to `/tmp/support` in the container.
 If the web server is enabled, it can also be accessed on `/support`.
