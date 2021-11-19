@@ -275,7 +275,7 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 COPY promtail/ /etc/promtail/
-ENV CMOS_LOGS=/logs
+ENV CMOS_LOGS_ROOT=/logs
 
 # Configuration Service
 

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 set -ex
-CMOS_LOGS=${CMOS_LOGS:-/logs}
+CMOS_LOGS_ROOT=${CMOS_LOGS_ROOT:-/logs}
 
 PROMTAIL_CONFIG_FILE=${PROMTAIL_CONFIG_FILE:-/etc/promtail/config-microlith.yaml}
 PROMTAIL_HTTP_PORT=${PROMTAIL_HTTP_PORT:-9080}
