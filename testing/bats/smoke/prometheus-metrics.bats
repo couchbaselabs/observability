@@ -123,3 +123,31 @@ function try_query() {
     fail "$failure_message Last query result: $(cat "$BATS_TEST_TMPDIR/output.json")"
   fi
 }
+
+function metricGreaterThanZero() {
+  local attempt=0
+  local max_attempts=15
+  local metric=$1
+  while [ "$attempt" -lt "$max_attempts" ]; do
+    if try_query "$metric>0" "1"; then
+      break
+    else
+      attempt=$(( attempt + 1 ))
+      sleep 5
+      continue
+  done
+  if [ "$attempt" -eq "$max_attempts" ]; then
+    fail "$metric stayed at zero after $attempt attempts"
+  fi
+}
+
+@test "verify logs are being ingested by Promtail and Loki" {
+    # Are we ready?
+    wait_for_url 10 "$CMOS_HOST/prometheus/-/ready"
+
+    # Are we consuming any logs?
+    metricGreaterThanZero "promtail_files_active_total"
+
+    # Are we forwarding logs to Loki ok?
+    metricGreaterThanZero "promtail_sent_bytes_total"
+}
