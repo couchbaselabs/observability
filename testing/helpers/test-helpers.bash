@@ -105,6 +105,7 @@ function _start_cmos() {
     local cmos_port
     cmos_port=$(docker inspect cmos -f '{{with index .NetworkSettings.Ports "8080/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
     export CMOS_HOST="localhost:$cmos_port"
+    wait_for_url 10 "http://$CMOS_HOST/config/api/v1/openapi.json"
     echo "# Test CMOS is running at http://$CMOS_HOST."
 
     local cbs_host
