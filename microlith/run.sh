@@ -67,6 +67,11 @@ export CMOS_CFG_HTTP_PATH_PREFIX=${CMOS_CFG_HTTP_PATH_PREFIX:-/config}
 export CMOS_CFG_HTTP_HOST=${CMOS_CFG_HTTP_HOST:-127.0.0.1}
 export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
 
+export CMOS_LOGS=${CMOS_LOGS:-/logs}
+
+export PROMTAIL_CONFIG_FILE=${PROMTAIL_CONFIG_FILE:-/etc/promtail/config-microlith.yaml}
+export PROMTAIL_HTTP_PORT=${PROMTAIL_HTTP_PORT:-9080}
+
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
@@ -74,6 +79,15 @@ mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 
 if [[ -v "KUBERNETES_DEPLOYMENT" ]]; then
     log "Using Kubernetes mode as KUBERNETES_DEPLOYMENT set (value ignored)"
+fi
+
+if [[ ! -x /bin/cbmultimanager ]]; then
+    log "Running OSS version, no Couchbase binaries"
+    export CMOS_OSS_VERSION=true
+    export CMOS_VERSION="OSS"
+else
+    log "Couchbase binaries available, not OSS version"
+    export CMOS_VERSION="Couchbase"
 fi
 
 # Support passing in custom command to run, e.g. bash

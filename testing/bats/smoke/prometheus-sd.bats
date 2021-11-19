@@ -17,6 +17,8 @@
 load "$HELPERS_ROOT/test-helpers.bash"
 load "$HELPERS_ROOT/url-helpers.bash"
 
+ensure_variables_set CMOS_HOST BATS_SUPPORT_ROOT BATS_ASSERT_ROOT
+
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 
