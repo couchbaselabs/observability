@@ -14,18 +14,21 @@ scrape_configs:
   pipeline_stages:
   - regex:
       expression: '(level|lvl|severity)=(?P<level>\\w+)'
+  - template:
+      source: level
+      template: '{{ ToUpper .Value }}'
   - labels:
       level:
   static_configs:
   - targets:
       - localhost
     labels:
-      job: varlogs
+      job: cmos-varlogs
       host: cmos
       __path__: /var/log/*log
   - targets:
       - localhost
     labels:
-      job: logs
+      job: cmos-logs
       host: cmos
       __path__: /logs/*log
