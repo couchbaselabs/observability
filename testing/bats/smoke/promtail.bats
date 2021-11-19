@@ -16,40 +16,40 @@
 
 load "$HELPERS_ROOT/test-helpers.bash"
 
-ensure_variables_set BATS_SUPPORT_ROOT BATS_ASSERT_ROOT
+ensure_variables_set CMOS_HOST BATS_SUPPORT_ROOT BATS_ASSERT_ROOT
 
 load "$BATS_SUPPORT_ROOT/load.bash"
 load "$BATS_ASSERT_ROOT/load.bash"
 
-@test "verify promtail functions if nothing else is running" {
-    # https://grafana.com/docs/loki/latest/clients/promtail/troubleshooting/
-    echo "test log line" | promtail --stdin --dry-run --inspect --client.url http://127.0.0.1:3100/loki/api/v1/push
+function metricGreaterThanZero() {
+    local attempt=0
+    local metric=$1
+    while true; do
+        run curl -o "$BATS_TEST_TMPDIR/output.json" -X GET "$CMOS_HOST/prometheus/api/v1/query?query=$metric>0"
+        assert_success
+
+        run jq -c '.data.result[] | select(.metric.job == "promtail")' "$BATS_TEST_TMPDIR/targets.json"
+        assert_success
+        if [[ "$output" == "" ]]; then
+            if [ "$attempt" -lt 10 ]; then
+                attempt=$(( attempt + 1 ))
+                sleep 5
+            else
+                fail "$metric stayed at zero even after $attempt attempts"
+            fi
+        else
+            break
+        fi
+    done
 }
 
-@test "verify logs are being read" {
-    local promtail_url="localhost:9080"
+@test "verify logs are being ingested by Promtail and Loki" {
     # Are we ready?
-    wait_for_url 10 "$promtail_url/ready"
+    wait_for_url 10 "$CMOS_HOST/prometheus/-/ready"
 
     # Are we consuming any logs?
-    # Check the "promtail_files_active_total" metric is > 0
-    run curl "$promtail_url/metrics"
-    assert_success
-    assert_line -p 'promtail_files_active_total'
-    refute_line 'promtail_files_active_total 0'
-}
-
-@test "verify logs are being sent to Loki" {
-    if [ -v "${DISABLE_LOKI}"; then
-        skip "Loki disabled"
-    fi
-    local promtail_url="localhost:9080"
-    # Are we ready?
-    wait_for_url 10 "$promtail_url/ready"
+    metricGreaterThanZero promtail_files_active_total
 
     # Are we forwarding logs to Loki ok?
-    run curl "$promtail_url/metrics"
-    assert_success
-    assert_line -p 'promtail_sent_bytes_total'
-    refute_line 'promtail_sent_bytes_total{host="localhost:3100"} 0'
+    metricGreaterThanZero promtail_sent_bytes_total
 }
