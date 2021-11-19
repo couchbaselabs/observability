@@ -135,6 +135,7 @@ function metricGreaterThanZero() {
       attempt=$(( attempt + 1 ))
       sleep 5
       continue
+    fi
   done
   if [ "$attempt" -eq "$max_attempts" ]; then
     fail "$metric stayed at zero after $attempt attempts"
