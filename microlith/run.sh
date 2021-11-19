@@ -67,6 +67,11 @@ export CMOS_CFG_HTTP_PATH_PREFIX=${CMOS_CFG_HTTP_PATH_PREFIX:-/config}
 export CMOS_CFG_HTTP_HOST=${CMOS_CFG_HTTP_HOST:-127.0.0.1}
 export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
 
+export CMOS_LOGS_ROOT=${CMOS_LOGS_ROOT:-/logs}
+
+export PROMTAIL_CONFIG_FILE=${PROMTAIL_CONFIG_FILE:-/etc/promtail/config-microlith.yaml}
+export PROMTAIL_HTTP_PORT=${PROMTAIL_HTTP_PORT:-9080}
+
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
@@ -74,6 +79,16 @@ mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 
 if [[ -v "KUBERNETES_DEPLOYMENT" ]]; then
     log "Using Kubernetes mode as KUBERNETES_DEPLOYMENT set (value ignored)"
+fi
+
+if [[ ! -x /bin/cbmultimanager ]]; then
+    log "Running OSS version, no Couchbase binaries"
+    # Simple test this is set rather than value comparison
+    export CMOS_OSS_DISTRIBUTION=true
+    export CMOS_DISTRIBUTION="OSS"
+else
+    log "Couchbase binaries available, not OSS version"
+    export CMOS_DISTRIBUTION="Couchbase"
 fi
 
 # Support passing in custom command to run, e.g. bash
@@ -92,10 +107,10 @@ else
             if [ "${LOG_TO_STDOUT:-true}" == "true" ]; then
               log "Running: $i"
               # See https://github.com/hilbix/speedtests for log name pre-pending info
-              "$i" "$@" 2>&1 | tee /logs/"${EXE_NAME}".log | awk '{ print "['"${EXE_NAME}"']" $0 }' &
+              "$i" "$@" 2>&1 | tee "${CMOS_LOGS_ROOT}/${EXE_NAME}".log | awk '{ print "['"${EXE_NAME}"']" $0 }' &
             else
               log "Running: $i ==> /logs/${EXE_NAME}.log"
-              "$i" "$@" &> /logs/"${EXE_NAME}".log &
+              "$i" "$@" &> "${CMOS_LOGS_ROOT}/${EXE_NAME}".log &
             fi
         else
             log "Skipping non-executable: $i"

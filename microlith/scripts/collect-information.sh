@@ -22,6 +22,8 @@ echo "Starting collect-information.sh..."
 tmpdir=${TEMPORARY_DIRECTORY:-$(mktemp -d)}
 exec &> >(tee -a "$tmpdir/collect-information.sh.log")
 
+echo "$@" > "$tmpdir/collection-command.txt"
+
 cp /etc/*-release.txt "$tmpdir"
 
 # Environment
@@ -42,11 +44,12 @@ done <<EOF
 /etc/jaeger/
 /etc/loki/
 /etc/nginx/
+/etc/promtail/
 EOF
 
 # Grab various overridden paths
 mkdir -p "$tmpdir/dynamic-config"
-for override_var in PROMETHEUS_CONFIG_FILE PROMETHEUS_CONFIG_TEMPLATE_FILE JAEGER_CONFIG_FILE LOKI_CONFIG_FILE ALERTMANAGER_CONFIG_FILE; do
+for override_var in PROMETHEUS_CONFIG_FILE PROMETHEUS_CONFIG_TEMPLATE_FILE JAEGER_CONFIG_FILE LOKI_CONFIG_FILE ALERTMANAGER_CONFIG_FILE PROMTAIL_CONFIG_FILE; do
   cp "${!override_var}" "$tmpdir/dynamic-config/$(basename "${!override_var}")"
 done
 
@@ -74,6 +77,7 @@ cp -r "$PROMETHEUS_STORAGE_PATH/snapshots/$snapshot_file_name" "$tmpdir/promethe
 curl -sS -o "$tmpdir/grafana-frontend-settings.json" "http://localhost:3000/grafana/api/frontend/settings"
 
 curl -sS -o "$tmpdir/loki-buildinfo.json" "http://localhost:3100/loki/api/v1/status/buildinfo"
+curl -sS -o "$tmpdir/loki-metrics.json" "http://localhost:3100/metrics"
 curl -sS -o "$tmpdir/loki-config.yml" "http://localhost:3100/config"
 
 curl -sS -o "$tmpdir/prom-buildinfo.json" "http://localhost:9090/prometheus/api/v1/status/buildinfo"
@@ -83,6 +87,10 @@ curl -sS -o "$tmpdir/prom-tsdb-status.json" "http://localhost:9090/prometheus/ap
 
 curl -sS -o "$tmpdir/prom-config.json" "http://localhost:9090/prometheus/api/v1/status/config"
 curl -sS -o "$tmpdir/prom-targets.json" "http://localhost:9090/prometheus/api/v1/targets"
+
+curl -sS -o "$tmpdir/promtail-targets.json" "http://localhost:9080/targets"
+curl -sS -o "$tmpdir/promtail-metrics.json" "http://localhost:9080/metrics"
+curl -sS -o "$tmpdir/promtail-config.yml" "http://localhost:9080/config"
 
 # Important Prometheus series
 curl -sS -o "$tmpdir/prom-series.json" "http://localhost:9090/prometheus/api/v1/series?match[]=multimanager_cluster_checker_status&match[]=multimanager_node_checker_status&match[]=multimanager_bucket_checker_status&match[]=cm_rest_request_enters_total&match[]=cbnode_up"
@@ -94,6 +102,7 @@ curl -sv "http://localhost:9093/alertmanager/-/healthy" > "$tmpdir/am-health.txt
 curl -sv "http://localhost:14269" > "$tmpdir/jaeger-health.txt" 2>&1
 curl -sv "http://localhost:3000/grafana/api/health" > "$tmpdir/grafana-health.txt" 2>&1
 curl -sv "http://localhost:8080/_meta/status" > "$tmpdir/nginx-status.txt" 2>&1
+curl -sv "http://localhost:9080/ready" > "$tmpdir/promtail-health.txt" 2>&1
 
 # Cluster Monitor endpoints
 if [ -f "/bin/cbmultimanager" ]; then
@@ -124,6 +133,8 @@ tar_exitcode=$?
 set +x
 
 if [ "$tar_exitcode" -eq 0 ]; then
+  # Ensure we are good citizens and clean up after ourselves
+  rm -rf "$tmpdir"
   echo "Collected support information at $output."
   echo "If the CMOS web server is enabled, it can also be downloaded from http://<cmos-host>:8080/support/$(basename "$output")."
   echo
@@ -133,4 +144,5 @@ if [ "$tar_exitcode" -eq 0 ]; then
 else
   echo "An error occurred and the diagnostics archive could not be collected."
   echo "Please inspect the output above for details."
+  echo "All collected data will still be available (cleanup manually as required) in $tmpdir."
 fi
