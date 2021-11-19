@@ -44,8 +44,8 @@ scrape_configs:
     - job_name: couchbase-kubernetes-pods
       # Server 7 requires authentication
       basic_auth:
-        username: Administrator
-        password: password
+          username: Administrator
+          password: password
       kubernetes_sd_configs:
           - role: pod
       relabel_configs:
@@ -64,6 +64,6 @@ scrape_configs:
           - source_labels: [__meta_kubernetes_pod_name]
             action: replace
             target_label: kubernetes_pod_name
-          - source_labels: [ __meta_kubernetes_pod_label_couchbase_cluster ]
+          - source_labels: [__meta_kubernetes_pod_label_couchbase_cluster]
             action: replace
             target_label: cluster
