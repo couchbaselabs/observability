@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 2,
   "id": 10,
-  "iteration": 1637334988868,
+  "iteration": 1637337593246,
   "links": [
     {
       "asDropdown": false,
@@ -76,7 +76,7 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 6,
+        "w": 9,
         "x": 0,
         "y": 1
       },
@@ -103,7 +103,7 @@
           "cacheDurationSeconds": 300,
           "fields": [
             {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$split($m, \"-\")[0]})",
               "language": "jsonata",
               "name": "Version",
               "type": "number"
@@ -128,6 +128,224 @@
       "type": "stat"
     },
     {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#808080",
+            "mode": "fixed"
+          },
+          "mappings": [
+            {
+              "options": {
+                "Enterprise": {
+                  "index": 0
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 9,
+        "y": 1
+      },
+      "id": 67,
+      "interval": null,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$replace($split($m, \"-\")[2], \"e\", \"E\", 1)})",
+              "language": "jsonata",
+              "name": "Version",
+              "type": "number"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Edition",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Version": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#808080",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "axisSoftMin": 0,
+            "fillOpacity": 44,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "semi-dark-blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Version + 1"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 5,
+        "x": 19,
+        "y": 1
+      },
+      "id": 59,
+      "interval": null,
+      "options": {
+        "barWidth": 1,
+        "groupWidth": 1,
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "orientation": "auto",
+        "showValue": "auto",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
+              "language": "jsonata",
+              "name": "Version",
+              "type": "string"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Version",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "count"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Count": {
+                "aggregations": [
+                  "count"
+                ],
+                "operation": "aggregate"
+              },
+              "Version": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -149,9 +367,9 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 6,
-        "x": 6,
-        "y": 1
+        "w": 7,
+        "x": 0,
+        "y": 11
       },
       "id": 56,
       "options": {
@@ -183,349 +401,32 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "#808080",
             "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 12,
-        "y": 1
-      },
-      "id": 55,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(group by (bucket) (multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"}))",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Buckets",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 18,
-        "y": 1
-      },
-      "id": 66,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "kv_collection_item_count{cluster=\"$cluster\", collection=\"_default\"}",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Documents",
-      "type": "stat"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 0,
-        "y": 11
-      },
-      "id": 62,
-      "interval": null,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "number"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Version",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "binary": {
-              "left": "Version",
-              "operator": "+",
-              "reducer": "sum",
-              "right": "Version"
-            },
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "Version"
-              ],
-              "reducer": "count"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "Count": {
-                "aggregations": [
-                  "sum"
-                ],
-                "operation": "aggregate"
-              },
-              "Version": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "semi-dark-blue",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 6,
-        "y": 11
-      },
-      "id": 65,
-      "interval": null,
-      "options": {
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $contains($join($node.services), \"kv\")})",
-              "language": "jsonata",
-              "name": "Data servi"
-            },
-            {
-              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $contains($join($node.services), \"index\")})",
-              "language": "jsonata",
-              "name": "Index serv"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Services",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "kv-count",
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "Data servi"
-              ],
-              "reducer": "sum"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "calculateField",
-          "options": {
-            "alias": "index-count",
-            "mode": "reduceRow",
-            "reduce": {
-              "include": [
-                "Index serv"
-              ],
-              "reducer": "sum"
-            }
-          }
-        },
-        {
-          "id": "rowsToFields",
-          "options": {
-            "mappings": [
-              {
-                "fieldName": "kv-count",
-                "handlerKey": "field.value"
-              },
-              {
-                "fieldName": "index-count",
-                "handlerKey": "field.value"
-              }
-            ]
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "hidden",
             "axisSoftMin": 0,
-            "fillOpacity": 77,
-            "gradientMode": "hue",
+            "fillOpacity": 50,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineWidth": 1
+            "lineWidth": 0
           },
           "mappings": [],
           "thresholds": {
             "mode": "percentage",
             "steps": [
               {
-                "color": "semi-dark-blue",
+                "color": "#ccccdc",
                 "value": null
               }
             ]
@@ -552,8 +453,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 6,
-        "x": 12,
+        "w": 17,
+        "x": 7,
         "y": 11
       },
       "id": 63,
@@ -566,7 +467,7 @@
           "displayMode": "list",
           "placement": "bottom"
         },
-        "orientation": "horizontal",
+        "orientation": "auto",
         "showValue": "auto",
         "stacking": "none",
         "text": {},
@@ -627,148 +528,18 @@
       "type": "barchart"
     },
     {
-      "datasource": "JSON API",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "fixed"
           },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "hidden",
-            "axisSoftMin": 0,
-            "fillOpacity": 44,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 0
-          },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-blue",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Version + 1"
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": true,
-                  "tooltip": true,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 6,
-        "x": 18,
-        "y": 11
-      },
-      "id": 59,
-      "interval": null,
-      "options": {
-        "barWidth": 0.6,
-        "groupWidth": 1,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "orientation": "horizontal",
-        "showValue": "auto",
-        "stacking": "none",
-        "text": {},
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Version",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "mode": "reduceRow",
-            "reduce": {
-              "reducer": "count"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "Count": {
-                "aggregations": [
-                  "count"
-                ],
-                "operation": "aggregate"
-              },
-              "Version": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        }
-      ],
-      "type": "barchart"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "semi-dark-blue",
+                "color": "text",
                 "value": null
               }
             ]
@@ -778,43 +549,94 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 6,
+        "w": 7,
         "x": 0,
         "y": 21
       },
-      "id": 64,
-      "interval": null,
+      "id": 55,
       "options": {
-        "showHeader": true,
-        "sortBy": []
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $contains($join($node.services), \"kv\")})",
-              "language": "jsonata",
-              "name": "Data servi"
-            },
-            {
-              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $contains($join($node.services), \"index\")})",
-              "language": "jsonata",
-              "name": "Index serv"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
+          "exemplar": true,
+          "expr": "count(group by (bucket) (multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"}))",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Services",
-      "transformations": [],
-      "type": "table"
+      "title": "Buckets",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 17,
+        "x": 7,
+        "y": 21
+      },
+      "id": 66,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "kv_collection_item_count{cluster=\"$cluster\", collection=\"_default\"}",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{bucket}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Documents",
+      "type": "stat"
     },
     {
       "collapsed": false,
@@ -1720,7 +1542,7 @@
       },
       "id": 16,
       "panels": [],
-      "title": "KPIs - KV",
+      "title": "KPIs - Data Service",
       "type": "row"
     },
     {
@@ -2056,7 +1878,7 @@
       },
       "id": 41,
       "panels": [],
-      "title": "KPIs - N1QL",
+      "title": "KPIs - Query Service",
       "type": "row"
     },
     {
@@ -2235,7 +2057,7 @@
       },
       "id": 43,
       "panels": [],
-      "title": "KPIs - GSI",
+      "title": "KPIs - Index Service",
       "type": "row"
     },
     {
@@ -2529,5 +2351,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 47
+  "version": 54
 }
