@@ -3,6 +3,7 @@ FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.0 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
 FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
+FROM grafana/promtail:2.4.1 as promtail-official
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -74,24 +75,6 @@ COPY docs/ /antora/docs/
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/modules/couchbase-cluster-monitor/pages/
 # Couchbase proprietary end
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
-
-# We have to build from source
-# https://docs.fluentbit.io/manual/installation/docker#why-there-is-no-fluent-bit-docker-image-based-on-alpine-linux
-FROM alpine:3.14 as fluentbit-builder
-RUN apk add --no-cache alpine-sdk
-
-ARG FLUENT_BIT_VER=1.8.9
-RUN mkdir -p /src/aports && \
-    git clone --depth 1 https://github.com/alpinelinux/aports.git /src/aports
-
-WORKDIR /src/aports/testing/fluent-bit
-
-# Packages" build-base gcc abuild binutils cmake git flex bison fts-dev gtest-dev zlib-dev
-RUN abuild-keygen -an && \
-    abuild -F deps && \
-    abuild -F -r -K
-
-# Output will be in /src/aports/testing/fluent-bit/pkg/fluent-bit/
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
@@ -273,10 +256,23 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 
-# Fluent Bit
-COPY --from=fluentbit-builder /src/aports/testing/fluent-bit/pkg/fluent-bit/ /
-COPY fluent-bit/*.conf /etc/fluent-bit/
-EXPOSE 2020
+# Promtail currently has a dependency on systemd
+# Taken from: https://github.com/grafana/loki/issues/838#issuecomment-963052919
+RUN wget -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+    wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.34-r0/glibc-2.34-r0.apk && \
+    apk add --no-cache --force-non-repo glibc-2.34-r0.apk && \
+    rm glibc-2.34-r0.apk
+COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
+COPY --from=promtail-official /etc/promtail /etc/promtail
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libsystemd.so /usr/local/lib/libsystemd.so
+COPY --from=promtail-official /lib/x86_64-linux-gnu/liblzma.so.5 /usr/local/lib/liblzma.so.5
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libzstd.so.1 /usr/local/lib/libzstd.so.1
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/liblz4.so.1 /usr/local/lib/liblz4.so.1
+COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libgcrypt.so.20 /usr/local/lib/libgcrypt.so.20
+COPY --from=promtail-official /lib/x86_64-linux-gnu/libgpg-error.so.0 /usr/local/lib/libgpg-error.so.0
+# Our custom configuration
+COPY promtail/ /etc/promtail/
+EXPOSE 9080
 ENV CMOS_LOGS=/logs
 
 # Configuration Service
@@ -337,7 +333,7 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
-    chown -R couchbase:couchbase /etc/fluent-bit/ && \
+    chown -R couchbase:couchbase /etc/promtail/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \

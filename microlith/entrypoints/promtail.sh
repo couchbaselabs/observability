@@ -16,25 +16,24 @@
 set -ex
 CMOS_LOGS=${CMOS_LOGS:-/logs}
 
-FLUENT_BIT_CONFIG_FILE=${FLUENT_BIT_CONFIG_FILE:-/etc/fluent-bit/fluent-bit.conf}
-FLUENT_BIT_HTTP_PORT=${FLUENT_BIT_HTTP_PORT:-2020}
+PROMTAIL_CONFIG_FILE=${PROMTAIL_CONFIG_FILE:-/etc/promtail/config-microlith.yaml}
+PROMTAIL_HTTP_PORT=${PROMTAIL_HTTP_PORT:-9080}
 
 # Set up Prometheus scraping for this target - this allows us to dynamically turn it on/off
 PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
-cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/fluentbit.json << __EOF__
+cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/promtail.json << __EOF__
 [
     {
       "targets": [
-        "localhost:$FLUENT_BIT_HTTP_PORT"
+        "localhost:$PROMTAIL_HTTP_PORT"
       ],
       "labels": {
-        "__metrics_path__": "/api/v1/metrics/prometheus",
-        "job": "fluentbit",
+        "job": "promtail",
         "container": "monitoring"
       }
     }
 ]
 __EOF__
 
-fluent-bit -c "${FLUENT_BIT_CONFIG_FILE}"
+/usr/bin/promtail -config.expand-env -config.file="${PROMTAIL_CONFIG_FILE}"
