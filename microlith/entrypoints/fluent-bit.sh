@@ -37,4 +37,4 @@ cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/fluentbit.json << __EOF__
 ]
 __EOF__
 
-/fluent-bit/bin/fluent-bit -c "${FLUENT_BIT_CONFIG_FILE}"
+fluent-bit -c "${FLUENT_BIT_CONFIG_FILE}"
