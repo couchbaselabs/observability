@@ -19,6 +19,7 @@ TEST_COMMON_SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1
 export TEST_ROOT="${TEST_COMMON_SCRIPT_DIR}/bats/"
 export HELPERS_ROOT="${TEST_COMMON_SCRIPT_DIR}/helpers/"
 export RESOURCES_ROOT="${TEST_COMMON_SCRIPT_DIR}/resources/"
+export DIAGNOSTICS_ROOT="${TEST_COMMON_SCRIPT_DIR}/diagnostics/"
 
 export DOCKER_USER=${DOCKER_USER:-couchbase}
 export DOCKER_TAG=${DOCKER_TAG:-v1}
@@ -36,6 +37,16 @@ export BATS_DETIK_ROOT=$BATS_ROOT/lib/bats-detik
 
 # shellcheck disable=SC1091
 source "$HELPERS_ROOT/test-helpers.bash"
+
+function _teardown_all_tests() {
+  local exit_code=$?
+  if [ "$exit_code" -ne 0 ]; then
+    capture_cmosinfo
+  fi
+  if [ -n "${COUCHBASE_SERVER_NODES:-}" ]; then
+    teardown_smoke_cluster
+  fi
+}
 
 # Helper function to run a set of tests based on our specific configuration
 # This function will call `exit`, so any cleanup must be done inside of it.
@@ -63,10 +74,12 @@ function run_tests() {
         run="--recursive ${TEST_ROOT}/$requested"
     fi
 
+    # This trap goes before start_smoke_cluster to make sure we grab diagnostics if CMOS setup fails
+    trap _teardown_all_tests ERR EXIT
+
     if [ "$smoke" -eq 1 ]; then
         export SMOKE_NODES=3
         start_smoke_cluster
-        trap teardown_smoke_cluster ERR EXIT
     fi
 
     echo

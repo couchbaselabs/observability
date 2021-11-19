@@ -126,7 +126,7 @@ for var_log in grafana; do
 done
 
 # Tar it up and copy it to /support
-output="/tmp/support/cmosinfo-$(date -u +"%Y-%m-%dT%H:%M:%SZ").tar"
+output="/tmp/support/cmosinfo-$(date -u +"%Y-%m-%dT%H-%M-%SZ").tar"
 tar -cvf "$output" -C "$tmpdir" .
 tar_exitcode=$?
 

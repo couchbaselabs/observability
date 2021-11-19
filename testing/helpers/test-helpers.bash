@@ -58,28 +58,69 @@ function find_unused_port() {
     return 1
 }
 
-# Converts the value of $COUCHBASE_SERVER_HOSTS into a file ready to feed to Prometheus file_sd.
-# Stores the name of the generated file in $PROMETHEUS_TARGETS_FILE.
-function _create_prometheus_targets_file() {
-    local tmp
-    tmp=$(mktemp -d)
-    echo "$COUCHBASE_SERVER_HOSTS" \
-      | jq -R -s '[split("\n")[:-1][] | sub("(:8091)?$"; ":9091")] | [{"targets": ., "labels": {"job":"couchbase-server","cluster":"smoke"}}]' \
-      > "$tmp/smoke.json"
-    export PROMETHEUS_TARGETS_FILE="$tmp/smoke.json"
+# Checks if the Couchbase Server version the tests are using is less than the given version ($1).
+function cb_version_lt() {
+  # this will work until CBS 10, which won't be for a good few years
+  [[ "$COUCHBASE_SERVER_VERSION" < "$1" ]]
+  return
 }
 
-# Starts a docker container named `cmos`, mounting $PROMETHEUS_TARGETS_FILE.
+# Checks if the Couchbase Server version the tests are using greater than or equal to the given version ($1).
+function cb_version_gte() {
+  # this will work until CBS 10, which won't be for a good few years
+  [[ ! "$COUCHBASE_SERVER_VERSION" < "$1" ]]
+  return
+}
+
+# Downloads a diagnostics tarball from the test environment's CMOS.
+# Can be disabled by setting DISABLE_CMOSINFO=true.
+# Does nothing if CMOS_HOST is not set.
+function capture_cmosinfo() {
+  if [ "${DISABLE_CMOSINFO:-false}" == "true" ]; then
+    echo "# Not capturing cmosinfo; DISABLE_CMOSINFO is set."
+    return
+  fi
+  if [ -z "${CMOS_HOST:-}" ]; then
+    echo "# Not capturing cmosinfo; CMOS_HOST not set."
+    return
+  fi
+  local output
+  output=$(curl -X POST -sS "http://$CMOS_HOST/config/api/v1/collectInformation")
+
+  local filename
+  filename=$(echo "$output" | sed -En -e 's/Collected support information at \/tmp\/support\/(.+)\.$/\1/p')
+
+  local output_path="$DIAGNOSTICS_ROOT/cmosinfo"
+  mkdir -p "$output_path"
+  wget -q -O "$output_path/$filename" "http://$CMOS_HOST/support/$filename"
+  echo "# Collected cmosinfo; saved to $output_path/$filename."
+}
+
+# Starts a docker container named `cmos` and configures $COUCHBASE_SERVER_HOSTS with Prometheus.
 # Exposes a variable $CMOS_HOST with the nginx host:port.
 # All parameters will be passed on to docker before the image.
 function _start_cmos() {
     docker run --rm -d -p '8080' --name cmos "$@" "$CMOS_IMAGE"
-    # Can't just volume mount it because of VM shared file shenanigans
-    docker exec cmos mkdir -p /etc/prometheus/couchbase/custom
-    docker cp "$PROMETHEUS_TARGETS_FILE" cmos:/etc/prometheus/couchbase/custom/smoke.json
+
     local cmos_port
     cmos_port=$(docker inspect cmos -f '{{with index .NetworkSettings.Ports "8080/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
     export CMOS_HOST="localhost:$cmos_port"
+    wait_for_url 10 "http://$CMOS_HOST/config/api/v1/openapi.json"
+    echo "# Test CMOS is running at http://$CMOS_HOST."
+
+    local cbs_host
+    cbs_host=$(echo "$COUCHBASE_SERVER_HOSTS" | head -n1)
+
+    # Add CBS to Prometheus
+    # shellcheck disable=SC2001
+    curl -fsS -X POST \
+      -H "Content-Type: application/json" \
+      --data '{"hostname":"'"$(echo "$cbs_host" | sed -e 's/:[0-9]*$//')"'", "couchbaseConfig": {"managementPort": 8091, "username": "Administrator", "password": "password"}}' \
+      "http://$CMOS_HOST/config/api/v1/clusters/add"
+
+    wait_for_url 10 "http://$CMOS_HOST/prometheus/-/ready"
+
+    curl -fsS -X POST "http://$CMOS_HOST/prometheus/-/reload"
 }
 
 # Starts a Couchbase cluster and CMOS container.
@@ -106,17 +147,18 @@ function start_smoke_cluster() {
               wait_for_url 10 "$host/ui"
             done <<< "$COUCHBASE_SERVER_HOSTS"
             initialize_couchbase_cluster "docker run --rm -i --network host $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
-            _create_prometheus_targets_file
             _start_cmos
             ;;
         containers)
             ensure_variables_set CMOS_IMAGE
             ensure_variables_set COUCHBASE_SERVER_IMAGE
-            # Build a new image, containing the Exporter
-            DOCKER_BUILDKIT=1 docker build -t "$COUCHBASE_SERVER_IMAGE-exporter" \
-             --build-arg COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE" \
-              -f "$RESOURCES_ROOT/containers/cb-with-exporter.Dockerfile" "$RESOURCES_ROOT/containers"
-            export COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE-exporter"
+            if cb_version_lt "7.0.0"; then
+              # Build a new image, containing the Exporter
+              DOCKER_BUILDKIT=1 docker build -t "$COUCHBASE_SERVER_IMAGE-exporter" \
+               --build-arg COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE" \
+                -f "$RESOURCES_ROOT/containers/cb-with-exporter.Dockerfile" "$RESOURCES_ROOT/containers"
+              export COUCHBASE_SERVER_IMAGE="$COUCHBASE_SERVER_IMAGE-exporter"
+            fi
             # We're creating these manually instead of using Compose because we need to support a variable number of nodes.
             docker network create cmos_test
             for i in $(seq 1 "$nodes"); do
@@ -136,7 +178,6 @@ function start_smoke_cluster() {
             mgmt_port=$(docker inspect test_couchbase1 -f '{{with index .NetworkSettings.Ports "8091/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
             wait_for_url 10 "http://localhost:$mgmt_port/ui"
             initialize_couchbase_cluster "docker run --rm -i --network cmos_test $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
-            _create_prometheus_targets_file
             _start_cmos --network=cmos_test
             ;;
         kubernetes)
