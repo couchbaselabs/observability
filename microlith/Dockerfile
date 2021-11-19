@@ -1,4 +1,4 @@
-FROM grafana/grafana:8.2.3 as grafana-official
+FROM grafana/grafana:8.2.5 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.0 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
@@ -74,6 +74,67 @@ COPY docs/ /antora/docs/
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/modules/couchbase-cluster-monitor/pages/
 # Couchbase proprietary end
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
+
+# We have to build from source
+# https://docs.fluentbit.io/manual/installation/docker#why-there-is-no-fluent-bit-docker-image-based-on-alpine-linux
+FROM alpine:3.14 as fluentbit-builder
+RUN apk add --no-cache build-base gcc abuild binutils cmake git flex bison fts-dev gtest-dev zlib-dev
+
+ARG FLUENT_BIT_VER=1.7.9
+RUN mkdir -p /src/fluent-bit && \
+    git clone --depth 1 --branch v${FLUENT_BIT_VER} https://github.com/fluent/fluent-bit.git /src/fluent-bit
+
+COPY fluent-bit/*.patch /src/fluent-bit/
+
+WORKDIR /src/fluent-bit
+RUN git apply *.patch && \
+    cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/fluent-bit \
+		-DCMAKE_BUILD_TYPE=None \
+		-DFLB_CORO_STACK_SIZE=24576 \
+        -DFLB_DEBUG=On \
+        -DFLB_TRACE=On \
+        -DFLB_SHARED_LIB=No \
+		-DFLB_TESTS_INTERNAL=Yes \
+		-DFLB_TESTS_RUNTIME=Yes \
+        -DFLB_TESTS=Yes \
+        -DFLB_EXAMPLES=No \
+        -DFLB_STREAM_PROCESSOR=No \
+        -DFLB_SIGNV4=No \
+		-DFLB_TLS=Yes \
+		-DFLB_HTTP_SERVER=Yes \
+        -DFLB_AWS=No \
+        -DFLB_AWS_ERROR_REPORTER=No \
+        -DFLB_FILTER_AWS=No \
+        -DFLB_FILTER_EXPECT=No \
+        -DFLB_FILTER_KUBERNETES=No \
+        -DFLB_OUT_AZURE=No \
+        -DFLB_OUT_BIGQUERY_=No \
+        -DFLB_OUT_COUNTER=No \
+        -DFLB_OUT_CLOUDWATCH_LOGS=No \
+        -DFLB_OUT_DATADOG=No \
+        -DFLB_OUT_ES=No \
+        -DFLB_OUT_KINESIS_FIREHOSE=No \
+        -DFLB_OUT_KINESIS_STREAMS=No \
+        -DFLB_OUT_FLOWCOUNTER=No \
+        -DFLB_OUT_FORWARD=No \
+        -DFLB_OUT_GELF=No \
+        -DFLB_OUT_HTTP=No \
+        -DFLB_OUT_INFLUXDB=No \
+        -DFLB_OUT_KAFKA=No \
+        -DFLB_OUT_KAFKA_REST=No \
+        -DFLB_OUT_LIB=No \
+        -DFLB_OUT_NATS=No \
+        -DFLB_OUT_NULL=No \
+        -DFLB_OUT_PGSQL=No \
+        -DFLB_OUT_PLOT=No \
+        -DFLB_OUT_SLACK=No \
+        -DFLB_OUT_S3=No \
+        -DFLB_OUT_SPLUNK=No \
+        -DFLB_OUT_STACKDRIVER=No \
+        -DFLB_OUT_TD=No \
+         . && \
+    make -C build install test
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
@@ -255,6 +316,13 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 
+# Fluent Bit
+COPY --from=fluentbit-builder /fluent-bit/bin/ fluent-bit/bin/
+COPY --from=fluentbit-builder /fluent-bit/etc/ fluent-bit/etc/
+COPY fluent-bit/*.conf /etc/fluent-bit/
+EXPOSE 2020
+ENV CMOS_LOGS=/logs
+
 # Configuration Service
 
 COPY --from=builder /bin/cmoscfg /bin/cmoscfg
@@ -312,6 +380,8 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
+    chown -R couchbase:couchbase /etc/fluent-bit/ && \
+    chown -R couchbase:couchbase /fluent-bit/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \

@@ -34,6 +34,9 @@ This software uses the following components with their associated licensing also
 |Jaeger
 |link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0^]
 
+|Fluent Bit
+|link:https://github.com/fluent/fluent-bit/blob/master/LICENSE[Apache 2.0^]
+
 |Nginx
 |link:http://nginx.org/LICENSE[Custom^]
 
@@ -147,6 +150,10 @@ The licensing links for all the source code are as follows:
 |Jaeger
 |https://github.com/jaegertracing/jaeger
 |link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
+
+|Fluent Bit
+|https://github.com/fluent/fluent-bit
+|link:https://github.com/fluent/fluent-bit/blob/master/LICENSE[Apache 2.0^]
 |===
 
 This is direct reuse but combined into a single file with minimal modification (e.g. addition of comments or removal of unnecessary lines).
@@ -204,6 +211,11 @@ Prometheus also says it explicitly on the DockerHub page with an incorrect link,
 
 The Jaeger image has no details on the DockerHub page at all.
 The source repo indicates it is Apache 2: https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE
+
+=== Fluent Bit
+
+We recompile the source for Fluent Bit to create a custom binary.
+The source code is licensed under Apache 2: https://github.com/fluent/fluent-bit/blob/master/LICENSE
 
 === Nginx
 
