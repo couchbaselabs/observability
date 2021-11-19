@@ -42,7 +42,7 @@ function ensure_variables_set() {
     fi
 }
 
-# Finds a random, unused port on the system and echos it to the given variable.
+# Finds a random, unused port on the system and echos it.
 # Returns 1 and echos -1 if it can't find one.
 # Have to do it this way to prevent variable shadowing.
 function find_unused_port() {
