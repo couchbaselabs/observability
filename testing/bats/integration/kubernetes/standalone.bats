@@ -222,7 +222,7 @@ __EOF__
     # shellcheck disable=SC2046
     run kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name|grep couchbase-grafana)
     assert_success
-    assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
+    assert_output --partial "Disabled as DISABLE_LOKI set"
 
     # Port forward into the K8S cluster
     local pid_file
