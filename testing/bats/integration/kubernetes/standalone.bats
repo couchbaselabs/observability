@@ -171,7 +171,10 @@ createCouchbaseCluster() {
     # Add Couchbase via helm chart
     helm repo add couchbase https://couchbase-partners.github.io/helm-charts
     helm repo update
-    helm upgrade --install --debug --namespace "$TEST_NAMESPACE" --create-namespace couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}"
+    helm upgrade --install --debug \
+      --namespace "$TEST_NAMESPACE" --create-namespace couchbase couchbase/couchbase-operator \
+      --set cluster.image="${COUCHBASE_SERVER_IMAGE}" \
+      --set cluster.monitoring.prometheus.enabled="$(cb_version_lt '7.0.0' && echo "true" || echo "false")"
     sleep 60
 }
 

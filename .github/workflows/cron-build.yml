@@ -81,6 +81,13 @@ jobs:
                   # CMOS-97
                   make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
+            - name: Capture cmosinfo if something went wrong
+              if: ${{ failure() }}
+              uses: actions/upload-artifact@v2
+              with:
+                name: test-failure-cmosinfo
+                path: testing/diagnostics/cmosinfo/*
+
     build-test-oss-native:
         name: CICD for the OSS variant (Native)
         runs-on: macos-10.15 # Apparently macOS is the only environment that supports nested virtualisation
@@ -127,3 +134,10 @@ jobs:
             - name: Run ${{ matrix.server-version }} tests
               run: |
                   make TEST_SUITE=all test-native -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+
+            - name: Capture cmosinfo if something went wrong
+              if: ${{ failure() }}
+              uses: actions/upload-artifact@v2
+              with:
+                name: test-failure-cmosinfo
+                path: testing/diagnostics/cmosinfo/*

@@ -81,6 +81,13 @@ jobs:
               run: |
                   make TEST_SUITE=smoke test-containers -e COUCHBASE_SERVER_IMAGE=couchbase/server:${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
 
+            - name: Capture cmosinfo if something went wrong
+              if: ${{ failure() }}
+              uses: actions/upload-artifact@v2
+              with:
+                name: test-failure-cmosinfo
+                path: testing/diagnostics/cmosinfo/*
+
   # TODO: once CMOS-97 is done, add something similar for k8s
 
     linting:
