@@ -69,8 +69,8 @@ export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
 
 export CMOS_LOGS=${CMOS_LOGS:-/logs}
 
-export FLUENT_BIT_CONFIG_FILE=${FLUENT_BIT_CONFIG_FILE:-/etc/fluent-bit/fluent-bit.conf}
-export FLUENT_BIT_HTTP_PORT=${FLUENT_BIT_HTTP_PORT:-2020}
+export PROMTAIL_CONFIG_FILE=${PROMTAIL_CONFIG_FILE:-/etc/promtail/config-microlith.yaml}
+export PROMTAIL_HTTP_PORT=${PROMTAIL_HTTP_PORT:-9080}
 
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
@@ -82,11 +82,11 @@ if [[ -v "KUBERNETES_DEPLOYMENT" ]]; then
 fi
 
 if [[ ! -x /bin/cbmultimanager ]]; then
-    echo "[ENTRYPOINT] Running OSS version, no Couchbase binaries"
+    log "Running OSS version, no Couchbase binaries"
     export CMOS_OSS_VERSION=true
     export CMOS_VERSION="OSS"
 else
-    echo "[ENTRYPOINT] Couchbase binaries available, not OSS version"
+    log "Couchbase binaries available, not OSS version"
     export CMOS_VERSION="Couchbase"
 fi
 
