@@ -76,6 +76,67 @@ COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /ant
 # Couchbase proprietary end
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
+# We have to build from source
+# https://docs.fluentbit.io/manual/installation/docker#why-there-is-no-fluent-bit-docker-image-based-on-alpine-linux
+FROM alpine:3.14 as fluentbit-builder
+RUN apk add --no-cache build-base gcc abuild binutils cmake git flex bison fts-dev gtest-dev zlib-dev
+
+ARG FLUENT_BIT_VER=1.7.9
+RUN mkdir -p /src/fluent-bit && \
+    git clone --depth 1 --branch v${FLUENT_BIT_VER} https://github.com/fluent/fluent-bit.git /src/fluent-bit
+
+COPY fluent-bit/*.patch /src/fluent-bit/
+
+WORKDIR /src/fluent-bit
+RUN git apply *.patch && \
+    cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=/fluent-bit \
+		-DCMAKE_BUILD_TYPE=None \
+		-DFLB_CORO_STACK_SIZE=24576 \
+        -DFLB_DEBUG=On \
+        -DFLB_TRACE=On \
+        -DFLB_SHARED_LIB=No \
+		-DFLB_TESTS_INTERNAL=Yes \
+		-DFLB_TESTS_RUNTIME=Yes \
+        -DFLB_TESTS=Yes \
+        -DFLB_EXAMPLES=No \
+        -DFLB_STREAM_PROCESSOR=No \
+        -DFLB_SIGNV4=No \
+		-DFLB_TLS=Yes \
+		-DFLB_HTTP_SERVER=Yes \
+        -DFLB_AWS=No \
+        -DFLB_AWS_ERROR_REPORTER=No \
+        -DFLB_FILTER_AWS=No \
+        -DFLB_FILTER_EXPECT=No \
+        -DFLB_FILTER_KUBERNETES=No \
+        -DFLB_OUT_AZURE=No \
+        -DFLB_OUT_BIGQUERY_=No \
+        -DFLB_OUT_COUNTER=No \
+        -DFLB_OUT_CLOUDWATCH_LOGS=No \
+        -DFLB_OUT_DATADOG=No \
+        -DFLB_OUT_ES=No \
+        -DFLB_OUT_KINESIS_FIREHOSE=No \
+        -DFLB_OUT_KINESIS_STREAMS=No \
+        -DFLB_OUT_FLOWCOUNTER=No \
+        -DFLB_OUT_FORWARD=No \
+        -DFLB_OUT_GELF=No \
+        -DFLB_OUT_HTTP=No \
+        -DFLB_OUT_INFLUXDB=No \
+        -DFLB_OUT_KAFKA=No \
+        -DFLB_OUT_KAFKA_REST=No \
+        -DFLB_OUT_LIB=No \
+        -DFLB_OUT_NATS=No \
+        -DFLB_OUT_NULL=No \
+        -DFLB_OUT_PGSQL=No \
+        -DFLB_OUT_PLOT=No \
+        -DFLB_OUT_SLACK=No \
+        -DFLB_OUT_S3=No \
+        -DFLB_OUT_SPLUNK=No \
+        -DFLB_OUT_STACKDRIVER=No \
+        -DFLB_OUT_TD=No \
+         . && \
+    make -C build install test
+
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
 # hadolint ignore=DL3018
@@ -275,6 +336,13 @@ COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
 COPY promtail/ /etc/promtail/
+ENV CMOS_LOGS=/logs
+
+# Fluent Bit
+COPY --from=fluentbit-builder /fluent-bit/bin/ fluent-bit/bin/
+COPY --from=fluentbit-builder /fluent-bit/etc/ fluent-bit/etc/
+COPY fluent-bit/*.conf /etc/fluent-bit/
+EXPOSE 2020
 ENV CMOS_LOGS=/logs
 
 # Configuration Service

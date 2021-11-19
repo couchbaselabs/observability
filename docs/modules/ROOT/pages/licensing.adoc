@@ -220,6 +220,11 @@ Prometheus also says it explicitly on the DockerHub page with an incorrect link,
 The Jaeger image has no details on the DockerHub page at all.
 The source repo indicates it is Apache 2: https://gitlab.cncf.ci/jaegertracing/jaeger/blob/master/LICENSE
 
+=== Fluent Bit
+
+We recompile the source for Fluent Bit to create a custom binary.
+The source code is licensed under Apache 2: https://github.com/fluent/fluent-bit/blob/master/LICENSE
+
 === Nginx
 
 The Nginx image license is a custom one linked directly from DockerHub: http://nginx.org/LICENSE
