@@ -68,6 +68,11 @@ Once all the above can be ticked off, go ahead and file a pull request! If you a
 
 When your pull request is in, it will automatically have a battery of automatic tests and linters run against it, and it will be reviewed by a human (another developer on the project). If either of these come back to you with change requests, don't panic - simply fix up your code, push a new commit, and repeat the process until it is ready for merge. Don't feel put down if we request changes - even our most experienced developers rarely have a perfect PR on the first try.
 
+GitHub has an auto-merge feature, which will automatically merge a pull request once it's been a) approved by a reviewer and b) all CI checks have passed.
+It is not enabled by default.
+The convention we use is for the reviewer of the PR to enable it once they're happy - then it'll be automatically merged once CI passes.
+The author of a PR should not enable auto-merge.
+
 ## Testing
 
 The testing philosophy of this project is described below - it is somewhat unconventional, since the project is not a single piece of code but rather an amalgamation of various other tools all plumbed together.
