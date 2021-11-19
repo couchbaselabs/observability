@@ -242,6 +242,10 @@ A good place to start is with the <a href="https://www.linuxfoundation.org/tools
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/jaegertracing/jaeger/blob/master/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Promtail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki/blob/main/LICENSE">AGPL 3.0</a></p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Nginx</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://nginx.org/LICENSE" target="_blank" rel="noopener">Custom</a></p></td>
 </tr>
@@ -308,6 +312,11 @@ A good place to start is with the <a href="https://www.linuxfoundation.org/tools
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki/blob/HEAD/LICENSING.md" target="_blank" rel="noopener">AGPL 3.0</a></p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Promtail</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki" class="bare">https://github.com/grafana/loki</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/grafana/loki/blob/main/LICENSE">AGPL 3.0</a></p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Prometheus</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://hub.docker.com/r/prom/prometheus" class="bare">https://hub.docker.com/r/prom/prometheus</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/prometheus/prometheus/blob/main/LICENSE" target="_blank" rel="noopener">Apache 2.0</a></p></td>
@@ -337,11 +346,12 @@ A good place to start is with the <a href="https://www.linuxfoundation.org/tools
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-Dockerfile hljs" data-lang="Dockerfile">FROM grafana/grafana:8.1.1 as grafana-official
-FROM grafana/loki:2.3.0 as loki-official
-FROM prom/prometheus:v2.28.1 as prometheus-official
-FROM prom/alertmanager:v0.22.2 as alertmanager-official
-FROM jaegertracing/all-in-one:1.25.0 as jaegaer-official
+<pre class="highlightjs highlight"><code class="language-Dockerfile hljs" data-lang="Dockerfile">FROM grafana/grafana:8.2.5 as grafana-official
+FROM grafana/loki:2.4.1 as loki-official
+FROM prom/prometheus:v2.31.0 as prometheus-official
+FROM prom/alertmanager:v0.23.0 as alertmanager-official
+FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
+FROM grafana/promtail:2.4.1 as promtail-official
 
 FROM nginx:alpine
 
@@ -355,7 +365,10 @@ COPY --from=prometheus-official /bin/prometheus /bin/prometheus
 COPY --from=prometheus-official /bin/promtool /bin/promtool
 COPY --from=prometheus-official /etc/prometheus/prometheus.yml /etc/prometheus/prometheus.yml
 COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/share/prometheus/console_libraries/
-COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/</code></pre>
+COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
+
+COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
+COPY --from=promtail-official /etc/promtail /etc/promtail</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -458,7 +471,7 @@ To this end a <a href="https://github.com/tern-tools/tern" target="_blank" rel="
 Note that the Tern report is a full scan of everything in the container and not necessarily how it is used or linked.</p>
 </div>
 <div class="sect2">
-<h3 id="_grafana_and_loki"><a class="anchor" href="#_grafana_and_loki"></a>Grafana and Loki</h3>
+<h3 id="_grafana_loki_and_promtail"><a class="anchor" href="#_grafana_loki_and_promtail"></a>Grafana, Loki and Promtail</h3>
 <div class="paragraph">
 <p>For Grafana and Loki there is a recent blog post: <a href="https://grafana.com/blog/2021/04/20/grafana-loki-tempo-relicensing-to-agplv3/" class="bare">https://grafana.com/blog/2021/04/20/grafana-loki-tempo-relicensing-to-agplv3/</a>.
 This then links out to the source repositories covering the specific components within each that are still Apache 2:</p>
@@ -475,6 +488,10 @@ This then links out to the source repositories covering the specific components 
 </div>
 <div class="paragraph">
 <p>In each case they indicate the default license is AGPL-3.</p>
+</div>
+<div class="paragraph">
+<p>Promtail is part of the Loki source repository and release process.
+For Promtail we use binaries from the image directly, there is no source usage.</p>
 </div>
 </div>
 <div class="sect2">
