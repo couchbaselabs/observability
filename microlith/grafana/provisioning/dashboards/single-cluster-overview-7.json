@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 10,
-  "iteration": 1637337593246,
+  "id": 6,
+  "iteration": 1637576789624,
   "links": [
     {
       "asDropdown": false,
@@ -76,7 +76,7 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 9,
+        "w": 7,
         "x": 0,
         "y": 1
       },
@@ -103,7 +103,7 @@
           "cacheDurationSeconds": 300,
           "fields": [
             {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$split($m, \"-\")[0]})",
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
               "language": "jsonata",
               "name": "Version",
               "type": "number"
@@ -135,102 +135,12 @@
             "fixedColor": "#808080",
             "mode": "fixed"
           },
-          "mappings": [
-            {
-              "options": {
-                "Enterprise": {
-                  "index": 0
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 10,
-        "x": 9,
-        "y": 1
-      },
-      "id": 67,
-      "interval": null,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$replace($split($m, \"-\")[2], \"e\", \"E\", 1)})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "number"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Edition",
-      "transformations": [
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "Version": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "#808080",
-            "mode": "fixed"
-          },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "hidden",
             "axisSoftMin": 0,
             "fillOpacity": 44,
-            "gradientMode": "opacity",
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -272,17 +182,17 @@
       "gridPos": {
         "h": 10,
         "w": 5,
-        "x": 19,
+        "x": 7,
         "y": 1
       },
       "id": 59,
       "interval": null,
       "options": {
-        "barWidth": 1,
+        "barWidth": 0.9,
         "groupWidth": 1,
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "orientation": "auto",
@@ -344,6 +254,201 @@
         }
       ],
       "type": "barchart"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto",
+            "filterable": false,
+            "minWidth": 1
+          },
+          "links": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 0,
+                  "text": "Good"
+                },
+                "1": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "2": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "3": {
+                  "index": 3,
+                  "text": "Info"
+                },
+                "4": {
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#676769b0",
+                "value": 0
+              },
+              {
+                "color": "#ff9830b0",
+                "value": 1
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 2
+              },
+              {
+                "color": "#c8c8ceb0",
+                "value": 3
+              },
+              {
+                "color": "transparent",
+                "value": 4
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Details",
+                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 68,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "State"
+          }
+        ]
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Cluster Check Status",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "cluster_name": true,
+              "cluster_uuid": true,
+              "instance": true,
+              "job": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 7,
+              "cluster_name": 1,
+              "cluster_uuid": 2,
+              "id": 3,
+              "instance": 5,
+              "job": 6,
+              "name": 4
+            },
+            "renameByName": {
+              "Value": "State",
+              "id": "ID",
+              "name": "Name"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": null,
@@ -413,7 +518,7 @@
             "axisPlacement": "hidden",
             "axisSoftMin": 0,
             "fillOpacity": 50,
-            "gradientMode": "opacity",
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -460,11 +565,11 @@
       "id": 63,
       "interval": null,
       "options": {
-        "barWidth": 0.92,
+        "barWidth": 0.9,
         "groupWidth": 1,
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "orientation": "auto",
@@ -662,7 +767,7 @@
           "custom": {
             "align": "center",
             "displayMode": "auto",
-            "minWidth": 0
+            "minWidth": 1
           },
           "mappings": [],
           "thresholds": {
@@ -687,7 +792,8 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 60
               }
             ]
           },
@@ -698,7 +804,8 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 90
               }
             ]
           },
@@ -787,6 +894,18 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Health Check Warnings"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 175
+              }
+            ]
           }
         ]
       },
@@ -799,7 +918,12 @@
       "id": 2,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Health Check Warnings"
+          }
+        ]
       },
       "pluginVersion": "8.2.3",
       "targets": [
@@ -833,7 +957,7 @@
               "name": "CPUs"
             },
             {
-              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $formatNumber($round($node.mem_total / 1024 / 1024), \"#,###;(#0.00)\") & \" MB\"\n})",
+              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $formatNumber($round($node.mem_total / 1024 / 1024), \"#,###;(#0.00)\") & \" MiB\"\n})",
               "language": "jsonata",
               "name": "Total RAM"
             },
@@ -1096,7 +1220,8 @@
           },
           "custom": {
             "align": "center",
-            "displayMode": "auto"
+            "displayMode": "auto",
+            "minWidth": 1
           },
           "mappings": [],
           "thresholds": {
@@ -1143,7 +1268,8 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 90
               }
             ]
           },
@@ -1169,7 +1295,8 @@
                 "value": "percentunit"
               },
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 160
               }
             ]
           },
@@ -1204,7 +1331,8 @@
                 "value": "0"
               },
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 175
               }
             ]
           },
@@ -1215,7 +1343,8 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 80
               }
             ]
           },
@@ -1233,6 +1362,18 @@
                     "url": "/d/H8M3rE5nk/bucket-overview?${cluster:queryparam}﻿&var-bucket=${__data.fields.Bucket}"
                   }
                 ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Replicas"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 70
               }
             ]
           }
@@ -1378,7 +1519,8 @@
           },
           "custom": {
             "align": "center",
-            "displayMode": "auto"
+            "displayMode": "auto",
+            "minWidth": 1
           },
           "mappings": [],
           "thresholds": {
@@ -1403,7 +1545,8 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 100
               }
             ]
           },
@@ -2264,7 +2407,7 @@
       "type": "bargauge"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "schemaVersion": 31,
   "style": "dark",
   "tags": [
@@ -2305,8 +2448,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "2663fb20aeeee34acf0d4850d4979089",
-          "value": "2663fb20aeeee34acf0d4850d4979089"
+          "text": "a2f460624fb9611dc95065be05165f1b",
+          "value": "a2f460624fb9611dc95065be05165f1b"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2331,8 +2474,8 @@
     ]
   },
   "time": {
-    "from": "2021-11-19T15:09:48.548Z",
-    "to": "2021-11-19T15:32:12.298Z"
+    "from": "now-3h",
+    "to": "now"
   },
   "timepicker": {
     "refresh_intervals": [
@@ -2351,5 +2494,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 54
+  "version": 30
 }
