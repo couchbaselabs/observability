@@ -51,6 +51,15 @@ paths:
                     type: boolean
                     enum: [true]
 
+  /collectInformation:
+    post: # avoid accidental activation by GET
+      summary: Collects diagnostic information about CMOS for Support analysis.
+      responses:
+        '200':
+          description: Stream of logging output from collect-information.sh
+          content:
+            text/plain:
+
 
 components:
   schemas:

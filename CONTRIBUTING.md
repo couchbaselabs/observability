@@ -68,6 +68,11 @@ Once all the above can be ticked off, go ahead and file a pull request! If you a
 
 When your pull request is in, it will automatically have a battery of automatic tests and linters run against it, and it will be reviewed by a human (another developer on the project). If either of these come back to you with change requests, don't panic - simply fix up your code, push a new commit, and repeat the process until it is ready for merge. Don't feel put down if we request changes - even our most experienced developers rarely have a perfect PR on the first try.
 
+GitHub has an auto-merge feature, which will automatically merge a pull request once it's been a) approved by a reviewer and b) all CI checks have passed.
+It is not enabled by default.
+The convention we use is for the reviewer of the PR to enable it once they're happy - then it'll be automatically merged once CI passes.
+The author of a PR should not enable auto-merge.
+
 ## Testing
 
 The testing philosophy of this project is described below - it is somewhat unconventional, since the project is not a single piece of code but rather an amalgamation of various other tools all plumbed together.
@@ -139,3 +144,144 @@ If your tests fail, and you want to poke around in the environment they were run
 ### Automation
 
 These tests are also run automatically using GitHub Actions. However, since setting up VMs and a Kubernetes cluster can be slow, we *only* run the containers smoke suite on pull requests. We run the full suite of tests every night, or manually upon request by a maintainer.
+
+## Documentation
+
+Documentation is done using [Asciidoc](https://docs.asciidoctor.org/asciidoc/latest/syntax-quick-reference/) for all Couchbase products.
+The specific flavour we use is [Antora](https://antora.org/).
+
+The only exception here is for developer documentation used directly from Github, i.e. this guide.
+
+### Useful Tools
+
+You can preview AsciiDoc code in a number of different ways.
+
+#### Asciidoctor.js Preview
+
+This is a browser plugin that detects and renders AsciiDoc, and is available for [Chrome](https://chrome.google.com/webstore/detail/asciidoctorjs-live-previe/iaalpfgpbocpdfblpnhhgllgbdbchmia?hl=en), and [Firefox](https://addons.mozilla.org/en-GB/firefox/addon/asciidoctorjs-live-preview/).
+Simply specify a URI e.g. `file:///home/src/github.com/couchbaselabs/observability/docs/modules/ROOT/pages/index.adoc`, and it will update every time you save.
+
+#### Github branch
+
+Ensure that the documentation looks correct when present in Github.
+
+#### CMOS container
+
+Ensure that the documnetation looks correct when viewed via the landing page.
+
+If there are certain aspects of the documentation that are only relevant when packaged inside the container, use `ifdef::env-packaged[]` to delimit these.
+For example:
+
+```asciidoc
+ifdef::env-packaged[]
+This text will only appear inside the container. It will not appear on docs.couchbase.com.
+endif::env-packaged[]
+```
+
+Similarly, you can use `ifndef` to hide certain content when inside the container.
+For example:
+
+```asciidoc
+ifndef::env-packaged[]
+This text will only appear on docs.couchbase.com and on GitHub. It will not appear inside the container.
+endif::env-packaged[]
+```
+
+### Site Layout
+
+Important things about this repository:
+
+[`docs/antora-container-playbook.yml`](./docs/antora-container-playbook.yml)
+This is the document generation configuration for the container.
+The product `title` should not be changed, unless PM ask for it as a branding exercise.
+The `start_page` is the landing/default page for the repository.
+Finally the `nav` defines the navigation menu for the repository.
+
+* [`docs/antora-gh-playbook.yml`](./docs/antora-gh-playbook.yml)
+  * This is the document generation configuration for the Github action on the `main` branch.
+  * It will update the published version here: https://labs.couchbase.com/observability/
+
+* [`docs/user/modules/ROOT/nav.adoc`](./docs/modules/ROOT/nav.adoc)
+  * Defines the navigation menu for the repository.
+  * The formatting is defined below.
+
+* [`docs/user/modules/ROOT/pages/`](docs/modules/ROOT/pages/)
+  * These are the main pages for the documentation.
+  * The formatting is defined below.
+
+* [`docs/user/modules/ROOT/partials/`](docs/modules/ROOT/partials/)
+  * These define partial documentation, or snippets.
+  * The formatting is the same as for documentation.
+
+* [`docs/user/modules/ROOT/assets/images/`](docs/modules/ROOT/assets/images/)
+  * These define any images included in documentation.
+  * The formatting is defined below.
+  * To ensure these are rendered correctly, any page using them should include the below snippet at the top:
+  ```
+  ifdef::env-github[]
+  :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+  endif::[]
+  ```
+
+### Navigation Layout
+
+When writing nav entries keep a few things in mind:
+
+* The title of the entry, must match the title of the document it refers to
+* Any level in the nav should aim to have about 10 entries at most, beyond this people cannot find things as they are overwhelmed
+* The top level nav entries (learn, manage, etc.) should be consistent across all Couchbase products, don't touch these (even if they are nonsense, and should be concepts, tasks, etc.)
+
+### Documentation Layout
+
+Before writing any technical documentation, first thoroughly read [Write the Docs](https://www.writethedocs.org/).
+
+Every document *must*:
+
+* Have a title that corresponds to a nav entry with the same name
+* Have an abstract
+* Use white space to separate elements e.g. don't butt titles and paragraphs together
+* Use one source line per sentence, this aids in diffing and code review
+* Accompany tables and images with a title
+* Use block syntax for admonitions
+* Use attributes for versions where appropriate, so they update automatically over time
+* Use xref, not link
+* Use US English spelling
+
+Every document should:
+
+* Not repeat anything else, use links to avoid duplication -- don't repeat yourself (DRY)
+* Have links at the bottom of the content to flow from one topic to the next
+* Use diagrams where appropriate -- a picture paints a thousand words
+
+#### Documentation Linting
+
+You can run `make lint` to perform automated testing on your code this will:
+
+* Spell check your work
+* Ensure your AsciiDoc is will formed (TBD)
+* Ensure cross-references point to something (TBD)
+
+On the topic of spell checking, we filter out a lot of AsciiDoc commands and verbatim blocks.
+By convention references to resources or tools e.g. `collectinfo` are surrounded by backticks (inline verbatim), and are filtered out.
+Do not add these to the dictionary, we use their absence to enforce the use of backticks and consistent presentation.
+When you think you need to add a word to the dictionary, please check to see if it already exists in a different form.
+This is because some brand names e.g. Red Hat, should be a certain way for correctness and consistency.
+
+### Image Layout
+
+Images are all created with [diagrams.net](https://diagrams.net).
+There's no real style defined for these, but try to keep things consistent with existing images e.g. default font size, Arial face.
+
+### Reviewing Documentation
+
+It is your job as reviewer to do the following:
+
+* Check the actions pass
+  * The author may not have spell checked
+  * May not have working syntax
+  * May have broken links
+* Review the generated HTML output
+  * Does it look broken or inconsistent anywhere?
+* Do a technical review
+  * Have *all* the navigation, documentation, and image layout conventions been followed.
+* Then, and only then, can you give it approval to merge.

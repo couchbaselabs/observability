@@ -1,4 +1,4 @@
-personal_ws-1.1 en 63
+personal_ws-1.1 en 66
 AGPL
 CAO
 CMOS
@@ -61,4 +61,7 @@ RBAC
 YAML
 DNS
 hostname
+html
+sanitization
 Loki
+Promtail
