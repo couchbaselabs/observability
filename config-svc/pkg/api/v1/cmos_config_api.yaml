@@ -51,6 +51,38 @@ paths:
                     type: boolean
                     enum: [true]
 
+  /alertsConfiguration:
+    get:
+      summary: Get the current alert notification configuration
+      responses:
+        '200':
+          description: Current Alertmanager notification configuration
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlertNotificationConfig"
+    put:
+      summary: Update the alert notification configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AlertNotificationConfig"
+      responses:
+        '200':
+          description: Alert notification config successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AlertNotificationConfig"
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /collectInformation:
     post: # avoid accidental activation by GET
       summary: Collects diagnostic information about CMOS for Support analysis.
@@ -58,7 +90,7 @@ paths:
         '200':
           description: Stream of logging output from collect-information.sh
           content:
-            text/plain:
+            text/plain: {}
 
 
 components:
@@ -86,6 +118,7 @@ components:
               type: boolean
         hostname:
           type: string
+
     ErrorResponse:
       type: object
       additionalProperties: false
@@ -96,3 +129,46 @@ components:
           enum: [false]
         error:
           type: string
+
+    AlertNotificationConfig:
+      type: object
+      additionalProperties: false
+      properties:
+        slack:
+          $ref: "#/components/schemas/SlackAlertNotificationConfig"
+        email:
+          $ref: "#/components/schemas/EmailAlertNotificationConfig"
+
+    SlackAlertNotificationConfig:
+      type: object
+      additionalProperties: false
+      required: [ webhookURL ]
+      properties:
+        configuredExternally:
+          type: boolean
+          description: The Slack webhook has been configured using slack_api_file, and cannot be managed by CMOS.
+        webhookURL:
+          type: string
+          format: url
+
+    EmailAlertNotificationConfig:
+      type: object
+      additionalProperties: false
+      required: [ from, host ]
+      properties:
+        from:
+          type: string
+        host:
+          type: string
+        hello:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        identity:
+          type: string
+        secret:
+          type: string
+        requireTLS:
+          type: boolean

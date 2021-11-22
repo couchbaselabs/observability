@@ -18,6 +18,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/labstack/echo/v4/middleware"
+
 	"github.com/brpaz/echozap"
 	"github.com/labstack/echo/v4"
 	"go.uber.org/zap"
@@ -40,6 +42,7 @@ func NewServer(baseLogger *zap.Logger, pathPrefix string, production bool) (*Ser
 	server.echo.HideBanner = true
 	server.echo.HidePort = true
 	server.echo.Use(echozap.ZapLogger(server.logger))
+	server.echo.Use(middleware.Recover())
 	server.echo.HTTPErrorHandler = server.handleError
 	server.registerRoutes(pathPrefix)
 	return &server, nil

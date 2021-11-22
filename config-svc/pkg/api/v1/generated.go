@@ -16,6 +16,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// Defines values for ErrorResponseOk.
+const (
+	ErrorResponseOkFalse ErrorResponseOk = false
+)
+
+// AlertNotificationConfig defines model for AlertNotificationConfig.
+type AlertNotificationConfig struct {
+	Email *EmailAlertNotificationConfig `json:"email,omitempty"`
+	Slack *SlackAlertNotificationConfig `json:"slack,omitempty"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	CouchbaseConfig struct {
@@ -28,14 +39,54 @@ type Cluster struct {
 	Name     *string `json:"name,omitempty"`
 }
 
+// EmailAlertNotificationConfig defines model for EmailAlertNotificationConfig.
+type EmailAlertNotificationConfig struct {
+	From       string  `json:"from"`
+	Hello      *string `json:"hello,omitempty"`
+	Host       string  `json:"host"`
+	Identity   *string `json:"identity,omitempty"`
+	Password   *string `json:"password,omitempty"`
+	RequireTLS *bool   `json:"requireTLS,omitempty"`
+	Secret     *string `json:"secret,omitempty"`
+	Username   *string `json:"username,omitempty"`
+}
+
+// ErrorResponse defines model for ErrorResponse.
+type ErrorResponse struct {
+	Error string          `json:"error"`
+	Ok    ErrorResponseOk `json:"ok"`
+}
+
+// ErrorResponseOk defines model for ErrorResponse.Ok.
+type ErrorResponseOk bool
+
+// SlackAlertNotificationConfig defines model for SlackAlertNotificationConfig.
+type SlackAlertNotificationConfig struct {
+	// The Slack webhook has been configured using slack_api_file, and cannot be managed by CMOS.
+	ConfiguredExternally *bool  `json:"configuredExternally,omitempty"`
+	WebhookURL           string `json:"webhookURL"`
+}
+
+// PutAlertsConfigurationJSONBody defines parameters for PutAlertsConfiguration.
+type PutAlertsConfigurationJSONBody AlertNotificationConfig
+
 // PostClustersAddJSONBody defines parameters for PostClustersAdd.
 type PostClustersAddJSONBody Cluster
+
+// PutAlertsConfigurationJSONRequestBody defines body for PutAlertsConfiguration for application/json ContentType.
+type PutAlertsConfigurationJSONRequestBody = PutAlertsConfigurationJSONBody
 
 // PostClustersAddJSONRequestBody defines body for PostClustersAdd for application/json ContentType.
 type PostClustersAddJSONRequestBody = PostClustersAddJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+	// Get the current alert notification configuration
+	// (GET /alertsConfiguration)
+	GetAlertsConfiguration(ctx echo.Context) error
+	// Update the alert notification configuration
+	// (PUT /alertsConfiguration)
+	PutAlertsConfiguration(ctx echo.Context) error
 	// Add a new Couchbase cluster to Prometheus
 	// (POST /clusters/add)
 	PostClustersAdd(ctx echo.Context) error
@@ -50,6 +101,24 @@ type ServerInterface interface {
 // ServerInterfaceWrapper converts echo contexts to parameters.
 type ServerInterfaceWrapper struct {
 	Handler ServerInterface
+}
+
+// GetAlertsConfiguration converts echo context to params.
+func (w *ServerInterfaceWrapper) GetAlertsConfiguration(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.GetAlertsConfiguration(ctx)
+	return err
+}
+
+// PutAlertsConfiguration converts echo context to params.
+func (w *ServerInterfaceWrapper) PutAlertsConfiguration(ctx echo.Context) error {
+	var err error
+
+	// Invoke the callback with all the unmarshalled arguments
+	err = w.Handler.PutAlertsConfiguration(ctx)
+	return err
 }
 
 // PostClustersAdd converts echo context to params.
@@ -107,6 +176,8 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 		Handler: si,
 	}
 
+	router.GET(baseURL+"/alertsConfiguration", wrapper.GetAlertsConfiguration)
+	router.PUT(baseURL+"/alertsConfiguration", wrapper.PutAlertsConfiguration)
 	router.POST(baseURL+"/clusters/add", wrapper.PostClustersAdd)
 	router.POST(baseURL+"/collectInformation", wrapper.PostCollectInformation)
 	router.GET(baseURL+"/openapi.json", wrapper.GetOpenapiJson)
@@ -116,20 +187,25 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/5RVTXPjNgz9Kxy2R6+kJJ02q1NTN9NxJ2k89d7SPdAUZHFDESwB2vVk/N87pOX4I/Hu",
-	"5qYhiPeAxwfoWWrsPTpwTLJ+lqQ76FX+HNtIDCF9qqYxbNApOw3oIbABknWrLMFI+oOjBBd1N1cEY3St",
-	"Wbwzu1dOLaAHx1MMnE4aaFW0LOvr6uPFSPLag6yli/0cgtyMpFdEKwxNujsEiYNxixSMBJ/uZgehOaIF",
-	"5YZYcKqHNxI3Ixng32gCNLJ+3N88YPv8UgrOv4DmhNgh8RnEkfw+qlP1DkBfM6Zk41rcyu5Y6awY9MpY",
-	"WefQry+AhcZe7sqQ493xSEycLuRIxpByOmZPdVkep21GsgHSwfj0jLKWf9/OPomb6URgK7gDsa02BpXi",
-	"YgZhaXSSyxoNjnLfA/GNV7oDcVlUrzhXq1WhcrjAsCiHXCrvJuPbv2a3H1LOZiTZsD1qQdyjM4xJT/FP",
-	"rKrLn8XDnCAs1dxYw2sxY6WfxIezVS4h0Lav5UViQA9OeSNreVVUxVV+du6yP0u9HQoqVZMt55Gy6MnE",
-	"GXfSyFpOkXgYH7ppGrl9ZCD+DZv17rnA5UzlvTU655ZfKJWxm8L09WOAVtbyh3I/puUwo+VuQDfHLuIQ",
-	"IR+QxyRggrmsqnfRvmNk8SmbzsVe1o+Je2/Ul2k7cTk+nXHzscuG/oRqGmgERa2BqI3WrjMixb5XYZ1M",
-	"1TRCCQcrsTfF8FCCUUwD9sAdRMp5pUZrQfPEtRh6tSX76ku+vv9NeRn+49JbZZysXbT2VXMzDqD6NEAW",
-	"F4vkXYzsI4s2YC+GEj+YPWdB3UnbQ10kGqMWDomNFgcJQs0xshjfP8xEi0HMovcYWCin7JoMFVs1BrcX",
-	"OxMs4A0Z/gB+2N77k76n/a+765svn7jSerkqKkEetGkHsNwId4bS9jmR4yHrR3kh7QDOJxdb3rQnIJCs",
-	"H59ParhDray4NzqgNdwdrau6LG0Kp+VcX1fXVanzbimVN2VeIm+j/Q5LsOjT/+083i8XH396Afq8+T8A",
-	"AP//pnnkhKIHAAA=",
+	"H4sIAAAAAAAC/8xXW2/bNhT+KwS3R1Vyk2JL9TTPCwYPSRPE6VNWFDR5ZLGhSJY8tGsE/u8DKSW+RMpl",
+	"W4e9GTo8t+87hx99R7lprNGg0dPyjnpeQ8PSz7EChx8MykpyhtLoidGVXEQTE0LGL0xdOmPBoQRPy4op",
+	"Dxm1O5/uKDRMqvjjRwcVLekPxTZh0WUrTuOhoXybjHrF+O1zQWbx0GCQTUZxbYGW1My/AMcYdqKCR3Cv",
+	"7IibwOs58/C38GiYZgtoQOOlcRi/CKhYUEjLk9H7tw9V6tDMwcUqLfN+ZZyIZzujRyd1QiZ4uD6b7Zjm",
+	"xihgurM5zRrocdxk1MHXIB0IWt5sT+5k+9QDWG08DkTM6MtSHaK3E7Qv45OT8TrkK2ea3sJrUMr0W4zH",
+	"XoMUoFHiutf4JGEdFoOkeeAOcIjrF/KZWu3K70XVOeOuwFujPbx2oaNvb30mrSjo0NDyJvlucz90eFCp",
+	"uaVZF7Kv0Cd3+rVrG52CA3H6DSOQSq3b9fPcSRuj0JJe10BSUrKCeW3MLamZJ3MATbYBSPBSL0i6lT4z",
+	"Kz9XUkFGmBaEM60NkjmQdtEFma/J5PxiltOsh+0uycerszShxjUMaUmDU9vjAxzvuD5GLh6WujJd48g4",
+	"7lzGyfTLwybmPE1LO1p0cv85I1PNY9mxmpLWiNaXRbHvtskOALw6nV2T8eWUmIpgDWTSoZaIIzNwS8nj",
+	"PaMkh274usRjy3gN5CgfPcq5Wq1ylsy5cYui8/XF2XRy+mF2+ib6xAteotprgZwbLdFE/MifYTQ6+olc",
+	"zD24JZtLJXFNZhipfjNY5RKcb/tavk0jbkEzK2lJj/NRfpzuS6zTfBUsjqnfixS/L9ptjqOYvk0FLenv",
+	"gOOe45HhdilTyKPR6J5A0CkKs1Z1S1B88W2CVv+eU8dhYXxE4SQ4BxpJcmnH2BG94/qwCm3VMYIPTcPc",
+	"um0tEc+7KAmWJ90zakMPRpdhEKOvATz+asT6v4Fnu3boAmz+HyyNh3AlPnAO3ldBqTUJVjAEEVF+9y8W",
+	"uq8gPeVN9ZIpKYjUkdz9EfmYakpT8vx0bDJa8Pah5gsmkqraTpcPBsZ47J50fizEd5qU+0fjd5iMV6jZ",
+	"ntbG3C+S2n6hONj+tj/ChACxN0sHLI6FIIxoWJHtfdsRRdCQS2cawBqC7zg0SgHHqW5Vrrsdn2Dy8fln",
+	"4UX4hoVVTMbYj1uboQPWRGVSZrGIomAC2oAkvpdIV+Abuc2Y+/qg6a4qT4RkC208Sk52HAibm4BJ8Ell",
+	"HJkFa41DwjRTay993mLRyUh+PwJDGnHRnvvD/3NteJb3mCvq9nE+It4C3y5kbARr6aOsH8BxkfDzaZXv",
+	"Aww7523eKMDgPC1vDl9fZ4YzRc4ld0ZJrPfeAWVRqGiOj9ryZHQyKtqLomBWFkmd+6P9BktQxsZ/XMPx",
+	"fn77/t1DoE+bvwIAAP//bscinBYPAAA=",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file

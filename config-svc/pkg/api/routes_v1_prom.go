@@ -19,7 +19,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 
 	"github.com/couchbase/tools-common/cbvalue"
 	"github.com/couchbaselabs/observability/config-svc/pkg/couchbase"
@@ -32,7 +31,6 @@ import (
 
 const (
 	defaultPrometheusConfigPath = "/etc/prometheus/prometheus.yml"
-	collectInfoPath             = "/collect-information.sh"
 )
 
 func (s *Server) PostClustersAdd(ctx echo.Context) error {
@@ -110,20 +108,6 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	})
 }
 
-func (s *Server) PostCollectInformation(ctx echo.Context) error {
-	cmd := exec.Command(collectInfoPath)
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		return err
-	}
-
-	err = cmd.Start()
-	if err != nil {
-		return err
-	}
-	return ctx.Stream(http.StatusOK, "text/plain", stdout)
-}
-
 func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username,
 	password string) (*prometheus.ScrapeConfig, error) {
 	staticConfig := prometheus.StaticConfig{
@@ -180,12 +164,4 @@ func overwriteFileContents(file *os.File, contents []byte) error {
 		return fmt.Errorf("failed to close Prometheus config: %w", err)
 	}
 	return nil
-}
-
-func (s *Server) GetOpenapiJson(ctx echo.Context) error { //nolint:revive
-	swagger, err := v1.GetSwagger()
-	if err != nil {
-		return err
-	}
-	return ctx.JSONPretty(http.StatusOK, swagger, "\t")
 }
