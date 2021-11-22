@@ -23,7 +23,7 @@ exit_code=0
 
 while IFS= read -r -d '' source
 do
-    echo "Dashboard lint: ${source##"$SCRIPT_DIR/.."}"
+    echo "Dashboard lint: ${source##"$DASHBOARDS_PATH"}"
     # Check that all time ranges are relative, otherwise you get confusing import behaviour
     if ! jq -e '[.time.from, .time.to] | all(contains("now"))' "$source" > /dev/null; then
       printf "\tFAIL: non-relative time range\n"
@@ -32,9 +32,9 @@ do
 
     # Check that they haven't been shared for external use
     if jq -e 'has("__requires")' "$source" > /dev/null; then
-        printf "\tFAIL: exported using 'share for external use'\n"
-        exit_code=1
-      fi
+      printf "\tFAIL: exported using 'share for external use'\n"
+      exit_code=1
+    fi
 done < <(find "$DASHBOARDS_PATH" -type f -name '*.json' -print0)
 
 exit "$exit_code"
