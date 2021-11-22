@@ -315,6 +315,134 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 14,
+        "y": 1
+      },
+      "id": 66,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(sum by (bucket) (kv_collection_item_count{cluster=\"$cluster\"}))",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{bucket}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Number of Documents",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 6,
+        "x": 18,
+        "y": 1
+      },
+      "id": 72,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "title": "Free space - how should it be filled?",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "mode": "thresholds"
           },
           "custom": {
@@ -506,62 +634,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 16,
-        "x": 8,
-        "y": 6
-      },
-      "id": 66,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "kv_collection_item_count{cluster=\"$cluster\", collection=\"_default\"}",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Documents",
-      "type": "stat"
-    },
-    {
       "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
@@ -613,10 +685,10 @@
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 14,
-        "x": 0,
-        "y": 14
+        "h": 8,
+        "w": 10,
+        "x": 8,
+        "y": 6
       },
       "id": 63,
       "interval": null,
@@ -695,7 +767,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 14
       },
       "id": 14,
       "panels": [],
@@ -858,7 +930,7 @@
         "h": 8,
         "w": 17,
         "x": 0,
-        "y": 22
+        "y": 15
       },
       "id": 2,
       "options": {
@@ -1097,7 +1169,7 @@
         "h": 8,
         "w": 7,
         "x": 17,
-        "y": 22
+        "y": 15
       },
       "id": 6,
       "options": {
@@ -1333,7 +1405,7 @@
         "h": 8,
         "w": 14,
         "x": 0,
-        "y": 30
+        "y": 23
       },
       "id": 48,
       "options": {
@@ -1517,7 +1589,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 30
+        "y": 23
       },
       "id": 39,
       "options": {
@@ -1631,7 +1703,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 38
+        "y": 31
       },
       "id": 16,
       "panels": [],
@@ -1691,7 +1763,7 @@
         "h": 8,
         "w": 6,
         "x": 0,
-        "y": 39
+        "y": 32
       },
       "id": 28,
       "options": {
@@ -1769,7 +1841,7 @@
         "h": 8,
         "w": 6,
         "x": 6,
-        "y": 39
+        "y": 32
       },
       "id": 29,
       "options": {
@@ -1852,7 +1924,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 39
+        "y": 32
       },
       "id": 46,
       "options": {
@@ -1935,7 +2007,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 39
+        "y": 32
       },
       "id": 50,
       "options": {
@@ -1967,7 +2039,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 40
       },
       "id": 41,
       "panels": [],
@@ -2030,7 +2102,7 @@
         "h": 8,
         "w": 7,
         "x": 0,
-        "y": 48
+        "y": 41
       },
       "id": 20,
       "options": {
@@ -2112,7 +2184,7 @@
         "h": 8,
         "w": 7,
         "x": 7,
-        "y": 48
+        "y": 41
       },
       "id": 24,
       "options": {
@@ -2146,7 +2218,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 56
+        "y": 49
       },
       "id": 43,
       "panels": [],
@@ -2211,7 +2283,7 @@
         "h": 8,
         "w": 7,
         "x": 0,
-        "y": 57
+        "y": 50
       },
       "id": 33,
       "options": {
@@ -2265,7 +2337,7 @@
         "h": 8,
         "w": 7,
         "x": 7,
-        "y": 57
+        "y": 50
       },
       "id": 35,
       "options": {
@@ -2325,7 +2397,7 @@
         "h": 8,
         "w": 7,
         "x": 14,
-        "y": 57
+        "y": 50
       },
       "id": 44,
       "options": {
@@ -2444,5 +2516,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 2
+  "version": 7
 }
