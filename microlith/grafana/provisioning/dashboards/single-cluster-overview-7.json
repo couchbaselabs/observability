@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 2,
   "id": 11,
-  "iteration": 1637583242257,
+  "iteration": 1637675497058,
   "links": [
     {
       "asDropdown": false,
@@ -76,7 +76,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
+        "w": 4,
         "x": 0,
         "y": 1
       },
@@ -84,7 +84,7 @@
       "interval": null,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -128,79 +128,6 @@
       "type": "stat"
     },
     {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 5,
-        "x": 3,
-        "y": 1
-      },
-      "id": 54,
-      "interval": null,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$m := $now()})",
-              "language": "jsonata",
-              "name": "Time",
-              "type": "time"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Version",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -223,7 +150,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 8,
+        "x": 4,
         "y": 1
       },
       "id": 56,
@@ -278,7 +205,7 @@
       "gridPos": {
         "h": 5,
         "w": 3,
-        "x": 11,
+        "x": 7,
         "y": 1
       },
       "id": 55,
@@ -332,14 +259,14 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 4,
-        "x": 14,
+        "w": 5,
+        "x": 10,
         "y": 1
       },
       "id": 66,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
@@ -367,51 +294,146 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "#808080",
+            "mode": "fixed"
           },
           "custom": {
             "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "axisPlacement": "hidden",
+            "axisSoftMin": 0,
+            "fillOpacity": 50,
+            "gradientMode": "hue",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
+            "lineWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "#ccccdc",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Version + 1"
             },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 9,
+        "x": 15,
+        "y": 1
+      },
+      "id": 63,
+      "interval": null,
+      "options": {
+        "barWidth": 0.9,
+        "groupWidth": 1,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"Analytics\" :\n    $svc = \"n1ql\" ? \"Query\" :\n    $svc = \"eventing\" ? \"Eventing\" :\n    $svc = \"index\" ? \"Index\" :\n    $svc = \"fts\" ? \"Search\" :\n    $svc = \"kv\" ? \"Data\" :\n    $svc = \"backup\" ? \"Backup\" : $svc\n  })), \", \")\n})",
+              "language": "jsonata",
+              "name": "Version",
+              "type": "string"
             }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Services",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "count"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Count": {
+                "aggregations": [
+                  "count"
+                ],
+                "operation": "aggregate"
+              },
+              "Version": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -419,24 +441,57 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
-        "w": 6,
-        "x": 18,
-        "y": 1
+        "h": 8,
+        "w": 4,
+        "x": 0,
+        "y": 6
       },
-      "id": 72,
+      "id": 54,
+      "interval": null,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single"
-        }
+        "text": {},
+        "textMode": "auto"
       },
-      "title": "Free space - how should it be filled?",
-      "type": "timeseries"
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
+              "language": "jsonata",
+              "name": "Version",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$m := $now()})",
+              "language": "jsonata",
+              "name": "Time",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Version",
+      "transformations": [],
+      "type": "stat"
     },
     {
       "datasource": null,
@@ -568,8 +623,8 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 8,
-        "x": 0,
+        "w": 11,
+        "x": 4,
         "y": 6
       },
       "id": 68,
@@ -577,7 +632,7 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": true,
+            "desc": false,
             "displayName": "State"
           }
         ]
@@ -632,133 +687,6 @@
         }
       ],
       "type": "table"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "#808080",
-            "mode": "fixed"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "hidden",
-            "axisSoftMin": 0,
-            "fillOpacity": 50,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 0
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "#ccccdc",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Version + 1"
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": true,
-                  "tooltip": true,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 10,
-        "x": 8,
-        "y": 6
-      },
-      "id": 63,
-      "interval": null,
-      "options": {
-        "barWidth": 0.9,
-        "groupWidth": 1,
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "orientation": "auto",
-        "showValue": "auto",
-        "stacking": "none",
-        "text": {},
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"Analytics\" :\n    $svc = \"n1ql\" ? \"Query\" :\n    $svc = \"eventing\" ? \"Eventing\" :\n    $svc = \"index\" ? \"Index\" :\n    $svc = \"fts\" ? \"Search\" :\n    $svc = \"kv\" ? \"Data\" :\n    $svc = \"backup\" ? \"Backup\" : $svc\n  })), \", \")\n})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Services",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "mode": "reduceRow",
-            "reduce": {
-              "reducer": "count"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "Count": {
-                "aggregations": [
-                  "count"
-                ],
-                "operation": "aggregate"
-              },
-              "Version": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        }
-      ],
-      "type": "barchart"
     },
     {
       "collapsed": false,
@@ -927,8 +855,8 @@
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 17,
+        "h": 6,
+        "w": 15,
         "x": 0,
         "y": 15
       },
@@ -1037,200 +965,216 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": false
-          },
-          "links": [],
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "#73bf69b0",
-                  "index": 0,
-                  "text": "Good"
-                },
-                "1": {
-                  "color": "#ffb357a8",
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "color": "#f2495cb0",
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
-                  "index": 3,
-                  "text": "Info"
-                },
-                "4": {
-                  "index": 4,
-                  "text": "Missing"
-                }
-              },
-              "type": "value"
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
-          ],
+          },
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "#73bf69b0",
+                "color": "green",
                 "value": null
               },
               {
-                "color": "#ffb357a8",
-                "value": 1
-              },
-              {
-                "color": "#f2495cb0",
-                "value": 2
-              },
-              {
-                "color": "text",
-                "value": 3
+                "color": "red",
+                "value": 80
               }
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "custom.displayMode",
-                "value": "color-background-solid"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Details",
-                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "State"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ID"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Name"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 7,
-        "x": 17,
+        "h": 6,
+        "w": 3,
+        "x": 15,
         "y": 15
       },
-      "id": 6,
+      "id": 72,
       "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "State"
-          }
-        ]
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
       },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Cluster Health Issues",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
-          "id": "merge",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "cluster_name": true,
-              "cluster_uuid": true,
-              "instance": true,
-              "job": true
+      "title": "Add Stat here",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
             },
-            "indexByName": {
-              "Time": 0,
-              "Value": 7,
-              "cluster_name": 1,
-              "cluster_uuid": 2,
-              "id": 3,
-              "instance": 5,
-              "job": 6,
-              "name": 4
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
             },
-            "renameByName": {
-              "Value": "State",
-              "id": "ID",
-              "name": "Name"
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
             }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
           }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 18,
+        "y": 15
+      },
+      "id": 73,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
         }
-      ],
-      "type": "table"
+      },
+      "title": "Add Stat here",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 3,
+        "x": 21,
+        "y": 15
+      },
+      "id": 74,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "title": "Add Stat here",
+      "type": "timeseries"
     },
     {
       "datasource": "-- Mixed --",
@@ -1250,12 +1194,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -1346,7 +1286,7 @@
               },
               {
                 "id": "custom.displayMode",
-                "value": "color-background"
+                "value": "color-background-solid"
               },
               {
                 "id": "noValue",
@@ -1402,10 +1342,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 14,
         "x": 0,
-        "y": 23
+        "y": 21
       },
       "id": 48,
       "options": {
@@ -1591,10 +1531,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 10,
         "x": 14,
-        "y": 23
+        "y": 21
       },
       "id": 39,
       "options": {
@@ -1708,7 +1648,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 31
+        "y": 26
       },
       "id": 16,
       "panels": [],
@@ -1752,10 +1692,10 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "text",
+                "color": "#37872db0",
                 "value": null
               }
             ]
@@ -1768,7 +1708,7 @@
         "h": 8,
         "w": 6,
         "x": 0,
-        "y": 32
+        "y": 27
       },
       "id": 28,
       "options": {
@@ -1833,7 +1773,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "#378745",
                 "value": null
               }
             ]
@@ -1846,7 +1786,7 @@
         "h": 8,
         "w": 6,
         "x": 6,
-        "y": 32
+        "y": 27
       },
       "id": 29,
       "options": {
@@ -1912,7 +1852,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "text",
+                "color": "#378745",
                 "value": null
               },
               {
@@ -1929,7 +1869,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 32
+        "y": 27
       },
       "id": 46,
       "options": {
@@ -1995,7 +1935,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "text",
+                "color": "#378745",
                 "value": null
               },
               {
@@ -2012,7 +1952,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 32
+        "y": 27
       },
       "id": 50,
       "options": {
@@ -2044,7 +1984,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 35
       },
       "id": 41,
       "panels": [],
@@ -2056,7 +1996,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -2064,7 +2004,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
-            "gradientMode": "scheme",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2107,7 +2047,7 @@
         "h": 8,
         "w": 7,
         "x": 0,
-        "y": 41
+        "y": 36
       },
       "id": 20,
       "options": {
@@ -2137,7 +2077,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -2176,7 +2116,7 @@
                 "value": null
               },
               {
-                "color": "red",
+                "color": "#F2495C",
                 "value": 80
               }
             ]
@@ -2189,7 +2129,7 @@
         "h": 8,
         "w": 7,
         "x": 7,
-        "y": 41
+        "y": 36
       },
       "id": 24,
       "options": {
@@ -2217,13 +2157,74 @@
       "type": "timeseries"
     },
     {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "#F2495C",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 14,
+        "y": 36
+      },
+      "id": 75,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "{{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Add panel here, make width full screen",
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 44
       },
       "id": 43,
       "panels": [],
@@ -2271,7 +2272,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "semi-dark-green",
                 "value": null
               },
               {
@@ -2286,9 +2287,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 7,
+        "w": 8,
         "x": 0,
-        "y": 50
+        "y": 45
       },
       "id": 33,
       "options": {
@@ -2334,75 +2335,15 @@
               }
             ]
           },
-          "unit": "ns"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 7,
-        "x": 7,
-        "y": 50
-      },
-      "id": 35,
-      "options": {
-        "displayMode": "basic",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "topk(4, index_avg_scan_latency{cluster=${cluster:doublequote}})",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{index}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Slowest Scanning Indexes",
-      "transformations": [],
-      "type": "bargauge"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
           "unit": "bytes"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
-        "w": 7,
-        "x": 14,
-        "y": 50
+        "w": 8,
+        "x": 8,
+        "y": 45
       },
       "id": 44,
       "options": {
@@ -2432,9 +2373,69 @@
       "title": "Largest Indexes",
       "transformations": [],
       "type": "bargauge"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 45
+      },
+      "id": 35,
+      "options": {
+        "displayMode": "basic",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showUnfilled": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(4, index_avg_scan_latency{cluster=${cluster:doublequote}})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{index}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Slowest Scanning Indexes",
+      "transformations": [],
+      "type": "bargauge"
     }
   ],
-  "refresh": "",
+  "refresh": false,
   "schemaVersion": 31,
   "style": "dark",
   "tags": [
@@ -2475,8 +2476,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "b5af6415918cc042e82efbaf407a3bbc",
-          "value": "b5af6415918cc042e82efbaf407a3bbc"
+          "text": "bde79ad3a0333431b55fb27488ac90e1",
+          "value": "bde79ad3a0333431b55fb27488ac90e1"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2521,5 +2522,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 1
+  "version": 7
 }

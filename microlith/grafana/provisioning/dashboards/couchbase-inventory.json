@@ -271,7 +271,12 @@
       "id": 2,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "Cluster"
+          }
+        ]
       },
       "pluginVersion": "8.2.3",
       "targets": [
