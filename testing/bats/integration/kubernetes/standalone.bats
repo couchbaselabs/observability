@@ -171,10 +171,7 @@ createCouchbaseCluster() {
     # Add Couchbase via helm chart
     helm repo add couchbase https://couchbase-partners.github.io/helm-charts
     helm repo update
-    helm upgrade --install --debug \
-      --namespace "$TEST_NAMESPACE" --create-namespace couchbase couchbase/couchbase-operator \
-      --set cluster.image="${COUCHBASE_SERVER_IMAGE}" \
-      --set cluster.monitoring.prometheus.enabled="$(cb_version_lt '7.0.0' && echo "true" || echo "false")"
+    helm upgrade --install --debug --namespace "$TEST_NAMESPACE" --create-namespace couchbase couchbase/couchbase-operator --set cluster.image="${COUCHBASE_SERVER_IMAGE}"
     sleep 60
 }
 
@@ -225,7 +222,7 @@ __EOF__
     # shellcheck disable=SC2046
     run kubectl logs --namespace="$TEST_NAMESPACE" $(kubectl get pods --namespace="$TEST_NAMESPACE" -o=name|grep couchbase-grafana)
     assert_success
-    assert_output --partial "Disabled as DISABLE_LOKI set"
+    assert_output --partial "[ENTRYPOINT] Disabled as DISABLE_LOKI set"
 
     # Port forward into the K8S cluster
     local pid_file

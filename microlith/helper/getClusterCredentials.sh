@@ -25,10 +25,12 @@ NAMESPACE=${NAMESPACE:-default}
 # 3. Get credentials from secret
 # 4. Add to cluster manager
 # End loop
+
 for CLUSTER in $(kubectl get -n "$NAMESPACE" couchbaseclusters.couchbase.com --output=name) ; do
     CLUSTER_SECRET=$(kubectl get -n "$NAMESPACE" "$CLUSTER" --template='{{.spec.security.adminSecret}}')
     echo "Secret $CLUSTER_SECRET for $CLUSTER in namespace $NAMESPACE"
     CB_USERNAME=$(kubectl get secret "$CLUSTER_SECRET" --template='{{.data.username | base64decode }}')
     CB_PASSWORD=$(kubectl get secret "$CLUSTER_SECRET" --template='{{.data.password | base64decode }}')
     echo "Credentials are $CB_USERNAME:$CB_PASSWORD"
+    # TODO: pass them along to the cluster manager
 done

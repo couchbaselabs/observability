@@ -67,7 +67,7 @@ ansible_become_password = vagrant
 $(seq -f "node%g" 1 "$VAGRANT_NODES")
 EOF
 
-    ansible-playbook -i "$RESOURCES_ROOT/native/hosts.ini" -e "couchbase_server_version=$cb_version" "$RESOURCES_ROOT/native/playbook.yml"
+    ansible-playbook -i "$RESOURCES_ROOT/native/hosts.ini" "$RESOURCES_ROOT/native/playbook.yml"
 }
 
 # Parameters:

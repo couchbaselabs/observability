@@ -53,7 +53,6 @@ lint: config-svc-lint container-lint
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
-	tools/dashboards-lint.sh
 
 config-svc-build:
 	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} config-svc/

@@ -19,7 +19,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"os/exec"
 
 	"github.com/couchbase/tools-common/cbvalue"
 	"github.com/couchbaselabs/observability/config-svc/pkg/couchbase"
@@ -30,10 +29,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-const (
-	defaultPrometheusConfigPath = "/etc/prometheus/prometheus.yml"
-	collectInfoPath             = "/collect-information.sh"
-)
+const defaultPrometheusConfigPath = "/etc/prometheus/prometheus.yml"
 
 func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	var data v1.PostClustersAddJSONRequestBody
@@ -108,20 +104,6 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, map[string]interface{}{
 		"ok": true,
 	})
-}
-
-func (s *Server) PostCollectInformation(ctx echo.Context) error {
-	cmd := exec.Command(collectInfoPath)
-	stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		return err
-	}
-
-	err = cmd.Start()
-	if err != nil {
-		return err
-	}
-	return ctx.Stream(http.StatusOK, "text/plain", stdout)
 }
 
 func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username,
