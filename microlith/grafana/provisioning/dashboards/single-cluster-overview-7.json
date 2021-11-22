@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 9,
-  "iteration": 1637579640094,
+  "id": 5,
+  "iteration": 1637580248998,
   "links": [
     {
       "asDropdown": false,
@@ -1102,7 +1102,12 @@
       "id": 6,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "State"
+          }
+        ]
       },
       "pluginVersion": "8.2.3",
       "targets": [
@@ -2393,8 +2398,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "2fc8ba5a6f6e0bb6daf93834cc8d0bd3",
-          "value": "2fc8ba5a6f6e0bb6daf93834cc8d0bd3"
+          "text": "592b0246da4329e31949e9c52d5b4acc",
+          "value": "592b0246da4329e31949e9c52d5b4acc"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2439,5 +2444,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 6
+  "version": 2
 }
