@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 5,
-  "iteration": 1637580248998,
+  "id": 11,
+  "iteration": 1637583242257,
   "links": [
     {
       "asDropdown": false,
@@ -1411,7 +1411,12 @@
       "options": {
         "frameIndex": 1,
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Health Check Warnings"
+          }
+        ]
       },
       "pluginVersion": "8.2.3",
       "targets": [
@@ -2470,8 +2475,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "592b0246da4329e31949e9c52d5b4acc",
-          "value": "592b0246da4329e31949e9c52d5b4acc"
+          "text": "b5af6415918cc042e82efbaf407a3bbc",
+          "value": "b5af6415918cc042e82efbaf407a3bbc"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2516,5 +2521,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 7
+  "version": 1
 }
