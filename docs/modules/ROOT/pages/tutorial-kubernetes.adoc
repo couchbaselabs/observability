@@ -138,7 +138,7 @@ Run the below command to create the prometheus config.
 [source,console]
 
 ----
-kubectl create configmap prometheus-config-cmos --from-file=prometheus-config.yaml
+$ kubectl create configmap prometheus-config-cmos --from-file=prometheus-config.yaml
 ----
 
 === Observability Stack
@@ -166,7 +166,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-    name: monitoring-role-binding <.>
+    name: monitoring-role-binding # <.>
 roleRef:
     kind: ClusterRole
     name: monitoring-endpoints-role
@@ -192,7 +192,7 @@ $ kubectl apply -f rbac.yaml
 ----
 
 ==== CMOS Workload
-
+  
 The actual CMOS workload runs as a kubernetes deployment along with other supporting services. Save the below content in `cmos-workload.yaml`.
 
 [source,yaml]
@@ -222,13 +222,13 @@ spec:
                   env:
                       - name: KUBERNETES_DEPLOYMENT
                         value: 'true'
-                      - name: ENABLE_LOG_TO_FILE <.>
+                      - name: ENABLE_LOG_TO_FILE # <.>
                         value: 'true'
                       - name: PROMETHEUS_CONFIG_FILE
                         value: /etc/prometheus/custom/prometheus-config.yaml
                       - name: PROMETHEUS_CONFIG_TEMPLATE_FILE
                         value: ignore
-                    # - name: DISABLE_LOKI <.>
+                    # - name: DISABLE_LOKI # <.>
                     #   value: "true"
                   volumeMounts:
                       - name: prometheus-config-volume
@@ -243,7 +243,7 @@ spec:
             volumes:
                 - name: prometheus-config-volume
                   configMap:
-                      name: prometheus-config-cmos <.>
+                      name: prometheus-config-cmos # <.>
 ----
 
 <.> `spec.template.spec.containers[0].image`: This is the CMOS image that we wish to run.
