@@ -143,7 +143,7 @@ function _load_sample_buckets() {
 
             for bucket in "${sample_buckets[@]}"; do
                 # Block until bucket is ready
-                _docker_exec_with_retry "$uid" "curl -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket" "{"
+                _docker_exec_with_retry "$uid" "curl -fs -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket" "{"
                 { 
                   _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
                     -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &

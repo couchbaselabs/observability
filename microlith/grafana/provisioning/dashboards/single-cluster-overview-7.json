@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 11,
-  "iteration": 1637675497058,
+  "id": 5,
+  "iteration": 1637682497875,
   "links": [
     {
       "asDropdown": false,
@@ -75,7 +75,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 8,
         "w": 4,
         "x": 0,
         "y": 1
@@ -294,146 +294,29 @@
       "type": "stat"
     },
     {
-      "datasource": "JSON API",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "#808080",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "hidden",
-            "axisSoftMin": 0,
-            "fillOpacity": 50,
-            "gradientMode": "hue",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 0
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "#ccccdc",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Version + 1"
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": true,
-                  "tooltip": true,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 13,
-        "w": 9,
-        "x": 15,
-        "y": 1
-      },
-      "id": 63,
-      "interval": null,
-      "options": {
-        "barWidth": 0.9,
-        "groupWidth": 1,
-        "legend": {
-          "calcs": [],
-          "displayMode": "hidden",
-          "placement": "bottom"
-        },
-        "orientation": "horizontal",
-        "showValue": "always",
-        "stacking": "none",
-        "text": {},
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"Analytics\" :\n    $svc = \"n1ql\" ? \"Query\" :\n    $svc = \"eventing\" ? \"Eventing\" :\n    $svc = \"index\" ? \"Index\" :\n    $svc = \"fts\" ? \"Search\" :\n    $svc = \"kv\" ? \"Data\" :\n    $svc = \"backup\" ? \"Backup\" : $svc\n  })), \", \")\n})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "string"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Services",
-      "transformations": [
-        {
-          "id": "calculateField",
-          "options": {
-            "mode": "reduceRow",
-            "reduce": {
-              "reducer": "count"
-            },
-            "replaceFields": false
-          }
-        },
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "Count": {
-                "aggregations": [
-                  "count"
-                ],
-                "operation": "aggregate"
-              },
-              "Version": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        }
-      ],
-      "type": "barchart"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
+            "align": "auto",
+            "displayMode": "auto"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "green",
                 "value": null
+              "options": "Version + 1"
+            },
+            "properties": [
+              {
+                "color": "red",
+                "value": 80
               }
             ]
           }
@@ -441,57 +324,102 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 4,
-        "x": 0,
-        "y": 6
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 1
       },
-      "id": 54,
-      "interval": null,
+      "id": 77,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
+        "showHeader": true
       },
       "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 300,
-          "fields": [
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$m := $now()})",
-              "language": "jsonata",
-              "name": "Time",
-              "type": "time"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Version",
-      "transformations": [],
-      "type": "stat"
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 18,
+        "y": 1
+      },
+      "id": 80,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.3",
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 1
+      },
+      "id": 79,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.3",
+      "title": "Panel Title",
+      "type": "table"
     },
     {
       "datasource": null,
@@ -542,7 +470,7 @@
                 "value": null
               },
               {
-                "color": "#676769b0",
+                "color": "#37872db0",
                 "value": 0
               },
               {
@@ -622,7 +550,7 @@
         ]
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 11,
         "x": 4,
         "y": 6
@@ -632,7 +560,7 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": false,
+            "desc": true,
             "displayName": "State"
           }
         ]
@@ -689,13 +617,357 @@
       "type": "table"
     },
     {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 9,
+        "x": 15,
+        "y": 6
+      },
+      "id": 78,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "\"Data\"",
+              "language": "jsonata",
+              "name": "",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$now()",
+              "language": "jsonata",
+              "name": "",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 4,
+        "x": 0,
+        "y": 9
+      },
+      "id": 54,
+      "interval": null,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Version$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
+              "language": "jsonata",
+              "name": "Version",
+              "type": "number"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$m := $now()})",
+              "language": "jsonata",
+              "name": "Time",
+              "type": "time"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Version",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 15,
+        "y": 11
+      },
+      "id": 84,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.3",
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 18,
+        "y": 11
+      },
+      "id": 86,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.3",
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 11
+      },
+      "id": 81,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.3",
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 15,
+        "w": 9,
+        "x": 0,
+        "y": 16
+      },
+      "id": 87,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "first"
+          ],
+          "fields": "/.*/",
+          "limit": 7,
+          "values": true
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "[\"Index\", \"Query\", \"Search\", \"Analytics\", \"Eventing\", \"Backup\", \"Data\"]",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        }
+      ],
+      "transparent": true,
+      "type": "stat"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 14
+        "y": 31
       },
       "id": 14,
       "panels": [],
@@ -858,7 +1130,7 @@
         "h": 6,
         "w": 15,
         "x": 0,
-        "y": 15
+        "y": 32
       },
       "id": 2,
       "options": {
@@ -866,7 +1138,7 @@
         "sortBy": [
           {
             "desc": true,
-            "displayName": "Health Check Warnings"
+            "displayName": "Services"
           }
         ]
       },
@@ -1016,7 +1288,7 @@
         "h": 6,
         "w": 3,
         "x": 15,
-        "y": 15
+        "y": 32
       },
       "id": 72,
       "options": {
@@ -1088,7 +1360,7 @@
         "h": 6,
         "w": 3,
         "x": 18,
-        "y": 15
+        "y": 32
       },
       "id": 73,
       "options": {
@@ -1160,7 +1432,7 @@
         "h": 6,
         "w": 3,
         "x": 21,
-        "y": 15
+        "y": 32
       },
       "id": 74,
       "options": {
@@ -1175,6 +1447,298 @@
       },
       "title": "Add Stat here",
       "type": "timeseries"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "#808080",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "hidden",
+            "axisSoftMin": 0,
+            "fillOpacity": 50,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "#ccccdc",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Version + 1"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 9,
+        "x": 0,
+        "y": 38
+      },
+      "id": 63,
+      "interval": null,
+      "options": {
+        "barWidth": 0.9,
+        "groupWidth": 1,
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "orientation": "horizontal",
+        "showValue": "always",
+        "stacking": "none",
+        "text": {},
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"Analytics\" :\n    $svc = \"n1ql\" ? \"Query\" :\n    $svc = \"eventing\" ? \"Eventing\" :\n    $svc = \"index\" ? \"Index\" :\n    $svc = \"fts\" ? \"Search\" :\n    $svc = \"kv\" ? \"Data\" :\n    $svc = \"backup\" ? \"Backup\" : $svc\n  })), \", \")\n})",
+              "language": "jsonata",
+              "name": "Version",
+              "type": "string"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Services",
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "reduceRow",
+            "reduce": {
+              "reducer": "count"
+            },
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Count": {
+                "aggregations": [
+                  "count"
+                ],
+                "operation": "aggregate"
+              },
+              "Version": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        }
+      ],
+      "type": "barchart"
+    },
+    {
+      "datasource": "JSON API",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto",
+            "minWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Count"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "SDK/Client Version"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 10,
+        "x": 14,
+        "y": 38
+      },
+      "id": 39,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.connections[*].sdk_name",
+              "name": "SDK/Client"
+            },
+            {
+              "jsonPath": "$.connections[*].sdk_version",
+              "language": "jsonpath",
+              "name": "SDK Version"
+            },
+            {
+              "jsonPath": "$.connections.user.($ = null ? \"\" : $replace($.name, /<\\/?ud>/, \"\"))",
+              "language": "jsonata",
+              "name": "Username"
+            },
+            {
+              "jsonPath": "$.connections[*].source.ip",
+              "language": "jsonpath",
+              "name": "Source IP"
+            },
+            {
+              "jsonPath": "$.connections[*].agent_name",
+              "language": "jsonpath",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid/connections"
+        }
+      ],
+      "title": "Connected KV Clients",
+      "transformations": [
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "SDK Version": {
+                "aggregations": [
+                  "first"
+                ],
+                "operation": "aggregate"
+              },
+              "SDK/Client": {
+                "aggregations": [
+                  "first",
+                  "count"
+                ],
+                "operation": "aggregate"
+              },
+              "Source IP": {
+                "aggregations": [
+                  "allValues"
+                ],
+                "operation": "aggregate"
+              },
+              "Username": {
+                "aggregations": [
+                  "allValues"
+                ],
+                "operation": "aggregate"
+              },
+              "agent_name": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "agent_name": true
+            },
+            "indexByName": {
+              "SDK Version (first)": 2,
+              "SDK/Client (count)": 3,
+              "SDK/Client (first)": 1,
+              "Source IP (allValues)": 5,
+              "Username (allValues)": 4,
+              "agent_name": 0
+            },
+            "renameByName": {
+              "SDK Version (first)": "SDK/Client Version",
+              "SDK/Client (count)": "Count",
+              "SDK/Client (first)": "SDK/Client",
+              "Source IP (allValues)": "Source IPs",
+              "Username (allValues)": "Usernames"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": "-- Mixed --",
@@ -1345,7 +1909,7 @@
         "h": 5,
         "w": 14,
         "x": 0,
-        "y": 21
+        "y": 51
       },
       "id": 48,
       "options": {
@@ -1477,178 +2041,13 @@
       "type": "table"
     },
     {
-      "datasource": "JSON API",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "minWidth": 1
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Count"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 100
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "SDK/Client Version"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 10,
-        "x": 14,
-        "y": 21
-      },
-      "id": 39,
-      "options": {
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.connections[*].sdk_name",
-              "name": "SDK/Client"
-            },
-            {
-              "jsonPath": "$.connections[*].sdk_version",
-              "language": "jsonpath",
-              "name": "SDK Version"
-            },
-            {
-              "jsonPath": "$.connections.user.($ = null ? \"\" : $replace($.name, /<\\/?ud>/, \"\"))",
-              "language": "jsonata",
-              "name": "Username"
-            },
-            {
-              "jsonPath": "$.connections[*].source.ip",
-              "language": "jsonpath",
-              "name": "Source IP"
-            },
-            {
-              "jsonPath": "$.connections[*].agent_name",
-              "language": "jsonpath",
-              "name": ""
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid/connections"
-        }
-      ],
-      "title": "Connected KV Clients",
-      "transformations": [
-        {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "SDK Version": {
-                "aggregations": [
-                  "first"
-                ],
-                "operation": "aggregate"
-              },
-              "SDK/Client": {
-                "aggregations": [
-                  "first",
-                  "count"
-                ],
-                "operation": "aggregate"
-              },
-              "Source IP": {
-                "aggregations": [
-                  "allValues"
-                ],
-                "operation": "aggregate"
-              },
-              "Username": {
-                "aggregations": [
-                  "allValues"
-                ],
-                "operation": "aggregate"
-              },
-              "agent_name": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "agent_name": true
-            },
-            "indexByName": {
-              "SDK Version (first)": 2,
-              "SDK/Client (count)": 3,
-              "SDK/Client (first)": 1,
-              "Source IP (allValues)": 5,
-              "Username (allValues)": 4,
-              "agent_name": 0
-            },
-            "renameByName": {
-              "SDK Version (first)": "SDK/Client Version",
-              "SDK/Client (count)": "Count",
-              "SDK/Client (first)": "SDK/Client",
-              "Source IP (allValues)": "Source IPs",
-              "Username (allValues)": "Usernames"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 56
       },
       "id": 16,
       "panels": [],
@@ -1708,7 +2107,7 @@
         "h": 8,
         "w": 6,
         "x": 0,
-        "y": 27
+        "y": 57
       },
       "id": 28,
       "options": {
@@ -1786,7 +2185,7 @@
         "h": 8,
         "w": 6,
         "x": 6,
-        "y": 27
+        "y": 57
       },
       "id": 29,
       "options": {
@@ -1869,7 +2268,7 @@
         "h": 8,
         "w": 6,
         "x": 12,
-        "y": 27
+        "y": 57
       },
       "id": 46,
       "options": {
@@ -1952,7 +2351,7 @@
         "h": 8,
         "w": 6,
         "x": 18,
-        "y": 27
+        "y": 57
       },
       "id": 50,
       "options": {
@@ -1984,7 +2383,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 35
+        "y": 65
       },
       "id": 41,
       "panels": [],
@@ -2047,7 +2446,7 @@
         "h": 8,
         "w": 7,
         "x": 0,
-        "y": 36
+        "y": 66
       },
       "id": 20,
       "options": {
@@ -2129,7 +2528,7 @@
         "h": 8,
         "w": 7,
         "x": 7,
-        "y": 36
+        "y": 66
       },
       "id": 24,
       "options": {
@@ -2185,7 +2584,7 @@
         "h": 8,
         "w": 10,
         "x": 14,
-        "y": 36
+        "y": 66
       },
       "id": 75,
       "options": {
@@ -2224,7 +2623,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 44
+        "y": 74
       },
       "id": 43,
       "panels": [],
@@ -2289,7 +2688,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 45
+        "y": 75
       },
       "id": 33,
       "options": {
@@ -2343,7 +2742,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 45
+        "y": 75
       },
       "id": 44,
       "options": {
@@ -2403,7 +2802,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 45
+        "y": 75
       },
       "id": 35,
       "options": {
@@ -2476,8 +2875,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "bde79ad3a0333431b55fb27488ac90e1",
-          "value": "bde79ad3a0333431b55fb27488ac90e1"
+          "text": "dce9bcc0a994ce26abb9de79e4721aa0",
+          "value": "dce9bcc0a994ce26abb9de79e4721aa0"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2522,5 +2921,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 7
+  "version": 10
 }
