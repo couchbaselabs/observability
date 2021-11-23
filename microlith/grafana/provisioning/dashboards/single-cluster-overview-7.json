@@ -294,29 +294,23 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-red",
                 "value": null
-              "options": "Version + 1"
-            },
-            "properties": [
+              },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -329,36 +323,75 @@
         "x": 15,
         "y": 1
       },
-      "id": 77,
+      "id": 91,
       "options": {
-        "showHeader": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
       },
       "pluginVersion": "8.2.3",
-      "title": "Panel Title",
-      "type": "table"
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"1\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Index",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -371,36 +404,75 @@
         "x": 18,
         "y": 1
       },
-      "id": 80,
+      "id": 93,
       "options": {
-        "showHeader": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
       },
       "pluginVersion": "8.2.3",
-      "title": "Panel Title",
-      "type": "table"
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"1\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Query",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -413,13 +485,56 @@
         "x": 21,
         "y": 1
       },
-      "id": 79,
+      "id": 96,
       "options": {
-        "showHeader": true
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
       },
       "pluginVersion": "8.2.3",
-      "title": "Panel Title",
-      "type": "table"
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"1\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Search",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
     },
     {
       "datasource": null,
@@ -628,12 +743,12 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -646,21 +761,21 @@
         "x": 15,
         "y": 6
       },
-      "id": 78,
+      "id": 90,
       "options": {
-        "colorMode": "background",
+        "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "lastNotNull"
+            "max"
           ],
           "fields": "",
           "values": false
         },
         "text": {},
-        "textMode": "value"
+        "textMode": "name"
       },
       "pluginVersion": "8.2.3",
       "targets": [
@@ -668,22 +783,31 @@
           "cacheDurationSeconds": 300,
           "fields": [
             {
-              "jsonPath": "\"Data\"",
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
               "language": "jsonata",
-              "name": "",
-              "type": "number"
-            },
-            {
-              "jsonPath": "$now()",
-              "language": "jsonata",
-              "name": "",
-              "type": "time"
+              "name": ""
             }
           ],
           "method": "GET",
           "queryParams": "",
           "refId": "A",
           "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Data",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
         }
       ],
       "type": "stat"
@@ -762,27 +886,23 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -795,97 +915,56 @@
         "x": 15,
         "y": 11
       },
-      "id": 84,
+      "id": 95,
       "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.3",
-      "title": "Panel Title",
-      "type": "table"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 18,
-        "y": 11
-      },
-      "id": 86,
-      "options": {
-        "showHeader": true
+        "text": {},
+        "textMode": "name"
       },
       "pluginVersion": "8.2.3",
-      "title": "Panel Title",
-      "type": "table"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"1\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Analytics",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
           }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 3,
-        "x": 21,
-        "y": 11
-      },
-      "id": 81,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.3",
-      "title": "Panel Title",
-      "type": "table"
+        }
+      ],
+      "type": "stat"
     },
     {
       "datasource": "JSON API",
@@ -899,12 +978,174 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "dark-red",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "dark-green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 18,
+        "y": 11
+      },
+      "id": 94,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"1\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Eventing",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 21,
+        "y": 11
+      },
+      "id": 92,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "cacheDurationSeconds": 300,
+          "fields": [
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"1\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": ""
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "transformations": [
+        {
+          "id": "calculateField",
+          "options": {
+            "alias": "Backup",
+            "mode": "reduceRow",
+            "reduce": {
+              "include": [
+                "result"
+              ],
+              "reducer": "sum"
+            },
+            "replaceFields": true
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "dark-red",
+                "value": null
+              },
+              {
+                "color": "dark-green",
+                "value": 1
               }
             ]
           }
@@ -917,22 +1158,21 @@
         "x": 0,
         "y": 16
       },
-      "id": 87,
+      "id": 97,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
-        "justifyMode": "center",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "first"
+            "max"
           ],
           "fields": "/.*/",
-          "limit": 7,
-          "values": true
+          "values": false
         },
         "text": {},
-        "textMode": "value"
+        "textMode": "name"
       },
       "pluginVersion": "8.2.3",
       "targets": [
@@ -940,9 +1180,39 @@
           "cacheDurationSeconds": 300,
           "fields": [
             {
-              "jsonPath": "[\"Index\", \"Query\", \"Search\", \"Analytics\", \"Eventing\", \"Backup\", \"Data\"]",
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
               "language": "jsonata",
-              "name": ""
+              "name": "Analytics"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"1\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"0\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": "Query"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": "Eventing"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": "Index"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": "Search"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": "Data"
+            },
+            {
+              "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"0\" :\n    $svc = \"n1ql\" ? \"0\" :\n    $svc = \"eventing\" ? \"0\" :\n    $svc = \"index\" ? \"0\" :\n    $svc = \"fts\" ? \"0\" :\n    $svc = \"kv\" ? \"1\" :\n    $svc = \"backup\" ? \"0\" : $svc\n  })), \"\")\n})",
+              "language": "jsonata",
+              "name": "Backup"
             }
           ],
           "method": "GET",
@@ -957,7 +1227,6 @@
           "options": {}
         }
       ],
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -2921,5 +3190,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 10
+  "version": 22
 }
