@@ -78,15 +78,15 @@ function start_new_nodes() {
 # - The command fails $retry_count times in a row and the program exits
 function _docker_exec_with_retry() {
 
-    local retry_count=5
-    local retry_time=(2 4 8 15 30)
+    local retry_count=4
+    local retry_time=(5 10 15 30)
 
     local container=$1
     local command=$2
     local success_msg=${3:-""} # Couchbase REST curl commands return nothing upon success
 
     local i=0
-    for ((i; i<retry_count; i++)); do
+    for ((i; i<retry_count+1; i++)); do
         output=$(docker exec "$container" /usr/bin/env bash -c "$command")
         if [[ $output == *$success_msg* ]]; then
             return
@@ -142,6 +142,8 @@ function _load_sample_buckets() {
             # Start cbpillowfight to simulate a non-zero load (NOT stress test)
 
             for bucket in "${sample_buckets[@]}"; do
+                # Block until bucket is ready
+                _docker_exec_with_retry "$uid" "curl -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket" "{"
                 { 
                   _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
                     -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
