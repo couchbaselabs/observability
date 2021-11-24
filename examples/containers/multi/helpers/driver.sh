@@ -111,9 +111,9 @@ function _add_nodes_to_cluster() {
     local j=$((start+1))
         for ((j; j<start+to_provision; j++)); do 
                 local node="node$j"
-                _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://$uid:8091\" \
+                _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://localhost:8091\" \
                    --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
-                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://$uid:8091\" \
+                _docker_exec_with_retry "$node" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://node$start.local:8091\" \
                   --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
                   --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query \
                   || echo 'failed'" "SUCCESS: "
@@ -136,10 +136,12 @@ function _load_sample_buckets() {
         _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
           -d '[$sample_buckets_json]'" "[]"
 
-        echo "- Sample buckets ${sample_buckets_json} loaded"
+        echo "- Sample buckets ${sample_buckets_json} loading in the background..."
+        sleep 10
         
         if $load; then
             # Start cbpillowfight to simulate a non-zero load (NOT stress test)
+            
 
             for bucket in "${sample_buckets[@]}"; do
                 # Block until bucket is ready
@@ -209,7 +211,7 @@ function configure_servers() {
         # Register cluster with CBMM if non-OSS build
         if ! $oss_flag; then 
             local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
-              '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid:8091\"}' \
+              '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid.local:8091\"}' \
             'http://localhost:8080/couchbase/api/v1/clusters'"
             _docker_exec_with_retry "cmos" "$cmos_cmd" ""
 
@@ -239,7 +241,7 @@ function configure_servers() {
 
         # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
-            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" \
+            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"http://$uid.local:8091\" \
               --username \"$server_user\" --password \"$server_pwd\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
         fi
 
