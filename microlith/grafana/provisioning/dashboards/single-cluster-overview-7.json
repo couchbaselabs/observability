@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 4,
-  "iteration": 1637772087089,
+  "id": 1,
+  "iteration": 1637774363645,
   "links": [
     {
       "asDropdown": false,
@@ -2251,19 +2251,15 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "transparent",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -2311,19 +2307,15 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "transparent",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -2408,8 +2400,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "c789e07f3db294c0723f9598888f65cf",
-          "value": "c789e07f3db294c0723f9598888f65cf"
+          "text": "347fcdf474c1b420c311ae4f3db61562",
+          "value": "347fcdf474c1b420c311ae4f3db61562"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",

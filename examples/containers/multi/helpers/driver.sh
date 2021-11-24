@@ -134,48 +134,28 @@ function _load_sample_buckets() {
     local sample_buckets=("$@") # Then we are able to capture all remaining args in a new array
 
     sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
-        _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
-          -d '[$sample_buckets_json]'" "[]"
+    _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
+        -d '[$sample_buckets_json]'" "[]"
 
-        echo "- Sample buckets ${sample_buckets_json} loading in the background..."
-        sleep 10
-        
-        if $load; then # Start cbpillowfight to simulate a non-zero load (NOT stress test)
+    echo "- Sample buckets ${sample_buckets_json} loading in the background..."
+    sleep 10
+    
+    if $load; then # Start cbpillowfight to simulate a non-zero load (NOT stress test)
 
-            for bucket in "${sample_buckets[@]}"; do
-                # Block until bucket is ready
-                _docker_exec_with_retry "$uid" "curl -fs -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \
-                  || echo 'failed'" "{"
-                { 
-                  _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
-                    -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
-                } 1>/dev/null 2>&1
-                echo "  - cbc-pillowfight started against $bucket"
-            done
-        fi
+        for bucket in "${sample_buckets[@]}"; do
+            # Block until bucket is ready
+            _docker_exec_with_retry "$uid" "curl -fs -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \
+                || echo 'failed'" "{"
+            { 
+                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
+                -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
+            } 1>/dev/null 2>&1
+            echo "  - cbc-pillowfight started against $bucket"
+        done
+    fi
     
 }
-
-function _build_primary_indexes() {
-
-    local start=$1
-    local server_user=$3
-    local server_pwd=$4
-    shift 3 # Bash passes each element in the array as another $i, so we must shift previous arguments so only array args are left
-    local sample_buckets=("$@") # Then we are able to capture all remaining args in a new array
-
-    # Find a query node
-    local j=$((start+1))
-    for ((j; j<start+to_provision; j++)); do 
-        echo ""
-    done
-
-    for bucket in "${sample_buckets[@]}"; do
-        local n1ql_query="CREATE PRIMARY INDEX ON \`$bucket\`" 
-        _docker_exec_with_retry "$uid" "curl -fs -u \"$server_user\":\"$server_pwd\" -v http://localhost:8093/query/service -d \"$n1ql_query\""
-    done
         
-}
 # Pre-conditions: 
 #   - $num_nodes containers running Couchbase Server (uninitialised)/exporter 
 
@@ -225,9 +205,6 @@ function configure_servers() {
 
         echo "** $clust_name created **"
 
-        # Load sample buckets
-        _load_sample_buckets "$uid" "$load" "$server_user" "$server_pwd" "${sample_buckets[@]}"
-
         # Register cluster with CBMM if non-OSS build
         if ! $oss_flag; then 
             local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
@@ -267,13 +244,8 @@ function configure_servers() {
 
         echo "- Rebalance started"
 
-        # Build primary indexes on buckets - this must be done after rebalance with Query nodes into the cluster
-        #if $load; then
-            #_build_primary_indexes "$start" "$server_user" "$server_pwd" "${sample_buckets[@]}"
-            #echo " All primary indexes built successfully."
-        #else
-        #    echo "- Skipped building primary indexes as LOAD=false"
-        #fi
+        # Load sample buckets
+        _load_sample_buckets "$uid" "$load" "$server_user" "$server_pwd" "${sample_buckets[@]}"
     
         echo "Cluster configuration complete."
         echo "---------------------------------"
