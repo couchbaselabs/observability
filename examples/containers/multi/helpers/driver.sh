@@ -78,15 +78,15 @@ function start_new_nodes() {
 # - The command fails $retry_count times in a row and the program exits
 function _docker_exec_with_retry() {
 
-    local retry_count=4
-    local retry_time=(5 10 15 30)
+    local retry_count=5
+    local retry_time=(5 10 15 30 60)
 
     local container=$1
     local command=$2
     local success_msg=${3:-""} # Couchbase REST curl commands return nothing upon success
 
     local i=0
-    for ((i; i<retry_count+1; i++)); do
+    for ((i; i<retry_count; i++)); do
         output=$(docker exec "$container" /usr/bin/env bash -c "$command")
         if [[ $output == *$success_msg* ]]; then
             return
