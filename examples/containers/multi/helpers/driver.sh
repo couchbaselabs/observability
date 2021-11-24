@@ -148,9 +148,18 @@ function _load_sample_buckets() {
                 || echo 'failed'" "{"
             { 
                 _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
-                -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
+                -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20 || echo 'failed'" "Running." &
             } 1>/dev/null 2>&1
             echo "  - cbc-pillowfight started against $bucket"
+
+            if [ "$bucket" == '"travel-sample"' ]; then
+                {
+                    docker cp "$SCRIPT_DIR"/helpers/demo-queries.txt "$uid":./
+                    _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-n1qlback -U http://localhost/$bucket \
+                    -u \"$server_user\" -P \"$server_pwd\" -t 2 -f ./demo-queries.txt || echo 'failed'" "Loaded" & 
+                } 1>/dev/null 2>&1
+                echo "  - Demo queries started against travel-sample"
+            fi
         done
     fi
     

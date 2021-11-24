@@ -1,0 +1,5 @@
+{"statement":  "SELECT DISTINCT airport.city as name FROM `travel-sample` airport INNER JOIN `travel-sample` hotel USE HASH(probe) ON hotel.city = airport.city WHERE airport.type = 'airport' AND hotel.type = 'hotel';"}
+{"statement":  "SELECT hotel.name, hotel.address, airport.airportname, airport.icao, hotel.geo FROM `travel-sample` airport              INNER JOIN `travel-sample` hotel ON hotel.type = 'hotel' AND hotel.city = airport.city WHERE airport.type = 'airport' AND airport.city = '${req.params.id}' LIMIT 5;"}
+{"statement": "select count(*) from `travel-sample` where meta().id like \"airline%\""}
+{"statement": "select count(*) from `travel-sample` where contains(split(meta().id, \"_\")[0], \"hotel\")"}
+{"statement": "SELECT faa as fromAirport,geo FROM `travel-sample` WHERE airportname = $1 UNION SELECT faa as toAirport,geo FROM `travel-sample` WHERE airportname = $2"}
