@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 7,
-  "iteration": 1637760973739,
+  "id": 4,
+  "iteration": 1637772087089,
   "links": [
     {
       "asDropdown": false,
@@ -245,7 +245,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$count($.nodes_summary[*])",
@@ -306,7 +306,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$count($.buckets_summary[*])",
@@ -622,7 +622,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
@@ -957,14 +957,14 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "#58585d",
+                "color": "red",
                 "value": null
               },
               {
@@ -984,7 +984,7 @@
       },
       "id": 99,
       "options": {
-        "displayMode": "gradient",
+        "displayMode": "basic",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -999,7 +999,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
@@ -2408,8 +2408,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "01f6902b102dafbdf7e474e6a7763a2e",
-          "value": "01f6902b102dafbdf7e474e6a7763a2e"
+          "text": "c789e07f3db294c0723f9598888f65cf",
+          "value": "c789e07f3db294c0723f9598888f65cf"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2454,5 +2454,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 3
+  "version": 2
 }

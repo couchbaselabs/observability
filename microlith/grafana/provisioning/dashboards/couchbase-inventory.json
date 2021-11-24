@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 1,
   "links": [
     {
       "asDropdown": false,
@@ -278,7 +278,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -303,7 +303,7 @@
               "name": "Nodes"
             },
             {
-              "jsonPath": "$map($, function($v) {$join($sort($distinct($map($v.nodes_summary.services, function($m) {$replace($replace($replace($replace($replace($replace($m, \"kv\", \"Data\"), \"index\", \"Index\"), \"n1ql\", \"Query\"), \"cbas\", \"Analytics\"), \"eventing\", \"Eventing\"), \"fts\", \"Search\")}))), ', ')})",
+              "jsonPath": "$map($, \n  function($v) {\n    $join(\n      $sort(\n        $distinct(\n          $map($v.nodes_summary.services, function($svc) {\n              $svc = \"cbas\" ? \"Analytics\" :\n              $svc = \"n1ql\" ? \"Query\" :\n              $svc = \"eventing\" ? \"Eventing\" :\n              $svc = \"index\" ? \"Index\" :\n              $svc = \"fts\" ? \"Search\" :\n              $svc = \"kv\" ? \"Data\" :\n              $svc = \"backup\" ? \"Backup\" : $svc\n          })\n        )\n      )\n    , \", \")\n})",
               "language": "jsonata",
               "name": "Services"
             },
@@ -340,7 +340,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 31,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -357,5 +357,5 @@
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 2
+  "version": 3
 }

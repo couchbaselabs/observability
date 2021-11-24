@@ -78,7 +78,7 @@ function start_new_nodes() {
 # - The command fails $retry_count times in a row and the program exits
 function _docker_exec_with_retry() {
 
-    local retry_count=5
+    local retry_count=4
     local retry_time=(5 10 15 30 60)
 
     local container=$1
@@ -109,17 +109,18 @@ function _add_nodes_to_cluster() {
     local server_pwd=$4
 
     local j=$((start+1))
-        for ((j; j<start+to_provision; j++)); do 
-                local node="node$j"
-                _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://localhost:8091\" \
-                   --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
-                _docker_exec_with_retry "$node" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://node$start.local:8091\" \
-                  --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
-                  --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query \
-                  || echo 'failed'" "SUCCESS: "
+    for ((j; j<start+to_provision; j++)); do 
 
-                echo " - $node added"
-        done
+        local node="node$j"
+        _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://localhost:8091\" \
+            --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
+        _docker_exec_with_retry "$node" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://node$start.local:8091\" \
+            --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
+            --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query \
+            || echo 'failed'" "SUCCESS: "
+
+        echo " - $node added"
+    done
 
 }
 
@@ -153,6 +154,27 @@ function _load_sample_buckets() {
             done
         fi
     
+}
+
+function _build_primary_indexes() {
+
+    local start=$1
+    local server_user=$3
+    local server_pwd=$4
+    shift 3 # Bash passes each element in the array as another $i, so we must shift previous arguments so only array args are left
+    local sample_buckets=("$@") # Then we are able to capture all remaining args in a new array
+
+    # Find a query node
+    local j=$((start+1))
+    for ((j; j<start+to_provision; j++)); do 
+        echo ""
+    done
+
+    for bucket in "${sample_buckets[@]}"; do
+        local n1ql_query="CREATE PRIMARY INDEX ON \`$bucket\`" 
+        _docker_exec_with_retry "$uid" "curl -fs -u \"$server_user\":\"$server_pwd\" -v http://localhost:8093/query/service -d \"$n1ql_query\""
+    done
+        
 }
 # Pre-conditions: 
 #   - $num_nodes containers running Couchbase Server (uninitialised)/exporter 
@@ -244,6 +266,15 @@ function configure_servers() {
         fi
 
         echo "- Rebalance started"
+
+        # Build primary indexes on buckets - this must be done after rebalance with Query nodes into the cluster
+        #if $load; then
+            #_build_primary_indexes "$start" "$server_user" "$server_pwd" "${sample_buckets[@]}"
+            #echo " All primary indexes built successfully."
+        #else
+        #    echo "- Skipped building primary indexes as LOAD=false"
+        #fi
+    
         echo "Cluster configuration complete."
         echo "---------------------------------"
         echo ""
