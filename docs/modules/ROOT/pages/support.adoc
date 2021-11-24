@@ -4,6 +4,26 @@ Please use our official link:https://issues.couchbase.com/projects/CMOS/issues[J
 
 No official support is currently provided but best efforts will be made and we are keen to hear of any issues.
 
+== Diagnostics
+
+All components of CMOS log their output to `/logs/<component>.log` inside the container.
+By default, they will also log to standard output, which you can access using `docker logs`, `kubectl logs`, or similar.
+This can be disabled by setting the environment variable `LOG_TO_STDOUT` to `false` when starting CMOS.
+
+=== Collecting Information
+
+ifdef::env-packaged[Use the link:/collect-info.html[Collect Information] form to create a tar-ball of all CMOS logs and configuration.]
+ifndef::env-packaged[If the CMOS web server is enabled, visit `/collect-info.html` to create a tar-ball of all CMOS logs and configuration.]
+If you cannot access the web server or it is disabled, the same can be done by running `/collect-information.sh` in the container.
+The output will be saved to `/tmp/support` in the container.
+If the web server is enabled, it can also be accessed on `/support`.
+
+[WARNING]
+====
+At the time of writing, no redaction or sanitization is performed on the output, and it is likely that it will include passwords or other credentials.
+We recommend inspecting the generated output before uploading it to Couchbase for review.
+====
+
 == Reporting a Vulnerability
 
 Refer to the link:https://www.couchbase.com/resources/security#VulnerabilityHandling[Couchbase security policy^] for full details.

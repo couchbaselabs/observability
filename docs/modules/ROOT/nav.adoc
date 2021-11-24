@@ -1,16 +1,20 @@
 * xref:index.adoc[Home]
 * xref:quickstart.adoc[Quick start guide]
 
+ifdef::env-packaged[]
+
 .Configuration
-* link:http://localhost:8080/promwebform.html[Add Cluster^]
-* link:http://localhost:8080/prometheus/alerts/[Prometheus Alerts^]
-* link:http://localhost:8080/prometheus/rules/[Prometheus Rules^]
-* link:http://localhost:8080/prometheus/targets/[Prometheus Targets^]
+* link:/promwebform.html[Add Cluster^]
+* link:/prometheus/alerts/[Prometheus Alerts^]
+* link:/prometheus/rules/[Prometheus Rules^]
+* link:/prometheus/targets/[Prometheus Targets^]
 
 .Tooling
-* link:http://localhost:8080/alertmanager/[Alert Manager^]
-* link:http://localhost:8080/grafana/[Grafana^]
-* link:http://localhost:8080/prometheus/[Prometheus^]
+* link:/alertmanager/[Alert Manager^]
+* link:/grafana/[Grafana^]
+* link:/prometheus/[Prometheus^]
+
+endif::env-packaged[]
 
 .Architecture
 * xref:architecture.adoc[Architecture overview]
