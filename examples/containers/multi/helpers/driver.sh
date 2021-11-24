@@ -139,9 +139,7 @@ function _load_sample_buckets() {
         echo "- Sample buckets ${sample_buckets_json} loading in the background..."
         sleep 10
         
-        if $load; then
-            # Start cbpillowfight to simulate a non-zero load (NOT stress test)
-            
+        if $load; then # Start cbpillowfight to simulate a non-zero load (NOT stress test)
 
             for bucket in "${sample_buckets[@]}"; do
                 # Block until bucket is ready
