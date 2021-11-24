@@ -21,7 +21,7 @@ ARG PROM_CONFIG_TOOL_VERSION=v0.3.0
 WORKDIR /src/github.com/lablabs/prometheus-alert-overrider
 RUN curl -Lo /src/prom.tgz "https://github.com/lablabs/prometheus-alert-overrider/archive/refs/tags/$PROM_CONFIG_TOOL_VERSION.tar.gz" && \
     tar --strip-components 1 -xzvf /src/prom.tgz && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/prometheus_merge main.go
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/prometheus_merge main.go
 
 # Build the configuration service
 WORKDIR /src/github.com/couchbaselabs/observability/config-svc
@@ -39,8 +39,8 @@ RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
 
 # Statically build it to allow reuse on Alpine Linux
 RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
 
 FROM node:16-alpine3.14 as ui-builder
 
