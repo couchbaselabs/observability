@@ -84,7 +84,7 @@ fi
 
 # Build CMOS container
 pushd "${SCRIPT_DIR}" || exit 1
-    docker-compose up -d --force-recreate 
+    docker-compose up -d --force-recreate
 popd || exit
 
 # Tag image to be used as node image, if vers 7 or later then just use the Couchbase Server docker image.

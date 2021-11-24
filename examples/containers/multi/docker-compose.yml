@@ -7,5 +7,7 @@ services:
         # Add to custom network so CMOS and server/exporter containers can communicate and resolve container names to IPs
         networks:
             - shared_network
+        environment:
+            DISABLE_PROMTAIL: 'true'
 networks:
     shared_network:
