@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1637840571439,
+  "id": 12,
+  "iteration": 1637855799726,
   "links": [
     {
       "asDropdown": false,
@@ -155,7 +155,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_ep_data_read_failed{cluster=`$cluster`,instance=`$node(?::[0-9]*)$`}",
+          "expr": "kv_ep_data_read_failed{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
           "instant": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -230,7 +230,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_ep_data_write_failed{cluster=`$cluster`,instance=`$node(?::[0-9]*)$`}",
+          "expr": "kv_ep_data_write_failed{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
           "instant": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -261,7 +261,7 @@
       },
       "targets": [
         {
-          "expr": "{job=\"couchbase-fluentbit\",hostname=\"$node\",file=\"memcached.log\"} |= \"Slow\" | json | line_format \"{{ .message }}\"",
+          "expr": "{job=\"couchbase-fluentbit\",hostname=~`${node:regex}(?::[0-9]*)?$`,file=\"memcached.log\"} |= \"Slow\" | json | line_format \"{{ .message }}\"",
           "refId": "A"
         }
       ],
@@ -341,7 +341,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(kv_ops{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])) by (bucket)",
+          "expr": "sum(irate(kv_ops{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])) by (bucket)",
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -423,7 +423,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}) by (bucket)",
+          "expr": "sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}) by (bucket)",
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -440,239 +440,6 @@
         "w": 24,
         "x": 0,
         "y": 16
-      },
-      "id": 10,
-      "panels": [],
-      "title": "DCP",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#ccccdbb0",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 17
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`,connection_type!=\"\"}) by (connection_type)",
-          "interval": "",
-          "legendFormat": "{{ connection_type }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Items Remaining",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "ops"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 17
-      },
-      "id": 16,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(kv_dcp_items_sent{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`,connection_type!=\"\"}[1m])",
-          "interval": "",
-          "legendFormat": "{{ connection_type }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Items Sent",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 16,
-        "y": 17
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "kv_dcp_backoff{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
-          "interval": "",
-          "legendFormat": "{{bucket}} ({{connection_type}})",
-          "refId": "A"
-        }
-      ],
-      "title": "Backoff Events",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 25
       },
       "id": 20,
       "panels": [],
@@ -705,7 +472,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 26
+        "y": 17
       },
       "id": 25,
       "options": {
@@ -727,7 +494,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_curr_items_tot{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "kv_curr_items_tot{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -761,7 +528,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 26
+        "y": 17
       },
       "id": 23,
       "options": {
@@ -783,7 +550,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "couch_docs_actual_disk_size{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "couch_docs_actual_disk_size{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -816,7 +583,7 @@
         "h": 8,
         "w": 11,
         "x": 0,
-        "y": 34
+        "y": 25
       },
       "id": 6,
       "options": {
@@ -838,7 +605,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_curr_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "kv_curr_connections{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -847,7 +614,7 @@
         },
         {
           "exemplar": true,
-          "expr": "kv_daemon_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "kv_daemon_connections{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`}",
           "hide": false,
           "interval": "",
           "legendFormat": "Daemon",
@@ -855,7 +622,7 @@
         },
         {
           "exemplar": true,
-          "expr": "kv_system_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "kv_system_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`,bucket=~`${bucket:regex}`}",
           "hide": false,
           "interval": "",
           "legendFormat": "System",
@@ -864,6 +631,405 @@
       ],
       "title": "Current Connections",
       "type": "stat"
+    },
+    {
+      "collapsed": true,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 33
+      },
+      "id": 10,
+      "panels": [
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "fixedColor": "text",
+                "mode": "thresholds"
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#ccccdbb0",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 0,
+            "y": 34
+          },
+          "id": 14,
+          "options": {
+            "colorMode": "value",
+            "graphMode": "area",
+            "justifyMode": "auto",
+            "orientation": "auto",
+            "reduceOptions": {
+              "calcs": [
+                "lastNotNull"
+              ],
+              "fields": "",
+              "values": false
+            },
+            "text": {},
+            "textMode": "auto"
+          },
+          "pluginVersion": "8.2.5",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,connection_type!=\"\"}) by (connection_type)",
+              "interval": "",
+              "legendFormat": "{{ connection_type }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Items Remaining",
+          "type": "stat"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ops"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 34
+          },
+          "id": 16,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "irate(kv_dcp_items_sent{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,connection_type!=\"\"}[1m])",
+              "interval": "",
+              "legendFormat": "{{ connection_type }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Items Sent",
+          "type": "timeseries"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 16,
+            "y": 34
+          },
+          "id": 12,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "kv_dcp_backoff{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
+              "interval": "",
+              "legendFormat": "{{bucket}} ({{connection_type}})",
+              "refId": "A"
+            }
+          ],
+          "title": "Backoff Events",
+          "type": "timeseries"
+        },
+        {
+          "datasource": "JSON API",
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "center",
+                "displayMode": "auto",
+                "minWidth": 1
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Count"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 100
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "SDK/Client Version"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width"
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 24,
+            "x": 0,
+            "y": 42
+          },
+          "id": 30,
+          "options": {
+            "showHeader": true,
+            "sortBy": []
+          },
+          "pluginVersion": "8.2.5",
+          "targets": [
+            {
+              "cacheDurationSeconds": 0,
+              "fields": [
+                {
+                  "jsonPath": "$.connections[*].sdk_name",
+                  "name": "SDK/Client"
+                },
+                {
+                  "jsonPath": "$.connections[*].sdk_version",
+                  "language": "jsonpath",
+                  "name": "SDK Version"
+                },
+                {
+                  "jsonPath": "$.connections.user.($ = null ? \"\" : $replace($.name, /<\\/?ud>/, \"\"))",
+                  "language": "jsonata",
+                  "name": "Username"
+                },
+                {
+                  "jsonPath": "$.connections[*].source.ip",
+                  "language": "jsonpath",
+                  "name": "Source IP"
+                },
+                {
+                  "jsonPath": "$.connections[*].agent_name",
+                  "language": "jsonpath",
+                  "name": ""
+                }
+              ],
+              "method": "GET",
+              "queryParams": "",
+              "refId": "A",
+              "urlPath": "/clusters/$cluster_uuid/connections"
+            }
+          ],
+          "title": "Connected KV Clients",
+          "transformations": [
+            {
+              "id": "groupBy",
+              "options": {
+                "fields": {
+                  "SDK Version": {
+                    "aggregations": [
+                      "first"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "SDK/Client": {
+                    "aggregations": [
+                      "first",
+                      "count"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Source IP": {
+                    "aggregations": [
+                      "allValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Username": {
+                    "aggregations": [
+                      "allValues"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "agent_name": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  }
+                }
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {
+                  "agent_name": true
+                },
+                "indexByName": {
+                  "SDK Version (first)": 2,
+                  "SDK/Client (count)": 3,
+                  "SDK/Client (first)": 1,
+                  "Source IP (allValues)": 5,
+                  "Username (allValues)": 4,
+                  "agent_name": 0
+                },
+                "renameByName": {
+                  "SDK Version (first)": "SDK/Client Version",
+                  "SDK/Client (count)": "Count",
+                  "SDK/Client (first)": "SDK/Client",
+                  "Source IP (allValues)": "Source IPs",
+                  "Username (allValues)": "Usernames"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        }
+      ],
+      "title": "DCP",
+      "type": "row"
     }
   ],
   "refresh": "5s",
@@ -908,17 +1074,21 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "172.27.0.3",
-          "value": "172.27.0.3"
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "node",
         "options": [],
         "query": {
@@ -935,8 +1105,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1058671af8cd6c3bdfe7ab5f15828a58",
-          "value": "1058671af8cd6c3bdfe7ab5f15828a58"
+          "text": "099248fa5dd678d3603eb76c1b9d5140",
+          "value": "099248fa5dd678d3603eb76c1b9d5140"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -962,8 +1132,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "e19149459fa427cae0783f74e1675eba",
-          "value": "e19149459fa427cae0783f74e1675eba"
+          "text": "d658d5c2df0baf95ef5e5ae9194e03c2",
+          "value": "d658d5c2df0baf95ef5e5ae9194e03c2"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -984,6 +1154,37 @@
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": null,
+        "definition": "label_values(multimanager_bucket_checker_status,bucket)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Bucket",
+        "multi": true,
+        "name": "bucket",
+        "options": [],
+        "query": {
+          "query": "label_values(multimanager_bucket_checker_status,bucket)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
       }
     ]
   },
@@ -995,5 +1196,5 @@
   "timezone": "",
   "title": "Data Service Overview",
   "uid": "4vnZHfcnk",
-  "version": 14
+  "version": 21
 }
