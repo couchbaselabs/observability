@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 12,
-  "iteration": 1637855799726,
+  "id": 14,
+  "iteration": 1637856897243,
   "links": [
     {
       "asDropdown": false,
@@ -433,13 +433,517 @@
       "type": "timeseries"
     },
     {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00000000",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 2.5
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 16
+      },
+      "id": 32,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.50, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{instance}}, {{bucket}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Reads - 50th percentile",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00000000",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 2.5
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 16
+      },
+      "id": 36,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{instance}}, {{bucket}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Reads - 99th percentile",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00000000",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 2.5
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 16
+      },
+      "id": 34,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.999, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{instance}}, {{bucket}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Reads - 99.9th percentile",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00000000",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 2.5
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 25
+      },
+      "id": 35,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.50, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{instance}}, {{bucket}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Writes - 50th percentile",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00000000",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 2.5
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 25
+      },
+      "id": 33,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{instance}}, {{bucket}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Writes - 99th percentile",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic",
+            "seriesBy": "last"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#00000000",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 2.5
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 25
+      },
+      "id": 37,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.999, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "{{instance}}, {{bucket}}",
+          "refId": "C"
+        }
+      ],
+      "title": "Writes - 99.9th percentile",
+      "type": "timeseries"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 34
       },
       "id": 20,
       "panels": [],
@@ -470,9 +974,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
+        "w": 8,
         "x": 0,
-        "y": 17
+        "y": 35
       },
       "id": 25,
       "options": {
@@ -495,6 +999,7 @@
         {
           "exemplar": true,
           "expr": "kv_curr_items_tot{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
+          "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -526,9 +1031,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 17
+        "w": 8,
+        "x": 8,
+        "y": 35
       },
       "id": 23,
       "options": {
@@ -551,6 +1056,7 @@
         {
           "exemplar": true,
           "expr": "couch_docs_actual_disk_size{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
+          "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -581,9 +1087,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 11,
-        "x": 0,
-        "y": 25
+        "w": 8,
+        "x": 16,
+        "y": 35
       },
       "id": 6,
       "options": {
@@ -616,6 +1122,7 @@
           "exemplar": true,
           "expr": "kv_daemon_connections{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`}",
           "hide": false,
+          "instant": false,
           "interval": "",
           "legendFormat": "Daemon",
           "refId": "B"
@@ -639,7 +1146,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 43
       },
       "id": 10,
       "panels": [
@@ -1105,8 +1612,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "099248fa5dd678d3603eb76c1b9d5140",
-          "value": "099248fa5dd678d3603eb76c1b9d5140"
+          "text": "310e26b49c5f95c06952d504b3b86c34",
+          "value": "310e26b49c5f95c06952d504b3b86c34"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -1132,8 +1639,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "d658d5c2df0baf95ef5e5ae9194e03c2",
-          "value": "d658d5c2df0baf95ef5e5ae9194e03c2"
+          "text": "8d9ba6ed316a48cb45d4066d122bb076",
+          "value": "8d9ba6ed316a48cb45d4066d122bb076"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -1158,7 +1665,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": [
             "All"
           ],
@@ -1196,5 +1703,5 @@
   "timezone": "",
   "title": "Data Service Overview",
   "uid": "4vnZHfcnk",
-  "version": 21
+  "version": 17
 }
