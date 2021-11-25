@@ -1,0 +1,833 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": 13,
+    "iteration": 1637836215264,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "couchbase",
+          "couchbase-7",
+          "couchbase-node"
+        ],
+        "targetBlank": false,
+        "title": "Node Overview",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "couchbase",
+          "couchbase-7",
+          "couchbase-cluster"
+        ],
+        "targetBlank": false,
+        "title": "Cluster Overview",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "couchbase",
+          "couchbase-7",
+          "couchbase-service"
+        ],
+        "targetBlank": false,
+        "title": "Service Dashboards",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 0,
+          "y": 0
+        },
+        "id": 12,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "count(count by (bucket, scope, collection, index) (index_resident_percent))",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Indexes",
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 3,
+          "y": 0
+        },
+        "id": 14,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum by (instance) (index_data_size_on_disk{instance=~`$node(?::[0-9]*)?$`})",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Index Size on Disk",
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 6,
+          "y": 0
+        },
+        "id": 15,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum by (instance) (index_memory_used{instance=~`$node(?::[0-9]*)?$`})",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Index Size in Memory",
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "short"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 9,
+          "y": 0
+        },
+        "id": 10,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum(index_items_count{instance=~`$node(?::[0-9]*)?$`})",
+            "format": "time_series",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Items Indexed",
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 0
+        },
+        "id": 6,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "text": {}
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "topk(5, index_data_size{instance=~`$node(?::[0-9]*)?$`})",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{bucket}}/{{index}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Largest Indexes",
+        "type": "bargauge"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#ccccdc",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ns"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 0,
+          "y": 4
+        },
+        "id": 2,
+        "options": {
+          "displayMode": "gradient",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "text": {}
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency{instance=~`$node(?::[0-9]+)?$`}))",
+            "format": "time_series",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "{{bucket}} / {{ index }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Slowest Scanning Indexes",
+        "type": "bargauge"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "ops"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 12,
+          "x": 12,
+          "y": 8
+        },
+        "id": 4,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "topk(5, sum by (bucket, index) (rate(index_num_requests{instance=~`$node(?::[0-9]*)?$`}[$__rate_interval])))",
+            "interval": "",
+            "legendFormat": "{{bucket}} / {{index}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Index Requests",
+        "type": "timeseries"
+      },
+      {
+        "datasource": null,
+        "description": "Indexes that have never been scanned and may be redundant.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Bucket"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 159
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Scope"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 123
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Collection"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 151
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 7,
+          "x": 0,
+          "y": 12
+        },
+        "id": 8,
+        "options": {
+          "showHeader": true,
+          "sortBy": []
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "(sum by (bucket, scope, collection, index) (index_num_requests{instance=~`$node(?::[0-9]*)?$`})) == 0",
+            "format": "table",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          }
+        ],
+        "title": "Indexes Never Scanned",
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "Value": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 5,
+                "bucket": 1,
+                "collection": 3,
+                "index": 4,
+                "scope": 2
+              },
+              "renameByName": {
+                "bucket": "Bucket",
+                "collection": "Collection",
+                "index": "Index",
+                "scope": "Scope"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 0,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 5,
+          "x": 7,
+          "y": 12
+        },
+        "id": 17,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "sum(index_num_docs_pending{instance=~`^$node(?::[0-9]*)?$`})",
+            "interval": "",
+            "legendFormat": "Documents",
+            "refId": "A"
+          }
+        ],
+        "title": "Pending Documents",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 32,
+    "style": "dark",
+    "tags": [
+      "couchbase",
+      "couchbase-7",
+      "couchbase-service",
+      "couchbase-service-gsi"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "CMOS container test",
+            "value": "CMOS container test"
+          },
+          "datasource": null,
+          "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "description": null,
+          "error": null,
+          "hide": 0,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "172.18.0.2",
+            "value": "172.18.0.2"
+          },
+          "datasource": null,
+          "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
+          "description": null,
+          "error": null,
+          "hide": 0,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "node",
+          "options": [],
+          "query": {
+            "query": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]node_name=\"(.+?)(?::[0-9]*)?\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "7f4de6604f602e8c05291cb9927056cf",
+            "value": "7f4de6604f602e8c05291cb9927056cf"
+          },
+          "datasource": null,
+          "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+          "description": null,
+          "error": null,
+          "hide": 2,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "cluster_uuid",
+          "options": [],
+          "query": {
+            "query": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "3030ae3db5bce35d3a7e4c58503b1b9a",
+            "value": "3030ae3db5bce35d3a7e4c58503b1b9a"
+          },
+          "datasource": null,
+          "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
+          "description": null,
+          "error": null,
+          "hide": 2,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "node_uuid",
+          "options": [],
+          "query": {
+            "query": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]node_uuid=\"(.+?)\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-5m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Index Service Overview",
+    "uid": "zlHletp7k",
+    "version": 13
+  }
