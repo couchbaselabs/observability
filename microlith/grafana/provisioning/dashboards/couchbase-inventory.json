@@ -483,27 +483,13 @@
             "filterable": false,
             "minWidth": 0
           },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -522,7 +508,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "semi-dark-green",
+                  "fixedColor": "#55a64bb0",
                   "mode": "fixed"
                 }
               }
@@ -541,7 +527,8 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "continuous-YlRd"
+                  "fixedColor": "#ffb357b0",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -554,7 +541,7 @@
             "properties": [
               {
                 "id": "custom.displayMode",
-                "value": "color-background"
+                "value": "color-background-solid"
               },
               {
                 "id": "thresholds",
@@ -562,11 +549,11 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
+                      "color": "#55a64bb0",
                       "value": null
                     },
                     {
-                      "color": "semi-dark-red",
+                      "color": "#e02f44b0",
                       "value": 1
                     }
                   ]
@@ -646,6 +633,13 @@
               {
                 "id": "mappings",
                 "value": []
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "text",
+                  "mode": "fixed"
+                }
               }
             ]
           },
@@ -655,10 +649,6 @@
               "options": "Cluster"
             },
             "properties": [
-              {
-                "id": "custom.width",
-                "value": 185
-              },
               {
                 "id": "links",
                 "value": [
@@ -692,7 +682,7 @@
         ]
       },
       "gridPos": {
-        "h": 5,
+        "h": 9,
         "w": 24,
         "x": 0,
         "y": 12
@@ -713,7 +703,8 @@
           "cacheDurationSeconds": 0,
           "fields": [
             {
-              "jsonPath": "$[*].nodes_summary[0].host",
+              "jsonPath": "$map($.nodes_summary[0].host, function($h) {\n    $replace(\n      $replace($h, /:\\d+$/, \"\")\n    , /https?:\\/\\//, \"\")\n})",
+              "language": "jsonata",
               "name": "Cluster"
             },
             {
@@ -786,5 +777,5 @@
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 6
+  "version": 14
 }
