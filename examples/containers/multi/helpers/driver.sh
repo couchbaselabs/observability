@@ -134,7 +134,7 @@ function _load_sample_buckets() {
     local sample_buckets=("$@") # Then we are able to capture all remaining args in a new array
 
     sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
-    _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
+    _docker_exec_with_retry "$uid" "curl -s -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
         -d '[$sample_buckets_json]' || echo 'failed'" "[]"
 
     echo "- Sample buckets ${sample_buckets_json} loading in the background..."
@@ -144,7 +144,7 @@ function _load_sample_buckets() {
 
         for bucket in "${sample_buckets[@]}"; do
             # Block until bucket is ready
-            _docker_exec_with_retry "$uid" "curl -fs -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \
+            _docker_exec_with_retry "$uid" "curl -s -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \
                 || echo 'failed'" "{"
             { 
                 _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
@@ -156,7 +156,7 @@ function _load_sample_buckets() {
                 {
                     docker cp "$SCRIPT_DIR"/helpers/demo-queries.txt "$uid":./
                     _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-n1qlback -U http://localhost/$bucket \
-                    -u \"$server_user\" -P \"$server_pwd\" -t 2 -f ./demo-queries.txt || echo 'failed'" "Loaded" & 
+                    -u \"$server_user\" -P \"$server_pwd\" -t 1 -f ./demo-queries.txt || echo 'failed'" "Loaded" & 
                 } 1>/dev/null 2>&1
                 echo "  - Demo queries started against travel-sample"
             fi
@@ -216,7 +216,7 @@ function configure_servers() {
 
         # Register cluster with CBMM if non-OSS build
         if ! $oss_flag; then 
-            local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
+            local cmos_cmd="curl -s -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
               '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid.local:8091\"}' \
             'http://localhost:8080/couchbase/api/v1/clusters'"
             _docker_exec_with_retry "cmos" "$cmos_cmd || echo 'failed'" ""
@@ -238,7 +238,7 @@ function configure_servers() {
         # Add cluster to CMOS' Prometheus using the config service. From its OpenAPI spec the management port
         # defaults to 8091, and depending upon the Server version looks for Prometheus metrics on either
         # 8091 (Couchbase Server 7.0 and newer) or 9091 (6.x and earlier).
-        _docker_exec_with_retry "cmos" "curl -fs -X POST -H \"Content-Type: application/json\" -d \
+        _docker_exec_with_retry "cmos" "curl -s -X POST -H \"Content-Type: application/json\" -d \
           '{\"couchbaseConfig\":{\"username\":\"$server_user\",\"password\":\"$server_pwd\"}, \
           \"hostname\":\"node$start.local\"}' 'http://localhost:7194/config/api/v1/clusters/add' || echo 'failed'" "{\"ok\":true}"
 
@@ -265,7 +265,7 @@ function configure_servers() {
     done
 
     # Reload Prometheus to start scraping the added clusters
-    _docker_exec_with_retry "cmos" "curl -fs -X POST localhost:9090/prometheus/-/reload || echo 'failed'" ""
+    _docker_exec_with_retry "cmos" "curl -s -X POST localhost:9090/prometheus/-/reload || echo 'failed'" ""
     echo "Refreshed Prometheus to start scraping."
     echo ""
 
