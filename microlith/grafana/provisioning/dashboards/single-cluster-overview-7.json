@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 2,
   "id": 8,
-  "iteration": 1637775587950,
+  "iteration": 1637854809582,
   "links": [
     {
       "asDropdown": false,
@@ -327,7 +327,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
@@ -336,6 +336,14 @@
               {
                 "color": "text",
                 "value": null
+              },
+              {
+                "color": "#ff780ab0",
+                "value": 1
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 10
               }
             ]
           }
@@ -368,331 +376,34 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(sum by (bucket) (kv_collection_item_count{cluster=\"$cluster\"}))",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Number of Documents",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": false,
-            "minWidth": 1
-          },
-          "links": [],
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "index": 0,
-                  "text": "Good"
-                },
-                "1": {
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
-                  "index": 3,
-                  "text": "Info"
-                },
-                "4": {
-                  "index": 4,
-                  "text": "Missing"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent",
-                "value": null
-              },
-              {
-                "color": "#37872db0",
-                "value": 0
-              },
-              {
-                "color": "#ff9830b0",
-                "value": 1
-              },
-              {
-                "color": "#f2495cb0",
-                "value": 2
-              },
-              {
-                "color": "#c8c8ceb0",
-                "value": 3
-              },
-              {
-                "color": "transparent",
-                "value": 4
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "custom.displayMode",
-                "value": "color-background-solid"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Details",
-                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "State"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ID"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 13,
-        "x": 0,
-        "y": 6
-      },
-      "id": 68,
-      "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "State"
-          }
-        ]
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+          "expr": "count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0)",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Cluster",
           "refId": "A"
-        }
-      ],
-      "title": "Cluster Check Status",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {}
         },
         {
-          "id": "merge",
-          "options": {}
+          "exemplar": true,
+          "expr": "count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Node",
+          "refId": "B"
         },
         {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "cluster_name": true,
-              "cluster_uuid": true,
-              "instance": true,
-              "job": true
-            },
-            "indexByName": {
-              "Time": 0,
-              "Value": 7,
-              "cluster_name": 1,
-              "cluster_uuid": 2,
-              "id": 3,
-              "instance": 5,
-              "job": 6,
-              "name": 4
-            },
-            "renameByName": {
-              "Value": "State",
-              "id": "ID",
-              "name": "Name"
-            }
-          }
+          "exemplar": true,
+          "expr": "count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Bucket",
+          "refId": "C"
         }
       ],
-      "type": "table"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#58585d",
-                "value": null
-              },
-              {
-                "color": "#55a64bb0",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 11,
-        "x": 13,
-        "y": 6
-      },
-      "id": 97,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "/.*/",
-          "values": false
-        },
-        "text": {},
-        "textMode": "name"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Data"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Index"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Search"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Query"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Eventing"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Analytics"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Backup"
-            },
-            {
-              "jsonPath": "\"placeholder\"",
-              "language": "jsonata",
-              "name": "XDCR"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters"
-        }
-      ],
-      "title": "Running Services",
-      "transformations": [
-        {
-          "id": "seriesToRows",
-          "options": {}
-        }
-      ],
+      "title": "Number of Health Check Warnings",
+      "transformations": [],
       "type": "stat"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 16
-      },
-      "id": 14,
-      "panels": [],
-      "title": "Basic Info",
-      "type": "row"
     },
     {
       "datasource": "-- Mixed --",
@@ -847,10 +558,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 14,
+        "h": 10,
+        "w": 8,
         "x": 0,
-        "y": 17
+        "y": 6
       },
       "id": 2,
       "options": {
@@ -913,16 +624,6 @@
           "queryParams": "",
           "refId": "A",
           "urlPath": "/clusters/$cluster_uuid"
-        },
-        {
-          "datasource": "Prometheus",
-          "exemplar": true,
-          "expr": "max by (hostname) (label_replace(multimanager_node_checker_status{cluster_name=\"$cluster\"} > 0, \"hostname\", \"$1\", \"node_name\", \"(.+)(:[0-9]+)$\"))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "B"
         }
       ],
       "title": "Nodes",
@@ -951,111 +652,6 @@
         }
       ],
       "type": "table"
-    },
-    {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "#55a64bb0",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 10,
-        "x": 14,
-        "y": 17
-      },
-      "id": 99,
-      "options": {
-        "displayMode": "basic",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "/.*/",
-          "values": false
-        },
-        "showUnfilled": false,
-        "text": {}
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Data"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Index"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Search"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Query"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Eventing"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Analytics"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Backup"
-            },
-            {
-              "jsonPath": "0",
-              "language": "jsonata",
-              "name": "XDCR"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters"
-        }
-      ],
-      "title": "Running Services",
-      "transformations": [
-        {
-          "id": "seriesToRows",
-          "options": {}
-        }
-      ],
-      "type": "bargauge"
     },
     {
       "datasource": "-- Mixed --",
@@ -1223,10 +819,10 @@
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 14,
-        "x": 0,
-        "y": 25
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 6
       },
       "id": 48,
       "options": {
@@ -1299,16 +895,6 @@
         {
           "datasource": "Prometheus",
           "exemplar": true,
-          "expr": "count by (bucket) (multimanager_bucket_checker_status{cluster_name=`$cluster`} > 0)",
-          "format": "table",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "CheckWarnings"
-        },
-        {
-          "datasource": "Prometheus",
-          "exemplar": true,
           "expr": "min by (bucket) (kv_vb_perc_mem_resident_ratio{cluster=`$cluster`,state=\"active\"})",
           "format": "table",
           "hide": false,
@@ -1359,7 +945,127 @@
     },
     {
       "datasource": "JSON API",
-      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#56565d",
+                "value": null
+              },
+              {
+                "color": "#55a64bb3",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 97,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Data"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Index"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Search"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Query"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Eventing"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Analytics"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Backup"
+            },
+            {
+              "jsonPath": "0",
+              "language": "jsonata",
+              "name": "XDCR"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "title": "Running Services",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 16
+      },
+      "id": 14,
+      "panels": [],
+      "title": "Basic Info",
+      "type": "row"
+    },
+    {
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1368,19 +1074,63 @@
           "custom": {
             "align": "center",
             "displayMode": "auto",
+            "filterable": true,
             "minWidth": 1
           },
-          "mappings": [],
+          "links": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 0,
+                  "text": "Good"
+                },
+                "1": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "2": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "3": {
+                  "index": 3,
+                  "text": "Info"
+                },
+                "4": {
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "transparent",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#37872db0",
+                "value": 0
+              },
+              {
+                "color": "#ff9830b0",
+                "value": 1
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 2
+              },
+              {
+                "color": "#c8c8ceb0",
+                "value": 3
+              },
+              {
+                "color": "transparent",
+                "value": 4
               }
             ]
           }
@@ -1389,133 +1139,519 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Count"
+              "options": "Value"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 100
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Details",
+                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
+                  }
+                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "SDK/Client Version"
+              "options": "State"
             },
             "properties": [
               {
                 "id": "custom.width"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 10,
-        "x": 14,
-        "y": 25
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 17
       },
-      "id": 39,
+      "id": 68,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "State"
+          }
+        ]
       },
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.connections[*].sdk_name",
-              "name": "SDK/Client"
-            },
-            {
-              "jsonPath": "$.connections[*].sdk_version",
-              "language": "jsonpath",
-              "name": "SDK Version"
-            },
-            {
-              "jsonPath": "$.connections.user.($ = null ? \"\" : $replace($.name, /<\\/?ud>/, \"\"))",
-              "language": "jsonata",
-              "name": "Username"
-            },
-            {
-              "jsonPath": "$.connections[*].source.ip",
-              "language": "jsonpath",
-              "name": "Source IP"
-            },
-            {
-              "jsonPath": "$.connections[*].agent_name",
-              "language": "jsonpath",
-              "name": ""
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid/connections"
+          "exemplar": true,
+          "expr": "multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
         }
       ],
-      "title": "Connected KV Clients",
+      "title": "Cluster Check Status",
       "transformations": [
         {
-          "id": "groupBy",
-          "options": {
-            "fields": {
-              "SDK Version": {
-                "aggregations": [
-                  "first"
-                ],
-                "operation": "aggregate"
-              },
-              "SDK/Client": {
-                "aggregations": [
-                  "first",
-                  "count"
-                ],
-                "operation": "aggregate"
-              },
-              "Source IP": {
-                "aggregations": [
-                  "allValues"
-                ],
-                "operation": "aggregate"
-              },
-              "Username": {
-                "aggregations": [
-                  "allValues"
-                ],
-                "operation": "aggregate"
-              },
-              "agent_name": {
-                "aggregations": [],
-                "operation": "groupby"
-              }
-            }
-          }
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
         },
         {
           "id": "organize",
           "options": {
             "excludeByName": {
-              "agent_name": true
+              "Time": true,
+              "cluster_name": true,
+              "cluster_uuid": true,
+              "instance": true,
+              "job": true
             },
             "indexByName": {
-              "SDK Version (first)": 2,
-              "SDK/Client (count)": 3,
-              "SDK/Client (first)": 1,
-              "Source IP (allValues)": 5,
-              "Username (allValues)": 4,
-              "agent_name": 0
+              "Time": 0,
+              "Value": 7,
+              "cluster_name": 1,
+              "cluster_uuid": 2,
+              "id": 3,
+              "instance": 5,
+              "job": 6,
+              "name": 4
             },
             "renameByName": {
-              "SDK Version (first)": "SDK/Client Version",
-              "SDK/Client (count)": "Count",
-              "SDK/Client (first)": "SDK/Client",
-              "Source IP (allValues)": "Source IPs",
-              "Username (allValues)": "Usernames"
+              "Value": "State",
+              "id": "ID",
+              "name": "Name"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto",
+            "filterable": true,
+            "minWidth": 1
+          },
+          "links": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 0,
+                  "text": "Good"
+                },
+                "1": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "2": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "3": {
+                  "index": 3,
+                  "text": "Info"
+                },
+                "4": {
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#37872db0",
+                "value": 0
+              },
+              {
+                "color": "#ff9830b0",
+                "value": 1
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 2
+              },
+              {
+                "color": "#c8c8ceb0",
+                "value": 3
+              },
+              {
+                "color": "transparent",
+                "value": 4
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Details",
+                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 8,
+        "y": 17
+      },
+      "id": 105,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "State"
+          }
+        ]
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Node Check Status",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "cluster_name": true,
+              "cluster_uuid": true,
+              "instance": true,
+              "job": true,
+              "node_name": false,
+              "node_uuid": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 8,
+              "cluster_name": 1,
+              "cluster_uuid": 2,
+              "id": 3,
+              "instance": 5,
+              "job": 7,
+              "name": 4,
+              "node_name": 6,
+              "node_uuid": 9
+            },
+            "renameByName": {
+              "Value": "State",
+              "id": "ID",
+              "name": "Name",
+              "node_name": "Node"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto",
+            "filterable": true,
+            "minWidth": 1
+          },
+          "links": [],
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "index": 0,
+                  "text": "Good"
+                },
+                "1": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "2": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "3": {
+                  "index": 3,
+                  "text": "Info"
+                },
+                "4": {
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "#37872db0",
+                "value": 0
+              },
+              {
+                "color": "#ff9830b0",
+                "value": 1
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 2
+              },
+              {
+                "color": "#c8c8ceb0",
+                "value": 3
+              },
+              {
+                "color": "transparent",
+                "value": 4
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Details",
+                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "custom.width"
+              },
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 16,
+        "y": 17
+      },
+      "id": 106,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "State"
+          }
+        ]
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Bucket Check Status",
+      "transformations": [
+        {
+          "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "bucket": false,
+              "cluster_name": true,
+              "cluster_uuid": true,
+              "instance": true,
+              "job": true,
+              "node_name": true,
+              "node_uuid": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 8,
+              "bucket": 5,
+              "cluster_name": 1,
+              "cluster_uuid": 2,
+              "id": 3,
+              "instance": 6,
+              "job": 7,
+              "name": 4
+            },
+            "renameByName": {
+              "Value": "State",
+              "id": "ID",
+              "name": "Name"
             }
           }
         }
@@ -1529,7 +1665,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 33
+        "y": 26
       },
       "id": 16,
       "panels": [],
@@ -1576,7 +1712,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "#37872db0",
+                "color": "semi-dark-green",
                 "value": null
               }
             ]
@@ -1587,9 +1723,9 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 8,
+        "w": 12,
         "x": 0,
-        "y": 34
+        "y": 27
       },
       "id": 28,
       "options": {
@@ -1619,63 +1755,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "#378745",
-                "value": null
-              }
-            ]
-          },
-          "unit": "ops"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 8,
-        "x": 8,
-        "y": 34
-      },
-      "id": 103,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum by (instance) (rate(kv_ops{cluster=\"$cluster\",op=\"get\"}[$__rate_interval]))",
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "GET operations",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds",
+            "mode": "palette-classic",
             "seriesBy": "last"
           },
           "custom": {
@@ -1684,7 +1764,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
-            "gradientMode": "scheme",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1694,7 +1774,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 10,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -1703,20 +1784,20 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line+area"
             }
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "#378745",
+                "color": "#00000000",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#e02f44b0",
+                "value": 2.5
               }
             ]
           },
@@ -1726,9 +1807,9 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 8,
-        "x": 16,
-        "y": 34
+        "w": 12,
+        "x": 12,
+        "y": 27
       },
       "id": 102,
       "options": {
@@ -1744,11 +1825,27 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m])))",
+          "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{bucket}}",
+          "legendFormat": "99%",
           "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99.9%",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "avg",
+          "refId": "C"
         }
       ],
       "title": "Reads 99th Percentile",
@@ -1794,7 +1891,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "#37872db0",
+                "color": "semi-dark-green",
                 "value": null
               }
             ]
@@ -1805,11 +1902,11 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 8,
+        "w": 12,
         "x": 0,
-        "y": 44
+        "y": 37
       },
-      "id": 104,
+      "id": 107,
       "options": {
         "legend": {
           "calcs": [],
@@ -1837,61 +1934,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "#378745",
-                "value": null
-              }
-            ]
-          },
-          "unit": "ops"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 8,
-        "x": 8,
-        "y": 44
-      },
-      "id": 50,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum by (instance) (rate(kv_ops{cluster=\"$cluster\",op=\"set\"}[$__rate_interval]))",
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "SET Operations",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds",
+            "mode": "palette-classic",
             "seriesBy": "last"
           },
           "custom": {
@@ -1900,7 +1943,7 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 0,
-            "gradientMode": "scheme",
+            "gradientMode": "none",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1910,7 +1953,8 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "type": "linear"
+              "log": 10,
+              "type": "log"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -1919,20 +1963,20 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line+area"
             }
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "#378745",
+                "color": "#00000000",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#e02f44b0",
+                "value": 2.5
               }
             ]
           },
@@ -1942,11 +1986,11 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 8,
-        "x": 16,
-        "y": 44
+        "w": 12,
+        "x": 12,
+        "y": 37
       },
-      "id": 46,
+      "id": 108,
       "options": {
         "legend": {
           "calcs": [],
@@ -1960,11 +2004,27 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m])))",
+          "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
           "instant": false,
           "interval": "",
-          "legendFormat": "{{bucket}}",
+          "legendFormat": "99%",
           "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99.9%",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "avg",
+          "refId": "C"
         }
       ],
       "title": "Writes 99th Percentile",
@@ -1977,7 +2037,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 54
+        "y": 47
       },
       "id": 41,
       "panels": [],
@@ -1989,7 +2049,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
@@ -2027,7 +2087,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "text",
+                "color": "semi-dark-green",
                 "value": null
               }
             ]
@@ -2040,7 +2100,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 55
+        "y": 48
       },
       "id": 20,
       "options": {
@@ -2102,15 +2162,15 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
                 "color": "text",
                 "value": null
               },
               {
-                "color": "#F2495C",
-                "value": 80
+                "color": "semi-dark-red",
+                "value": 1
               }
             ]
           },
@@ -2122,7 +2182,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 55
+        "y": 48
       },
       "id": 24,
       "options": {
@@ -2148,215 +2208,6 @@
       ],
       "title": "Average Query Execution Time",
       "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 65
-      },
-      "id": 43,
-      "panels": [],
-      "title": "KPIs - Index Service",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds",
-            "seriesBy": "last"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "area"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "dark-green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 0.85
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 8,
-        "x": 0,
-        "y": 66
-      },
-      "id": 33,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "index_memory_used_total{cluster=${cluster:doublequote}} / index_memory_quota{cluster=${cluster:doublequote}}",
-          "interval": "",
-          "legendFormat": "{{instance}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Index Memory Quota Usage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent",
-                "value": null
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 8,
-        "x": 8,
-        "y": 66
-      },
-      "id": 44,
-      "options": {
-        "displayMode": "basic",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "topk(4, index_data_size{cluster=${cluster:doublequote}})",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{index}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Largest Indexes",
-      "transformations": [],
-      "type": "bargauge"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent",
-                "value": null
-              }
-            ]
-          },
-          "unit": "ns"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 8,
-        "x": 16,
-        "y": 66
-      },
-      "id": 35,
-      "options": {
-        "displayMode": "basic",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showUnfilled": true,
-        "text": {}
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "topk(4, index_avg_scan_latency{cluster=${cluster:doublequote}})",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "{{index}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Slowest Scanning Indexes",
-      "transformations": [],
-      "type": "bargauge"
     }
   ],
   "refresh": false,
@@ -2400,8 +2251,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "5a26b5ccdc50a94a8e6eabba82e5bc74",
-          "value": "5a26b5ccdc50a94a8e6eabba82e5bc74"
+          "text": "099248fa5dd678d3603eb76c1b9d5140",
+          "value": "099248fa5dd678d3603eb76c1b9d5140"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2446,5 +2297,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 2
+  "version": 30
 }
