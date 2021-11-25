@@ -91,7 +91,7 @@ function _docker_exec_with_retry() {
         if [[ $output == *$success_msg* ]]; then
             return
         else
-            echo "Command failed, waiting ${retry_time[$i]} seconds before retrying..."
+            echo "Couchbase Server is not ready, waiting ${retry_time[$i]} seconds before retrying..."
             sleep "${retry_time[$i]}"
             
         fi
