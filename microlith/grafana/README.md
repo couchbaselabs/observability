@@ -16,7 +16,7 @@ Note: for Couchbase Server 6 and below only, the exporter must be installed on e
 
 When developing dashboards, especially for those with SSH access to the private cbmultimanager repository, it may be helpful to call `make example-multi`. This will build and run the CMOS container as well as a number of Couchbase Server nodes, divided into the specified amount of clusters, with sample buckets and indexes loaded, and a gentle cbpillowfight activated. More information on how to use this and the various variables that can be changed can be found in the README under `examples/containers/multi`.
 
-Once you have a local environment configured, you can visit http://localhost:8080/grafana, and begin editing the dashboards. It is important to note that they will refresh every time the page is reloaded, so make sure to hit "Save" every time you make a change (and before exporting the dashboard).
+Once you have a local environment configured, you can visit http://localhost:8080/grafana, and begin editing the dashboards. It is important to note that they will reset every time the page is reloaded, so make sure to hit "Save" every time you make a change (and before exporting the dashboard).
 
 ## Exporting dashboards from the web UI for provisioning ##
 
