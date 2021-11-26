@@ -138,10 +138,10 @@ function _load_sample_buckets() {
         -d '[$sample_buckets_json]' || echo 'failed'" "[]"
 
     echo "- Sample buckets ${sample_buckets_json} loading in the background..."
-    sleep 10
     
     if $load; then # Start cbpillowfight and n1qlback to simulate a non-zero load (NOT stress test)
-
+        sleep 10
+        
         for bucket in "${sample_buckets[@]}"; do
             # Block until bucket is ready
             _docker_exec_with_retry "$uid" "curl -s -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \

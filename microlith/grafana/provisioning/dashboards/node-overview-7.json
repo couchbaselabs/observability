@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 11,
-  "iteration": 1637839746917,
+  "id": 13,
+  "iteration": 1637946028453,
   "links": [
     {
       "asDropdown": false,
@@ -141,17 +141,26 @@
               "language": "jsonata",
               "name": "Version",
               "type": "number"
-            },
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$m := $now()})",
-              "language": "jsonata",
-              "name": "Time",
-              "type": "time"
             }
           ],
           "method": "GET",
           "queryParams": "",
           "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        },
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.nodes_summary[node_uuid=\"$node_uuid\"].version",
+              "language": "jsonata",
+              "name": "Version"
+            }
+          ],
+          "hide": true,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
           "urlPath": "/clusters/$cluster_uuid"
         }
       ],
@@ -171,6 +180,7 @@
           "custom": {
             "align": "center",
             "displayMode": "auto",
+            "filterable": true,
             "minWidth": 0,
             "width": 0
           },
@@ -239,7 +249,13 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Checker info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
               }
             ]
           }
@@ -254,7 +270,12 @@
       "id": 2,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Status"
+          }
+        ]
       },
       "pluginVersion": "8.2.5",
       "targets": [
@@ -312,7 +333,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "transparent",
+                "color": "#56565d",
                 "value": null
               },
               {
@@ -332,7 +353,7 @@
       },
       "id": 14,
       "options": {
-        "colorMode": "background",
+        "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -385,11 +406,6 @@
               "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
               "language": "jsonata",
               "name": "Backup"
-            },
-            {
-              "jsonPath": "\"Placeholder\"",
-              "language": "jsonata",
-              "name": "Placeholder"
             }
           ],
           "method": "GET",
@@ -469,7 +485,7 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 8,
+        "w": 10,
         "x": 0,
         "y": 9
       },
@@ -551,8 +567,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 16,
-        "x": 8,
+        "w": 14,
+        "x": 10,
         "y": 9
       },
       "id": 10,
@@ -633,7 +649,7 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 8,
+        "w": 10,
         "x": 0,
         "y": 19
       },
@@ -715,8 +731,8 @@
       },
       "gridPos": {
         "h": 10,
-        "w": 16,
-        "x": 8,
+        "w": 14,
+        "x": 10,
         "y": 19
       },
       "id": 8,
@@ -783,8 +799,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1058671af8cd6c3bdfe7ab5f15828a58",
-          "value": "1058671af8cd6c3bdfe7ab5f15828a58"
+          "text": "6aebca415d4cda73ca5ed591a7236987",
+          "value": "6aebca415d4cda73ca5ed591a7236987"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -810,8 +826,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node1.local",
-          "value": "node1.local"
+          "text": "172.30.0.3",
+          "value": "172.30.0.3"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -837,8 +853,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "353c6792411aef5ee1e14020aa1e5d85",
-          "value": "353c6792411aef5ee1e14020aa1e5d85"
+          "text": "92b04d918b3f7b65eeaad05740e7e309",
+          "value": "92b04d918b3f7b65eeaad05740e7e309"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -870,5 +886,5 @@
   "timezone": "",
   "title": "Node Overview (7.x)",
   "uid": "Dx-2iOc7k",
-  "version": 16
+  "version": 3
 }

@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 11,
-  "iteration": 1637926522265,
+  "id": 1,
+  "iteration": 1637940909736,
   "links": [
     {
       "asDropdown": false,
@@ -105,14 +105,8 @@
             {
               "jsonPath": "$cluster",
               "language": "jsonata",
-              "name": "Version",
+              "name": "Cluster Name",
               "type": "number"
-            },
-            {
-              "jsonPath": "$now()",
-              "language": "jsonata",
-              "name": "Time",
-              "type": "time"
             }
           ],
           "method": "GET",
@@ -180,12 +174,6 @@
               "language": "jsonata",
               "name": "Version",
               "type": "number"
-            },
-            {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$m := $now()})",
-              "language": "jsonata",
-              "name": "Time",
-              "type": "time"
             }
           ],
           "method": "GET",
@@ -202,6 +190,7 @@
     },
     {
       "datasource": "JSON API",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -249,7 +238,8 @@
           "fields": [
             {
               "jsonPath": "$count($.nodes_summary[*])",
-              "language": "jsonata"
+              "language": "jsonata",
+              "name": "Number of nodes"
             }
           ],
           "method": "GET",
@@ -310,7 +300,8 @@
           "fields": [
             {
               "jsonPath": "$count($.buckets_summary[*])",
-              "language": "jsonata"
+              "language": "jsonata",
+              "name": "Number of buckets"
             }
           ],
           "method": "GET",
@@ -370,7 +361,7 @@
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.2.5",
       "targets": [
@@ -529,7 +520,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Hostname"
+              "options": "Node"
             },
             "properties": [
               {
@@ -537,7 +528,7 @@
                 "value": [
                   {
                     "title": "Node Overview Dashboard",
-                    "url": "/d/Dx-2iOc7k/node-overview-7-x?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}&var-node=${__data.fields.Hostname}"
+                    "url": "/d/Dx-2iOc7k/node-overview-7-x?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}&var-node=${__data.fields.Node}"
                   }
                 ]
               }
@@ -582,7 +573,7 @@
             {
               "jsonPath": "$map($.nodes_summary[*].host, function($h) {\n    $replace(\n      $replace($h, /:\\d+$/, \"\")\n    , /https?:\\/\\//, \"\")\n})",
               "language": "jsonata",
-              "name": "hostname"
+              "name": "Node"
             },
             {
               "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
@@ -675,7 +666,76 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Data Service Overview",
+                    "url": "/d/Dx-2iOc7k/data-service-overview?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Index"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Index Service Overview",
+                    "url": "/d/Dx-2iOc7k/index-service-overview?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Search"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Search Service Overview",
+                    "url": "/d/Dx-2iOc7k/search-service-overview?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}&var-node=${__data.fields.Hostname}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Query"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Query Service Overview",
+                    "url": "/d/Dx-2iOc7k/query-service-overview?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 12,
@@ -738,11 +798,6 @@
               "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
               "language": "jsonata",
               "name": "Backup"
-            },
-            {
-              "jsonPath": "0",
-              "language": "jsonata",
-              "name": "XDCR"
             }
           ],
           "method": "GET",
@@ -751,7 +806,7 @@
           "urlPath": "/clusters"
         }
       ],
-      "title": "Running Services",
+      "title": "Running Services (clickable!)",
       "transformations": [
         {
           "id": "seriesToRows",
@@ -1145,16 +1200,6 @@
               {
                 "id": "custom.displayMode",
                 "value": "color-background-solid"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Details",
-                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
-                  }
-                ]
               }
             ]
           },
@@ -1340,16 +1385,6 @@
               {
                 "id": "custom.displayMode",
                 "value": "color-background-solid"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Details",
-                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
-                  }
-                ]
               }
             ]
           },
@@ -1380,6 +1415,23 @@
                     "targetBlank": true,
                     "title": "Checker Documentation",
                     "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Node"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Node Overview",
+                    "url": "/d/Dx-2iOc7k/node-overview-7-x?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}&var-node=${__data.fields.Node}"
                   }
                 ]
               }
@@ -1540,16 +1592,6 @@
               {
                 "id": "custom.displayMode",
                 "value": "color-background-solid"
-              },
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Details",
-                    "url": "http://localhost:8080/couchbase/ui/clusters/${cluster_uuid:queryparam}/status"
-                  }
-                ]
               }
             ]
           },
@@ -1580,6 +1622,23 @@
                     "targetBlank": true,
                     "title": "Checker Documentation",
                     "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bucket"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Bucket Overview",
+                    "url": "/d/H8M3rE5nk/bucket-overview?${cluster:queryparam}﻿&var-bucket=${__data.fields.Bucket}"
                   }
                 ]
               }
@@ -1650,6 +1709,7 @@
             },
             "renameByName": {
               "Value": "State",
+              "bucket": "Bucket",
               "id": "ID",
               "name": "Name"
             }
@@ -2251,8 +2311,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "2d2cc74118ce8435362f24762b53b51f",
-          "value": "2d2cc74118ce8435362f24762b53b51f"
+          "text": "044c6d81e82e3a5ecb43d2d4e659739c",
+          "value": "044c6d81e82e3a5ecb43d2d4e659739c"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2297,5 +2357,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 2
+  "version": 10
 }

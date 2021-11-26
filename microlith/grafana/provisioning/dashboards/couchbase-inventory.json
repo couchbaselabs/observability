@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 12,
+  "id": 14,
   "links": [
     {
       "asDropdown": false,
@@ -646,7 +646,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Cluster"
+              "options": "Server UI"
             },
             "properties": [
               {
@@ -655,7 +655,7 @@
                   {
                     "targetBlank": true,
                     "title": "Go to Couchbase UI",
-                    "url": "${__data.fields.Cluster}"
+                    "url": "https://${__data.fields.Cluster}:8091"
                   }
                 ]
               }
@@ -705,7 +705,7 @@
             {
               "jsonPath": "$map($.nodes_summary[0].host, function($h) {\n    $replace(\n      $replace($h, /:\\d+$/, \"\")\n    , /https?:\\/\\//, \"\")\n})",
               "language": "jsonata",
-              "name": "Cluster"
+              "name": "Server UI"
             },
             {
               "jsonPath": "$[*].name",
@@ -770,12 +770,12 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-3h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 14
+  "version": 1
 }
