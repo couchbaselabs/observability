@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 8,
-  "iteration": 1637854809582,
+  "id": 11,
+  "iteration": 1637926522265,
   "links": [
     {
       "asDropdown": false,
@@ -558,8 +558,8 @@
         ]
       },
       "gridPos": {
-        "h": 10,
-        "w": 8,
+        "h": 6,
+        "w": 16,
         "x": 0,
         "y": 6
       },
@@ -652,6 +652,113 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#56565d",
+                "value": null
+              },
+              {
+                "color": "#55a64bb3",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "id": 97,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Data"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Index"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Search"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Query"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Eventing"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Analytics"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Backup"
+            },
+            {
+              "jsonPath": "0",
+              "language": "jsonata",
+              "name": "XDCR"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "title": "Running Services",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        }
+      ],
+      "type": "stat"
     },
     {
       "datasource": "-- Mixed --",
@@ -819,10 +926,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
-        "w": 8,
-        "x": 8,
-        "y": 6
+        "h": 6,
+        "w": 16,
+        "x": 0,
+        "y": 12
       },
       "id": 48,
       "options": {
@@ -944,120 +1051,13 @@
       "type": "table"
     },
     {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#56565d",
-                "value": null
-              },
-              {
-                "color": "#55a64bb3",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 8,
-        "x": 16,
-        "y": 6
-      },
-      "id": 97,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "max"
-          ],
-          "fields": "/.*/",
-          "values": false
-        },
-        "text": {},
-        "textMode": "name"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Data"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Index"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Search"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Query"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Eventing"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Analytics"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Backup"
-            },
-            {
-              "jsonPath": "0",
-              "language": "jsonata",
-              "name": "XDCR"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters"
-        }
-      ],
-      "title": "Running Services",
-      "transformations": [
-        {
-          "id": "seriesToRows",
-          "options": {}
-        }
-      ],
-      "type": "stat"
-    },
-    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 18
       },
       "id": 14,
       "panels": [],
@@ -1196,7 +1196,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 17
+        "y": 19
       },
       "id": 68,
       "options": {
@@ -1391,7 +1391,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 17
+        "y": 19
       },
       "id": 105,
       "options": {
@@ -1591,7 +1591,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 17
+        "y": 19
       },
       "id": 106,
       "options": {
@@ -1665,7 +1665,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 26
+        "y": 28
       },
       "id": 16,
       "panels": [],
@@ -1725,7 +1725,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 27
+        "y": 29
       },
       "id": 28,
       "options": {
@@ -1809,7 +1809,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 27
+        "y": 29
       },
       "id": 102,
       "options": {
@@ -1904,7 +1904,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 37
+        "y": 39
       },
       "id": 107,
       "options": {
@@ -1988,7 +1988,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 37
+        "y": 39
       },
       "id": 108,
       "options": {
@@ -2037,7 +2037,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 49
       },
       "id": 41,
       "panels": [],
@@ -2100,7 +2100,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 48
+        "y": 50
       },
       "id": 20,
       "options": {
@@ -2182,7 +2182,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 48
+        "y": 50
       },
       "id": 24,
       "options": {
@@ -2251,8 +2251,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "099248fa5dd678d3603eb76c1b9d5140",
-          "value": "099248fa5dd678d3603eb76c1b9d5140"
+          "text": "2d2cc74118ce8435362f24762b53b51f",
+          "value": "2d2cc74118ce8435362f24762b53b51f"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2297,5 +2297,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 30
+  "version": 2
 }
