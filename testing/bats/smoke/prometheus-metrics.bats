@@ -143,6 +143,7 @@ function metricGreaterThanZero() {
 }
 
 @test "verify logs are being ingested by Promtail and Loki" {
+    skip "CMOS-179"
     # Are we ready?
     wait_for_url 10 "$CMOS_HOST/prometheus/-/ready"
 
