@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Alertmanager Configuration | CMOS</title>
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Alertmanager Configuration</h1>
+    <div x-data="generator">
+      <p x-show="loading">Loading configuration, please wait...</p>
+      <template x-if="!loading">
+        <form name="inputForm" x-cloak>
+          <fieldset>
+            <h2>Slack Alerts</h2>
+
+            <label>
+              <input
+                type="url"
+                x-model="config.slack.webhookURL"
+                :disabled="config.slack.configuredExternally"
+              />
+              Webhook URL
+            </label>
+
+            <div x-show="config.slack.configuredExternally">
+              <strong>
+                <code>slack_webhook_url</code> is set in the Alertmanager config
+                file. Please edit that file instead of using this form.
+              </strong>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <h2>Email Alerts</h2>
+
+            <div>
+              <label>
+                <input type="text" x-model="config.email.host" placeholder="mail.mycompany.com:25" />
+                SMTP Host:port
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="text" x-model="config.email.from" />
+                SMTP FROM Header
+              </label>
+            </div>
+            <div>
+              <label>
+                <input
+                  type="text"
+                  x-model="config.email.hello"
+                  placeholder="localhost"
+                />
+                SMTP HELLO
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="text" x-model="config.email.username" />
+                Authentication Username (for CRAM-MD5, LOGIN and PLAIN)
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="password" x-model="config.email.password" />
+                Authentication Password (for LOGIN and PLAIN)
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="text" x-model="config.email.identity" />
+                Authentication Identity (for PLAIN)
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="text" x-model="config.email.secret" />
+                Authentication Secret (for CRAM-MD5)
+              </label>
+            </div>
+            <div>
+              <label>
+                <input type="checkbox" x-model="config.email.requireTLS" />
+                Require TLS?
+              </label>
+            </div>
+          </fieldset>
+
+          <button @click.prevent="configure">Save</button>
+          <button @click.prevent="generate">
+            Show Manual Configuration Steps
+          </button>
+
+          <div x-show="amConfigYaml.length > 0">
+            <p>
+              Add the following fragment of YAML to
+              <code>/etc/alertmanager/config.yml</code>. If you already have a <code>global</code> section, add
+              the fields if not already present, or replace their values if they are.
+            </p>
+            <pre id="alertmanagerYaml" x-text="amConfigYaml"></pre>
+          </div>
+
+          <div x-show="saving">Saving configuration, please wait...</div>
+          <div x-show="success">Alertmanager configuration saved!</div>
+          <div
+            x-show="error.length > 0"
+            x-text="error"
+            style="color: red; font-weight: bold"
+          ></div>
+        </form>
+      </template>
+    </div>
+    <script defer src="/alpine-3.4.2.min.js"></script>
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.data("generator", () => ({
+          config: {},
+          loading: true,
+          saving: false,
+          success: false,
+          error: "",
+
+          amConfigYaml: "",
+
+          init() {
+            fetch("/config/api/v1/alertsConfiguration")
+              .then((res) => res.json())
+              .then((data) => {
+                if (!("email" in data)) {
+                  data.email = {
+                    from: "",
+                    hello: "",
+                    host: "",
+                    username: "",
+                    identity: "",
+                    password: "",
+                    secret: "",
+                    requireTLS: true,
+                  };
+                }
+                if (!("slack" in data)) {
+                  data.slack = {
+                    webhookURL: "",
+                  };
+                }
+                console.log("Got data", data);
+                this.config = data;
+                this.loading = false;
+              })
+              .catch((err) => {
+                this.error = String(err);
+              });
+          },
+
+          configure() {
+            this.saving = true;
+            this.error = "";
+            fetch("/config/api/v1/alertsConfiguration", {
+              method: "PUT",
+              body: JSON.stringify(this.config),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.ok) {
+                  this.success = true;
+                    return fetch("/alertmanager/-/reload", {method: "POST"});
+                } else {
+                  this.error = data.err;
+                }
+              })
+              .catch((e) => {
+                this.error = String(e);
+              })
+              .finally(() => {
+                this.saving = false;
+              });
+          },
+
+          generate() {
+            let yaml = "global:";
+            if (this.config.email && this.config.email.host.length > 0) {
+              yaml += `
+  smtp_from: ${this.config.email.from}
+  smtp_smarthost: ${this.config.email.host}
+  smtp_hello: ${this.config.email.hello}
+  smtp_auth_username: ${this.config.email.username}
+  smtp_auth_password: ${this.config.email.password}
+  smtp_auth_identity: ${this.config.email.identity}
+  smtp_auth_secret: ${this.config.email.secret}
+`;
+            }
+
+            if (this.config.slack && this.config.slack.webhookURL.length > 0) {
+              yaml += `
+  slack_api_url: ${this.config.slack.webhookURL}
+`;
+            }
+
+            this.amConfigYaml = yaml;
+          },
+        }));
+      });
+    </script>
+  </body>
+</html>

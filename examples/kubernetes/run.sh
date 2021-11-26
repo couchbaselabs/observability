@@ -60,6 +60,7 @@ EOF
   # Wait for cluster to come up
   docker pull "${COUCHBASE_SERVER_IMAGE}"
   kind load docker-image "${COUCHBASE_SERVER_IMAGE}" --name="${CLUSTER_NAME}"
+  kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
 fi #SKIP_CLUSTER_CREATION
 
 # Set up Helm repos required in this script - final / can be missing or present and is treated as a unique entity so attempt both in case one is already there.
@@ -79,7 +80,9 @@ kubectl delete configmap prometheus-config &> /dev/null || true
 kubectl create configmap prometheus-config --from-file="${SCRIPT_DIR}/prometheus/custom/"
 
 # Deploy the CMOS microlith and services
+if [[ "${SKIP_CLUSTER_CREATION:-no}" != "no" ]]; then
 kind load docker-image "${CMOS_IMAGE}" --name="${CLUSTER_NAME}"
+fi
 kubectl apply -f "${SCRIPT_DIR}/microlith.yaml"
 
 # Add Couchbase via helm chart

@@ -44,17 +44,15 @@ func (s *Server) GetAlertsConfiguration(ctx echo.Context) error {
 		result.Slack.WebhookURL = cfg.Global.SlackAPIURL
 	}
 
-	if cfg.Global.SMTPFrom != "" && cfg.Global.SMTPHello != "" {
-		result.Email = &v1.EmailAlertNotificationConfig{
-			From:       cfg.Global.SMTPFrom,
-			Host:       cfg.Global.SMTPSmarthost,
-			Hello:      null.StringFrom(cfg.Global.SMTPHello).Ptr(),
-			Identity:   null.StringFrom(cfg.Global.SMTPAuthIdentity).Ptr(),
-			Password:   null.StringFrom(cfg.Global.SMTPAuthPassword).Ptr(),
-			RequireTLS: null.BoolFrom(cfg.Global.SMTPRequireTLS).Ptr(),
-			Secret:     null.StringFrom(cfg.Global.SMTPAuthSecret).Ptr(),
-			Username:   null.StringFrom(cfg.Global.SMTPAuthUsername).Ptr(),
-		}
+	result.Email = &v1.EmailAlertNotificationConfig{
+		From:       cfg.Global.SMTPFrom,
+		Host:       cfg.Global.SMTPSmarthost,
+		Hello:      null.StringFrom(cfg.Global.SMTPHello).Ptr(),
+		Identity:   null.StringFrom(cfg.Global.SMTPAuthIdentity).Ptr(),
+		Password:   null.StringFrom(cfg.Global.SMTPAuthPassword).Ptr(),
+		RequireTLS: null.BoolFrom(cfg.Global.SMTPRequireTLS).Ptr(),
+		Secret:     null.StringFrom(cfg.Global.SMTPAuthSecret).Ptr(),
+		Username:   null.StringFrom(cfg.Global.SMTPAuthUsername).Ptr(),
 	}
 
 	return ctx.JSON(http.StatusOK, result)
