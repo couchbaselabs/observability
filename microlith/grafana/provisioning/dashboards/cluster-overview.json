@@ -393,7 +393,7 @@
           "refId": "C"
         }
       ],
-      "title": "Number of Health Check Warnings",
+      "title": "Health Check Warnings",
       "transformations": [],
       "type": "stat"
     },
@@ -2034,7 +2034,7 @@
           "refId": "C"
         }
       ],
-      "title": "Reads 99th Percentile",
+      "title": "Read latency",
       "type": "timeseries"
     },
     {
@@ -2213,7 +2213,7 @@
           "refId": "C"
         }
       ],
-      "title": "Writes 99th Percentile",
+      "title": "Write Latency",
       "type": "timeseries"
     },
     {
