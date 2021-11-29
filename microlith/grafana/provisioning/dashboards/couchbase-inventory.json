@@ -41,6 +41,7 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": true,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -655,7 +656,7 @@
                   {
                     "targetBlank": true,
                     "title": "Go to Couchbase UI",
-                    "url": "https://${__data.fields.Cluster}:8091"
+                    "url": "https://${__data.fields.Server UI}:8091"
                   }
                 ]
               }
