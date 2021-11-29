@@ -15,8 +15,8 @@ GIT_REVISION := $(shell git rev-parse HEAD)
 # This is analogous to revisions in DEB and RPM archives.
 revision = $(if $(REVISION),$(REVISION),)
 
-.PHONY: all build clean config-svc-lint container container-clean container-lint container-oss container-public container-scan \
-        dist docs docs-generate-markdown docs-license-analysis docs-lint example-kubernetes example-containers example-multi \
+.PHONY: all build clean config-svc-lint container container-clean container-lint container-oss container-public container-scan dist \
+        docs docs-generate-markdown docs-license-analysis docs-lint examples-clean example-kubernetes example-containers example-multi \
 		lint test test-containers test-dist test-kubernetes test-native
 
 # TODO: add 'test examples'
@@ -131,21 +131,21 @@ test-dist-oss: dist
 	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "test-dist/Dockerfile" > "test-dist/Dockerfile.oss"
 	docker build -f test-dist/Dockerfile.oss test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 
-# Remove our images then remove dangling ones to prevent any caching
-container-clean:
-	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
-	docker image prune --force
-
-clean: container-clean
-	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
-	rm -f microlith/git-commit.txt
+examples-clean: 
 	-examples/containers/stop.sh
 	rm -f examples/containers/logs/*.log
 	-examples/kubernetes/stop.sh
 	-examples/containers/multi/stop.sh
+
+container-clean: examples-clean
+	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
+				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
+
+clean: container-clean
+	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
+	rm -f microlith/git-commit.txt
 
 docs-license-analysis:
 	tools/tern-report.sh
