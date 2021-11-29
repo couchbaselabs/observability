@@ -395,10 +395,10 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(n1ql_request_time{instance=\"$node\"}[$__rate_interval])) / sum(rate(n1ql_requests{instance=\"$node\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_request_time{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])) / sum(rate(n1ql_requests{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval]))",
           "instant": false,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "50th percentile",
           "refId": "A"
         }
       ],
