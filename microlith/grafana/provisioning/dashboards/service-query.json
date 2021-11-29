@@ -395,7 +395,8 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(n1ql_request_time[$__rate_interval])) / sum(rate(n1ql_requests[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_request_time{instance=\"$node\"}[$__rate_interval])) / sum(rate(n1ql_requests{instance=\"$node\"}[$__rate_interval]))",
+          "instant": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -534,5 +535,5 @@
   "timezone": "",
   "title": "Query Service Overview",
   "uid": "89ydpf5nz",
-  "version": 1
+  "version": 3
 }
