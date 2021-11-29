@@ -142,7 +142,7 @@ components:
     SlackAlertNotificationConfig:
       type: object
       additionalProperties: false
-      required: [ webhookURL ]
+      required: [webhookURL]
       properties:
         configuredExternally:
           type: boolean
@@ -154,7 +154,7 @@ components:
     EmailAlertNotificationConfig:
       type: object
       additionalProperties: false
-      required: [ from, host ]
+      required: [from, host]
       properties:
         from:
           type: string

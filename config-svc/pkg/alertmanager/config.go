@@ -20,8 +20,6 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-const defaultAlertmanagerConfigPath = "/etc/alertmanager/config.yml"
-
 type GlobalContents struct {
 	SlackAPIURL     string `yaml:"slack_api_url,omitempty" mapstructure:"slack_api_url"`
 	SlackAPIURLFile string `yaml:"slack_api_url_file,omitempty" mapstructure:"slack_api_url_file"`
