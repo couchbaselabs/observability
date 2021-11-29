@@ -1,5 +1,4 @@
-{"statement":  "SELECT airport.city as name FROM `travel-sample` airport WHERE airport.type = 'airport' LIMIT 5"}
-{"statement":  "SELECT hotel.name, hotel.address, airport.airportname, airport.icao, hotel.geo FROM `travel-sample` airport LIMIT 5"}
-{"statement": "select count(*) from `travel-sample` where meta().id like \"airline%\" LIMIT 10"}
-{"statement": "select count(*) from `travel-sample` where contains(split(meta().id, \"_\")[0], \"hotel\") LIMIT 5"}
-{"statement": "SELECT faa as fromAirport,geo FROM `travel-sample` WHERE airportname = $1 LIMIT 5"}
+{"statement":  "SELECT airport.city as name FROM `travel-sample` airport WHERE airport.type = 'airport' LIMIT 1"}
+{"statement":  "SELECT hotel.name FROM `travel-sample` airport LIMIT 1"}
+{"statement": "select count(*) from `travel-sample` where meta().id like \"airline%\" LIMIT 1"}
+{"statement": "SELECT faa as fromAirport FROM `travel-sample` WHERE airportname = $1 LIMIT 1"}

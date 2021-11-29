@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 1,
-  "iteration": 1637940909736,
+  "id": 4,
+  "iteration": 1638193758799,
   "links": [
     {
       "asDropdown": false,
@@ -76,7 +76,7 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 5,
+        "w": 4,
         "x": 0,
         "y": 1
       },
@@ -144,7 +144,7 @@
       "gridPos": {
         "h": 5,
         "w": 5,
-        "x": 5,
+        "x": 4,
         "y": 1
       },
       "id": 54,
@@ -211,8 +211,8 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
-        "x": 10,
+        "w": 2,
+        "x": 9,
         "y": 1
       },
       "id": 56,
@@ -273,8 +273,8 @@
       },
       "gridPos": {
         "h": 5,
-        "w": 3,
-        "x": 13,
+        "w": 2,
+        "x": 11,
         "y": 1
       },
       "id": 55,
@@ -315,6 +315,7 @@
     },
     {
       "datasource": null,
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -342,14 +343,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 16,
+        "h": 6,
+        "w": 11,
+        "x": 13,
         "y": 1
       },
       "id": 66,
       "options": {
-        "colorMode": "value",
+        "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "center",
         "orientation": "auto",
@@ -413,7 +414,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#73BF69",
                 "value": null
               },
               {
@@ -433,40 +434,6 @@
               {
                 "id": "custom.width",
                 "value": 60
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "RAM Usage"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 90
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Total RAM"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Health Check Warnings"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
               },
               {
                 "id": "custom.displayMode",
@@ -478,31 +445,87 @@
                   "mode": "absolute",
                   "steps": [
                     {
+                      "color": "#e02f44b0",
+                      "value": null
+                    },
+                    {
+                      "color": "#55a64bb0",
+                      "value": 8
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "RAM Usage"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
                       "color": "#55a64bb0",
                       "value": null
                     },
                     {
-                      "color": "#ffb357a8",
-                      "value": 1
+                      "color": "#e02f44b0",
+                      "value": 80
                     }
                   ]
                 }
               },
               {
-                "id": "mappings",
-                "value": [
-                  {
-                    "options": {
-                      "match": "null",
-                      "result": {
-                        "color": "#55a64bb0",
-                        "index": 0,
-                        "text": "0"
-                      }
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Total RAM"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 120
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#e02f44b0",
+                      "value": null
                     },
-                    "type": "special"
-                  }
-                ]
+                    {
+                      "color": "#55a64bb0",
+                      "value": 16
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "decgbytes"
               }
             ]
           },
@@ -533,24 +556,12 @@
                 ]
               }
             ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Health Check Warnings"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 175
-              }
-            ]
           }
         ]
       },
       "gridPos": {
-        "h": 6,
-        "w": 16,
+        "h": 7,
+        "w": 13,
         "x": 0,
         "y": 6
       },
@@ -596,12 +607,12 @@
               "name": "CPUs"
             },
             {
-              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $formatNumber($round($node.mem_total / 1024 / 1024), \"#,###;(#0.00)\") & \" MiB\"\n})",
+              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $formatNumber($round($node.mem_total / 1024 / 1024 / 1024), \"####;(#0.00)\")\n})",
               "language": "jsonata",
               "name": "Total RAM"
             },
             {
-              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $round((1 - ($node.mem_free / $node.mem_total)) * 100, 2) & \"%\"\n})",
+              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $round((1 - ($node.mem_free / $node.mem_total)) * 100, 2)\n})",
               "language": "jsonata",
               "name": "RAM Usage"
             },
@@ -646,6 +657,7 @@
     },
     {
       "datasource": "JSON API",
+      "description": "Click on each service to be taken to its dashboard page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -656,11 +668,11 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#56565d",
+                "color": "#47474c",
                 "value": null
               },
               {
-                "color": "#55a64bb3",
+                "color": "#55a64b",
                 "value": 1
               }
             ]
@@ -739,9 +751,9 @@
       },
       "gridPos": {
         "h": 12,
-        "w": 8,
-        "x": 16,
-        "y": 6
+        "w": 11,
+        "x": 13,
+        "y": 7
       },
       "id": 97,
       "options": {
@@ -847,7 +859,12 @@
             },
             "properties": [
               {
-                "id": "custom.width"
+                "id": "custom.width",
+                "value": 160
+              },
+              {
+                "id": "unit",
+                "value": "decgbytes"
               }
             ]
           },
@@ -871,6 +888,34 @@
               {
                 "id": "custom.width",
                 "value": 90
+              },
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#e02f44b0",
+                      "value": 80
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "unit",
+                "value": "percent"
               }
             ]
           },
@@ -898,27 +943,19 @@
               {
                 "id": "custom.width",
                 "value": 160
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Health Check Warnings"
-            },
-            "properties": [
+              },
               {
                 "id": "thresholds",
                 "value": {
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "#55a64bb0",
+                      "color": "#e02f44b0",
                       "value": null
                     },
                     {
-                      "color": "#ffb357a8",
-                      "value": 1
+                      "color": "#55a64bb0",
+                      "value": 0.1
                     }
                   ]
                 }
@@ -926,14 +963,6 @@
               {
                 "id": "custom.displayMode",
                 "value": "color-background-solid"
-              },
-              {
-                "id": "noValue",
-                "value": "0"
-              },
-              {
-                "id": "custom.width",
-                "value": 175
               }
             ]
           },
@@ -975,6 +1004,54 @@
               {
                 "id": "custom.width",
                 "value": 70
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#ff780ab0",
+                      "value": null
+                    },
+                    {
+                      "color": "#55a64bb0",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "# Indexes"
+            },
+            "properties": [
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              },
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#e02f44b0",
+                      "value": null
+                    },
+                    {
+                      "color": "#55a64bb3",
+                      "value": 1
+                    }
+                  ]
+                }
               }
             ]
           }
@@ -982,9 +1059,9 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 16,
+        "w": 13,
         "x": 0,
-        "y": 12
+        "y": 13
       },
       "id": 48,
       "options": {
@@ -1013,12 +1090,12 @@
               "name": "Items Stored"
             },
             {
-              "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $formatNumber($b.quota / 1024 / 1024, \"#,###\") & \" MiB\"\n})",
+              "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $b.quota / 1024 / 1024 / 1024\n})",
               "language": "jsonata",
               "name": "Quota"
             },
             {
-              "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $round($b.quota_used, 2) & \"%\"\n})",
+              "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $round($b.quota_used, 2)\n})",
               "language": "jsonata",
               "name": "Quota Used",
               "type": "number"
@@ -1112,7 +1189,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 19
       },
       "id": 14,
       "panels": [],
@@ -1234,14 +1311,32 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       "gridPos": {
         "h": 9,
-        "w": 8,
+        "w": 7,
         "x": 0,
-        "y": 19
+        "y": 20
       },
       "id": 68,
       "options": {
@@ -1436,14 +1531,32 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       "gridPos": {
         "h": 9,
         "w": 8,
-        "x": 8,
-        "y": 19
+        "x": 7,
+        "y": 20
       },
       "id": 105,
       "options": {
@@ -1643,14 +1756,31 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Checkers Documentation",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
       "gridPos": {
         "h": 9,
-        "w": 8,
-        "x": 16,
-        "y": 19
+        "w": 9,
+        "x": 15,
+        "y": 20
       },
       "id": 106,
       "options": {
@@ -1725,7 +1855,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 29
       },
       "id": 16,
       "panels": [],
@@ -1785,7 +1915,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 29
+        "y": 30
       },
       "id": 28,
       "options": {
@@ -1869,7 +1999,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 30
       },
       "id": 102,
       "options": {
@@ -1964,7 +2094,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 39
+        "y": 40
       },
       "id": 107,
       "options": {
@@ -2048,7 +2178,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 40
       },
       "id": 108,
       "options": {
@@ -2097,7 +2227,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 50
       },
       "id": 41,
       "panels": [],
@@ -2160,7 +2290,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 51
       },
       "id": 20,
       "options": {
@@ -2242,7 +2372,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 51
       },
       "id": 24,
       "options": {
@@ -2311,8 +2441,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "044c6d81e82e3a5ecb43d2d4e659739c",
-          "value": "044c6d81e82e3a5ecb43d2d4e659739c"
+          "text": "a4640d9ecd06022989b9cdf12b018de5",
+          "value": "a4640d9ecd06022989b9cdf12b018de5"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2357,5 +2487,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 10
+  "version": 15
 }

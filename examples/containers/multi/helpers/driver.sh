@@ -266,7 +266,7 @@ function configure_servers() {
 
     # Reload Prometheus to start scraping the added clusters
     _docker_exec_with_retry "cmos" "curl -s -X POST localhost:9090/prometheus/-/reload || echo 'failed'" ""
-    echo "Refreshed Prometheus to start scraping. It may take up to a minute to fully load these stats into Grafana."
+    echo "Refreshed Prometheus to start scraping. It may take up to a minute to fully load these stats into Grafana, and you may need to close and reopen the page."
     echo ""
 
 }

@@ -692,8 +692,8 @@
         "showHeader": true,
         "sortBy": [
           {
-            "desc": false,
-            "displayName": "Cluster"
+            "desc": true,
+            "displayName": "Critical"
           }
         ]
       },
