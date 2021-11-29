@@ -1179,7 +1179,7 @@
       "type": "table"
     },
     {
-      "collapsed": false,
+      "collapsed": true,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -1707,17 +1707,6 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "State"
-            },
-            "properties": [
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
               "options": "ID"
             },
             "properties": [
@@ -1763,7 +1752,8 @@
                 "id": "links",
                 "value": [
                   {
-                    "title": "Checkers Documentation",
+                    "targetBlank": true,
+                    "title": "Checker Documentation",
                     "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
                   }
                 ]
