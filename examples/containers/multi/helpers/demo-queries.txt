@@ -1,0 +1,4 @@
+{"statement":  "SELECT airport.city as name FROM `travel-sample` airport WHERE airport.type = 'airport' LIMIT 1"}
+{"statement":  "SELECT hotel.name FROM `travel-sample` airport LIMIT 1"}
+{"statement": "select count(*) from `travel-sample` where meta().id like \"airline%\" LIMIT 1"}
+{"statement": "SELECT faa as fromAirport FROM `travel-sample` WHERE airportname = $1 LIMIT 1"}

@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
-  "iteration": 1637057526815,
+  "id": 13,
+  "iteration": 1637928488310,
   "links": [
     {
       "asDropdown": false,
@@ -77,182 +77,64 @@
   "liveNow": false,
   "panels": [
     {
-      "collapsed": false,
       "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
       "gridPos": {
-        "h": 1,
-        "w": 24,
+        "h": 4,
+        "w": 3,
         "x": 0,
         "y": 0
       },
-      "id": 8,
-      "panels": [],
-      "title": "Overview",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "ops"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 1
-      },
-      "id": 4,
+      "id": 12,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single"
-        }
+        "text": {},
+        "textMode": "auto"
       },
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(kv_ops{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])) by (bucket)",
+          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count))",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{bucket}}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Bucket Operations",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 12,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}) by (bucket)",
-          "interval": "",
-          "legendFormat": "{{ bucket }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Data Sizes",
-      "type": "timeseries"
+      "title": "Indexes",
+      "type": "stat"
     },
     {
       "datasource": null,
@@ -270,20 +152,21 @@
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "bytes"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 5,
-        "x": 0,
-        "y": 9
+        "h": 4,
+        "w": 4,
+        "x": 3,
+        "y": 0
       },
-      "id": 6,
+      "id": 14,
       "options": {
         "colorMode": "value",
-        "graphMode": "area",
+        "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
@@ -296,112 +179,146 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_curr_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
-          "instant": false,
+          "expr": "sum by (instance) (fts_num_bytes_used_disk{instance=~`$node(?::[0-9]*)?$`})",
+          "instant": true,
           "interval": "",
-          "legendFormat": "Current",
+          "legendFormat": "",
           "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "kv_daemon_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Daemon",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "kv_system_connections{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "System",
-          "refId": "C"
         }
       ],
-      "title": "Current Connections",
+      "title": "Total Index Size on Disk",
       "type": "stat"
-    },
-    {
-      "datasource": "Loki",
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 5,
-        "y": 9
-      },
-      "id": 27,
-      "options": {
-        "dedupStrategy": "none",
-        "enableLogDetails": true,
-        "prettifyLogMessage": true,
-        "showCommonLabels": false,
-        "showLabels": false,
-        "showTime": true,
-        "sortOrder": "Descending",
-        "wrapLogMessage": true
-      },
-      "targets": [
-        {
-          "expr": "{job=\"couchbase-fluentbit\",hostname=\"$node\",file=\"memcached.log\"} |= \"Slow\" | json | line_format \"{{ .message }}\"",
-          "refId": "A"
-        }
-      ],
-      "title": "Slow Runtimes / Operations",
-      "type": "logs"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 17
-      },
-      "id": 10,
-      "panels": [],
-      "title": "DCP",
-      "type": "row"
     },
     {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 7,
+        "y": 0
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (instance) (fts_num_bytes_used_ram{instance=~`$node(?::[0-9]*)?$`})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total Index Size in Memory",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 11,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(fts_doc_count{instance=~`$node(?::[0-9]*)?$`})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Items Indexed",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "Indexes that have never been scanned and may be redundant.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
           },
           "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "align": "auto",
+            "displayMode": "auto"
           },
           "mappings": [],
           "thresholds": {
@@ -418,92 +335,95 @@
             ]
           }
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 0,
-        "y": 18
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "kv_dcp_backoff{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
-          "interval": "",
-          "legendFormat": "{{bucket}} ({{connection_type}})",
-          "refId": "A"
-        }
-      ],
-      "title": "Backoff Events",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Bucket"
+            },
+            "properties": [
               {
-                "color": "green",
-                "value": null
+                "id": "custom.width",
+                "value": 159
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Scope"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 123
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Collection"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 151
               }
             ]
           }
-        },
-        "overrides": []
+        ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 4,
-        "x": 6,
-        "y": 18
+        "h": 4,
+        "w": 9,
+        "x": 15,
+        "y": 0
       },
-      "id": 14,
+      "id": 8,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
+        "showHeader": true,
+        "sortBy": []
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`,connection_type!=\"\"}) by (connection_type)",
+          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{instance=~`$node(?::[0-9]*)?$`})) == 0",
+          "format": "table",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{ connection_type }}",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Items Remaining",
-      "type": "stat"
+      "title": "Indexes Never Scanned",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "Value": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 5,
+              "bucket": 1,
+              "collection": 3,
+              "index": 4,
+              "scope": 2
+            },
+            "renameByName": {
+              "bucket": "Bucket",
+              "collection": "Collection",
+              "index": "Index",
+              "scope": "Scope"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": null,
@@ -560,11 +480,11 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 10,
-        "y": 18
+        "w": 12,
+        "x": 0,
+        "y": 4
       },
-      "id": 16,
+      "id": 4,
       "options": {
         "legend": {
           "calcs": [],
@@ -578,108 +498,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(kv_dcp_items_sent{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`,connection_type!=\"\"}[1m])",
+          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{instance=~`$node(?::[0-9]*)?$`}[$__rate_interval])))",
           "interval": "",
-          "legendFormat": "{{ connection_type }}",
+          "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
         }
       ],
-      "title": "Items Sent",
-      "type": "timeseries"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 26
-      },
-      "id": 20,
-      "panels": [],
-      "title": "Data",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 0,
-        "y": 27
-      },
-      "id": 18,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "kv_ep_data_read_failed{cluster=`$cluster`,instance=`$node(?::[0-9]*)$`}",
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Read Failures",
+      "title": "Index Requests",
       "type": "timeseries"
     },
     {
@@ -736,11 +561,11 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 6,
-        "x": 6,
-        "y": 27
+        "w": 12,
+        "x": 12,
+        "y": 4
       },
-      "id": 21,
+      "id": 17,
       "options": {
         "legend": {
           "calcs": [],
@@ -754,13 +579,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_ep_data_write_failed{cluster=`$cluster`,instance=`$node(?::[0-9]*)$`}",
+          "expr": "fts_num_mutations_to_index{instance=~`$node(?::[0-9]*)?$`}",
           "interval": "",
-          "legendFormat": "{{bucket}}",
+          "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
         }
       ],
-      "title": "Write Failures",
+      "title": "Pending Mutations",
       "type": "timeseries"
     },
     {
@@ -775,7 +600,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#ccccdbb0",
                 "value": null
               }
             ]
@@ -785,16 +610,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 12,
-        "y": 27
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 12
       },
-      "id": 23,
+      "id": 6,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
+        "displayMode": "basic",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -803,55 +626,53 @@
           "fields": "",
           "values": false
         },
-        "text": {},
-        "textMode": "auto"
+        "showUnfilled": false,
+        "text": {}
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "couch_docs_actual_disk_size{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "topk(5, fts_num_bytes_used_disk{instance=~`$node(?::[0-9]*)?$`})",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{ bucket }}",
+          "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
         }
       ],
-      "title": "Dataset Size on Disk",
-      "type": "stat"
+      "title": "Largest Indexes",
+      "type": "bargauge"
     },
     {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "text",
-            "mode": "fixed"
+            "mode": "thresholds"
           },
           "mappings": [],
-          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#ccccdbb0",
                 "value": null
               }
             ]
-          }
+          },
+          "unit": "ns"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
+        "h": 8,
+        "w": 12,
         "x": 12,
-        "y": 31
+        "y": 12
       },
-      "id": 25,
+      "id": 2,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
+        "displayMode": "basic",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -860,40 +681,42 @@
           "fields": "",
           "values": false
         },
-        "text": {},
-        "textMode": "auto"
+        "showUnfilled": true,
+        "text": {}
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "kv_curr_items_tot{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}",
+          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{instance=~`$node(?::[0-9]+)?$`}))",
+          "format": "time_series",
+          "instant": true,
           "interval": "",
-          "legendFormat": "{{ bucket }}",
+          "legendFormat": "{{bucket}} / {{ index }}",
           "refId": "A"
         }
       ],
-      "title": "# Documents (incl. replicas)",
-      "type": "stat"
+      "title": "Slowest Scanning Indexes",
+      "type": "bargauge"
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 31,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
     "couchbase-7",
     "couchbase-service",
-    "couchbase-service-kv"
+    "couchbase-service-fts"
   ],
   "templating": {
     "list": [
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "cb7",
-          "value": "cb7"
+          "selected": true,
+          "text": "Cluster 0",
+          "value": "Cluster 0"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -918,9 +741,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "cb7-0001.cb7.default.svc",
-          "value": "cb7-0001.cb7.default.svc"
+          "selected": true,
+          "text": "node1.local",
+          "value": "node1.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -946,8 +769,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "ed43377ab7fb860adabb7df4a702b176",
-          "value": "ed43377ab7fb860adabb7df4a702b176"
+          "text": "defa975c8cf99fa61cf75b26e0e99dee",
+          "value": "defa975c8cf99fa61cf75b26e0e99dee"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -973,8 +796,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "8b19cbad3721fc4ebf002ce90447025e",
-          "value": "8b19cbad3721fc4ebf002ce90447025e"
+          "text": "97da970c50e0955bc37a61085d5d53ac",
+          "value": "97da970c50e0955bc37a61085d5d53ac"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -1004,7 +827,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Data Service Overview",
-  "uid": "4vnZHfcnk",
-  "version": 2
+  "title": "Search Service Overview",
+  "uid": "5O4ki2tnz",
+  "version": 3
 }

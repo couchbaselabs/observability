@@ -27,7 +27,7 @@ function start_new_nodes() {
     local num_nodes=$1
     local nodes_ready=() 
 
-    echo "---- Starting $num_nodes Couchbase Server and Exporter nodes ----"
+    echo "---- Starting $num_nodes nodes ----"
 
     local i=0
     for ((i; i<num_nodes; i++)); do
@@ -78,8 +78,8 @@ function start_new_nodes() {
 # - The command fails $retry_count times in a row and the program exits
 function _docker_exec_with_retry() {
 
-    local retry_count=5
-    local retry_time=(2 4 8 15 30)
+    local retry_count=10
+    local retry_time=(5 10 10 10 10 10 10 10 10 10)
 
     local container=$1
     local command=$2
@@ -91,7 +91,7 @@ function _docker_exec_with_retry() {
         if [[ $output == *$success_msg* ]]; then
             return
         else
-            echo "Command failed, waiting ${retry_time[$i]} seconds before retrying..."
+            echo "Couchbase Server is not ready, waiting ${retry_time[$i]} seconds before retrying..."
             sleep "${retry_time[$i]}"
             
         fi
@@ -109,17 +109,18 @@ function _add_nodes_to_cluster() {
     local server_pwd=$4
 
     local j=$((start+1))
-        for ((j; j<start+to_provision; j++)); do 
-                local node="node$j"
-                _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://$uid:8091\" \
-                   --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
-                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://$uid:8091\" \
-                  --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
-                  --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query \
-                  || echo 'failed'" "SUCCESS: "
+    for ((j; j<start+to_provision; j++)); do 
 
-                echo " - $node added"
-        done
+        local node="node$j"
+        _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://localhost:8091\" \
+            --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
+        _docker_exec_with_retry "$node" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://node$start.local:8091\" \
+            --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
+            --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query \
+            || echo 'failed'" "SUCCESS: "
+
+        echo " - $node added"
+    done
 
 }
 
@@ -133,24 +134,37 @@ function _load_sample_buckets() {
     local sample_buckets=("$@") # Then we are able to capture all remaining args in a new array
 
     sample_buckets_json=$(IFS=, ; echo "${sample_buckets[*]}")
-        _docker_exec_with_retry "$uid" "curl -fs -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
-          -d '[$sample_buckets_json]'" "[]"
+    _docker_exec_with_retry "$uid" "curl -s -X POST -u \"$server_user\":\"$server_pwd\" \"http://localhost:8091/sampleBuckets/install\" \
+        -d '[$sample_buckets_json]' || echo 'failed'" "[]"
 
-        echo "- Sample buckets ${sample_buckets_json} loaded"
+    echo "- Sample buckets ${sample_buckets_json} loading in the background..."
+    
+    if $load; then # Start cbpillowfight and n1qlback to simulate a non-zero load (NOT stress test)
+        sleep 10
         
-        if $load; then
-            # Start cbpillowfight to simulate a non-zero load (NOT stress test)
+        for bucket in "${sample_buckets[@]}"; do
+            # Block until bucket is ready
+            _docker_exec_with_retry "$uid" "curl -s -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \
+                || echo 'failed'" "{"
+            { 
+                _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
+                -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20 || echo 'failed'" "Running." &
+            } 1>/dev/null 2>&1
+            echo "  - cbc-pillowfight started against $bucket"
 
-            for bucket in "${sample_buckets[@]}"; do
-                { 
-                  _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
-                    -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20" "Running." &
+            if [ "$bucket" == '"travel-sample"' ]; then
+                {
+                    docker cp "$SCRIPT_DIR"/helpers/demo-queries.txt "$uid":./
+                    _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-n1qlback -U http://localhost/$bucket \
+                    -u \"$server_user\" -P \"$server_pwd\" -t 1 -f ./demo-queries.txt || echo 'failed'" "Loaded" & 
                 } 1>/dev/null 2>&1
-                echo "  - cbc-pillowfight started against $bucket"
-            done
-        fi
+                echo "  - Demo queries started against travel-sample"
+            fi
+        done
+    fi
     
 }
+        
 # Pre-conditions: 
 #   - $num_nodes containers running Couchbase Server (uninitialised)/exporter 
 
@@ -194,21 +208,20 @@ function configure_servers() {
         # Create and initialize cluster
         local uid="node$start"
         local clust_name="Cluster $i"
+        _docker_exec_with_retry $uid "/opt/couchbase/bin/couchbase-cli node-init --cluster localhost \
+            --node-init-hostname=$uid.local --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
         _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name=\"$clust_name\" \
             --cluster-username=\"$server_user\" --cluster-password=\"$server_pwd\" --cluster-ramsize=$data_alloc \
             --cluster-index-ramsize=$index_alloc --services=data || echo 'failed'" "SUCCESS: "
 
         echo "** $clust_name created **"
 
-        # Load sample buckets
-        _load_sample_buckets "$uid" "$load" "$server_user" "$server_pwd" "${sample_buckets[@]}"
-
         # Register cluster with CBMM if non-OSS build
         if ! $oss_flag; then 
-            local cmos_cmd="curl -fs -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
-              '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid:8091\"}' \
+            local cmos_cmd="curl -s -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
+              '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid.local:8091\"}' \
             'http://localhost:8080/couchbase/api/v1/clusters'"
-            _docker_exec_with_retry "cmos" "$cmos_cmd" ""
+            _docker_exec_with_retry "cmos" "$cmos_cmd || echo 'failed'" ""
 
             echo "- Registered with Cluster Monitor"
         else
@@ -227,20 +240,24 @@ function configure_servers() {
         # Add cluster to CMOS' Prometheus using the config service. From its OpenAPI spec the management port
         # defaults to 8091, and depending upon the Server version looks for Prometheus metrics on either
         # 8091 (Couchbase Server 7.0 and newer) or 9091 (6.x and earlier).
-        _docker_exec_with_retry "cmos" "curl -fs -X POST -H \"Content-Type: application/json\" -d \
+        _docker_exec_with_retry "cmos" "curl -s -X POST -H \"Content-Type: application/json\" -d \
           '{\"couchbaseConfig\":{\"username\":\"$server_user\",\"password\":\"$server_pwd\"}, \
-          \"hostname\":\"node$start.local\"}' 'http://localhost:7194/config/api/v1/clusters/add'" "{\"ok\":true}"
+          \"hostname\":\"node$start.local\"}' 'http://localhost:7194/config/api/v1/clusters/add' || echo 'failed'" "{\"ok\":true}"
 
         echo ""
         echo "- Nodes added to Prometheus scrape config under the cluster"
 
         # Rebalance newly-added nodes into the fully provisioned cluster
         if (( to_provision > 1 )); then
-            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"$uid\" \
+            _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli rebalance --cluster \"http://$uid.local:8091\" \
               --username \"$server_user\" --password \"$server_pwd\" --no-progress-bar --no-wait || echo 'failed'" "SUCCESS: "
         fi
 
         echo "- Rebalance started"
+
+        # Load sample buckets
+        _load_sample_buckets "$uid" "$load" "$server_user" "$server_pwd" "${sample_buckets[@]}"
+    
         echo "Cluster configuration complete."
         echo "---------------------------------"
         echo ""
@@ -250,6 +267,8 @@ function configure_servers() {
     done
 
     # Reload Prometheus to start scraping the added clusters
-    _docker_exec_with_retry "cmos" "curl -fs -X POST localhost:9090/prometheus/-/reload" ""
+    _docker_exec_with_retry "cmos" "curl -s -X POST localhost:9090/prometheus/-/reload || echo 'failed'" ""
+    echo "Refreshed Prometheus to start scraping. It may take up to a minute to fully load these stats into Grafana, and you may need to close and reopen the page."
+    echo ""
 
 }
