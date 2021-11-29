@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1637056462490,
+  "id": 1,
+  "iteration": 1638204510600,
   "links": [
     {
       "asDropdown": false,
@@ -149,7 +149,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_requests{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])",
+          "expr": "irate(n1ql_requests{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
           "interval": "",
           "legendFormat": "Queries",
           "refId": "A"
@@ -231,7 +231,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_errors{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])",
+          "expr": "irate(n1ql_errors{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
           "interval": "",
           "legendFormat": "Errors",
           "refId": "A"
@@ -313,7 +313,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_warnings{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])",
+          "expr": "irate(n1ql_warnings{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
           "interval": "",
           "legendFormat": "Warnings",
           "refId": "A"
@@ -407,7 +407,7 @@
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 31,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -421,8 +421,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "cb7",
-          "value": "cb7"
+          "text": "Cluster 0",
+          "value": "Cluster 0"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -448,17 +448,21 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "cb7-0001.cb7.default.svc",
-          "value": "cb7-0001.cb7.default.svc"
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "node",
         "options": [],
         "query": {
@@ -475,8 +479,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "ed43377ab7fb860adabb7df4a702b176",
-          "value": "ed43377ab7fb860adabb7df4a702b176"
+          "text": "5e896a77e4b4010d0609e61f7dac95c7",
+          "value": "5e896a77e4b4010d0609e61f7dac95c7"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -502,8 +506,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "8b19cbad3721fc4ebf002ce90447025e",
-          "value": "8b19cbad3721fc4ebf002ce90447025e"
+          "text": "18f8c67c4082d7a179948eea032fefb3",
+          "value": "18f8c67c4082d7a179948eea032fefb3"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -535,5 +539,5 @@
   "timezone": "",
   "title": "Query Service Overview",
   "uid": "89ydpf5nz",
-  "version": 3
+  "version": 2
 }

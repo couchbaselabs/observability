@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 4,
-  "iteration": 1638198810858,
+  "id": 2,
+  "iteration": 1638203849145,
   "links": [
     {
       "asDropdown": false,
@@ -75,7 +75,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 4,
         "x": 0,
         "y": 1
@@ -142,7 +142,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 5,
         "x": 4,
         "y": 1
@@ -210,7 +210,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 2,
         "x": 9,
         "y": 1
@@ -272,7 +272,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 4,
         "w": 2,
         "x": 11,
         "y": 1
@@ -559,7 +559,7 @@
         "h": 7,
         "w": 13,
         "x": 0,
-        "y": 6
+        "y": 5
       },
       "id": 2,
       "options": {
@@ -1057,7 +1057,7 @@
         "h": 6,
         "w": 13,
         "x": 0,
-        "y": 13
+        "y": 12
       },
       "id": 48,
       "options": {
@@ -2409,7 +2409,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
+          "selected": true,
           "text": "Cluster 0",
           "value": "Cluster 0"
         },
@@ -2437,8 +2437,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "a4640d9ecd06022989b9cdf12b018de5",
-          "value": "a4640d9ecd06022989b9cdf12b018de5"
+          "text": "17527245a159e44c25d7ad7e8e91c2d2",
+          "value": "17527245a159e44c25d7ad7e8e91c2d2"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2483,5 +2483,5 @@
   "timezone": "",
   "title": "Single Cluster Information (7.x)",
   "uid": "UEZRQMc7z",
-  "version": 18
+  "version": 2
 }

@@ -208,6 +208,8 @@ function configure_servers() {
         # Create and initialize cluster
         local uid="node$start"
         local clust_name="Cluster $i"
+        _docker_exec_with_retry $uid "/opt/couchbase/bin/couchbase-cli node-init --cluster localhost \
+            --node-init-hostname=$uid.local --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
         _docker_exec_with_retry "$uid" "/opt/couchbase/bin/couchbase-cli cluster-init -c localhost --cluster-name=\"$clust_name\" \
             --cluster-username=\"$server_user\" --cluster-password=\"$server_pwd\" --cluster-ramsize=$data_alloc \
             --cluster-index-ramsize=$index_alloc --services=data || echo 'failed'" "SUCCESS: "
