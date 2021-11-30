@@ -23,10 +23,11 @@ endif::env-packaged[]
 * xref:deployment-distributed.adoc[Distributed microservices deployment]
 
 .Components
-* xref:component-loki.adoc[Loki]
-* xref:component-jaeger.adoc[Jaeger]
 * xref:component-alertmanager.adoc[Alertmanager]
 * xref:component-grafana.adoc[Grafana]
+* xref:component-jaeger.adoc[Jaeger]
+* xref:component-loki.adoc[Loki]
+* xref:component-prometheus.adoc[Prometheus]
 
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
