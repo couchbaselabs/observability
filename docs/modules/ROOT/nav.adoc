@@ -26,6 +26,7 @@ endif::env-packaged[]
 * xref:component-loki.adoc[Loki]
 * xref:component-jaeger.adoc[Jaeger]
 * xref:component-alertmanager.adoc[Alertmanager]
+* xref:component-grafana.adoc[Grafana]
 
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
