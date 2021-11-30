@@ -25,6 +25,7 @@ endif::env-packaged[]
 .Components
 * xref:component-loki.adoc[Loki]
 * xref:component-jaeger.adoc[Jaeger]
+* xref:component-alertmanager.adoc[Alertmanager]
 
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
