@@ -31,7 +31,7 @@ function start_new_nodes() {
 
     local i=0
     for ((i; i<num_nodes; i++)); do
-        docker run -d --rm --name "node$i" --hostname="node$i.local" --network=multi_shared_network \
+        docker run -d --name "node$i" --hostname="node$i.local" --network=multi_shared_network \
         -p $((8091+i)):8091 "cbs_server_exp" > /dev/null
         nodes_ready+=(false)
     done
