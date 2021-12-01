@@ -16,7 +16,9 @@ ifdef::env-github[]
 endif::[]
 image:component-prometheus.png[]
 
-Starting Couchbase Server 7, detailed metric endpoints are exposed via a https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics[Prometheus instance^] built into the server.Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.The CMOS Prometheus Server, when configured, scrapes metrics from Couchbase Server targets along with other components in the stack. Alerts are generated based on standard alerting rules that are forwarded to the Alert Manager instance running in the CMOS stack.
+From Couchbase Server 7, detailed metric endpoints are exposed via a https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics[Prometheus instance^] built into the server.
+Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.The CMOS Prometheus Server, when configured, scrapes metrics from Couchbase Server targets along with other components in the stack.
+Alerts are generated based on standard alerting rules that are forwarded to the Alert Manager instance running in the CMOS stack.
 
 == Get Started
 
@@ -27,6 +29,7 @@ Check out the reference xref:architecture.adoc[Couchbase Monitoring Observabilit
 Learn more about how to further customize Prometheus to scrape metrics from other targets and create new rules in the https://prometheus.io/docs/introduction/first_steps[first steps^].
 
 == Links
+
 * On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
 * Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
 * Prometheus: https://prometheus.io/docs/introduction/first_steps[First Steps^]
