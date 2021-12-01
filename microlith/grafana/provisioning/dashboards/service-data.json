@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 2,
-  "iteration": 1638195428074,
+  "iteration": 1638372964945,
   "links": [
     {
       "asDropdown": false,
@@ -60,7 +60,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "couchbase",
@@ -77,7 +77,7 @@
   "liveNow": false,
   "panels": [
     {
-      "collapsed": true,
+      "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -89,170 +89,6 @@
       "panels": [],
       "title": "Overview",
       "type": "row"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "ops"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 0,
-        "y": 1
-      },
-      "id": 4,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(irate(kv_ops{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])) by (bucket)",
-          "interval": "",
-          "legendFormat": "{{bucket}}",
-          "refId": "A"
-        }
-      ],
-      "title": "Bucket Operations",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 10,
-        "w": 12,
-        "x": 12,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}) by (bucket)",
-          "interval": "",
-          "legendFormat": "{{ bucket }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Data Sizes",
-      "type": "timeseries"
     },
     {
       "datasource": null,
@@ -294,10 +130,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 4,
+        "h": 6,
+        "w": 12,
         "x": 0,
-        "y": 11
+        "y": 1
       },
       "id": 18,
       "options": {
@@ -369,10 +205,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 4,
-        "x": 4,
-        "y": 11
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 1
       },
       "id": 28,
       "options": {
@@ -409,6 +245,88 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 7
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(irate(kv_ops{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])) by (bucket)",
+          "interval": "",
+          "legendFormat": "{{bucket}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Bucket Operations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
             "fixedColor": "text",
             "mode": "thresholds"
           },
@@ -429,15 +347,15 @@
       "gridPos": {
         "h": 7,
         "w": 8,
-        "x": 8,
-        "y": 11
+        "x": 0,
+        "y": 17
       },
       "id": 25,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
+        "colorMode": "background",
+        "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -449,6 +367,7 @@
         "textMode": "auto"
       },
       "pluginVersion": "8.2.5",
+      "repeat": null,
       "targets": [
         {
           "exemplar": true,
@@ -486,15 +405,71 @@
       "gridPos": {
         "h": 7,
         "w": 8,
+        "x": 8,
+        "y": 17
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}) by (bucket)",
+          "interval": "",
+          "legendFormat": "{{ bucket }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Dataset size in memory",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
         "x": 16,
-        "y": 11
+        "y": 17
       },
       "id": 23,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
+        "colorMode": "background",
+        "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -526,7 +501,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 24
       },
       "id": 8,
       "panels": [],
@@ -546,14 +521,17 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -591,7 +569,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 19
+        "y": 25
       },
       "id": 32,
       "options": {
@@ -630,14 +608,17 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -675,7 +656,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 19
+        "y": 25
       },
       "id": 36,
       "options": {
@@ -714,8 +695,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -759,7 +740,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 19
+        "y": 25
       },
       "id": 34,
       "options": {
@@ -798,8 +779,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -843,7 +824,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 28
+        "y": 34
       },
       "id": 35,
       "options": {
@@ -882,8 +863,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -927,7 +908,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 28
+        "y": 34
       },
       "id": 33,
       "options": {
@@ -966,8 +947,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1011,7 +992,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 28
+        "y": 34
       },
       "id": 37,
       "options": {
@@ -1061,7 +1042,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 37
+        "y": 43
       },
       "id": 6,
       "options": {
@@ -1135,7 +1116,7 @@
         "h": 8,
         "w": 5,
         "x": 8,
-        "y": 37
+        "y": 43
       },
       "id": 41,
       "options": {
@@ -1172,7 +1153,7 @@
         "h": 8,
         "w": 11,
         "x": 13,
-        "y": 37
+        "y": 43
       },
       "id": 27,
       "options": {
@@ -1201,7 +1182,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 45
+        "y": 51
       },
       "id": 10,
       "panels": [
@@ -1634,27 +1615,23 @@
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 3,
         "type": "query"
       },
       {
         "allValue": null,
         "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+          "selected": false,
+          "text": "node0.local",
+          "value": "node0.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
-        "hide": 0,
-        "includeAll": true,
-        "label": "Node",
+        "hide": 2,
+        "includeAll": false,
+        "label": "",
         "multi": true,
         "name": "node",
         "options": [],
@@ -1672,8 +1649,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "a4640d9ecd06022989b9cdf12b018de5",
-          "value": "a4640d9ecd06022989b9cdf12b018de5"
+          "text": "a706f6926d2f75b9d0a334156d1e10e5",
+          "value": "a706f6926d2f75b9d0a334156d1e10e5"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -1699,8 +1676,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "12806f9c626a42dfd0c448feb6abc838",
-          "value": "12806f9c626a42dfd0c448feb6abc838"
+          "text": "1d384c9c0c4b072c6e8e5bfce1918990",
+          "value": "1d384c9c0c4b072c6e8e5bfce1918990"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -1750,7 +1727,7 @@
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 0,
+        "sort": 1,
         "type": "query"
       }
     ]
@@ -1763,5 +1740,5 @@
   "timezone": "",
   "title": "Data Service Overview",
   "uid": "4vnZHfcnk",
-  "version": 11
+  "version": 2
 }

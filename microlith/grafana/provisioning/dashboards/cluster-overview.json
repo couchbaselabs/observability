@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 2,
-  "iteration": 1638203849145,
+  "id": 5,
+  "iteration": 1638371097875,
   "links": [
     {
       "asDropdown": false,
@@ -720,7 +720,7 @@
                 "value": [
                   {
                     "title": "Search Service Overview",
-                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&var-node=${__data.fields.Hostname}"
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
                   }
                 ]
               }
@@ -746,7 +746,7 @@
         ]
       },
       "gridPos": {
-        "h": 12,
+        "h": 11,
         "w": 11,
         "x": 13,
         "y": 7
@@ -806,6 +806,11 @@
               "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
               "language": "jsonata",
               "name": "Backup"
+            },
+            {
+              "jsonPath": "0",
+              "language": "jsonata",
+              "name": "..."
             }
           ],
           "method": "GET",
@@ -1185,7 +1190,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 18
       },
       "id": 14,
       "panels": [],
@@ -1332,7 +1337,7 @@
         "h": 9,
         "w": 7,
         "x": 0,
-        "y": 20
+        "y": 19
       },
       "id": 68,
       "options": {
@@ -1552,7 +1557,7 @@
         "h": 9,
         "w": 8,
         "x": 7,
-        "y": 20
+        "y": 19
       },
       "id": 105,
       "options": {
@@ -1766,7 +1771,7 @@
         "h": 9,
         "w": 9,
         "x": 15,
-        "y": 20
+        "y": 19
       },
       "id": 106,
       "options": {
@@ -1841,7 +1846,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 28
       },
       "id": 16,
       "panels": [],
@@ -1860,8 +1865,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1901,7 +1906,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 30
+        "y": 29
       },
       "id": 28,
       "options": {
@@ -1939,8 +1944,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -1985,7 +1990,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 30
+        "y": 29
       },
       "id": 102,
       "options": {
@@ -2039,8 +2044,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2080,7 +2085,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 39
       },
       "id": 107,
       "options": {
@@ -2118,8 +2123,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2164,7 +2169,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 39
       },
       "id": 108,
       "options": {
@@ -2213,7 +2218,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 50
+        "y": 49
       },
       "id": 41,
       "panels": [],
@@ -2232,8 +2237,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2276,7 +2281,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 51
+        "y": 50
       },
       "id": 20,
       "options": {
@@ -2313,8 +2318,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 100,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -2358,7 +2363,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 51
+        "y": 50
       },
       "id": 24,
       "options": {
@@ -2399,7 +2404,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "Cluster 0",
           "value": "Cluster 0"
         },
@@ -2427,8 +2432,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "17527245a159e44c25d7ad7e8e91c2d2",
-          "value": "17527245a159e44c25d7ad7e8e91c2d2"
+          "text": "1a528e14cf83548956ab971a279eb3b8",
+          "value": "1a528e14cf83548956ab971a279eb3b8"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
