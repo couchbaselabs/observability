@@ -13,7 +13,7 @@ Each node exposes port `:8091` to the host on port `:8091+i` where `i` is from t
 ### Important notes ###
 Running many nodes at once is very resource intensive depending on machine specifications, and if run on a laptop will quickly destroy your battery (especially when not plugged in). Calling `docker pause cmos node0 node1 ...` and then `docker resume cmos node0 node1 ...` when temporarily not in use helps.
 
-Laptops on lower battery (causing throttling), and low-power machines in general, will take much longer to initialise the example - this is normal. 
+Laptops on lower battery (causing throttling), and low-power machines in general, will take much longer to initialise the example (and load stats into Prometheus, Grafana, etc.) - this is normal. 
 
 ## Environment Variables ##
 
