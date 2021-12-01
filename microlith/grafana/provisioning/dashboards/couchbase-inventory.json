@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 14,
+  "id": 8,
   "links": [
     {
       "asDropdown": false,
@@ -41,7 +41,7 @@
   "liveNow": false,
   "panels": [
     {
-      "collapsed": true,
+      "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -49,7 +49,8 @@
         "x": 0,
         "y": 0
       },
-      "id": 6,
+      "id": 19,
+      "panels": [],
       "title": "Overview",
       "type": "row"
     },
@@ -98,7 +99,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$count($)",
@@ -159,7 +160,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$count($.nodes_summary)",
@@ -220,7 +221,7 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$count($.buckets_summary[*])",
@@ -289,6 +290,7 @@
               "jsonPath": ""
             }
           ],
+          "instant": true,
           "interval": "",
           "legendFormat": "",
           "method": "GET",
@@ -778,5 +780,5 @@
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 1
+  "version": 2
 }

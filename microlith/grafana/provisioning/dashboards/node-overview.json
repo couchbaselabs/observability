@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 7,
-  "iteration": 1638371237379,
+  "iteration": 1638381210884,
   "links": [
     {
       "asDropdown": false,
@@ -59,7 +59,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "couchbase",
@@ -866,8 +866,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1a528e14cf83548956ab971a279eb3b8",
-          "value": "1a528e14cf83548956ab971a279eb3b8"
+          "text": "607f87b68e908fc34ab9bf33e1074858",
+          "value": "607f87b68e908fc34ab9bf33e1074858"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -920,8 +920,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "8e4370d3568d05b9d3abee9cba78ea3b",
-          "value": "8e4370d3568d05b9d3abee9cba78ea3b"
+          "text": "e8f7bfa83f58d5f45bdb9c160c52bc8c",
+          "value": "e8f7bfa83f58d5f45bdb9c160c52bc8c"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -953,5 +953,5 @@
   "timezone": "",
   "title": "Node Overview (7.x)",
   "uid": "Dx-2iOc7k",
-  "version": 1
+  "version": 2
 }
