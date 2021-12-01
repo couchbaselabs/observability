@@ -4,7 +4,7 @@
 Alertmanager handles and routes alerts from CMOS Prometheus server.
 
 == Overview
-https://prometheus.io/docs/alerting/latest/alertmanager/:[Alertmanager^] is an open source tool which has become the industry standard for alert management on cloud platforms.The CMOS Prometheus Server triggers alerts whenever certain rules are met and sends these alerts to the Alertmanager.The Alertmanager takes care of deduplicating, grouping and routing these alerts to the correct receiver using integrations such as e-mail, Slack and Pagerduty.
+https://prometheus.io/docs/alerting/alertmanager[Alertmanager^] is an open source tool which has become the industry standard for alert management on cloud platforms.The CMOS Prometheus Server triggers alerts whenever certain rules are met and sends these alerts to the Alertmanager.The Alertmanager takes care of deduplicating, grouping and routing these alerts to the correct receiver using integrations such as e-mail, Slack and Pagerduty.
 
 With multiple sources generating the same alert, distributed environments can be noisy.
 In these cases, the alerts should be deduplicated and grouped by their nature, origin, and severity before being routed to the receiver.The Alertmanager can also suppress and mute alerts if required.
@@ -22,7 +22,7 @@ The Alertmanager can be configured to route these alerts to a user defined recei
 
 == Get Started
 
-In CMOS, the Alertmanager is included and enabled by default. It ships with a set of standard built-in rules to deduplicate and group alerts based on multiple alert parameters. Additionally, it can be customized to send notifications to different https://prometheus.io/docs/alerting/latest/configuration/:[receiver] endpoints.
+In CMOS, the Alertmanager is included and enabled by default. It ships with a set of standard built-in rules to deduplicate and group alerts based on multiple alert parameters. Additionally, it can be customized to send notifications to different https://prometheus.io/docs/alerting/configuration[receiver^] endpoints.
 
  
 The CMOS Alertmanager can be deployed xref:tutorial-onpremise.adoc[on premise] or using xref:tutorial-kubernetes.adoc[kubernetes].
@@ -30,7 +30,6 @@ Check out the reference xref:architecture.adoc[Couchbase Monitoring Observabilit
 
 == Links
 
-* https://github.com/prometheus/alertmanager/:[Alertmanager Open Source Project] 
 * On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
 * Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
-* Alertmanager: https://prometheus.io/docs/alerting/latest/configuration/:[Configuration]
+* Alertmanager: https://prometheus.io/docs/alerting/latest/configuration[Configuration^]

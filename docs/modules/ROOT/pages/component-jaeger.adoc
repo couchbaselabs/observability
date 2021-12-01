@@ -5,7 +5,7 @@ Jaeger can be used to collect traces of CMOS components.
 
 == Overview
 
-https://www.jaegertracing.io/[Jaeger^] is a distributed tracing system which is used for monitoring and troubleshooting microservices-based distributed systems, distributed transaction monitoring, root cause analysis and service dependency analysis.
+https://www.jaegertracing.io[Jaeger^] is a distributed tracing system which is used for monitoring and troubleshooting microservices-based distributed systems, distributed transaction monitoring, root cause analysis and service dependency analysis.
 
 In a distributed environment, several independent microservices can be invoked for a single request which need to be analysed for performance optimization, dependency analysis and isolating problems
 
@@ -21,10 +21,9 @@ As part of Couchbase Monitoring and Observability Stack (CMOS), Jaeger comes wit
 Jaeger is included and enabled by default in CMOS.
 It ships with a default configuration to monitor traces for some of the CMOS components.
 Check out the reference xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS) architecture to learn more.
-Learn more about how to further customize Jaeger https://www.jaegertracing.io/docs/1.28/deployment/#configuration-options:[Configuration Options].
+Learn more about how to further customize Jaeger https://www.jaegertracing.io/docs/deployment/#configuration-options[Configuration Options^].
 
 == Links
-* https://github.com/jaegertracing/jaeger:[Jaeger Open Source Project] 
 * On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
 * Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
-* Jaeger: https://www.jaegertracing.io/docs/1.28/deployment/#configuration-options:[Configuration Options]
+* Jaeger: https://www.jaegertracing.io/docs/deployment/#configuration-options[Configuration Options^]

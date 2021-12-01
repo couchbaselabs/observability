@@ -5,7 +5,7 @@ Grafana helps visualize Couchbase metrics, logs, and alerts.
 
 == Overview
 
-https://grafana.com/[Grafana^] is an multi-platform open source monitoring, analytics and visualization tool for large scale cloud-native projects.
+https://grafana.com[Grafana^] is an multi-platform open source monitoring, analytics and visualization tool for large scale cloud-native projects.
 Linked to supported data sources, Grafana provides rich charts, graphs, and alerts, enabling users to query, visualize, and get alerts instantly. 
 
 A dynamic cloud environment makes it essential to visualize the state of the system at all times.
@@ -16,7 +16,7 @@ ifdef::env-github[]
 endif::[]
 image:component-grafana.png[]
 
-In CMOS, Grafana is linked to data sources such as https://github.com/prometheus/prometheus:[Prometheus^] and https://github.com/grafana/loki:[Loki^]. 
+In CMOS, Grafana is linked to data sources such as https://prometheus.io[Prometheus^] and https://grafana.com/Loki[Loki^]. 
 Prometheus scrapes couchbase metrics and stores these data points in the prometheus server. Using dashboards in Grafana, users can visualize metrics from the Prometheus server.
 Logs from Couchbase are sent to Loki, and then exposed in the Grafana dashboards.
 
@@ -25,10 +25,10 @@ Logs from Couchbase are sent to Loki, and then exposed in the Grafana dashboards
 Grafana is included and enabled by default in the CMOS stack.
 It ships with a default set of standard dashboards, allowing administrators to quickly and easily get started.
 Grafana in CMOS can be deployed xref:tutorial-kubernetes.adoc[on premise] or using xref:tutorial-kubernetes.adoc[kubernetes].
-Check out the reference xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS) architecture to learn more. Learn more about how to further customize Grafana dashboards in CMOS: https://grafana.com/docs/grafana/latest/getting-started/getting-started/:[additional dashboards].
+Check out the reference xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS) architecture to learn more. Learn more about how to further customize Grafana dashboards in CMOS: https://grafana.com/docs/grafana/latest/getting-started/getting-started[additional dashboards^].
 
 == Links
 
 * On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
 * Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
-* Grafana: https://grafana.com/docs/grafana/latest/getting-started/getting-started/:[Creating custom dashboards]
+* Grafana: https://grafana.com/docs/grafana/latest/getting-started/getting-started[Creating custom dashboards^]
