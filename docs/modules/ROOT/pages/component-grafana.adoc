@@ -5,7 +5,7 @@ Grafana helps visualize Couchbase metrics, logs, and alerts.
 
 == Overview
 
-https://grafana.com[Grafana^] is an multi-platform open source monitoring and visualization tool for large scale cloud-native projects.
+https://grafana.com[Grafana^] is a multi-platform open source monitoring and visualization tool for large scale cloud-native projects.
 Linked to supported data sources, Grafana provides rich charts, graphs, and alerts, enabling users to query, visualize, and get alerts instantly. 
 
 A dynamic cloud environment makes it essential to visualize the state of the system at all times.

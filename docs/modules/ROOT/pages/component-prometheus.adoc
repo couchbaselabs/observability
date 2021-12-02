@@ -17,7 +17,8 @@ endif::[]
 image:component-prometheus.png[]
 
 From Couchbase Server 7, detailed metric endpoints are exposed via a https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics[Prometheus instance^] built into the server.
-Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.The CMOS Prometheus Server, when configured, scrapes metrics from Couchbase Server targets along with other components in the stack.
+Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.
+The CMOS Prometheus Server, when configured, scrapes metrics from Couchbase Server targets along with other components in the stack.
 Alerts are generated based on standard alerting rules that are forwarded to the Alert Manager instance running in the CMOS stack.
 
 == Get Started

@@ -22,17 +22,17 @@ image:component-alertmanager.png[]
 
 Based on a predefined set of rules, the CMOS Prometheus Server generates alerts depending on the metrics it collects from Couchbase Server and other targets.
 By default, these alerts are forwarded to CMOS Alertmanager.
-The Alertmanager can be configured to route these alerts to a user-defined receiver integration such as e-mail, slack, PagerDuty or other API-based endpoints to notify the user.
+The Alertmanager can be configured to route these alerts to a user-defined receiver integration such as e-mail, Slack, PagerDuty or other API-based endpoints to notify the user.
 
 == Get Started
 
 In CMOS, the Alertmanager is included and enabled by default.
-It ships with a set of standard built-in rules to de-duplicate and group alerts based on multiple alert parameters.
+It ships with a set of standard built-in rules to group alerts based on multiple alert parameters.
 Additionally, it can be customized to send notifications to different https://prometheus.io/docs/alerting/configuration[receiver^] endpoints.
 
  
-The CMOS Alertmanager can be deployed xref:tutorial-onpremise.adoc[on premise] or using xref:tutorial-kubernetes.adoc[kubernetes].
-Check out the reference xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS) architecture to learn more.
+The CMOS Alertmanager can be deployed xref:tutorial-onpremise.adoc[on premise] or using xref:tutorial-kubernetes.adoc[Kubernetes].
+Check out the reference xref:architecture.adoc[Couchbase Monitoring and Observability Stack] (CMOS) architecture to learn more.
 
 == Links
 
