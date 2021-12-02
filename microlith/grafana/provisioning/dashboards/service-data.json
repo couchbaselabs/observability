@@ -139,14 +139,14 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "fields": "",
-          "values": false
+          "values": true
         },
         "text": {},
         "textMode": "auto"
@@ -156,7 +156,7 @@
         {
           "exemplar": true,
           "expr": "kv_ep_data_read_failed{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -214,14 +214,14 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
           ],
           "fields": "",
-          "values": false
+          "values": true
         },
         "text": {},
         "textMode": "auto"
@@ -231,7 +231,7 @@
         {
           "exemplar": true,
           "expr": "kv_ep_data_write_failed{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
-          "instant": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -323,6 +323,71 @@
       "type": "timeseries"
     },
     {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 17
+      },
+      "id": 8,
+      "panels": [],
+      "title": "Data",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 0,
+        "y": 18
+      },
+      "id": 46,
+      "options": {
+        "content": "# Number of documents (incl. replicas) #",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.2.5",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 8,
+        "y": 18
+      },
+      "id": 47,
+      "options": {
+        "content": "# Dataset size on disk #",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.2.5",
+      "transparent": true,
+      "type": "text"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 16,
+        "y": 18
+      },
+      "id": 48,
+      "options": {
+        "content": "# Dataset size in memory #",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.2.5",
+      "transparent": true,
+      "type": "text"
+    },
+    {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
@@ -345,12 +410,13 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 2,
         "w": 8,
         "x": 0,
-        "y": 17
+        "y": 20
       },
       "id": 25,
+      "maxPerRow": 6,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
@@ -364,10 +430,11 @@
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.2.5",
-      "repeat": null,
+      "repeat": "bucket",
+      "repeatDirection": "v",
       "targets": [
         {
           "exemplar": true,
@@ -378,7 +445,6 @@
           "refId": "A"
         }
       ],
-      "title": "# Documents (incl. replicas)",
       "type": "stat"
     },
     {
@@ -403,66 +469,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 2,
         "w": 8,
         "x": 8,
-        "y": 17
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}) by (bucket)",
-          "interval": "",
-          "legendFormat": "{{ bucket }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Dataset size in memory",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#ccccdbb0",
-                "value": null
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 17
+        "y": 20
       },
       "id": 23,
       "options": {
@@ -478,35 +488,79 @@
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.2.5",
+      "repeat": "bucket",
+      "repeatDirection": "v",
       "targets": [
         {
           "exemplar": true,
-          "expr": "couch_docs_actual_disk_size{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}",
+          "expr": "topk(3, couch_docs_actual_disk_size{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
         }
       ],
-      "title": "Dataset Size on Disk",
       "type": "stat"
     },
     {
-      "collapsed": false,
       "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 24
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
       },
-      "id": 8,
-      "panels": [],
-      "title": "Data",
-      "type": "row"
+      "gridPos": {
+        "h": 2,
+        "w": 8,
+        "x": 16,
+        "y": 20
+      },
+      "id": 2,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.2.5",
+      "repeat": "bucket",
+      "repeatDirection": "v",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "topk(3, sum(kv_collection_mem_used_bytes{cluster=`$cluster`,instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}) by (bucket))",
+          "interval": "",
+          "legendFormat": "{{ bucket }}",
+          "refId": "A"
+        }
+      ],
+      "type": "stat"
     },
     {
       "datasource": null,
@@ -569,7 +623,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 25
+        "y": 24
       },
       "id": 32,
       "options": {
@@ -656,7 +710,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 25
+        "y": 24
       },
       "id": 36,
       "options": {
@@ -740,7 +794,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 25
+        "y": 24
       },
       "id": 34,
       "options": {
@@ -824,7 +878,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 34
+        "y": 33
       },
       "id": 35,
       "options": {
@@ -908,7 +962,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 34
+        "y": 33
       },
       "id": 33,
       "options": {
@@ -992,7 +1046,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 34
+        "y": 33
       },
       "id": 37,
       "options": {
@@ -1042,7 +1096,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 43
+        "y": 42
       },
       "id": 6,
       "options": {
@@ -1116,7 +1170,7 @@
         "h": 8,
         "w": 5,
         "x": 8,
-        "y": 43
+        "y": 42
       },
       "id": 41,
       "options": {
@@ -1153,7 +1207,7 @@
         "h": 8,
         "w": 11,
         "x": 13,
-        "y": 43
+        "y": 42
       },
       "id": 27,
       "options": {
@@ -1182,7 +1236,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 51
+        "y": 50
       },
       "id": 10,
       "panels": [
@@ -1622,8 +1676,12 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node0.local",
-          "value": "node0.local"
+          "text": [
+            "node0.local"
+          ],
+          "value": [
+            "node0.local"
+          ]
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
