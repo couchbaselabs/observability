@@ -1858,7 +1858,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
@@ -1900,6 +1900,10 @@
                 "value": null
               },
               {
+                "color": "#ebb838b0",
+                "value": 70
+              },
+              {
                 "color": "#f2495cb0",
                 "value": 80
               }
@@ -1929,9 +1933,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sys_cpu_utilization_rate{instance=~`${node:regex}(:[0-9]*)?$`}",
+          "expr": "sys_cpu_utilization_rate{cluster=${cluster:doublequote}}",
           "interval": "",
-          "legendFormat": "{{ instance }}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -1985,6 +1989,10 @@
                 "value": null
               },
               {
+                "color": "#ebb838b0",
+                "value": 0.7
+              },
+              {
                 "color": "#f2495cb0",
                 "value": 0.8
               }
@@ -1992,7 +2000,32 @@
           },
           "unit": "percentunit"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "__systemRef": "hideSeriesFrom",
+            "matcher": {
+              "id": "byNames",
+              "options": {
+                "mode": "exclude",
+                "names": [
+                  "node4.local:8091"
+                ],
+                "prefix": "All except:",
+                "readOnly": true
+              }
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 10,
@@ -2014,9 +2047,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sys_mem_free{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
+          "expr": "sys_mem_free{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
           "interval": "",
-          "legendFormat": "{{ instance }}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -2042,7 +2075,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -2077,7 +2110,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "semi-dark-green",
+                "color": "#3275d9b0",
                 "value": null
               }
             ]
@@ -2121,7 +2154,7 @@
         "defaults": {
           "color": {
             "mode": "palette-classic",
-            "seriesBy": "last"
+            "seriesBy": "max"
           },
           "custom": {
             "axisLabel": "",
@@ -2139,8 +2172,7 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "log": 10,
-              "type": "log"
+              "type": "linear"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -2149,7 +2181,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line+area"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -2157,12 +2189,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#00000000",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "#e02f44b0",
-                "value": 2.5
               }
             ]
           },
@@ -2190,10 +2218,18 @@
       "targets": [
         {
           "exemplar": true,
+          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "50th percentile (avg)",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
           "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
           "instant": false,
           "interval": "",
-          "legendFormat": "99%",
+          "legendFormat": "99th percentile",
           "refId": "A"
         },
         {
@@ -2201,16 +2237,8 @@
           "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
           "hide": false,
           "interval": "",
-          "legendFormat": "99.9%",
+          "legendFormat": "99.9th percentile",
           "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "avg",
-          "refId": "C"
         }
       ],
       "title": "Read latency",
@@ -2221,7 +2249,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -2256,7 +2284,7 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "semi-dark-green",
+                "color": "#3275d9b0",
                 "value": null
               }
             ]
@@ -2318,8 +2346,7 @@
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
-              "log": 10,
-              "type": "log"
+              "type": "linear"
             },
             "showPoints": "auto",
             "spanNulls": false,
@@ -2328,7 +2355,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line+area"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -2336,12 +2363,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#00000000",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "#e02f44b0",
-                "value": 2.5
               }
             ]
           },
@@ -2369,10 +2392,18 @@
       "targets": [
         {
           "exemplar": true,
+          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "50th percentile (avg)",
+          "refId": "C"
+        },
+        {
+          "exemplar": true,
           "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
           "instant": false,
           "interval": "",
-          "legendFormat": "99%",
+          "legendFormat": "99th percentile",
           "refId": "A"
         },
         {
@@ -2380,16 +2411,8 @@
           "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
           "hide": false,
           "interval": "",
-          "legendFormat": "99.9%",
+          "legendFormat": "99.9th percentile",
           "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "avg",
-          "refId": "C"
         }
       ],
       "title": "Write Latency",
@@ -2414,7 +2437,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic",
+            "seriesBy": "last"
           },
           "custom": {
             "axisLabel": "",
@@ -2449,10 +2473,10 @@
           },
           "mappings": [],
           "thresholds": {
-            "mode": "percentage",
+            "mode": "absolute",
             "steps": [
               {
-                "color": "semi-dark-green",
+                "color": "text",
                 "value": null
               }
             ]
@@ -2495,7 +2519,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "palette-classic",
+            "seriesBy": "last"
           },
           "custom": {
             "axisLabel": "",
@@ -2532,14 +2557,10 @@
               {
                 "color": "text",
                 "value": null
-              },
-              {
-                "color": "semi-dark-red",
-                "value": 1
               }
             ]
           },
-          "unit": "ns"
+          "unit": "ms"
         },
         "overrides": []
       },
@@ -2564,7 +2585,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "increase(n1ql_request_time[$__rate_interval]) / increase(n1ql_requests[$__rate_interval])",
+          "expr": "increase(n1ql_request_time[$__rate_interval]) / increase(n1ql_requests[$__rate_interval]) / 1000000\n",
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -2643,8 +2664,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node0.local",
-          "value": "node0.local"
+          "text": "node2.local",
+          "value": "node2.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
