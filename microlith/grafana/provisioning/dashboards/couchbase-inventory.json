@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 8,
+  "id": 7,
   "links": [
     {
       "asDropdown": false,
@@ -641,7 +641,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "text",
+                  "fixedColor": "#55a64bb0",
                   "mode": "fixed"
                 }
               }
