@@ -1947,7 +1947,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -1962,9 +1962,6 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineStyle": {
-              "fill": "solid"
-            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -1977,7 +1974,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "line"
+              "mode": "off"
             }
           },
           "mappings": [],
@@ -2000,32 +1997,7 @@
           },
           "unit": "percentunit"
         },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "node4.local:8091"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 10,
@@ -2044,10 +2016,13 @@
           "mode": "single"
         }
       },
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
           "expr": "sys_mem_free{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
+          "format": "time_series",
+          "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
