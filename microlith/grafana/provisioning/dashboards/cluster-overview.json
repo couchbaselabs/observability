@@ -1848,6 +1848,190 @@
         "x": 0,
         "y": 28
       },
+      "id": 110,
+      "panels": [],
+      "title": "System resources",
+      "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#73bf69b0",
+                "value": null
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 29
+      },
+      "id": 114,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sys_cpu_utilization_rate{instance=~`${node:regex}(:[0-9]*)?$`}",
+          "interval": "",
+          "legendFormat": "{{ instance }}",
+          "refId": "A"
+        }
+      ],
+      "title": "CPU Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#73bf69b0",
+                "value": null
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 0.8
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 116,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sys_mem_free{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
+          "interval": "",
+          "legendFormat": "{{ instance }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 39
+      },
       "id": 16,
       "panels": [],
       "title": "KPIs - Data Service",
@@ -1906,7 +2090,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 29
+        "y": 40
       },
       "id": 28,
       "options": {
@@ -1990,7 +2174,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 40
       },
       "id": 102,
       "options": {
@@ -2085,7 +2269,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 39
+        "y": 50
       },
       "id": 107,
       "options": {
@@ -2169,7 +2353,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 39
+        "y": 50
       },
       "id": 108,
       "options": {
@@ -2218,7 +2402,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 49
+        "y": 60
       },
       "id": 41,
       "panels": [],
@@ -2281,7 +2465,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 61
       },
       "id": 20,
       "options": {
@@ -2363,7 +2547,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 61
       },
       "id": 24,
       "options": {
@@ -2451,6 +2635,33 @@
         },
         "refresh": 1,
         "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": false,
+          "text": "node0.local",
+          "value": "node0.local"
+        },
+        "datasource": null,
+        "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
+        "description": null,
+        "error": null,
+        "hide": 2,
+        "includeAll": false,
+        "label": null,
+        "multi": false,
+        "name": "node",
+        "options": [],
+        "query": {
+          "query": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "/[{,]node_name=\"(.+?)(?::[0-9]*)?\"[,}]/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
