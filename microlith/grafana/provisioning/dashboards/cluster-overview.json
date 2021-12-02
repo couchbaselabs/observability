@@ -1044,12 +1044,12 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "#e02f44b0",
+                      "color": "text",
                       "value": null
                     },
                     {
                       "color": "#55a64bb3",
-                      "value": 1
+                      "value": 0
                     }
                   ]
                 }
@@ -2318,7 +2318,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 100,
+            "fillOpacity": 40,
             "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,

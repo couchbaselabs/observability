@@ -141,20 +141,19 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds",
-            "seriesBy": "max"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#73bf69b0",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 0.1
+                "color": "#f2495cb0",
+                "value": 1
               }
             ]
           }
@@ -181,7 +180,7 @@
           "values": false
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.2.5",
       "targets": [
@@ -189,7 +188,7 @@
           "exemplar": true,
           "expr": "irate(n1ql_errors{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "Errors",
+          "legendFormat": "Errors (last $__interval)",
           "refId": "A"
         }
       ],
@@ -527,7 +526,7 @@
           "exemplar": true,
           "expr": "sum(rate(n1ql_request_time{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])) / sum(rate(n1ql_requests{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{node}}",
           "refId": "A"
         }
       ],
