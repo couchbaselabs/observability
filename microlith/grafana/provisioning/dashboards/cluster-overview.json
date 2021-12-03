@@ -75,8 +75,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 4,
+        "h": 3,
+        "w": 5,
         "x": 0,
         "y": 1
       },
@@ -122,6 +122,246 @@
       "type": "stat"
     },
     {
+      "datasource": null,
+      "description": "Scroll down to \"basic info\" to see the exact alerts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#55a64bb0",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 4,
+        "x": 5,
+        "y": 1
+      },
+      "id": 66,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} >= 30)",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Cluster",
+          "refId": "A"
+        }
+      ],
+      "title": "Critical Alerts",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "description": "Click on each service to be taken to its dashboard page.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#bcbcbc3d",
+                "value": null
+              },
+              {
+                "color": "#55a64b",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Data",
+                    "url": "/d/4vnZHfcnk/data-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Index"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Index",
+                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Search"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Search",
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Query"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Query",
+                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 15,
+        "x": 9,
+        "y": 1
+      },
+      "id": 97,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Data"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Index"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Search"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Query"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Eventing"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Analytics"
+            },
+            {
+              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Backup"
+            },
+            {
+              "jsonPath": "0",
+              "language": "jsonata",
+              "name": "..."
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters"
+        }
+      ],
+      "title": "Running Services (clickable!)",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        }
+      ],
+      "type": "stat"
+    },
+    {
       "datasource": "JSON API",
       "fieldConfig": {
         "defaults": {
@@ -142,10 +382,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 5,
-        "x": 4,
-        "y": 1
+        "x": 0,
+        "y": 4
       },
       "id": 54,
       "interval": null,
@@ -210,10 +450,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 9,
-        "y": 1
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 9
       },
       "id": 56,
       "options": {
@@ -252,153 +492,8 @@
       "type": "stat"
     },
     {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 2,
-        "x": 11,
-        "y": 1
-      },
-      "id": 55,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$count($.buckets_summary[*])",
-              "language": "jsonata",
-              "name": "Number of buckets"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "title": "Buckets",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              },
-              {
-                "color": "#ff780ab0",
-                "value": 1
-              },
-              {
-                "color": "#e02f44b0",
-                "value": 10
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 11,
-        "x": 13,
-        "y": 1
-      },
-      "id": 66,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} > 10)",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Cluster",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} > 10)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Node",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Bucket",
-          "refId": "C"
-        }
-      ],
-      "title": "Health Check Warnings",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
       "datasource": "-- Mixed --",
+      "description": "Couchbase recommends a minimum of 8 CPUs, 8GB RAM, and keeping RAM usage below 80%.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -556,10 +651,10 @@
         ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 13,
-        "x": 0,
-        "y": 5
+        "h": 5,
+        "w": 21,
+        "x": 3,
+        "y": 9
       },
       "id": 2,
       "options": {
@@ -653,119 +748,45 @@
     },
     {
       "datasource": "JSON API",
-      "description": "Click on each service to be taken to its dashboard page.",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "#47474c",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "#55a64b",
-                "value": 1
               }
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Data"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "title": "Data Service Overview",
-                    "url": "/d/4vnZHfcnk/data-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Index"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "title": "Index Service Overview",
-                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Search"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "title": "Search Service Overview",
-                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Query"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "title": "Query Service Overview",
-                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 11,
-        "w": 11,
-        "x": 13,
-        "y": 7
+        "h": 5,
+        "w": 3,
+        "x": 0,
+        "y": 14
       },
-      "id": 97,
+      "id": 55,
       "options": {
         "colorMode": "value",
-        "graphMode": "none",
+        "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
-            "max"
+            "lastNotNull"
           ],
-          "fields": "/.*/",
-          "values": false
+          "fields": "",
+          "values": true
         },
         "text": {},
-        "textMode": "name"
+        "textMode": "auto"
       },
       "pluginVersion": "8.2.5",
       "targets": [
@@ -773,64 +794,23 @@
           "cacheDurationSeconds": 0,
           "fields": [
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+              "jsonPath": "$count($.buckets_summary[*])",
               "language": "jsonata",
-              "name": "Data"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Index"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Search"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Query"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Eventing"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Analytics"
-            },
-            {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
-              "language": "jsonata",
-              "name": "Backup"
-            },
-            {
-              "jsonPath": "0",
-              "language": "jsonata",
-              "name": "..."
+              "name": "Number of buckets"
             }
           ],
           "method": "GET",
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/clusters"
+          "urlPath": "/clusters/$cluster_uuid"
         }
       ],
-      "title": "Running Services (clickable!)",
-      "transformations": [
-        {
-          "id": "seriesToRows",
-          "options": {}
-        }
-      ],
+      "title": "Buckets",
       "type": "stat"
     },
     {
       "datasource": "-- Mixed --",
-      "description": "",
+      "description": "Couchbase recommends at least one replica, keeping Resident Ratio above 10%, and Quota used below 80%.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1089,10 +1069,10 @@
         ]
       },
       "gridPos": {
-        "h": 6,
-        "w": 13,
-        "x": 0,
-        "y": 12
+        "h": 5,
+        "w": 21,
+        "x": 3,
+        "y": 14
       },
       "id": 48,
       "options": {
@@ -1220,11 +1200,11 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 19
       },
       "id": 14,
       "panels": [],
-      "title": "Basic Info",
+      "title": "Health Status",
       "type": "row"
     },
     {
@@ -1288,12 +1268,12 @@
                 "value": 10
               },
               {
-                "color": "#f2495cb0",
+                "color": "#ff9830b0",
                 "value": 20
               },
               {
-                "color": "#ff9830b0",
-                "value": 20
+                "color": "#f2495cb0",
+                "value": 30
               }
             ]
           }
@@ -1367,7 +1347,7 @@
         "h": 9,
         "w": 7,
         "x": 0,
-        "y": 19
+        "y": 20
       },
       "id": 68,
       "options": {
@@ -1587,7 +1567,7 @@
         "h": 9,
         "w": 8,
         "x": 7,
-        "y": 19
+        "y": 20
       },
       "id": 105,
       "options": {
@@ -1770,6 +1750,7 @@
                 "id": "links",
                 "value": [
                   {
+                    "targetBlank": true,
                     "title": "Bucket Overview",
                     "url": "/d/H8M3rE5nk/bucket-overview?${cluster:queryparam}﻿&var-bucket=${__data.fields.Bucket}"
                   }
@@ -1801,7 +1782,7 @@
         "h": 9,
         "w": 9,
         "x": 15,
-        "y": 19
+        "y": 20
       },
       "id": 106,
       "options": {
@@ -1876,7 +1857,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 28
+        "y": 29
       },
       "id": 110,
       "panels": [],
@@ -1947,7 +1928,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 29
+        "y": 30
       },
       "id": 114,
       "options": {
@@ -2033,7 +2014,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 29
+        "y": 30
       },
       "id": 116,
       "options": {
@@ -2068,7 +2049,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 39
+        "y": 40
       },
       "id": 16,
       "panels": [],
@@ -2128,7 +2109,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 40
+        "y": 41
       },
       "id": 28,
       "options": {
@@ -2150,7 +2131,7 @@
           "refId": "A"
         }
       ],
-      "title": "GET Operations",
+      "title": "Reads per second",
       "type": "timeseries"
     },
     {
@@ -2207,7 +2188,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 40
+        "y": 41
       },
       "id": 102,
       "options": {
@@ -2302,7 +2283,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 50
+        "y": 51
       },
       "id": 107,
       "options": {
@@ -2324,7 +2305,7 @@
           "refId": "A"
         }
       ],
-      "title": "SET Operations",
+      "title": "Writes per second",
       "type": "timeseries"
     },
     {
@@ -2381,7 +2362,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 50
+        "y": 51
       },
       "id": 108,
       "options": {
@@ -2430,7 +2411,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 60
+        "y": 61
       },
       "id": 41,
       "panels": [],
@@ -2494,7 +2475,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 61
+        "y": 62
       },
       "id": 20,
       "options": {
@@ -2573,7 +2554,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 61
+        "y": 62
       },
       "id": 24,
       "options": {
