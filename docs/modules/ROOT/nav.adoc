@@ -26,7 +26,6 @@ endif::env-packaged[]
 .Components
 * xref:component-alertmanager.adoc[Alertmanager]
 * xref:component-grafana.adoc[Grafana]
-* xref:component-jaeger.adoc[Jaeger]
 * xref:component-loki.adoc[Loki]
 * xref:component-prometheus.adoc[Prometheus]
 
