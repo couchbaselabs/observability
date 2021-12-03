@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 5,
-  "iteration": 1638371097875,
+  "id": 9,
+  "iteration": 1638542473831,
   "links": [
     {
       "asDropdown": false,
@@ -2204,7 +2204,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
+          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[$__rate_interval]))))",
           "hide": false,
           "interval": "",
           "legendFormat": "50th percentile (avg)",
@@ -2212,7 +2212,7 @@
         },
         {
           "exemplar": true,
-          "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
+          "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[$__rate_interval]))))",
           "instant": false,
           "interval": "",
           "legendFormat": "99th percentile",
@@ -2220,7 +2220,7 @@
         },
         {
           "exemplar": true,
-          "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[5m]))))",
+          "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\"}[$__rate_interval]))))",
           "hide": false,
           "interval": "",
           "legendFormat": "99.9th percentile",
@@ -2378,7 +2378,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
+          "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[$__rate_interval]))))",
           "hide": false,
           "interval": "",
           "legendFormat": "50th percentile (avg)",
@@ -2386,7 +2386,7 @@
         },
         {
           "exemplar": true,
-          "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
+          "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[$__rate_interval]))))",
           "instant": false,
           "interval": "",
           "legendFormat": "99th percentile",
@@ -2394,7 +2394,7 @@
         },
         {
           "exemplar": true,
-          "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[5m]))))",
+          "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\"}[$__rate_interval]))))",
           "hide": false,
           "interval": "",
           "legendFormat": "99.9th percentile",
@@ -2582,7 +2582,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "5s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
@@ -2623,8 +2623,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1a528e14cf83548956ab971a279eb3b8",
-          "value": "1a528e14cf83548956ab971a279eb3b8"
+          "text": "3d5627609838ad781d3d42bae4e8f8b6",
+          "value": "3d5627609838ad781d3d42bae4e8f8b6"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2650,8 +2650,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node2.local",
-          "value": "node2.local"
+          "text": "node0.local",
+          "value": "node0.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -2676,7 +2676,7 @@
     ]
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {
@@ -2696,5 +2696,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 2
+  "version": 1
 }

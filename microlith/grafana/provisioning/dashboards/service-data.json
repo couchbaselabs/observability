@@ -639,7 +639,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.50, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "expr": "histogram_quantile(0.50, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}, {{bucket}}",
@@ -726,7 +726,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "expr": "histogram_quantile(0.99, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}, {{bucket}}",
@@ -810,7 +810,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.999, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "expr": "histogram_quantile(0.999, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}, {{bucket}}",
@@ -894,7 +894,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.50, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "expr": "histogram_quantile(0.50, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}, {{bucket}}",
@@ -978,7 +978,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "expr": "histogram_quantile(0.99, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}, {{bucket}}",
@@ -1062,7 +1062,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.999, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[5m])))",
+          "expr": "histogram_quantile(0.999, sum by(le,bucket,instance) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",instance=~`${node:regex}(?::[0-9]*)?$`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{instance}}, {{bucket}}",
