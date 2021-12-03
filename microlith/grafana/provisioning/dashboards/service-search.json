@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 13,
-  "iteration": 1637928488310,
+  "id": 9,
+  "iteration": 1638372719808,
   "links": [
     {
       "asDropdown": false,
@@ -60,7 +60,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "couchbase",
@@ -183,7 +183,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (fts_num_bytes_used_disk{instance=~`$node(?::[0-9]*)?$`})",
+          "expr": "sum by (instance) (fts_num_bytes_used_disk{instance=~`${node:regex}(?::[0-9]*)?$`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -240,7 +240,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (fts_num_bytes_used_ram{instance=~`$node(?::[0-9]*)?$`})",
+          "expr": "sum by (instance) (fts_num_bytes_used_ram{instance=~`${node:regex}(?::[0-9]*)?$`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -297,7 +297,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(fts_doc_count{instance=~`$node(?::[0-9]*)?$`})",
+          "expr": "sum(fts_doc_count{instance=~`${node:regex}(?::[0-9]*)?$`})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -389,7 +389,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{instance=~`$node(?::[0-9]*)?$`})) == 0",
+          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{instance=~`${node:regex}(?::[0-9]*)?$`})) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -437,8 +437,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -498,7 +498,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{instance=~`$node(?::[0-9]*)?$`}[$__rate_interval])))",
+          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{instance=~`${node:regex}(?::[0-9]*)?$`}[$__rate_interval])))",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -519,8 +519,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -579,7 +579,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "fts_num_mutations_to_index{instance=~`$node(?::[0-9]*)?$`}",
+          "expr": "fts_num_mutations_to_index{instance=~`${node:regex}(?::[0-9]*)?$`}",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -610,7 +610,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 12,
         "x": 0,
         "y": 12
@@ -618,7 +618,7 @@
       "id": 6,
       "options": {
         "displayMode": "basic",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -633,7 +633,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, fts_num_bytes_used_disk{instance=~`$node(?::[0-9]*)?$`})",
+          "expr": "topk(5, fts_num_bytes_used_disk{instance=~`${node:regex}(?::[0-9]*)?$`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -665,7 +665,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 7,
         "w": 12,
         "x": 12,
         "y": 12
@@ -673,7 +673,7 @@
       "id": 2,
       "options": {
         "displayMode": "basic",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -688,7 +688,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{instance=~`$node(?::[0-9]+)?$`}))",
+          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{instance=~`${node:regex}(?::[0-9]+)?$`}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -714,7 +714,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "Cluster 0",
           "value": "Cluster 0"
         },
@@ -741,7 +741,7 @@
       {
         "allValue": null,
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "node1.local",
           "value": "node1.local"
         },
@@ -749,10 +749,10 @@
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
-        "hide": 0,
+        "hide": 2,
         "includeAll": false,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "node",
         "options": [],
         "query": {
@@ -769,8 +769,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "defa975c8cf99fa61cf75b26e0e99dee",
-          "value": "defa975c8cf99fa61cf75b26e0e99dee"
+          "text": "a706f6926d2f75b9d0a334156d1e10e5",
+          "value": "a706f6926d2f75b9d0a334156d1e10e5"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -796,8 +796,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "97da970c50e0955bc37a61085d5d53ac",
-          "value": "97da970c50e0955bc37a61085d5d53ac"
+          "text": "68c476b08d722db9e27db7600b694712",
+          "value": "68c476b08d722db9e27db7600b694712"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -806,7 +806,7 @@
         "hide": 2,
         "includeAll": false,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "node_uuid",
         "options": [],
         "query": {
@@ -829,5 +829,5 @@
   "timezone": "",
   "title": "Search Service Overview",
   "uid": "5O4ki2tnz",
-  "version": 3
+  "version": 9
 }
