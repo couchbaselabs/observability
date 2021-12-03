@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 2,
   "id": 1,
-  "iteration": 1638544340461,
+  "iteration": 1638545534370,
   "links": [
     {
       "asDropdown": false,
@@ -122,7 +122,7 @@
       "type": "stat"
     },
     {
-      "datasource": null,
+      "datasource": "-- Mixed --",
       "description": "Scroll down to \"basic info\" to see the exact alerts.",
       "fieldConfig": {
         "defaults": {
@@ -148,7 +148,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 8,
         "w": 4,
         "x": 5,
         "y": 1
@@ -172,16 +172,61 @@
       "pluginVersion": "8.2.5",
       "targets": [
         {
+          "datasource": "Prometheus",
           "exemplar": true,
           "expr": "count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} >= 30)",
+          "hide": false,
           "instant": true,
           "interval": "",
-          "legendFormat": "Cluster",
+          "legendFormat": "critical_alerts",
           "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "JSON API",
+          "fields": [
+            {
+              "jsonPath": "$count($.nodes_summary[$.cluster_membership = \"inactiveFailed\"])",
+              "language": "jsonata",
+              "name": "failed_nodes"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/clusters/$cluster_uuid"
         }
       ],
       "title": "Critical Alerts",
-      "transformations": [],
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
       "type": "stat"
     },
     {
@@ -425,74 +470,6 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Version",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "datasource": "JSON API",
-      "description": "Nodes that have been failed over",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#55a64bb0",
-                "value": null
-              },
-              {
-                "color": "#e02f44b0",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 4,
-        "x": 5,
-        "y": 5
-      },
-      "id": 117,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "cacheDurationSeconds": 5,
-          "fields": [
-            {
-              "jsonPath": "$count($.nodes_summary[$.cluster_membership != \"active\"])",
-              "language": "jsonata"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "title": "Inactive Nodes",
       "transformations": [],
       "type": "stat"
     },
@@ -2805,5 +2782,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 3
+  "version": 6
 }
