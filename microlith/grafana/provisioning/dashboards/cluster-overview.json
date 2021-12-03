@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 9,
-  "iteration": 1638542473831,
+  "id": 1,
+  "iteration": 1638544340461,
   "links": [
     {
       "asDropdown": false,
@@ -148,7 +148,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 4,
         "w": 4,
         "x": 5,
         "y": 1
@@ -430,6 +430,74 @@
     },
     {
       "datasource": "JSON API",
+      "description": "Nodes that have been failed over",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#55a64bb0",
+                "value": null
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 5,
+        "y": 5
+      },
+      "id": 117,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "cacheDurationSeconds": 5,
+          "fields": [
+            {
+              "jsonPath": "$count($.nodes_summary[$.cluster_membership != \"active\"])",
+              "language": "jsonata"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "title": "Inactive Nodes",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -647,6 +715,42 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "State"
+            },
+            "properties": [
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "active": {
+                        "color": "#55a64bb0",
+                        "index": 0,
+                        "text": "Active"
+                      },
+                      "inactiveAdded": {
+                        "index": 2,
+                        "text": "Pending Rebalance"
+                      },
+                      "inactiveFailed": {
+                        "color": "#e02f44b0",
+                        "index": 1,
+                        "text": "Failed Over"
+                      }
+                    },
+                    "type": "value"
+                  }
+                ]
+              },
+              {
+                "id": "custom.displayMode",
+                "value": "color-background-solid"
+              }
+            ]
           }
         ]
       },
@@ -691,6 +795,11 @@
               "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"Analytics\" :\n    $svc = \"n1ql\" ? \"Query\" :\n    $svc = \"eventing\" ? \"Eventing\" :\n    $svc = \"index\" ? \"Index\" :\n    $svc = \"fts\" ? \"Search\" :\n    $svc = \"kv\" ? \"Data\" :\n    $svc = \"backup\" ? \"Backup\" : $svc\n  })), \", \")\n})",
               "language": "jsonata",
               "name": "Services"
+            },
+            {
+              "jsonPath": "$.nodes_summary[*].cluster_membership",
+              "language": "jsonata",
+              "name": "State"
             },
             {
               "jsonPath": "$.nodes_summary[*].cpuCount",
@@ -2623,8 +2732,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "3d5627609838ad781d3d42bae4e8f8b6",
-          "value": "3d5627609838ad781d3d42bae4e8f8b6"
+          "text": "4153cc66f7b50b490a882f1d3634688f",
+          "value": "4153cc66f7b50b490a882f1d3634688f"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2696,5 +2805,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 1
+  "version": 3
 }
