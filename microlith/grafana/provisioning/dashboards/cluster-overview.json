@@ -349,7 +349,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/clusters"
+          "urlPath": "/clusters/$cluster_uuid"
         }
       ],
       "title": "Running Services (clickable!)",
