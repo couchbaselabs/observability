@@ -354,23 +354,23 @@
                   "index": 0,
                   "text": "Good"
                 },
-                "1": {
-                  "color": "#ff780ab0",
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "color": "#e02f44b0",
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
+                "10": {
                   "color": "#ccccdbb0",
                   "index": 3,
                   "text": "Info"
                 },
-                "4": {
-                  "color": "#ccccdbb0",
+                "20": {
+                  "color": "#ff780ab0",
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "transparent",
                   "index": 4,
                   "text": "Missing"
                 }
@@ -951,7 +951,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Node Overview (7.x)",
+  "title": "Node Overview",
   "uid": "Dx-2iOc7k",
   "version": 2
 }

@@ -368,7 +368,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0)",
+          "expr": "count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} > 10)",
           "instant": true,
           "interval": "",
           "legendFormat": "Cluster",
@@ -376,7 +376,7 @@
         },
         {
           "exemplar": true,
-          "expr": "count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} > 0)",
+          "expr": "count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} > 10)",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -964,6 +964,21 @@
               {
                 "id": "custom.displayMode",
                 "value": "color-background-solid"
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "index": 0,
+                        "text": "Fetching..."
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
               }
             ]
           },
@@ -1053,6 +1068,21 @@
                     }
                   ]
                 }
+              },
+              {
+                "id": "mappings",
+                "value": [
+                  {
+                    "options": {
+                      "match": "null",
+                      "result": {
+                        "index": 0,
+                        "text": "Fetching..."
+                      }
+                    },
+                    "type": "special"
+                  }
+                ]
               }
             ]
           }
@@ -1184,7 +1214,7 @@
       "type": "table"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
@@ -1218,19 +1248,19 @@
                   "index": 0,
                   "text": "Good"
                 },
-                "1": {
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
+                "10": {
                   "index": 3,
                   "text": "Info"
                 },
-                "4": {
+                "20": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "30": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "-1": {
                   "index": 4,
                   "text": "Missing"
                 }
@@ -1246,24 +1276,24 @@
                 "value": null
               },
               {
+                "color": "transparent",
+                "value": -1
+              },
+              {
                 "color": "#37872db0",
                 "value": 0
               },
               {
-                "color": "#ff9830b0",
-                "value": 1
+                "color": "#c8c8ceb0",
+                "value": 10
               },
               {
                 "color": "#f2495cb0",
-                "value": 2
+                "value": 20
               },
               {
-                "color": "#c8c8ceb0",
-                "value": 3
-              },
-              {
-                "color": "transparent",
-                "value": 4
+                "color": "#ff9830b0",
+                "value": 20
               }
             ]
           }
@@ -1421,19 +1451,19 @@
                   "index": 0,
                   "text": "Good"
                 },
-                "1": {
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
+                "10": {
                   "index": 3,
                   "text": "Info"
                 },
-                "4": {
+                "20": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "30": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "-1": {
                   "index": 4,
                   "text": "Missing"
                 }
@@ -1449,24 +1479,24 @@
                 "value": null
               },
               {
+                "color": "transparent",
+                "value": -1
+              },
+              {
                 "color": "#37872db0",
                 "value": 0
               },
               {
+                "color": "#c8c8ceb0",
+                "value": 10
+              },
+              {
                 "color": "#ff9830b0",
-                "value": 1
+                "value": 20
               },
               {
                 "color": "#f2495cb0",
-                "value": 2
-              },
-              {
-                "color": "#c8c8ceb0",
-                "value": 3
-              },
-              {
-                "color": "transparent",
-                "value": 4
+                "value": 30
               }
             ]
           }
@@ -1646,19 +1676,19 @@
                   "index": 0,
                   "text": "Good"
                 },
-                "1": {
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
+                "10": {
                   "index": 3,
                   "text": "Info"
                 },
-                "4": {
+                "20": {
+                  "index": 1,
+                  "text": "Warn"
+                },
+                "30": {
+                  "index": 2,
+                  "text": "Alert"
+                },
+                "-1": {
                   "index": 4,
                   "text": "Missing"
                 }
@@ -1674,24 +1704,24 @@
                 "value": null
               },
               {
+                "color": "transparent",
+                "value": -1
+              },
+              {
                 "color": "#37872db0",
                 "value": 0
               },
               {
+                "color": "#c8c8ceb0",
+                "value": 10
+              },
+              {
                 "color": "#ff9830b0",
-                "value": 1
+                "value": 20
               },
               {
                 "color": "#f2495cb0",
-                "value": 2
-              },
-              {
-                "color": "#c8c8ceb0",
-                "value": 3
-              },
-              {
-                "color": "transparent",
-                "value": 4
+                "value": 30
               }
             ]
           }
