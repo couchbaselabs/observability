@@ -189,7 +189,7 @@
                 "id": "links",
                 "value": [
                   {
-                    "title": "Data Service Overview",
+                    "title": "Data",
                     "url": "/d/4vnZHfcnk/data-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
                   }
                 ]
@@ -206,7 +206,7 @@
                 "id": "links",
                 "value": [
                   {
-                    "title": "Index Service Overview",
+                    "title": "Index",
                     "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
                   }
                 ]
@@ -223,7 +223,7 @@
                 "id": "links",
                 "value": [
                   {
-                    "title": "Search Service Overview",
+                    "title": "Search",
                     "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
                   }
                 ]
@@ -240,7 +240,7 @@
                 "id": "links",
                 "value": [
                   {
-                    "title": "Query Service Overview",
+                    "title": "Query",
                     "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
                   }
                 ]
