@@ -193,10 +193,10 @@
 <p>Clone the couchbaselabs/observability repo: <code>git clone <a href="mailto:git@github.com">git@github.com</a>:couchbaselabs/observability.git</code></p>
 </li>
 <li>
-<p>Part of CMOS is the proprietary Couchbase Cluster Monitor, in <a href="https://github.com/couchbaselabs/cbmultimanager" target="_blank" rel="noopener">this private repository</a>. If you want to build CMOS to use it, <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent" target="_blank" rel="noopener">set up your local SSH agent</a>.</p>
+<p>Part of CMOS is the proprietary Couchbase Cluster Monitor, found in <a href="https://github.com/couchbaselabs/cbmultimanager" target="_blank" rel="noopener">this private repository</a>. Note that it is not required to download the Couchbase Cluster Monitor locally to run CMOS. If you want to build CMOS to use it, <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent" target="_blank" rel="noopener">set up your local SSH agent</a>.</p>
 </li>
 <li>
-<p>Build the container: <code>make container</code> if you want to include the Cluster Monitor or <code>make container-oss</code> otherwise</p>
+<p>If you want to include the Cluster Monitor, build the container: <code>make container</code>. Otherwise use: <code>make container-oss</code></p>
 </li>
 <li>
 <p>Run the container: <code>docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1</code> (if your Couchbase Server is running in Docker, you may need to set <a href="https://docs.docker.com/network/" target="_blank" rel="noopener">extra options</a> to permit them to communicate.)</p>
