@@ -10,6 +10,11 @@ This example will spin up the configured number of nodes in Docker, partitioning
 
 Each node exposes port `:8091` to the host on port `:8091+i` where `i` is from the container name `node$i`, allowing for debugging or testing (e.g., failing over a node) via the Couchbase Server UI. This is important as on MacOS there is no way to access a container by its IP.
 
+### Important notes ###
+Running many nodes at once is very resource intensive depending on machine specifications, and if run on a laptop will quickly destroy your battery (especially when not plugged in). Calling `docker pause cmos node0 node1 ...` and then `docker resume cmos node0 node1 ...` when temporarily not in use helps.
+
+Laptops on lower battery (causing throttling), and low-power machines in general, will take much longer to initialise the example (and load stats into Prometheus, Grafana, etc.) - this is normal. 
+
 ## Environment Variables ##
 
 There are various environment variables you can configure:
