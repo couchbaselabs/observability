@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 1,
-  "iteration": 1638545534370,
+  "id": 3,
+  "iteration": 1638787447345,
   "links": [
     {
       "asDropdown": false,
@@ -123,7 +123,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"basic info\" to see the exact alerts.",
+      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2709,8 +2709,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "4153cc66f7b50b490a882f1d3634688f",
-          "value": "4153cc66f7b50b490a882f1d3634688f"
+          "text": "895c78fef7f419017bac788218d8f31c",
+          "value": "895c78fef7f419017bac788218d8f31c"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2782,5 +2782,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 6
+  "version": 1
 }
