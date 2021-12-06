@@ -340,11 +340,8 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": true,
-            "minWidth": 0,
-            "width": 0
+            "align": "left",
+            "displayMode": "color-background-solid"
           },
           "mappings": [
             {
@@ -356,17 +353,17 @@
                 },
                 "10": {
                   "color": "#ccccdbb0",
-                  "index": 3,
+                  "index": 1,
                   "text": "Info"
                 },
                 "20": {
                   "color": "#ff780ab0",
-                  "index": 1,
-                  "text": "Warn"
+                  "index": 2,
+                  "text": "Warning"
                 },
                 "30": {
                   "color": "#e02f44b0",
-                  "index": 2,
+                  "index": 3,
                   "text": "Alert"
                 },
                 "-1": {
@@ -382,28 +379,13 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "transparent",
                 "value": null
               }
             ]
           }
         },
         "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Status"
-            },
-            "properties": [
-              {
-                "id": "custom.displayMode",
-                "value": "color-background-solid"
-              },
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
           {
             "matcher": {
               "id": "byName",
@@ -414,7 +396,26 @@
                 "id": "links",
                 "value": [
                   {
-                    "title": "Checker info",
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
                     "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
                   }
                 ]
@@ -429,13 +430,13 @@
         "x": 0,
         "y": 4
       },
-      "id": 2,
+      "id": 22,
       "options": {
         "showHeader": true,
         "sortBy": [
           {
             "desc": true,
-            "displayName": "Status"
+            "displayName": "Value"
           }
         ]
       },
@@ -454,10 +455,6 @@
       "title": "Health Check Warnings",
       "transformations": [
         {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
           "id": "organize",
           "options": {
             "excludeByName": {
@@ -467,13 +464,13 @@
               "cluster_uuid": true,
               "instance": true,
               "job": true,
-              "name": false,
               "node_name": true,
               "node_uuid": true
             },
             "indexByName": {},
             "renameByName": {
               "Value": "Status",
+              "__name__": "",
               "id": "ID",
               "name": "Name"
             }
@@ -866,8 +863,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "607f87b68e908fc34ab9bf33e1074858",
-          "value": "607f87b68e908fc34ab9bf33e1074858"
+          "text": "136a713e902e59472e297446c4174e49",
+          "value": "136a713e902e59472e297446c4174e49"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -892,9 +889,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "node0.local",
-          "value": "node0.local"
+          "selected": true,
+          "text": "node1.local",
+          "value": "node1.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -920,8 +917,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "e8f7bfa83f58d5f45bdb9c160c52bc8c",
-          "value": "e8f7bfa83f58d5f45bdb9c160c52bc8c"
+          "text": "18aa2600b377b01404f887d8b4f8ff4b",
+          "value": "18aa2600b377b01404f887d8b4f8ff4b"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -953,5 +950,5 @@
   "timezone": "",
   "title": "Node Overview",
   "uid": "Dx-2iOc7k",
-  "version": 2
+  "version": 11
 }
