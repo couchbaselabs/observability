@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>On-premise usage :: Couchbase Monitoring and Observability Stack</title>
+    <title>Prometheus :: Couchbase Monitoring and Observability Stack</title>
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -106,7 +106,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="component-loki.html">Loki</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="component-prometheus.html">Prometheus</a>
   </li>
 </ul>
@@ -115,7 +115,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Deployment</span>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -179,110 +179,74 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
-    <li>Deployment</li>
-    <li><a href="deployment-onpremise.html">On-premise deployment</a></li>
+    <li>Components</li>
+    <li><a href="component-prometheus.html">Prometheus</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/deployment-onpremise.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/component-prometheus.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">On-premise usage</h1>
+<h1 class="page">Prometheus</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p>A working example is <a href="https://github.com/couchbaselabs/observability/tree/main/examples/containers/" target="_blank" rel="noopener">provided</a> based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.</p>
-</div>
-<div class="paragraph">
-<p>The basic steps are:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install a container runtime for your platform, for example on Ubuntu details are here: <a href="https://docs.docker.com/engine/install/ubuntu/" class="bare">https://docs.docker.com/engine/install/ubuntu/</a></p>
-</li>
-<li>
-<p>Run the microlith container up: <code>docker run --name=couchbase-grafana --rm -d -P couchbase-observability</code></p>
-</li>
-<li>
-<p>Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Prometheus end points and credentials can be added to the <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/dynamic/prometheus/couchbase/targets.json" target="_blank" rel="noopener">config file</a> mounted into the container above. This is periodically rescanned and new end points added.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">[
-    {
-      "targets": [
-        "exporter:9091"
-      ],
-      "labels": {
-        "job": "db1",
-        "container": "exporter"
-      }
-    }
-]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The cluster monitor currently requires configuration via a bespoke REST API:
-<code>curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"</code></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>COUCHBASE_ENDPOINT should be set to a node that you want to monitor in a Couchbase cluster.</p>
-</li>
-<li>
-<p>COUCHBASE_USER &amp; COUCHBASE_PWD are the credentials for accesing that cluster.</p>
-</li>
-<li>
-<p>CLUSTER_MONITOR_ENDPOINT is the mapping to port 7196 of the container we started, e.g. <code><a href="http://localhost:7196" class="bare">http://localhost:7196</a></code>. In the container run line above we map to dynamic ports so grab them using <code>docker container port couchbase-grafana 7196</code> and use that value in the URL or alternatively use the Nginx reverse-proxy URL <code><a href="http://localhost:8080/couchbase" class="bare">http://localhost:8080/couchbase</a></code>.</p>
-</li>
-<li>
-<p>CLUSTER_MONITOR_USER &amp; CLUSTER_MONITOR_PWD are the credentials for the cluster monitor tool, defaults to a <code>admin:password</code> but can be set differently using these variables when launching the container.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>As an example to configure a new cluster node to be monitored:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>CLUSTER_MONITOR_USER=admin
-CLUSTER_MONITOR_PWD=password
-CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port couchbase-grafana 7196)
-COUCHBASE_USER=Administrator
-COUCHBASE_PWD=password
-COUCHBASE_ENDPOINT=http://db2:8091
-curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We can also run with a directory containing shell scripts that do the above: <code>-v $PWD/microlith/dynamic/healthcheck/:/etc/healthcheck/</code>
-This will be re-scanned periodically and any scripts in it run.</p>
+<div class="quoteblock abstract">
+<blockquote>
+Prometheus helps to scrape Couchbase Server metrics and generate alerts on them.
+</blockquote>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next steps</h2>
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://prometheus.io" target="_blank" rel="noopener">Prometheus</a> is a leading open-source monitoring solution which has become the industry standard for metrics collection and alert generation on cloud platforms.
+With Prometheus, multi-dimensional metric data can be collected from multiple endpoints and stored as time series data along with optional labels.</p>
+</div>
+<div class="paragraph">
+<p>In a distributed environment, metrics need to be collected in real-time from various sources and alerts need to be triggered based on data trends and threshold deviations.
+As part of the Couchbase Monitoring and Observability Stack (CMOS), Prometheus Server comes with a set of built-in standard rules to create alerts on metrics scraped from Couchbase Server and other CMOS components.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/component-prometheus.png" alt="component prometheus"></span></p>
+</div>
+<div class="paragraph">
+<p>From Couchbase Server 7, detailed metric endpoints are exposed via a <a href="https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics" target="_blank" rel="noopener">Prometheus instance</a> built into the server.
+Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.
+The CMOS Prometheus Server, when configured, scrapes metrics from Couchbase Server targets along with other components in the stack.
+Alerts are generated based on standard alerting rules that are forwarded to the Alert Manager instance running in the CMOS stack.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_started"><a class="anchor" href="#_get_started"></a>Get Started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The CMOS Prometheus Server is included and enabled by default in CMOS.
+It ships with a default set of Couchbase specific standard alerting rules that trigger alerts, allowing administrators to quickly and easily take actions to mitigate issues.
+Prometheus in CMOS can be deployed <a href="tutorial-onpremise.html" class="page">on premise</a> or using <a href="tutorial-kubernetes.html" class="page">kubernetes</a>.
+Check out the reference <a href="architecture.html" class="page">Couchbase Monitoring Observability Stack</a>(CMOS) architecture to learn more.
+Learn more about how to further customize Prometheus to scrape metrics from other targets and create new rules in the <a href="https://prometheus.io/docs/introduction/first_steps" target="_blank" rel="noopener">first steps</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="architecture.html" class="page">Architecture overview</a></p>
+<p>On Premise Tutorial: <a href="tutorial-onpremise.html" class="page">Deploy CMOS on Premise</a></p>
 </li>
 <li>
-<p><a href="deployment-microlith.html" class="page">Microlith container deployment</a></p>
+<p>Kubernetes Tutorial: <a href="tutorial-kubernetes.html" class="page">Deploy CMOS on Kubernetes</a></p>
 </li>
 <li>
-<p><a href="tutorial-onpremise.html" class="page">On-premise example</a></p>
+<p>Prometheus: <a href="https://prometheus.io/docs/introduction/first_steps" target="_blank" rel="noopener">First Steps</a></p>
 </li>
 </ul>
 </div>

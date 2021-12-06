@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>On-premise usage :: Couchbase Monitoring and Observability Stack</title>
+    <title>Alertmanager :: Couchbase Monitoring and Observability Stack</title>
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -97,7 +97,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Components</span>
 <ul class="nav-list">
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="component-alertmanager.html">Alertmanager</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -115,7 +115,7 @@
     <button class="nav-item-toggle"></button>
     <span class="nav-text">Deployment</span>
 <ul class="nav-list">
-  <li class="nav-item is-current-page" data-depth="1">
+  <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -179,110 +179,80 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
-    <li>Deployment</li>
-    <li><a href="deployment-onpremise.html">On-premise deployment</a></li>
+    <li>Components</li>
+    <li><a href="component-alertmanager.html">Alertmanager</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/deployment-onpremise.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/component-alertmanager.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">On-premise usage</h1>
+<h1 class="page">Alertmanager</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="paragraph">
-<p>A working example is <a href="https://github.com/couchbaselabs/observability/tree/main/examples/containers/" target="_blank" rel="noopener">provided</a> based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.</p>
-</div>
-<div class="paragraph">
-<p>The basic steps are:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install a container runtime for your platform, for example on Ubuntu details are here: <a href="https://docs.docker.com/engine/install/ubuntu/" class="bare">https://docs.docker.com/engine/install/ubuntu/</a></p>
-</li>
-<li>
-<p>Run the microlith container up: <code>docker run --name=couchbase-grafana --rm -d -P couchbase-observability</code></p>
-</li>
-<li>
-<p>Configure the cluster to talk to it by providing credentials to Prometheus and cluster monitor tools.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Prometheus end points and credentials can be added to the <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/dynamic/prometheus/couchbase/targets.json" target="_blank" rel="noopener">config file</a> mounted into the container above. This is periodically rescanned and new end points added.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">[
-    {
-      "targets": [
-        "exporter:9091"
-      ],
-      "labels": {
-        "job": "db1",
-        "container": "exporter"
-      }
-    }
-]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The cluster monitor currently requires configuration via a bespoke REST API:
-<code>curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"</code></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>COUCHBASE_ENDPOINT should be set to a node that you want to monitor in a Couchbase cluster.</p>
-</li>
-<li>
-<p>COUCHBASE_USER &amp; COUCHBASE_PWD are the credentials for accesing that cluster.</p>
-</li>
-<li>
-<p>CLUSTER_MONITOR_ENDPOINT is the mapping to port 7196 of the container we started, e.g. <code><a href="http://localhost:7196" class="bare">http://localhost:7196</a></code>. In the container run line above we map to dynamic ports so grab them using <code>docker container port couchbase-grafana 7196</code> and use that value in the URL or alternatively use the Nginx reverse-proxy URL <code><a href="http://localhost:8080/couchbase" class="bare">http://localhost:8080/couchbase</a></code>.</p>
-</li>
-<li>
-<p>CLUSTER_MONITOR_USER &amp; CLUSTER_MONITOR_PWD are the credentials for the cluster monitor tool, defaults to a <code>admin:password</code> but can be set differently using these variables when launching the container.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>As an example to configure a new cluster node to be monitored:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>CLUSTER_MONITOR_USER=admin
-CLUSTER_MONITOR_PWD=password
-CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port couchbase-grafana 7196)
-COUCHBASE_USER=Administrator
-COUCHBASE_PWD=password
-COUCHBASE_ENDPOINT=http://db2:8091
-curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>We can also run with a directory containing shell scripts that do the above: <code>-v $PWD/microlith/dynamic/healthcheck/:/etc/healthcheck/</code>
-This will be re-scanned periodically and any scripts in it run.</p>
+<div class="quoteblock abstract">
+<blockquote>
+Alertmanager handles and routes alerts from CMOS Prometheus server.
+</blockquote>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next steps</h2>
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><a href="https://prometheus.io/docs/alerting/alertmanager" target="_blank" rel="noopener">Alertmanager</a> is an open source tool which has become the industry standard for alert management on cloud platforms.
+The CMOS Prometheus Server triggers alerts whenever certain rules are met and sends these alerts to the Alertmanager.
+The Alertmanager takes care of de-duplicating, grouping and routing these alerts to the correct receiver using integration such as e-mail, Slack and PagerDuty.</p>
+</div>
+<div class="paragraph">
+<p>With multiple sources generating the same alert, distributed environments can be noisy.
+In these cases, the alerts should be de-duplicated and grouped by their nature, origin, and severity before being routed to the receiver.
+The Alertmanager can also suppress and mute alerts if required.</p>
+</div>
+<div class="paragraph">
+<p>As part of the Couchbase Monitoring and Observability Stack (CMOS), Alertmanager comes with a set of built-in standard rules to handle alerts generated for Couchbase Server and other CMOS components.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="_images/component-alertmanager.png" alt="component alertmanager"></span></p>
+</div>
+<div class="paragraph">
+<p>Based on a predefined set of rules, the CMOS Prometheus Server generates alerts depending on the metrics it collects from Couchbase Server and other targets.
+By default, these alerts are forwarded to CMOS Alertmanager.
+The Alertmanager can be configured to route these alerts to a user-defined receiver integration such as e-mail, Slack, PagerDuty or other API-based endpoints to notify the user.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_started"><a class="anchor" href="#_get_started"></a>Get Started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In CMOS, the Alertmanager is included and enabled by default.
+It ships with a set of standard built-in rules to group alerts based on multiple alert parameters.
+Additionally, it can be customized to send notifications to different <a href="https://prometheus.io/docs/alerting/configuration" target="_blank" rel="noopener">receiver</a> endpoints.</p>
+</div>
+<div class="paragraph">
+<p>The CMOS Alertmanager can be deployed <a href="tutorial-onpremise.html" class="page">on premise</a> or using <a href="tutorial-kubernetes.html" class="page">Kubernetes</a>.
+Check out the reference <a href="architecture.html" class="page">Couchbase Monitoring and Observability Stack</a> (CMOS) architecture to learn more.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="architecture.html" class="page">Architecture overview</a></p>
+<p>On Premise Tutorial: <a href="tutorial-onpremise.html" class="page">Deploy CMOS on Premise</a></p>
 </li>
 <li>
-<p><a href="deployment-microlith.html" class="page">Microlith container deployment</a></p>
+<p>Kubernetes Tutorial: <a href="tutorial-kubernetes.html" class="page">Deploy CMOS on Kubernetes</a></p>
 </li>
 <li>
-<p><a href="tutorial-onpremise.html" class="page">On-premise example</a></p>
+<p>Alertmanager: <a href="https://prometheus.io/docs/alerting/latest/configuration" target="_blank" rel="noopener">Configuration</a></p>
 </li>
 </ul>
 </div>
