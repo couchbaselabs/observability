@@ -1,0 +1,552 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "gnetId": null,
+    "graphTooltip": 0,
+    "id": 12,
+    "iteration": 1638463990878,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "couchbase",
+          "couchbase-7",
+          "couchbase-node"
+        ],
+        "targetBlank": false,
+        "title": "Node Overview",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "couchbase",
+          "couchbase-cluster",
+          "couchbase-7"
+        ],
+        "targetBlank": false,
+        "title": "Cluster Overview",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": true,
+        "icon": "external link",
+        "includeVars": true,
+        "keepTime": true,
+        "tags": [
+          "couchbase",
+          "couchbase-7",
+          "couchbase-service"
+        ],
+        "targetBlank": false,
+        "title": "Service Dashboards",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "collapsed": false,
+        "datasource": null,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 16,
+        "panels": [],
+        "title": "Overview",
+        "type": "row"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#63a0fc",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 0,
+          "y": 1
+        },
+        "id": 13,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "eventing_agg_queue_size{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)$`,functionName=~`^${function:regex}$`}",
+            "interval": "",
+            "legendFormat": "{{ functionName }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Queue Size",
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#63a0fc",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 6,
+          "x": 6,
+          "y": 1
+        },
+        "id": 14,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "eventing_agg_queue_memory{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)$`,functionName=~`^${function:regex}$`}",
+            "interval": "",
+            "legendFormat": "{{ functionName }}",
+            "refId": "A"
+          }
+        ],
+        "title": "Total Queue Memory",
+        "type": "stat"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#1f61c4",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ops"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 12,
+          "y": 1
+        },
+        "id": 2,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "irate(eventing_on_update_success{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+            "interval": "",
+            "legendFormat": "{{functionName}} Update",
+            "refId": "A"
+          },
+          {
+            "exemplar": true,
+            "expr": "irate(eventing_on_delete_success{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{functionName}} Delete",
+            "refId": "B"
+          }
+        ],
+        "title": "Successful Function Runs",
+        "type": "timeseries"
+      },
+      {
+        "datasource": null,
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "semi-dark-red",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ops"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 12,
+          "w": 12,
+          "x": 0,
+          "y": 7
+        },
+        "id": 10,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "exemplar": true,
+            "expr": "irate(eventing_on_update_failure{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+            "interval": "",
+            "legendFormat": "{{functionName}} Update",
+            "refId": "A"
+          },
+          {
+            "exemplar": true,
+            "expr": "irate(eventing_on_delete_failure{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{functionName}} Delete",
+            "refId": "B"
+          },
+          {
+            "exemplar": true,
+            "expr": "irate(eventing_timeout_count{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "{{functionName}} Timeout",
+            "refId": "C"
+          }
+        ],
+        "title": "Failed Function Runs",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "5s",
+    "schemaVersion": 32,
+    "style": "dark",
+    "tags": [
+      "couchbase",
+      "couchbase-7",
+      "couchbase-service",
+      "couchbase-service-eventing"
+    ],
+    "templating": {
+      "list": [
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "Cluster 0",
+            "value": "Cluster 0"
+          },
+          "datasource": null,
+          "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "description": null,
+          "error": null,
+          "hide": 0,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": true,
+            "text": [
+              "node0.local",
+              "node1.local"
+            ],
+            "value": [
+              "node0.local",
+              "node1.local"
+            ]
+          },
+          "datasource": null,
+          "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
+          "description": null,
+          "error": null,
+          "hide": 2,
+          "includeAll": false,
+          "label": null,
+          "multi": true,
+          "name": "node",
+          "options": [],
+          "query": {
+            "query": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]node_name=\"(.+?)(?::[0-9]*)?\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "8982612a2b3c7154bd087e7c1b6255b7",
+            "value": "8982612a2b3c7154bd087e7c1b6255b7"
+          },
+          "datasource": null,
+          "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+          "description": null,
+          "error": null,
+          "hide": 2,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "cluster_uuid",
+          "options": [],
+          "query": {
+            "query": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": false,
+            "text": "f43d75eea620de5e5a71b48979e3d5e6",
+            "value": "f43d75eea620de5e5a71b48979e3d5e6"
+          },
+          "datasource": null,
+          "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
+          "description": null,
+          "error": null,
+          "hide": 2,
+          "includeAll": false,
+          "label": null,
+          "multi": false,
+          "name": "node_uuid",
+          "options": [],
+          "query": {
+            "query": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]node_uuid=\"(.+?)\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "allValue": null,
+          "current": {
+            "selected": true,
+            "text": [
+              "All"
+            ],
+            "value": [
+              "$__all"
+            ]
+          },
+          "datasource": null,
+          "definition": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)$`}[$__range]))",
+          "description": null,
+          "error": null,
+          "hide": 0,
+          "includeAll": true,
+          "label": "Function",
+          "multi": true,
+          "name": "function",
+          "options": [],
+          "query": {
+            "query": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)$`}[$__range]))",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]functionName=\"(.+?)\"/",
+          "skipUrlSync": false,
+          "sort": 1,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-5m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "",
+    "title": "Eventing Service",
+    "uid": "R0hxsR2nk",
+    "version": 16
+  }

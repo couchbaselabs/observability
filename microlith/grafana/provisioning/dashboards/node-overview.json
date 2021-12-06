@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 13,
-  "iteration": 1637946028453,
+  "id": 7,
+  "iteration": 1638381210884,
   "links": [
     {
       "asDropdown": false,
@@ -59,7 +59,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "couchbase",
@@ -89,7 +89,7 @@
     },
     {
       "datasource": "JSON API",
-      "description": "Needs to be edited to actually represent the nodes version.",
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -109,8 +109,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 5,
+        "h": 3,
+        "w": 10,
         "x": 0,
         "y": 1
       },
@@ -137,192 +137,27 @@
           "cacheDurationSeconds": 0,
           "fields": [
             {
-              "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
-              "language": "jsonata",
-              "name": "Version",
-              "type": "number"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        },
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$.nodes_summary[node_uuid=\"$node_uuid\"].version",
+              "jsonPath": "$.version ~> function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")}",
               "language": "jsonata",
               "name": "Version"
             }
           ],
-          "hide": true,
+          "hide": false,
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/clusters/$cluster_uuid"
+          "urlPath": "/clusters/$cluster_uuid/node/$node_uuid"
         }
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Version - PLACEHOLDER",
+      "title": "Version",
       "transformations": [],
       "type": "stat"
     },
     {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": true,
-            "minWidth": 0,
-            "width": 0
-          },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "#55a64bb0",
-                  "index": 0,
-                  "text": "Good"
-                },
-                "1": {
-                  "color": "#ff780ab0",
-                  "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "color": "#e02f44b0",
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
-                  "color": "#ccccdbb0",
-                  "index": 3,
-                  "text": "Info"
-                },
-                "4": {
-                  "color": "#ccccdbb0",
-                  "index": 4,
-                  "text": "Missing"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Status"
-            },
-            "properties": [
-              {
-                "id": "custom.displayMode",
-                "value": "color-background-solid"
-              },
-              {
-                "id": "custom.width"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ID"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "title": "Checker info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 9,
-        "x": 5,
-        "y": 1
-      },
-      "id": 2,
-      "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Status"
-          }
-        ]
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} > 0",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Health Check Warnings",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "cluster_name": true,
-              "cluster_uuid": true,
-              "instance": true,
-              "job": true,
-              "name": false,
-              "node_name": true,
-              "node_uuid": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Status",
-              "id": "ID",
-              "name": "Name"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
       "datasource": "JSON API",
-      "description": "Needs to be updated to actually show per-node, not per-cluster.",
+      "description": "Click on each service to be taken to its dashboard page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -333,25 +168,94 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#56565d",
+                "color": "#47474c",
                 "value": null
               },
               {
-                "color": "#55a64bb0",
+                "color": "#55a64b",
                 "value": 1
               }
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Data Service Overview",
+                    "url": "/d/4vnZHfcnk/data-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Index"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Index Service Overview",
+                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Search"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Search Service Overview",
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Query"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Query Service Overview",
+                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
-        "h": 7,
-        "w": 10,
-        "x": 14,
+        "h": 10,
+        "w": 14,
+        "x": 10,
         "y": 1
       },
-      "id": 14,
+      "id": 20,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -373,50 +277,207 @@
           "cacheDurationSeconds": 0,
           "fields": [
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
               "language": "jsonata",
               "name": "Data"
             },
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
               "language": "jsonata",
               "name": "Index"
             },
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
               "language": "jsonata",
               "name": "Search"
             },
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
               "language": "jsonata",
               "name": "Query"
             },
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
               "language": "jsonata",
               "name": "Eventing"
             },
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
               "language": "jsonata",
               "name": "Analytics"
             },
             {
-              "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
               "language": "jsonata",
               "name": "Backup"
+            },
+            {
+              "jsonPath": "0",
+              "language": "jsonata",
+              "name": "..."
             }
           ],
           "method": "GET",
           "queryParams": "",
           "refId": "A",
-          "urlPath": "/clusters"
+          "urlPath": "/clusters/$cluster_uuid/node/$node_uuid"
         }
       ],
-      "title": "Services - PLACEHOLDER",
-      "transformations": [],
+      "title": "Running Services (clickable!)",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        }
+      ],
       "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "displayMode": "color-background-solid"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#55a64bb0",
+                  "index": 0,
+                  "text": "Good"
+                },
+                "10": {
+                  "color": "#ccccdbb0",
+                  "index": 1,
+                  "text": "Info"
+                },
+                "20": {
+                  "color": "#ff780ab0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "transparent",
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 0,
+        "y": 4
+      },
+      "id": 22,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Value"
+          }
+        ]
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} > 0",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Health Check Warnings",
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "cluster_name": true,
+              "cluster_uuid": true,
+              "instance": true,
+              "job": true,
+              "node_name": true,
+              "node_uuid": true
+            },
+            "indexByName": {},
+            "renameByName": {
+              "Value": "Status",
+              "__name__": "",
+              "id": "ID",
+              "name": "Name"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": null,
@@ -424,7 +485,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 8
+        "y": 11
       },
       "id": 16,
       "title": "Basic info",
@@ -442,14 +503,17 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -462,7 +526,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -470,11 +534,11 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#73bf69b0",
                 "value": null
               },
               {
-                "color": "red",
+                "color": "#f2495cb0",
                 "value": 80
               }
             ]
@@ -487,13 +551,13 @@
         "h": 10,
         "w": 10,
         "x": 0,
-        "y": 9
+        "y": 12
       },
       "id": 4,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "tooltip": {
@@ -524,8 +588,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -569,7 +633,7 @@
         "h": 10,
         "w": 14,
         "x": 10,
-        "y": 9
+        "y": 12
       },
       "id": 10,
       "options": {
@@ -599,21 +663,24 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -626,7 +693,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -634,12 +701,12 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#73bf69b0",
                 "value": null
               },
               {
-                "color": "red",
-                "value": 80
+                "color": "#f2495cb0",
+                "value": 0.8
               }
             ]
           },
@@ -651,13 +718,13 @@
         "h": 10,
         "w": 10,
         "x": 0,
-        "y": 19
+        "y": 22
       },
       "id": 6,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "tooltip": {
@@ -688,8 +755,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -716,12 +783,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -733,7 +796,7 @@
         "h": 10,
         "w": 14,
         "x": 10,
-        "y": 19
+        "y": 22
       },
       "id": 8,
       "options": {
@@ -759,6 +822,7 @@
       "type": "timeseries"
     }
   ],
+  "refresh": false,
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
@@ -799,8 +863,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "6aebca415d4cda73ca5ed591a7236987",
-          "value": "6aebca415d4cda73ca5ed591a7236987"
+          "text": "136a713e902e59472e297446c4174e49",
+          "value": "136a713e902e59472e297446c4174e49"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -825,9 +889,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "172.30.0.3",
-          "value": "172.30.0.3"
+          "selected": true,
+          "text": "node1.local",
+          "value": "node1.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -853,8 +917,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "92b04d918b3f7b65eeaad05740e7e309",
-          "value": "92b04d918b3f7b65eeaad05740e7e309"
+          "text": "18aa2600b377b01404f887d8b4f8ff4b",
+          "value": "18aa2600b377b01404f887d8b4f8ff4b"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -884,7 +948,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Node Overview (7.x)",
+  "title": "Node Overview",
   "uid": "Dx-2iOc7k",
-  "version": 3
+  "version": 11
 }
