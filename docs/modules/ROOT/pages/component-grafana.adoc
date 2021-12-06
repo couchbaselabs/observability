@@ -1,0 +1,36 @@
+= Grafana
+
+[abstract]
+Grafana helps visualize Couchbase metrics, logs, and alerts.
+
+== Overview
+
+https://grafana.com[Grafana^] is a multi-platform open source monitoring and visualization tool for large scale cloud-native projects.
+Linked to supported data sources, Grafana provides rich charts, graphs, and alerts, enabling users to query, visualize, and get alerts instantly. 
+
+A dynamic cloud environment makes it essential to visualize the state of the system at all times.
+As part of the Couchbase Monitoring and Observability Stack (CMOS), Grafana has a set of dashboards that allow administrators to query the state of the system centrally and take action at any given time.
+
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+image:component-grafana.png[]
+
+In CMOS, Grafana is linked to data sources such as https://prometheus.io[Prometheus^] and https://grafana.com/Loki[Loki^]. 
+Prometheus scrapes couchbase metrics and stores these data points in the prometheus server.
+Using dashboards in Grafana, users can visualize metrics from the Prometheus server.
+Logs from Couchbase are sent to Loki, and then exposed in the Grafana dashboards.
+
+== Get Started
+
+Grafana is included and enabled by default in the CMOS stack.
+It ships with a default set of standard dashboards, allowing administrators to quickly and easily get started.
+Grafana in CMOS can be deployed xref:tutorial-kubernetes.adoc[on premise] or using xref:tutorial-kubernetes.adoc[kubernetes].
+Check out the reference xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS) architecture to learn more.
+Learn more about how to further customize Grafana dashboards in CMOS: https://grafana.com/docs/grafana/latest/getting-started/getting-started[additional dashboards^].
+
+== Links
+
+* On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
+* Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
+* Grafana: https://grafana.com/docs/grafana/latest/getting-started/getting-started[Creating custom dashboards^]

@@ -5,7 +5,7 @@ Loki can be used to process and store Couchbase logs.
 
 == Overview
 
-https://grafana.com/oss/Loki/[Loki^] is a https://prometheus.io/[Prometheus^]-inspired open source, multi-tenant log aggregation system.
+https://grafana.com/Loki[Loki^] is a https://prometheus.io/[Prometheus^]-inspired open source, multi-tenant log aggregation system.
 Loki is used to process and store collected Couchbase logs.
 
 ifdef::env-github[]
