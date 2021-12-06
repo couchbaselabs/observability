@@ -23,7 +23,7 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
+  "id": 2,
   "links": [
     {
       "asDropdown": false,
@@ -54,27 +54,13 @@
             "filterable": false,
             "minWidth": 0
           },
-          "mappings": [
-            {
-              "options": {
-                "0": {
-                  "color": "green",
-                  "index": 0
-                }
-              },
-              "type": "value"
-            }
-          ],
+          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -93,7 +79,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "semi-dark-green",
+                  "fixedColor": "#55a64bb0",
                   "mode": "fixed"
                 }
               }
@@ -112,7 +98,8 @@
               {
                 "id": "color",
                 "value": {
-                  "mode": "continuous-YlRd"
+                  "fixedColor": "#ffb357b0",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -125,7 +112,7 @@
             "properties": [
               {
                 "id": "custom.displayMode",
-                "value": "color-background"
+                "value": "color-background-solid"
               },
               {
                 "id": "thresholds",
@@ -133,11 +120,11 @@
                   "mode": "absolute",
                   "steps": [
                     {
-                      "color": "semi-dark-green",
+                      "color": "#55a64bb0",
                       "value": null
                     },
                     {
-                      "color": "semi-dark-red",
+                      "color": "#e02f44b0",
                       "value": 1
                     }
                   ]
@@ -217,26 +204,29 @@
               {
                 "id": "mappings",
                 "value": []
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#55a64bb0",
+                  "mode": "fixed"
+                }
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "Cluster"
+              "options": "Server UI"
             },
             "properties": [
-              {
-                "id": "custom.width",
-                "value": 185
-              },
               {
                 "id": "links",
                 "value": [
                   {
                     "targetBlank": true,
                     "title": "Go to Couchbase UI",
-                    "url": "${__data.fields.Cluster}"
+                    "url": "https://${__data.fields.Server UI}:8091"
                   }
                 ]
               }
@@ -263,7 +253,7 @@
         ]
       },
       "gridPos": {
-        "h": 5,
+        "h": 19,
         "w": 24,
         "x": 0,
         "y": 0
@@ -271,16 +261,22 @@
       "id": 2,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Critical"
+          }
+        ]
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "cacheDurationSeconds": 0,
           "fields": [
             {
-              "jsonPath": "$[*].nodes_summary[0].host",
-              "name": "Cluster"
+              "jsonPath": "$map($.nodes_summary[0].host, function($h) {\n    $replace(\n      $replace($h, /:\\d+$/, \"\")\n    , /https?:\\/\\//, \"\")\n})",
+              "language": "jsonata",
+              "name": "Server UI"
             },
             {
               "jsonPath": "$[*].name",
@@ -298,7 +294,7 @@
               "name": "Nodes"
             },
             {
-              "jsonPath": "$map($, function($v) {$join($sort($distinct($map($v.nodes_summary.services, function($m) {$replace($replace($replace($replace($replace($replace($m, \"kv\", \"Data\"), \"index\", \"Index\"), \"n1ql\", \"Query\"), \"cbas\", \"Analytics\"), \"eventing\", \"Eventing\"), \"fts\", \"Search\")}))), ', ')})",
+              "jsonPath": "$map($, \n  function($v) {\n    $join(\n      $sort(\n        $distinct(\n          $map($v.nodes_summary.services, function($svc) {\n              $svc = \"cbas\" ? \"Analytics\" :\n              $svc = \"n1ql\" ? \"Query\" :\n              $svc = \"eventing\" ? \"Eventing\" :\n              $svc = \"index\" ? \"Index\" :\n              $svc = \"fts\" ? \"Search\" :\n              $svc = \"kv\" ? \"Data\" :\n              $svc = \"backup\" ? \"Backup\" : $svc\n          })\n        )\n      )\n    , \", \")\n})",
               "language": "jsonata",
               "name": "Services"
             },
@@ -335,7 +331,7 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 31,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -345,12 +341,12 @@
     "list": []
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 2
+  "version": 1
 }

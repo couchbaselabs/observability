@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 10,
-  "iteration": 1637056462490,
+  "id": 3,
+  "iteration": 1638367099980,
   "links": [
     {
       "asDropdown": false,
@@ -81,200 +81,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "ops"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(n1ql_requests{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])",
-          "interval": "",
-          "legendFormat": "Queries",
-          "refId": "A"
-        }
-      ],
-      "title": "Queries Per Second",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
             "mode": "thresholds",
             "seriesBy": "max"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 0.1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 6,
-        "x": 12,
-        "y": 0
-      },
-      "id": 4,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(n1ql_errors{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])",
-          "interval": "",
-          "legendFormat": "Errors",
-          "refId": "A"
-        }
-      ],
-      "title": "Query Errors",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds",
-            "seriesBy": "max"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
           },
           "mappings": [],
           "thresholds": {
@@ -294,48 +102,295 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 6,
         "w": 6,
-        "x": 18,
+        "x": 0,
         "y": 0
       },
       "id": 5,
       "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single"
-        }
+        "text": {},
+        "textMode": "auto"
       },
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_warnings{cluster=`$cluster`,instance=~`$node(?::[0-9]*)$`}[$__rate_interval])",
+          "expr": "irate(n1ql_warnings{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
           "interval": "",
           "legendFormat": "Warnings",
           "refId": "A"
         }
       ],
       "title": "Query Warnings",
-      "type": "timeseries"
+      "type": "stat"
     },
     {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#73bf69b0",
+                "value": null
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 6,
+        "x": 6,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "irate(n1ql_errors{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
+          "interval": "",
+          "legendFormat": "Errors (last $__interval)",
+          "refId": "A"
+        }
+      ],
+      "title": "Query Errors",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "250ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#ffcb7db0",
+                      "value": 10
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "500ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#ffcb7dad",
+                      "value": 9.9998
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "1000ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#73bf69b0",
+                      "value": null
+                    },
+                    {
+                      "color": "#ff780ab0",
+                      "value": 3
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "5000ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#f2495cb0",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "n1ql_requests_250ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "250ms",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "n1ql_requests_500ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "500ms",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "n1ql_requests_1000ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "1000ms",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "n1ql_requests_5000ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "5000ms",
+          "refId": "C"
+        }
+      ],
+      "title": "Requests that take longer than",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
           },
           "custom": {
             "axisLabel": "",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -362,26 +417,22 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#1f61c4",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
-          "unit": "ns"
+          "unit": "ops"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 13,
         "w": 12,
         "x": 0,
-        "y": 8
+        "y": 6
       },
-      "id": 7,
+      "id": 2,
       "options": {
         "legend": {
           "calcs": [],
@@ -395,18 +446,96 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(n1ql_request_time[$__rate_interval])) / sum(rate(n1ql_requests[$__rate_interval]))",
+          "expr": "irate(n1ql_requests{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Queries",
           "refId": "A"
         }
       ],
-      "title": "Average Request Time",
+      "title": "Queries Per Second",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "bars",
+            "fillOpacity": 40,
+            "gradientMode": "hue",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 12,
+        "x": 12,
+        "y": 6
+      },
+      "id": 9,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_request_time{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])) / sum(rate(n1ql_requests{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval]))",
+          "interval": "",
+          "legendFormat": "{{node}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Query Execution time",
       "type": "timeseries"
     }
   ],
   "refresh": "5s",
-  "schemaVersion": 31,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -420,8 +549,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "cb7",
-          "value": "cb7"
+          "text": "Cluster 0",
+          "value": "Cluster 0"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -447,17 +576,23 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "cb7-0001.cb7.default.svc",
-          "value": "cb7-0001.cb7.default.svc"
+          "text": [
+            "node0.local",
+            "node1.local"
+          ],
+          "value": [
+            "node0.local",
+            "node1.local"
+          ]
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
-        "hide": 0,
+        "hide": 2,
         "includeAll": false,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "node",
         "options": [],
         "query": {
@@ -474,8 +609,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "ed43377ab7fb860adabb7df4a702b176",
-          "value": "ed43377ab7fb860adabb7df4a702b176"
+          "text": "7d075d26891ed2c01e4bfae89ed978d1",
+          "value": "7d075d26891ed2c01e4bfae89ed978d1"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -501,8 +636,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "8b19cbad3721fc4ebf002ce90447025e",
-          "value": "8b19cbad3721fc4ebf002ce90447025e"
+          "text": "633095d5b1b0cda6fc317647d87806f1",
+          "value": "633095d5b1b0cda6fc317647d87806f1"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -532,7 +667,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Query Service Overview",
+  "title": "Query Service",
   "uid": "89ydpf5nz",
-  "version": 1
+  "version": 17
 }

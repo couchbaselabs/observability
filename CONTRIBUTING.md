@@ -14,6 +14,10 @@ As CMOS is an amalgamation of various other projects, as well as some code of ou
 
 The majority of these standards are enforced by linters - you can run all the linters by running `make lint`. If this passes, your code is probably good to go!
 
+### Grafana (dashboards) ###
+
+See the [README](microlith/grafana/README.md).
+
 ### Golang (Configuration Service)
 
 In general, follow [gofumpt](https://github.com/mvdan/gofumpt). We use [golangci-lint](https://golangci-lint.run/) to enforce it.

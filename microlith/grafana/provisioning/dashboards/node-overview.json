@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 1,
-  "id": 8,
-  "iteration": 1636992159527,
+  "id": 7,
+  "iteration": 1638381210884,
   "links": [
     {
       "asDropdown": false,
@@ -59,7 +59,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "couchbase",
@@ -77,40 +77,297 @@
   "panels": [
     {
       "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 18,
+      "title": "Overview",
+      "type": "row"
+    },
+    {
+      "datasource": "JSON API",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 10,
+        "x": 0,
+        "y": 1
+      },
+      "id": 12,
+      "interval": null,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^Version$/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.version ~> function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")}",
+              "language": "jsonata",
+              "name": "Version"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/clusters/$cluster_uuid/node/$node_uuid"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Version",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "description": "Click on each service to be taken to its dashboard page.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#47474c",
+                "value": null
+              },
+              {
+                "color": "#55a64b",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Data Service Overview",
+                    "url": "/d/4vnZHfcnk/data-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Index"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Index Service Overview",
+                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Search"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Search Service Overview",
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Query"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Query Service Overview",
+                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 14,
+        "x": 10,
+        "y": 1
+      },
+      "id": 20,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "max"
+          ],
+          "fields": "/.*/",
+          "values": false
+        },
+        "text": {},
+        "textMode": "name"
+      },
+      "pluginVersion": "8.2.5",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Data"
+            },
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Index"
+            },
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Search"
+            },
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Query"
+            },
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Eventing"
+            },
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Analytics"
+            },
+            {
+              "jsonPath": "$.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
+              "language": "jsonata",
+              "name": "Backup"
+            },
+            {
+              "jsonPath": "0",
+              "language": "jsonata",
+              "name": "..."
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid/node/$node_uuid"
+        }
+      ],
+      "title": "Running Services (clickable!)",
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
-            "displayMode": "auto"
+            "align": "left",
+            "displayMode": "color-background-solid"
           },
           "mappings": [
             {
               "options": {
                 "0": {
-                  "color": "green",
+                  "color": "#55a64bb0",
                   "index": 0,
                   "text": "Good"
                 },
-                "1": {
-                  "color": "orange",
+                "10": {
+                  "color": "#ccccdbb0",
                   "index": 1,
-                  "text": "Warn"
-                },
-                "2": {
-                  "color": "red",
-                  "index": 2,
-                  "text": "Alert"
-                },
-                "3": {
-                  "color": "text",
-                  "index": 3,
                   "text": "Info"
                 },
-                "4": {
-                  "color": "text",
+                "20": {
+                  "color": "#ff780ab0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "transparent",
                   "index": 4,
                   "text": "Missing"
                 }
@@ -122,12 +379,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "transparent",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -136,45 +389,58 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "Status"
+              "options": "ID"
             },
             "properties": [
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
-              },
-              {
-                "id": "custom.width",
-                "value": 110
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
               }
             ]
           },
           {
             "matcher": {
               "id": "byName",
-              "options": "ID"
+              "options": "Value"
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 150
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                  }
+                ]
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 7,
+        "h": 7,
+        "w": 10,
         "x": 0,
-        "y": 0
+        "y": 4
       },
-      "id": 2,
+      "id": 22,
       "options": {
         "showHeader": true,
-        "sortBy": []
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Value"
+          }
+        ]
       },
-      "pluginVersion": "8.2.3",
+      "pluginVersion": "8.2.5",
       "targets": [
         {
           "exemplar": true,
@@ -189,10 +455,6 @@
       "title": "Health Check Warnings",
       "transformations": [
         {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
           "id": "organize",
           "options": {
             "excludeByName": {
@@ -202,13 +464,13 @@
               "cluster_uuid": true,
               "instance": true,
               "job": true,
-              "name": false,
               "node_name": true,
               "node_uuid": true
             },
             "indexByName": {},
             "renameByName": {
               "Value": "Status",
+              "__name__": "",
               "id": "ID",
               "name": "Name"
             }
@@ -216,6 +478,18 @@
         }
       ],
       "type": "table"
+    },
+    {
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 11
+      },
+      "id": 16,
+      "title": "Basic info",
+      "type": "row"
     },
     {
       "datasource": null,
@@ -229,14 +503,17 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
               "viz": false
             },
             "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
             "lineWidth": 1,
             "pointSize": 5,
             "scaleDistribution": {
@@ -249,7 +526,7 @@
               "mode": "none"
             },
             "thresholdsStyle": {
-              "mode": "off"
+              "mode": "line"
             }
           },
           "mappings": [],
@@ -257,11 +534,11 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#73bf69b0",
                 "value": null
               },
               {
-                "color": "red",
+                "color": "#f2495cb0",
                 "value": 80
               }
             ]
@@ -271,16 +548,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 7,
-        "y": 0
+        "h": 10,
+        "w": 10,
+        "x": 0,
+        "y": 12
       },
       "id": 4,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "hidden",
           "placement": "bottom"
         },
         "tooltip": {
@@ -311,172 +588,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "percentunit"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 9,
-        "x": 15,
-        "y": 0
-      },
-      "id": 6,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sys_mem_free{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
-          "interval": "",
-          "legendFormat": "{{ instance }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Memory Usage",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "bytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 11,
-        "w": 8,
-        "x": 0,
-        "y": 8
-      },
-      "id": 8,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sysproc_mem_resident{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
-          "interval": "",
-          "legendFormat": "{{ proc }}",
-          "refId": "A"
-        }
-      ],
-      "title": "Memory Usage by Process",
-      "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -517,10 +630,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
-        "w": 11,
-        "x": 8,
-        "y": 8
+        "h": 10,
+        "w": 14,
+        "x": 10,
+        "y": 12
       },
       "id": 10,
       "options": {
@@ -544,9 +657,173 @@
       ],
       "title": "CPU Usage by Process",
       "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineStyle": {
+              "fill": "solid"
+            },
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "line"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#73bf69b0",
+                "value": null
+              },
+              {
+                "color": "#f2495cb0",
+                "value": 0.8
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 0,
+        "y": 22
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sys_mem_free{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
+          "interval": "",
+          "legendFormat": "{{ instance }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 14,
+        "x": 10,
+        "y": 22
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sysproc_mem_resident{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
+          "interval": "",
+          "legendFormat": "{{ proc }}",
+          "refId": "A"
+        }
+      ],
+      "title": "Memory Usage by Process",
+      "type": "timeseries"
     }
   ],
-  "schemaVersion": 31,
+  "refresh": false,
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -559,8 +836,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "cb7",
-          "value": "cb7"
+          "text": "Cluster 0",
+          "value": "Cluster 0"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -586,8 +863,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "ed43377ab7fb860adabb7df4a702b176",
-          "value": "ed43377ab7fb860adabb7df4a702b176"
+          "text": "136a713e902e59472e297446c4174e49",
+          "value": "136a713e902e59472e297446c4174e49"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -612,9 +889,9 @@
       {
         "allValue": null,
         "current": {
-          "selected": false,
-          "text": "cb7-0000.cb7.default.svc",
-          "value": "cb7-0000.cb7.default.svc"
+          "selected": true,
+          "text": "node1.local",
+          "value": "node1.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -640,8 +917,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "1b9f7925a62d4adfe0e1762757de9cf8",
-          "value": "1b9f7925a62d4adfe0e1762757de9cf8"
+          "text": "18aa2600b377b01404f887d8b4f8ff4b",
+          "value": "18aa2600b377b01404f887d8b4f8ff4b"
         },
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
@@ -671,7 +948,7 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "Node Overview (7.x)",
+  "title": "Node Overview",
   "uid": "Dx-2iOc7k",
-  "version": 2
+  "version": 11
 }

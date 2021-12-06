@@ -46,8 +46,8 @@ source "$SCRIPT_DIR"/helpers/driver.sh
 COUCHBASE_SERVER_VERSION=${COUCHBASE_SERVER_VERSION:-7.0.2}
 COUCHBASE_SERVER_IMAGE=${COUCHBASE_SERVER_IMAGE:-couchbase/server:$COUCHBASE_SERVER_VERSION}
 
-NUM_CLUSTERS=${NUM_CLUSTERS:-3}
-NUM_NODES=${NUM_NODES:-8}
+NUM_CLUSTERS=${NUM_CLUSTERS:-2}
+NUM_NODES=${NUM_NODES:-5}
 
 CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-"admin"}
 CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-"password"}
@@ -84,7 +84,7 @@ fi
 
 # Build CMOS container
 pushd "${SCRIPT_DIR}" || exit 1
-    docker-compose up -d --force-recreate 
+    docker-compose up -d --force-recreate
 popd || exit
 
 # Tag image to be used as node image, if vers 7 or later then just use the Couchbase Server docker image.
