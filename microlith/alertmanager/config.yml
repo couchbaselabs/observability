@@ -61,6 +61,10 @@ receivers:
 
                 *Description:* {{ .Annotations.description }}
 
+                {{ if .Annotations.remediation }}
+                *Remediation:* {{ .Annotations.remediation }}
+                {{ end }}
+
                 *Details:*
                   {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
                   {{ end }}
