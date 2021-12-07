@@ -65,8 +65,9 @@ config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
 # NOTE: This target is only for local development.
+container: CBMULTIMANAGER_REF ?= master
 container: build
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CONFIG_SVC_IMAGE=${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CBMULTIMANAGER_REF=${CBMULTIMANAGER_REF} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
 
 container-oss: build
 	tools/build-oss-container.sh
