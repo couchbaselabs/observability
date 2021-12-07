@@ -64,6 +64,9 @@ html
 sanitization
 Loki
 Alertmanager
+txt
+Promtail
 PagerDuty
 de
-txt
+VM
+ClusterRole
