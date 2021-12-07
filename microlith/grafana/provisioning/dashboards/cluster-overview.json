@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 3,
-  "iteration": 1638787447345,
+  "id": 6,
+  "iteration": 1638900592503,
   "links": [
     {
       "asDropdown": false,
@@ -1212,7 +1212,7 @@
           "cacheDurationSeconds": 300,
           "datasource": "Prometheus",
           "exemplar": true,
-          "expr": "count by (bucket) (index_items_count{cluster=`$cluster`}) or max by (bucket) (clamp_max(kv_ops, 0))",
+          "expr": "count by (bucket) (index_items_count{cluster=`$cluster`}) or max by (bucket) (clamp_max(kv_ops{cluster=`$cluster`}, 0))",
           "fields": [
             {
               "jsonPath": ""
@@ -2682,8 +2682,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "Cluster 0",
-          "value": "Cluster 0"
+          "text": "Cluster 1",
+          "value": "Cluster 1"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -2709,8 +2709,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "895c78fef7f419017bac788218d8f31c",
-          "value": "895c78fef7f419017bac788218d8f31c"
+          "text": "4d9b258c035e41b6d391797547b15c1d",
+          "value": "4d9b258c035e41b6d391797547b15c1d"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2736,8 +2736,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node0.local",
-          "value": "node0.local"
+          "text": "node2.local",
+          "value": "node2.local"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -2782,5 +2782,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 1
+  "version": 2
 }
