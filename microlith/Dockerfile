@@ -31,8 +31,9 @@ RUN go mod download && \
 
 # Couchbase proprietary start
 # Standalone as need to use --mount option
+ARG CBMULTIMANAGER_REF=master
 WORKDIR /src/github.com/couchbaselabs/cbmultimanager
-RUN --mount=type=ssh git clone --depth 1 git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
+RUN --mount=type=ssh git clone --depth 1 --branch ${CBMULTIMANAGER_REF} git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
 
 # Output our commit information to a file we can access
 RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
