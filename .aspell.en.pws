@@ -65,3 +65,6 @@ html
 sanitization
 Loki
 Promtail
+Alertmanager
+PagerDuty
+de

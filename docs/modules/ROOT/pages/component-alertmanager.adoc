@@ -1,0 +1,41 @@
+= Alertmanager
+
+[abstract]
+Alertmanager handles and routes alerts from CMOS Prometheus server.
+
+== Overview
+
+https://prometheus.io/docs/alerting/alertmanager[Alertmanager^] is an open source tool which has become the industry standard for alert management on cloud platforms.
+The CMOS Prometheus Server triggers alerts whenever certain rules are met and sends these alerts to the Alertmanager.
+The Alertmanager takes care of de-duplicating, grouping and routing these alerts to the correct receiver using integration such as e-mail, Slack and PagerDuty.
+
+With multiple sources generating the same alert, distributed environments can be noisy.
+In these cases, the alerts should be de-duplicated and grouped by their nature, origin, and severity before being routed to the receiver.
+The Alertmanager can also suppress and mute alerts if required.
+
+As part of the Couchbase Monitoring and Observability Stack (CMOS), Alertmanager comes with a set of built-in standard rules to handle alerts generated for Couchbase Server and other CMOS components.
+
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+image:component-alertmanager.png[]
+
+Based on a predefined set of rules, the CMOS Prometheus Server generates alerts depending on the metrics it collects from Couchbase Server and other targets.
+By default, these alerts are forwarded to CMOS Alertmanager.
+The Alertmanager can be configured to route these alerts to a user-defined receiver integration such as e-mail, Slack, PagerDuty or other API-based endpoints to notify the user.
+
+== Get Started
+
+In CMOS, the Alertmanager is included and enabled by default.
+It ships with a set of standard built-in rules to group alerts based on multiple alert parameters.
+Additionally, it can be customized to send notifications to different https://prometheus.io/docs/alerting/configuration[receiver^] endpoints.
+
+ 
+The CMOS Alertmanager can be deployed xref:tutorial-onpremise.adoc[on premise] or using xref:tutorial-kubernetes.adoc[Kubernetes].
+Check out the reference xref:architecture.adoc[Couchbase Monitoring and Observability Stack] (CMOS) architecture to learn more.
+
+== Links
+
+* On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
+* Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
+* Alertmanager: https://prometheus.io/docs/alerting/latest/configuration[Configuration^]

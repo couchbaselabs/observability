@@ -312,6 +312,8 @@ COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/dist/app/
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
 EXPOSE 7196 7197
+
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/rules/checker-alerts.yml /etc/prometheus/alerting/couchbase/cluster-monitor-alerts.yml
 # Couchbase proprietary end
 
 # Customisation for entrypoints and run as a non-root user

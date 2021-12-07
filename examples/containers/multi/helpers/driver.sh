@@ -116,7 +116,7 @@ function _add_nodes_to_cluster() {
             --username \"$server_user\" --password \"$server_pwd\" || echo 'failed'" "SUCCESS: "
         _docker_exec_with_retry "$node" "/opt/couchbase/bin/couchbase-cli server-add --cluster \"http://node$start.local:8091\" \
             --username \"$server_user\" --password \"$server_pwd\" --server-add \"http://$node.local:8091\" \
-            --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services index,query,fts \
+            --server-add-username \"$server_user\" --server-add-password \"$server_pwd\" --services data,index,query,fts \
             || echo 'failed'" "SUCCESS: "
 
         echo " - $node added"
