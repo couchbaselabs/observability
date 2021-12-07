@@ -1,7 +1,7 @@
 = Prometheus
 
 [abstract]
-Prometheus helps to scrape Couchbase Server metrics and generate alerts on them.
+Prometheus server in CMOS stack helps to scrape Couchbase Server metrics and generate alerts on them.
 
 == Overview
 
