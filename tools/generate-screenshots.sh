@@ -57,7 +57,7 @@ wait_for_url 120 "$CMOS_HOST/grafana/api/health"
 # Build and run the screenshot utility
 pushd "${SCRIPT_DIR}/../testing/screenshots"
     # Any extra stuff we need to add to the Grafana URL, e.g. time period. Set empty to disable, e.g. for local testing with live data.
-    export GRAFANA_ADDITIONAL_QUERY_ARGS=${GRAFANA_ADDITIONAL_QUERY_ARGS:-"?from=1638951658&to=1638955198"}
+    export GRAFANA_ADDITIONAL_QUERY_ARGS=${GRAFANA_ADDITIONAL_QUERY_ARGS:-"?from=1638951658000&to=1638955198000"}
     npm install
     if [[ "${GITHUB_ACTIONS:-false}" != "true" ]]; then
         echo "Running outside of an action so generating all screenshots"
