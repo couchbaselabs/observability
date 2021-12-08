@@ -23,18 +23,18 @@ If it is not already installed, you can install it using the following helm comm
 
 [source,console]
 ----
-$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-$ helm repo update
-$ helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 ----
 
 If you don’t have helm, you can install helm by running the following commands.
 
 [source,console]
 ----
-$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-$ chmod +x get_helm.sh
-$ ./get_helm.sh
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
+chmod +x get_helm.sh
+./get_helm.sh
 ----
 
 CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, Services etc.
@@ -130,7 +130,7 @@ scrape_configs:
     - job_name: couchbase-kubernetes-pods
       # Server 7 requires authentication
       basic_auth:
-          username: Administrator
+          username: admin
           password: password
       kubernetes_sd_configs:
           - role: pod
@@ -165,7 +165,7 @@ EOF
 You can extend the rules by adding rule files under `alerting/` directory.
 Note that the `alerting/` directory is a relative path to the prometheus configuration file.
 By default the complete path is `/etc/prometheus/custom/alerting/`. 
-Refer to the [Monitoring Dashboard] section for volume mounts.
+Refer to the <<Observability Stack>> section for volume mounts.
 
 <.> `alerting`: Alert manager is shipped and enabled by default in the CMOS.
 This section has various configurations of alert managers.
@@ -392,8 +392,8 @@ In the command below, the default values can in turn be overridden by a user-sup
 
 [source,console]
 ----
-$ helm repo add couchbase https://couchbase-partners.github.io/helm-charts/
-$ helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image=couchbase/server:7.0.2 --values=custom-values.yaml
+helm repo add couchbase https://couchbase-partners.github.io/helm-charts/
+helm upgrade --install couchbase couchbase/couchbase-operator --set cluster.image=couchbase/server:7.0.2 --values=custom-values.yaml
 ----
 
 == Accessing CMOS
