@@ -42,7 +42,7 @@ export ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/co
 export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
 export ALERTMANAGER_URL_SUBPATH=${ALERTMANAGER_URL_SUBPATH-/alertmanager/}
 
-export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
+export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/config.yml}
 
 export JAEGER_URL_SUBPATH=${JAEGER_URL_SUBPATH-/jaeger}
 export JAEGER_CONFIG_FILE=${JAEGER_CONFIG_FILE:-/etc/jaeger/config.json}

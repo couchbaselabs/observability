@@ -13,11 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This script env-substitutes all Prometheus alerting rules, then uses prometheus-alert-overrider
-# to merge them into one alerts file, applying overrides.
+# This script env-substitutes all Loki alerting rules, then copies them to the right place.
+# We do not do any more complex overriding or pre-processing than that.
 
-if [[ -v "${DISABLE_ALERTS_PREPARE}" ]]; then
-  echo "alerts_prepare.sh: disabled, not using preset alerting rules."
+if [[ -v "${DISABLE_LOKI_ALERTS_PREPARE}" ]]; then
+  echo "loki_alerts_prepare.sh: disabled, not using preset alerting rules."
   exit 0
 fi
 
@@ -41,17 +41,9 @@ do
   else
     echo "Unable to substitute any values in ${FILE} - likely read-only due to being mounted in"
   fi
-done < <(find "/etc/prometheus/alerting/" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
+done < <(find "/etc/loki/alerting/" -type f \( -name '*.yaml' -o -name '*.yml' \) -print0)
 
-# Now run the alert overrider to merge the rules
-/bin/prometheus_merge /etc/prometheus/alerting/couchbase/*.yaml /etc/prometheus/alerting/couchbase/*.yml /etc/prometheus/alerting/overrides/*.yaml /etc/prometheus/alerting/overrides/*.yml > /etc/prometheus/alerting/generated/alerts.yaml
-echo "Written alert overrides to /etc/prometheus/alerting/generated/alerts.yaml"
+mkdir -p /etc/loki/rules/fake
+shopt -s nullglob
+cp /etc/loki/alerting/couchbase/*.yaml /etc/loki/alerting/custom/*.yaml /etc/loki/rules/fake/
 
-# If Prometheus is running, tell it to reload.
-if pgrep prometheus >/dev/null; then
-    if curl -X POST -s localhost:9090/-/reload; then
-        echo "Prometheus reloaded"
-    else
-        echo "Could not reload Prometheus!"
-    fi
-fi
