@@ -4,7 +4,7 @@ cluster:
         server:
             enabled: true
             sidecar:
-                image: couchbase/fluent-bit:1.1.2
+                image: couchbase/fluent-bit:1.1.3
     monitoring:
         prometheus:
             enabled: false # We're using server 7 metrics directly
