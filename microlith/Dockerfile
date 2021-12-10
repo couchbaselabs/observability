@@ -85,7 +85,6 @@ COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
 
 COPY --from=loki-official /usr/bin/loki /usr/bin/loki
-COPY --from=loki-official /etc/loki /etc/loki
 
 COPY --from=prometheus-official /bin/prometheus /bin/prometheus
 COPY --from=prometheus-official /bin/promtool /bin/promtool
@@ -162,11 +161,13 @@ WORKDIR /
 
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
+# Note: we removed `/etc/loki` from the last line - we'll chown it later.
+# Otherwise this is identical to the command from the upstream Dockerfile.
 RUN addgroup -g 10001 -S loki && \
     adduser -u 10001 -S loki -G loki && \
     mkdir -p /loki/rules && \
     mkdir -p /loki/rules-temp && \
-    chown -R loki:loki /etc/loki /loki
+    chown -R loki:loki /loki
 
 # See https://github.com/grafana/loki/issues/1928
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
