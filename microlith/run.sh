@@ -68,16 +68,6 @@ export CMOS_CFG_HTTP_HOST=${CMOS_CFG_HTTP_HOST:-127.0.0.1}
 export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
 
 export CMOS_LOGS_ROOT=${CMOS_LOGS_ROOT:-/logs}
-
-export PROMTAIL_CONFIG_FILE=${PROMTAIL_CONFIG_FILE:-/etc/promtail/config-microlith.yaml}
-export PROMTAIL_HTTP_PORT=${PROMTAIL_HTTP_PORT:-9080}
-# Temporary, see https://issues.couchbase.com/browse/CMOS-179
-if [ "${DISABLE_PROMTAIL:-true}" == "false" ]; then
-  unset DISABLE_PROMTAIL
-else
-  DISABLE_PROMTAIL=true
-fi
-
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
