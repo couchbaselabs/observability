@@ -55,7 +55,7 @@ COPY docs/ /antora/docs/
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
 # Cannot use Nginx as a base so have to add it to UBI
-FROM registry.access.redhat.com/ubi8/ubi-minimal:8.4
+FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
 # hadolint ignore=DL3018
 RUN microdnf update && microdnf install -y bash openssl libcap shadow-utils nginx tar && microdnf clean all
 
