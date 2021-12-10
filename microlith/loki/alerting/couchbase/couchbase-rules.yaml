@@ -8,15 +8,15 @@ groups:
           count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster,node=hostname [1h])
         for: 1m
         labels:
-            severity: warning
-            health_check_id: CB90036
-            health_check_name: memcachedCrash
-            cluster: '{{ $labels.cluster }}'
-            node: '{{ $labels.node }}'
+          severity: warning
+          health_check_id: CB90036
+          health_check_name: memcachedCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.node }}'
         annotations:
-            title: Data Service Crash ({{ $labels.node }})
-            description: The Data Service on {{ $labels.node }} (cluster {{ $labels.cluster }}) has crashed.
-            remediation: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
+          title: Data Service Crash ({{ $labels.node }})
+          description: The Data Service on {{ $labels.node }} (cluster {{ $labels.cluster }}) has crashed.
+          remediation: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
 
       - alert: CB90037-slowOperations
         expr: |
@@ -25,13 +25,13 @@ groups:
           [5m])) by (cluster, node, bucket) > 0
         for: 1m
         labels:
-            severity: info
-            health_check_id: CB90037
-            health_check_name: slowOperations
-            cluster: '{{ $labels.cluster }}'
-            node: '{{ $labels.node }}'
-            bucket: '{{ $labels.bucket }}'
+          severity: info
+          health_check_id: CB90037
+          health_check_name: slowOperations
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.node }}'
+          bucket: '{{ $labels.bucket }}'
         annotations:
-            title: Slow KV Operations ({{ $labels.node }})
-            description: Slow operations reported on {{ $labels.node }} for bucket {{$labels.bucket}}.
-            remediation: Review system resource usage on {{ $labels.node }}.
+          title: Slow KV Operations ({{ $labels.node }})
+          description: Slow operations reported on {{ $labels.node }} for bucket {{$labels.bucket}}.
+          remediation: Review system resource usage on {{ $labels.node }}.
