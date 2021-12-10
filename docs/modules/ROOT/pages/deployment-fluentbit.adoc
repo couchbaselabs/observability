@@ -54,7 +54,7 @@ An link:https://github.com/couchbase/couchbase-fluent-bit/tree/main/tools/loki-s
 
 [source,console]
 ----
-$ docker run --rm -d --name logger -v /opt/couchbase/var/lib/couchbase/logs/:/opt/couchbase/var/lib/couchbase/logs/:ro -e COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/ -e LOKI_MATCH="*" -e LOKI_HOST="127.0.0.1" couchbase/fluent-bit:1.1.2
+$ docker run --rm -d --name logger -v /opt/couchbase/var/lib/couchbase/logs/:/opt/couchbase/var/lib/couchbase/logs/:ro -e COUCHBASE_LOGS=/opt/couchbase/var/lib/couchbase/logs/ -e LOKI_MATCH="*" -e LOKI_HOST="127.0.0.1" couchbase/fluent-bit:1.1.3
 ----
 
 Replace `LOKI_HOST` here with your actual DNS name or IP address for CMOS.
