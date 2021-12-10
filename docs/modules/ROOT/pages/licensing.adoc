@@ -34,9 +34,6 @@ This software uses the following components with their associated licensing also
 |Jaeger
 |link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0^]
 
-|Promtail
-|link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0]
-
 |Nginx
 |link:http://nginx.org/LICENSE[Custom^]
 
@@ -76,10 +73,6 @@ The container layers used in the deliverable image are:
 |https://hub.docker.com/r/grafana/loki
 |link:https://github.com/grafana/loki/blob/HEAD/LICENSING.md[AGPL 3.0^]
 
-|Promtail
-|https://github.com/grafana/loki
-|link:https://github.com/grafana/loki/blob/main/LICENSE[AGPL 3.0]
-
 |Prometheus
 |https://hub.docker.com/r/prom/prometheus
 |link:https://github.com/prometheus/prometheus/blob/main/LICENSE[Apache 2.0^]
@@ -103,12 +96,11 @@ These can all be seen in this example excerpt from the link:https://github.com/c
 
 [source,Dockerfile]
 ----
-FROM grafana/grafana:8.2.5 as grafana-official
+FROM grafana/grafana:8.2.7 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.0 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
 FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
-FROM grafana/promtail:2.4.1 as promtail-official
 
 FROM nginx:alpine
 
@@ -116,16 +108,12 @@ COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
 
 COPY --from=loki-official /usr/bin/loki /usr/bin/loki
-COPY --from=loki-official /etc/loki /etc/loki
 
 COPY --from=prometheus-official /bin/prometheus /bin/prometheus
 COPY --from=prometheus-official /bin/promtool /bin/promtool
 COPY --from=prometheus-official /etc/prometheus/prometheus.yml /etc/prometheus/prometheus.yml
 COPY --from=prometheus-official /usr/share/prometheus/console_libraries/ /usr/share/prometheus/console_libraries/
 COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prometheus/consoles/
-
-COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
-COPY --from=promtail-official /etc/promtail /etc/promtail
 ----
 
 In each case we use or copy the contents direct from the container layer provided remotely, i.e. published by the provider.
@@ -158,7 +146,6 @@ The licensing links for all the source code are as follows:
 |Jaeger
 |https://github.com/jaegertracing/jaeger
 |link:https://github.com/jaegertracing/jaeger/blob/master/LICENSE[Apache 2.0]
-
 |===
 
 This is direct reuse but combined into a single file with minimal modification (e.g. addition of comments or removal of unnecessary lines).
@@ -197,7 +184,7 @@ To this end a link:https://github.com/tern-tools/tern[Tern^] link:https://github
 The full Tern report can be found link:http://localhost:8080/tern-licensing-report.html[here].
 Note that the Tern report is a full scan of everything in the container and not necessarily how it is used or linked.
 
-=== Grafana, Loki and Promtail
+=== Grafana and Loki
 
 For Grafana and Loki there is a recent blog post: https://grafana.com/blog/2021/04/20/grafana-loki-tempo-relicensing-to-agplv3/.
 This then links out to the source repositories covering the specific components within each that are still Apache 2:
@@ -207,10 +194,7 @@ This then links out to the source repositories covering the specific components 
 
 In each case they indicate the default license is AGPL-3.
 
-Promtail is part of the Loki source repository and release process.
-For Promtail we use binaries from the image directly, there is no source usage.
-
-=== Prometheus and AlertManager
+=== Prometheus and Alertmanager
 
 Both Prometheus and Alert Manager link from DockerHub to the documentation site which does cover licensing as Apache 2: https://prometheus.io/docs/introduction/faq/#what-license-is-prometheus-released-under
 Prometheus also says it explicitly on the DockerHub page with an incorrect link, presumably as the information comes directly from the Github repo with the same relative link: https://github.com/prometheus/prometheus/blob/main/LICENSE
