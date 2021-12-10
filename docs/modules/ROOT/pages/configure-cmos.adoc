@@ -1,5 +1,9 @@
 = Configuration Options
 
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
 .Microlith configuration image
 image::microlith-runtime.png[]
 
@@ -14,7 +18,7 @@ If you choose to disable a service, this is achieved by setting the correspondin
 
 == Logging
 
-By default, logs can be either provided to standard output (stdout) or to service-based log files by setting the `ENABLE_LOG_TO_FILE` configuration value.
+By default, logs can be either provided to standard output `(stdout)` or to service-based log files by setting the `ENABLE_LOG_TO_FILE` configuration value.
 If file output is used for the logs, these files will appear in the `/logs/` directory.
 Further, if desired, these logs can externally be shared via a volume or bind mount.
 
@@ -33,18 +37,17 @@ The cluster manager service of the CMOS stack will auto-start and self-configure
 
 The cluster manager  exposes a REST API endpoint from the container so that it can be used externally to add/remove Couchbase clusters. 
 The cluster monitor is also capable of running any scripts found in `/etc/healthcheck/` folder to perform health checks on the Couchbase cluster.
-Refer to the Connecting Couchbase Cluster section to learn more.
 
 == Prometheus
 
 Prometheus has various configuration options exposed to the user, almost entirely using files.
-You can mount these configuration files to the CMOS container using docker volumes or bind mounts.
+You can mount these configuration files to the CMOS container using https://docs.docker.com/storage/volumes/[docker volumes^] or https://docs.docker.com/storage/bind-mounts/[bind mounts^].
 
 [NOTE]
-To pick up any configuration changes after the prometheus service has started, you may need to reload the config files using the reload endpoint.
+To pick up any configuration changes after the prometheus service has started, you may need to reload the config files using the `reload` endpoint.
 
 Below are the environment variables used for Prometheus configuration.
-You can further read on prometheus configuration on the official documentation website.
+You can further read on prometheus configuration on the https://prometheus.io/docs/prometheus/latest/configuration/configuration/[official documentation website^].
 
 [console]
 ----
@@ -66,7 +69,7 @@ PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/promethe
 
 === Endpoints
 
-In CMOS, a file-based service discovery approach is used to support adding/removing endpoints.
+In CMOS, a https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[file-based service discovery^] approach is used to support adding/removing endpoints.
 These endpoints are used to dynamically scrape metrics.
 
 Based on which services are enabled, the microlith will construct a set of dynamic endpoints.
@@ -92,13 +95,20 @@ Whereas, this enables addition of a new scrape target, it does not automatically
 ]
 ----
 
-You can set the authentication credentials for your Couchbase Server clusters using the $CB_SERVER_AUTH_USER and $CB_SERVER_AUTH_PASSWORD environment variables. Note that currently we do not support using different credentials for multiple clusters.
+You can set the authentication credentials for your Couchbase Server clusters using the `$CB_SERVER_AUTH_USER` and `$CB_SERVER_AUTH_PASSWORD` environment variables.
+Note that currently we do not support using different credentials for multiple clusters.
 
-Note: This is a legacy way of configuring Prometheus targets and we recommend not to use this approach. You can use CMOS UI to perform the same using the Add Cluster option present on the landing page.
+[NOTE]
+This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
+You can use CMOS UI to perform the same using the Add Cluster option present on the landing page.
+
+.Add cluster image
+image::add-cluster-vm.png[]
 
 == Loki
 
-Configuration file for the log aggregation system Loki is present in the yaml file located at  /etc/loki/local-config.yaml inside the container. You can update  the environment variable to change the location of the config file or update the config file to change the properties of Loki accordingly.
+Configuration file for the log aggregation system Loki is present in the YAML file located at  `/etc/loki/local-config.yaml` inside the container.
+You can update  the environment variable to change the location of the config file or update the config file to change the properties of Loki accordingly.
 
 [console]
 ----
@@ -108,9 +118,19 @@ LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 
 == Grafana
 
-Various dashboards to monitor the couchbase cluster are shipped out of the box in Grafana. You can list all the dashboards using the search dashboard option. You may also create additional dashboards that meets your needs. Post successful completion of the setup steps previously described, you should be able to see a list of attached clusters in the Grafana landing page:
+Various dashboards to monitor the couchbase cluster are shipped out of the box in Grafana.
+You can list all the dashboards using the search dashboard option.
+You may also create additional dashboards that meets your needs.
+Post successful completion of the setup steps previously described, you should be able to see a list of attached clusters in the Grafana landing page.
 
-You can list all available dashboards by clicking on the search button. It will show a list of dashboards similar to the one below. You can navigate to each dashboard by clicking on the name.
+.Couchbase inventory image
+image::couchbase-inventory-vm.png[]
+
+You can list all available dashboards by clicking on the search button.
+It will show a list of dashboards similar to the one below. You can navigate to each dashboard by clicking on the name.
+
+.Grafana dashboards
+image::grafana-dashboards.png[]
 
 == Alert
 
@@ -118,18 +138,18 @@ You can list all available dashboards by clicking on the search button. It will 
 
 Using alert rules, you can define alert conditions based on Prometheus language expressions and send notification to an external service when an alert is fired.
 
-The installation of CMOS comes with default alerting rules present at  `/etc/prometheus/alerting/couchbase/` directory. 
+The installation of CMOS comes with default alerting rules present at `/etc/prometheus/alerting/couchbase/` directory. 
 
-NOTE : The default rules are not intended to be modified by the user. Changing the default rules could result in unexpected and unwanted behavior, so it should be avoided.  
+[NOTE]
+The default rules are not intended to be modified by the user.
+Changing the default rules could result in unexpected and unwanted behavior, so it should be avoided.  
 
 To add custom alerts, you can place your custom alert rules file to `/etc/prometheus/alerting/custom/` directory.
 
-
 Using https://github.com/lablabs/prometheus-alert-overrider[prometheus-alert-overrider^], you can also override or disable a rule by putting it in the `/etc/prometheus/alerting/overrides/` directory. 
-
 Below is an example of how to override a base rule. 
 
-[source, console]
+[console]
 ----
 # this is a base rule
 groups:
@@ -144,8 +164,10 @@ groups:
             annotations:
                 summary: Kubernetes Node ready (instance {{ $labels.instance }})
                 description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+----
 
-
+[console]
+----
 # override KubernetesNodeReady alert rule
 groups:
     - name: Override
@@ -167,12 +189,20 @@ groups:
                 description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 ----
 
-We support modifying rules via environment variables. Prometheus automatically replaces template values in rules files with values based on available environment variables. You can see available environment variables in the https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh[entrypoint of prometheus service^].
+We support modifying rules via environment variables.
+Prometheus automatically replaces template values in rules files with values based on available environment variables.
+You can see available environment variables in the https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh[entrypoint of prometheus service^].
+
+.Alert rules image
+image::prometheus-alert-rules.png[]
+
+.Alerts image
+image::prometheus-alerts.png[]
 
 == Alert manager
 
 By default the CMOS Alertmanager is enabled and Prometheus forwards the alerts to it.
-Additional alert managers can be specified by using the same <file_sd_config> syntax in  the /etc/prometheus/alertmanager/custom/ directory.
+Additional alert managers can be specified by using the same `<file_sd_config>` syntax in  the `/etc/prometheus/alertmanager/custom/` directory.
 
 Here are environment variables used for Alert manager configuration.
 
@@ -185,7 +215,11 @@ ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.ym
 ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
 ----
 
-After the setup is complete, you can view the alerts and alert rules in the dashboard by navigating to the Alertmanager page from the landing page. To configure Alertmanager to send notifications to your desired receiver, you can follow the standard approach suggested by Alertmanager.
+After the setup is complete, you can view the alerts and alert rules in the dashboard by navigating to the Alertmanager page from the landing page.
+To configure Alertmanager to send notifications to your desired receiver, you can follow the standard approach suggested by Alertmanager.
+
+.Alert manager image
+image::alert-manager.png[]
 
 == Next steps
 
