@@ -14,7 +14,9 @@ As part of the Couchbase Monitoring and Observability Stack (CMOS), Prometheus S
 ifdef::env-github[]
 :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
 endif::[]
-image:component-prometheus.png[]
+
+.Prometheus server in CMOS
+image::component-prometheus.png[]
 
 From Couchbase Server 7, detailed metric endpoints are exposed via a https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics[Prometheus instance^] built into the server.
 Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.

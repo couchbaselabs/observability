@@ -13,7 +13,9 @@ As part of the Couchbase Monitoring and Observability Stack (CMOS), Grafana has 
 ifdef::env-github[]
 :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
 endif::[]
-image:component-grafana.png[]
+
+.Grafana in CMOS
+image::component-grafana.png[]
 
 In CMOS, Grafana is linked to data sources such as https://prometheus.io[Prometheus^] and https://grafana.com/Loki[Loki^]. 
 Prometheus scrapes couchbase metrics and stores these data points in the prometheus server.
