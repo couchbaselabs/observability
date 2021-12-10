@@ -256,6 +256,7 @@ ENV GF_INSTALL_PLUGINS=""
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
+COPY loki/ /etc/loki
 ENV CMOS_LOGS_ROOT=/logs
 
 # Configuration Service
