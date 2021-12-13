@@ -3,19 +3,19 @@ groups:
   - name: Couchbase-Server
     rules:
 
-    - alert: CB90016-nodeDown
+    - alert: CB90038-statsCollectionFailed
       expr: |
         up{job=~`couchbase-server.*`} == 0
       for: 30s
       labels:
         job: couchbase_prometheus
         kind: node
-        health_check_id: CB90016
-        health_check_name: nodeDown
+        health_check_id: CB90038
+        health_check_name: statsCollectionFailed
         cluster: '{{ $labels.cluster }}'
         node: '{{ $labels.instance }}'
         severity: critical
       annotations:
-        title: Node {{ $labels.instance }} down or overloaded (cluster {{ $labels.cluster }})
+        title: Could not collect stats from {{ $labels.instance }} (cluster {{ $labels.cluster }})
         description: Statistics collection failed from node {{ $labels.instance }}. Either it is down or its CPU is overloaded.
         remediation: Verify the node's status and examine other metrics and health check results.
