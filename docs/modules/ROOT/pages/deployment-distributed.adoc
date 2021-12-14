@@ -1,8 +1,6 @@
-= Distributed deployment
+= Distributed Multi-cluster Deployment
 
-Currently not supported but on the roadmap.
-
-For those users who want to scale up the deployment and/or follow a more cloud-native approach using microservices that are easier to manage.
+The initial release of CMOS only supports single-cluster deployment; however, support for distributed multi-cluster deployment is the roadmap.
 
 == Next steps
 
