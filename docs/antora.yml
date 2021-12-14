@@ -3,5 +3,6 @@ name: cmos
 title: Couchbase Monitoring and Observability Stack
 version: '0.1'
 prerelease: true
+start_page: ROOT:index.adoc
 nav:
     - modules/ROOT/nav.adoc
