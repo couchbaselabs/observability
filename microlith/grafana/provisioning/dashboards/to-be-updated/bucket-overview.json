@@ -23,7 +23,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": 12,
-  "iteration": 1637061145360,
+  "iteration": 1639146577623,
   "links": [
     {
       "asDropdown": false,
@@ -95,7 +95,7 @@
         "showThresholdMarkers": true,
         "text": {}
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -296,7 +296,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -399,7 +399,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
+      "datasource": "-- Mixed --",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -547,15 +547,41 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": "Prometheus",
           "exemplar": true,
           "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\",bucket=\"$bucket\"} > 0",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "$[*].labels.health_check_id",
+              "name": "id"
+            },
+            {
+              "jsonPath": "$[*].labels.health_check_name",
+              "language": "jsonpath",
+              "name": "name"
+            },
+            {
+              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \\\"critical\\\" ? 30 :\n$a = \\\"warning\\\" ? 20 :\n$a = \\\"info\\\" ? 10 : -1\n})]",
+              "language": "jsonata",
+              "name": "Value"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=kind=bucket&filter=cluster=${cluster:querystring}&filter=bucket=${bucket:querystring}"
         }
       ],
       "title": "Bucket Health Issues",
@@ -573,6 +599,7 @@
           "options": {
             "excludeByName": {
               "Time": true,
+              "bucket": true,
               "cluster_name": true,
               "cluster_uuid": true,
               "instance": true,
@@ -813,7 +840,7 @@
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -887,8 +914,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "cb7",
-          "value": "cb7"
+          "text": "CMOS container test",
+          "value": "CMOS container test"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -914,8 +941,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "ed43377ab7fb860adabb7df4a702b176",
-          "value": "ed43377ab7fb860adabb7df4a702b176"
+          "text": "1aaf5319e5791aed9625ba9381ee66c7",
+          "value": "1aaf5319e5791aed9625ba9381ee66c7"
         },
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
@@ -941,8 +968,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "travel-sample",
-          "value": "travel-sample"
+          "text": "testBucket",
+          "value": "testBucket"
         },
         "datasource": null,
         "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
@@ -974,5 +1001,5 @@
   "timezone": "",
   "title": "Bucket Overview",
   "uid": "H8M3rE5nk",
-  "version": 17
+  "version": 2
 }

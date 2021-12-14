@@ -5,33 +5,73 @@ groups:
 
       - alert: CB90036-memcachedCrash
         expr: |
-          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster,node=hostname [1h])
+          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h])
         for: 1m
         labels:
+          job: couchbase_fluent_bit
+          kind: node
           severity: warning
           health_check_id: CB90036
           health_check_name: memcachedCrash
           cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.node }}'
+          node: '{{ $labels.hostname }}'
         annotations:
-          title: Data Service Crash ({{ $labels.node }})
-          description: The Data Service on {{ $labels.node }} (cluster {{ $labels.cluster }}) has crashed.
+          title: Data Service Crash ({{ $labels.hostname }})
+          description: The Data Service on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
           remediation: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
 
       - alert: CB90037-slowOperations
         expr: |
           sum(count_over_time (
-          {file="memcached.log"} |= "Slow operation:" | label_format cluster=couchbase_cluster | json message="message",node="hostname" | line_format "{{.message}}" | pattern "<_>Slow operation: <payload>" | line_format "{{.payload}}" | json
+          {file="memcached.log"} |= "Slow operation:" !~ `(CREATE_BUCKET|CMD_SEQNO_PERSISTENCE|CMD_COMPACT_DB)` | label_format cluster=couchbase_cluster | json message="message",hostname="hostname" | line_format "{{.message}}" | pattern "<_>Slow operation: <payload>" | line_format "{{.payload}}" | json
           [5m])) by (cluster, node, bucket) > 0
         for: 1m
         labels:
+          job: couchbase_fluent_bit
+          kind: bucket
           severity: info
           health_check_id: CB90037
           health_check_name: slowOperations
           cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.node }}'
+          node: '{{ $labels.hostname }}'
           bucket: '{{ $labels.bucket }}'
         annotations:
-          title: Slow KV Operations ({{ $labels.node }})
-          description: Slow operations reported on {{ $labels.node }} for bucket {{$labels.bucket}}.
-          remediation: Review system resource usage on {{ $labels.node }}.
+          title: Slow KV Operations ({{ $labels.hostname }})
+          description: Slow operations reported on {{ $labels.hostname }} for bucket {{$labels.bucket}}.
+          remediation: Review system resource usage on {{ $labels.hostname }}.
+
+      - alert: CB90033-longDcpNames-failedDcpOpen
+        expr: |
+          sum(count_over_time(
+            {file="memcached.log"} |= `Invalid format specified for "DCP_OPEN"` |= `Reason:"Key length exceeds 250"` | json hostname="hostname" [5m]
+          )) by (couchbase_cluster, hostname) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: cluster # even though this is technically node-level logging, the issue is cluster-level
+          severity: critical
+          health_check_id: CB90037
+          health_check_name: longDcpNames
+          cluster: '{{ $labels.couchbase_cluster }}'
+        annotations:
+          title: DCP Connection Failures due to MB-34280 (cluster ${{ labels.cluster }})
+          description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
+          remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
+
+      - alert: CB90033-longDcpNames-failedResponse
+        expr: |
+          sum(count_over_time(
+            {file="memcached.log"} |= "Response::setKeylen: key cannot exceed 1 byte" | json hostname="hostname" [5m]
+          )) by (couchbase_cluster, hostname) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: cluster # even though this is technically node-level logging, the issue is cluster-level
+          severity: critical
+          health_check_id: CB90037
+          health_check_name: longDcpNames
+          cluster: '{{ $labels.couchbase_cluster }}'
+        annotations:
+          title: Long DCP Names (MB-34280) (cluster ${{ labels.cluster }})
+          description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
+          remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
