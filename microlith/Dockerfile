@@ -303,7 +303,7 @@ COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/rules/checker-a
 
 # TODO: this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
 RUN mkdir -p /licenses && \
-    wget -O /licenses/couchbase-cluster-monitor-notices.txt \
+    curl -Lo /licenses/couchbase-cluster-monitor-notices.txt \
     https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-cluster-monitor/blackduck/${PROD_VERSION}/notices.txt
 # Couchbase proprietary end
 
@@ -345,14 +345,14 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 # NOTE: this creates a chicken-and-egg effect - if we update notices, we need to run two builds to ensure it gets picked up
 # TODO: this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
-RUN wget -O /licenses/notices.txt \
+RUN curl -Lo /licenses/notices.txt \
     https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-observability-stack/blackduck/${PROD_VERSION}/notices.txt && \
     mkdir -p /html/licenses && cp /licenses/* /html/licenses/ && chown -R couchbase:couchbase /html
 
 COPY docs/modules/ROOT/pages/support.adoc /help.1
 
 COPY git-commit.txt /etc/cmos-release.txt
-RUN echo -e "Couchbase Observability Stack version ${PROD_VERSION}-${PROD_BUILD}\n$(cat /etc/cmos-release.txt)" > /etc/cmos-release.txt
+RUN printf "Couchbase Observability Stack version ${PROD_VERSION}-${PROD_BUILD}\n%s" "$(cat /etc/cmos-release.txt)" > /etc/cmos-release.txt
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
