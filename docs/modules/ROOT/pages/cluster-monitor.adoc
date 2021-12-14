@@ -1,6 +1,6 @@
 = Cluster Monitor
 
-If running with the Couchbase Cluster Monitor enabled, it will output the status of its checkers to Prometheus like the following:
+Couchbase cluster monitor is a core component of the CMOS that provides cluster-level information via a Prometheus endpoint. If Couchbase cluster monitor is enabled, it will output the status of its checkers to Prometheus like the following:
 
 ----
 # HELP multimanager_cluster_checker_status Checker results for cluster level checkers
@@ -14,7 +14,7 @@ multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c0
 multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2
 ----
 
-The values of each metric represent the current status of the checker. The integer values have the following meanings:
+The values of each metric represents the current status of the checker. The integer values have the following meanings:
 
 * 0: Good (everything is fine, no action required)
 * 1: Warn (potential issue, worth investigating)
