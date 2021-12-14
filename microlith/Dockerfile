@@ -1,9 +1,8 @@
-FROM grafana/grafana:8.2.5 as grafana-official
+FROM grafana/grafana:8.2.7 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
-FROM prom/prometheus:v2.31.0 as prometheus-official
+FROM prom/prometheus:v2.31.1 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
-FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
-FROM grafana/promtail:2.4.1 as promtail-official
+FROM jaegertracing/all-in-one:1.29.0 as jaegaer-official
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -86,7 +85,6 @@ COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
 
 COPY --from=loki-official /usr/bin/loki /usr/bin/loki
-COPY --from=loki-official /etc/loki /etc/loki
 
 COPY --from=prometheus-official /bin/prometheus /bin/prometheus
 COPY --from=prometheus-official /bin/promtool /bin/promtool
@@ -163,11 +161,13 @@ WORKDIR /
 
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
+# Note: we removed `/etc/loki` from the last line - we'll chown it later.
+# Otherwise this is identical to the command from the upstream Dockerfile.
 RUN addgroup -g 10001 -S loki && \
     adduser -u 10001 -S loki -G loki && \
     mkdir -p /loki/rules && \
     mkdir -p /loki/rules-temp && \
-    chown -R loki:loki /etc/loki /loki
+    chown -R loki:loki /loki
 
 # See https://github.com/grafana/loki/issues/1928
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
@@ -233,25 +233,6 @@ ENV JAEGER_AGENT_HOST=localhost
 # VOLUME ["/tmp"]
 # ENTRYPOINT ["/go/bin/all-in-one-linux"]
 
-# PROMTAIL
-# Promtail currently has a dependency on systemd and no Alpine image
-COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
-COPY --from=promtail-official /etc/promtail /etc/promtail
-# Taken from: https://github.com/grafana/loki/issues/838#issuecomment-963052919
-# Without this you get a helpful "no such file or directory" error if you try to run the binary
-RUN curl -L -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-    curl -LO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.34-r0/glibc-2.34-r0.apk && \
-    apk add --no-cache --force-non-repo glibc-2.34-r0.apk && \
-    rm glibc-2.34-r0.apk
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libsystemd.so /usr/local/lib/libsystemd.so
-COPY --from=promtail-official /lib/x86_64-linux-gnu/liblzma.so.5 /usr/local/lib/liblzma.so.5
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libzstd.so.1 /usr/local/lib/libzstd.so.1
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/liblz4.so.1 /usr/local/lib/liblz4.so.1
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libgcrypt.so.20 /usr/local/lib/libgcrypt.so.20
-COPY --from=promtail-official /lib/x86_64-linux-gnu/libgpg-error.so.0 /usr/local/lib/libgpg-error.so.0
-# Promtail HTTP server
-EXPOSE 9080
-
 # Add support for auto-provisioning now
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
@@ -275,7 +256,7 @@ ENV GF_INSTALL_PLUGINS=""
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
-COPY promtail/ /etc/promtail/
+COPY loki/ /etc/loki
 ENV CMOS_LOGS_ROOT=/logs
 
 # Configuration Service
@@ -329,8 +310,7 @@ ARG CB_UID="8453"
 ARG CB_GID="8453"
 
 RUN addgroup -g $CB_GID -S couchbase && \
-    adduser -u $CB_UID -S couchbase -G couchbase && \
-    echo "couchbase    ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    adduser -u $CB_UID -S couchbase -G couchbase
 
 # Copied from `chown` lines in the original, just substitute our user
 RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
@@ -339,7 +319,6 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
-    chown -R couchbase:couchbase /etc/promtail/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \

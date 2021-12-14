@@ -57,8 +57,6 @@ services:
             - 7196:7196
             # Loki
             - 3100:3100
-            # Promtail
-            - 9080:9080
 
     # This section is intended to represent a typical local deployment, instead of containers it could be done with native binaries
     db1:
