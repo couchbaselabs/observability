@@ -28,4 +28,4 @@ make -C "${SCRIPT_DIR}/.." build
 # Remove everything between `# Couchbase proprietary start` and `# Couchbase proprietary end`
 sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "$SCRIPT_DIR/../microlith/Dockerfile" > "$SCRIPT_DIR/../microlith/Dockerfile.oss"
 echo "Building OSS image: $CMOS_IMAGE"
-docker build -t "$CMOS_IMAGE" -f "$SCRIPT_DIR/../microlith/Dockerfile.oss" "$SCRIPT_DIR/../microlith"
+docker build -t "$CMOS_IMAGE" --build-arg "PROD_VERSION=${PROD_VERSION}" --build-arg "PROD_BUILD=${PROD_BUILD}" -f "$SCRIPT_DIR/../microlith/Dockerfile.oss" "$SCRIPT_DIR/../microlith"
