@@ -273,7 +273,7 @@ ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 COPY licenses/* /licenses/
 # NOTE: this creates a chicken-and-egg effect - if we update notices, we need to run two builds to ensure it gets picked up
 # TODO: this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
-RUN wget -O /licenses/notices.txt \
+RUN curl -Lo /licenses/notices.txt \
     https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-observability-stack/blackduck/${PROD_VERSION}/notices.txt && \
     mkdir -p /html/licenses && cp /licenses/* /html/licenses/ && chown -R couchbase:couchbase /html
 
