@@ -18,7 +18,9 @@ As part of the Couchbase Monitoring and Observability Stack (CMOS), Alertmanager
 ifdef::env-github[]
 :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
 endif::[]
-image:component-alertmanager.png[]
+
+.Alertmanager in CMOS
+image::component-alertmanager.png[]
 
 Based on a predefined set of rules, the CMOS Prometheus Server generates alerts depending on the metrics it collects from Couchbase Server and other targets.
 By default, these alerts are forwarded to CMOS Alertmanager.
