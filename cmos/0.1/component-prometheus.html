@@ -195,7 +195,7 @@
 <div class="sectionbody">
 <div class="quoteblock abstract">
 <blockquote>
-Prometheus helps to scrape Couchbase Server metrics and generate alerts on them.
+Prometheus server in CMOS stack helps to scrape Couchbase Server metrics and generate alerts on them.
 </blockquote>
 </div>
 </div>
@@ -211,8 +211,11 @@ With Prometheus, multi-dimensional metric data can be collected from multiple en
 <p>In a distributed environment, metrics need to be collected in real-time from various sources and alerts need to be triggered based on data trends and threshold deviations.
 As part of the Couchbase Monitoring and Observability Stack (CMOS), Prometheus Server comes with a set of built-in standard rules to create alerts on metrics scraped from Couchbase Server and other CMOS components.</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="_images/component-prometheus.png" alt="component prometheus"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/component-prometheus.png" alt="component prometheus">
+</div>
+<div class="title">Figure 1. Prometheus server in CMOS</div>
 </div>
 <div class="paragraph">
 <p>From Couchbase Server 7, detailed metric endpoints are exposed via a <a href="https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics" target="_blank" rel="noopener">Prometheus instance</a> built into the server.
