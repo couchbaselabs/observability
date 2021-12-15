@@ -757,7 +757,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "fixedColor": "#55a64bb0",
+            "mode": "fixed"
           },
           "custom": {
             "axisLabel": "",
@@ -792,12 +793,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#55a64bb0",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "#e02f44b0",
-                "value": 80
               }
             ]
           },
@@ -819,9 +816,21 @@
                 "value": {
                   "dash": [
                     0,
-                    10
+                    3,
+                    3
                   ],
                   "fill": "dot"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#3275d9b0",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -841,9 +850,21 @@
                 "value": {
                   "dash": [
                     0,
-                    10
+                    3,
+                    3
                   ],
                   "fill": "dot"
+                }
+              },
+              {
+                "id": "custom.fillOpacity",
+                "value": 0
+              },
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#e02f44b0",
+                  "mode": "fixed"
                 }
               }
             ]
@@ -888,7 +909,7 @@
           "expr": "kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"}",
           "hide": false,
           "interval": "",
-          "legendFormat": "Memory ({{instance}})",
+          "legendFormat": "{{instance}}",
           "refId": "mem_used"
         }
       ],
