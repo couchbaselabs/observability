@@ -340,7 +340,7 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "left",
+            "align": "center",
             "displayMode": "color-background-solid",
             "filterable": true
           },
