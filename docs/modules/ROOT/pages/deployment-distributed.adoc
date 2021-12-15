@@ -1,6 +1,6 @@
 = Distributed multi-cluster deployment
 
-The initial release of CMOS only supports single-cluster deployment; however, support for distributed multi-cluster deployment is the roadmap.
+The initial release of CMOS only supports single-cluster deployment; however, support for distributed multi-cluster deployment is on the roadmap.
 
 == Next steps
 
