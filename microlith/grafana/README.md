@@ -33,3 +33,9 @@ Once you have a local environment configured, you can visit http://localhost:808
     If this is set to some specific date and time and not `now-3h`/`now`, the dashboard will break on re-provisioning as the data does not exist. 
     
 There is a [linter](/tools/dashboards-lint.sh) to check the dashboards do not have a set time or are exported for sharing externally.
+
+## Linking to other dashboards in Grafana ##
+
+Grafana uses UIDs set at provisioning to link between dashboards. In CMOS, each dashboard is identified and linked to by a 9 character alphanumeric string to avoid unintentional collisions.
+
+For more information please see [Grafana's documentation](https://grafana.com/docs/grafana/latest/linking/dashboard-links/).
