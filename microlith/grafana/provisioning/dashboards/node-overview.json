@@ -207,7 +207,7 @@
                 "value": [
                   {
                     "title": "Index Service Overview",
-                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -224,7 +224,7 @@
                 "value": [
                   {
                     "title": "Search Service Overview",
-                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -241,7 +241,7 @@
                 "value": [
                   {
                     "title": "Query Service Overview",
-                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -259,7 +259,7 @@
                   {
                     "targetBlank": false,
                     "title": "Eventing Service Overview",
-                    "url": "/d/R0hxsR2nk/eventing-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/R0hxsR2nk/eventing-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
