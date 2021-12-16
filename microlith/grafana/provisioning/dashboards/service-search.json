@@ -122,7 +122,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster=`$cluster`}))",
+          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -179,7 +179,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(fts_doc_count{cluster=`$cluster`})",
+          "expr": "sum(fts_doc_count{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -237,7 +237,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(fts_num_bytes_used_ram{cluster=`$cluster`})",
+          "expr": "sum(fts_num_bytes_used_ram{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -294,7 +294,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(fts_num_bytes_used_disk{cluster=`$cluster`})",
+          "expr": "sum(fts_num_bytes_used_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -379,7 +379,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster=`$cluster`})) == 0",
+          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster=`$cluster`,bucket=~`${bucket:regex}`})) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -488,7 +488,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster=`$cluster`}[$__rate_interval])))",
+          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -569,7 +569,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "fts_num_mutations_to_index{cluster=`$cluster`}",
+          "expr": "fts_num_mutations_to_index{cluster=`$cluster`,bucket=~`${bucket:regex}`}",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -623,7 +623,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, fts_num_bytes_used_disk{cluster=`$cluster`})",
+          "expr": "topk(5, fts_num_bytes_used_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -678,7 +678,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{cluster=`$cluster`}))",
+          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -716,6 +716,37 @@
         "options": [],
         "query": {
           "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": null,
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "datasource": null,
+        "definition": "label_values(multimanager_bucket_checker_status,bucket)",
+        "description": null,
+        "error": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Bucket",
+        "multi": true,
+        "name": "bucket",
+        "options": [],
+        "query": {
+          "query": "label_values(multimanager_bucket_checker_status,bucket)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
