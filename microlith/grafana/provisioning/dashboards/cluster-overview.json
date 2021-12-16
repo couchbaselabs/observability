@@ -100,7 +100,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$cluster",
@@ -514,7 +514,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
@@ -1446,6 +1446,7 @@
           "expr": "min by (bucket) (kv_vb_perc_mem_resident_ratio{cluster=`$cluster`,state=\"active\"})",
           "format": "table",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "ResidentRatio"
