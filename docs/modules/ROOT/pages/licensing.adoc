@@ -45,9 +45,13 @@ This software uses the following components with their associated licensing also
 
 |Couchbase Cluster Monitor
 |link:https://www.couchbase.com/LA03012021[Couchbase License Agreement^]
+
+|Various open-source libraries
+ifdef::env-packaged[|link:/licenses/notices.txt[notices.txt^]]
+ifndef::env-packaged[|link:https://github.com/couchbase/product-metadata/blob/master/couchbase-observability-stack/blackduck/1.0.0/notices.txt[notices.txt^]]
 |===
 
-All licences are in the CMOS source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`^] directory.
+All licences (with the exception of notices.txt for our bespoke code, as it is automatically generated) are in the CMOS source repository and the container in the link:https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/[`/licenses`^] directory.
 
 A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.
 
@@ -172,6 +176,16 @@ EXPOSE 3100
 
 The Loki binary requires some extra configuration but this is taken directly from the official Dockerfile "recipe" for each component.
 We do comment out unnecessary aspects just to keep aligned with the original and for simpler updates.
+
+CMOS also contains some components written in Golang and other languages which use various open source libraries.
+ifdef::env-packaged[]
+Their licenses are included in link:/licenses/notices.txt[notices.txt^] (also found in `/licenses` in the image).
+If the Couchbase Cluster Monitor is included, its notices.txt file can be found as link:/licenses/couchbase-cluster-monitor-notices.txt[couchbase-cluster-monitor-notices.txt^] in the same locations.
+endif::env-packaged[]
+ifndef::env-packaged[]
+Their licenses are included in `notices.txt` in the container images, as well as link:https://github.com/couchbase/product-metadata/blob/master/couchbase-observability-stack/blackduck/1.0.0/notices.txt[on GitHub^].
+If the Couchbase Cluster Monitor is included, its notices.txt file can be found in the same locations and link:https://github.com/couchbase/product-metadata/blob/master/couchbase-cluster-monitor/blackduck/1.0.0/notices.txt[online^].
+endif::env-packaged[]
 
 == License analysis
 

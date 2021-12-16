@@ -68,8 +68,14 @@ config-svc-lint:
 # NOTE: This target is only for local development.
 container: CBMULTIMANAGER_REF ?= master
 container: build
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile --build-arg CBMULTIMANAGER_REF=${CBMULTIMANAGER_REF} -t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} microlith/
+# Set the same variables the official builds set (https://github.com/couchbase/build-tools/blob/7a44c105cf8768a7f758e80968b357eb37c08fc0/k8s-microservice/jenkins/util/build-k8s-images.sh#L82-L86)
+	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile \
+		--build-arg CBMULTIMANAGER_REF=${CBMULTIMANAGER_REF} --build-arg PROD_VERSION=$(version) --build-arg PROD_BUILD=$(bldNum) \
+		-t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
+		microlith/
 
+container-oss: export PROD_VERSION=$(version)
+container-oss: export PROD_BUILD=$(bldNum)
 container-oss: build
 	tools/build-oss-container.sh
 
@@ -120,18 +126,23 @@ generate-screenshots: container-oss
 
 # Special target to verify the internal release pipeline will work as well
 # Take the archive we would make and extract it to a local directory to then run the docker builds on
+test-dist: CBMULTIMANAGER_REF ?= master
 test-dist: dist
 	rm -rf test-dist/
 	mkdir -p test-dist/
 	tar -xzvf dist/couchbase-observability-stack-image_$(productVersion).tgz -C test-dist/
-	docker build -f test-dist/Dockerfile test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
+	docker build \
+		-f test-dist/Dockerfile \
+		--build-arg CBMULTIMANAGER_REF=${CBMULTIMANAGER_REF} --build-arg PROD_VERSION=$(version) --build-arg PROD_BUILD=$(bldNum) \
+		test-dist/ \
+		-t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 
 test-dist-oss: dist
 	rm -rf test-dist/
 	mkdir -p test-dist/
 	tar -xzvf dist/couchbase-observability-stack-image_$(productVersion).tgz -C test-dist/
 	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "test-dist/Dockerfile" > "test-dist/Dockerfile.oss"
-	docker build -f test-dist/Dockerfile.oss test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
+	docker build -f test-dist/Dockerfile.oss --build-arg PROD_VERSION=$(version) --build-arg PROD_BUILD=$(bldNum) test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
 
 examples-clean: 
 	-examples/containers/stop.sh
