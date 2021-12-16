@@ -71,9 +71,20 @@ RUN apk add --upgrade --no-cache git && \
 
 # Put the changeable stuff here
 COPY docs/ /antora/docs/
+
 # Couchbase proprietary start
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/modules/couchbase-cluster-monitor/pages/
+
+# Copy over the files from cbmultimanager rather than letting Antora clone it, for consistency and local testing
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/docs /antora/cbmultimanager
+RUN git init /antora/cbmultimanager && \
+    touch /antora/cbmultimanager/.gitignore && \
+    git -C /antora/cbmultimanager add . && \
+    git -C /antora/cbmultimanager commit -m "ignore me"
+# antora-container-playbook defaults to OSS, override it
+COPY docs/antora-container-playbook-proprietary.yml /antora/docs/antora-container-playbook.yml
+
 # Couchbase proprietary end
+
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
