@@ -268,10 +268,14 @@ A good place to start is with the <a href="https://www.linuxfoundation.org/tools
 <td class="tableblock halign-left valign-top"><p class="tableblock">Couchbase Cluster Monitor</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.couchbase.com/LA03012021" target="_blank" rel="noopener">Couchbase License Agreement</a></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Various open-source libraries</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://github.com/couchbase/product-metadata/blob/master/couchbase-observability-stack/blackduck/1.0.0/notices.txt" target="_blank" rel="noopener">notices.txt</a></p></td>
+</tr>
 </tbody>
 </table>
 <div class="paragraph">
-<p>All licences are in the CMOS source repository and the container in the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/" target="_blank" rel="noopener"><code>/licenses</code></a> directory.</p>
+<p>All licences (with the exception of notices.txt for our bespoke code, as it is automatically generated) are in the CMOS source repository and the container in the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/licenses/" target="_blank" rel="noopener"><code>/licenses</code></a> directory.</p>
 </div>
 <div class="paragraph">
 <p>A statement is printed out to standard output/console at start up to indicate acceptance of licensing and where you can find them all.</p>
@@ -449,6 +453,11 @@ EXPOSE 3100
 <div class="paragraph">
 <p>The Loki binary requires some extra configuration but this is taken directly from the official Dockerfile "recipe" for each component.
 We do comment out unnecessary aspects just to keep aligned with the original and for simpler updates.</p>
+</div>
+<div class="paragraph">
+<p>CMOS also contains some components written in Golang and other languages which use various open source libraries.
+Their licenses are included in <code>notices.txt</code> in the container images, as well as <a href="https://github.com/couchbase/product-metadata/blob/master/couchbase-observability-stack/blackduck/1.0.0/notices.txt" target="_blank" rel="noopener">on GitHub</a>.
+If the Couchbase Cluster Monitor is included, its notices.txt file can be found in the same locations and <a href="https://github.com/couchbase/product-metadata/blob/master/couchbase-cluster-monitor/blackduck/1.0.0/notices.txt" target="_blank" rel="noopener">online</a>.</p>
 </div>
 </div>
 </div>
