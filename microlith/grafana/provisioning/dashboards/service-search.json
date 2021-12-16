@@ -88,12 +88,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#55a64bb0",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -101,16 +97,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 3,
         "x": 0,
         "y": 0
       },
       "id": 12,
       "options": {
-        "colorMode": "none",
+        "colorMode": "value",
         "graphMode": "none",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -148,22 +144,22 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "#3275d9b0",
                 "value": null
               }
             ]
           },
-          "unit": "bytes"
+          "unit": "short"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 4,
         "x": 3,
         "y": 0
       },
-      "id": 14,
+      "id": 10,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -183,14 +179,15 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (fts_num_bytes_used_disk{instance=~`${node:regex}(?::[0-9]*)?$`})",
-          "instant": true,
+          "expr": "sum(fts_doc_count)",
+          "format": "time_series",
+          "instant": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Total Index Size on Disk",
+      "title": "Items Indexed",
       "type": "stat"
     },
     {
@@ -205,7 +202,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "#a352ccb0",
                 "value": null
               }
             ]
@@ -215,7 +212,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 4,
         "x": 7,
         "y": 0
@@ -240,7 +237,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (fts_num_bytes_used_ram{instance=~`${node:regex}(?::[0-9]*)?$`})",
+          "expr": "sum(fts_num_bytes_used_ram{instance=~`${node:regex}(?::[0-9]*)?$`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -262,22 +259,22 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "text",
+                "color": "#8ab9ffb0",
                 "value": null
               }
             ]
           },
-          "unit": "short"
+          "unit": "bytes"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 4,
         "x": 11,
         "y": 0
       },
-      "id": 10,
+      "id": 14,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -297,15 +294,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(fts_doc_count{instance=~`${node:regex}(?::[0-9]*)?$`})",
-          "format": "time_series",
-          "instant": false,
+          "expr": "sum(fts_num_bytes_used_disk)",
+          "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Items Indexed",
+      "title": "Total Index Size on Disk",
       "type": "stat"
     },
     {
@@ -314,10 +310,11 @@
       "fieldConfig": {
         "defaults": {
           "color": {
+            "fixedColor": "text",
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
+            "align": "left",
             "displayMode": "auto"
           },
           "mappings": [],
@@ -325,12 +322,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -343,8 +336,7 @@
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 159
+                "id": "custom.width"
               }
             ]
           },
@@ -355,8 +347,7 @@
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 123
+                "id": "custom.width"
               }
             ]
           },
@@ -367,15 +358,14 @@
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": 151
+                "id": "custom.width"
               }
             ]
           }
         ]
       },
       "gridPos": {
-        "h": 4,
+        "h": 6,
         "w": 9,
         "x": 15,
         "y": 0
@@ -389,7 +379,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{instance=~`${node:regex}(?::[0-9]*)?$`})) == 0",
+          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries)) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -479,16 +469,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 13,
         "w": 12,
         "x": 0,
-        "y": 4
+        "y": 6
       },
       "id": 4,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -498,7 +488,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{instance=~`${node:regex}(?::[0-9]*)?$`}[$__rate_interval])))",
+          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries[$__rate_interval])))",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -560,16 +550,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 13,
         "w": 12,
         "x": 12,
-        "y": 4
+        "y": 6
       },
       "id": 17,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -579,7 +569,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "fts_num_mutations_to_index{instance=~`${node:regex}(?::[0-9]*)?$`}",
+          "expr": "fts_num_mutations_to_index",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -593,7 +583,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
@@ -610,10 +600,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 11,
         "w": 12,
         "x": 0,
-        "y": 12
+        "y": 19
       },
       "id": 6,
       "options": {
@@ -626,14 +616,14 @@
           "fields": "",
           "values": false
         },
-        "showUnfilled": false,
+        "showUnfilled": true,
         "text": {}
       },
       "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, fts_num_bytes_used_disk{instance=~`${node:regex}(?::[0-9]*)?$`})",
+          "expr": "topk(5, fts_num_bytes_used_disk)",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -648,7 +638,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
@@ -665,10 +655,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 11,
         "w": 12,
         "x": 12,
-        "y": 12
+        "y": 19
       },
       "id": 2,
       "options": {
@@ -688,7 +678,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{instance=~`${node:regex}(?::[0-9]+)?$`}))",
+          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency))",
           "format": "time_series",
           "instant": true,
           "interval": "",

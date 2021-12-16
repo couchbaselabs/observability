@@ -89,7 +89,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#ccccdbb0",
+                "color": "#55a64bb0",
                 "value": null
               }
             ]
@@ -99,7 +99,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 3,
         "x": 0,
         "y": 0
@@ -146,7 +146,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#ccccdbb0",
+                "color": "#3275d9b0",
                 "value": null
               }
             ]
@@ -156,7 +156,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 3,
         "x": 3,
         "y": 0
@@ -181,7 +181,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(index_items_count{instance=~`${node:regex}(?::[0-9]*)?$`})",
+          "expr": "sum(index_items_count)",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -189,7 +189,7 @@
           "refId": "A"
         }
       ],
-      "title": "Items Indexed",
+      "title": "Total Items Indexed",
       "type": "stat"
     },
     {
@@ -204,7 +204,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#ccccdbb0",
+                "color": "#a352ccb0",
                 "value": null
               }
             ]
@@ -214,7 +214,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 6,
         "y": 0
@@ -224,7 +224,7 @@
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -239,10 +239,10 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (index_memory_used{instance=~`${node:regex}(?::[0-9]*)?$`})",
+          "expr": "sum(index_memory_used)",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -261,7 +261,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#ccccdbb0",
+                "color": "#8ab9ffb0",
                 "value": null
               }
             ]
@@ -271,7 +271,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 4,
         "x": 10,
         "y": 0
@@ -281,7 +281,7 @@
         "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
-        "orientation": "auto",
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -296,10 +296,10 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (index_data_size_on_disk{instance=~`${node:regex}(?::[0-9]*)?$`})",
+          "expr": "sum(index_data_size_on_disk)",
           "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -315,7 +315,7 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "center",
+            "align": "left",
             "displayMode": "auto",
             "filterable": true
           },
@@ -367,7 +367,7 @@
         ]
       },
       "gridPos": {
-        "h": 5,
+        "h": 6,
         "w": 10,
         "x": 14,
         "y": 0
@@ -381,7 +381,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (bucket, scope, collection, index) (index_num_requests{instance=~`${node:regex}(?::[0-9]*)?$`})) == 0",
+          "expr": "(sum by (bucket, scope, collection, index) (index_num_requests)) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -429,7 +429,7 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 39,
+            "fillOpacity": 40,
             "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
@@ -470,16 +470,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 0,
-        "y": 5
+        "y": 6
       },
       "id": 4,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -489,9 +489,10 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (rate(index_num_requests{instance=~`${node:regex}(?::[0-9]*)?$`}[$__rate_interval])))",
+          "expr": "rate(index_num_requests[$__rate_interval])",
+          "instant": false,
           "interval": "",
-          "legendFormat": "{{bucket}} / {{index}}",
+          "legendFormat": "{{index}}",
           "refId": "A"
         }
       ],
@@ -547,16 +548,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 10,
         "w": 12,
         "x": 12,
-        "y": 5
+        "y": 6
       },
       "id": 17,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -566,9 +567,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(index_num_docs_pending{instance=~`^${node:regex}(?::[0-9]*)?$`})",
+          "expr": "sum(index_num_docs_pending) by (index)",
           "interval": "",
-          "legendFormat": "Documents",
+          "legendFormat": "{{index}}",
           "refId": "A"
         }
       ],
@@ -580,7 +581,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
@@ -597,10 +598,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 14,
         "w": 12,
         "x": 0,
-        "y": 13
+        "y": 16
       },
       "id": 6,
       "options": {
@@ -620,7 +621,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, index_data_size{instance=~`${node:regex}(?::[0-9]*)?$`})",
+          "expr": "topk(5, index_data_size)",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -635,7 +636,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "mappings": [],
           "thresholds": {
@@ -652,10 +653,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 14,
         "w": 12,
         "x": 12,
-        "y": 13
+        "y": 16
       },
       "id": 2,
       "options": {
@@ -675,7 +676,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency{instance=~`${node:regex}(?::[0-9]+)?$`}))",
+          "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency))",
           "format": "time_series",
           "instant": true,
           "interval": "",

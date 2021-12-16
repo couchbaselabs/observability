@@ -81,19 +81,18 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds",
-            "seriesBy": "max"
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#37872db0",
                 "value": null
               },
               {
-                "color": "orange",
+                "color": "#ff780ab0",
                 "value": 0.1
               }
             ]
@@ -103,7 +102,7 @@
       },
       "gridPos": {
         "h": 6,
-        "w": 6,
+        "w": 5,
         "x": 0,
         "y": 0
       },
@@ -111,7 +110,7 @@
       "options": {
         "colorMode": "value",
         "graphMode": "area",
-        "justifyMode": "auto",
+        "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
           "calcs": [
@@ -127,72 +126,13 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_warnings{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
+          "expr": "sum(irate(n1ql_warnings{cluster=`$cluster`}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "Warnings",
+          "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Query Warnings",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#73bf69b0",
-                "value": null
-              },
-              {
-                "color": "#f2495cb0",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 6,
-        "x": 6,
-        "y": 0
-      },
-      "id": 4,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "irate(n1ql_errors{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
-          "interval": "",
-          "legendFormat": "Errors (last $__interval)",
-          "refId": "A"
-        }
-      ],
-      "title": "Query Errors",
+      "title": "Total Query Warnings",
       "type": "stat"
     },
     {
@@ -201,188 +141,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#ccccdbb0",
-                "value": null
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "250ms"
-            },
-            "properties": [
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "#55a64bb0",
-                      "value": null
-                    },
-                    {
-                      "color": "#ffcb7db0",
-                      "value": 10
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "500ms"
-            },
-            "properties": [
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "#55a64bb0",
-                      "value": null
-                    },
-                    {
-                      "color": "#ffcb7dad",
-                      "value": 9.9998
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "1000ms"
-            },
-            "properties": [
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "#73bf69b0",
-                      "value": null
-                    },
-                    {
-                      "color": "#ff780ab0",
-                      "value": 3
-                    }
-                  ]
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "5000ms"
-            },
-            "properties": [
-              {
-                "id": "thresholds",
-                "value": {
-                  "mode": "absolute",
-                  "steps": [
-                    {
-                      "color": "#55a64bb0",
-                      "value": null
-                    },
-                    {
-                      "color": "#f2495cb0",
-                      "value": 1
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 0
-      },
-      "id": 7,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value_and_name"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "n1ql_requests_250ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "250ms",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "n1ql_requests_500ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "500ms",
-          "refId": "D"
-        },
-        {
-          "exemplar": true,
-          "expr": "n1ql_requests_1000ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "1000ms",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "n1ql_requests_5000ms{instance=~`^${node:regex}(?::[0-9]*)?$`}",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "5000ms",
-          "refId": "C"
-        }
-      ],
-      "title": "Requests that take longer than",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -417,7 +176,281 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "#1f61c4",
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 7,
+        "x": 5,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "irate(n1ql_errors{cluster=`$cluster`}[$__rate_interval])",
+          "interval": "",
+          "legendFormat": "{{instance}} (last $__interval)",
+          "refId": "A"
+        }
+      ],
+      "title": "Query Errors",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "This is in the past time range, i.e., the value set in the top-right corner of \"Last X time unit\" (defaults to 30 minutes).",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          },
+          "unit": "none"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "250ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#fff899b0",
+                      "value": 0
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "thresholds"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "500ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#ffb357b0",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "color"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "1000ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#37872db0",
+                      "value": null
+                    },
+                    {
+                      "color": "#ff780ab3",
+                      "value": 1
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "5000ms"
+            },
+            "properties": [
+              {
+                "id": "thresholds",
+                "value": {
+                  "mode": "absolute",
+                  "steps": [
+                    {
+                      "color": "#55a64bb0",
+                      "value": null
+                    },
+                    {
+                      "color": "#f2495cb0",
+                      "value": 1
+                    }
+                  ]
+                }
+              },
+              {
+                "id": "color"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "round(sum(increase(n1ql_requests_250ms{cluster=`$cluster`}[$__range])))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "250ms",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "round(sum(increase(n1ql_requests_500ms{cluster=`$cluster`}[$__range])))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "500ms",
+          "refId": "D"
+        },
+        {
+          "exemplar": true,
+          "expr": "round(sum(increase(n1ql_requests_1000ms{cluster=`$cluster`}[$__range])))",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "1000ms",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "round(sum(increase(n1ql_requests_5000ms{cluster=`$cluster`}[$__range])))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "5000ms",
+          "refId": "C"
+        }
+      ],
+      "title": "Total requests that took longer than:",
+      "transformations": [],
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
                 "value": null
               }
             ]
@@ -446,9 +479,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_requests{cluster=`$cluster`,instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])",
+          "expr": "irate(n1ql_requests{cluster=`$cluster`}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "Queries",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
@@ -460,7 +493,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "thresholds"
+            "mode": "palette-classic"
           },
           "custom": {
             "axisLabel": "",
@@ -514,7 +547,7 @@
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "hidden",
+          "displayMode": "list",
           "placement": "bottom"
         },
         "tooltip": {
@@ -524,9 +557,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(rate(n1ql_request_time{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval])) / sum(rate(n1ql_requests{instance=~`^${node:regex}(?::[0-9]*)?$`}[$__rate_interval]))",
+          "expr": "rate(n1ql_request_time{cluster=`$cluster`}[$__rate_interval]) / rate(n1ql_requests{cluster=`$cluster`}[$__rate_interval])",
           "interval": "",
-          "legendFormat": "{{node}}",
+          "legendFormat": "{{instance}}",
           "refId": "A"
         }
       ],
