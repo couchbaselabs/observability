@@ -301,7 +301,7 @@ EXPOSE 7196 7197
 
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/rules/checker-alerts.yml /etc/prometheus/alerting/couchbase/cluster-monitor-alerts.yml
 
-# TODO: this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
+# TODO (CMOS-230): this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
 RUN mkdir -p /licenses && \
     curl -Lo /licenses/couchbase-cluster-monitor-notices.txt \
     https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-cluster-monitor/blackduck/${PROD_VERSION}/notices.txt
