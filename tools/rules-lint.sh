@@ -18,7 +18,7 @@ set -eu
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 if ! command -v "yq" &> /dev/null; then
-    echo "yq not installed. Install yq before running this script: https://github.com/kislyuk/yq"
+    echo "yq not installed. Install yq before running this script: https://github.com/mikefarah/yq"
     exit 1
 fi
 
@@ -30,7 +30,7 @@ for source in $rule_files; do
     echo "Rules lint: ${source##"$SCRIPT_DIR/.."}"
 
     # Check that the required labels are defined
-    if ! yq -e '.groups[].rules[] | [.labels.job, .labels.kind, .labels.health_check_id, .labels.health_check_name, .labels.severity] | map(type) | all(. == "string")' "$source" > /dev/null; then
+    if ! yq e -e '.groups[].rules[].labels | keys | contains(["job", "kind", "severity", "health_check_id", "health_check_name", "cluster"])' "$source" > /dev/null; then
       printf "\tFAIL: missing labels\n"
       exit_code=1
     fi
@@ -40,9 +40,9 @@ for source in $rule_files; do
     while IFS= read -r id; do
         if ! grep -q "$id" "$SCRIPT_DIR/../docs/modules/ROOT/partials/cmos-health-checks.adoc"; then
             printf "\tFAIL: undocumented checker %s\n" "$id"
-      exit_code=1
+            exit_code=1
         fi
-    done <<< "$(yq -r '.groups[].rules[].labels.health_check_id | select(. | type == "string")' "$source")"
+    done <<< "$(yq e '.groups[].rules[].labels.health_check_id' "$source")"
 done
 
 exit "$exit_code"
