@@ -1,6 +1,6 @@
 = Distributed multi-cluster deployment
 
-The developer preview release of CMOS only supports single Couchbase cluster deployment; however, support for distributed multiple Couchbase cluster deployments is on the roadmap.
+The developer preview release of CMOS only supports single Couchbase cluster deployment; however, support for multiple Couchbase cluster deployments is on the roadmap.
 
 == Next steps
 
