@@ -1,0 +1,44 @@
+// tag::group-cluster[]
+
+[#CB90038]
+=== Stats Collection Failed (CB90038)
+
+*Background*: The CMOS Prometheus server will scrape all Couchbase Server nodes periodically (every 30 seconds by default) for statistics.
+If a node fails to respond, this can indicate that the node is down, its CPU is overloaded, or there is a network issue preventing Prometheus from communicating with it.
+
+*Condition*: Prometheus has failed to scrape a Couchbase Server node.
+
+*Remediation*: Check the node's status and resource usage.
+
+// end::group-cluster[]
+
+// tag::group-node[]
+
+[#CB90036]
+=== `memcached` Crashes (CB90036)
+
+*Background*: If the Data Service process (`memcached`) crashes, it will be restarted within a few seconds.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in the `memcached` logs.
+
+*Remediation*: Contact Couchbase Technical Support.
+
+// end::group-node[]
+
+// tag::group-bucket[]
+
+// CB90033 is documented in cbmultimanager
+
+[#CB90037]
+=== Slow Operations (CB90037)
+
+*Background*: Data Service operations that take longer than 500ms will be logged.
+Seeing one or two should not always be cause for concern, but consistent numbers of slow operations may indicate resource contention on your Data Service nodes.
+Note that this is different to slow operations logged by the Couchbase SDKs - this health check is purely server-side.
+
+*Condition*: Slow operations logged by the Data Service.
+
+*Remediation*: Verify that your Data Service nodes have adequate system resources.
+
+// end::group-bucket[]
