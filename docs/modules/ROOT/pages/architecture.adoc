@@ -10,11 +10,10 @@ Couchbase monitoring and observability stack [CMOS] is built primarily with Graf
 * Industry standard and OSS with various integration points for other pipelines
 * Existing options to scale from single node up to cloud scale easily
 
-We expose Prometheus endpoints already for node-level information on a Couchbase Server instance starting from Couchbase Server 7.0 release.
-Recently we have exposed logs using Fluent Bit, primarily for Kubernetes based solutions but this can be deployed on-premise deployment as well.
+We already expose Prometheus endpoints for node-level information on a Couchbase Server instance starting from the Couchbase Server 7.0 release.
+We expose Couchbase logs using Fluent Bit, primarily on Kubernetes-based deployments but can get deployed on-premise deployments as well.
 
-One of the core capabilities of CMOS is the Couchbase Cluster Monitor that provides cluster-level information via a Prometheus endpoint: https://github.com/couchbaselabs/cbmultimanager.
-Couchbase Cluster Monitor is a closed-source enterprise-only solution that integrates Couchbase knowledge and best practices into a reusable component.
+One of the core capabilities of CMOS is the Couchbase Cluster Monitor that provides cluster-level insights as well information via a Prometheus endpoint; it is a closed-source enterprise-only solution that integrates Couchbase knowledge and best practices into a reusable component.
 
 Our observability stack is therefore a combination of Couchbase-specific components that provide that discrete knowledge and monitoring of the Couchbase cluster which are then plumbed into a generic Grafana pipline like below.
 
