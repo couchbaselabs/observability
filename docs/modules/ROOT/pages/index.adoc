@@ -5,7 +5,7 @@ The intention of this repository is to provide a simple, out-of-the-box solution
 * An additional requirement is to ensure we can integrate into existing observability pipelines people may already have as easily as possible.
 * This must all support being deployed on-premise and on cloud platforms with minimal change.
 * Any bespoke software must be minimal and ideally just restricted to configuration of generic tools.
-* We must support customer configuration of what is "important" to monitor in their clusters although with best practice defaults provided.
+* We should provide default configurations based on the best practices guidelines and support customers to customize what is "important" to monitor in their clusters.
 * A simple and often upgrade pipeline to support frequent changes and updates to the solution which are then easy to roll out for users.
 
 We essentially need to support two fairly distinct types of user:
@@ -15,7 +15,6 @@ We essentially need to support two fairly distinct types of user:
 
 == Caveats and restrictions
 
-* No support for data persistence is currently other than mounting the relevant volumes into the container.
 * Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
 * The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh[helper script^] that does this.
 

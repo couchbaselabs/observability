@@ -1,4 +1,4 @@
-= On-premise usage
+= On-premise deployment
 
 A working example is https://github.com/couchbaselabs/observability/tree/main/examples/containers/[provided^] based on a docker compose stack to run up a single node Couchbase cluster with the microlith all correctly configured.
 
@@ -50,6 +50,5 @@ This will be re-scanned periodically and any scripts in it run.
 
 == Next steps
 
-* xref:architecture.adoc[Architecture overview]
-* xref:deployment-microlith.adoc[Microlith container deployment]
+* xref:deployment-fluentbit.adoc[Fluent Bit deployment]
 * xref:tutorial-onpremise.adoc[On-premise example]
