@@ -929,11 +929,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "CMOS container test",
-          "value": "CMOS container test"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -956,11 +952,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "1aaf5319e5791aed9625ba9381ee66c7",
-          "value": "1aaf5319e5791aed9625ba9381ee66c7"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "description": null,
@@ -983,11 +975,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "testBucket",
-          "value": "testBucket"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,

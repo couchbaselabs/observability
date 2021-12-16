@@ -713,11 +713,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "Cluster 0",
-          "value": "Cluster 0"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -742,15 +738,15 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node1.local",
-          "value": "node1.local"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
         "hide": 2,
-        "includeAll": false,
+        "includeAll": true,
         "label": null,
         "multi": true,
         "name": "node",
@@ -767,11 +763,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "a706f6926d2f75b9d0a334156d1e10e5",
-          "value": "a706f6926d2f75b9d0a334156d1e10e5"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "description": null,
@@ -794,11 +786,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "68c476b08d722db9e27db7600b694712",
-          "value": "68c476b08d722db9e27db7600b694712"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
         "description": null,

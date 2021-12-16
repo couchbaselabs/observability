@@ -865,11 +865,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "CMOS container test",
-          "value": "CMOS container test"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -892,11 +888,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "1aaf5319e5791aed9625ba9381ee66c7",
-          "value": "1aaf5319e5791aed9625ba9381ee66c7"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "description": null,
@@ -919,11 +911,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "172.29.0.2",
-          "value": "172.29.0.2"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
@@ -946,11 +934,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "ffd74d7f51618afab87243badc9f59a8",
-          "value": "ffd74d7f51618afab87243badc9f59a8"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
         "description": null,
