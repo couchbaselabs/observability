@@ -120,7 +120,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -177,7 +177,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -235,7 +235,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -292,7 +292,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -377,7 +377,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -616,7 +616,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -671,7 +671,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -707,7 +707,7 @@
         "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
+        "label": "Cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
