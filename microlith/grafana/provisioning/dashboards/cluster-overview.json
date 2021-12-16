@@ -382,6 +382,23 @@
                 ]
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventing"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Eventing Service Overview",
+                    "url": "/d/R0hxsR2nk/eventing-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                  }
+                ]
+              }
+            ]
           }
         ]
       },
