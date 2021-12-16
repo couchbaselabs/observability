@@ -446,7 +446,7 @@
         {
           "datasource": "Prometheus",
           "exemplar": true,
-          "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} > 0",
+          "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} >= 0",
           "format": "table",
           "instant": true,
           "interval": "",
