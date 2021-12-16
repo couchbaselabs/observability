@@ -1418,7 +1418,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster=`$cluster`,connection_type!=\"\"}[1m]))",
+              "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster=`$cluster`,connection_type!=\"\"}[$__rate_interval]))",
               "interval": "",
               "legendFormat": "{{ connection_type }}",
               "refId": "A"
