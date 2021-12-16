@@ -299,6 +299,7 @@
       "type": "state-timeline"
     }
   ],
+  "refresh": "15s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [],

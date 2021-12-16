@@ -268,7 +268,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -330,7 +330,7 @@
       "type": "table"
     }
   ],
-  "refresh": "",
+  "refresh": "15s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
