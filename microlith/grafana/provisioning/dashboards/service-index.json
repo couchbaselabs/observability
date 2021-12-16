@@ -124,7 +124,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(count by (bucket, scope, collection, index) (index_resident_percent))",
+          "expr": "count(count by (bucket, scope, collection, index) (index_resident_percent{cluster=`$cluster`}))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -181,7 +181,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(index_items_count)",
+          "expr": "sum(index_items_count{cluster=`$cluster`})",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -239,7 +239,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(index_memory_used)",
+          "expr": "sum(index_memory_used{cluster=`$cluster`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -296,7 +296,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(index_data_size_on_disk)",
+          "expr": "sum(index_data_size_on_disk{cluster=`$cluster`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -381,7 +381,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "(sum by (bucket, scope, collection, index) (index_num_requests)) == 0",
+          "expr": "(sum by (bucket, scope, collection, index) (index_num_requests{cluster=`$cluster`})) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -489,7 +489,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(index_num_requests[$__rate_interval])",
+          "expr": "rate(index_num_requests{cluster=`$cluster`}[$__rate_interval])",
           "instant": false,
           "interval": "",
           "legendFormat": "{{index}}",
@@ -567,7 +567,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(index_num_docs_pending) by (index)",
+          "expr": "sum(index_num_docs_pending{cluster=`$cluster`}) by (index)",
           "interval": "",
           "legendFormat": "{{index}}",
           "refId": "A"
@@ -621,7 +621,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, index_data_size)",
+          "expr": "topk(5, index_data_size{cluster=`$cluster`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -676,7 +676,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency))",
+          "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency{cluster=`$cluster`}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -718,79 +718,6 @@
         },
         "refresh": 1,
         "regex": "",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
-        "datasource": null,
-        "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
-        "description": null,
-        "error": null,
-        "hide": 2,
-        "includeAll": true,
-        "label": null,
-        "multi": true,
-        "name": "node",
-        "options": [],
-        "query": {
-          "query": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/[{,]node_name=\"(.+?)(?::[0-9]*)?\"[,}]/",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
-        "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
-        "description": null,
-        "error": null,
-        "hide": 2,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "cluster_uuid",
-        "options": [],
-        "query": {
-          "query": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
-        "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
-        "description": null,
-        "error": null,
-        "hide": 2,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "node_uuid",
-        "options": [],
-        "query": {
-          "query": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/[{,]node_uuid=\"(.+?)\"[,}]/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
