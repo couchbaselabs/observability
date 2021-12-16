@@ -44,3 +44,6 @@ datasources:
       basicAuth: true
       basicAuthUser: ${CB_MULTI_ADMIN_USER}
       basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
+    - name: Alertmanager API
+      type: marcusolsson-json-datasource
+      url: http://localhost:9093/alertmanager/api/v2

@@ -1,4 +1,4 @@
-personal_ws-1.1 en 66
+personal_ws-1.1 en 68
 AGPL
 CAO
 CMOS
@@ -51,7 +51,6 @@ runnable
 runtime
 scalable
 Dockerfile
-AlertManager
 Github
 roadmap
 macOS
@@ -64,7 +63,7 @@ hostname
 html
 sanitization
 Loki
-Promtail
 Alertmanager
 PagerDuty
 de
+txt

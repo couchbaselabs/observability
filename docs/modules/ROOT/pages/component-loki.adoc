@@ -11,7 +11,9 @@ Loki is used to process and store collected Couchbase logs.
 ifdef::env-github[]
 :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
 endif::[]
-image:component-loki.png[]
+
+.Loki in CMOS
+image::component-loki.png[]
 
 Couchbase cluster generates logs of various operations which is important for monitoring and investigation purposes.
 Loki provides the option to parse the logs enabling search and aggregation based on keys.

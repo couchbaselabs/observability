@@ -1,9 +1,11 @@
+ARG PROD_VERSION=1.0.0
+ARG PROD_BUILD=999
+
 FROM grafana/grafana:8.2.7 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
-FROM prom/prometheus:v2.31.0 as prometheus-official
+FROM prom/prometheus:v2.31.1 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
-FROM jaegertracing/all-in-one:1.27.0 as jaegaer-official
-FROM grafana/promtail:2.4.1 as promtail-official
+FROM jaegertracing/all-in-one:1.29.0 as jaegaer-official
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -79,6 +81,9 @@ RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
+ARG PROD_VERSION
+ARG PROD_BUILD
+
 # hadolint ignore=DL3018
 RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext jq sudo
 
@@ -86,7 +91,6 @@ COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
 COPY --from=grafana-official /etc/grafana /etc/grafana
 
 COPY --from=loki-official /usr/bin/loki /usr/bin/loki
-COPY --from=loki-official /etc/loki /etc/loki
 
 COPY --from=prometheus-official /bin/prometheus /bin/prometheus
 COPY --from=prometheus-official /bin/promtool /bin/promtool
@@ -163,11 +167,13 @@ WORKDIR /
 
 # LOKI:
 # From https://github.com/grafana/loki/blob/main/cmd/loki/Dockerfile
+# Note: we removed `/etc/loki` from the last line - we'll chown it later.
+# Otherwise this is identical to the command from the upstream Dockerfile.
 RUN addgroup -g 10001 -S loki && \
     adduser -u 10001 -S loki -G loki && \
     mkdir -p /loki/rules && \
     mkdir -p /loki/rules-temp && \
-    chown -R loki:loki /etc/loki /loki
+    chown -R loki:loki /loki
 
 # See https://github.com/grafana/loki/issues/1928
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
@@ -233,25 +239,6 @@ ENV JAEGER_AGENT_HOST=localhost
 # VOLUME ["/tmp"]
 # ENTRYPOINT ["/go/bin/all-in-one-linux"]
 
-# PROMTAIL
-# Promtail currently has a dependency on systemd and no Alpine image
-COPY --from=promtail-official /usr/bin/promtail /usr/bin/promtail
-COPY --from=promtail-official /etc/promtail /etc/promtail
-# Taken from: https://github.com/grafana/loki/issues/838#issuecomment-963052919
-# Without this you get a helpful "no such file or directory" error if you try to run the binary
-RUN curl -L -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
-    curl -LO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.34-r0/glibc-2.34-r0.apk && \
-    apk add --no-cache --force-non-repo glibc-2.34-r0.apk && \
-    rm glibc-2.34-r0.apk
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libsystemd.so /usr/local/lib/libsystemd.so
-COPY --from=promtail-official /lib/x86_64-linux-gnu/liblzma.so.5 /usr/local/lib/liblzma.so.5
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libzstd.so.1 /usr/local/lib/libzstd.so.1
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/liblz4.so.1 /usr/local/lib/liblz4.so.1
-COPY --from=promtail-official /usr/lib/x86_64-linux-gnu/libgcrypt.so.20 /usr/local/lib/libgcrypt.so.20
-COPY --from=promtail-official /lib/x86_64-linux-gnu/libgpg-error.so.0 /usr/local/lib/libgpg-error.so.0
-# Promtail HTTP server
-EXPOSE 9080
-
 # Add support for auto-provisioning now
 COPY grafana/grafana.ini /etc/grafana/grafana.ini
 COPY grafana/provisioning/ /etc/grafana/provisioning/
@@ -275,7 +262,7 @@ ENV GF_INSTALL_PLUGINS=""
 COPY prometheus/ /etc/prometheus/
 COPY alertmanager/ /etc/alertmanager/
 COPY jaeger/ /etc/jaeger/
-COPY promtail/ /etc/promtail/
+COPY loki/ /etc/loki
 ENV CMOS_LOGS_ROOT=/logs
 
 # Configuration Service
@@ -286,7 +273,6 @@ COPY --from=builder /src/github.com/couchbaselabs/observability/config-svc/entry
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
-COPY licenses/ /html/licenses/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
 COPY --from=antora-generator /antora/cmos /html/cmos
@@ -314,6 +300,11 @@ RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 EXPOSE 7196 7197
 
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/rules/checker-alerts.yml /etc/prometheus/alerting/couchbase/cluster-monitor-alerts.yml
+
+# TODO (CMOS-230): this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
+RUN mkdir -p /licenses && \
+    curl -Lo /licenses/couchbase-cluster-monitor-notices.txt \
+    https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-cluster-monitor/blackduck/${PROD_VERSION}/notices.txt
 # Couchbase proprietary end
 
 # Customisation for entrypoints and run as a non-root user
@@ -329,8 +320,7 @@ ARG CB_UID="8453"
 ARG CB_GID="8453"
 
 RUN addgroup -g $CB_GID -S couchbase && \
-    adduser -u $CB_UID -S couchbase -G couchbase && \
-    echo "couchbase    ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+    adduser -u $CB_UID -S couchbase -G couchbase
 
 # Copied from `chown` lines in the original, just substitute our user
 RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
@@ -339,7 +329,6 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
     chown -R couchbase:couchbase /html /etc/nginx/ /var/cache/nginx && \
     chown -R couchbase:couchbase /etc/jaeger/ && \
-    chown -R couchbase:couchbase /etc/promtail/ && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
@@ -352,10 +341,18 @@ ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
 ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
 # Add all useful and required information
+
 COPY licenses/* /licenses/
+# NOTE: this creates a chicken-and-egg effect - if we update notices, we need to run two builds to ensure it gets picked up
+# TODO: this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
+RUN curl -Lo /licenses/notices.txt \
+    https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-observability-stack/blackduck/${PROD_VERSION}/notices.txt && \
+    mkdir -p /html/licenses && cp /licenses/* /html/licenses/ && chown -R couchbase:couchbase /html
+
 COPY docs/modules/ROOT/pages/support.adoc /help.1
 
 COPY git-commit.txt /etc/cmos-release.txt
+RUN printf "Couchbase Observability Stack version ${PROD_VERSION}-${PROD_BUILD}\n%s" "$(cat /etc/cmos-release.txt)" > /etc/cmos-release.txt
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]

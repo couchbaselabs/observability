@@ -44,12 +44,11 @@ done <<EOF
 /etc/jaeger/
 /etc/loki/
 /etc/nginx/
-/etc/promtail/
 EOF
 
 # Grab various overridden paths
 mkdir -p "$tmpdir/dynamic-config"
-for override_var in PROMETHEUS_CONFIG_FILE PROMETHEUS_CONFIG_TEMPLATE_FILE JAEGER_CONFIG_FILE LOKI_CONFIG_FILE ALERTMANAGER_CONFIG_FILE PROMTAIL_CONFIG_FILE; do
+for override_var in PROMETHEUS_CONFIG_FILE PROMETHEUS_CONFIG_TEMPLATE_FILE JAEGER_CONFIG_FILE LOKI_CONFIG_FILE ALERTMANAGER_CONFIG_FILE; do
   cp "${!override_var}" "$tmpdir/dynamic-config/$(basename "${!override_var}")"
 done
 
@@ -88,10 +87,6 @@ curl -sS -o "$tmpdir/prom-tsdb-status.json" "http://localhost:9090/prometheus/ap
 curl -sS -o "$tmpdir/prom-config.json" "http://localhost:9090/prometheus/api/v1/status/config"
 curl -sS -o "$tmpdir/prom-targets.json" "http://localhost:9090/prometheus/api/v1/targets"
 
-curl -sS -o "$tmpdir/promtail-targets.json" "http://localhost:9080/targets"
-curl -sS -o "$tmpdir/promtail-metrics.json" "http://localhost:9080/metrics"
-curl -sS -o "$tmpdir/promtail-config.yml" "http://localhost:9080/config"
-
 # Important Prometheus series
 curl -sS -o "$tmpdir/prom-series.json" "http://localhost:9090/prometheus/api/v1/series?match[]=multimanager_cluster_checker_status&match[]=multimanager_node_checker_status&match[]=multimanager_bucket_checker_status&match[]=cm_rest_request_enters_total&match[]=cbnode_up"
 
@@ -102,7 +97,6 @@ curl -sv "http://localhost:9093/alertmanager/-/healthy" > "$tmpdir/am-health.txt
 curl -sv "http://localhost:14269" > "$tmpdir/jaeger-health.txt" 2>&1
 curl -sv "http://localhost:3000/grafana/api/health" > "$tmpdir/grafana-health.txt" 2>&1
 curl -sv "http://localhost:8080/_meta/status" > "$tmpdir/nginx-status.txt" 2>&1
-curl -sv "http://localhost:9080/ready" > "$tmpdir/promtail-health.txt" 2>&1
 
 # Cluster Monitor endpoints
 if [ -f "/bin/cbmultimanager" ]; then

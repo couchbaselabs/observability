@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 6,
-  "iteration": 1638900683843,
+  "id": 11,
+  "iteration": 1639145054058,
   "links": [
     {
       "asDropdown": false,
@@ -76,7 +76,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 8,
+        "w": 7,
         "x": 0,
         "y": 1
       },
@@ -97,7 +97,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -144,8 +144,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
-        "x": 8,
+        "w": 3,
+        "x": 7,
         "y": 1
       },
       "id": 56,
@@ -164,7 +164,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -211,8 +211,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 2,
+        "h": 4,
+        "w": 6,
         "x": 10,
         "y": 1
       },
@@ -232,7 +232,7 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "datasource": "Prometheus",
@@ -246,206 +246,21 @@
         },
         {
           "cacheDurationSeconds": 5,
-          "datasource": "JSON API",
+          "datasource": "Alertmanager API",
           "fields": [
             {
-              "jsonPath": "$count($.nodes_summary[$.cluster_membership = \"inactiveFailed\"])",
-              "language": "jsonata",
-              "name": "failed_nodes"
+              "jsonPath": "$count($)",
+              "language": "jsonata"
             }
           ],
           "hide": false,
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/clusters/$cluster_uuid"
+          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=severity=critical"
         }
       ],
       "title": "Critical Alerts",
-      "transformations": [
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "lastNotNull"
-            ]
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Field": true
-            },
-            "indexByName": {},
-            "renameByName": {}
-          }
-        },
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "sum"
-            ]
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": "-- Mixed --",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#55a64bb0",
-                "value": null
-              },
-              {
-                "color": "#bc4b00",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 2,
-        "x": 12,
-        "y": 1
-      },
-      "id": 117,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "datasource": "Prometheus",
-          "exemplar": true,
-          "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "warnings",
-          "refId": "A"
-        }
-      ],
-      "title": "Health Warnings",
-      "transformations": [
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "lastNotNull"
-            ]
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Field": true
-            },
-            "indexByName": {},
-            "renameByName": {}
-          }
-        },
-        {
-          "id": "reduce",
-          "options": {
-            "reducers": [
-              "sum"
-            ]
-          }
-        }
-      ],
-      "type": "stat"
-    },
-    {
-      "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#55a64bb0",
-                "value": null
-              },
-              {
-                "color": "#124490",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 2,
-        "x": 14,
-        "y": 1
-      },
-      "id": 118,
-      "options": {
-        "colorMode": "background",
-        "graphMode": "none",
-        "justifyMode": "center",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.2.5",
-      "targets": [
-        {
-          "datasource": "Prometheus",
-          "exemplar": true,
-          "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1)",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "critical_alerts",
-          "refId": "A"
-        }
-      ],
-      "title": "Info",
       "transformations": [
         {
           "id": "reduce",
@@ -592,7 +407,7 @@
         "text": {},
         "textMode": "name"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -675,7 +490,7 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 8,
+        "w": 7,
         "x": 0,
         "y": 5
       },
@@ -696,7 +511,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 300,
@@ -742,8 +557,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 2,
-        "x": 8,
+        "w": 3,
+        "x": 7,
         "y": 5
       },
       "id": 55,
@@ -762,7 +577,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -780,6 +595,219 @@
         }
       ],
       "title": "Buckets",
+      "type": "stat"
+    },
+    {
+      "datasource": "-- Mixed --",
+      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#55a64bb0",
+                "value": null
+              },
+              {
+                "color": "#bc4b00",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 10,
+        "y": 5
+      },
+      "id": 117,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "exemplar": true,
+          "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "warnings",
+          "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "$count($)",
+              "language": "jsonata"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=severity=warning"
+        }
+      ],
+      "title": "Warnings",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
+      "type": "stat"
+    },
+    {
+      "datasource": "-- Mixed --",
+      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#55a64bb0",
+                "value": null
+              },
+              {
+                "color": "#124490",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 13,
+        "y": 5
+      },
+      "id": 118,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "exemplar": true,
+          "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1)",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "critical_alerts",
+          "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "$count($)"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=severity=info"
+        }
+      ],
+      "title": "Info",
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "lastNotNull"
+            ]
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Field": true
+            },
+            "indexByName": {},
+            "renameByName": {}
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": [
+              "sum"
+            ]
+          }
+        }
+      ],
       "type": "stat"
     },
     {
@@ -993,7 +1021,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -1355,7 +1383,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -1478,7 +1506,7 @@
       "type": "row"
     },
     {
-      "datasource": null,
+      "datasource": "-- Mixed --",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1629,15 +1657,41 @@
           }
         ]
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": "Prometheus",
           "exemplar": true,
           "expr": "multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "$[*].labels.health_check_id",
+              "name": "id"
+            },
+            {
+              "jsonPath": "$[*].labels.health_check_name",
+              "language": "jsonpath",
+              "name": "name"
+            },
+            {
+              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]\n",
+              "language": "jsonata",
+              "name": "Value"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=cluster&filter=job=~\"couchbase_.*\""
         }
       ],
       "title": "Cluster Check Status",
@@ -1681,7 +1735,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "-- Mixed --",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1849,15 +1903,46 @@
           }
         ]
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": "Prometheus",
           "exemplar": true,
           "expr": "multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "$[*].labels.health_check_id",
+              "name": "id"
+            },
+            {
+              "jsonPath": "$[*].labels.health_check_name",
+              "language": "jsonpath",
+              "name": "name"
+            },
+            {
+              "jsonPath": "$[*].labels.node",
+              "language": "jsonpath",
+              "name": "node_name"
+            },
+            {
+              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]",
+              "language": "jsonata",
+              "name": "Value"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=node&filter=job=~\"couchbase_.*\""
         }
       ],
       "title": "Node Check Status",
@@ -1906,7 +1991,7 @@
       "type": "table"
     },
     {
-      "datasource": null,
+      "datasource": "-- Mixed --",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2064,15 +2149,47 @@
           }
         ]
       },
-      "pluginVersion": "8.2.5",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": "Prometheus",
           "exemplar": true,
           "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"}",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "$[*].labels.health_check_id",
+              "name": "id"
+            },
+            {
+              "jsonPath": "$[*].labels.health_check_name",
+              "language": "jsonpath",
+              "name": "name"
+            },
+            {
+              "jsonPath": "$[*].labels.bucket",
+              "language": "jsonpath",
+              "name": "bucket"
+            },
+            {
+              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]\n",
+              "language": "jsonata",
+              "name": "Value",
+              "type": "number"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=bucket&filter=job=~\"couchbase_.*\""
         }
       ],
       "title": "Bucket Check Status",
@@ -2866,8 +2983,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "Cluster 1",
-          "value": "Cluster 1"
+          "text": "CMOS container test",
+          "value": "CMOS container test"
         },
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
@@ -2893,8 +3010,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "4d9b258c035e41b6d391797547b15c1d",
-          "value": "4d9b258c035e41b6d391797547b15c1d"
+          "text": "2d6a3967c5571f33b63392ac8b94d0a9",
+          "value": "2d6a3967c5571f33b63392ac8b94d0a9"
         },
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
@@ -2920,8 +3037,8 @@
         "allValue": null,
         "current": {
           "selected": false,
-          "text": "node2.local",
-          "value": "node2.local"
+          "text": "172.27.0.2",
+          "value": "172.27.0.2"
         },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
@@ -2951,7 +3068,6 @@
   },
   "timepicker": {
     "refresh_intervals": [
-      "5s",
       "15s",
       "30s",
       "1m",
@@ -2966,5 +3082,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 8
+  "version": 7
 }

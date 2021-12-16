@@ -18,6 +18,21 @@ The majority of these standards are enforced by linters - you can run all the li
 
 See the [README](microlith/grafana/README.md).
 
+### Alerting Rules (Prometheus and Loki)
+
+The labels of the alerts MUST have the following format, otherwise dashboards will break (things in square brackets are optional):
+
+```yaml
+job: couchbase_cluster_monitor | couchbase_prometheus | couchbase_fluent_bit
+kind: cluster | node | bucket
+severity: info | warning | critical
+health_check_id: CB99999
+health_check_name: itsInternalName
+cluster: the_cluster_name
+node: [the_node_hostname_if_relevant]
+bucket: [the_bucket_name_if_relevant]
+```
+
 ### Golang (Configuration Service)
 
 In general, follow [gofumpt](https://github.com/mvdan/gofumpt). We use [golangci-lint](https://golangci-lint.run/) to enforce it.
