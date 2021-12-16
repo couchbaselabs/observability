@@ -1,4 +1,4 @@
-personal_ws-1.1 en 65
+personal_ws-1.1 en 67
 AGPL
 CAO
 CMOS
@@ -67,3 +67,5 @@ Alertmanager
 PagerDuty
 de
 SDKs
+DCP
+rebalance
