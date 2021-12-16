@@ -113,7 +113,7 @@ You can update  the environment variable to change the location of the config fi
 [console]
 ----
 # Loki configuration
-LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
+LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/config.yml}
 ----
 
 == Grafana
