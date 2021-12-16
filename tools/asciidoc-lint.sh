@@ -23,6 +23,7 @@ FILTER="sed"
 FILTER="${FILTER} -e /^----$/,/^----$/d"
 # Ignore asciidoc ifdef blocks (contain arbitrary non-English configuration).
 FILTER="${FILTER} -e /^ifdef/,/^endif/d"
+FILTER="${FILTER} -e /^ifndef/,/^endif/d"
 # Ignore inline literals and attributes (contain arbitrary non-English configuration).
 FILTER="${FILTER} -e s/\`[^\`]*\`//g"
 FILTER="${FILTER} -e s/{[^}]*}//g"
