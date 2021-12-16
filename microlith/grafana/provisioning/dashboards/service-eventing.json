@@ -60,7 +60,7 @@
     {
       "asDropdown": true,
       "icon": "external link",
-      "includeVars": true,
+      "includeVars": false,
       "keepTime": true,
       "tags": [
         "couchbase",
@@ -88,12 +88,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "#73bf69b0",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           }
@@ -573,11 +569,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "Cluster 0",
-          "value": "Cluster 0"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -600,15 +592,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": [
-            "node0.local"
-          ],
-          "value": [
-            "node0.local"
-          ]
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
@@ -631,11 +615,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "e3770c05ca0504406d943b060d0f705a",
-          "value": "e3770c05ca0504406d943b060d0f705a"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "description": null,
@@ -658,11 +638,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "c18ca07188e3be07980dbba392cad3e7",
-          "value": "c18ca07188e3be07980dbba392cad3e7"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
         "description": null,
