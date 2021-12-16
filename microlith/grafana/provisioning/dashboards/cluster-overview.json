@@ -2982,11 +2982,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "CMOS container test",
-          "value": "CMOS container test"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -3009,11 +3005,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "2d6a3967c5571f33b63392ac8b94d0a9",
-          "value": "2d6a3967c5571f33b63392ac8b94d0a9"
-        },
+        "current": {},
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
         "description": null,
@@ -3036,11 +3028,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "172.27.0.2",
-          "value": "172.27.0.2"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,

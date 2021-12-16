@@ -1618,11 +1618,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "Cluster 1",
-          "value": "Cluster 1"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -1645,11 +1641,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "05d087d6d8d0a472f39668a4fde70202",
-          "value": "05d087d6d8d0a472f39668a4fde70202"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "description": null,
