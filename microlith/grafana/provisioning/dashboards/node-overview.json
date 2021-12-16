@@ -853,7 +853,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "15s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
