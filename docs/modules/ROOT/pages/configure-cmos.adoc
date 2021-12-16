@@ -11,10 +11,10 @@ CMOS is designed as a microlith container with several services included in its 
 CMOS allows users to control these services in a fine grained manner.
 As shown in the above diagram, you can customize the installation by overriding the default service configuration values using environment variables or by providing a native configuration file for each service.
 
-== Disabling Service
+== Disabling a Service
 
 All the services of CMOS stack are enabled by default.
-If you choose to disable a service, this is achieved by setting the corresponding environment variables of the docker container. The naming convention to be followed to disable a service is `DISABLE_X`, where `X` is the name of the service e.g. `DISABLE_ALERT_MANAGER`, `DISABLE_GRAFANA`, `DISABLE_JAEGER`, `DISABLE_LOKI`, `DISABLE_PROMETHEUS` and `DISABLE_WEBSERVER`.
+If you choose to disable a service, this is achieved by setting the corresponding environment variables of the docker container. The naming convention to be followed to disable a service is `DISABLE_X`, where `X` is the name of the service (e.g.,`DISABLE_ALERT_MANAGER`, `DISABLE_GRAFANA`, `DISABLE_JAEGER`, `DISABLE_LOKI`, `DISABLE_PROMETHEUS` and `DISABLE_WEBSERVER`).
 
 == Logging
 
@@ -22,18 +22,18 @@ By default, logs can be either provided to standard output `(stdout)` or to serv
 If file output is used for the logs, these files will appear in the `/logs/` directory.
 Further, if desired, these logs can externally be shared via a volume or bind mount.
 
-To mount files into a container use the `docker -v <source>:<destination>`, ideally as read-only.
-Refer to the official documentation for options available:
+To mount files into a container, use the `docker -v <source>:<destination>` command, ideally as read-only.
+For further information, refer to the official documentation:
 - https://docs.docker.com/storage/volumes/
 - https://docs.docker.com/storage/bind-mounts/
 
 == Cluster Monitor
 
-The cluster manager service of the CMOS stack will auto-start and self-configure itself to monitor a couchbase cluster using the configuration supplied through the following environment variables:
+The cluster manager service of the CMOS stack will auto-start and self-configure itself to monitor a Couchbase cluster using the configuration supplied through the following environment variables:
 
-- `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`: The username of couchbase cluster to monitor.
-- `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`: The password of couchbase cluster to monitor.
-- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`: The endpoint of couchbase cluster to monitor.
+- `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`: The username for the Couchbase cluster to monitor.
+- `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`: The password for the Couchbase cluster to monitor.
+- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`: The endpoint of the Couchbase cluster to monitor.
 
 The cluster manager  exposes a REST API endpoint from the container so that it can be used externally to add/remove Couchbase clusters. 
 The cluster monitor is also capable of running any scripts found in `/etc/healthcheck/` folder to perform health checks on the Couchbase cluster.
@@ -44,10 +44,10 @@ Prometheus has various configuration options exposed to the user, almost entirel
 You can mount these configuration files to the CMOS container using https://docs.docker.com/storage/volumes/[docker volumes^] or https://docs.docker.com/storage/bind-mounts/[bind mounts^].
 
 [NOTE]
-To pick up any configuration changes after the prometheus service has started, you may need to reload the config files using the `reload` endpoint.
+To pick up any configuration changes after the Prometheus service has started, you may need to reload the config files using the `reload` endpoint.
 
 Below are the environment variables used for Prometheus configuration.
-You can further read on prometheus configuration on the https://prometheus.io/docs/prometheus/latest/configuration/configuration/[official documentation website^].
+To read more about Prometheus configuration, see the https://prometheus.io/docs/prometheus/latest/configuration/configuration/[official documentation website^].
 
 [console]
 ----
@@ -78,7 +78,7 @@ These endpoints are created for each service by adding a JSON file to the `${PRO
 To add Couchbase Server endpoints, create a similar JSON format file like the example in the `/etc/prometheus/couchbase/custom/` directory mounted on the container.
 In order to always stay current with the system state, this file is periodically rescanned to add or remove targets.
 
-Whereas, this enables addition of a new scrape target, it does not automatically add dashboards to Grafana for this scrape target and you will have to do that manually.
+While this enables the addition of a new scrape target, it will not automatically add dashboards to Grafana. The dashboards will need to be added manually for the relevant scrape target.
 
 [console]
 ----
@@ -100,7 +100,7 @@ Note that currently we do not support using different credentials for multiple c
 
 [NOTE]
 This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
-You can use CMOS UI to perform the same using the Add Cluster option present on the landing page.
+You can use CMOS UI to perform the same using the "Add Cluster" option present on the landing page.
 
 .Add cluster image
 image::add-cluster-vm.png[]
@@ -118,16 +118,17 @@ LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/local-config.yaml}
 
 == Grafana
 
-Various dashboards to monitor the couchbase cluster are shipped out of the box in Grafana.
+Various dashboards to monitor the Couchbase cluster are shipped out of the box in Grafana.
 You can list all the dashboards using the search dashboard option.
-You may also create additional dashboards that meets your needs.
+You may also create additional dashboards that meet your needs.
 Post successful completion of the setup steps previously described, you should be able to see a list of attached clusters in the Grafana landing page.
 
 .Couchbase inventory image
 image::couchbase-inventory-vm.png[]
 
 You can list all available dashboards by clicking on the search button.
-It will show a list of dashboards similar to the one below. You can navigate to each dashboard by clicking on the name.
+It will show a list of dashboards similar to the one below.
+You can navigate to each dashboard by clicking on the name.
 
 .Grafana dashboards
 image::grafana-dashboards.png[]
@@ -138,7 +139,7 @@ image::grafana-dashboards.png[]
 
 Using alert rules, you can define alert conditions based on Prometheus language expressions and send notification to an external service when an alert is fired.
 
-The installation of CMOS comes with default alerting rules present at `/etc/prometheus/alerting/couchbase/` directory. 
+The installation of CMOS comes with default alerting rules located in the `/etc/prometheus/alerting/couchbase/` directory.
 
 [NOTE]
 The default rules are not intended to be modified by the user.
@@ -204,7 +205,7 @@ image::prometheus-alerts.png[]
 By default the CMOS Alertmanager is enabled and Prometheus forwards the alerts to it.
 Additional alert managers can be specified by using the same `<file_sd_config>` syntax in  the `/etc/prometheus/alertmanager/custom/` directory.
 
-Here are environment variables used for Alert manager configuration.
+Here are the environment variables used for Alertmanager configuration.
 
 [console]
 ----
