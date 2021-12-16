@@ -17,9 +17,9 @@ image::microlith-runtime.png[]
 === Installation
 
 At this moment, we only support deployment of CMOS using containers.
-Use docker command to start the CMOS container.
-Alternatively, you can also use alternative Linux container tools such as link:https://podman.io[Podman^].
-To install CMOS stack run below command
+Use docker to start the CMOS container.
+Alternatively, you can also use Linux container tools such as link:https://podman.io[Podman^].
+To install CMOS run the command below:
 
 [source,console]
 ----
@@ -28,13 +28,14 @@ docker run --name=cmos --rm -d -P couchbase/observability-stack:latest
 
 ==== Port Configuration
 
-Couchbase Monitoring and Observability Stack contains multiple services, each running on their  own default port such as Grafana(3000), Prometheus(9090), Alert manager(9093), Landing page(8080), Cluster monitor(77196), Loki(3100). You also can access different services using path based routing through the landing page.
+Couchbase Monitoring and Observability Stack contains multiple services, each running on their own default port such as Grafana(3000), Prometheus(9090), Alert manager(9093), Landing page(8080), Cluster monitor(77196), and Loki(3100).
+You can also access different services using path-based routing through the landing page.
 
 === Verification
 
-You can verify whether the CMOS container is up and running then navigate to mapped port of 8080 to access the CMOS landing page.
+You can verify whether the CMOS container is up and running by navigating to the CMOS landing page on port 8080.
 
-To get port in your host run below command
+To check the port mapping in your host, run the command below:
 
 [source,console]
 ----
@@ -53,7 +54,7 @@ image::cmos-landing.png[]
 
 ==== Add Cluster
 
-If you don't have any existing Couchbase cluster installed then you can install it from https://docs.couchbase.com/server/current/install/getting-started-docker.html#section_jvt_zvj_42b[here^].
+If you don't have an existing Couchbase cluster setup, you can install it from https://docs.couchbase.com/server/current/install/getting-started-docker.html#section_jvt_zvj_42b[here^].
 To monitor a Couchbase cluster, you can add it using the add cluster option on the landing page.
 
 .Add cluster image
@@ -75,7 +76,7 @@ image::prometheus-target-vm.png[]
 
 From the landing page, you can go to Grafana and check the graphs.
 CMOS comes with pre-installed graphs to monitor the Couchbase cluster.
-Graphs with tag couchbase-7 are relevant for Couchbase server version 7+.
+Graphs with tag `couchbase-7` are relevant for Couchbase server version 7+.
 For more information, check the Grafana configuration section.
 
 .Couchbase cluster overview image
@@ -96,7 +97,7 @@ image::prometheus-alerts.png[]
 ==== Loki
 
 Loki, which is shipped with Grafana, allows access to logs of various components.
-You can configure it via Configuration > Data sources > Loki > Explore
+You can configure it via Configuration > Data sources > Loki > Explore.
 
 .Loki explore dashboard image
 image::loki-explore-dashboard.png[]

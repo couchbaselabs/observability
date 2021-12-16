@@ -15,7 +15,7 @@ CMOS can be deployed to monitor the Couchbase clusters deployed via https://docs
 
 === Kube State Metrics
 
-The kube state metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the Kubernetes objects.
+Kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the Kubernetes objects.
 It will provide many metrics which are not available by default in Kubernetes.
 
 A prerequisite to configuring CMOS is to install https://github.com/kubernetes/kube-state-metrics[kube-state-metrics^].
@@ -28,7 +28,7 @@ helm repo update
 helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
 ----
 
-If you don’t have helm, you can install helm by running the following commands.
+If you don’t have helm, you can install it by running the following commands.
 
 [source,console]
 ----
@@ -38,24 +38,23 @@ chmod +x get_helm.sh
 ----
 
 CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, Services etc.
-Following sections describe how to deploy these standard objects. 
+The Following sections describe how to deploy these standard objects.
 They also include information on configuring these services.
 
 === Prometheus Configuration
 
 The prometheus configuration file is a standard way of specifying the configuration for the prometheus server.
 Prometheus configuration can be externalized using a Kubernetes `ConfigMap`, which contains all the details including credentials, and targets to scrape metrics.
-By externalizing Prometheus config to a Kubernetes config map, you don’t have to build the Prometheus image whenever you need to add or remove a configuration.
+By externalizing Prometheus configuration to a Kubernetes config map, you don’t have to build the Prometheus image whenever you need to add or remove a configuration.
 You simply need to update the config map and restart the Prometheus pods to apply the new configuration.
 
-The following is an example configuration file content that contains default configuration for CMOS prometheus to work out of the box.
+The following is an example file that contains default configuration for CMOS prometheus to work out of the box.
 Run the below command in the console to create it.
 
 [source,console]
 ----
 mkdir -p ./prometheus/custom/alerting
 cat <<EOF >./prometheus/custom/prometheus-k8s.yml
-# This is a template file we use so we can substitute environment variables at launch
 # This is a template file we use so we can substitute environment variables at launch
 global:
     scrape_interval: 30s
@@ -162,7 +161,7 @@ EOF
 ----
 
 <.> `rule_files`: Prometheus is configured to load rules via rule_files. 
-You can extend the rules by adding rule files under `alerting/` directory.
+You can extend rules by adding rule_files under the `alerting/` directory.
 Note that the `alerting/` directory is a relative path to the prometheus configuration file.
 By default the complete path is `/etc/prometheus/custom/alerting/`. 
 Refer to the <<Observability Stack>> section for volume mounts.
@@ -174,7 +173,7 @@ This section has various configurations of alert managers.
 This includes `prometheus`, `couchbase-grafana`, `couchbase-cluster-monitor`, `couchbase-kubernetes-pods` and `kube-state-metrics`.
 We try to discover the couchbase pods using labels.
 
-Run the below command in kubernetes console to create the prometheus config map from the configuration file :
+Run the below command in kubernetes console to create the prometheus config map from the configuration file:
 
 [source,console]
 ----
@@ -228,7 +227,8 @@ In this configure file, you can see that the cluster role is defined by specifyi
 
 <.> `monitoring-role-binding`: This role binding is required to give the permissions created in ClusterRole to the service account of CMOS.
 
-The actual CMOS workload runs as a kubernetes deployment along with other supporting services. Create it by running the below command in the kubernetes console.
+The actual CMOS workload runs as a Kubernetes deployment along with other supporting services.
+Create it by running the below command in the Kubernetes console.
 
 [source,console]
 ----
@@ -304,7 +304,7 @@ spec:
 EOF
 ----
 
-<.> The observability monitoring service runs on port 8080 by default
+<.> The observability monitoring service runs on port 8080 by default.
 
 Create a service for accessing Loki by running the below command in the kubernetes console.
 
@@ -375,10 +375,10 @@ cluster:
 EOF
 ----
 
-<.> We recommend specifying a stronger password 
+<.> We recommend specifying a stronger password.
 
 [NOTE]
-If you already have the couchbase operator deployed using helm or are considering a new couchbase operator deployment, the below command can be used with custom values to enable CMOS.
+If you already have the Couchbase operator deployed using helm or are considering a new deployment, the below command can be used with custom values to enable CMOS.
 If it is deployed using command line tools, you have to update the existing service using the  https://kubernetes.io/docs/tasks/manage-kubernetes-objects/update-api-object-kubectl-patch/[kubectl patch^] with custom values mentioned above.
 
 By using the command below, you can upgrade the existing version of an already deployed Couchbase operator.
@@ -441,16 +441,16 @@ EOF
 
 If everything is deployed properly, you should be able to access http://localhost (or whatever the Ingress* is for your deployment).
 
-You should see a  landing page which includes links to documentation, cluster manager service and various other services of CMOS.
+You should see a landing page which includes links to documentation, cluster manager service and various other services of CMOS.
 
 .CMOS landing image
 image::cmos-landing.png[]
 
 == Add Couchbase Cluster
 
-You can access the couchbase cluster from the CMOS dashboard using the “Add Cluster” option.
+You can access the Couchbase cluster from the CMOS dashboard using the “Add Cluster” option.
 In this section, we need to enter a few details and then click on "Add Cluster".
-Enter the couchbase server hostname, username and password credentials. 
+Enter the Couchbase Server hostname, username and password credentials.
 
 By default the username is “admin” and password is “password”.
 We recommend specifying a stronger password in the `custom-values.yaml` file during CMOS installation.
@@ -516,12 +516,12 @@ image::prometheus-alert-rules.png[]
 .Alerts image
 image::prometheus-alerts.png[]
 
-== Alert Manager
+== Alertmanager
 
-Alert manager is shipped and enabled by default in the CMOS, which is accessible via “Alert Manager” options.
+Alertmanager is shipped and enabled by default in the CMOS, which is accessible via “Alert Manager” options.
 You can view all the generated alerts in this dashboard.
 
-.Alert manager image
+.Alertmanager image
 image::alert-manager.png[]
 
 == Loki
