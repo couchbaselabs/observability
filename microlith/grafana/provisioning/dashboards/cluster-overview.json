@@ -186,7 +186,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "description": "Scroll down to \"Health Status\" to see the alerts.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -599,7 +599,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "description": "Scroll down to \"Health Status\" to see the warnings.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -706,7 +706,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "description": "Scroll down to \"Health Status\" for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
