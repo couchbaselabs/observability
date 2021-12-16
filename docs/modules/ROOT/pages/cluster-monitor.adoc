@@ -1,6 +1,7 @@
 = Cluster Monitor
 
-Couchbase cluster monitor is a core component of the CMOS that provides cluster-level information via a Prometheus endpoint. If Couchbase cluster monitor is enabled, it will output the status of its checkers to Prometheus like the following:
+Couchbase cluster monitor is a core component of CMOS that provides cluster-level information via a Prometheus endpoint.
+If Couchbase cluster monitor is enabled, it will output the status of its checkers to Prometheus like the following:
 
 ----
 # HELP multimanager_cluster_checker_status Checker results for cluster level checkers
