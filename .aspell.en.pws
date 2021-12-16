@@ -1,4 +1,4 @@
-personal_ws-1.1 en 68
+personal_ws-1.1 en 71
 AGPL
 CAO
 CMOS
@@ -66,4 +66,7 @@ Loki
 Alertmanager
 PagerDuty
 de
+SDKs
+DCP
+rebalance
 txt

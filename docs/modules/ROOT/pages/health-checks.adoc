@@ -1,0 +1,24 @@
+= Health Checks
+
+NOTE: The "CB900XX" system of IDs is subject to change in future releases.
+
+== Cluster Checks
+
+ifndef::env-oss[]
+include::cbmultimanager:ROOT:page$checkers.adoc[tag=group-cluster]
+endif::env-oss[]
+include::partial$cmos-health-checks.adoc[tag=group-cluster]
+
+== Node Checks
+
+ifndef::env-oss[]
+include::cbmultimanager:ROOT:page$checkers.adoc[tag=group-node]
+endif::env-oss[]
+include::partial$cmos-health-checks.adoc[tag=group-node]
+
+== Bucket Checks
+
+ifndef::env-oss[]
+include::cbmultimanager:ROOT:page$checkers.adoc[tag=group-bucket]
+endif::env-oss[]
+include::partial$cmos-health-checks.adoc[tag=group-bucket]
