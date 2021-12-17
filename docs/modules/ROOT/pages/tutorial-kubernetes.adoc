@@ -1,4 +1,4 @@
-= Kubernetes Deployment
+=  Configure CMOS for Kubernetes deployment
 
 include::partial$tutorial.adoc[]
 
