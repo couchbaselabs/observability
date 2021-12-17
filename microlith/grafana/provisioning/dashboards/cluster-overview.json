@@ -22,8 +22,8 @@
   "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 2,
-  "id": 11,
-  "iteration": 1639145054058,
+  "id": 2,
+  "iteration": 1639763371634,
   "links": [
     {
       "asDropdown": false,
@@ -1070,17 +1070,17 @@
               "name": "State"
             },
             {
-              "jsonPath": "$.nodes_summary[*].cpuCount",
+              "jsonPath": "$map($.nodes_summary, function($n) {$n.cpuCount ? $n.cpuCount : \"(unknown)\"})",
               "language": "jsonata",
               "name": "CPUs"
             },
             {
-              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $formatNumber($round($node.mem_total / 1024 / 1024 / 1024), \"####;(#0.00)\")\n})",
+              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $node.mem_total ? $formatNumber($round($node.mem_total / 1024 / 1024 / 1024), \"####;(#0.00)\") : \"(unknown)\"\n})",
               "language": "jsonata",
               "name": "Total RAM"
             },
             {
-              "jsonPath": "$map($.nodes_summary, function ($node) {\n  $round((1 - ($node.mem_free / $node.mem_total)) * 100, 2)\n})",
+              "jsonPath": "$map($.nodes_summary, function ($node) {\n  ($node.mem_free and $node.mem_total) ? $round((1 - ($node.mem_free / $node.mem_total)) * 100, 2) : \"(unknown)\"\n})",
               "language": "jsonata",
               "name": "RAM Usage"
             },
@@ -3088,5 +3088,5 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 7
+  "version": 8
 }

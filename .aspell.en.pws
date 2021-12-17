@@ -1,4 +1,4 @@
-personal_ws-1.1 en 73
+personal_ws-1.1 en 77
 AGPL
 CAO
 CMOS
@@ -64,6 +64,8 @@ html
 sanitization
 Loki
 Alertmanager
+txt
+Promtail
 PagerDuty
 de
 SDKs
@@ -72,3 +74,5 @@ rebalance
 txt
 Couchbase's
 JIRA
+VM
+ClusterRole
