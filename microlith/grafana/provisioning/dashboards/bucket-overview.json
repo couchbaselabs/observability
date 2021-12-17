@@ -78,7 +78,7 @@
                   "text": "Warn"
                 },
                 "30": {
-                  "color": "#e02f44ad",
+                  "color": "#e02f44b0",
                   "index": 2,
                   "text": "Alert"
                 },
@@ -170,8 +170,8 @@
         ]
       },
       "gridPos": {
-        "h": 5,
-        "w": 11,
+        "h": 7,
+        "w": 9,
         "x": 0,
         "y": 0
       },
@@ -190,7 +190,7 @@
         {
           "datasource": "Prometheus",
           "exemplar": true,
-          "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\",bucket=\"$bucket\"} >= 0",
+          "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\",bucket=~`${bucket:regex}`} >= 0",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -201,12 +201,13 @@
           "datasource": "Alertmanager API",
           "fields": [
             {
-              "jsonPath": "$[*].labels.health_check_id",
+              "jsonPath": "[$[*].labels.health_check_id]",
+              "language": "jsonata",
               "name": "id"
             },
             {
-              "jsonPath": "$[*].labels.health_check_name",
-              "language": "jsonpath",
+              "jsonPath": "[$[*].labels.health_check_name]",
+              "language": "jsonata",
               "name": "name"
             },
             {
@@ -219,7 +220,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=kind=bucket&filter=cluster=${cluster:querystring}&filter=bucket=${bucket:querystring}"
+          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=kind=bucket&filter=cluster=${cluster:querystring}&filter=bucket=${bucket:regex}"
         }
       ],
       "title": "Bucket Health Issues",
@@ -271,6 +272,99 @@
           "color": {
             "mode": "thresholds"
           },
+          "custom": {
+            "fillOpacity": 40,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#55a64bb0",
+                  "index": 0,
+                  "text": "Good"
+                },
+                "10": {
+                  "color": "#ccccdbb0",
+                  "index": 1,
+                  "text": "Info"
+                },
+                "20": {
+                  "color": "#ff9830b0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "#808080",
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 9,
+        "x": 9,
+        "y": 0
+      },
+      "id": 45,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": false,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_bucket_checker_status{cluster_name=~`${cluster:regex}`,bucket=~`${bucket:regex}`} and (changes(multimanager_bucket_checker_status{cluster_name=~`${cluster:regex}`,bucket=~`${bucket:regex}`}[$__range]) > 0) or (multimanager_bucket_checker_status{cluster_name=~`${cluster:regex}`,bucket=~`${bucket:regex}`} > 0)",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}} ({{bucket}})",
+          "refId": "A"
+        }
+      ],
+      "title": "Bucket Check History",
+      "transformations": [],
+      "type": "state-timeline"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "max": 1,
           "min": 0,
@@ -296,9 +390,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
+        "h": 3,
         "w": 6,
-        "x": 11,
+        "x": 18,
         "y": 0
       },
       "id": 29,
@@ -321,18 +415,19 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg(kv_vb_perc_mem_resident_ratio{bucket=\"$bucket\",cluster=\"$cluster\",state=\"active\"})",
+          "expr": "avg(kv_vb_perc_mem_resident_ratio{bucket=~`${bucket:regex}`,cluster=\"$cluster\",state=\"active\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Active Resident Ratio",
+      "title": "Average Active Resident Ratio",
       "type": "stat"
     },
     {
       "datasource": null,
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -354,10 +449,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 5,
-        "w": 7,
-        "x": 17,
-        "y": 0
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 3
       },
       "id": 33,
       "options": {
@@ -379,132 +474,22 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum (kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "sum (kv_mem_used_bytes{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
           "interval": "",
           "legendFormat": "In Memory",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "sum (couch_docs_actual_disk_size{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "sum (couch_docs_actual_disk_size{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
           "hide": false,
           "interval": "",
           "legendFormat": "On Disk",
           "refId": "B"
         }
       ],
-      "title": "Data Size",
+      "title": "Total Data Size",
       "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Data Size"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "bytes"
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 11,
-        "x": 0,
-        "y": 5
-      },
-      "id": 35,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum by (scope, collection) (kv_collection_data_size_bytes{cluster=\"$cluster\",bucket=\"$bucket\"})",
-          "format": "table",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "data_size"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum by (scope, collection) (kv_collection_item_count{cluster=\"$cluster\",bucket=\"$bucket\"})",
-          "format": "table",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "item_count"
-        }
-      ],
-      "title": "Collections",
-      "transformations": [
-        {
-          "id": "seriesToColumns",
-          "options": {
-            "byField": "collection"
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time 1": true,
-              "Time 2": true,
-              "scope 1": false,
-              "scope 2": true
-            },
-            "indexByName": {
-              "Time 1": 2,
-              "Time 2": 4,
-              "Value #data_size": 3,
-              "Value #item_count": 6,
-              "collection": 1,
-              "scope 1": 0,
-              "scope 2": 5
-            },
-            "renameByName": {
-              "Value #data_size": "Data Size",
-              "Value #item_count": "Items",
-              "collection": "Collection",
-              "scope 1": "Scope"
-            }
-          }
-        }
-      ],
-      "type": "table"
     },
     {
       "datasource": null,
@@ -560,17 +545,17 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 13,
-        "x": 11,
-        "y": 5
+        "h": 12,
+        "w": 24,
+        "x": 0,
+        "y": 7
       },
       "id": 39,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+          "displayMode": "table",
+          "placement": "right"
         },
         "tooltip": {
           "mode": "single"
@@ -579,13 +564,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (op) (rate(kv_ops{cluster=`$cluster`,bucket=`$bucket`}[$__rate_interval]))",
+          "expr": "sum by (op,bucket) (rate(kv_ops{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{ op }}",
+          "legendFormat": "{{op}} ({{bucket}})",
           "refId": "A"
         }
       ],
       "title": "Operations",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -652,8 +638,7 @@
                 "value": {
                   "dash": [
                     0,
-                    3,
-                    3
+                    10
                   ],
                   "fill": "dot"
                 }
@@ -686,8 +671,7 @@
                 "value": {
                   "dash": [
                     0,
-                    3,
-                    3
+                    10
                   ],
                   "fill": "dot"
                 }
@@ -708,17 +692,17 @@
         ]
       },
       "gridPos": {
-        "h": 8,
-        "w": 8,
+        "h": 12,
+        "w": 24,
         "x": 0,
-        "y": 11
+        "y": 19
       },
       "id": 31,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+          "displayMode": "table",
+          "placement": "right"
         },
         "tooltip": {
           "mode": "single"
@@ -727,30 +711,142 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "avg (kv_ep_mem_low_wat{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "max by (bucket) (kv_ep_mem_low_wat{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
+          "hide": false,
+          "instant": false,
           "interval": "",
-          "legendFormat": "Low Water Mark",
+          "legendFormat": "Low Water Mark ({{bucket}})",
           "refId": "low_wat"
         },
         {
           "exemplar": true,
-          "expr": "avg (kv_ep_mem_high_wat{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "max by (bucket) (kv_ep_mem_high_wat{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
           "hide": false,
           "interval": "",
-          "legendFormat": "High Water Mark",
+          "legendFormat": "High Water Mark ({{bucket}})",
           "refId": "high_wat"
         },
         {
           "exemplar": true,
-          "expr": "kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"}",
+          "expr": "kv_mem_used_bytes{cluster=\"$cluster\",bucket=~`${bucket:regex}`}",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{bucket}} ({{instance}})",
           "refId": "mem_used"
         }
       ],
       "title": "Memory Usage",
+      "transparent": true,
       "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto",
+            "filterable": true,
+            "minWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data Size"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 11,
+        "x": 0,
+        "y": 31
+      },
+      "id": 35,
+      "options": {
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (scope, collection) (kv_collection_data_size_bytes{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "data_size"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum by (scope, collection) (kv_collection_item_count{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "item_count"
+        }
+      ],
+      "title": "Collections",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "collection"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "scope 1": false,
+              "scope 2": true
+            },
+            "indexByName": {
+              "Time 1": 2,
+              "Time 2": 4,
+              "Value #data_size": 3,
+              "Value #item_count": 6,
+              "collection": 1,
+              "scope 1": 0,
+              "scope 2": 5
+            },
+            "renameByName": {
+              "Value #data_size": "Data Size",
+              "Value #item_count": "Items",
+              "collection": "Collection",
+              "scope 1": "Scope"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "datasource": null,
@@ -805,16 +901,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 8,
-        "y": 11
+        "h": 10,
+        "w": 13,
+        "x": 11,
+        "y": 31
       },
       "id": 37,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -824,9 +920,9 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (instance) (kv_ep_diskqueue_items{cluster=`$cluster`,bucket=`$bucket`})",
+          "expr": "sum by (instance,bucket) (kv_ep_diskqueue_items{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "{{bucket}} ({{instance}})",
           "refId": "A"
         }
       ],
@@ -835,6 +931,7 @@
     },
     {
       "datasource": null,
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -845,8 +942,8 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
             "hideFrom": {
               "legend": false,
               "tooltip": false,
@@ -873,12 +970,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
               }
             ]
           },
@@ -887,16 +980,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 12,
         "w": 8,
-        "x": 16,
-        "y": 11
+        "x": 0,
+        "y": 41
       },
       "id": 41,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
+          "displayMode": "table",
           "placement": "bottom"
         },
         "tooltip": {
@@ -906,13 +999,409 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.90, irate(kv_cmd_duration_seconds_bucket{opcode=\"GET\",bucket=\"$bucket\",cluster=\"$cluster\"}[$__rate_interval]))",
+          "expr": "histogram_quantile(0.50, irate(kv_cmd_duration_seconds_bucket{opcode=\"GET\",bucket=~`${bucket:regex}`,cluster=\"$cluster\"}[$__rate_interval]))",
           "interval": "",
-          "legendFormat": "{{ instance }}",
+          "legendFormat": "{{bucket}} ({{ instance }})",
           "refId": "A"
         }
       ],
-      "title": "90th Percentile Read Latency",
+      "title": "Read Latency: 50th percentile",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 41
+      },
+      "id": 48,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.50, irate(kv_cmd_duration_seconds_bucket{opcode=\"GET\",bucket=~`${bucket:regex}`,cluster=\"$cluster\"}[$__rate_interval]))",
+          "interval": "",
+          "legendFormat": "{{bucket}} ({{ instance }})",
+          "refId": "A"
+        }
+      ],
+      "title": "Read Latency: 50th percentile",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 41
+      },
+      "id": 47,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.999, irate(kv_cmd_duration_seconds_bucket{opcode=\"GET\",bucket=~`${bucket:regex}`,cluster=\"$cluster\"}[$__rate_interval]))",
+          "interval": "",
+          "legendFormat": "{{bucket}} ({{ instance }})",
+          "refId": "A"
+        }
+      ],
+      "title": "Read Latency: 99.9th percentile",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 0,
+        "y": 53
+      },
+      "id": 46,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.50, irate(kv_cmd_duration_seconds_bucket{opcode=\"SET\",bucket=~`${bucket:regex}`,cluster=\"$cluster\"}[$__rate_interval]))",
+          "interval": "",
+          "legendFormat": "{{bucket}} ({{ instance }})",
+          "refId": "A"
+        }
+      ],
+      "title": "Write Latency: 50th percentile",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 53
+      },
+      "id": 49,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, irate(kv_cmd_duration_seconds_bucket{opcode=\"SET\",bucket=~`${bucket:regex}`,cluster=\"$cluster\"}[$__rate_interval]))",
+          "interval": "",
+          "legendFormat": "{{bucket}} ({{ instance }})",
+          "refId": "A"
+        }
+      ],
+      "title": "Write Latency: 99th percentile",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 53
+      },
+      "id": 50,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, irate(kv_cmd_duration_seconds_bucket{opcode=\"SET\",bucket=~`${bucket:regex}`,cluster=\"$cluster\"}[$__rate_interval]))",
+          "interval": "",
+          "legendFormat": "{{bucket}} ({{ instance }})",
+          "refId": "A"
+        }
+      ],
+      "title": "Write Latency: 99.9th percentile",
+      "transparent": true,
       "type": "timeseries"
     }
   ],
@@ -974,15 +1463,23 @@
       },
       {
         "allValue": null,
-        "current": {},
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": null,
         "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": null,
-        "multi": false,
+        "multi": true,
         "name": "bucket",
         "options": [],
         "query": {
@@ -1017,5 +1514,5 @@
   "timezone": "",
   "title": "Bucket Overview",
   "uid": "H8M3rE5nk",
-  "version": 2
+  "version": 38
 }

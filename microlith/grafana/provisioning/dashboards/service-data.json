@@ -92,6 +92,144 @@
     },
     {
       "datasource": null,
+      "description": "If more than three buckets are selected, only the three with the lowest Active Resident Ratio are shown.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#e02f44b0",
+                "value": null
+              },
+              {
+                "color": "#ff780ab0",
+                "value": 0.1
+              },
+              {
+                "color": "#55a64bb0",
+                "value": 0.2
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 67,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "bottomk(3, kv_vb_perc_mem_resident_ratio{bucket=~`${bucket:regex}`,cluster=\"$cluster\",state=\"active\"})",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{bucket}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Active Resident Ratio",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "If more than three buckets are selected, only the three with the highest Cache Miss Percentage are shown.",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "displayName": "NOT IMPLEMENTED",
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#55a64bb0",
+                "value": null
+              },
+              {
+                "color": "#ff780ab0",
+                "value": 0.1
+              },
+              {
+                "color": "#e02f44b0",
+                "value": 0.2
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 73,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "value_and_name"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "0",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{value}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Cache Miss Percentage",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "If more than three buckets are selected, only the three with the most Read Failures are shown.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -131,8 +269,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 12,
-        "x": 0,
+        "w": 6,
+        "x": 12,
         "y": 1
       },
       "id": 18,
@@ -162,11 +300,12 @@
           "refId": "A"
         }
       ],
-      "title": "Top 3 Read Failures",
+      "title": "Read Failures",
       "type": "stat"
     },
     {
       "datasource": null,
+      "description": "If more than three buckets are selected, only the three with the most Write Failures are shown.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -206,8 +345,8 @@
       },
       "gridPos": {
         "h": 4,
-        "w": 12,
-        "x": 12,
+        "w": 6,
+        "x": 18,
         "y": 1
       },
       "id": 28,
@@ -237,7 +376,7 @@
           "refId": "A"
         }
       ],
-      "title": "Top 3 Write Failures",
+      "title": "Write Failures",
       "type": "stat"
     },
     {
@@ -320,7 +459,301 @@
         }
       ],
       "title": "Bucket Operations",
+      "transparent": true,
       "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 15
+      },
+      "id": 6,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum(kv_curr_connections{cluster=`$cluster`})",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Current",
+          "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kv_daemon_connections{cluster=`$cluster`})",
+          "hide": false,
+          "instant": false,
+          "interval": "",
+          "legendFormat": "Daemon",
+          "refId": "B"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum(kv_system_connections{cluster=`$cluster`})",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "System",
+          "refId": "C"
+        }
+      ],
+      "title": "Current Connections",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 8,
+        "y": 15
+      },
+      "id": 52,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "max(count by (instance) (kv_collection_item_count{cluster=`$cluster`,collection=\"_default\"}))",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total # of Buckets",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "noValue": "1",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#ccccdbb0",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 3,
+        "x": 11,
+        "y": 15
+      },
+      "id": 41,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "max(count by (instance) (kv_collection_item_count{cluster=`$cluster`,collection!=\"_default\",bucket=`${bucket:regex}`}))",
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Total # of collections",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": true,
+            "minWidth": 1
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Data Size"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "bytes"
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 10,
+        "x": 14,
+        "y": 15
+      },
+      "id": 72,
+      "options": {
+        "showHeader": true
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "sum by (scope, collection) (kv_collection_data_size_bytes{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "data_size"
+        },
+        {
+          "exemplar": true,
+          "expr": "sum by (scope, collection) (kv_collection_item_count{cluster=\"$cluster\",bucket=~`${bucket:regex}`})",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "item_count"
+        }
+      ],
+      "title": "Collections",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "collection"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time 1": true,
+              "Time 2": true,
+              "scope 1": false,
+              "scope 2": true
+            },
+            "indexByName": {
+              "Time 1": 2,
+              "Time 2": 4,
+              "Value #data_size": 3,
+              "Value #item_count": 6,
+              "collection": 1,
+              "scope 1": 0,
+              "scope 2": 5
+            },
+            "renameByName": {
+              "Value #data_size": "Data Size",
+              "Value #item_count": "Items",
+              "collection": "Collection",
+              "scope 1": "Scope"
+            }
+          }
+        }
+      ],
+      "type": "table"
     },
     {
       "collapsed": false,
@@ -329,7 +762,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 20
       },
       "id": 8,
       "panels": [],
@@ -342,7 +775,7 @@
         "h": 2,
         "w": 8,
         "x": 0,
-        "y": 16
+        "y": 21
       },
       "id": 46,
       "options": {
@@ -359,7 +792,7 @@
         "h": 2,
         "w": 8,
         "x": 8,
-        "y": 16
+        "y": 21
       },
       "id": 47,
       "options": {
@@ -376,7 +809,7 @@
         "h": 2,
         "w": 8,
         "x": 16,
-        "y": 16
+        "y": 21
       },
       "id": 48,
       "options": {
@@ -413,7 +846,7 @@
         "h": 2,
         "w": 8,
         "x": 0,
-        "y": 18
+        "y": 23
       },
       "id": 25,
       "maxPerRow": 6,
@@ -472,7 +905,7 @@
         "h": 2,
         "w": 8,
         "x": 8,
-        "y": 18
+        "y": 23
       },
       "id": 23,
       "options": {
@@ -530,7 +963,7 @@
         "h": 2,
         "w": 8,
         "x": 16,
-        "y": 18
+        "y": 23
       },
       "id": 2,
       "options": {
@@ -623,7 +1056,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 22
+        "y": 27
       },
       "id": 32,
       "options": {
@@ -647,6 +1080,7 @@
         }
       ],
       "title": "Reads - 50th percentile",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -710,7 +1144,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 22
+        "y": 27
       },
       "id": 36,
       "options": {
@@ -734,6 +1168,7 @@
         }
       ],
       "title": "Reads - 99th percentile",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -794,7 +1229,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 22
+        "y": 27
       },
       "id": 34,
       "options": {
@@ -818,6 +1253,7 @@
         }
       ],
       "title": "Reads - 99.9th percentile",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -878,7 +1314,7 @@
         "h": 9,
         "w": 8,
         "x": 0,
-        "y": 31
+        "y": 36
       },
       "id": 35,
       "options": {
@@ -902,6 +1338,7 @@
         }
       ],
       "title": "Writes - 50th percentile",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -962,7 +1399,7 @@
         "h": 9,
         "w": 8,
         "x": 8,
-        "y": 31
+        "y": 36
       },
       "id": 33,
       "options": {
@@ -986,6 +1423,7 @@
         }
       ],
       "title": "Writes - 99th percentile",
+      "transparent": true,
       "type": "timeseries"
     },
     {
@@ -1046,7 +1484,7 @@
         "h": 9,
         "w": 8,
         "x": 16,
-        "y": 31
+        "y": 36
       },
       "id": 37,
       "options": {
@@ -1070,191 +1508,8 @@
         }
       ],
       "title": "Writes - 99.9th percentile",
+      "transparent": true,
       "type": "timeseries"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#ccccdbb0",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 0,
-        "y": 40
-      },
-      "id": 6,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "sum(kv_curr_connections{cluster=`$cluster`})",
-          "format": "time_series",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Current",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum(kv_daemon_connections{cluster=`$cluster`})",
-          "hide": false,
-          "instant": false,
-          "interval": "",
-          "legendFormat": "Daemon",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "sum(kv_system_connections{cluster=`$cluster`})",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "System",
-          "refId": "C"
-        }
-      ],
-      "title": "Current Connections",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#ccccdbb0",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 8,
-        "y": 40
-      },
-      "id": 52,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "max(count by (instance) (kv_collection_item_count{cluster=`$cluster`,collection=\"_default\"}))",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total Number of Buckets",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "#ccccdbb0",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 8,
-        "x": 16,
-        "y": 40
-      },
-      "id": 41,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "max(count by (instance) (kv_collection_item_count{cluster=`$cluster`,collection!=\"_default\"}))",
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Total Number of collections",
-      "type": "stat"
     },
     {
       "collapsed": true,
@@ -1263,7 +1518,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 47
+        "y": 45
       },
       "id": 10,
       "panels": [
@@ -1279,86 +1534,8 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "#ccccdbb0",
-                    "value": null
-                  }
-                ]
-              }
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 0,
-            "y": 50
-          },
-          "id": 14,
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "single"
-            }
-          },
-          "pluginVersion": "8.2.7",
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,connection_type!=\"\"}) by (connection_type)",
-              "interval": "",
-              "legendFormat": "{{ connection_type }}",
-              "refId": "A"
-            }
-          ],
-          "title": "Items Remaining",
-          "type": "timeseries"
-        },
-        {
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
+                "fillOpacity": 40,
+                "gradientMode": "opacity",
                 "hideFrom": {
                   "legend": false,
                   "tooltip": false,
@@ -1401,8 +1578,8 @@
           "gridPos": {
             "h": 8,
             "w": 8,
-            "x": 8,
-            "y": 50
+            "x": 0,
+            "y": 54
           },
           "id": 16,
           "options": {
@@ -1439,8 +1616,86 @@
                 "axisPlacement": "auto",
                 "barAlignment": 0,
                 "drawStyle": "line",
-                "fillOpacity": 0,
-                "gradientMode": "none",
+                "fillOpacity": 41,
+                "gradientMode": "opacity",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "auto",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "#ccccdbb0",
+                    "value": null
+                  }
+                ]
+              }
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 54
+          },
+          "id": 14,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "table",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "pluginVersion": "8.2.7",
+          "targets": [
+            {
+              "exemplar": true,
+              "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,connection_type!=\"\"}) by (connection_type)",
+              "interval": "",
+              "legendFormat": "{{ connection_type }}",
+              "refId": "A"
+            }
+          ],
+          "title": "Items Remaining",
+          "type": "timeseries"
+        },
+        {
+          "datasource": null,
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 40,
+                "gradientMode": "opacity",
                 "hideFrom": {
                   "legend": false,
                   "tooltip": false,
@@ -1483,7 +1738,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 50
+            "y": 54
           },
           "id": 12,
           "options": {
@@ -1507,176 +1762,6 @@
           ],
           "title": "Backoff Events",
           "type": "timeseries"
-        },
-        {
-          "datasource": "JSON API",
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "custom": {
-                "align": "center",
-                "displayMode": "auto",
-                "minWidth": 1
-              },
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              }
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Count"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width",
-                    "value": 100
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "SDK/Client Version"
-                },
-                "properties": [
-                  {
-                    "id": "custom.width"
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 8,
-            "w": 24,
-            "x": 0,
-            "y": 58
-          },
-          "id": 30,
-          "options": {
-            "showHeader": true,
-            "sortBy": [
-              {
-                "desc": true,
-                "displayName": "Count"
-              }
-            ]
-          },
-          "pluginVersion": "8.2.7",
-          "targets": [
-            {
-              "cacheDurationSeconds": 0,
-              "fields": [
-                {
-                  "jsonPath": "$.connections[*].sdk_name",
-                  "name": "SDK/Client"
-                },
-                {
-                  "jsonPath": "$.connections[*].sdk_version",
-                  "language": "jsonpath",
-                  "name": "SDK Version"
-                },
-                {
-                  "jsonPath": "$.connections.user.($ = null ? \"\" : $replace($.name, /<\\/?ud>/, \"\"))",
-                  "language": "jsonata",
-                  "name": "Username"
-                },
-                {
-                  "jsonPath": "$.connections[*].source.ip",
-                  "language": "jsonpath",
-                  "name": "Source IP"
-                },
-                {
-                  "jsonPath": "$.connections[*].agent_name",
-                  "language": "jsonpath",
-                  "name": ""
-                }
-              ],
-              "method": "GET",
-              "queryParams": "",
-              "refId": "A",
-              "urlPath": "/clusters/$cluster_uuid/connections"
-            }
-          ],
-          "title": "Connected KV Clients",
-          "transformations": [
-            {
-              "id": "groupBy",
-              "options": {
-                "fields": {
-                  "SDK Version": {
-                    "aggregations": [
-                      "first"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "SDK/Client": {
-                    "aggregations": [
-                      "first",
-                      "count"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "Source IP": {
-                    "aggregations": [
-                      "allValues"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "Username": {
-                    "aggregations": [
-                      "allValues"
-                    ],
-                    "operation": "aggregate"
-                  },
-                  "agent_name": {
-                    "aggregations": [],
-                    "operation": "groupby"
-                  }
-                }
-              }
-            },
-            {
-              "id": "organize",
-              "options": {
-                "excludeByName": {
-                  "agent_name": true
-                },
-                "indexByName": {
-                  "SDK Version (first)": 2,
-                  "SDK/Client (count)": 3,
-                  "SDK/Client (first)": 1,
-                  "Source IP (allValues)": 5,
-                  "Username (allValues)": 4,
-                  "agent_name": 0
-                },
-                "renameByName": {
-                  "SDK Version (first)": "SDK/Client Version",
-                  "SDK/Client (count)": "Count",
-                  "SDK/Client (first)": "SDK/Client",
-                  "Source IP (allValues)": "Source IPs",
-                  "Username (allValues)": "Usernames"
-                }
-              }
-            }
-          ],
-          "type": "table"
         }
       ],
       "title": "DCP",
