@@ -194,7 +194,7 @@
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>A Grafana-based stack has been selected for a few reasons:</p>
+<p>Couchbase monitoring and observability stack [CMOS] is built primarily with Grafana-based components mainly for the following reasons:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -210,12 +210,11 @@
 </ul>
 </div>
 <div class="paragraph">
-<p>We expose Prometheus endpoints already for node-level information on a Couchbase Server instance.
-Recently we have exposed logs using Fluent Bit, primarily for kubernetes based solutions but this can be deployed on-premise as well.</p>
+<p>We already expose Prometheus endpoints for node-level information on a Couchbase Server instance starting from the Couchbase Server 7.0 release.
+We expose Couchbase logs using Fluent Bit, primarily on Kubernetes-based deployments but can get deployed on-premise deployments as well.</p>
 </div>
 <div class="paragraph">
-<p>Couchbase have a proprietary project that provides cluster-level information via a Prometheus endpoint: <a href="https://github.com/couchbaselabs/cbmultimanager" class="bare">https://github.com/couchbaselabs/cbmultimanager</a>
-This integrates Couchbase knowledge and best practices into a reusable component. We can then reuse this component in the monitoring stack here as it provides a Prometheus endpoint.</p>
+<p>One of the core capabilities of CMOS is the Couchbase Cluster Monitor that provides cluster-level insights as well information via a Prometheus endpoint; it is a closed-source enterprise-only solution that integrates Couchbase knowledge and best practices into a reusable component.</p>
 </div>
 <div class="paragraph">
 <p>Our observability stack is therefore a combination of Couchbase-specific components that provide that discrete knowledge and monitoring of the Couchbase cluster which are then plumbed into a generic Grafana pipline like below.</p>
