@@ -152,7 +152,8 @@ groups:
 
   # Prometheus has no target in service discovery
           - alert: PrometheusTargetEmpty
-            expr: prometheus_sd_discovered_targets == 0
+            # Exclude couchbase-server (add cluster form uses couchbase-server-managed-N instead, so this is often empty)
+            expr: prometheus_sd_discovered_targets{config!="couchbase-server"} == 0
             for: 0m
             labels:
                 severity: critical
