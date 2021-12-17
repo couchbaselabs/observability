@@ -1,4 +1,4 @@
-= On-premise example
+= Configure CMOS for On-premises deployment
 
 include::partial$tutorial.adoc[]
 
