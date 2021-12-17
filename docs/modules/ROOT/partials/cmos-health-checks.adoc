@@ -1,0 +1,56 @@
+// tag::group-cluster[]
+
+[#CB90038]
+=== Stats Collection Failed (CB90038)
+
+*Background*: The CMOS Prometheus server will scrape all Couchbase Server nodes periodically (every 30 seconds by default) for statistics.
+If a node fails to respond, this can indicate that the node is down, its CPU is overloaded, or there is a network issue preventing Prometheus from communicating with it.
+
+*Condition*: Prometheus has failed to scrape a Couchbase Server node.
+
+*Remediation*: Check the node's status and resource usage.
+
+// end::group-cluster[]
+
+// tag::group-node[]
+
+[#CB90036]
+=== `memcached` Crashes (CB90036)
+
+*Background*: If the Data Service process (`memcached`) crashes, it will be restarted within a few seconds.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in the `memcached` logs.
+
+*Remediation*: Contact Couchbase Technical Support.
+
+// end::group-node[]
+
+// tag::group-bucket[]
+
+[#CB90033]
+=== Long DCP Names (CB90033)
+
+*Background*: All Database Change Protocol (DCP) streams, including internal replication streams, have an internal name.
+Before Couchbase Server 7.0, this was implicitly limited to 255 characters (or fewer in some cases), and DCP names that exceed this threshold could result in rebalance failures and other issues.
+As of Couchbase Server 7.0, these names are explicitly limited to 200 characters.
+This means that an online upgrade to 7.0 could fail if names longer than 200 but shorter than 255 characters are present.
+
+*Condition*: DCP stream names longer than 200 characters are present, or errors related to them are seen.
+
+*Remediation*: Contact Couchbase Technical Support for analysis.
+
+*Further Reading*: https://issues.couchbase.com/browse/MB-34280[MB-34280]
+
+[#CB90037]
+=== Slow Operations (CB90037)
+
+*Background*: Data Service operations that take longer than 500ms will be logged.
+Seeing one or two should not always be cause for concern, but consistent numbers of slow operations may indicate resource contention on your Data Service nodes.
+Note that this is different to slow operations logged by the Couchbase SDKs - this health check is purely server-side.
+
+*Condition*: Slow operations logged by the Data Service.
+
+*Remediation*: Verify that your Data Service nodes have adequate system resources.
+
+// end::group-bucket[]

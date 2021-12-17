@@ -12,6 +12,12 @@ The file [datasources.yml](./provisioning/datasources) specifies the types of da
 
 Note: for Couchbase Server 6 and below only, the exporter must be installed on each node to import statistics into the Prometheus instance.
 
+### Linking to other dashboards in Grafana ###
+
+Grafana uses UIDs set at provisioning to link between dashboards. In CMOS, each dashboard is identified and linked to by a 9 character alphanumeric string to avoid unintentional collisions.
+
+For more information please see [Grafana's documentation](https://grafana.com/docs/grafana/latest/linking/dashboard-links/).
+
 ## Example Workflow ##
 
 When developing dashboards, especially for those with SSH access to the private cbmultimanager repository, it may be helpful to call `make example-multi`. This will build and run the CMOS container as well as a number of Couchbase Server nodes, divided into the specified amount of clusters, with sample buckets and indexes loaded, and a gentle cbpillowfight activated. More information on how to use this and the various variables that can be changed can be found in the example's [README](/examples/containers/multi).
@@ -34,8 +40,8 @@ Once you have a local environment configured, you can visit http://localhost:808
     
 There is a [linter](/tools/dashboards-lint.sh) to check the dashboards do not have a set time or are exported for sharing externally.
 
-## Linking to other dashboards in Grafana ##
+## Pull Request best practices ##
 
-Grafana uses UIDs set at provisioning to link between dashboards. In CMOS, each dashboard is identified and linked to by a 9 character alphanumeric string to avoid unintentional collisions.
+It is recommended to add a screenshot to the Pull Request to display the changes made. Make sure that the input source you use is reproduceable and the way to reproduce it is documented. The easiest way to do this may be to use one of the examples. 
 
-For more information please see [Grafana's documentation](https://grafana.com/docs/grafana/latest/linking/dashboard-links/).
+Additionally, as some changes/behaviours are not easily captured by screenshots, it may be acceptable to recommend to test using an example - along with a detailed description of the intended behaviour and changes.

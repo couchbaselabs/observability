@@ -100,7 +100,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$cluster",
@@ -186,7 +186,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "description": "Scroll down to \"Health Status\" to see the alerts.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -343,7 +343,7 @@
                 "value": [
                   {
                     "title": "Index",
-                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -360,7 +360,7 @@
                 "value": [
                   {
                     "title": "Search",
-                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -377,7 +377,24 @@
                 "value": [
                   {
                     "title": "Query",
-                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventing"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "title": "Eventing Service Overview",
+                    "url": "/d/R0hxsR2nk/eventing-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -514,7 +531,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "cacheDurationSeconds": 300,
+          "cacheDurationSeconds": 0,
           "fields": [
             {
               "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
@@ -599,7 +616,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "description": "Scroll down to \"Health Status\" to see the warnings.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -706,7 +723,7 @@
     },
     {
       "datasource": "-- Mixed --",
-      "description": "Scroll down to \"Nodes\" and/or \"Health Status\" to see the alerts.",
+      "description": "Scroll down to \"Health Status\" for more information.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1446,6 +1463,7 @@
           "expr": "min by (bucket) (kv_vb_perc_mem_resident_ratio{cluster=`$cluster`,state=\"active\"})",
           "format": "table",
           "hide": false,
+          "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "ResidentRatio"
@@ -1615,7 +1633,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -1633,7 +1651,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -1844,7 +1862,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -1879,7 +1897,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2089,7 +2107,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2125,7 +2143,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2969,7 +2987,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": "5s",
+  "refresh": "15s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
@@ -2981,11 +2999,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "CMOS container test",
-          "value": "CMOS container test"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -3008,11 +3022,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "2d6a3967c5571f33b63392ac8b94d0a9",
-          "value": "2d6a3967c5571f33b63392ac8b94d0a9"
-        },
+        "current": {},
         "datasource": null,
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
         "description": null,
@@ -3035,11 +3045,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "172.27.0.2",
-          "value": "172.27.0.2"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
@@ -3063,7 +3069,7 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
   "timepicker": {
