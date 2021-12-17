@@ -75,8 +75,8 @@ image::prometheus-target-vm.png[]
 ==== Grafana
 
 From the landing page, you can go to Grafana and check the graphs.
-CMOS comes with pre-installed graphs to monitor the Couchbase cluster.
-Graphs with tag `couchbase-7` are relevant for Couchbase server version 7+.
+CMOS comes with pre-installed dashboards to monitor the Couchbase cluster.
+Dashboards with tag `couchbase-7` are relevant for Couchbase server version 7+.
 For more information, check the Grafana configuration section.
 
 .Couchbase cluster overview image
@@ -85,7 +85,7 @@ image::couchbase-cluster-overview-vm.png[]
 ==== Alerts
 
 CMOS comes with pre-installed alert rules to monitor the Couchbase cluster.
-Navigate to Alertmanager, prometheus UI to check the alert rules and alerts.
+Navigate to the Prometheus UI to see the rules, or Alertmanager to see the alerts.
 For more information check the prometheus and alerting configuration section.
 
 .Alert rules image
