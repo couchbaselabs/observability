@@ -30,7 +30,7 @@
     {
       "datasource": null,
       "gridPos": {
-        "h": 4,
+        "h": 5,
         "w": 15,
         "x": 0,
         "y": 0
@@ -50,12 +50,72 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 4
+        "y": 5
       },
       "id": 10,
       "panels": [],
       "title": "Overview",
       "type": "row"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "#e02f44b0",
+                "value": null
+              },
+              {
+                "color": "#55a64bb0",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 0,
+        "y": 6
+      },
+      "id": 15,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "count(count by (cluster_uuid) (multimanager_cluster_checker_status))",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "Couchbase Cluster Monitor",
+          "refId": "B"
+        }
+      ],
+      "title": "Configured Clusters",
+      "type": "stat"
     },
     {
       "datasource": null,
@@ -114,10 +174,10 @@
         ]
       },
       "gridPos": {
-        "h": 9,
-        "w": 9,
-        "x": 0,
-        "y": 5
+        "h": 7,
+        "w": 12,
+        "x": 3,
+        "y": 6
       },
       "id": 2,
       "options": {
@@ -164,605 +224,6 @@
         }
       ],
       "type": "table"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 9,
-        "w": 6,
-        "x": 9,
-        "y": 5
-      },
-      "id": 15,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(count by (cluster_uuid) (multimanager_cluster_checker_status))",
-          "hide": false,
-          "interval": "",
-          "legendFormat": "Couchbase Cluster Monitor",
-          "refId": "B"
-        }
-      ],
-      "title": "Configured Clusters",
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 9,
-        "x": 0,
-        "y": 14
-      },
-      "id": 23,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count by (cluster) (cbnode_up) unless count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Clusters Missing from Cluster Monitor",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
-          "id": "merge",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "{cluster=\"Dev Kicks with 6.6\"}": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "cluster": "Clusters"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 6,
-        "x": 9,
-        "y": 14
-      },
-      "id": 22,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nunless\ncount by (cluster) (cbnode_up)",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Clusters Without Prometheus Exporter",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
-          "id": "merge",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "Value": true,
-              "{cluster=\"Dev Kicks with 6.6\"}": true
-            },
-            "indexByName": {
-              "Time": 0,
-              "Value": 2,
-              "cluster": 1
-            },
-            "renameByName": {
-              "cluster": "Clusters"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "collapsed": false,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 21
-      },
-      "id": 8,
-      "panels": [],
-      "repeat": "clusters",
-      "title": "Couchbase Prometheus Exporter ($clusters)",
-      "type": "row"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 0,
-        "y": 22
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(cbbucketinfo_up{cluster=${clusters:doublequote}})",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Prometheus Exporter",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node_uuid) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Couchbase Cluster Monitor",
-          "refId": "B"
-        }
-      ],
-      "title": "Configured Nodes",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 4,
-        "w": 12,
-        "x": 3,
-        "y": 22
-      },
-      "id": 12,
-      "options": {
-        "content": "**Note:** If the number of nodes for a particular service does not equal the total number of nodes in the cluster, this may be because that node is not configured to run the respective service. In this case, the discrepancy can be ignored.",
-        "mode": "markdown"
-      },
-      "pluginVersion": "8.2.7",
-      "type": "text"
-    },
-    {
-      "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "custom.displayMode",
-                "value": "color-background"
-              },
-              {
-                "id": "mappings",
-                "value": []
-              },
-              {
-                "id": "custom.width",
-                "value": 125
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Configured Nodes"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 158
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 8,
-        "x": 0,
-        "y": 26
-      },
-      "id": 20,
-      "options": {
-        "showHeader": true,
-        "sortBy": []
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbbucketinfo_up{cluster=${clusters:doublequote}}))",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbbucketinfo",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbbucketstat_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbnode",
-          "refId": "B"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbcbas_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbcbas (Analytics)",
-          "refId": "C"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbeventing_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbeventing (Eventing)",
-          "refId": "D"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbfts_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbfts (Search)",
-          "refId": "E"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbindex_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbindex (Index)",
-          "refId": "F"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbnode_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbnode",
-          "refId": "G"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbpernode_bucketstats (Data)",
-          "refId": "H"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbquery_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbquery (Query)",
-          "refId": "I"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node) (cbtask_up{cluster=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "cbtask",
-          "refId": "J"
-        }
-      ],
-      "title": "Couchbase Exporter Checks",
-      "transformations": [
-        {
-          "id": "seriesToRows",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "cluster": true,
-              "cluster_label": true,
-              "instance": false,
-              "job": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Configured Nodes",
-              "__name__": "Metric Group",
-              "cluster": "Cluster",
-              "cluster_label": "Cluster Label",
-              "instance": "Node"
-            }
-          }
-        }
-      ],
-      "type": "table"
-    },
-    {
-      "datasource": null,
-      "description": "If nodes appear in this panel despite both being added to the Cluster Monitor and Prometheus, check if alternate addresses are enabled. If so, ensure you are using the alternate address to refer to the node in your Prometheus service discovery configuration.",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "align": "auto",
-            "displayMode": "auto"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 7,
-        "x": 8,
-        "y": 26
-      },
-      "id": 24,
-      "options": {
-        "showHeader": true
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count by (node) (label_replace(count by (node_name) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}), \"node\", \"$1\", \"node_name\", \"(.*)(?::[0-9]*$)\")) unless count by (instance) (cbnode_up)",
-          "instant": true,
-          "interval": "",
-          "legendFormat": "",
-          "refId": "A"
-        }
-      ],
-      "title": "Nodes Without Prometheus Exporter",
-      "transformations": [
-        {
-          "id": "labelsToFields",
-          "options": {}
-        },
-        {
-          "id": "merge",
-          "options": {}
-        },
-        {
-          "disabled": true,
-          "id": "filterFieldsByName",
-          "options": {
-            "include": {
-              "pattern": "^\\{"
-            }
-          }
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "Value": true,
-              "{cluster=\"Dev Kicks with 6.6\"}": true,
-              "{node=\"35.223.87.116:18091\"}": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "cluster": "Clusters",
-              "node": "Node"
-            }
-          }
-        }
-      ],
-      "type": "table"
     }
   ],
   "refresh": "15s",
@@ -770,31 +231,7 @@
   "style": "dark",
   "tags": [],
   "templating": {
-    "list": [
-      {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
-        "definition": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
-        "description": null,
-        "error": null,
-        "hide": 2,
-        "includeAll": true,
-        "label": null,
-        "multi": false,
-        "name": "clusters",
-        "options": [],
-        "query": {
-          "query": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/{cluster=\"(.+?)\"/",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      }
-    ]
+    "list": []
   },
   "time": {
     "from": "now-30m",
