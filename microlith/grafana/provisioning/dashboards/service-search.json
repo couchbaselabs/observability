@@ -192,6 +192,7 @@
     },
     {
       "datasource": null,
+      "description": "This is across all buckets, scopes, collections, and indexes (i.e., per cluster).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -237,7 +238,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(fts_num_bytes_used_ram{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "expr": "sum(fts_num_bytes_used_ram{cluster=`$cluster`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
