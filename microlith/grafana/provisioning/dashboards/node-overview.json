@@ -417,7 +417,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -435,7 +435,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
