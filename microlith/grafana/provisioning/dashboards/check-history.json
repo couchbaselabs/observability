@@ -299,6 +299,7 @@
       "type": "state-timeline"
     }
   ],
+  "refresh": "15s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [],
@@ -306,15 +307,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -338,10 +331,22 @@
     ]
   },
   "time": {
-    "from": "now-15m",
+    "from": "now-30m",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "15s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "",
   "title": "Check History",
   "uid": "3FgtRlvnk",

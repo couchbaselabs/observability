@@ -19,17 +19,19 @@
     ]
   },
   "editable": true,
+  "fiscalYearStartMonth": 0,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1635495009676,
+  "id": 2,
+  "iteration": 1639648277394,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
       "datasource": null,
       "gridPos": {
         "h": 4,
-        "w": 12,
+        "w": 15,
         "x": 0,
         "y": 0
       },
@@ -38,7 +40,7 @@
         "content": "# Configuration Check\n\nIf all the checks below report OK, and the number of nodes and clusters is right, you're all set! Head over to the [Cluster Overview Dashboard](/d/g-waunKnz/cluster-overview-dashboard) to get started.\n\nIf any report a problem, or the number of nodes does not match your expectations, review the [setup instructions](https://docs.couchbase.com).",
         "mode": "markdown"
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "type": "text"
     },
     {
@@ -63,19 +65,19 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
+            "align": "center",
             "displayMode": "auto"
           },
           "mappings": [
             {
               "options": {
                 "0": {
-                  "color": "red",
+                  "color": "#e02f44b0",
                   "index": 0,
                   "text": "Problem"
                 },
                 "1": {
-                  "color": "green",
+                  "color": "#55a64bb0",
                   "index": 1,
                   "text": "OK"
                 }
@@ -87,7 +89,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": null
               }
             ]
@@ -97,7 +99,7 @@
           {
             "matcher": {
               "id": "byName",
-              "options": "OK?"
+              "options": "Status"
             },
             "properties": [
               {
@@ -105,8 +107,7 @@
                 "value": "color-background"
               },
               {
-                "id": "custom.width",
-                "value": 190
+                "id": "custom.width"
               }
             ]
           }
@@ -114,7 +115,7 @@
       },
       "gridPos": {
         "h": 9,
-        "w": 6,
+        "w": 9,
         "x": 0,
         "y": 5
       },
@@ -123,7 +124,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -141,14 +142,22 @@
           "options": {}
         },
         {
+          "id": "merge",
+          "options": {}
+        },
+        {
           "id": "organize",
           "options": {
             "excludeByName": {
               "Time": true
             },
-            "indexByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value": 2,
+              "job": 1
+            },
             "renameByName": {
-              "Value": "OK?",
+              "Value": "Status",
               "job": "Job"
             }
           }
@@ -183,7 +192,7 @@
       "gridPos": {
         "h": 9,
         "w": 6,
-        "x": 6,
+        "x": 9,
         "y": 5
       },
       "id": 15,
@@ -202,15 +211,8 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(count by (cluster) (cbbucketinfo_up))",
-          "interval": "",
-          "legendFormat": "Prometheus Exporter",
-          "refId": "A"
-        },
         {
           "exemplar": true,
           "expr": "count(count by (cluster_uuid) (multimanager_cluster_checker_status))",
@@ -253,29 +255,33 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 3,
-        "x": 12,
-        "y": 5
+        "w": 9,
+        "x": 0,
+        "y": 14
       },
-      "id": 22,
+      "id": 23,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
-          "expr": "count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nunless\ncount by (cluster) (cbnode_up)",
+          "expr": "count by (cluster) (cbnode_up) unless count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Clusters Without Prometheus Exporter",
+      "title": "Clusters Missing from Cluster Monitor",
       "transformations": [
         {
           "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
           "options": {}
         },
         {
@@ -302,7 +308,7 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "auto",
+            "align": "center",
             "displayMode": "auto"
           },
           "mappings": [],
@@ -324,29 +330,33 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 3,
-        "x": 15,
-        "y": 5
+        "w": 6,
+        "x": 9,
+        "y": 14
       },
-      "id": 23,
+      "id": 22,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
-          "expr": "count by (cluster) (cbnode_up) unless count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))",
+          "expr": "count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nunless\ncount by (cluster) (cbnode_up)",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "title": "Clusters Missing from Cluster Monitor",
+      "title": "Clusters Without Prometheus Exporter",
       "transformations": [
         {
           "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
           "options": {}
         },
         {
@@ -354,9 +364,14 @@
           "options": {
             "excludeByName": {
               "Time": true,
+              "Value": true,
               "{cluster=\"Dev Kicks with 6.6\"}": true
             },
-            "indexByName": {},
+            "indexByName": {
+              "Time": 0,
+              "Value": 2,
+              "cluster": 1
+            },
             "renameByName": {
               "cluster": "Clusters"
             }
@@ -366,43 +381,39 @@
       "type": "table"
     },
     {
+      "collapsed": false,
+      "datasource": null,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 8,
+      "panels": [],
+      "repeat": "clusters",
+      "title": "Couchbase Prometheus Exporter ($clusters)",
+      "type": "row"
+    },
+    {
       "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "from": 1,
-                "result": {
-                  "color": "green",
-                  "index": 0,
-                  "text": "Yes"
-                },
-                "to": 999999999
-              },
-              "type": "range"
-            },
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "color": "red",
-                  "index": 1,
-                  "text": "No"
-                }
-              },
-              "type": "special"
-            }
-          ],
+          "mappings": [],
+          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
+                "color": "red",
                 "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
               }
             ]
           }
@@ -410,14 +421,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
-        "w": 6,
-        "x": 12,
-        "y": 12
+        "h": 4,
+        "w": 3,
+        "x": 0,
+        "y": 22
       },
-      "id": 26,
+      "id": 14,
       "options": {
-        "colorMode": "background",
+        "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -431,33 +442,46 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
-          "expr": "count(\ncount by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nand\ncount by (cluster) (cbnode_up)\n)",
+          "expr": "count(cbbucketinfo_up{cluster=${clusters:doublequote}})",
+          "hide": false,
+          "instant": true,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "Prometheus Exporter",
           "refId": "A"
+        },
+        {
+          "exemplar": true,
+          "expr": "count(count by (node_uuid) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}))",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "Couchbase Cluster Monitor",
+          "refId": "B"
         }
       ],
-      "title": "All Clusters Registered + Exporter Configured?",
+      "title": "Configured Nodes",
+      "transformations": [],
       "type": "stat"
     },
     {
-      "collapsed": false,
       "datasource": null,
       "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 14
+        "h": 4,
+        "w": 12,
+        "x": 3,
+        "y": 22
       },
-      "id": 8,
-      "panels": [],
-      "repeat": "clusters",
-      "title": "Couchbase Prometheus Exporter ($clusters)",
-      "type": "row"
+      "id": 12,
+      "options": {
+        "content": "**Note:** If the number of nodes for a particular service does not equal the total number of nodes in the cluster, this may be because that node is not configured to run the respective service. In this case, the discrepancy can be ignored.",
+        "mode": "markdown"
+      },
+      "pluginVersion": "8.2.7",
+      "type": "text"
     },
     {
       "datasource": null,
@@ -521,17 +545,17 @@
         ]
       },
       "gridPos": {
-        "h": 12,
-        "w": 4,
+        "h": 8,
+        "w": 8,
         "x": 0,
-        "y": 15
+        "y": 26
       },
       "id": 20,
       "options": {
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -654,78 +678,6 @@
     },
     {
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "noValue": "0",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": null
-              },
-              {
-                "color": "green",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 5,
-        "x": 4,
-        "y": 15
-      },
-      "id": 14,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.1.1",
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "count(cbbucketinfo_up{cluster=${clusters:doublequote}})",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Prometheus Exporter",
-          "refId": "A"
-        },
-        {
-          "exemplar": true,
-          "expr": "count(count by (node_uuid) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}))",
-          "hide": false,
-          "instant": true,
-          "interval": "",
-          "legendFormat": "Couchbase Cluster Monitor",
-          "refId": "B"
-        }
-      ],
-      "title": "Configured Nodes",
-      "transformations": [],
-      "type": "stat"
-    },
-    {
-      "datasource": null,
       "description": "If nodes appear in this panel despite both being added to the Cluster Monitor and Prometheus, check if alternate addresses are enabled. If so, ensure you are using the alternate address to refer to the node in your Prometheus service discovery configuration.",
       "fieldConfig": {
         "defaults": {
@@ -754,16 +706,16 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
-        "w": 3,
-        "x": 9,
-        "y": 15
+        "h": 8,
+        "w": 7,
+        "x": 8,
+        "y": 26
       },
       "id": 24,
       "options": {
         "showHeader": true
       },
-      "pluginVersion": "8.1.1",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
           "exemplar": true,
@@ -778,6 +730,10 @@
       "transformations": [
         {
           "id": "labelsToFields",
+          "options": {}
+        },
+        {
+          "id": "merge",
           "options": {}
         },
         {
@@ -807,36 +763,17 @@
         }
       ],
       "type": "table"
-    },
-    {
-      "datasource": null,
-      "gridPos": {
-        "h": 6,
-        "w": 5,
-        "x": 4,
-        "y": 21
-      },
-      "id": 12,
-      "options": {
-        "content": "**Note:** If the number of nodes for a particular service does not equal the total number of nodes in the cluster, this may be because that node is not configured to run the respective service. In this case, the discrepancy can be ignored.",
-        "mode": "markdown"
-      },
-      "pluginVersion": "8.1.1",
-      "type": "text"
     }
   ],
-  "schemaVersion": 30,
+  "refresh": "15s",
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
         "description": null,
@@ -860,12 +797,24 @@
     ]
   },
   "time": {
-    "from": "now-5m",
+    "from": "now-30m",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "15s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "",
   "title": "Configuration Check",
   "uid": "nu7dhVF7k",
-  "version": 7
+  "version": 4
 }
