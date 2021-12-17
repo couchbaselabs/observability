@@ -149,7 +149,7 @@
           "values": true
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.2.7",
       "targets": [
@@ -224,7 +224,7 @@
           "values": true
         },
         "text": {},
-        "textMode": "auto"
+        "textMode": "value_and_name"
       },
       "pluginVersion": "8.2.7",
       "targets": [
