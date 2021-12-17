@@ -50,7 +50,7 @@ groups:
           job: couchbase_fluent_bit
           kind: cluster # even though this is technically node-level logging, the issue is cluster-level
           severity: critical
-          health_check_id: CB90037
+          health_check_id: CB90033
           health_check_name: longDcpNames
           cluster: '{{ $labels.couchbase_cluster }}'
         annotations:
@@ -68,7 +68,7 @@ groups:
           job: couchbase_fluent_bit
           kind: cluster # even though this is technically node-level logging, the issue is cluster-level
           severity: critical
-          health_check_id: CB90037
+          health_check_id: CB90033
           health_check_name: longDcpNames
           cluster: '{{ $labels.couchbase_cluster }}'
         annotations:

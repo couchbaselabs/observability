@@ -1,3 +1,6 @@
+ARG PROD_VERSION=1.0.0
+ARG PROD_BUILD=999
+
 FROM grafana/grafana:8.2.7 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.1 as prometheus-official
@@ -71,13 +74,27 @@ RUN apk add --upgrade --no-cache git && \
 
 # Put the changeable stuff here
 COPY docs/ /antora/docs/
+
 # Couchbase proprietary start
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/doc/*.adoc /antora/docs/modules/couchbase-cluster-monitor/pages/
+
+# Copy over the files from cbmultimanager rather than letting Antora clone it, for consistency and local testing
+COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/docs /antora/cbmultimanager
+RUN git init /antora/cbmultimanager && \
+    touch /antora/cbmultimanager/.gitignore && \
+    git -C /antora/cbmultimanager add . && \
+    git -C /antora/cbmultimanager commit -m "ignore me"
+# antora-container-playbook defaults to OSS, override it
+COPY docs/antora-container-playbook-proprietary.yml /antora/docs/antora-container-playbook.yml
+
 # Couchbase proprietary end
+
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
 # Combined image using Nginx as a base to support a simple web server plus proxying into endpoints
 FROM nginx:alpine
+ARG PROD_VERSION
+ARG PROD_BUILD
+
 # hadolint ignore=DL3018
 RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext jq sudo
 
@@ -267,7 +284,6 @@ COPY --from=builder /src/github.com/couchbaselabs/observability/config-svc/entry
 # Simple static webserver
 COPY nginx/ /etc/nginx/
 COPY html/ /html/
-COPY licenses/ /html/licenses/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
 COPY --from=antora-generator /antora/cmos /html/cmos
@@ -295,6 +311,11 @@ RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 EXPOSE 7196 7197
 
 COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/rules/checker-alerts.yml /etc/prometheus/alerting/couchbase/cluster-monitor-alerts.yml
+
+# TODO (CMOS-230): this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
+RUN mkdir -p /licenses && \
+    curl -Lo /licenses/couchbase-cluster-monitor-notices.txt \
+    https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-cluster-monitor/blackduck/${PROD_VERSION}/notices.txt
 # Couchbase proprietary end
 
 # Customisation for entrypoints and run as a non-root user
@@ -331,10 +352,18 @@ ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
 ENV PROMETHEUS_DYNAMIC_DIR=/etc/prometheus/couchbase/
 
 # Add all useful and required information
+
 COPY licenses/* /licenses/
+# NOTE: this creates a chicken-and-egg effect - if we update notices, we need to run two builds to ensure it gets picked up
+# TODO: this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
+RUN curl -Lo /licenses/notices.txt \
+    https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-observability-stack/blackduck/${PROD_VERSION}/notices.txt && \
+    mkdir -p /html/licenses && cp /licenses/* /html/licenses/ && chown -R couchbase:couchbase /html
+
 COPY docs/modules/ROOT/pages/support.adoc /help.1
 
 COPY git-commit.txt /etc/cmos-release.txt
+RUN printf "Couchbase Observability Stack version ${PROD_VERSION}-${PROD_BUILD}\n%s" "$(cat /etc/cmos-release.txt)" > /etc/cmos-release.txt
 
 USER       $CB_UID
 ENTRYPOINT [ "/sbin/tini", "--", "/run.sh" ]
