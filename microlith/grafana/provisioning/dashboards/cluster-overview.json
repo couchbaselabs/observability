@@ -122,69 +122,6 @@
       "type": "stat"
     },
     {
-      "datasource": "JSON API",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 7,
-        "y": 1
-      },
-      "id": 56,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "text": {},
-        "textMode": "value"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$count($.nodes_summary[*])",
-              "language": "jsonata",
-              "name": "Number of nodes"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "title": "Nodes",
-      "type": "stat"
-    },
-    {
       "datasource": "-- Mixed --",
       "description": "Scroll down to \"Health Status\" to see the alerts.",
       "fieldConfig": {
@@ -213,7 +150,7 @@
       "gridPos": {
         "h": 4,
         "w": 6,
-        "x": 10,
+        "x": 7,
         "y": 1
       },
       "id": 66,
@@ -289,6 +226,69 @@
           }
         }
       ],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 13,
+        "y": 1
+      },
+      "id": 56,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "text": {},
+        "textMode": "value"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$count($.nodes_summary[*])",
+              "language": "jsonata",
+              "name": "Number of nodes"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "title": "Nodes",
       "type": "stat"
     },
     {
@@ -553,68 +553,6 @@
       "type": "stat"
     },
     {
-      "datasource": "JSON API",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "text",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 4,
-        "w": 3,
-        "x": 7,
-        "y": 5
-      },
-      "id": 55,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": true
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.2.7",
-      "targets": [
-        {
-          "cacheDurationSeconds": 0,
-          "fields": [
-            {
-              "jsonPath": "$count($.buckets_summary[*])",
-              "language": "jsonata",
-              "name": "Number of buckets"
-            }
-          ],
-          "method": "GET",
-          "queryParams": "",
-          "refId": "A",
-          "urlPath": "/clusters/$cluster_uuid"
-        }
-      ],
-      "title": "Buckets",
-      "type": "stat"
-    },
-    {
       "datasource": "-- Mixed --",
       "description": "Scroll down to \"Health Status\" to see the warnings.",
       "fieldConfig": {
@@ -643,7 +581,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 10,
+        "x": 7,
         "y": 5
       },
       "id": 117,
@@ -750,7 +688,7 @@
       "gridPos": {
         "h": 4,
         "w": 3,
-        "x": 13,
+        "x": 10,
         "y": 5
       },
       "id": 118,
@@ -825,6 +763,68 @@
           }
         }
       ],
+      "type": "stat"
+    },
+    {
+      "datasource": "JSON API",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 3,
+        "x": 13,
+        "y": 5
+      },
+      "id": 55,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "cacheDurationSeconds": 0,
+          "fields": [
+            {
+              "jsonPath": "$count($.buckets_summary[*])",
+              "language": "jsonata",
+              "name": "Number of buckets"
+            }
+          ],
+          "method": "GET",
+          "queryParams": "",
+          "refId": "A",
+          "urlPath": "/clusters/$cluster_uuid"
+        }
+      ],
+      "title": "Buckets",
       "type": "stat"
     },
     {
