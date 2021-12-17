@@ -49,6 +49,8 @@ FILTER="${FILTER} -e s/^\[.*$//g"
 # Ignore inline ui-macros.
 FILTER="${FILTER} -e s/btn:\[[^\]*\]//g"
 FILTER="${FILTER} -e s/kbd:\[[^\]*\]//g"
+# Ignore AsciiDoc comments.
+FILTER="${FILTER} -e s/^\/\/.*$//g"
 
 # CHECK_ARGS is the spell checking command to run.
 CHECK_ARGS="-l en_US --home-dir=$SCRIPT_DIR/../"
