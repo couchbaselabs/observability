@@ -207,7 +207,7 @@
                 "value": [
                   {
                     "title": "Index Service Overview",
-                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -224,7 +224,7 @@
                 "value": [
                   {
                     "title": "Search Service Overview",
-                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -241,7 +241,25 @@
                 "value": [
                   {
                     "title": "Query Service Overview",
-                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Eventing"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": false,
+                    "title": "Eventing Service Overview",
+                    "url": "/d/R0hxsR2nk/eventing-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
                   }
                 ]
               }
@@ -340,7 +358,7 @@
             "mode": "thresholds"
           },
           "custom": {
-            "align": "left",
+            "align": "center",
             "displayMode": "color-background-solid",
             "filterable": true
           },
@@ -399,7 +417,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -417,7 +435,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/couchbase-cluster-monitor/checkers.html#${__data.fields.ID}"
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -853,7 +871,7 @@
       "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "15s",
   "schemaVersion": 32,
   "style": "dark",
   "tags": [
@@ -865,11 +883,7 @@
     "list": [
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "CMOS container test",
-          "value": "CMOS container test"
-        },
+        "current": {},
         "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "description": null,
@@ -892,11 +906,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "1aaf5319e5791aed9625ba9381ee66c7",
-          "value": "1aaf5319e5791aed9625ba9381ee66c7"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "description": null,
@@ -919,17 +929,13 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "172.29.0.2",
-          "value": "172.29.0.2"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
         "error": null,
         "hide": 0,
-        "includeAll": false,
+        "includeAll": true,
         "label": "Node",
         "multi": false,
         "name": "node",
@@ -946,11 +952,7 @@
       },
       {
         "allValue": null,
-        "current": {
-          "selected": false,
-          "text": "ffd74d7f51618afab87243badc9f59a8",
-          "value": "ffd74d7f51618afab87243badc9f59a8"
-        },
+        "current": {},
         "datasource": null,
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
         "description": null,
@@ -977,7 +979,19 @@
     "from": "now-30m",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "15s",
+      "30s",
+      "1m",
+      "5m",
+      "15m",
+      "30m",
+      "1h",
+      "2h",
+      "1d"
+    ]
+  },
   "timezone": "",
   "title": "Node Overview",
   "uid": "Dx-2iOc7k",
