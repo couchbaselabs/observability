@@ -109,4 +109,4 @@ start_new_nodes "$NUM_NODES" "cbs_server_exp"
 # and if $LOAD=true throw a light (non-zero) load at the cluster to simulate use using cbpillowfight
 configure_servers "$NUM_NODES" "$NUM_CLUSTERS" "$SERVER_USER" "$SERVER_PWD" "$NODE_RAM" "$LOAD" "$OSS_FLAG"
 
-echo "All done. Go to: http://localhost:8080."
+echo "All done. Go to: http://localhost:8080"
