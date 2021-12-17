@@ -88,6 +88,203 @@
       "type": "row"
     },
     {
+      "datasource": "-- Mixed --",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "left",
+            "displayMode": "color-background-solid",
+            "filterable": true
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#55a64bb0",
+                  "index": 0,
+                  "text": "Good"
+                },
+                "10": {
+                  "color": "#ccccdbb0",
+                  "index": 1,
+                  "text": "Info"
+                },
+                "20": {
+                  "color": "#ff780ab0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "transparent",
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ID"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Value"
+            },
+            "properties": [
+              {
+                "id": "links",
+                "value": [
+                  {
+                    "targetBlank": true,
+                    "title": "Checkers Info",
+                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 10,
+        "x": 0,
+        "y": 1
+      },
+      "id": 22,
+      "options": {
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "Status"
+          }
+        ]
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "exemplar": true,
+          "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} >= 0",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "A"
+        },
+        {
+          "cacheDurationSeconds": 5,
+          "datasource": "Alertmanager API",
+          "fields": [
+            {
+              "jsonPath": "[$[*].labels.health_check_id]",
+              "language": "jsonata",
+              "name": "id"
+            },
+            {
+              "jsonPath": "[$[*].labels.health_check_name]",
+              "language": "jsonata",
+              "name": "name"
+            },
+            {
+              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]",
+              "language": "jsonata",
+              "name": "Value"
+            },
+            {
+              "jsonPath": "[$[*].labels.node]",
+              "language": "jsonata",
+              "name": "node_name"
+            }
+          ],
+          "hide": false,
+          "method": "GET",
+          "queryParams": "",
+          "refId": "B",
+          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=kind=node&filter=cluster=${cluster:querystring}&filter=node=~\"${node:regex}(?::[0-9]*)$\""
+        }
+      ],
+      "title": "Health Check Warnings",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true,
+              "__name__": true,
+              "cluster_name": true,
+              "cluster_uuid": true,
+              "instance": true,
+              "job": true,
+              "node_name": false,
+              "node_uuid": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value": 10,
+              "__name__": 1,
+              "cluster_name": 2,
+              "cluster_uuid": 3,
+              "id": 4,
+              "instance": 5,
+              "job": 6,
+              "name": 8,
+              "node_name": 7,
+              "node_uuid": 9
+            },
+            "renameByName": {
+              "Value": "Status",
+              "__name__": "",
+              "id": "ID",
+              "name": "Name",
+              "node_name": "Node"
+            }
+          }
+        }
+      ],
+      "type": "table"
+    },
+    {
       "datasource": "JSON API",
       "description": "",
       "fieldConfig": {
@@ -110,8 +307,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 10,
-        "x": 0,
+        "w": 14,
+        "x": 10,
         "y": 1
       },
       "id": 12,
@@ -268,10 +465,10 @@
         ]
       },
       "gridPos": {
-        "h": 10,
+        "h": 12,
         "w": 14,
         "x": 10,
-        "y": 1
+        "y": 4
       },
       "id": 20,
       "options": {
@@ -351,16 +548,16 @@
       "type": "stat"
     },
     {
-      "datasource": "-- Mixed --",
+      "datasource": null,
+      "description": "The history of checkers that had values other than \"Good\" in the selected timeframe (alerts are not shown).",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": "center",
-            "displayMode": "color-background-solid",
-            "filterable": true
+            "fillOpacity": 40,
+            "lineWidth": 0
           },
           "mappings": [
             {
@@ -376,7 +573,7 @@
                   "text": "Info"
                 },
                 "20": {
-                  "color": "#ff780ab0",
+                  "color": "#ff9830b0",
                   "index": 2,
                   "text": "Warning"
                 },
@@ -386,7 +583,7 @@
                   "text": "Alert"
                 },
                 "-1": {
-                  "color": "transparent",
+                  "color": "#808080",
                   "index": 4,
                   "text": "Missing"
                 }
@@ -404,129 +601,44 @@
             ]
           }
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ID"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": [
-              {
-                "id": "links",
-                "value": [
-                  {
-                    "targetBlank": true,
-                    "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/cmos/cmos/0.1/health-checks.html#${__data.fields.ID}"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
-        "h": 7,
+        "h": 8,
         "w": 10,
         "x": 0,
-        "y": 4
+        "y": 8
       },
-      "id": 22,
+      "id": 24,
       "options": {
-        "showHeader": true,
-        "sortBy": [
-          {
-            "desc": true,
-            "displayName": "Status"
-          }
-        ]
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": false,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        }
       },
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "datasource": "Prometheus",
           "exemplar": true,
-          "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} >= 0",
-          "format": "table",
-          "instant": true,
+          "expr": "multimanager_node_checker_status{cluster_name=~`${cluster:regex}`,node_name=~`${node:regex}(:[0-9]*)?`} and (changes(multimanager_node_checker_status{cluster_name=~`${cluster:regex}`,node_name=~`${node:regex}(:[0-9]*)?`}[$__range]) != 0) or (multimanager_node_checker_status{cluster_name=~`${cluster:regex}`,node_name=~`${node:regex}(:[0-9]*)?`} != 0)",
+          "format": "time_series",
+          "instant": false,
           "interval": "",
-          "legendFormat": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}  ({{node_name}})",
           "refId": "A"
-        },
-        {
-          "cacheDurationSeconds": 5,
-          "datasource": "Alertmanager API",
-          "fields": [
-            {
-              "jsonPath": "$[*].labels.health_check_id",
-              "name": "id"
-            },
-            {
-              "jsonPath": "$[*].labels.health_check_name",
-              "language": "jsonpath",
-              "name": "name"
-            },
-            {
-              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]",
-              "language": "jsonata",
-              "name": "Value"
-            }
-          ],
-          "hide": false,
-          "method": "GET",
-          "queryParams": "",
-          "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=kind=node&filter=cluster=${cluster:querystring}&filter=node=~\"${node:regex}(?::[0-9]*)$\""
         }
       ],
-      "title": "Health Check Warnings",
-      "transformations": [
-        {
-          "id": "merge",
-          "options": {}
-        },
-        {
-          "id": "organize",
-          "options": {
-            "excludeByName": {
-              "Time": true,
-              "__name__": true,
-              "cluster_name": true,
-              "cluster_uuid": true,
-              "instance": true,
-              "job": true,
-              "node_name": true,
-              "node_uuid": true
-            },
-            "indexByName": {},
-            "renameByName": {
-              "Value": "Status",
-              "__name__": "",
-              "id": "ID",
-              "name": "Name"
-            }
-          }
-        }
-      ],
-      "type": "table"
+      "title": "Node Check History",
+      "transformations": [],
+      "type": "state-timeline"
     },
     {
       "datasource": null,
@@ -534,7 +646,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 11
+        "y": 16
       },
       "id": 16,
       "title": "Basic info",
@@ -600,7 +712,7 @@
         "h": 10,
         "w": 10,
         "x": 0,
-        "y": 12
+        "y": 17
       },
       "id": 4,
       "options": {
@@ -682,14 +794,16 @@
         "h": 10,
         "w": 14,
         "x": 10,
-        "y": 12
+        "y": 17
       },
       "id": 10,
       "options": {
         "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+          "calcs": [
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right"
         },
         "tooltip": {
           "mode": "single"
@@ -700,7 +814,7 @@
           "exemplar": true,
           "expr": "sysproc_cpu_utilization{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
-          "legendFormat": "{{ proc }}",
+          "legendFormat": "{{ proc }} ({{instance}})",
           "refId": "A"
         }
       ],
@@ -767,7 +881,7 @@
         "h": 10,
         "w": 10,
         "x": 0,
-        "y": 22
+        "y": 27
       },
       "id": 6,
       "options": {
@@ -845,14 +959,14 @@
         "h": 10,
         "w": 14,
         "x": 10,
-        "y": 22
+        "y": 27
       },
       "id": 8,
       "options": {
         "legend": {
           "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
+          "displayMode": "table",
+          "placement": "right"
         },
         "tooltip": {
           "mode": "single"
@@ -863,7 +977,7 @@
           "exemplar": true,
           "expr": "sysproc_mem_resident{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
-          "legendFormat": "{{ proc }}",
+          "legendFormat": "{{ proc}} ({{instance}})",
           "refId": "A"
         }
       ],
@@ -929,7 +1043,15 @@
       },
       {
         "allValue": null,
-        "current": {},
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "datasource": null,
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "description": null,
@@ -937,7 +1059,7 @@
         "hide": 0,
         "includeAll": true,
         "label": "Node",
-        "multi": false,
+        "multi": true,
         "name": "node",
         "options": [],
         "query": {
@@ -995,5 +1117,5 @@
   "timezone": "",
   "title": "Node Overview",
   "uid": "Dx-2iOc7k",
-  "version": 2
+  "version": 17
 }
