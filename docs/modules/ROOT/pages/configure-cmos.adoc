@@ -22,21 +22,36 @@ By default, logs can be either provided to standard output `(stdout)` or to serv
 If file output is used for the logs, these files will appear in the `/logs/` directory.
 Further, if desired, these logs can externally be shared via a volume or bind mount.
 
-To mount files into a container, use the `docker -v <source>:<destination>` command, ideally as read-only.
+To mount files into a container, use the `docker -v <source>:<destination>` command.
 For further information, refer to the official documentation:
 - https://docs.docker.com/storage/volumes/
 - https://docs.docker.com/storage/bind-mounts/
 
 == Cluster Monitor
 
-The cluster manager service of the CMOS stack will auto-start and self-configure itself to monitor a Couchbase cluster using the configuration supplied through the following environment variables:
+The cluster monitor exposes a REST API endpoint from the container so that it can be used externally to add/remove Couchbase clusters.
 
-- `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`: The username for the Couchbase cluster to monitor.
-- `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`: The password for the Couchbase cluster to monitor.
-- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`: The endpoint of the Couchbase cluster to monitor.
+The cluster monitor can be configured via a bespoke REST API: `curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"`
 
-The cluster manager  exposes a REST API endpoint from the container so that it can be used externally to add/remove Couchbase clusters. 
-The cluster monitor is also capable of running any scripts found in `/etc/healthcheck/` folder to perform health checks on the Couchbase cluster.
+- `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`: The username for the cluster monitor tool.
+- `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`: The password for the cluster monitor tool.
+- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`: The endpoint of the cluster monitor tool.
+- `COUCHBASE_USER=${COUCHBASE_USER:-Administrator}`: The username for accesing the Couchbase cluster.
+- `COUCHBASE_PWD=${COUCHBASE_PWD:-password`: The password for accesing the Couchbase cluster.
+- `COUCHBASE_ENDPOINT=${COUCHBASE_PWD:-http://db2:8091`: This should be set to a node that you want to monitor in a Couchbase cluster.
+
+As an example to configure a new cluster node to be monitored:
+
+[console]
+----
+CLUSTER_MONITOR_USER=admin
+CLUSTER_MONITOR_PWD=password
+CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port couchbase-grafana 7196)
+COUCHBASE_USER=Administrator
+COUCHBASE_PWD=password
+COUCHBASE_ENDPOINT=http://db2:8091
+curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"
+----
 
 == Prometheus
 
@@ -69,6 +84,10 @@ PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/promethe
 
 === Endpoints
 
+[NOTE]
+This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
+You can use CMOS UI to perform the same using the "Add Cluster" option present on the landing page.
+
 In CMOS, a https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[file-based service discovery^] approach is used to support adding/removing endpoints.
 These endpoints are used to dynamically scrape metrics.
 
@@ -77,8 +96,6 @@ These endpoints are created for each service by adding a JSON file to the `${PRO
 
 To add Couchbase Server endpoints, create a similar JSON format file like the example in the `/etc/prometheus/couchbase/custom/` directory mounted on the container.
 In order to always stay current with the system state, this file is periodically rescanned to add or remove targets.
-
-While this enables the addition of a new scrape target, it will not automatically add dashboards to Grafana. The dashboards will need to be added manually for the relevant scrape target.
 
 [console]
 ----
@@ -98,16 +115,13 @@ While this enables the addition of a new scrape target, it will not automaticall
 You can set the authentication credentials for your Couchbase Server clusters using the `$CB_SERVER_AUTH_USER` and `$CB_SERVER_AUTH_PASSWORD` environment variables.
 Note that currently we do not support using different credentials for multiple clusters.
 
-[NOTE]
-This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
-You can use CMOS UI to perform the same using the "Add Cluster" option present on the landing page.
 
 .Add cluster image
 image::add-cluster-vm.png[]
 
 == Loki
 
-Configuration file for the log aggregation system Loki is present in the YAML file located at  `/etc/loki/local-config.yaml` inside the container.
+Configuration file for the log aggregation system Loki is present in the YAML file located at  `/etc/loki/config.yaml` inside the container.
 You can update  the environment variable to change the location of the config file or update the config file to change the properties of Loki accordingly.
 
 [console]
@@ -200,7 +214,7 @@ image::prometheus-alert-rules.png[]
 .Alerts image
 image::prometheus-alerts.png[]
 
-== Alert manager
+== Alertmanager
 
 By default the CMOS Alertmanager is enabled and Prometheus forwards the alerts to it.
 Additional alert managers can be specified by using the same `<file_sd_config>` syntax in  the `/etc/prometheus/alertmanager/custom/` directory.
