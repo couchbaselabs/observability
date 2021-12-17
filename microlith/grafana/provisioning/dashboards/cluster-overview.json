@@ -1809,7 +1809,7 @@
                 "value": 0
               },
               {
-                "color": "#c8c8ceb0",
+                "color": "#ccccdbb0",
                 "value": 10
               },
               {
@@ -2256,13 +2256,289 @@
       "type": "table"
     },
     {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 40,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#55a64bb0",
+                  "index": 0,
+                  "text": "Good"
+                },
+                "10": {
+                  "color": "#ccccdbb0",
+                  "index": 1,
+                  "text": "Info"
+                },
+                "20": {
+                  "color": "#ff9830b0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "#808080",
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 7,
+        "x": 0,
+        "y": 29
+      },
+      "id": 120,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": false,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_cluster_checker_status{cluster_name=~`${cluster:regex}`} and (changes(multimanager_cluster_checker_status{cluster_name=~`${cluster:regex}`}[$__range]) > 0) or (multimanager_cluster_checker_status{cluster_name=~`${cluster:regex}`} > 0)",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Cluster Check History",
+      "transformations": [],
+      "type": "state-timeline"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 40,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#55a64bb0",
+                  "index": 0,
+                  "text": "Good"
+                },
+                "10": {
+                  "color": "#ccccdbb0",
+                  "index": 1,
+                  "text": "Info"
+                },
+                "20": {
+                  "color": "#ff9830b0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "#808080",
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 7,
+        "y": 29
+      },
+      "id": 121,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": false,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_node_checker_status{cluster_name=~`${cluster:regex}`} and (changes(multimanager_node_checker_status{cluster_name=~`${cluster:regex}`}[$__range]) > 0) or (multimanager_node_checker_status{cluster_name=~`${cluster:regex}`} > 0)",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}  ({{node_name}})",
+          "refId": "A"
+        }
+      ],
+      "title": "Node Check History",
+      "transformations": [],
+      "type": "state-timeline"
+    },
+    {
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "fillOpacity": 40,
+            "lineWidth": 0
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#55a64bb0",
+                  "index": 0,
+                  "text": "Good"
+                },
+                "10": {
+                  "color": "#ccccdbb0",
+                  "index": 1,
+                  "text": "Info"
+                },
+                "20": {
+                  "color": "#ff9830b0",
+                  "index": 2,
+                  "text": "Warning"
+                },
+                "30": {
+                  "color": "#e02f44b0",
+                  "index": 3,
+                  "text": "Alert"
+                },
+                "-1": {
+                  "color": "#808080",
+                  "index": 4,
+                  "text": "Missing"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 9,
+        "x": 15,
+        "y": 29
+      },
+      "id": 122,
+      "options": {
+        "alignValue": "left",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "mergeValues": false,
+        "rowHeight": 0.9,
+        "showValue": "never",
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "multimanager_bucket_checker_status{cluster_name=~`${cluster:regex}`} and (changes(multimanager_bucket_checker_status{cluster_name=~`${cluster:regex}`}[$__range]) > 0) or (multimanager_bucket_checker_status{cluster_name=~`${cluster:regex}`} > 0)",
+          "format": "time_series",
+          "instant": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}} ({{bucket}})",
+          "refId": "A"
+        }
+      ],
+      "title": "Bucket Check History",
+      "transformations": [],
+      "type": "state-timeline"
+    },
+    {
       "collapsed": false,
       "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 29
+        "y": 39
       },
       "id": 110,
       "panels": [],
@@ -2333,7 +2609,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 30
+        "y": 40
       },
       "id": 114,
       "options": {
@@ -2419,7 +2695,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 30
+        "y": 40
       },
       "id": 116,
       "options": {
@@ -2454,7 +2730,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 40
+        "y": 50
       },
       "id": 16,
       "panels": [],
@@ -2514,7 +2790,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 41
+        "y": 51
       },
       "id": 28,
       "options": {
@@ -2593,7 +2869,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 41
+        "y": 51
       },
       "id": 102,
       "options": {
@@ -2688,7 +2964,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 51
+        "y": 61
       },
       "id": 107,
       "options": {
@@ -2767,7 +3043,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 51
+        "y": 61
       },
       "id": 108,
       "options": {
@@ -2816,7 +3092,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 61
+        "y": 71
       },
       "id": 41,
       "panels": [],
@@ -2880,7 +3156,7 @@
         "h": 10,
         "w": 12,
         "x": 0,
-        "y": 62
+        "y": 72
       },
       "id": 20,
       "options": {
@@ -2959,7 +3235,7 @@
         "h": 10,
         "w": 12,
         "x": 12,
-        "y": 62
+        "y": 72
       },
       "id": 24,
       "options": {
