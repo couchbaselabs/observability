@@ -42,5 +42,6 @@ endif::env-packaged[]
 
 .Further Information
 * xref:prerequisite-and-setup.adoc[Pre-requisites]
+* xref:health-checks.adoc[Health Checks]
 * xref:licensing.adoc[Licensing]
 * xref:support.adoc[Support]
