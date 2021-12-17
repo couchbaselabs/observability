@@ -1,4 +1,4 @@
-personal_ws-1.1 en 71
+personal_ws-1.1 en 73
 AGPL
 CAO
 CMOS
@@ -70,3 +70,5 @@ SDKs
 DCP
 rebalance
 txt
+Couchbase's
+JIRA
