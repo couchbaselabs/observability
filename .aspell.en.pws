@@ -64,9 +64,13 @@ html
 sanitization
 Loki
 Alertmanager
+txt
+Promtail
 PagerDuty
 de
 SDKs
 DCP
 rebalance
 txt
+VM
+ClusterRole
