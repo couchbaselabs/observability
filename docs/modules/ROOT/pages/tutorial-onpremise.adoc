@@ -5,7 +5,7 @@ include::partial$tutorial.adoc[]
 == Overview
 
 Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry standard tooling to observe the state of a Couchbase cluster.
-CMOS can be deployed in a VM using Docker or any container runtime.
+CMOS can be deployed using Docker or any container runtime.
 
 ifdef::env-github[]
 :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
@@ -28,7 +28,7 @@ docker run --name=cmos --rm -d -P couchbase/observability-stack:latest
 
 ==== Port Configuration
 
-Couchbase Monitoring and Observability Stack contains multiple services, each running on their own default port such as Grafana(3000), Prometheus(9090), Alert manager(9093), Landing page(8080), Cluster monitor(77196), and Loki(3100).
+CMOS contains multiple services, each running on their own default port such as Grafana (3000), Prometheus (9090), Alertmanager (9093), Landing page (8080), and Loki (3100).
 You can also access different services using path-based routing through the landing page.
 
 === Verification
@@ -98,6 +98,12 @@ image::prometheus-alerts.png[]
 
 Loki, which is shipped with Grafana, allows access to logs of various components.
 You can configure it via Configuration > Data sources > Loki > Explore.
+
+[NOTE]
+====
+You will need to install and configure Fluent Bit on your Couchbase Server nodes before logs will be sent to Loki.
+Refer to the xref:deployment-fluentbit.adoc[Fluent Bit install guidance].
+====
 
 .Loki explore dashboard image
 image::loki-explore-dashboard.png[]
