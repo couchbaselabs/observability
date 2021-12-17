@@ -196,11 +196,6 @@
 <h1 class="page">On-premise example</h1>
 <div id="preamble">
 <div class="sectionbody">
-<div class="quoteblock abstract">
-<blockquote>
-CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server exposed on port 8080 to provide a landing page.
-</blockquote>
-</div>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -209,10 +204,162 @@ CMOS is deployed to monitor an on-premise cluster with a simple Nginx web server
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Tutorials are accurate at the time of writing but rely heavily on third party software.
-Tutorials are provided to demonstrate how a particular problem may be solved.
-Use of third party software is not supported by Couchbase.
+<p>Tutorials are provided to demonstrate how a particular problem may be solved.
+Tutorials are accurate at the time of writing but rely heavily on third party software.
+The third party software is not directly supported by Couchbase.
 For further help in the event of a problem, contact the relevant software maintainer.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry standard tooling to observe the state of a Couchbase cluster.
+CMOS can be deployed using Docker or any container runtime.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/microlith-runtime.png" alt="microlith runtime">
+</div>
+<div class="title">Figure 1. Microlith runtime image</div>
+</div>
+<div class="sect2">
+<h3 id="_installation"><a class="anchor" href="#_installation"></a>Installation</h3>
+<div class="paragraph">
+<p>At this moment, we only support deployment of CMOS using containers.
+Use docker to start the CMOS container.
+Alternatively, you can also use Linux container tools such as <a href="https://podman.io" target="_blank" rel="noopener">Podman</a>.
+To install CMOS run the command below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker run --name=cmos --rm -d -P couchbase/observability-stack:latest</code></pre>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_port_configuration"><a class="anchor" href="#_port_configuration"></a>Port Configuration</h4>
+<div class="paragraph">
+<p>CMOS contains multiple services, each running on their own default port such as Grafana (3000), Prometheus (9090), Alertmanager (9093), Landing page (8080), and Loki (3100).
+You can also access different services using path-based routing through the landing page.</p>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_verification"><a class="anchor" href="#_verification"></a>Verification</h3>
+<div class="paragraph">
+<p>You can verify whether the CMOS container is up and running by navigating to the CMOS landing page on port 8080.</p>
+</div>
+<div class="paragraph">
+<p>To check the port mapping in your host, run the command below:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker container port cmos 8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># output
+0.0.0.0:55124
+:::55124</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/cmos-landing.png" alt="cmos landing">
+</div>
+<div class="title">Figure 2. CMOS landing image</div>
+</div>
+<div class="sect3">
+<h4 id="_add_cluster"><a class="anchor" href="#_add_cluster"></a>Add Cluster</h4>
+<div class="paragraph">
+<p>If you don&#8217;t have an existing Couchbase cluster setup, you can install it from <a href="https://docs.couchbase.com/server/current/install/getting-started-docker.html#section_jvt_zvj_42b" target="_blank" rel="noopener">here</a>.
+To monitor a Couchbase cluster, you can add it using the add cluster option on the landing page.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/add-cluster-vm.png" alt="add cluster vm">
+</div>
+<div class="title">Figure 3. Add cluster image</div>
+</div>
+<div class="paragraph">
+<p>As soon as you add a cluster, you will see a Grafana URL where you can view inventory and metrics of Couchbase server clusters.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/couchbase-inventory-vm.png" alt="couchbase inventory vm">
+</div>
+<div class="title">Figure 4. Couchbase inventory image</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_prometheus"><a class="anchor" href="#_prometheus"></a>Prometheus</h4>
+<div class="paragraph">
+<p>From the landing page, you can go to the prometheus target page and check if the added cluster target is up or down.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-target-vm.png" alt="prometheus target vm">
+</div>
+<div class="title">Figure 5. Prometheus target image</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_grafana"><a class="anchor" href="#_grafana"></a>Grafana</h4>
+<div class="paragraph">
+<p>From the landing page, you can go to Grafana and check the graphs.
+CMOS comes with pre-installed dashboards to monitor the Couchbase cluster.
+Dashboards with tag <code>couchbase-7</code> are relevant for Couchbase server version 7+.
+For more information, check the Grafana configuration section.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/couchbase-cluster-overview-vm.png" alt="couchbase cluster overview vm">
+</div>
+<div class="title">Figure 6. Couchbase cluster overview image</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_alerts"><a class="anchor" href="#_alerts"></a>Alerts</h4>
+<div class="paragraph">
+<p>CMOS comes with pre-installed alert rules to monitor the Couchbase cluster.
+Navigate to the Prometheus UI to see the rules, or Alertmanager to see the alerts.
+For more information check the prometheus and alerting configuration section.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-alert-rules.png" alt="prometheus alert rules">
+</div>
+<div class="title">Figure 7. Alert rules image</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-alerts.png" alt="prometheus alerts">
+</div>
+<div class="title">Figure 8. Alerts image</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_loki"><a class="anchor" href="#_loki"></a>Loki</h4>
+<div class="paragraph">
+<p>Loki, which is shipped with Grafana, allows access to logs of various components.
+You can configure it via Configuration &gt; Data sources &gt; Loki &gt; Explore.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>You will need to install and configure Fluent Bit on your Couchbase Server nodes before logs will be sent to Loki.
+Refer to the <a href="deployment-fluentbit.html" class="page">Fluent Bit install guidance</a>.</p>
 </div>
 </td>
 </tr>
@@ -220,186 +367,33 @@ For further help in the event of a problem, contact the relevant software mainta
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="_images/microlith-runtime.png" alt="microlith runtime">
+<img src="_images/loki-explore-dashboard.png" alt="loki explore dashboard">
 </div>
-<div class="title">Figure 1. Microlith overview</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_usage"><a class="anchor" href="#_usage"></a>Usage</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To run refer to the <a href="quickstart.html" class="page">quick start guide</a> for full details:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker run --name=cmos --rm -d -P couchbase-observability-stack</code></pre>
-</div>
+<div class="title">Figure 9. Loki explore dashboard image</div>
 </div>
 <div class="paragraph">
-<p>Use <code>docker ps</code> or <code>docker inspect X</code> to see the local ports exposed, the mapping to <code>3000</code> is the Grafana one so to get this:</p>
+<p>From the Log browser, you can enter a custom Loki query or select appropriate labels to see the logs.</p>
 </div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker container port couchbase-grafana 3000
-0.0.0.0:55124
-:::55124</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Browse to <code>localhost:55124</code> and log in with the default credentials of <code>admin:password</code> for Grafana.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_configuration_options"><a class="anchor" href="#_configuration_options"></a>Configuration options</h2>
-<div class="sectionbody">
 <div class="imageblock">
 <div class="content">
-<img src="_images/microlith-config.png" alt="microlith config">
+<img src="_images/loki-log-browser.png" alt="loki log browser">
 </div>
-<div class="title">Figure 2. Microlith configuration</div>
-</div>
-<div class="paragraph">
-<p>To disable various services from being run, set a variable (<code>docker run -e var &#8230;&#8203;</code>) called <code>DISABLE_X</code> where X is an uppercase version of their <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/entrypoints" target="_blank" rel="noopener">entrypoint name</a> (minus any <code>.sh</code> suffix). For example, to disable <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/entrypoints/loki.sh" target="_blank" rel="noopener">Loki</a> you would set <code>DISABLE_LOKI</code>.</p>
+<div class="title">Figure 10. Loki log browser image</div>
 </div>
 <div class="paragraph">
-<p>Logs can be either provided to <code>stdout</code> by default or too service-based logs by setting <code>ENABLE_LOG_TO_FILE</code>, these will then appear into the <code>/logs/</code> directory which can be exposed via a volume or bind mount externally if needs be.</p>
+<p>After that select the “Show logs” to view logs.
+You can also build  <a href="https://grafana.com/docs/grafana/latest/getting-started/getting-started/#step-3-create-a-dashboard" target="_blank" rel="noopener">custom Grafana dashboards</a> based on your needs.</p>
 </div>
-<div class="paragraph">
-<p>To mount files into a container use the <code>docker -v &lt;source&gt;:&lt;destination&gt;</code> syntax, ideally as read-only.
-Refer to the official documentation for options available: <a href="https://docs.docker.com/storage/volumes/" class="bare">https://docs.docker.com/storage/volumes/</a> or <a href="https://docs.docker.com/storage/bind-mounts/" class="bare">https://docs.docker.com/storage/bind-mounts/</a></p>
-</div>
-<div class="sect2">
-<h3 id="_environment_variables"><a class="anchor" href="#_environment_variables"></a>Environment variables</h3>
-<div class="listingblock">
+<div class="imageblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console"># Health check specific configuration
-export CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}
-export CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}
-export CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}
-
-# Prometheus configuration
-export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
-export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
-export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
-export PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
-
-# Couchbase Server scrape credentials
-export CB_SERVER_AUTH_USER=${CB_SERVER_AUTH_USER:-Administrator}
-export CB_SERVER_AUTH_PASSWORD=${CB_SERVER_AUTH_PASSWORD:-password}
-
-# Alert manager configuration
-export ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
-export ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}
-
-# Loki configuration
-export LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/config.yml}
-
-# Microlith configuration
-export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}</code></pre>
+<img src="_images/loki-logs.png" alt="loki logs">
+</div>
+<div class="title">Figure 11. Loki logs image</div>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_prometheus"><a class="anchor" href="#_prometheus"></a>Prometheus</h3>
-<div class="paragraph">
-<p>Prometheus has various configuration options exposed, almost entirely via files unfortunately but that is the only real way.
-This is handled by mounting the configuration you want into the container, e.g. from a <code>ConfigMap</code> in Kubernetes or volumes/bind mounts locally.</p>
-</div>
-<div class="paragraph">
-<p>Note that to pick up changes to configuration we may need to reload config files via the <code>reload</code> endpoint: <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration" class="bare">https://prometheus.io/docs/prometheus/latest/configuration/configuration/#configuration</a></p>
-</div>
-<div class="sect3">
-<h4 id="_end_points"><a class="anchor" href="#_end_points"></a>End points</h4>
-<div class="paragraph">
-<p>The [file-based service discovery](<a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config" class="bare">https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config</a>) approach is used to support adding/removing end points to scrape metrics for dynamically.</p>
-</div>
-<div class="paragraph">
-<p>The microlith will construct a set of dynamic end points to monitor internally based on which services are disabled above. These endpoints are created by each entry point adding a JSON file to the <code>${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}</code> directory when it is run.</p>
-</div>
-<div class="paragraph">
-<p>To add Couchbase Server end points, create a similar JSON format file to the <a href="https://github.com/couchbaselabs/observability/blob/main/examples/containers/dynamic/prometheus/couchbase-servers/targets.json" target="_blank" rel="noopener">example</a> in the <code>/etc/prometheus/couchbase/custom/</code> directory mounted on the container. This is periodically rescanned to add or remove targets (it should match the current state always).</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">[
-    {
-      "targets": [
-        "exporter:9091"
-      ],
-      "labels": {
-        "job": "db1",
-        "container": "exporter"
-      }
-    }
-]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>You can set the authentication credentials for your Couchbase Server clusters using the <code>$CB_SERVER_AUTH_USER</code> and <code>$CB_SERVER_AUTH_PASSWORD</code> environment variables. Note that currently we do not support using different credentials for multiple clusters.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_alerting_rules"><a class="anchor" href="#_alerting_rules"></a>Alerting rules</h4>
-<div class="paragraph">
-<p>We want to be able to override in two specific ways:
-. Extend: provide Couchbase default rules and add custom ones.
-. Replace: only provide custom rules.</p>
-</div>
-<div class="paragraph">
-<p>To support this there are two locations to be used:
-. <code>/etc/prometheus/alerting/custom/</code>
-. <code>/etc/prometheus/alerting/</code></p>
-</div>
-<div class="paragraph">
-<p>The first only adds whilst the second will replace the defaults.
-Of course you can also just specify files rather than the full directory which can be useful to inhibit default rules by removing them from the file.</p>
-</div>
-<div class="paragraph">
-<p>We also support tuning of rules by environment variable.
-When Prometheus is launched, it will run <code>envsubst</code> on the files with all available environment variables then substituted.
-Be aware that if you use a variable then you cannot currently default it other than providing that default to the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh" target="_blank" rel="noopener">entrypoint</a> script for substitution: a variable must be defined.</p>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_alert_manager"><a class="anchor" href="#_alert_manager"></a>Alert manager</h3>
-<div class="paragraph">
-<p>From a Prometheus perspective we always assume there is a local Alert Manager target so this may report as failed if disabled.</p>
-</div>
-<div class="paragraph">
-<p>Additional alert managers can be specified by adding using the same <code>&lt;file_sd_config&gt;</code> <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config" target="_blank" rel="noopener">syntax</a> to the <code>/etc/prometheus/alertmanager/custom/</code> directory.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_cluster_monitor"><a class="anchor" href="#_cluster_monitor"></a>Cluster Monitor</h3>
-<div class="paragraph">
-<p>The cluster manager will auto-start and configure itself with credentials supplied via the following environment variables:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}</code></p>
-</li>
-<li>
-<p><code>CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}</code></p>
-</li>
-<li>
-<p><code>CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}</code></p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The cluster manager exposes its REST API from the container so this can be used externally to add/remove Couchbase clusters. We also support running any scripts found in <code>/etc/healthcheck</code> to do it.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next steps</h2>
-<div class="sectionbody">
+<h3 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next steps</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -411,10 +405,8 @@ Be aware that if you use a variable then you cannot currently default it other t
 <li>
 <p><a href="cluster-monitor.html" class="page">Couchbase Cluster Monitor component</a></p>
 </li>
-<li>
-<p><a href="deployment-onpremise.html" class="page">On-premise deployment</a></p>
-</li>
 </ul>
+</div>
 </div>
 </div>
 </div>
