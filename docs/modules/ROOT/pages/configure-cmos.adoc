@@ -29,16 +29,20 @@ For further information, refer to the official documentation:
 
 == Cluster Monitor
 
+[NOTE]
+This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
+You can use CMOS UI to perform the same using the "Add Cluster" option present on the landing page.
+
 The cluster monitor exposes a REST API endpoint from the container so that it can be used externally to add/remove Couchbase clusters.
 
 The cluster monitor can be configured via a bespoke REST API: `curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"`
 
 - `CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}`: The username for the cluster monitor tool.
 - `CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}`: The password for the cluster monitor tool.
-- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:7196}`: The endpoint of the cluster monitor tool.
+- `CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:8080/couchbase}`: The endpoint of the cluster monitor tool.
 - `COUCHBASE_USER=${COUCHBASE_USER:-Administrator}`: The username for accesing the Couchbase cluster.
-- `COUCHBASE_PWD=${COUCHBASE_PWD:-password`: The password for accesing the Couchbase cluster.
-- `COUCHBASE_ENDPOINT=${COUCHBASE_PWD:-http://db2:8091`: This should be set to a node that you want to monitor in a Couchbase cluster.
+- `COUCHBASE_PWD=${COUCHBASE_PWD:-password}`: The password for accesing the Couchbase cluster.
+- `COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db2:8091}`: This should be set to a node that you want to monitor in a Couchbase cluster.
 
 As an example to configure a new cluster node to be monitored:
 
@@ -83,10 +87,6 @@ PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/promethe
 ----
 
 === Endpoints
-
-[NOTE]
-This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
-You can use CMOS UI to perform the same using the "Add Cluster" option present on the landing page.
 
 In CMOS, a https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config[file-based service discovery^] approach is used to support adding/removing endpoints.
 These endpoints are used to dynamically scrape metrics.
