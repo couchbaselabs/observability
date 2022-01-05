@@ -19,3 +19,21 @@ groups:
         title: Could not collect stats from {{ $labels.instance }} (cluster {{ $labels.cluster }})
         description: Statistics collection failed from node {{ $labels.instance }}. Either it is down or its CPU is overloaded.
         remediation: Verify the node's status and examine other metrics and health check results.
+
+    - alert: CB90041-cpuStolenRate
+      expr: |
+        sys_cpu_stolen_rate{instance=".*"} > 3
+      for: 30s
+      labels:
+        job: couchbase_prometheus
+        kind: node
+        health_check_id: CB90041
+        health_check_name: cpuStolenRate
+        cluster: '{{ $labels.cluster }}'
+        node: '{{ $labels.instance }}'
+        severity: warning
+      annotations:
+        title: CPU stolen rate is above the threshold on {{ $labels.instance }} (cluster {{ $labels.cluster }})
+        description: The percentage of time that the virtual CPU on node {{ $labels.instance }} is waiting for a real CPU is above a certain threshold.
+          This can be due to the fact that a virtual Machine is undersized or the hypervisor is overcommited.
+        remediation: Increase the number of resources available to the VM.
