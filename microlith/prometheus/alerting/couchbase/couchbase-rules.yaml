@@ -34,6 +34,6 @@ groups:
         severity: warning
       annotations:
         title: High CPU steal rate on {{ $labels.instance }} (cluster {{ $labels.cluster }})
-        description: The percentage of time that the virtual CPU on node {{ $labels.instance }} is waiting for a real CPU is above a certain threshold.
+        description: The percentage of time that the virtual CPU on node {{ $labels.instance }} is waiting for a real CPU is above 3%.
           This can be due to the fact that a virtual Machine is undersized or the hypervisor is overcommited.
-        remediation: Increase the resources available to the VM.
+        remediation: Increase the resources available to the VM or reduce the number of VMs on the host machine.
