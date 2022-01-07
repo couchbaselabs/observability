@@ -34,7 +34,18 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 
 *Remediation*: Increase resources available to virtual machine.
 
-*Further Reading*: https://support.couchbase.com/hc/en-us/articles/213960606-Virtualization-Considerations[Virtualisation Considerations]
+*Further Reading*: https://docs.couchbase.com/server/current/install/best-practices-vm.html[Virtualisation Best Practices]
+
+[#CB90043]
+=== Disk Commit Fail (CB90043)
+
+*Background*: A disk commit failure is when Couchbase Server cannot write data from memory to the file system.
+
+*Condition*: An item failed to be committed from memory to disk.
+
+*Remediation*: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
 
 // end::group-node[]
 
