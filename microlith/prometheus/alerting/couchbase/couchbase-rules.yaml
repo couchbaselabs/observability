@@ -53,5 +53,5 @@ groups:
         severity: critical
       annotations:
         title: "Disk Commit Fail on bucket: {{ $labels.bucket }}"
-        description: A disk commit has failed on {{ $labels.bucket }} (cluster {{ $labels.cluster }}, node {{ $labels.hostname }}).
+        description: A disk commit has failed on {{ $labels.bucket }} (cluster {{ $labels.cluster }}, node {{ $labels.instance }}).
         remediation: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
