@@ -41,9 +41,9 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 
 *Background*: A disk commit failure is when Couchbase Server cannot write data from memory to the file system.
 
-*Condition*: An item failed to be committed from memory to disk.
+*Condition*: An item failed to be written to disk.
 
-*Remediation*: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
+*Remediation*: Review your infrastructure for signs of corruption or any other issues, or contact Couchbase Technical Support.
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
 
