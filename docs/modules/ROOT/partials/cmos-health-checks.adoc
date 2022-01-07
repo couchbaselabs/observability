@@ -43,7 +43,7 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 
 *Condition*: An item failed to be written to disk.
 
-*Remediation*: Review your infrastructure for signs of corruption or any other issues, or contact Couchbase Technical Support.
+*Remediation*: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
 

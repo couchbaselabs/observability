@@ -54,4 +54,4 @@ groups:
       annotations:
         title: "Disk Commit Fail on bucket: {{ $labels.bucket }}"
         description: A disk commit has failed in the last 24 hours on {{ $labels.bucket }} (cluster {{ $labels.cluster }}, node {{ $labels.hostname }}).
-        remediation: Review your infrastructure for signs of corruption or any other issues, or contact Couchbase Technical Support.
+        remediation: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
