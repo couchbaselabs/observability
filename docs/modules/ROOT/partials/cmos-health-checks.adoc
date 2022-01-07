@@ -34,7 +34,7 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 
 *Remediation*: Increase resources available to virtual machine.
 
-*Further Reading*: https://support.couchbase.com/hc/en-us/articles/213960606-Virtualization-Considerations[Virtualisation Considerations]
+*Further Reading*: https://docs.couchbase.com/server/current/install/best-practices-vm.html[Virtualisation Best Practices]
 
 // end::group-node[]
 
