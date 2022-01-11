@@ -78,7 +78,7 @@ groups:
       
       - alert: CB90044-babysitterManagedProcessCrash
         expr: |
-          count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | label_format cluster=couchbase_cluster | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process>" [1h]) > 0
+          count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | label_format cluster=couchbase_cluster | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -89,7 +89,8 @@ groups:
           cluster: '{{ $labels.cluster }}'
           node: '{{ $labels.hostname }}'
           process: '{{ $labels.process }}'
+          reason: '{{$labels.reason}}'
         annotations:
           title: Process managed by babysitter has crashed ({{ $labels.hostname }})
-          description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }}"
+          description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }} - {{$labels.reason}}"
           remediation: Contact Couchbase Technical Support.
