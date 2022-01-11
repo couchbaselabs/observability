@@ -52,13 +52,11 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 
 *Background*: Babysitter is part of Couchbase Server's cluster manager which is responsible for maintaining a variety of Couchbase Server processes.
 If any of the processes managed by the babysitter die, it is responsible for restarting them.
-A process can crash for a number of reasons, so if it happens once it is not indicative of a Couchbase Server issue.
-However if it is happening repeatedly or you do notice disruption in your cluster 
 
 *Condition*: A process managed by babysitter crashes.
 
 *Remediation*: A process can crash for a number of reasons, so if it happens once it is not indicative of a Couchbase Server issue.
-However if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
+However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html[Cluster Manager]
 
