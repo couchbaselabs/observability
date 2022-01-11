@@ -75,7 +75,7 @@ groups:
           title: Long DCP Names (MB-34280) (cluster {{ $labels.couchbase_cluster }})
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
-      
+          
       - alert: CB90044-babysitterManagedProcessCrash
         expr: |
           count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | label_format cluster=couchbase_cluster | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
