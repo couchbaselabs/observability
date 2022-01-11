@@ -54,7 +54,7 @@ groups:
           health_check_name: longDcpNames
           cluster: '{{ $labels.couchbase_cluster }}'
         annotations:
-          title: DCP Connection Failures due to MB-34280 (cluster ${{ labels.cluster }})
+          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.couchbase_cluster }})
           description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
@@ -72,7 +72,7 @@ groups:
           health_check_name: longDcpNames
           cluster: '{{ $labels.couchbase_cluster }}'
         annotations:
-          title: Long DCP Names (MB-34280) (cluster ${{ labels.cluster }})
+          title: Long DCP Names (MB-34280) (cluster {{ $labels.couchbase_cluster }})
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
       
