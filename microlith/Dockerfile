@@ -310,8 +310,6 @@ RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
 EXPOSE 7196 7197
 
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/rules/checker-alerts.yml /etc/prometheus/alerting/couchbase/cluster-monitor-alerts.yml
-
 # TODO (CMOS-230): this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
 RUN mkdir -p /licenses && \
     curl -Lo /licenses/couchbase-cluster-monitor-notices.txt \
@@ -343,9 +341,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
-    mkdir -p /etc/cmos /tmp/support && \
+    mkdir -p /etc/cmos /tmp/support /tmp/loki/scratch && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui /etc/cmos /tmp/support
+    chown -R couchbase:couchbase /data /priv /ui /etc/cmos /tmp/support /tmp/loki
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/
