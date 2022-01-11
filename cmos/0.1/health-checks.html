@@ -267,6 +267,23 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 <p><strong>Further Reading</strong>: <a href="https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html">Storage</a></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90044"><a class="anchor" href="#CB90044"></a>Babysitter Managed Process Crash (CB90043)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: Babysitter is part of Couchbase Server&#8217;s cluster manager which is responsible for maintaining a variety of Couchbase Server processes.
+If any of the processes managed by the babysitter die, it is responsible for restarting them.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: A process managed by babysitter crashes.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: A process can crash for a number of reasons, so if it happens once or twice it is not indicative of a Couchbase Server issue.
+However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.</p>
+</div>
+<div class="paragraph">
+<p><strong>Further Reading</strong>: <a href="https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html">Cluster Manager</a></p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
