@@ -262,8 +262,9 @@ RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     mkdir -p /logs && chmod 777 /logs && \
     mkdir -p /etc/prometheus/couchbase/monitoring/ && chmod 777 /etc/prometheus/couchbase/monitoring/ && \
     mkdir -p /etc/prometheus/couchbase/custom && \
+    mkdir -p /etc/cmos /tmp/support /tmp/loki/scratch && \
     chown -R couchbase:couchbase /entrypoints /logs /etc/prometheus/couchbase/ && \
-    chown -R couchbase:couchbase /data /priv /ui
+    chown -R couchbase:couchbase /data /priv /ui /etc/cmos /tmp/support /tmp/loki
 
 # Location of dynamic target information for Prometheus
 ENV PROMETHEUS_DYNAMIC_INTERNAL_DIR=/etc/prometheus/couchbase/monitoring/

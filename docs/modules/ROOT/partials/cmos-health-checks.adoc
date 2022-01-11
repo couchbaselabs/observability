@@ -24,6 +24,18 @@ However, repeated crashes should be investigated as they may be caused by an und
 
 *Remediation*: Contact Couchbase Technical Support.
 
+[#CB90041]
+=== CPU Steal (CB90041)
+
+*Background*: Steal time is the percentage of time a virtual CPU waits for a real CPU while the hypervisor is servicing another virtual processor.
+In virtual environments, high CPU steal indicates that the virtual machines might be undersized or the hypervisor may be overcommitted.
+
+*Condition*: CPU steal rate is greater than 3%.
+
+*Remediation*: Increase resources available to virtual machine.
+
+*Further Reading*: https://docs.couchbase.com/server/current/install/best-practices-vm.html[Virtualisation Best Practices]
+
 [#CB90042]
 === Segmentation Faults Found (CB90042)
 
@@ -32,6 +44,30 @@ However, repeated crashes should be investigated as they may be caused by an und
 *Condition*: A segmentation fault is found in the `diag` or `couchbase` logs.
 
 *Remediation*: Contact Couchbase Technical Support.
+
+[#CB90043]
+=== Disk Commit Fail (CB90043)
+
+*Background*: A disk commit failure is when Couchbase Server cannot write data from memory to the file system.
+
+*Condition*: An item failed to be written to disk.
+
+*Remediation*: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
+
+[#CB90044]
+=== Babysitter Managed Process Crash (CB90043)
+
+*Background*: Babysitter is part of Couchbase Server's cluster manager which is responsible for maintaining a variety of Couchbase Server processes.
+If any of the processes managed by the babysitter die, it is responsible for restarting them.
+
+*Condition*: A process managed by babysitter crashes.
+
+*Remediation*: A process can crash for a number of reasons, so if it happens once or twice it is not indicative of a Couchbase Server issue.
+However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html[Cluster Manager]
 
 // end::group-node[]
 
