@@ -100,7 +100,7 @@ function capture_cmosinfo() {
 # Exposes a variable $CMOS_HOST with the nginx host:port.
 # All parameters will be passed on to docker before the image.
 function _start_cmos() {
-    docker run --rm -d -p '8080' --name cmos "$@" "$CMOS_IMAGE"
+    docker run --rm -d -p '8080' --name cmos -e 'LOKI_RULER_RESEND_DELAY=5s' -e 'LOKI_RULER_EVALUATION_INTERVAL=5s' -e 'LOKI_ALERTS_INCLUDE_TEST=true' "$@" "$CMOS_IMAGE"
 
     local cmos_port
     cmos_port=$(docker inspect cmos -f '{{with index .NetworkSettings.Ports "8080/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
