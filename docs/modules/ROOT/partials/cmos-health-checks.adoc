@@ -27,7 +27,7 @@ However, repeated crashes should be investigated as they may be caused by an und
 [#CB90042]
 === Segmentation Faults Found (CB90042)
 
-*Background*: If the node Operating System has any segemntation faults this can be indicative of an underlying issue. 
+*Background*: If the node Operating System has any segmentation faults this can be indicative of an underlying issue. 
 
 *Condition*: A segmentation fault is found in the `diag` or `couchbase` logs.
 
