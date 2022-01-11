@@ -55,7 +55,7 @@ If any of the processes managed by the babysitter die, it is responsible for res
 
 *Condition*: A process managed by babysitter crashes.
 
-*Remediation*: A process can crash for a number of reasons, so if it happens once it is not indicative of a Couchbase Server issue.
+*Remediation*: A process can crash for a number of reasons, so if it happens once or twice it is not indicative of a Couchbase Server issue.
 However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html[Cluster Manager]
