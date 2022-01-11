@@ -91,5 +91,5 @@ groups:
           process: '{{ $labels.process }}'
         annotations:
           title: Process managed by babysitter has crashed ({{ $labels.hostname }})
-          description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }} "
+          description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }}"
           remediation: Contact Couchbase Technical Support.
