@@ -75,3 +75,19 @@ groups:
           title: Long DCP Names (MB-34280) (cluster ${{ labels.cluster }})
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
+
+      - alert: CB90042-segmentationFaults
+        expr: sum( (count_over_time({file="diag.log"} |= "segfault") + (count_over_time({file="couchbase.log"} |= "segfault") )>0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node 
+          severity: critical
+          health_check_id: CB90042
+          health_check_name: segmentationFaultsFound
+          cluster: '{{ $labels.couchbase_cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Segmentation Faults ({{ $labels.hostname }})
+          description: Node {{ $labels.hostname }} has experienced segmentation faults. 
+          remediation: Contact Couchbase Technical Support.

@@ -24,6 +24,15 @@ However, repeated crashes should be investigated as they may be caused by an und
 
 *Remediation*: Contact Couchbase Technical Support.
 
+[#CB90042]
+=== Segmentation Faults Found (CB90042)
+
+*Background*: If the node Operating System has any segemntation faults this can be indicative of an underlying issue. 
+
+*Condition*: A segmentation fault is found in the `diag` or `couchbase` logs.
+
+*Remediation*: Contact Couchbase Technical Support.
+
 // end::group-node[]
 
 // tag::group-bucket[]
