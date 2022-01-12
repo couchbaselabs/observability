@@ -81,7 +81,7 @@ groups:
         for: 1m
         labels:
           job: couchbase_fluent_bit
-          kind: node 
+          kind: node
           severity: critical
           health_check_id: CB90042
           health_check_name: segmentationFaultsFound
@@ -89,7 +89,7 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: Segmentation Faults ({{ $labels.hostname }})
-          description: Node {{ $labels.hostname }} has experienced segmentation faults. 
+          description: Node {{ $labels.hostname }} has experienced segmentation faults.
           remediation: Contact Couchbase Technical Support.
 
       - alert: CB90044-babysitterManagedProcessCrash
