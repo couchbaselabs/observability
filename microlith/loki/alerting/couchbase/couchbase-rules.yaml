@@ -76,7 +76,6 @@ groups:
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
-
       - alert: CB90042-segmentationFaults
         expr: sum( (count_over_time({file="diag.log"} |= "segfault" [1h]) + (count_over_time({file="couchbase.log"} |= "segfault" [1h]) )>0
         for: 1m
