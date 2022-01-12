@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Configuration Options :: Couchbase Monitoring and Observability Stack</title>
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/cmos">Couchbase Monitoring and Observability Stack</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="cmos" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Couchbase Monitoring and Observability Stack</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Introduction</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="quickstart.html">Quick start guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architecture</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Components</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-alertmanager.html">Alertmanager</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-grafana.html">Grafana</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-loki.html">Loki</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-prometheus.html">Prometheus</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="configure-cmos.html">CMOS Configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-onpremise.html">On-premise example</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-kubernetes.html">Kubernetes example</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Further Information</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="prerequisite-and-setup.html">Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="health-checks.html">Health Checks</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="licensing.html">Licensing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="support.html">Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Couchbase Monitoring and Observability Stack</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">Couchbase Monitoring and Observability Stack</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
+    <li>Configuration</li>
+    <li><a href="configure-cmos.html">CMOS Configuration</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/configure-cmos.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Configuration Options</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="_images/microlith-runtime.png" alt="microlith runtime">
+</div>
+<div class="title">Figure 1. Microlith configuration image</div>
+</div>
+<div class="paragraph">
+<p>CMOS is designed as a microlith container with several services included in its stack.
+CMOS allows users to control these services in a fine grained manner.
+As shown in the above diagram, you can customize the installation by overriding the default service configuration values using environment variables or by providing a native configuration file for each service.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_disabling_a_service"><a class="anchor" href="#_disabling_a_service"></a>Disabling a Service</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All the services of CMOS stack are enabled by default.
+If you choose to disable a service, this is achieved by setting the corresponding environment variables of the docker container. The naming convention to be followed to disable a service is <code>DISABLE_X</code>, where <code>X</code> is the name of the service (e.g.,<code>DISABLE_ALERT_MANAGER</code>, <code>DISABLE_GRAFANA</code>, <code>DISABLE_JAEGER</code>, <code>DISABLE_LOKI</code>, <code>DISABLE_PROMETHEUS</code> and <code>DISABLE_WEBSERVER</code>).</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_logging"><a class="anchor" href="#_logging"></a>Logging</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default, logs can be either provided to standard output <code>(stdout)</code> or to service-based log files by setting the <code>ENABLE_LOG_TO_FILE</code> configuration value.
+If file output is used for the logs, these files will appear in the <code>/logs/</code> directory.
+Further, if desired, these logs can externally be shared via a volume or bind mount.</p>
+</div>
+<div class="paragraph">
+<p>To mount files into a container, use the <code>docker -v &lt;source&gt;:&lt;destination&gt;</code> command.
+For further information, refer to the official documentation:
+- <a href="https://docs.docker.com/storage/volumes/" class="bare">https://docs.docker.com/storage/volumes/</a>
+- <a href="https://docs.docker.com/storage/bind-mounts/" class="bare">https://docs.docker.com/storage/bind-mounts/</a></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_cluster_monitor"><a class="anchor" href="#_cluster_monitor"></a>Cluster Monitor</h2>
+<div class="sectionbody">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This is a legacy way of configuring Prometheus targets and we recommend not to use this approach.
+You can use CMOS UI to perform the same using the "Add Cluster" option present on the landing page.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>The cluster monitor exposes a REST API endpoint from the container so that it can be used externally to add/remove Couchbase clusters.</p>
+</div>
+<div class="paragraph">
+<p>The cluster monitor can be configured via a bespoke REST API: <code>curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"</code></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>CLUSTER_MONITOR_USER=${CLUSTER_MONITOR_USER:-admin}</code>: The username for the cluster monitor tool.</p>
+</li>
+<li>
+<p><code>CLUSTER_MONITOR_PWD=${CLUSTER_MONITOR_PWD:-password}</code>: The password for the cluster monitor tool.</p>
+</li>
+<li>
+<p><code>CLUSTER_MONITOR_ENDPOINT=${CLUSTER_MONITOR_ENDPOINT:-http://localhost:8080/couchbase}</code>: The endpoint of the cluster monitor tool.</p>
+</li>
+<li>
+<p><code>COUCHBASE_USER=${COUCHBASE_USER:-Administrator}</code>: The username for accesing the Couchbase cluster.</p>
+</li>
+<li>
+<p><code>COUCHBASE_PWD=${COUCHBASE_PWD:-password}</code>: The password for accesing the Couchbase cluster.</p>
+</li>
+<li>
+<p><code>COUCHBASE_ENDPOINT=${COUCHBASE_ENDPOINT:-http://db2:8091}</code>: This should be set to a node that you want to monitor in a Couchbase cluster.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>As an example to configure a new cluster node to be monitored:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CLUSTER_MONITOR_USER=admin
+CLUSTER_MONITOR_PWD=password
+CLUSTER_MONITOR_ENDPOINT=http://localhost:$(docker container port couchbase-grafana 7196)
+COUCHBASE_USER=Administrator
+COUCHBASE_PWD=password
+COUCHBASE_ENDPOINT=http://db2:8091
+curl -u "${CLUSTER_MONITOR_USER}:${CLUSTER_MONITOR_PWD}" -X POST -d '{ "user": "'"${COUCHBASE_USER}"'", "password": "'"${COUCHBASE_PWD}"'", "host": "'"${COUCHBASE_ENDPOINT}"'" }' "${CLUSTER_MONITOR_ENDPOINT}/api/v1/clusters"</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prometheus"><a class="anchor" href="#_prometheus"></a>Prometheus</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Prometheus has various configuration options exposed to the user, almost entirely using files.
+You can mount these configuration files to the CMOS container using <a href="https://docs.docker.com/storage/volumes/" target="_blank" rel="noopener">docker volumes</a> or <a href="https://docs.docker.com/storage/bind-mounts/" target="_blank" rel="noopener">bind mounts</a>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+To pick up any configuration changes after the Prometheus service has started, you may need to reload the config files using the <code>reload</code> endpoint.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Below are the environment variables used for Prometheus configuration.
+To read more about Prometheus configuration, see the <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/" target="_blank" rel="noopener">official documentation website</a>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Prometheus configuration file
+PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
+
+# Prometheus configuration file template
+PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
+
+# Prometheus url sub path
+PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH-/prometheus/}
+
+# Prometheus storage path
+PROMETHEUS_STORAGE_PATH=${PROMETHEUS_STORAGE_PATH-/prometheus}
+
+# Microlith configuration
+PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}</pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_endpoints"><a class="anchor" href="#_endpoints"></a>Endpoints</h3>
+<div class="paragraph">
+<p>In CMOS, a <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config" target="_blank" rel="noopener">file-based service discovery</a> approach is used to support adding/removing endpoints.
+These endpoints are used to dynamically scrape metrics.</p>
+</div>
+<div class="paragraph">
+<p>Based on which services are enabled, the microlith will construct a set of dynamic endpoints.
+These endpoints are created for each service by adding a JSON file to the <code>${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}</code>.</p>
+</div>
+<div class="paragraph">
+<p>To add Couchbase Server endpoints, create a similar JSON format file like the example in the <code>/etc/prometheus/couchbase/custom/</code> directory mounted on the container.
+In order to always stay current with the system state, this file is periodically rescanned to add or remove targets.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>[
+    {
+      "targets": [
+        "exporter:9091"
+      ],
+      "labels": {
+        "job": "db1",
+        "container": "exporter"
+      }
+    }
+]</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You can set the authentication credentials for your Couchbase Server clusters using the <code>$CB_SERVER_AUTH_USER</code> and <code>$CB_SERVER_AUTH_PASSWORD</code> environment variables.
+Note that currently we do not support using different credentials for multiple clusters.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/add-cluster-vm.png" alt="add cluster vm">
+</div>
+<div class="title">Figure 2. Add cluster image</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_loki"><a class="anchor" href="#_loki"></a>Loki</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Configuration file for the log aggregation system Loki is present in the YAML file located at  <code>/etc/loki/config.yaml</code> inside the container.
+You can update  the environment variable to change the location of the config file or update the config file to change the properties of Loki accordingly.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Loki configuration
+LOKI_CONFIG_FILE=${LOKI_CONFIG_FILE:-/etc/loki/config.yml}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_grafana"><a class="anchor" href="#_grafana"></a>Grafana</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Various dashboards to monitor the Couchbase cluster are shipped out of the box in Grafana.
+You can list all the dashboards using the search dashboard option.
+You may also create additional dashboards that meet your needs.
+Post successful completion of the setup steps previously described, you should be able to see a list of attached clusters in the Grafana landing page.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/couchbase-inventory-vm.png" alt="couchbase inventory vm">
+</div>
+<div class="title">Figure 3. Couchbase inventory image</div>
+</div>
+<div class="paragraph">
+<p>You can list all available dashboards by clicking on the search button.
+It will show a list of dashboards similar to the one below.
+You can navigate to each dashboard by clicking on the name.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/grafana-dashboards.png" alt="grafana dashboards">
+</div>
+<div class="title">Figure 4. Grafana dashboards</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_alert"><a class="anchor" href="#_alert"></a>Alert</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_alerting_rules"><a class="anchor" href="#_alerting_rules"></a>Alerting rules</h3>
+<div class="paragraph">
+<p>Using alert rules, you can define alert conditions based on Prometheus language expressions and send notification to an external service when an alert is fired.</p>
+</div>
+<div class="paragraph">
+<p>The installation of CMOS comes with default alerting rules located in the <code>/etc/prometheus/alerting/couchbase/</code> directory.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The default rules are not intended to be modified by the user.
+Changing the default rules could result in unexpected and unwanted behavior, so it should be avoided.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>To add custom alerts, you can place your custom alert rules file to <code>/etc/prometheus/alerting/custom/</code> directory.</p>
+</div>
+<div class="paragraph">
+<p>Using <a href="https://github.com/lablabs/prometheus-alert-overrider" target="_blank" rel="noopener">prometheus-alert-overrider</a>, you can also override or disable a rule by putting it in the <code>/etc/prometheus/alerting/overrides/</code> directory.
+Below is an example of how to override a base rule.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># this is a base rule
+groups:
+    - name: Kubernetes-Monitoring
+      rules:
+# Node {{ $labels.node }} has been unready for a long time
+          - alert: KubernetesNodeReady
+            expr: kube_node_status_condition{condition="Ready",status="true"} == 0
+            for: 10m
+            labels:
+                severity: critical
+            annotations:
+                summary: Kubernetes Node ready (instance {{ $labels.instance }})
+                description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># override KubernetesNodeReady alert rule
+groups:
+    - name: Override
+      rules:
+          - alert: alert_override
+            # list of rules to be overridden, accepts regexp
+            override: ["KubernetesNodeReady"]
+            # if set to false, only base rules are changed and no new rules
+            # are created
+            enabled: false
+            # this expression will be negated and inserted into all rules
+            # matching the values in override.
+            expr: '{kubernetes_cluster="kube-dev"}'
+            for: 30s
+            labels:
+                severity: warning
+            annotations:
+                summary: override kubernetes single alert
+                description: "Node {{ $labels.node }} has been unready for a long time\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>We support modifying rules via environment variables.
+Prometheus automatically replaces template values in rules files with values based on available environment variables.
+You can see available environment variables in the <a href="https://github.com/couchbaselabs/observability/blob/main/microlith/entrypoints/prometheus.sh" target="_blank" rel="noopener">entrypoint of prometheus service</a>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-alert-rules.png" alt="prometheus alert rules">
+</div>
+<div class="title">Figure 5. Alert rules image</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/prometheus-alerts.png" alt="prometheus alerts">
+</div>
+<div class="title">Figure 6. Alerts image</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_alertmanager"><a class="anchor" href="#_alertmanager"></a>Alertmanager</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>By default the CMOS Alertmanager is enabled and Prometheus forwards the alerts to it.
+Additional alert managers can be specified by using the same <code>&lt;file_sd_config&gt;</code> syntax in  the <code>/etc/prometheus/alertmanager/custom/</code> directory.</p>
+</div>
+<div class="paragraph">
+<p>Here are the environment variables used for Alertmanager configuration.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># Alert manager configuration file
+ALERTMANAGER_CONFIG_FILE=${ALERTMANAGER_CONFIG_FILE:-/etc/alertmanager/config.yml}
+
+# Alert manager storage path
+ALERTMANAGER_STORAGE_PATH=${ALERTMANAGER_STORAGE_PATH:-/alertmanager}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>After the setup is complete, you can view the alerts and alert rules in the dashboard by navigating to the Alertmanager page from the landing page.
+To configure Alertmanager to send notifications to your desired receiver, you can follow the standard approach suggested by Alertmanager.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/alert-manager.png" alt="alert manager">
+</div>
+<div class="title">Figure 7. Alert manager image</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next steps</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="architecture.html" class="page">Architecture overview</a></p>
+</li>
+<li>
+<p><a href="deployment-microlith.html" class="page">Microlith container deployment</a></p>
+</li>
+<li>
+<p><a href="tutorial-onpremise.html" class="page">On-premise deployment</a></p>
+</li>
+<li>
+<p><a href="cluster-monitor.html" class="page">Couchbase Cluster Monitor component</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
