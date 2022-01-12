@@ -65,6 +65,9 @@ config-svc-test-unit:
 config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
+test-loki-rules:
+	testing/loki_alerts/run_all.sh
+
 # NOTE: This target is only for local development.
 container: CBMULTIMANAGER_REF ?= master
 container: build

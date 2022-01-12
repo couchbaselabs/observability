@@ -1,0 +1,176 @@
+[ns_server:info,2022-01-12T10:10:42.189Z,babysitter_of_ns_1@cb.local:<0.107.0>:ns_babysitter:init_logging:131]Brought up babysitter logging
+[ns_server:info,2022-01-12T10:10:42.197Z,babysitter_of_ns_1@cb.local:<0.107.0>:ns_babysitter:log_pending:96]Static config terms:
+[{error_logger_mf_dir,"/opt/couchbase/var/lib/couchbase/logs"},
+ {path_config_bindir,"/opt/couchbase/bin"},
+ {path_config_etcdir,"/opt/couchbase/etc/couchbase"},
+ {path_config_libdir,"/opt/couchbase/lib"},
+ {path_config_datadir,"/opt/couchbase/var/lib/couchbase"},
+ {path_config_tmpdir,"/opt/couchbase/var/lib/couchbase/tmp"},
+ {path_config_secdir,"/opt/couchbase/etc/security"},
+ {nodefile,"/opt/couchbase/var/lib/couchbase/couchbase-server.node"},
+ {loglevel_default,debug},
+ {loglevel_couchdb,info},
+ {loglevel_ns_server,debug},
+ {loglevel_error_logger,debug},
+ {loglevel_user,debug},
+ {loglevel_menelaus,debug},
+ {loglevel_ns_doctor,debug},
+ {loglevel_stats,debug},
+ {loglevel_rebalance,debug},
+ {loglevel_cluster,debug},
+ {loglevel_views,debug},
+ {loglevel_mapreduce_errors,debug},
+ {loglevel_xdcr,debug},
+ {loglevel_access,info},
+ {loglevel_cbas,debug},
+ {disk_sink_opts,[{rotation,[{compress,true},
+                             {size,41943040},
+                             {num_files,10},
+                             {buffer_size_max,52428800}]}]},
+ {disk_sink_opts_json_rpc,[{rotation,[{compress,true},
+                                      {size,41943040},
+                                      {num_files,2},
+                                      {buffer_size_max,52428800}]}]},
+ {net_kernel_verbosity,10}]
+[ns_server:debug,2022-01-12T10:10:42.199Z,babysitter_of_ns_1@cb.local:<0.107.0>:dist_manager:configure_net_kernel:297]Set net_kernel vebosity to 10 -> 0
+  MFA: {supervisor_cushion,start_link,
+                           [cbas,5000,infinity,ns_port_server,start_link,
+                            [#Fun<ns_child_ports_sup.4.44980406>]]}
+[error_logger:info,2022-01-12T10:10:51.906Z,babysitter_of_ns_1@cb.local:ns_child_ports_sup<0.124.0>:ale_error_logger_handler:do_log:101]
+=========================PROGRESS REPORT=========================
+    supervisor: {local,ns_child_ports_sup}
+    started: [{pid,<0.300.0>},
+              {id,{cbas,"/opt/couchbase/bin/cbas",
+                      ["-serverPort=8091","-serverSslPort=18091",
+                       "-bindHttpPort=8095","-bindAdminPort=9110",
+                       "-debugPort=-1","-ccHttpPort=9111",
+                       "-ccClusterPort=9112","-ccClientPort=9113",
+                       "-consolePort=9114","-clusterPort=9115",
+                       "-dataPort=9116","-resultPort=9117",
+                       "-messagingPort=9118","-metadataPort=9121",
+                       "-metadataCallbackPort=9119","-parentPort=9122",
+                       "-bindReplicationPort=9120","-bindHttpsPort=18095",
+                       "-tlsCertFile=/opt/couchbase/var/lib/couchbase/config/memcached-cert.pem",
+                       "-tlsKeyFile=/opt/couchbase/var/lib/couchbase/config/memcached-key.pem",
+                       "-uuid=a1bfe960d241eae8dbffe4c7cedab56c",
+                       "-serverAddress=127.0.0.1",
+                       "-bindHttpAddress=127.0.0.1",
+                       "-cbasExecutable=/opt/couchbase/bin/cbas",
+                       "-memoryQuotaMb=1024",
+                       "-logDir=/opt/couchbase/var/lib/couchbase/logs",
+                       "-tmpDir=/opt/couchbase/var/lib/couchbase/tmp",
+                       "-logRotationSize=41943040","-logRotationNumFiles=10",
+                       "-logLevel=debug",
+                       "-dataDir=/opt/couchbase/var/lib/couchbase/data/@analytics",
+                       "-ipv4=required","-ipv6=optional"],
+                      [via_goport,exit_status,stderr_to_stdout,
+                       {env,
+                           [{"GOTRACEBACK","single"},
+                            {"CBAUTH_REVRPC_URL",
+                             <<85,67,24,135,97,12,41,196,112,251,160,160,
+                               169,121,189,3,192,147,212,160,222,67,247,154,
+                               119,69,12,206,220,21,64,144>>}]},
+                       {log,"analytics_info.log"}]}},
+              {mfargs,
+                  {restartable,start_link,
+                      [{supervisor_cushion,start_link,
+                           [cbas,5000,infinity,ns_port_server,start_link,
+                            [#Fun<ns_child_ports_sup.4.44980406>]]},
+                       86400000]}},
+              {restart_type,permanent},
+              {shutdown,infinity},
+              {child_type,worker}]
+[ns_server:debug,2022-01-12T10:10:52.009Z,babysitter_of_ns_1@cb.local:cbas-goport<0.367.0>:goport:handle_eof:576]Stream 'stderr' closed
+[ns_server:debug,2022-01-12T10:10:52.009Z,babysitter_of_ns_1@cb.local:cbas-goport<0.367.0>:goport:handle_eof:576]Stream 'stdout' closed
+[ns_server:info,2022-01-12T10:10:52.012Z,babysitter_of_ns_1@cb.local:cbas-goport<0.367.0>:goport:handle_process_exit:557]Port exited with status 1.
+[error_logger:error,2022-01-12T10:10:52.016Z,babysitter_of_ns_1@cb.local:<0.302.0>:ale_error_logger_handler:do_log:101]
+=========================ERROR REPORT=========================
+** Generic server <0.302.0> terminating
+** Last message in was {<0.367.0>,{exit_status,1}}
+** When Server state == {state,<0.367.0>,
+                            {cbas,"/opt/couchbase/bin/cbas",
+                                ["-serverPort=8091","-serverSslPort=18091",
+                                 "-bindHttpPort=8095","-bindAdminPort=9110",
+                                 "-debugPort=-1","-ccHttpPort=9111",
+                                 "-ccClusterPort=9112","-ccClientPort=9113",
+                                 "-consolePort=9114","-clusterPort=9115",
+                                 "-dataPort=9116","-resultPort=9117",
+                                 "-messagingPort=9118","-metadataPort=9121",
+                                 "-metadataCallbackPort=9119",
+                                 "-parentPort=9122",
+                                 "-bindReplicationPort=9120",
+                                 "-bindHttpsPort=18095",
+                                 "-tlsCertFile=/opt/couchbase/var/lib/couchbase/config/memcached-cert.pem",
+                                 "-tlsKeyFile=/opt/couchbase/var/lib/couchbase/config/memcached-key.pem",
+                                 "-uuid=a1bfe960d241eae8dbffe4c7cedab56c",
+                                 "-serverAddress=127.0.0.1",
+                                 "-bindHttpAddress=127.0.0.1",
+                                 "-cbasExecutable=/opt/couchbase/bin/cbas",
+                                 "-memoryQuotaMb=1024",
+                                 "-logDir=/opt/couchbase/var/lib/couchbase/logs",
+                                 "-tmpDir=/opt/couchbase/var/lib/couchbase/tmp",
+                                 "-logRotationSize=41943040",
+                                 "-logRotationNumFiles=10","-logLevel=debug",
+                                 "-dataDir=/opt/couchbase/var/lib/couchbase/data/@analytics",
+                                 "-ipv4=required","-ipv6=optional"],
+                                [via_goport,exit_status,stderr_to_stdout,
+                                 {env,
+                                     [{"GOTRACEBACK","single"},
+                                      {"CBAUTH_REVRPC_URL",
+                                       "http://%40:452d4a267df9dce3c07f0d928f1d579a@127.0.0.1:8091/cbas"}]}]},
+                            {ringbuffer,997,1024,
+                                {[{<<"2022-01-12T10:10:52.007+00:00 FATA CBAS.cbas error validating java home: unable to determine java version: exit status 1\n">>,
+                                   121},
+                                  {<<"2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas setting java.home to bundled jre (/opt/couchbase/lib/cbas/runtime)\n">>,
+                                   112},
+                                  {<<"2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas io devices were adjusted to a total of: 1\n">>,
+                                   87},
+                                  {<<"2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas configuring io devices based on available memory (1024): 1\n">>,
+                                   104},
+                                  {<<"2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas a single io device was provided; auto-adjusting...\n">>,
+                                   96},
+                                  {<<"2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas IPv4 addresses: [127.0.0.1 172.31.0.2]\n2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas IPv6 addresses: []\n2022-01-12T10:10:51.930+00:00 INFO CBAS.cbas setting ipv4 required, ipv6 optional\n">>,
+                                   230},
+                                  {<<"2022-01-12T10:10:51.929+00:00 INFO CBAS.cbas uuid: a1bfe960d241eae8dbffe4c7cedab56c\n">>,
+                                   84},
+                                  {<<"2022-01-12T10:10:51.929+00:00 INFO CBAS.cbas ++++++++++++ starting cbas main ++++++++++++\n">>,
+                                   90}],
+                                 [{<<"2022-01-12T10:10:51.928+00:00 WARN CBAS.cbas Updating log level to DEBUG\n">>,
+                                   73}]}},
+                            cbas,undefined,[],0}
+** Reason for termination ==
+** {abnormal,1}
+
+[error_logger:error,2022-01-12T10:10:52.027Z,babysitter_of_ns_1@cb.local:<0.302.0>:ale_error_logger_handler:do_log:101]
+=========================CRASH REPORT=========================
+  crasher:
+    initial call: ns_port_server:init/1
+    pid: <0.302.0>
+    registered_name: []
+    exception exit: {abnormal,1}
+      in function  gen_server:handle_common_reply/8 (gen_server.erl, line 751)
+    ancestors: [<0.301.0>,<0.300.0>,ns_child_ports_sup,ns_babysitter_sup,
+                  <0.107.0>]
+    message_queue_len: 1
+    messages: [{'EXIT',<0.367.0>,normal}]
+    links: [<0.301.0>]
+    dictionary: []
+    trap_exit: true
+    status: running
+    heap_size: 4185
+    stack_size: 27
+    reductions: 69064
+  neighbours:
+
+[ns_server:info,2022-01-12T10:10:52.027Z,babysitter_of_ns_1@cb.local:<0.301.0>:supervisor_cushion:handle_info:54]Cushion managed supervisor for cbas failed:  {abnormal,1}
+[ns_server:info,2022-01-12T10:10:52.027Z,babysitter_of_ns_1@cb.local:<0.301.0>:supervisor_cushion:die_slowly:76]Service cbas exited on node 'babysitter_of_ns_1@cb.local' in 0.40s
+
+[error_logger:info,2022-01-12T10:10:52.028Z,babysitter_of_ns_1@cb.local:kernel_safe_sup<0.80.0>:ale_error_logger_handler:do_log:101]
+=========================PROGRESS REPORT=========================
+    supervisor: {local,kernel_safe_sup}
+    started: [{pid,<0.379.0>},
+              {id,timer_server},
+              {mfargs,{timer,start_link,[]}},
+              {restart_type,permanent},
+              {shutdown,1000},
+              {child_type,worker}]

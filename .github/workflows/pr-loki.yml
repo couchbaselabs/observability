@@ -1,0 +1,32 @@
+---
+name: PR - Loki rule tests
+# Validate our Loki alerting rules
+
+on:
+    pull_request:
+        branches:
+            - main
+        paths:
+            - microlith/loki/alerting/**
+            - testing/loki_alerts/**
+
+    workflow_dispatch:
+        inputs:
+            ref:
+                description: Branch, tag, or commit SHA to run against
+                required: false
+                default: main
+
+jobs:
+    unit-tests:
+        name: Unit test Loki rules
+        runs-on: ubuntu-20.04
+        timeout-minutes: 15
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+              with:
+                ref: ${{ github.event.inputs.ref || 'main' }}
+            
+            - name: Run tests
+              run: make test-loki-rules
