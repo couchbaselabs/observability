@@ -78,7 +78,7 @@ groups:
 
 
       - alert: CB90042-segmentationFaults
-        expr: sum( (count_over_time({file="diag.log"} |= "segfault") + (count_over_time({file="couchbase.log"} |= "segfault") )>0
+        expr: sum( (count_over_time({file="diag.log"} |= "segfault" [1h]) + (count_over_time({file="couchbase.log"} |= "segfault" [1h]) )>0
         for: 1m
         labels:
           job: couchbase_fluent_bit
