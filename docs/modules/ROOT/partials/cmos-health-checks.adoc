@@ -72,7 +72,7 @@ However, repeated crashes should be investigated as they may be caused by an und
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/index-service.html[Index Service]
 
-//CB90047 to be added when couchbase-fluent-bit can parse query.log
+//CB90047 to be added when couchbase-fluent-bit can parse query.log (https://issues.couchbase.com/browse/K8S-2585)
 
 [#CB90048]
 === Cross Data Center Replication (XDCR) Crash (CB90048)
