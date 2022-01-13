@@ -94,3 +94,90 @@ groups:
           title: Process managed by babysitter has crashed ({{ $labels.hostname }})
           description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }} - {{$labels.reason}}"
           remediation: Contact Couchbase Technical Support.
+
+      - alert: CB90046-indexerCrash
+        expr: |
+          count_over_time({file="indexer.log"} |~ ".*(panic:|fatal error:).*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90046
+          health_check_name: indexerCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Index Service Crash ({{ $labels.hostname }})
+          description: The Index Service on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          remediation: Review indexer.log to identify the cause, or contact Couchbase Technical Support.
+
+# CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log
+
+      - alert: CB90048-goxdcrCrash
+        expr: |
+          count_over_time({file="goxdcr.log"} |~ ".*panic.*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90048
+          health_check_name: goxdcrCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: XDCR Crash ({{ $labels.hostname }})
+          description: XDCR on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          remediation: Review goxdcr.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90049-ftsCrash
+        expr: |
+          count_over_time({file="fts.log"} |~ ".*(panic:|fatal error|fatal, err).*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90049
+          health_check_name: ftsCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Full Text Search Crash ({{ $labels.hostname }})
+          description: FTS on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          remediation: Review fts.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90050-eventingCrash
+        expr: |
+          count_over_time({file="eventing.log"} |~ ".*(panic:|fatal error:).*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90050
+          health_check_name: eventingCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Eventing Crash ({{ $labels.hostname }})
+          description: Eventing on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          remediation: Review eventing.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90051-analyticsCrash
+        expr: |
+          count_over_time({file="analytics_debug.log"} |~ ".*JVM halting.*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90050
+          health_check_name: analyticsCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Analytics Crash ({{ $labels.hostname }})
+          description: Analytics on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.

@@ -1,4 +1,4 @@
-personal_ws-1.1 en 78
+personal_ws-1.1 en 82
 AGPL
 CAO
 CMOS
@@ -76,3 +76,7 @@ VM
 ClusterRole
 overcommitted
 memcached
+FTS
+XDCR
+Eventing
+Analytics

@@ -48,7 +48,7 @@ In virtual environments, high CPU steal indicates that the virtual machines migh
 *Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
 
 [#CB90044]
-=== Babysitter Managed Process Crash (CB90043)
+=== Babysitter Managed Process Crash (CB90044)
 
 *Background*: Babysitter is part of Couchbase Server's cluster manager which is responsible for maintaining a variety of Couchbase Server processes.
 If any of the processes managed by the babysitter die, it is responsible for restarting them.
@@ -59,6 +59,68 @@ If any of the processes managed by the babysitter die, it is responsible for res
 However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html[Cluster Manager]
+
+[#CB90046]
+=== Indexer Crash (CB90046)
+
+*Background*: If the Index Service process (`indexer`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `indexer` logs.
+
+*Remediation*: Review `indexer.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/index-service.html[Index Service]
+
+//CB90047 to be added when couchbase-fluent-bit can parse query.log
+
+[#CB90048]
+=== Cross Data Center Replication (XDCR) Crash (CB90048)
+
+*Background*: If the XDCR process (`goxdcr`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `goxdcr` logs.
+
+*Remediation*: Review `goxdcr.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html[Cross Data Center Replication]
+
+[#CB90049]
+=== Full Text Search (FTS) Crash (CB90049)
+
+*Background*: If the FTS Service process (`cbft`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `cbft` logs.
+
+*Remediation*: Review `fts.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/search-service.html[Search Service]
+
+[#CB90050]
+=== Eventing Crash (CB90050)
+
+*Background*: If the Eventing Service process crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `eventing.log`.
+
+*Remediation*: Review `eventing.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/eventing-service.html[Eventing Service]
+
+[#CB90051]
+=== Analytics Crash (CB90051)
+
+*Background*: If the Analytics Service process (`cbas`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `cbas` logs.
+
+*Remediation*: Review `analytics_debug.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/analytics-service.html[Analytics Service]
 
 // end::group-node[]
 
