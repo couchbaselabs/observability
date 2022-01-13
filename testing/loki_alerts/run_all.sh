@@ -81,7 +81,7 @@ function log() {
     echo "$@"
 }
 
-if [ -z "${LOKI_HOST:-}" ] || [ -z "${LOKI_PORT:-}" ]; then
+if [ -z "${LOKI_HOST:-}" ]; then
     # Start up Loki
     log 1 "Starting Loki..."
     loki_container_id=$(docker run --rm -d -p 3100:3100 --name test_loki grafana/loki:2.4.1 -config.file=/etc/loki/local-config.yaml -log.level=debug)
