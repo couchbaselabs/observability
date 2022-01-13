@@ -34,7 +34,7 @@ source "$HELPERS_ROOT/url-helpers.bash"
 
 VERBOSITY=${VERBOSITY:-0}
 SKIP_TEARDOWN=${SKIP_TEARDOWN:-false}
-LOKI_PORT=3100
+LOKI_PORT=${LOKI_PORT:-3100}
 
 while [[ $# -gt 1 ]]; do
   case $1 in
@@ -149,33 +149,34 @@ fb_cfg="$fb_cfg
 $(cat "$SCRIPT_DIR/fluent-bit.trailer.conf")
 "
 
-echo "$fb_cfg" > "$SCRIPT_DIR/fluent-bit.conf"
-log 2 "Fluent Bit config generated and written to $SCRIPT_DIR/fluent-bit.conf"
+config_dir=$(mktemp -d)
+echo "$fb_cfg" > "$config_dir/fluent-bit.conf"
+log 2 "Fluent Bit config generated and written to $config_dir/fluent-bit.conf"
 
 # Run Fluent Bit over the case's files
-# Would like to use Exit_on_EOF, but that'd require setting it for each individual [INPUT], which is infeasible (also https://github.com/fluent/fluent-bit/issues/3274)
-# Instead we just run FB and wait a bit - long enough for it to dump the full logs under any reasonable circumstances
 log 1 "Starting Fluent Bit..."
 fb_command="docker run --rm -d \
     --network host \
     -v "'"'"$logs_path:/opt/couchbase/var/lib/couchbase/logs:ro"'"'" \
-    -v "'"'"$SCRIPT_DIR/fluent-bit.conf:/fluent-bit/config/fluent-bit.conf"'"'" \
+    -v "'"'"$config_dir/fluent-bit.conf:/fluent-bit/config/fluent-bit.conf"'"'" \
     -v "'"'"$SCRIPT_DIR/rebase_times.lua:/fluent-bit/config/rebase_times.lua"'"'" \
     -e 'LOKI_MATCH=*' \
     -e 'LOKI_HOST=$LOKI_HOST' \
     -e 'LOKI_PORT=$LOKI_PORT' \
     -e 'LOKI_TENANT=$suite' \
-    --name test_fluentbit \
     couchbase/fluent-bit:1.1.3"
 log 2 "Command: $fb_command"
 fb_container_id=$(eval "$fb_command")
 
 # Print the logs so we see what's going on.
+# Would like to use Exit_on_EOF, but https://github.com/fluent/fluent-bit/issues/3274
+# Instead we just run FB and wait a bit - long enough for it to dump the full logs under any reasonable circumstances
+fb_execution_timeout_seconds=10
 if [ "$VERBOSITY" -lt 2 ]; then
-    sleep 10
+    sleep "$fb_execution_timeout_seconds"
 else
     # timeout will abort the script with error 124 without the ||true
-    timeout 10 docker logs -ft "$fb_container_id" || true
+    timeout "$fb_execution_timeout_seconds" docker logs -ft "$fb_container_id" || true
 fi
 docker rm -f "$fb_container_id"
 
