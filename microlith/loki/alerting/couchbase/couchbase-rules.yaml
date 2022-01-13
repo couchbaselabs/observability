@@ -112,7 +112,7 @@ groups:
           description: The Index Service on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
           remediation: Review indexer.log to identify the cause, or contact Couchbase Technical Support.
 
-# CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log
+# CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log (https://issues.couchbase.com/browse/K8S-2585)
 
       - alert: CB90048-goxdcrCrash
         expr: |
