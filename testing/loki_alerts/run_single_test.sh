@@ -118,7 +118,9 @@ if [ ! -d "$logs_path" ]; then
     exit 1
 fi
 
-expr=$(yq e -e ".groups[] | select(.name == "'"'"$group"'"'") | .rules[] | select(.alert == "'"'"$alert"'"'") | .expr" "$SCRIPT_DIR/../../microlith/loki/alerting/couchbase/couchbase-rules.yaml")
+rules_path="$SCRIPT_DIR/../../microlith/loki/alerting/couchbase/couchbase-rules.yaml"
+log 2 "Looking for expression for $group/$alert in $rules_path"
+expr=$(yq e -e ".groups[] | select(.name == "'"'"$group"'"'") | .rules[] | select(.alert == "'"'"$alert"'"'") | .expr" "$rules_path")
 
 if [ -z "${LOKI_HOST:-}" ]; then
     # Start up Loki
