@@ -78,7 +78,7 @@ groups:
 
       - alert: CB90044-babysitterManagedProcessCrash
         expr: |
-          count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | label_format cluster=couchbase_cluster | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
+          count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -97,7 +97,7 @@ groups:
 
       - alert: CB90046-indexerCrash
         expr: |
-          count_over_time({file="indexer.log"} |~ ".*(panic:|fatal error:).*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="indexer.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -109,14 +109,14 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: Index Service Crash ({{ $labels.hostname }})
-          description: The Index Service on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          description: "Index Service on node: {{ $labels.hostname }} has crashed."
           remediation: Review indexer.log to identify the cause, or contact Couchbase Technical Support.
 
 # CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log (https://issues.couchbase.com/browse/K8S-2585)
 
       - alert: CB90048-goxdcrCrash
         expr: |
-          count_over_time({file="goxdcr.log"} |~ ".*panic.*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="goxdcr.log"} |~ ".*(panic|SIGABRT:).*" | json [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -128,12 +128,12 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: XDCR Crash ({{ $labels.hostname }})
-          description: XDCR on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          description: "XDCR on node: {{ $labels.hostname }} has crashed."
           remediation: Review goxdcr.log to identify the cause, or contact Couchbase Technical Support.
 
       - alert: CB90049-ftsCrash
         expr: |
-          count_over_time({file="fts.log"} |~ ".*(panic:|fatal error|fatal, err).*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="fts.log"} |~ ".*(panic:|fatal error|fatal, err).*" | json [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -145,12 +145,12 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: Full Text Search Crash ({{ $labels.hostname }})
-          description: FTS on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          description: "FTS Service on node: {{ $labels.hostname }} has crashed."
           remediation: Review fts.log to identify the cause, or contact Couchbase Technical Support.
 
       - alert: CB90050-eventingCrash
         expr: |
-          count_over_time({file="eventing.log"} |~ ".*(panic:|fatal error:).*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="eventing.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -162,12 +162,12 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: Eventing Crash ({{ $labels.hostname }})
-          description: Eventing on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          description: "Eventing Service on node: {{ $labels.hostname }} has crashed."
           remediation: Review eventing.log to identify the cause, or contact Couchbase Technical Support.
 
       - alert: CB90051-analyticsCrash
         expr: |
-          count_over_time({file="analytics_debug.log"} |~ ".*JVM halting.*" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="analytics_debug.log"} |~ ".*JVM halting.*" | json [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -179,5 +179,5 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: Analytics Crash ({{ $labels.hostname }})
-          description: Analytics on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+          description: "Analytics on node: {{ $labels.hostname }} has crashed."
           remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.
