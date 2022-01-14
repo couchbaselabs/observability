@@ -257,7 +257,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=severity=critical"
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=severity=critical"
         }
       ],
       "title": "Critical Alerts",
@@ -687,7 +687,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=severity=warning"
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=severity=warning"
         }
       ],
       "title": "Warnings",
@@ -793,7 +793,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=severity=info"
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=severity=info"
         }
       ],
       "title": "Info",
@@ -1709,7 +1709,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=cluster&filter=job=~\"couchbase_.*\""
+          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=cluster&filter=job=~\"couchbase_(prometheus|fluent_bit)$\""
         }
       ],
       "title": "Cluster Check Status",
@@ -1960,7 +1960,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=node&filter=job=~\"couchbase_.*\""
+          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=node&filter=job=~\"couchbase_(prometheus|fluent_bit)$\""
         }
       ],
       "title": "Node Check Status",
@@ -2207,7 +2207,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=bucket&filter=job=~\"couchbase_.*\""
+          "urlPath": "/alerts?filter=cluster=${cluster:querystring}&filter=kind=bucket&filter=job=~\"couchbase_(prometheus|fluent_bit)$\""
         }
       ],
       "title": "Bucket Check Status",
