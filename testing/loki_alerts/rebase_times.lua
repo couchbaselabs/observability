@@ -1,19 +1,6 @@
 tag_first_timestamps = {}
 tag_first_seen_wall_clock_times = {}
 
-function dump(o)
-    if type(o) == 'table' then
-       local s = '{ '
-       for k,v in pairs(o) do
-          if type(k) ~= 'number' then k = '"'..k..'"' end
-          s = s .. '['..k..'] = ' .. dump(v) .. ','
-       end
-       return s .. '} '
-    else
-       return tostring(o)
-    end
- end
-
  ns_in_1s = 1000000000
 
 function add_time_tables(t1, t2)
@@ -48,12 +35,10 @@ function cb_rebase_times(tag, timestamp, record)
     if not found then
         tag_first_timestamps[tag] = timestamp
         tag_first_seen_wall_clock_times[tag] = math.floor(os.time() - (60 * 30)) -- shift it back an hour, just in case
-        print("Adding", tag, dump(timestamp), dump(tag_first_timestamps), dump(tag_first_seen_wall_clock_times))
     end
 
     local new_ts = add_time_tables(sub_time_tables(timestamp, tag_first_timestamps[tag]), {sec=tag_first_seen_wall_clock_times[tag], nsec=0})
     -- The "timestamp" record key (string) will now be nonsense, so remove it - downstream should be using the Loki timestamp anyway
     record["timestamp"] = nil
-    print(1, tag, dump(timestamp), dump(new_ts))
     return 1, new_ts, record
 end
