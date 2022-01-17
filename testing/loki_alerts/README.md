@@ -10,4 +10,5 @@ This directory contains scripts and helpers for testing our Loki alerting rules.
 2. Place the log files that should trigger that rule in that directory.
     * These must be named as they would be on a running Couchbase Server (so if you're using a cbcollect make sure to trim off the `ns_server.` prefix)
     * These MUST NOT contain any customer data! Where possible, use logs from your own reproduction of the issue.
+    * Due to the way we handle times, ensure that the sample log lines don't cover more than an hour or so
 3. To verify, run `./run_single_test.sh <group name>/<rule name>`.
