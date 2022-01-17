@@ -181,3 +181,23 @@ groups:
           title: Analytics Crash ({{ $labels.hostname }})
           description: "Analytics on node: {{ $labels.hostname }} has crashed."
           remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90052-malformedvBuckets
+        expr: |
+          count_over_time({file="memcached.log"} |~ ".*malformed data in file.*" |json message="message" | line_format "{{.message}}" | pattern "<_>WARNING (<bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: bucket
+          severity: warning
+          health_check_id: CB90052
+          health_check_name: malformedvBuckets
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          m_bucket: '{{ $labels.m_bucket}}' # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
+          vbucket: '{{ $labels.vbucket }}'
+        annotations:
+          title: "Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.m_bucket}}, on node: {{ $labels.hostname }}"
+          description: "Files in vbucket, {{ $labels.vbucket }}, have been corrupted"
+          remediation: "Review your infrastructure for signs of disk problems or any other issues. 
+          Or, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support."

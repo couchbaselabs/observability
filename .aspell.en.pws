@@ -1,4 +1,4 @@
-personal_ws-1.1 en 82
+personal_ws-1.1 en 84
 AGPL
 CAO
 CMOS
@@ -80,3 +80,5 @@ FTS
 XDCR
 Eventing
 Analytics
+vBucket
+vBuckets
