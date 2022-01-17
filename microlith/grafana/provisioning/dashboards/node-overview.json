@@ -494,7 +494,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_.*\"&filter=kind=node&filter=cluster=${cluster:querystring}&filter=node=~\"${node:regex}(?::[0-9]*)$\""
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=kind=node&filter=cluster=${cluster:querystring}&filter=node=~\"${node:regex}(?::[0-9]*)$\""
         }
       ],
       "title": "Health Check Warnings",
