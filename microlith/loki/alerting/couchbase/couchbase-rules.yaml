@@ -194,9 +194,9 @@ groups:
           health_check_name: malformedvBuckets
           cluster: '{{ $labels.cluster }}'
           node: '{{ $labels.hostname }}'
-          m_bucket: '{{ $labels.m_bucket}}' # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
+          bucket: '{{ $labels.m_bucket}}' # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
           vbucket: '{{ $labels.vbucket }}'
         annotations:
-          title: "Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.m_bucket}}, on node: {{ $labels.hostname }}"
+          title: "Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.bucket}}, on node: {{ $labels.hostname }}"
           description: "Files in vbucket, {{ $labels.vbucket }}, have been corrupted"
           remediation: "Review your infrastructure for signs of disk problems or any other issues. Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support."
