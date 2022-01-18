@@ -161,4 +161,15 @@ Note that this is different to slow operations logged by the Couchbase SDKs - th
 *Remediation*: Review your infrastructure for signs of disk problems or any other issues. 
 Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support.
 
+[#CB90055]
+=== Metadata Overhead (CB90055)
+
+*Background*: More then 50% of the memory is occupied by document keys and other metadata, this can happen when the document keys are large, or that there are many small documents.
+
+*Condition*: Over 50% of memory is taken up by metadata.
+
+*Remediation*: Increase memory allocation for bucket or change the https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy[evictionPolicy] of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/data/data.html#metadata[Metadata], https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy[evictionPolicy].
+
 // end::group-bucket[]
