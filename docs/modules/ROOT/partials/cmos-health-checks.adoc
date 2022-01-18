@@ -164,7 +164,7 @@ Alternatively, navigate to your Data storage directory and enter the following c
 [#CB90055]
 === Metadata Overhead (CB90055)
 
-*Background*: More then 50% of the memory is occupied by document keys and other metadata, this can happen when the document keys are large, or that there are many small documents.
+*Background*: More then 50% of the memory is occupied by document keys and other metadata, this can happen when the document keys are large, or there are many small documents.
 
 *Condition*: Over 50% of memory is taken up by metadata.
 
