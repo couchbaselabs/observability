@@ -151,4 +151,14 @@ Note that this is different to slow operations logged by the Couchbase SDKs - th
 
 *Remediation*: Verify that your Data Service nodes have adequate system resources.
 
+[#CB90052]
+=== Malformed vBuckets (CB90052)
+
+*Background*: Files stored in a Bucket have become corrupted and attempting to read specific parts of those files results in a checksum error. This is normally the result of some issue with the underlying disk / file system / OS - either the data on-disk was corrupted at the time it was written, or the data has subsequently become corrupted and hence it cannot be successfully read.
+
+*Condition*: vBucket detected by Couchbase Server containing corrupted data.
+
+*Remediation*: Review your infrastructure for signs of disk problems or any other issues. 
+Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support.
+
 // end::group-bucket[]
