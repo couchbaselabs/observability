@@ -197,6 +197,23 @@
 <h1 class="page">Couchbase Monitoring and Observability Stack</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>CMOS is provided as a Developer Preview.
+Developer Preview features and their use are subject to Couchbase’s “Non-GA Offering Supplemental Terms” set forth in the <a href="https://www.couchbase.com/LA03012021">License Agreement</a>.
+Developer Preview features may not be functionally complete and are not intended for production use.
+They are intended for development and testing purposes only.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>The intention of this repository is to provide a simple, out-of-the-box solution based on industry standard tooling to observe the state of your Couchbase cluster.</p>
 </div>
@@ -240,10 +257,49 @@
 <div class="ulist">
 <ul>
 <li>
-<p>Limited compatibility by supporting migrating from previous version to latest version. Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided. We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.</p>
+<p>CMOS is built for Couchbase Server 7.0 and above.
+Lower versions are supported but some features might be missing.
+We intend to improve support for lower versions in future releases, however Couchbase Server 7.0 and above will remain the primary target of development.</p>
 </li>
 <li>
-<p>The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container. The container can be built without it by removing it and there is a <a href="https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh" target="_blank" rel="noopener">helper script</a> that does this.</p>
+<p>Limited cross-version compatibility by supporting migrating from previous version to latest version.
+Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided.
+We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.</p>
+</li>
+<li>
+<p>CMOS is open source; however, the Couchbase Cluster Monitor is a closed source (private repository) component.
+If you are building from source, this component will require access to the repository to be included in the container.
+The container can be built without it by removing it and there is a <a href="https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh" target="_blank" rel="noopener">helper script</a> that does this, however certain features (in particular Grafana dashboards) may not be fully functional without it.
+We plan to address this in a future release.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_known_issues"><a class="anchor" href="#_known_issues"></a>Known Issues</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CMOS is provided as a Developer Preview and may have bugs, missing features, or other issues.
+Below is an incomplete list of issues that we plan to address in a future release.
+To see the full list or report any issues you encounter, please check the JIRA board and Forums linked below.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Grafana dashboards may show incorrect information if two clusters with the same name are added (<a href="https://issues.couchbase.com/browse/CMOS-203" target="_blank" rel="noopener">CMOS-203</a>)</p>
+</li>
+<li>
+<p>Buckets may persist in dashboards after they are dropped (<a href="https://issues.couchbase.com/browse/CMOS-231" target="_blank" rel="noopener">CMOS-231</a>)</p>
+</li>
+<li>
+<p>Prometheus scrape targets are not updated if nodes are added or removed from the cluster (<a href="https://issues.couchbase.com/browse/CMOS-106" target="_blank" rel="noopener">CMOS-106</a>)</p>
+</li>
+<li>
+<p>Currently there is no official support or documentation for integrating into existing Prometheus/Loki/Grafana configurations (<a href="https://issues.couchbase.com/browse/CMOS-166" target="_blank" rel="noopener">CMOS-166</a>)</p>
+</li>
+<li>
+<p>When Couchbase Server is running in containers or on Kubernetes, CPU and memory statistics may display data from the host node rather than the container (<a href="https://issues.couchbase.com/browse/CMOS-233" target="_blank" rel="noopener">CMOS-233</a>)</p>
 </li>
 </ul>
 </div>
@@ -253,7 +309,8 @@
 <h2 id="_feedback_and_support"><a class="anchor" href="#_feedback_and_support"></a>Feedback and support</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Please use our official <a href="https://issues.couchbase.com/projects/CMOS/issues" target="_blank" rel="noopener">JIRA board</a> to report any bugs and issues with the appropriate components. We also encourage you to use the <a href="https://forums.couchbase.com" target="_blank" rel="noopener">Couchbase Forums</a> for posting any questions or feedback that you might have.</p>
+<p>Please use our official <a href="https://issues.couchbase.com/projects/CMOS/issues" target="_blank" rel="noopener">JIRA board</a> to report any bugs and issues with the appropriate components.
+We also encourage you to use the <a href="https://forums.couchbase.com" target="_blank" rel="noopener">Couchbase Forums</a> for posting any questions or feedback that you might have.</p>
 </div>
 <div class="paragraph">
 <p>No official support is currently provided but best efforts will be made and we are keen to hear of any issues.</p>
