@@ -164,11 +164,11 @@ Alternatively, navigate to your Data storage directory and enter the following c
 [#CB90055]
 === Metadata Overhead (CB90055)
 
-*Background*: More then 50% of the memory is occupied by document keys and other metadata, this can happen when the document keys are large, or there are many small documents.
+*Background*: As Couchbase Server stores all of it's working documents in memory, if a large portion of that memory is taken up by metadata it can impact performance and force useful documents to be stored on disk rather than memory.
 
 *Condition*: Over 50% of memory is taken up by metadata.
 
-*Remediation*: Increase memory allocation for bucket or change the https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy[evictionPolicy] of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+*Remediation*: Increase memory allocation for bucket or change the https://docs.couchbase.com/server/current/manage/manage-buckets/edit-bucket.html#making-changes[evictionPolicy] of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/data/data.html#metadata[Metadata], https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy[evictionPolicy].
 
