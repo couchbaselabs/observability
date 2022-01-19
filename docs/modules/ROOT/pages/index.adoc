@@ -29,7 +29,8 @@ We essentially need to support two fairly distinct types of user:
 * Limited cross-version compatibility by supporting migrating from previous version to latest version.
   Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided.
   We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
-* The Couchbase cluster monitor is proprietary and requires access to the repository to build it into the container.
+* CMOS is open source; however, the Couchbase Cluster Monitor is a closed source (private repository) component.
+  If you are building from source, this component will require access to the repository to be included in the container.
   The container can be built without it by removing it and there is a https://github.com/couchbaselabs/observability/tree/main/tools/build-oss-container.sh[helper script^] that does this, however certain features (in particular Grafana dashboards) may not be fully functional without it.
   We plan to address this in a future release.
 
