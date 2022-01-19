@@ -29,6 +29,9 @@ endif::env-packaged[]
 * xref:component-loki.adoc[Loki]
 * xref:component-prometheus.adoc[Prometheus]
 
+.Configuration
+* xref:configure-cmos.adoc[CMOS Configuration]
+
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
 * xref:deployment-fluentbit.adoc[Fluent Bit deployment]

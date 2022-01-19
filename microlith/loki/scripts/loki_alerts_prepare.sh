@@ -23,6 +23,10 @@ fi
 
 set -e
 
+if [ "${LOKI_ALERTS_INCLUDE_TEST:-}" != 'true' ]; then
+  rm /etc/loki/alerting/couchbase/test-rules.yaml || true
+fi
+
 # Work on the rules, we substitute in-place to keep it simple
 while IFS= read -r -d '' FILE
 do
@@ -46,4 +50,3 @@ done < <(find "/etc/loki/alerting/" -type f \( -name '*.yaml' -o -name '*.yml' \
 mkdir -p /etc/loki/rules/fake
 shopt -s nullglob
 cp /etc/loki/alerting/couchbase/*.yaml /etc/loki/alerting/custom/*.yaml /etc/loki/rules/fake/
-

@@ -38,4 +38,4 @@ __EOF__
 mkdir -p /etc/loki/rules/fake
 /etc/loki/scripts/loki_alerts_prepare.sh
 
-/usr/bin/loki -config.file="${LOKI_CONFIG_FILE}"
+/usr/bin/loki -config.file="${LOKI_CONFIG_FILE}" -config.expand-env=true

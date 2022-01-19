@@ -24,6 +24,104 @@ However, repeated crashes should be investigated as they may be caused by an und
 
 *Remediation*: Contact Couchbase Technical Support.
 
+[#CB90041]
+=== CPU Steal (CB90041)
+
+*Background*: Steal time is the percentage of time a virtual CPU waits for a real CPU while the hypervisor is servicing another virtual processor.
+In virtual environments, high CPU steal indicates that the virtual machines might be undersized or the hypervisor may be overcommitted.
+
+*Condition*: CPU steal rate is greater than 3%.
+
+*Remediation*: Increase resources available to virtual machine.
+
+*Further Reading*: https://docs.couchbase.com/server/current/install/best-practices-vm.html[Virtualisation Best Practices]
+
+[#CB90043]
+=== Disk Commit Fail (CB90043)
+
+*Background*: A disk commit failure is when Couchbase Server cannot write data from memory to the file system.
+
+*Condition*: An item failed to be written to disk.
+
+*Remediation*: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
+
+[#CB90044]
+=== Babysitter Managed Process Crash (CB90044)
+
+*Background*: Babysitter is part of Couchbase Server's cluster manager which is responsible for maintaining a variety of Couchbase Server processes.
+If any of the processes managed by the babysitter die, it is responsible for restarting them.
+
+*Condition*: A process managed by babysitter crashes.
+
+*Remediation*: A process can crash for a number of reasons, so if it happens once or twice it is not indicative of a Couchbase Server issue.
+However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html[Cluster Manager]
+
+[#CB90046]
+=== Indexer Crash (CB90046)
+
+*Background*: If the Index Service process (`indexer`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `indexer` logs.
+
+*Remediation*: Review `indexer.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/index-service.html[Index Service]
+
+//CB90047 to be added when couchbase-fluent-bit can parse query.log (https://issues.couchbase.com/browse/K8S-2585)
+
+[#CB90048]
+=== Cross Data Center Replication (XDCR) Crash (CB90048)
+
+*Background*: If the XDCR process (`goxdcr`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `goxdcr` logs.
+
+*Remediation*: Review `goxdcr.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/clusters-and-availability/xdcr-overview.html[Cross Data Center Replication]
+
+[#CB90049]
+=== Full Text Search (FTS) Crash (CB90049)
+
+*Background*: If the FTS Service process (`cbft`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `cbft` logs.
+
+*Remediation*: Review `fts.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/search-service.html[Search Service]
+
+[#CB90050]
+=== Eventing Crash (CB90050)
+
+*Background*: If the Eventing Service process crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `eventing.log`.
+
+*Remediation*: Review `eventing.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/eventing-service.html[Eventing Service]
+
+[#CB90051]
+=== Analytics Crash (CB90051)
+
+*Background*: If the Analytics Service process (`cbas`) crashes, it will be restarted within a few seconds by the cluster manager.
+However, repeated crashes should be investigated as they may be caused by an underlying issue.
+
+*Condition*: A crash is seen in `cbas` logs.
+
+*Remediation*: Review `analytics_debug.log` to identify the cause, or contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/analytics-service.html[Analytics Service]
+
 // end::group-node[]
 
 // tag::group-bucket[]
@@ -52,5 +150,26 @@ Note that this is different to slow operations logged by the Couchbase SDKs - th
 *Condition*: Slow operations logged by the Data Service.
 
 *Remediation*: Verify that your Data Service nodes have adequate system resources.
+
+[#CB90052]
+=== Malformed vBuckets (CB90052)
+
+*Background*: Files stored in a Bucket have become corrupted and attempting to read specific parts of those files results in a checksum error. This is normally the result of some issue with the underlying disk / file system / OS - either the data on-disk was corrupted at the time it was written, or the data has subsequently become corrupted and hence it cannot be successfully read.
+
+*Condition*: vBucket detected by Couchbase Server containing corrupted data.
+
+*Remediation*: Review your infrastructure for signs of disk problems or any other issues. 
+Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support.
+
+[#CB90055]
+=== Metadata Overhead (CB90055)
+
+*Background*: As Couchbase Server stores all of its working documents in memory, if a large portion of that memory is taken up by metadata it can impact performance and force useful documents to be stored on disk rather than memory.
+
+*Condition*: Over 50% of memory is taken up by metadata.
+
+*Remediation*: Increase memory allocation for bucket or change the https://docs.couchbase.com/server/current/manage/manage-buckets/edit-bucket.html#making-changes[evictionPolicy] of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/data/data.html#metadata[Metadata], https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy[evictionPolicy].
 
 // end::group-bucket[]

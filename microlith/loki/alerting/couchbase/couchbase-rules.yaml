@@ -5,7 +5,7 @@ groups:
 
       - alert: CB90036-memcachedCrash
         expr: |
-          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h])
+          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -54,7 +54,7 @@ groups:
           health_check_name: longDcpNames
           cluster: '{{ $labels.couchbase_cluster }}'
         annotations:
-          title: DCP Connection Failures due to MB-34280 (cluster ${{ labels.cluster }})
+          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.couchbase_cluster }})
           description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
@@ -72,6 +72,131 @@ groups:
           health_check_name: longDcpNames
           cluster: '{{ $labels.couchbase_cluster }}'
         annotations:
-          title: Long DCP Names (MB-34280) (cluster ${{ labels.cluster }})
+          title: Long DCP Names (MB-34280) (cluster {{ $labels.couchbase_cluster }})
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
+
+      - alert: CB90044-babysitterManagedProcessCrash
+        expr: |
+          count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90044
+          health_check_name: babysitterManagedProcessCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          process: '{{ $labels.process }}'
+          reason: '{{$labels.reason}}'
+        annotations:
+          title: Process managed by babysitter has crashed ({{ $labels.hostname }})
+          description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }} - {{$labels.reason}}"
+          remediation: Contact Couchbase Technical Support.
+
+      - alert: CB90046-indexerCrash
+        expr: |
+          count_over_time({file="indexer.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90046
+          health_check_name: indexerCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Index Service Crash ({{ $labels.hostname }})
+          description: "Index Service on node: {{ $labels.hostname }} has crashed."
+          remediation: Review indexer.log to identify the cause, or contact Couchbase Technical Support.
+
+# CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log (https://issues.couchbase.com/browse/K8S-2585)
+
+      - alert: CB90048-goxdcrCrash
+        expr: |
+          count_over_time({file="goxdcr.log"} |~ ".*(panic|SIGABRT:).*" | json [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90048
+          health_check_name: goxdcrCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: XDCR Crash ({{ $labels.hostname }})
+          description: "XDCR on node: {{ $labels.hostname }} has crashed."
+          remediation: Review goxdcr.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90049-ftsCrash
+        expr: |
+          count_over_time({file="fts.log"} |~ ".*(panic:|fatal error|fatal, err).*" | json [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90049
+          health_check_name: ftsCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Full Text Search Crash ({{ $labels.hostname }})
+          description: "FTS Service on node: {{ $labels.hostname }} has crashed."
+          remediation: Review fts.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90050-eventingCrash
+        expr: |
+          count_over_time({file="eventing.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90050
+          health_check_name: eventingCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Eventing Crash ({{ $labels.hostname }})
+          description: "Eventing Service on node: {{ $labels.hostname }} has crashed."
+          remediation: Review eventing.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90051-analyticsCrash
+        expr: |
+          count_over_time({file="analytics_debug.log"} |~ ".*JVM halting.*" | json [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90051
+          health_check_name: analyticsCrash
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: Analytics Crash ({{ $labels.hostname }})
+          description: "Analytics on node: {{ $labels.hostname }} has crashed."
+          remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90052-malformedvBuckets
+        expr: |
+          count_over_time({file="memcached.log"} |~ "malformed data in file" |json message="message" | line_format "{{.message}}" | pattern "<_>WARNING (<m_bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: bucket
+          severity: warning
+          health_check_id: CB90052
+          health_check_name: malformedvBuckets
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          bucket: '{{ $labels.m_bucket}}' # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
+          vbucket: '{{ $labels.vbucket }}'
+        annotations:
+          title: "Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.bucket}}, on node: {{ $labels.hostname }}"
+          description: "Files in vbucket, {{ $labels.vbucket }}, have been corrupted"
+          remediation: "Review your infrastructure for signs of disk problems or any other issues. Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support."

@@ -1,4 +1,4 @@
-personal_ws-1.1 en 77
+personal_ws-1.1 en 85
 AGPL
 CAO
 CMOS
@@ -76,3 +76,11 @@ Couchbase's
 JIRA
 VM
 ClusterRole
+overcommitted
+memcached
+FTS
+XDCR
+Eventing
+Analytics
+vBucket
+vBuckets
