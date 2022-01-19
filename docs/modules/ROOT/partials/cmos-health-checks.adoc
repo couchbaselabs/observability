@@ -122,6 +122,18 @@ However, repeated crashes should be investigated as they may be caused by an und
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/analytics-service.html[Analytics Service]
 
+=== Memcached Time Jumps (CB90057)
+
+*Background*: Time jumps occur when the cluster manager process (`beam.smp`) has not been scheduled by the CPU, or not scheduled enough for a significant period of time.
+Time jumps are the result of underlying issues (e.g. over provisioning or VM resource contention) with the machine that Couchbase Server is running on, particularly in virtualised environments.
+
+*Condition*: Memcached detected a time jump.
+
+*Remediation*: Check for evidence of your node being over provisioned or for evidence of VM resource contention.
+
+*Further Reading*: 
+
+
 // end::group-node[]
 
 // tag::group-bucket[]
