@@ -423,6 +423,21 @@ Note that this is different to slow operations logged by the Couchbase SDKs - th
 Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: <code>/opt/couchbase/bin/couch_dbck --verbose --json &lt;couchbase_server_data_directory&gt;/&lt;bucket&gt;/&lt;malformed_vb_file&gt;</code>, then take the response and provide it to Couchbase Technical Support.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90055"><a class="anchor" href="#CB90055"></a>Metadata Overhead (CB90055)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: As Couchbase Server stores all of its working documents in memory, if a large portion of that memory is taken up by metadata it can impact performance and force useful documents to be stored on disk rather than memory.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: Over 50% of memory is taken up by metadata.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: Increase memory allocation for bucket or change the <a href="https://docs.couchbase.com/server/current/manage/manage-buckets/edit-bucket.html#making-changes">evictionPolicy</a> of the bucket from <code>Value-only</code> (be aware this will have an adverse effect on performance).</p>
+</div>
+<div class="paragraph">
+<p><strong>Further Reading</strong>: <a href="https://docs.couchbase.com/server/current/learn/data/data.html#metadata">Metadata</a>, <a href="https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy">evictionPolicy</a>.</p>
+</div>
+</div>
 </div>
 </div>
 </article>
