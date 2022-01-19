@@ -222,7 +222,7 @@ groups:
 
       - alert: CB90056-connectionsRejected-Alert
         expr: |
-          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port <port>: <current_limit>; total: <total> " [24h]) > 1
+          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 1
         for: 1m
         labels:
           job: couchbase_fluent_bit
