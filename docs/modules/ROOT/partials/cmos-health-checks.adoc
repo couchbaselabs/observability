@@ -164,7 +164,7 @@ Alternatively, navigate to your Data storage directory and enter the following c
 [#CB90055]
 === Metadata Overhead (CB90055)
 
-*Background*: As Couchbase Server stores all of it's working documents in memory, if a large portion of that memory is taken up by metadata it can impact performance and force useful documents to be stored on disk rather than memory.
+*Background*: As Couchbase Server stores all of its working documents in memory, if a large portion of that memory is taken up by metadata it can impact performance and force useful documents to be stored on disk rather than memory.
 
 *Condition*: Over 50% of memory is taken up by metadata.
 
