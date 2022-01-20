@@ -72,6 +72,8 @@ SDKs
 DCP
 rebalance
 txt
+Couchbase's
+JIRA
 VM
 ClusterRole
 overcommitted
