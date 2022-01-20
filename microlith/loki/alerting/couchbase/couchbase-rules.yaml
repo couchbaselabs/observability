@@ -201,28 +201,9 @@ groups:
           description: "Files in vbucket, {{ $labels.vbucket }}, have been corrupted"
           remediation: "Review your infrastructure for signs of disk problems or any other issues. Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support."
 
-      - alert: CB90056-connectionsRejected-Warning
-        expr: | # warning is triggered when *just* one of these messages is detected in a 24 hour period
-          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) == 1
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90056
-          health_check_name: connectionsRejected
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          current_limit: '{{ $labels.current_limit }}'
-          total: '{{ $labels.total }}'
-        annotations:
-          title: "Too Many Open Connections to Memcached (Node: {{ $labels.hostname }})"
-          description: "Memcached has reached the maximum number of open connections ({{ $labels.current_limit }}), this means it will start rejecting new connections"
-          remediation: Contact your network/application team to see if there are any applications keeping open a large number of connections.
-
-      - alert: CB90056-connectionsRejected-Alert
-        expr: | # alert is triggered when *more than* one of these messages is detected in a 24 hour period
-          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 1
+      - alert: CB90056-connectionsRejected
+        expr: |
+          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -236,5 +217,5 @@ groups:
           total: '{{ $labels.total }}'
         annotations:
           title: "Too Many Open Connections to Memcached (Node: {{ $labels.hostname }})"
-          description: "Memcached has reached the maximum number of open connections multiple times in the past 24 hours (Current/Limit{{ $labels.current_limit }}, Total: {{ $labels.total}}), this means it will start rejecting new connections"
+          description: "Memcached has reached the maximum number of open connections (Current/Limit{{ $labels.current_limit }}, Total: {{ $labels.total}}), this means it will start rejecting new connections"
           remediation: Contact your network/application team to see if there are any applications keeping open a large number of connections.
