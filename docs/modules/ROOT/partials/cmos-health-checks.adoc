@@ -122,6 +122,18 @@ However, repeated crashes should be investigated as they may be caused by an und
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/services-and-indexes/services/analytics-service.html[Analytics Service]
 
+[#CB90056]
+=== Memcached Connections Rejected (CB90056)
+
+*Background*: If `memcached` (the Data Service) has too many open connections then it won't allow any new ones to be made.
+This will result in client errors on applications attempting to connect to Couchbase Server
+
+*Condition*: The number of open connections to `memcached` reaches its limit.
+
+*Remediation*: Contact your network/application team to see if there are any applications keeping open a large number of connections.
+
+*Further Reading*: https://docs.couchbase.com/server/current/rest-api/rest-manage-cluster-connections.html[Manage Cluster Connections]
+
 === Memcached Time Jumps (CB90057)
 
 *Background*: Memcached time jumps occur when the `memcached` process has not been scheduled by the CPU, or not scheduled enough for a significant period of time.
