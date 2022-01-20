@@ -374,6 +374,22 @@ However, repeated crashes should be investigated as they may be caused by an und
 </div>
 </div>
 <div class="sect2">
+<h3 id="CB90056"><a class="anchor" href="#CB90056"></a>Memcached Connections Rejected (CB90056)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: If <code>memcached</code> (the Data Service) has too many open connections then it won&#8217;t allow any new ones to be made.
+This will result in client errors on applications attempting to connect to Couchbase Server</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: The number of open connections to <code>memcached</code> reaches its limit.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: Contact your network/application team to see if there are any applications keeping open a large number of connections.</p>
+</div>
+<div class="paragraph">
+<p><strong>Further Reading</strong>: <a href="https://docs.couchbase.com/server/current/rest-api/rest-manage-cluster-connections.html">Manage Cluster Connections</a></p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_memcached_time_jumps_cb90057"><a class="anchor" href="#_memcached_time_jumps_cb90057"></a>Memcached Time Jumps (CB90057)</h3>
 <div class="paragraph">
 <p><strong>Background</strong>: Memcached time jumps occur when the <code>memcached</code> process has not been scheduled by the CPU, or not scheduled enough for a significant period of time.
