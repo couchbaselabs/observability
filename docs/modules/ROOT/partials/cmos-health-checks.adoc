@@ -128,7 +128,7 @@ However, repeated crashes should be investigated as they may be caused by an und
 *Background*: If `memcached` (the Data Service) has too many open connections then it won't allow any new ones to be made.
 This will result in client errors on applications attempting to connect to Couchbase Server
 
-*Condition*: The number of open connections to `memcached` reaches its limit.
+*Condition*: The number of open connections to `memcached` reaches its limit (set as warning if detected once and alert if detected multiple times in a 24 hour period).
 
 *Remediation*: Contact your network/application team to see if there are any applications keeping open a large number of connections.
 
