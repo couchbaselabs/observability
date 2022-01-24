@@ -91,3 +91,39 @@ groups:
         title: "Metadata Overhead Above 90% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
         description: The percentage of memory that is taken up by metadata is over 90%
         remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+
+    - alert: CB90061-diskWriteQueueLength-Alert
+      expr: |
+        kv_ep_storage_age_seconds > 10
+      for: 0m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90061
+        health_check_name: diskWriteQueueLength
+        cluster: '{{ $labels.cluster }}'
+        node: '{{ $labels.instance }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: critical
+      annotations:
+        title: "The age of items in the disk write queue is very high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
+        description: he age of items in the disk write queue is over 10 seconds.
+        remediation: Contact Couchbase Technical Support.
+
+    - alert: CB90061-diskWriteQueueLength-Warn
+      expr: |
+        kv_ep_storage_age_seconds > 2
+      for: 0m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90061
+        health_check_name: diskWriteQueueLength
+        cluster: '{{ $labels.cluster }}'
+        node: '{{ $labels.instance }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: warning
+      annotations:
+        title: "The age of items in the disk write queue is high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
+        description: The age of items in the disk write queue is over 2 seconds.
+        remediation: Contact Couchbase Technical Support.
