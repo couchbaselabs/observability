@@ -84,6 +84,12 @@ components:
               type: string
             useTLS:
               type: boolean
+        metricsConfig:
+          type: object
+          additionalProperties: false
+          properties:
+            metricsPort:
+              type: number
         hostname:
           type: string
     ErrorResponse:

@@ -24,8 +24,11 @@ type Cluster struct {
 		UseTLS         *bool    `json:"useTLS,omitempty"`
 		Username       string   `json:"username"`
 	} `json:"couchbaseConfig"`
-	Hostname string  `json:"hostname"`
-	Name     *string `json:"name,omitempty"`
+	Hostname      string `json:"hostname"`
+	MetricsConfig *struct {
+		MetricsPort *float32 `json:"metricsPort,omitempty"`
+	} `json:"metricsConfig,omitempty"`
+	Name *string `json:"name,omitempty"`
 }
 
 // PostClustersAddJSONBody defines parameters for PostClustersAdd.
@@ -102,7 +105,6 @@ func RegisterHandlers(router EchoRouter, si ServerInterface) {
 // Registers handlers, and prepends BaseURL to the paths, so that the paths
 // can be served under a prefix.
 func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL string) {
-
 	wrapper := ServerInterfaceWrapper{
 		Handler: si,
 	}
@@ -110,26 +112,25 @@ func RegisterHandlersWithBaseURL(router EchoRouter, si ServerInterface, baseURL 
 	router.POST(baseURL+"/clusters/add", wrapper.PostClustersAdd)
 	router.POST(baseURL+"/collectInformation", wrapper.PostCollectInformation)
 	router.GET(baseURL+"/openapi.json", wrapper.GetOpenapiJson)
-
 }
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
 
-	"H4sIAAAAAAAC/5RVTXPjNgz9Kxy2R6+kJJ02q1NTN9NxJ2k89d7SPdAUZHFDESwB2vVk/N87pOX4I/Hu",
-	"5qYhiPeAxwfoWWrsPTpwTLJ+lqQ76FX+HNtIDCF9qqYxbNApOw3oIbABknWrLMFI+oOjBBd1N1cEY3St",
-	"Wbwzu1dOLaAHx1MMnE4aaFW0LOvr6uPFSPLag6yli/0cgtyMpFdEKwxNujsEiYNxixSMBJ/uZgehOaIF",
-	"5YZYcKqHNxI3Ixng32gCNLJ+3N88YPv8UgrOv4DmhNgh8RnEkfw+qlP1DkBfM6Zk41rcyu5Y6awY9MpY",
-	"WefQry+AhcZe7sqQ493xSEycLuRIxpByOmZPdVkep21GsgHSwfj0jLKWf9/OPomb6URgK7gDsa02BpXi",
-	"YgZhaXSSyxoNjnLfA/GNV7oDcVlUrzhXq1WhcrjAsCiHXCrvJuPbv2a3H1LOZiTZsD1qQdyjM4xJT/FP",
-	"rKrLn8XDnCAs1dxYw2sxY6WfxIezVS4h0Lav5UViQA9OeSNreVVUxVV+du6yP0u9HQoqVZMt55Gy6MnE",
-	"GXfSyFpOkXgYH7ppGrl9ZCD+DZv17rnA5UzlvTU655ZfKJWxm8L09WOAVtbyh3I/puUwo+VuQDfHLuIQ",
-	"IR+QxyRggrmsqnfRvmNk8SmbzsVe1o+Je2/Ul2k7cTk+nXHzscuG/oRqGmgERa2BqI3WrjMixb5XYZ1M",
-	"1TRCCQcrsTfF8FCCUUwD9sAdRMp5pUZrQfPEtRh6tSX76ku+vv9NeRn+49JbZZysXbT2VXMzDqD6NEAW",
-	"F4vkXYzsI4s2YC+GEj+YPWdB3UnbQ10kGqMWDomNFgcJQs0xshjfP8xEi0HMovcYWCin7JoMFVs1BrcX",
-	"OxMs4A0Z/gB+2N77k76n/a+765svn7jSerkqKkEetGkHsNwId4bS9jmR4yHrR3kh7QDOJxdb3rQnIJCs",
-	"H59ParhDray4NzqgNdwdrau6LG0Kp+VcX1fXVanzbimVN2VeIm+j/Q5LsOjT/+083i8XH396Afq8+T8A",
-	"AP//pnnkhKIHAAA=",
+	"H4sIAAAAAAAC/5xVTXPjNgz9Kxy2R0dSkk6b1alpmumkkzSZem/pHmgKsrihCJYA7Xoy/u8dUnL8kXh3",
+	"szcNwfcAPDxCz1Jj79GBY5L1syTdQa/y55WNxBDSp2oawwadsg8BPQQ2QLJulSWYSL9zlOii7maK4Apd",
+	"a+bvRPfKqTn04PgBA6eTBloVLcv6ovpwOpG88iBr6WI/gyDXE+kV0RJDk+6OQeJg3DwFI8HH2+lOaIZo",
+	"QbkxFpzq4Q3geiID/BtNgEbWj9ubO9k+vZSCs8+gOTF2SHyEcSJ74GA0fZ8qA3YjyYEG6zdK+bbGDme1",
+	"08Lr/hLYuBaHITtWOhcDvTJW1jn06wthobGXmzLk1eZ4Im6cLuRExpAwHbOnuiz3YeuJbIB0MD7JI2v5",
+	"9/X0o7h8uBHYCu5ADNXGoFJcTCEsjE7DsUaDo9z3mPjSK92BOCuqVzmXy2WhcrjAMC9HLJW3N1fXf02v",
+	"TxImKWvY7rUg7tAZxqSn+CdW1dnP4n5GEBZqZqzhlZiy0k/i5GiVCwg09LU4TRnQg1PeyFqeF1Vxnk3G",
+	"XZ57qYcnSKVqssE9UhY9mSPz3jSylg9IPD5WumwaOQwZiH/DZrUZF7iMVN5bozO2/EypjM2bT18/Bmhl",
+	"LX8ot0uhHDdCuVkH630XcYiQD8hjEjDRnFXVu9K+4yngUzadi72sH1PurVFf3vaBy/HpiJv3XTb2J1TT",
+	"QCMoag1EbbR2lRkp9r0Kq2SqphFKOFiKrSnGQQlG8RCwB+4gUsaVGq0FzTeuxdCrIdkXJ/n6/lflZfiP",
+	"S2+VcbJ20dpXzU05gOrTA7I4nyfvYmQfWbQBezGWeGK2OQvqDtoe6yLRGDV3SGy02AEINcPI4urufipa",
+	"DGIavcfAQjllV2SoGNQY3V5sTDCHN2T4A/h+uPcnfUv7X3bXVyefcqX1cl5Ugjxo045kuRHuDKXtcyDH",
+	"fdaP8kLaEBwHF0PetCcgkKwfnw9quEWtrLgzOqA13O2tq7osbQqn5VxfVBdVqfNuKZU3ZV4ib7P9Dguw",
+	"6NPf9DjfL6cffnoh+rT+PwAA//8bCrtwEAgAAA==",
 }
 
 // GetSwagger returns the content of the embedded swagger specification file
@@ -164,7 +165,7 @@ func decodeSpecCached() func() ([]byte, error) {
 
 // Constructs a synthetic filesystem for resolving external references when loading openapi specifications.
 func PathToRawSpec(pathToFile string) map[string]func() ([]byte, error) {
-	var res = make(map[string]func() ([]byte, error))
+	res := make(map[string]func() ([]byte, error))
 	if len(pathToFile) > 0 {
 		res[pathToFile] = rawSpec
 	}
@@ -178,12 +179,12 @@ func PathToRawSpec(pathToFile string) map[string]func() ([]byte, error) {
 // Externally referenced files must be embedded in the corresponding golang packages.
 // Urls can be supported but this task was out of the scope.
 func GetSwagger() (swagger *openapi3.T, err error) {
-	var resolvePath = PathToRawSpec("")
+	resolvePath := PathToRawSpec("")
 
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 	loader.ReadFromURIFunc = func(loader *openapi3.Loader, url *url.URL) ([]byte, error) {
-		var pathToFile = url.String()
+		pathToFile := url.String()
 		pathToFile = path.Clean(pathToFile)
 		getSpec, ok := resolvePath[pathToFile]
 		if !ok {
