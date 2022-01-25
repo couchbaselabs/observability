@@ -107,12 +107,12 @@ groups:
         severity: critical
       annotations:
         title: "The age of items in the disk write queue is very high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: he age of items in the disk write queue is over 10 seconds.
+        description: The age of items in the disk write queue is over 10 seconds.
         remediation: Contact Couchbase Technical Support.
 
     - alert: CB90061-diskWriteQueueLength-Warn
       expr: |
-        kv_ep_storage_age_seconds > 2
+        kv_ep_storage_age_seconds > 2 < 10
       for: 0m
       labels:
         job: couchbase_prometheus
