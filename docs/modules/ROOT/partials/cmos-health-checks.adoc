@@ -198,12 +198,12 @@ Alternatively, navigate to your Data storage directory and enter the following c
 [#CB90061]
 === Disk Write Queue (CB90061)
 
-*Background*: Having items in the disk write queue for a long time can cause backoffs.
+*Background*: Having items in the disk write queue for too long could cause backoffs. This usually indicates either a sizing issue, or a storage medium failing.
 
-*Condition*: Age of items in disk write queue over 2 seconds.
+*Condition*: Age of items in disk write queue over 40 seconds.
 
 *Remediation*: Contact Couchbase Technical Support.
 
-*Further Reading*: https://docs.couchbase.com/server/current/metrics-reference/data-service-metrics.html#kv_ep_storage_age_seconds
+*Further Reading*: https://docs.couchbase.com/server/current/metrics-reference/data-service-metrics.html#kv_ep_storage_age_seconds, https://docs.couchbase.com/server/current/install/sizing-general.html#sizing-data-service-nodes
 
 // end::group-bucket[]

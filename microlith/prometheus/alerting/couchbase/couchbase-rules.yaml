@@ -94,8 +94,8 @@ groups:
 
     - alert: CB90061-diskWriteQueueLength-Alert
       expr: |
-        kv_ep_storage_age_seconds > 10
-      for: 0m
+        kv_ep_storage_age_seconds > 60
+      for: 1m
       labels:
         job: couchbase_prometheus
         kind: bucket
@@ -107,13 +107,13 @@ groups:
         severity: critical
       annotations:
         title: "The age of items in the disk write queue is very high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: he age of items in the disk write queue is over 10 seconds.
+        description: The age of items in the disk write queue is over 60 seconds.
         remediation: Contact Couchbase Technical Support.
 
     - alert: CB90061-diskWriteQueueLength-Warn
       expr: |
-        kv_ep_storage_age_seconds > 2
-      for: 0m
+        kv_ep_storage_age_seconds > 40 < 60
+      for: 1m
       labels:
         job: couchbase_prometheus
         kind: bucket
@@ -125,5 +125,5 @@ groups:
         severity: warning
       annotations:
         title: "The age of items in the disk write queue is high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: The age of items in the disk write queue is over 2 seconds.
+        description: The age of items in the disk write queue is over 40 seconds.
         remediation: Contact Couchbase Technical Support.
