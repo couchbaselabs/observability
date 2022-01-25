@@ -67,6 +67,7 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 		useTLS,
 		data.CouchbaseConfig.Username,
 		data.CouchbaseConfig.Password,
+		data.MetricsConfig,
 	)
 	if err != nil {
 		return fmt.Errorf("could not create scrape config: %w", err)
@@ -124,8 +125,12 @@ func (s *Server) PostCollectInformation(ctx echo.Context) error {
 	return ctx.Stream(http.StatusOK, "text/plain", stdout)
 }
 
-func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username,
-	password string) (*prometheus.ScrapeConfig, error) {
+type MetricsConfig *struct {
+	MetricsPort *float32 `json:"metricsPort,omitempty"`
+}
+
+func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username, password string,
+	metricsConfig MetricsConfig) (*prometheus.ScrapeConfig, error) {
 	staticConfig := prometheus.StaticConfig{
 		Targets: make([]string, len(cluster.Nodes)),
 		Labels: map[string]string{
@@ -143,8 +148,9 @@ func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, 
 		if node.Version.AtLeast(cbvalue.Version7_0_0) {
 			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
 			anyNodeCB7 = true
+		} else if metricsConfig != nil && metricsConfig.MetricsPort != nil {
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%.0f", hostname, *metricsConfig.MetricsPort)
 		} else {
-			// TODO (CMOS-106): allow customizing this
 			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, 9091)
 		}
 	}
