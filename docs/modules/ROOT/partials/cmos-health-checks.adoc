@@ -200,7 +200,7 @@ Alternatively, navigate to your Data storage directory and enter the following c
 
 *Background*: Having items in the disk write queue for too long could cause backoffs. This usually indicates either a sizing issue, or a storage medium failing.
 
-*Condition*: Age of items in disk write queue over 40 seconds produces a warning, and over 60 an alert.
+*Condition*: Age of items in disk write queue over 40 seconds produces a warning, and upgraded to critical if the age is over 60 seconds.
 
 *Remediation*: Review your hardware for malfunctions or sizing issues.
 If the problem persists, then please contact Couchbase Technical Support.
