@@ -204,6 +204,6 @@ Alternatively, navigate to your Data storage directory and enter the following c
 
 *Remediation*: Review your hardware for malfunctions or sizing issues. If the problem persists, then please contact Couchbase Technical Support. 
 
-*Further Reading*: https://docs.couchbase.com/server/current/metrics-reference/data-service-metrics.html#kv_ep_storage_age_seconds, https://docs.couchbase.com/server/current/install/sizing-general.html#sizing-data-service-nodes
+*Further Reading*: https://docs.couchbase.com/server/current/metrics-reference/data-service-metrics.html#kv_ep_storage_age_seconds[kv_ep_storage_age_seconds], https://docs.couchbase.com/server/current/install/sizing-general.html#sizing-data-service-nodes[sizing-data-service-nodes]
 
 // end::group-bucket[]
