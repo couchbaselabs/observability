@@ -94,7 +94,7 @@ groups:
 
     - alert: CB90061-diskWriteQueueLength-Alert
       expr: |
-        kv_ep_storage_age_seconds > 100
+        kv_ep_storage_age_seconds > 99
       for: 1m
       labels:
         job: couchbase_prometheus
@@ -108,7 +108,7 @@ groups:
         title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
         description: The age of items in the disk write queue is over 100 seconds.
         remediation: Review your hardware for malfunctions or sizing issues. 
-If the problem persists, then please contact Couchbase Technical Support. 
+          If the problem persists, then please contact Couchbase Technical Support. 
 
     - alert: CB90061-diskWriteQueueLength-Warn
       expr: |
@@ -126,4 +126,4 @@ If the problem persists, then please contact Couchbase Technical Support.
         title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
         description: The age of items in the disk write queue is over 50 seconds.
         remediation: Review your hardware for malfunctions or sizing issues. 
-If the problem persists, then please contact Couchbase Technical Support. 
+          If the problem persists, then please contact Couchbase Technical Support. 
