@@ -94,7 +94,7 @@ groups:
 
     - alert: CB90061-diskWriteQueueLength-Alert
       expr: |
-        kv_ep_storage_age_seconds > 60
+        kv_ep_storage_age_seconds > 100
       for: 1m
       labels:
         job: couchbase_prometheus
@@ -102,17 +102,17 @@ groups:
         health_check_id: CB90061
         health_check_name: diskWriteQueueLength
         cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
         bucket: '{{ $labels.bucket }}'
         severity: critical
       annotations:
-        title: "The age of items in the disk write queue is very high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: The age of items in the disk write queue is over 60 seconds.
-        remediation: Contact Couchbase Technical Support.
+        title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
+        description: The age of items in the disk write queue is over 100 seconds.
+        remediation: Review your hardware for malfunctions or sizing issues. 
+If the problem persists, then please contact Couchbase Technical Support. 
 
     - alert: CB90061-diskWriteQueueLength-Warn
       expr: |
-        kv_ep_storage_age_seconds > 40 < 60
+        (kv_ep_storage_age_seconds > 50) and (kv_ep_storage_age_seconds < 100)
       for: 1m
       labels:
         job: couchbase_prometheus
@@ -120,10 +120,10 @@ groups:
         health_check_id: CB90061
         health_check_name: diskWriteQueueLength
         cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
         bucket: '{{ $labels.bucket }}'
         severity: warning
       annotations:
-        title: "The age of items in the disk write queue is high on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: The age of items in the disk write queue is over 40 seconds.
-        remediation: Contact Couchbase Technical Support.
+        title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
+        description: The age of items in the disk write queue is over 50 seconds.
+        remediation: Review your hardware for malfunctions or sizing issues. 
+If the problem persists, then please contact Couchbase Technical Support. 
