@@ -147,11 +147,14 @@ Time jumps are the result of underlying issues (e.g. over provisioning or VM res
 
 === Dropped Ticks (CB90062)
 
-*Background*: Couchbase Server nodes regularly send heartbeat ticks between each other to make sure they are all active. If one of these ticks does not gets received it counts as a `dropped tick`. Dropped ticks are usually a sign of resource contention.
+*Background*: Couchbase Server nodes regularly send heartbeat ticks to each other to collect stats from different Couchbase Server components.
+If the Cluster Manager logs `dropped ticks` this means when it tried to process a tick, it found other ticks had not been processed yet.
+This means that due to a scheduling issue, the Cluster Manager was not able to process the previous tick in time.
+Dropped ticks are usually a sign of resource contention.
 
 *Condition*: Can be triggered by either detecting over 10 dropped ticks on a node or by detecting over 4 instances of dropped ticks occurring on a node.
 
-*Remediation*: Increase resources available to Couchbase Server node
+*Remediation*: Increase number of CPUs available to Couchbase Server.
 
 *Further Reading*: xref:7.0@server:install:sizing-general[Sizing Guidelines]
 
