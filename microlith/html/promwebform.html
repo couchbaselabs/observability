@@ -74,6 +74,24 @@
             </label>
           </div>
         </fieldset>
+        <fieldset x-show="doProm">
+        <legend>
+            <h2>Prometheus configuration</h2>
+          </legend>
+          <div>
+            <label for="prometheusPort"
+              >Prometheus Exporter Port:</label
+            >
+            <input
+              type="text"
+              id="prometheusPort"
+              x-model="prometheusPort"
+              required
+            />
+            <br />
+            <em>Note: this field is not necessary (and will be ignored) if the cluster is running Couchbase Server 7.0 or above, as the built-in Prometheus metrics will be used and an exporter is not necessary.</em>
+          </div>
+        </fieldset>
         <fieldset x-show="doCBMM">
           <legend>
             <h2>Couchbase Cluster Monitor configuration</h2>
@@ -162,6 +180,8 @@
             cbmmUsername: "admin",
             cbmmPassword: "password",
 
+            prometheusPort: 9091,
+
             yamlPrometheus: "",
             healthcheckCommand: "",
 
@@ -210,7 +230,7 @@
                 this.yamlPrometheus = `    - job_name: couchbase-server-<cluster name>
       static_config:
         targets:
-          - '${this.hostname}:${this.managementPort}'
+          - '${this.hostname}:${this.prometheusPort ?? this.managementPort}'
           # Add the other nodes in the cluster here
         labels:
           cluster: <cluster name>
@@ -254,6 +274,9 @@
                         managementPort: parseInt(this.managementPort, 10),
                         useTLS: this.useTLS,
                       },
+                      metricsConfig: this.prometheusPort === null || String(this.prometheusPort) === "" ? null : {
+                        metricsPort: parseInt(this.prometheusPort, 10),
+                      }
                     }),
                   })
                     .then(async (resp) => {
