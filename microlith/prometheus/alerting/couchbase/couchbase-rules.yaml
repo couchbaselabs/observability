@@ -112,7 +112,7 @@ groups:
 
     - alert: CB90061-diskWriteQueueLength-Warn
       expr: |
-        (kv_ep_storage_age_seconds > 50) and (kv_ep_storage_age_seconds < 100)
+        kv_ep_storage_age_seconds > 50 < 100
       for: 1m
       labels:
         job: couchbase_prometheus
