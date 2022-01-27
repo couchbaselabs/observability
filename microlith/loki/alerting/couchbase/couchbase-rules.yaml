@@ -253,8 +253,8 @@ groups:
           ticks: '{{ $labels.ticks }}'
         annotations:
           title: "Multiple Instances of Dropped Ticks on Node: {{ $labels.hostname }}"
-          description: Couchbase Server nodes regularly send heartbeat ticks to each other to collect stats from different Couchbase Server components. Dropped ticks are usually a sign of resource contention.
-          remediation: Increase resources available to Couchbase Server node
+          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
 
       - alert: CB90062-droppedTicks-max # fires when over 10 dropped ticks are detected on any collector
         expr: |
@@ -271,5 +271,5 @@ groups:
           ticks: '{{ $labels.ticks }}'
         annotations:
           title: "Large Number of Dropped Ticks Detected (node: {{ $labels.hostname }})"
-          description: Couchbase Server nodes regularly send heartbeat ticks to each other to collect stats from different Couchbase Server components. Dropped ticks are usually a sign of resource contention.
-          remediation: Increase resources available to Couchbase Server node
+          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
