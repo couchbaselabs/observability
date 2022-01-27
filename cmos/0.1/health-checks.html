@@ -470,6 +470,24 @@ Alternatively, navigate to your Data storage directory and enter the following c
 <p><strong>Further Reading</strong>: <a href="https://docs.couchbase.com/server/current/learn/data/data.html#metadata">Metadata</a>, <a href="https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy">evictionPolicy</a>.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90061"><a class="anchor" href="#CB90061"></a>Disk Write Queue (CB90061)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: Having items in the disk write queue for too long could cause backoffs.
+This usually indicates either a sizing issue, or a storage medium failing.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: If the time since the object most recently persisted to disk was added to the Disk Write Queue is over 50 seconds, a warning is produced.
+If that time breaches 100 seconds, then a critical alert is produced.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: Review your hardware for malfunctions or sizing issues.
+If the problem persists, then please contact Couchbase Technical Support.</p>
+</div>
+<div class="paragraph">
+<p><strong>Further Reading</strong>: <a href="#7.0@server:metrics-reference:data-service-metrics.adoc#kv_ep_storage_age_second" class="page unresolved">Data Service Metrics</a>, <a href="#7.0@server:install:sizing-general.adoc#sizing-data-service-nodes" class="page unresolved">Sizing Data Service Nodes</a></p>
+</div>
+</div>
 </div>
 </div>
 </article>
