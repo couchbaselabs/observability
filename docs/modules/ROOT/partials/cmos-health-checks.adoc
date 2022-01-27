@@ -194,7 +194,7 @@ Note that this is different to slow operations logged by the Couchbase SDKs - th
 
 *Condition*: vBucket detected by Couchbase Server containing corrupted data.
 
-*Remediation*: Review your infrastructure for signs of disk problems or any other issues. 
+*Remediation*: Review your infrastructure for signs of disk problems or any other issues.
 Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support.
 
 [#CB90055]
@@ -207,5 +207,19 @@ Alternatively, navigate to your Data storage directory and enter the following c
 *Remediation*: Increase memory allocation for bucket or change the https://docs.couchbase.com/server/current/manage/manage-buckets/edit-bucket.html#making-changes[evictionPolicy] of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
 
 *Further Reading*: https://docs.couchbase.com/server/current/learn/data/data.html#metadata[Metadata], https://docs.couchbase.com/server/current/rest-api/rest-bucket-create.html#evictionpolicy[evictionPolicy].
+
+[#CB90061]
+=== Disk Write Queue (CB90061)
+
+*Background*: Having items in the disk write queue for too long could cause backoffs. 
+This usually indicates either a sizing issue, or a storage medium failing.
+
+*Condition*: If the time since the object most recently persisted to disk was added to the Disk Write Queue is over 50 seconds, a warning is produced. 
+If that time breaches 100 seconds, then a critical alert is produced.
+
+*Remediation*: Review your hardware for malfunctions or sizing issues.
+If the problem persists, then please contact Couchbase Technical Support.
+
+*Further Reading*: xref:7.0@server:metrics-reference:data-service-metrics.adoc#kv_ep_storage_age_second[Data Service Metrics], xref:7.0@server:install:sizing-general.adoc#sizing-data-service-nodes[Sizing Data Service Nodes]
 
 // end::group-bucket[]
