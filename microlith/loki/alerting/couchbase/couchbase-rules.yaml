@@ -236,3 +236,40 @@ groups:
           title: "Time Jumps Detected in memcached.log (Node: {{ $labels.hostname }})"
           description: Time jumps occur when the cluster manager process (`beam.smp`) has not been scheduled by the CPU, or not scheduled enough for a significant period of time.
           remediation: Check for evidence of your node being over provisioned or for evidence of VM resource contention.
+
+      - alert: CB90062-droppedTicks-instances # fires when over 4 instances of dropped ticks are detected
+        expr: |
+          count(count_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_> Dropped <ticks> ticks<_>" [1h])) > 4
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90062
+          health_check_name: droppedTicks
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          collector: '{{ $labels.collector }}'
+          ticks: '{{ $labels.ticks }}'
+        annotations:
+          title: "Multiple Instances of Dropped Ticks on Node: {{ $labels.hostname }}"
+          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
+
+      - alert: CB90062-droppedTicks-max # fires when over 10 dropped ticks are detected on any collector
+        expr: |
+          sum((sum_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_>(Collector: <collector>) Dropped <ticks> ticks" | unwrap ticks  [1h])) > 10)
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90062
+          health_check_name: droppedTicks
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          ticks: '{{ $labels.ticks }}'
+        annotations:
+          title: "Large Number of Dropped Ticks Detected (node: {{ $labels.hostname }})"
+          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
