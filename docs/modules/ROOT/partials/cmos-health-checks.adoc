@@ -159,7 +159,7 @@ Dropped ticks are usually a sign of resource contention, specifically CPU conten
 *Further Reading*: xref:7.0@server:install:sizing-general[Sizing Guidelines]
 
 [#CB90067]
-=== Service Has Been Forced to Roll Back to Zero (CB90067)
+=== Service Rollback to Zero (CB90067)
 
 *Background*: A service has been forced to roll back to zero. This is bad because it means the service is attempting to resynchronise the entirety of the data set.
 
