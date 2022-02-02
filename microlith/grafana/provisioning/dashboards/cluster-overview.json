@@ -257,7 +257,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=severity=critical"
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=cluster=\"${cluster:querystring}\"&filter=severity=critical"
         }
       ],
       "title": "Critical Alerts",
@@ -687,7 +687,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=severity=warning"
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=cluster=\"${cluster:querystring}\"&filter=severity=warning"
         }
       ],
       "title": "Warnings",

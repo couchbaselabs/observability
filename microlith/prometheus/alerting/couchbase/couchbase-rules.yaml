@@ -55,3 +55,75 @@ groups:
         title: "Disk Commit Fail on bucket: {{ $labels.bucket }}"
         description: A disk commit has failed on {{ $labels.bucket }} (cluster {{ $labels.cluster }}, node {{ $labels.instance }}).
         remediation: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
+
+    - alert: CB90055-metadataOverhead-Warning
+      expr: |
+        (kv_total_memory_overhead_bytes / kv_ep_max_size) > 0.5 < 0.9
+      for: 0m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90055
+        health_check_name: metadataOverhead
+        cluster: '{{ $labels.cluster }}'
+        node: '{{ $labels.instance }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: warning
+      annotations:
+        title: "Metadata Overhead Above 50% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
+        description: The percentage of memory that is taken up by metadata is over 50%
+        remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+
+    - alert: CB90055-metadataOverhead-Alert
+      expr: |
+        (kv_total_memory_overhead_bytes / kv_ep_max_size) >= 0.9
+      for: 0m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90055
+        health_check_name: metadataOverhead
+        cluster: '{{ $labels.cluster }}'
+        node: '{{ $labels.instance }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: critical
+      annotations:
+        title: "Metadata Overhead Above 90% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
+        description: The percentage of memory that is taken up by metadata is over 90%
+        remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+
+    - alert: CB90061-diskWriteQueueLength-Alert
+      expr: |
+        kv_ep_storage_age_seconds > 99
+      for: 1m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90061
+        health_check_name: diskWriteQueueLength
+        cluster: '{{ $labels.cluster }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: critical
+      annotations:
+        title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
+        description: The age of items in the disk write queue is over 100 seconds.
+        remediation: Review your hardware for malfunctions or sizing issues. 
+          If the problem persists, then please contact Couchbase Technical Support. 
+
+    - alert: CB90061-diskWriteQueueLength-Warn
+      expr: |
+        kv_ep_storage_age_seconds > 50 < 100
+      for: 1m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90061
+        health_check_name: diskWriteQueueLength
+        cluster: '{{ $labels.cluster }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: warning
+      annotations:
+        title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
+        description: The age of items in the disk write queue is over 50 seconds.
+        remediation: Review your hardware for malfunctions or sizing issues. 
+          If the problem persists, then please contact Couchbase Technical Support. 

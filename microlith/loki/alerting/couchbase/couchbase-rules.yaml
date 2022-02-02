@@ -181,3 +181,95 @@ groups:
           title: Analytics Crash ({{ $labels.hostname }})
           description: "Analytics on node: {{ $labels.hostname }} has crashed."
           remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.
+
+      - alert: CB90052-malformedvBuckets
+        expr: |
+          count_over_time({file="memcached.log"} |~ "malformed data in file" |json message="message" | line_format "{{.message}}" | pattern "<_>WARNING (<m_bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: bucket
+          severity: warning
+          health_check_id: CB90052
+          health_check_name: malformedvBuckets
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          bucket: '{{ $labels.m_bucket}}' # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
+          vbucket: '{{ $labels.vbucket }}'
+        annotations:
+          title: "Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.bucket}}, on node: {{ $labels.hostname }}"
+          description: "Files in vbucket, {{ $labels.vbucket }}, have been corrupted"
+          remediation: "Review your infrastructure for signs of disk problems or any other issues. Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support."
+
+      - alert: CB90056-connectionsRejected
+        expr: |
+          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90056
+          health_check_name: connectionsRejected
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          current_limit: '{{ $labels.current_limit }}'
+          total: '{{ $labels.total }}'
+        annotations:
+          title: "Too Many Open Connections to Memcached (Node: {{ $labels.hostname }})"
+          description: "Memcached has reached the maximum number of open connections (Current/Limit{{ $labels.current_limit }}, Total: {{ $labels.total}}), this means it will start rejecting new connections"
+          remediation: Contact your network/application team to see if there are any applications keeping open a large number of connections.
+
+      - alert: CB90057-memcachedTimeJumps
+        expr: |
+          count_over_time({file="memcached.log"} |= "system clock changed?" | json [1h]) > 0
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90057
+          health_check_name: memcachedTimeJumps
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: "Time Jumps Detected in memcached.log (Node: {{ $labels.hostname }})"
+          description: Time jumps occur when the cluster manager process (`beam.smp`) has not been scheduled by the CPU, or not scheduled enough for a significant period of time.
+          remediation: Check for evidence of your node being over provisioned or for evidence of VM resource contention.
+
+      - alert: CB90062-droppedTicks-instances # fires when over 4 instances of dropped ticks are detected
+        expr: |
+          count(count_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_> Dropped <ticks> ticks<_>" [1h])) > 4
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90062
+          health_check_name: droppedTicks
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          collector: '{{ $labels.collector }}'
+          ticks: '{{ $labels.ticks }}'
+        annotations:
+          title: "Multiple Instances of Dropped Ticks on Node: {{ $labels.hostname }}"
+          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
+
+      - alert: CB90062-droppedTicks-max # fires when over 10 dropped ticks are detected on any collector
+        expr: |
+          sum((sum_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_>(Collector: <collector>) Dropped <ticks> ticks" | unwrap ticks  [1h])) > 10)
+        for: 1m
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90062
+          health_check_name: droppedTicks
+          cluster: '{{ $labels.cluster }}'
+          node: '{{ $labels.hostname }}'
+          ticks: '{{ $labels.ticks }}'
+        annotations:
+          title: "Large Number of Dropped Ticks Detected (node: {{ $labels.hostname }})"
+          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
