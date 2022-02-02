@@ -1,0 +1,6 @@
+2022-01-11T15:24:42.866891+00:00 INFO Couchbase version 7.0.2-6703 starting.
+2022-01-11T15:24:42.866944+00:00 INFO recalculate_max_connections: {"max_fds":1048576,"max_connections":60000,"system_connections":5000,"engine_fds":987549}
+2022-01-11T15:24:42.866955+00:00 INFO Breakpad disabled
+2022-01-11T15:24:42.867345+00:00 INFO Using SLA configuration: {"COMPACT_DB":{"slow":"1800 s"},"CREATE_BUCKET":{"slow":"5 s"},"DELETE_BUCKET":{"slow":"10 s"},"SELECT_BUCKET":{"slow":"10 ms"},"SEQNO_PERSISTENCE":{"slow":"30 s"},"comment":"Current MCBP SLA configuration","default":{"slow":"500 ms"},"version":1}
+2022-01-11T15:24:42.867412+00:00 INFO Enable standard input listener
+2022-01-11T15:24:42.982093+00:00 WARNING Breakpad caught crash in memcached. Writing crash dump to /opt/couchbase/var/lib/couchbase/crash/1e4a92b9-e350-b8d2-67b966ba-1b89a355.dmp before terminating.

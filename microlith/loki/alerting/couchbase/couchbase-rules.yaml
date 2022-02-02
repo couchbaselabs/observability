@@ -5,7 +5,7 @@ groups:
 
       - alert: CB90036-memcachedCrash
         expr: |
-          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h])
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -44,7 +44,7 @@ groups:
         expr: |
           sum(count_over_time(
             {file="memcached.log"} |= `Invalid format specified for "DCP_OPEN"` |= `Reason:"Key length exceeds 250"` | json hostname="hostname" [5m]
-          )) by (couchbase_cluster, hostname) > 0
+          )) by (cluster, hostname) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -52,9 +52,9 @@ groups:
           severity: critical
           health_check_id: CB90033
           health_check_name: longDcpNames
-          cluster: '{{ $labels.couchbase_cluster }}'
+          cluster: '{{ $labels.cluster }}'
         annotations:
-          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.couchbase_cluster }})
+          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.cluster }})
           description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
@@ -62,7 +62,7 @@ groups:
         expr: |
           sum(count_over_time(
             {file="memcached.log"} |= "Response::setKeylen: key cannot exceed 1 byte" | json hostname="hostname" [5m]
-          )) by (couchbase_cluster, hostname) > 0
+          )) by (cluster, hostname) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -70,9 +70,9 @@ groups:
           severity: critical
           health_check_id: CB90033
           health_check_name: longDcpNames
-          cluster: '{{ $labels.couchbase_cluster }}'
+          cluster: '{{ $labels.cluster }}'
         annotations:
-          title: Long DCP Names (MB-34280) (cluster {{ $labels.couchbase_cluster }})
+          title: Long DCP Names (MB-34280) (cluster {{ $labels.cluster }})
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
