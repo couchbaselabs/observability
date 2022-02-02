@@ -283,7 +283,7 @@ groups:
           severity: warning
           health_check_id: CB90067
           health_check_name: serviceRollback
-          cluster: '{{ $labels.cluster }}'
+          cluster: '{{ $labels.couchbase_cluster }}'
           node: '{{ $labels.hostname }}'
         annotations:
           title: "Service DCP Rollback to Zero (node: {{ $labels.hostname }})"

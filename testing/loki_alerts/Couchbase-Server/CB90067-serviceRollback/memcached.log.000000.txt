@@ -1,0 +1,2 @@
+2022-02-03T17:01:40.591583 WARNING Stream request requires rollback to seqno:0 because purge seqno (1) is greater than start seqno - could miss purged deletions.
+2022-02-03T17:01:45.591583 WARNING Stream request requires rollback to seqno:0 because purge seqno (2) is greater than start seqno - could miss purged deletions.
