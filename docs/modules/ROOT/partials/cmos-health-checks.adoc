@@ -162,7 +162,7 @@ Dropped ticks are usually a sign of resource contention, specifically CPU conten
 === Service Rollback to Zero (CB90067)
 
 *Background*: A service has been forced to roll back to zero.
-This is bad because it means the service is attempting to resynchronize the entirety of the data set.
+This may be undesirable because it means the service is attempting to resynchronize the entirety of the data set.
 
 *Condition*: A rollback to zero is seen in the `memcached` logs.
 
