@@ -158,6 +158,15 @@ Dropped ticks are usually a sign of resource contention, specifically CPU conten
 
 *Further Reading*: xref:7.0@server:install:sizing-general[Sizing Guidelines]
 
+[#CB90067]
+=== Service Has Been Forced to Roll Back to Zero (CB90067)
+
+*Background*: A service has been forced to roll back to zero. This is bad because it means the service is attempting to resynchronise the entirety of the data set.
+
+*Condition*: a rollback is seen in the `memcached` logs.
+
+*Remediation*: Contact Couchbase Technical Support.
+
 // end::group-node[]
 
 // tag::group-bucket[]
@@ -211,10 +220,10 @@ Alternatively, navigate to your Data storage directory and enter the following c
 [#CB90061]
 === Disk Write Queue (CB90061)
 
-*Background*: Having items in the disk write queue for too long could cause backoffs. 
+*Background*: Having items in the disk write queue for too long could cause backoffs.
 This usually indicates either a sizing issue, or a storage medium failing.
 
-*Condition*: If the time since the object most recently persisted to disk was added to the Disk Write Queue is over 50 seconds, a warning is produced. 
+*Condition*: If the time since the object most recently persisted to disk was added to the Disk Write Queue is over 50 seconds, a warning is produced.
 If that time breaches 100 seconds, then a critical alert is produced.
 
 *Remediation*: Review your hardware for malfunctions or sizing issues.
