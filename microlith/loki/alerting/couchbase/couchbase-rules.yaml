@@ -276,7 +276,7 @@ groups:
 
       - alert: CB90067-serviceRollback
         expr: |
-          count_over_time( {file="memcached.log"} |= "requires rollback to seqno:0" != "eq_dcpq:replication" [24h]) > 0
+          count_over_time( {file="memcached.log"} |= "requires rollback to seqno:0" != "eq_dcpq:replication" [1h]) > 0
         labels:
           job: couchbase_fluent_bit
           kind: node

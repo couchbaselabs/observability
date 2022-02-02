@@ -161,7 +161,7 @@ Dropped ticks are usually a sign of resource contention, specifically CPU conten
 [#CB90067]
 === Service Rollback to Zero (CB90067)
 
-*Background*: A service has been forced to roll back to zero. This is bad because it means the service is attempting to resynchronise the entirety of the data set.
+*Background*: A service has been forced to roll back to zero. This is bad because it means the service is attempting to resynchronize the entirety of the data set.
 
 *Condition*: a rollback is seen in the `memcached` logs.
 
