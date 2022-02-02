@@ -167,7 +167,7 @@ This may be undesirable because it means the service is attempting to resynchron
 *Condition*: A DCP rollback to zero is seen in the `memcached` logs.
 
 *Remediation*: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues.
-If you experience any, then please Contact Couchbase Technical Support.
+If you experience any, then please contact Couchbase Technical Support.
 
 *Further Reading*: https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/[Couchbase DCP Rollback]
 
