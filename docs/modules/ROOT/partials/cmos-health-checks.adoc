@@ -159,15 +159,15 @@ Dropped ticks are usually a sign of resource contention, specifically CPU conten
 *Further Reading*: xref:7.0@server:install:sizing-general[Sizing Guidelines]
 
 [#CB90067]
-=== Service Rollback to Zero (CB90067)
+=== Service DCP Rollback to Zero (CB90067)
 
-*Background*: A service has been forced to roll back to zero.
+*Background*: A service has been forced to DCP rollback to zero.
 This may be undesirable because it means the service is attempting to resynchronize the entirety of the data set.
 
-*Condition*: A rollback to zero is seen in the `memcached` logs.
+*Condition*: A DCP rollback to zero is seen in the `memcached` logs.
 
-*Remediation*: This is typically a symptom of another problem, you may ignore this unless you notice any other issues with your cluster.
-If you do, then please Contact Couchbase Technical Support.
+*Remediation*: This is typically a symptom of another problem, you should your cluster closely for any further issues.
+If you experience any, then please Contact Couchbase Technical Support.
 
 *Further Reading*: https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/[Couchbase DCP Rollback]
 
