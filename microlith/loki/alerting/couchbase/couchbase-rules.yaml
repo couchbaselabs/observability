@@ -286,7 +286,7 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: "Service Rollback to Zero (node: {{ $labels.hostname }})"
-          description: A service has been forced to roll back to zero. 
+          description: A service has been forced to roll back to zero.
             This may be undesirable because it means the service is attempting to resynchronize the entirety of the data set.
-          remediation: This is typically a symptom of another problem, you may ignore this unless you notice any other issues with your cluster. 
+          remediation: This is typically a symptom of another problem, you may ignore this unless you notice any other issues with your cluster.
             If you do, then please Contact Couchbase Technical Support.
