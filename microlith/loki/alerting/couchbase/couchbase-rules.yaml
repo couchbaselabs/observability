@@ -288,8 +288,6 @@ groups:
         annotations:
           title: "Service DCP Rollback to Zero (node: {{ $labels.hostname }})"
           description: A service has been forced to DCP rollback to zero.
-            A DCP rollback is when a client connects to the Data Service with newer mutations that are not present on the Data Service.
-            The client must rollback or undo some mutations to align with the mutations on the Data Service.
             If the Data Service is rolled back to 0, it means the service is attempting to resynchronize the entirety of the data set.
           remediation: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues.
             If you experience any, then please contact Couchbase Technical Support.
