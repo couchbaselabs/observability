@@ -1,0 +1,352 @@
+= Stand-Alone Deployment
+
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
+[abstract]
+While CMOS is designed as an all-in-one stack, it is also possible to deploy all its components separately.
+This tutorial will show you how to do this.
+
+include::partial$tutorial.adoc[]
+
+== Overview
+
+Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry-standard tooling to observe the state of a running Couchbase cluster.
+If you already have all the components of the stack in your deployment, it is easy to connect them all into a complete monitoring solution and take advantage of all the features, including the advanced health checking capabilities of the Couchbase Cluster Monitor.
+
+In this tutorial, we will use Docker to configure all the components individually from scratch.
+However, if you already have some of these components deployed, you can skip the respective sections.
+
+== Pre-Requisites
+
+We assume that you already have a Couchbase Server cluster running.
+If not, refer to the xref:7.0@server:install:getting-started[installation options] to deploy a cluster.
+
+We also assume that you have Docker installed.
+
+Create a named Docker network to enable the components to resolve each other by their hostnames:
+
+[source, console]
+---
+docker network create cmos
+---
+
+== Install Prometheus
+
+First, create a configuration file for Prometheus - by convention this is called `prometheus.yml`.
+It will need to reference all your Couchbase Server nodes.
+
+.prometheus.yml
+[source, yaml]
+----
+global:
+  scrape_interval: 30s
+
+scrape_configs:
+  - job_name: couchbase-server
+    basic_auth:
+      username: Administrator    # <.>
+      password: password    # <.>
+    static_configs:
+      - targets:
+          - 10.145.212.101:8091    # <.>
+          - 10.145.212.102:8091
+          - 10.145.212.103:8091
+        labels:
+          cluster: "Couchbase Server Cluster"    # <.>
+----
+
+<.> This needs to be set to the username of a Couchbase Server user with at least "External Stats Reader" permission.
+<.> This needs to be set to the password of the above user.
+<.> Here we specify the addresses of all the nodes in your cluster.
+    The port number needs to be the management port - use 18091 if you have TLS enabled.
+    There are other ways of configuring it that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
+<.> This label will be added to all metrics from this cluster.
+    The value should match the name the cluster is configured to use in the Web Console.
+    If you wish, you can add additional labels here (e.g., environment, datacenter...)
+
+Then, run Prometheus, mounting your configuration file inside the container.
+If you want to persist your data across restarts, you can also mount the default data directory.
+
+[source, console]
+----
+docker run -d \
+  -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
+  -v /tmp/prometheus/data:/prometheus \ # Remove this if you do not want to persist the data.
+  -p 9090:9090 \
+  --network cmos \
+  --name prometheus \
+  prom/prometheus
+----
+
+If it has started successfully, you should be able to access its UI and see your cluster listed on http://localhost:9090/targets:
+
+
+=== Prometheus Alerting Rules
+
+You can reuse the CMOS alert definitions to get alerts about events in your cluster.
+
+First, download the rule defitions:
+
+[source, console]
+----
+wget -O prometheus-rules https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/prometheus/alerting/couchbase/couchbase-rules.yaml
+----
+
+Then, modify your Prometheus config to include the path where they will be stored:
+
+.prometheus.yml
+[source, yaml]
+----
+# Insert this at the top level of your prometheus.yml
+rule_files:
+  - /etc/prometheus/alerting/*.yaml
+----
+
+Finally, recreate your Prometheus container, mounting in the rules:
+
+[source, console]
+----
+docker rm -f prometheus
+docker run -d \
+  -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
+  -v $(pwd)/prometheus-rules.yaml:/etc/prometheus/alerting/couchbase-rules.yaml \
+  -v /tmp/prometheus/data:/prometheus \ # Remove this if you do not want to persist the data.
+  -p 9090:9090 \
+  --network cmos \
+  --name prometheus \
+  prom/prometheus
+----
+
+You should now be able to see the rules if you visit http://localhost:9090/rules (you may need to un-hide inactive rules):
+
+Now Prometheus is testing the incoming metrics against these rules, but it is not firing alerts yet.
+In the next step we will add Alertmanager.
+
+== Install Alertmanager
+
+Just like Prometheus, Alertmanager is configured using a YAML file, which by convention is named `alertmanager.yml`.
+
+Alertmanager can send alerts to a number of destinations, including Slack, email, PagerDuty and others, as well as custom webhooks for receivers it does not natively support.
+In this tutorial we will create a "no-op" receiver, however you will likely want to configure it to dispatch alerts to where your team usually receives them.
+Refer to the https://prometheus.io/docs/alerting/latest/configuration/#receiver[Alertmanager documentation^] for details on configuring this.
+
+.alertmanager.yml
+[source, yaml]
+----
+global:
+  #    <.>
+
+route: #    <.>
+  routes:
+    - matchers: #    <.>
+        - severity =~ (warning|critical) #    <.>
+      receiver: noop #    <.>
+      continue: true #    <.>
+
+receivers:
+  - name: noop #    <.>
+----
+
+<.> Here we can specify the default settings for the alert receivers.
+<.> This is the default route.
+    Alertmanager routes form a tree - alerts enter the tree through this node, and descend through it until they reach a route with `continue: false` set.
+<.> The default route must match every alert, so we define a child route that will only match certain alerts.
+<.> Here we specify which alerts will match this route - in this case, those with a severity of either `warning` or `critical`.
+<.> Here we specify which receiver matching alerts are sent to - in this case we are using `noop`.
+<.> If `continue` is set, the alert will proceed through this route's sibling routes, otherwise it will stop here.
+<.> Here we define our receivers - we only define one, named `noop`, but you will likely define others.
+
+Then, run an Alertmanager container:
+
+[source, console]
+----
+docker run -d \
+  -v $(pwd)/alertmanager/alertmanager.yml:/etc/prometheus/alertmanager/alertmanager.yml \
+  -v /tmp/alertmanager/data:/alertmanager \ # Remove this if you do not want to persist the data.
+  -p 9093:9093 \
+  --network cmos \
+  --name alertmanager \
+  prom/alertmanager
+----
+
+Once it has started you will be able to access its UI on http://localhost:9093.
+It will not do anything yet though, because we need to configure Prometheus to send alerts to it.
+
+Add the following to your `prometheus.yml`:
+
+.prometheus.yml
+[source, yaml]
+----
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - alertmanager <.>
+----
+
+<.> This is the name we gave to our Alertmanager container.
+    If they are both on the same Docker network, they can resolve each other by hostname.
+
+Finally, tell Prometheus to reload its config.
+You can do this by sending it a `HUP` signal:
+
+[source, console]
+----
+docker kill -s HUP prometheus
+----
+
+[TIP]
+====
+When we previously added the rules file, we needed to stop and restart the Prometheus container.
+However, we did not need to restart it when we only modified the configuration file.
+This is because the `prometheus.yml` is mounted inside the container, so it will pick up any changes we make to it without needing to restart it.
+We still need to tell it to reload the file, but there's no need for a restart if there are no other changes apart from the configuration file.
+====
+
+== Install Loki
+
+Loki is also configured using a YAML file.
+By default this is located in `/etc/loki/local-config.yaml`, however we will name it `loki.yaml` to avoid confusion.
+
+.loki.yaml
+[source, yaml]
+----
+auth_enabled: false    # <.>
+
+server:
+  http_listen_port: 3100    # <.>
+  grpc_listen_port: 9096
+
+common:
+  path_prefix: /tmp/loki    # <.>
+  storage:
+    filesystem:
+      chunks_directory: /tmp/loki/chunks
+      rules_directory: /tmp/loki/rules
+  replication_factor: 1
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: boltdb-shipper
+      object_store: filesystem    # <.>
+      schema: v11
+      index:
+        prefix: index_
+        period: 24h
+
+----
+
+<.> We disable authentication for this tutorial.
+    In production environments you will likely want to enable authentication.
+<.> Here we set the ports that Loki will listen on.
+    Most clients (including Fluent Bit) use the HTTP port, which defaults to 3100.
+<.> We configure Loki to store its data on the file system.
+    However, Loki has a wide range of storage options, including object stores such as Amazon S3.
+    Refer to the https://grafana.com/docs/loki/latest/operations/storage/[Loki documentation^] for more details.
+<.> Loki stores two types of data: the index, and chunks.
+    The two can be configured separately.
+    Here we store the index on the file system as well.
+
+Once you have prepared your configuration, run Loki:
+
+[source, console]
+----
+docker run -d \
+  -v $(pwd)/loki.yml:/etc/loki/local-config.yml \
+  -v /tmp/loki:/tmp/loki \ # Remove this if you do not want to persist the data.
+  -p 3100:3100 \
+  --network cmos \
+  --name loki \
+  grafana/loki
+----
+
+=== Loki Alerting Rules
+
+Just like Prometheus, Loki allows you to configure rules that send alerts if certain LogQL queries match your logs.
+The format of the rules file is almost identical to Prometheus', the only difference being that it uses LogQL instead of PromQL.
+
+You can reuse the rules that ship with CMOS in your own Loki installation. First, download them:
+
+[source, console]
+----
+wget -O loki-rules.yaml https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/loki/alerting/couchbase/couchbase-rules.yaml
+----
+
+Then, add the following to your Loki config to use the rules:
+
+.loki.yaml
+[source, yaml]
+----
+ruler:
+  alertmanager_url: http://alertmanager:9093/    # <.>
+  enable_alertmanager_v2: true
+  rule_path: /tmp/loki/scratch    # <.>
+  storage:
+    type: local
+    local:
+      directory: /etc/loki/rules    # <.>
+----
+
+<.> We configure the URL of the Alertmanager we started earlier, which is where Loki will send its alerts.
+<.> This path is where Loki will store temporary rule files.
+    This is not the same as the rules storage (configured below).
+<.> This is where Loki will search for its rules.
+    Loki can also load rules from external storage providers - refer to the https://grafana.com/docs/loki/latest/rules/[Loki documentation^] for more details.
+
+Finally, restart your Loki container, mounting in your rules.
+
+[NOTE]
+====
+Loki is a multi-tenant system, and so all the rules need to be placed in a folder matching the tenant they are for.
+We will be using the default tenant (named "fake").
+====
+
+[source, console]
+----
+docker rm -f loki
+docker run -d \
+  -v $(pwd)/loki.yml:/etc/loki/local-config.yml \
+  -v $(pwd)/loki-rules.yml:/etc/loki/rules/fake/couchbase-rules.yml \
+  -v /tmp/loki:/tmp/loki \ # Remove this if you do not want to persist the data.
+  -p 3100:3100 \
+  --network cmos \
+  --name loki \
+  grafana/loki
+----
+
+// TODO fluent bit (CMOS-303)
+
+== Install Grafana
+
+Unlike the other components, Grafana can be configured entirely through a web interface, and thus we do not need to prepare any configuration beforehand. Simply run the Docker image:
+
+[source, console]
+----
+docker run -d \
+  -p 3000:3000 \
+  -e "GF_INSTALL_PLUGINS=marcusolsson-json-datasource 1.3.0" \
+  --network cmos \
+  --name grafana \
+  grafana/grafana-oss
+----
+
+Once it has started, visit http://localhost:3000 and you should be greeted by the login screen.
+The default credentials are `admin`/`admin`.
+
+Once you are in, navigate to the Configuration option on the left sidebar menu and select Data Sources, then click Add Data Source.
+Select Prometheus as your first data source and configure it for the Prometheus we started earlier:
+
+// TODO: image goes here
+
+Perform the same steps to add Loki:
+
+// TODO: image goes here
+
+_Add in note about Grafana declarative provisioning._
