@@ -2976,7 +2976,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "increase(n1ql_request_time[$__rate_interval]) / increase(n1ql_requests[$__rate_interval]) / 1000000\n",
+          "expr": "increase(n1ql_request_time{cluster=\"$cluster\"}[$__rate_interval]) / increase(n1ql_requests{cluster=\"$cluster\"}[$__rate_interval]) / 1000000\n",
           "instant": false,
           "interval": "",
           "legendFormat": "{{instance}}",
