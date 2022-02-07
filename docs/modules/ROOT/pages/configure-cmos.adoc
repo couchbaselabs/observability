@@ -16,6 +16,15 @@ As shown in the above diagram, you can customize the installation by overriding 
 All the services of CMOS stack are enabled by default.
 If you choose to disable a service, this is achieved by setting the corresponding environment variables of the docker container. The naming convention to be followed to disable a service is `DISABLE_X`, where `X` is the name of the service (e.g.,`DISABLE_ALERT_MANAGER`, `DISABLE_GRAFANA`, `DISABLE_JAEGER`, `DISABLE_LOKI`, `DISABLE_PROMETHEUS` and `DISABLE_WEBSERVER`).
 
+== Running behind a reverse proxy
+
+CMOS can be run behind a reverse proxy in your deployments.
+There are two ways of running it: on a subdomain (e.g. `cmos.example.com`), or on a subpath (e.g. `example.com/cmos`).
+
+If running on a subdomain, you do not need to change any CMOS configuration, just point your reverse proxy at port 8080 on the CMOS container.
+
+If you are running on a subpath, you will need to set the `CMOS_HTTP_PATH_PREFIX` environment variable to ensure all the services reflect this, for example `docker run -e "CMOS_HTTP_PATH_PREFIX=/cmos" ...`.
+
 == Logging
 
 By default, logs can be either provided to standard output `(stdout)` or to service-based log files by setting the `ENABLE_LOG_TO_FILE` configuration value.
