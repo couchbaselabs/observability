@@ -3,9 +3,6 @@ version: '3'
 services:
     cb1:
         image: ${COUCHBASE_SERVER_IMAGE}
-        ports:
-            - 8091-8096:8091-8096
-            - 11209-11211:11209-11211
         volumes:
             - ./cb-entrypoint.sh:/entrypoint.sh
     cmos:
