@@ -286,7 +286,7 @@ COPY nginx/ /etc/nginx/
 COPY html/ /html/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
-COPY --from=antora-generator /antora/cmos /html/cmos
+COPY --from=antora-generator /antora/cmos /html/docs
 
 # Couchbase cluster monitor - need these to keep OSS generic
 RUN mkdir -p /data /priv /ui

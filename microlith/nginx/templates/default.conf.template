@@ -1,0 +1,94 @@
+daemon off;
+worker_processes 1;
+pid        /tmp/nginx.pid;
+error_log stderr notice;
+events {
+    worker_connections 1024;
+}
+
+http {
+    include                 mime.types;
+    default_type            application/octet-stream;
+    access_log              /dev/stdout;
+    sendfile                on;
+    keepalive_timeout       65;
+    proxy_temp_path         /tmp/proxy_temp;
+    client_body_temp_path   /tmp/client_temp;
+    fastcgi_temp_path       /tmp/fastcgi_temp;
+    uwsgi_temp_path         /tmp/uwsgi_temp;
+    scgi_temp_path          /tmp/scgi_temp;
+
+    server {
+        listen  8080;
+        
+        location ${CMOS_HTTP_PATH_PREFIX} {
+            alias    /html;
+            index   index.html;
+
+            location ~ ${CMOS_HTTP_PATH_PREFIX}/grafana/ {
+                proxy_pass  http://localhost:3000;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/prometheus/ {
+                proxy_pass  http://localhost:9090;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/jaeger/ {
+                proxy_pass  http://localhost:16686;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/alertmanager/ {
+                proxy_pass  http://localhost:9093;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/loki/ {
+                proxy_pass  http://localhost:3100;
+            }
+
+            # Self-monitoring
+            location ${CMOS_HTTP_PATH_PREFIX}/_meta/status {
+                stub_status;
+            }
+
+            # TODO (CMOS-98) - eventually these should all just be /couchbase/
+
+            # Redirect /ui to its proper place just in case
+            location ~ ^${CMOS_HTTP_PATH_PREFIX}/ui/?$ {
+                return 301 ${CMOS_HTTP_PATH_PREFIX}/couchbase/ui;
+            }
+
+            # Static assets are served here and there's no easy way to change it
+            location ${CMOS_HTTP_PATH_PREFIX}/ui/assets/ {
+                proxy_pass  http://localhost:7196;
+            }
+
+            # UI assumes the cbmultimanager REST API is on /api
+            location ${CMOS_HTTP_PATH_PREFIX}/api/ {
+                # cbmm doesn't yet support path prefixes so strip it
+                rewrite ^${CMOS_HTTP_PATH_PREFIX}/api(.*)$ /api$1;
+                proxy_pass  http://localhost:7196;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/couchbase {
+                # Redirect to the UI to avoid a white page
+                rewrite ^${CMOS_HTTP_PATH_PREFIX}/couchbase/?$ /couchbase/ui redirect;
+                # Strip the /couchbase prefix
+                rewrite ^${CMOS_HTTP_PATH_PREFIX}/couchbase/(.*) /$1 break;
+                proxy_pass http://localhost:7196;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/licenses/ {
+                autoindex on;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/support {
+                alias /tmp/support/;
+                autoindex on;
+            }
+
+            location ${CMOS_HTTP_PATH_PREFIX}/config {
+                proxy_pass http://localhost:7194;
+            }
+        }
+    }
+}

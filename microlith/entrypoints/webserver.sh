@@ -14,4 +14,8 @@
 # limitations under the License.
 
 set -ex
+
+# Ensure we set a default value
+export CMOS_HTTP_PATH_PREFIX=${CMOS_HTTP_PATH_PREFIX:-/}
+
 /docker-entrypoint.sh nginx
