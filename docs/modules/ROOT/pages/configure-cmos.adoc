@@ -19,11 +19,11 @@ If you choose to disable a service, this is achieved by setting the correspondin
 == Running behind a reverse proxy
 
 CMOS can be run behind a reverse proxy in your deployments.
-There are two ways of running it: on a subdomain (e.g. `cmos.example.com`), or on a subpath (e.g. `example.com/cmos`).
+There are two ways of running it: on a subdomain (e.g. `cmos.example.com`), or on a sub-path (e.g. `example.com/cmos`).
 
 If running on a subdomain, you do not need to change any CMOS configuration, just point your reverse proxy at port 8080 on the CMOS container.
 
-If you are running on a subpath, you will need to set the `CMOS_HTTP_PATH_PREFIX` environment variable to ensure all the services reflect this, for example `docker run -e "CMOS_HTTP_PATH_PREFIX=/cmos" ...`.
+If you are running on a sub-path, you will need to set the `CMOS_HTTP_PATH_PREFIX` environment variable to ensure all the services reflect this, for example `docker run -e "CMOS_HTTP_PATH_PREFIX=/cmos" ...`.
 
 == Logging
 
