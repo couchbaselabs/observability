@@ -423,6 +423,25 @@ Dropped ticks are usually a sign of resource contention, specifically CPU conten
 <p><strong>Further Reading</strong>: <a href="#7.0@server:install:sizing-general">Sizing Guidelines</a></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90067"><a class="anchor" href="#CB90067"></a>Service DCP Rollback to Zero (CB90067)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: A service has been forced to DCP rollback to zero.
+A DCP rollback is when the Data Service connects to a client with newer mutations that are not present on the Data Service.
+The client must rollback or undo some mutations to align with the mutations on the Data Service.
+If the client is rolled back to 0, it means the service is attempting to resynchronize the entirety of the data set.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: A DCP rollback to zero is seen in the <code>memcached</code> logs in the last hour.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues.
+If you experience any, then please contact Couchbase Technical Support.</p>
+</div>
+<div class="paragraph">
+<p><strong>Further Reading</strong>: <a href="https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/">Couchbase DCP Rollback</a></p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -491,7 +510,7 @@ Alternatively, navigate to your Data storage directory and enter the following c
 <div class="sect2">
 <h3 id="CB90061"><a class="anchor" href="#CB90061"></a>Disk Write Queue (CB90061)</h3>
 <div class="paragraph">
-<p><strong>Background</strong>: Having items in the disk write queue for too long could cause backoffs.
+<p><strong>Background</strong>: Having items in the Disk Write Queue for too long could cause applications to backoff and writes to fail.
 This usually indicates either a sizing issue, or a storage medium failing.</p>
 </div>
 <div class="paragraph">
