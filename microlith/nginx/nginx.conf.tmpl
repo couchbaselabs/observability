@@ -20,75 +20,100 @@ http {
 
     server {
         listen  8080;
+
+        {{- $rootPath := "/" -}}
+        {{- $subPath := "" -}}
+        {{- $usingSubPath := false -}}
+
+        {{- if and (ne (env.Getenv "CMOS_HTTP_PATH_PREFIX") "") (ne (env.Getenv "CMOS_HTTP_PATH_PREFIX") "/") -}}
+            {{ $subPath = .Env.CMOS_HTTP_PATH_PREFIX | strings.TrimSuffix "/" }}
+            {{ $rootPath = $subPath }}
+            {{ $usingSubPath = true }}
+        {{- end -}}
         
-        location ${CMOS_HTTP_PATH_PREFIX} {
+        {{- if not $usingSubPath }}
+
+        root /html;
+
+        {{ else }}
+
+        location = / {
+            return 303 {{ $rootPath }};
+        }
+
+        location {{ $rootPath }} {
             alias    /html;
+
+        {{ end -}}
+
             index   index.html;
 
-            location ~ ${CMOS_HTTP_PATH_PREFIX}/grafana/ {
+            location ~ {{ $subPath }}/grafana/ {
                 proxy_pass  http://localhost:3000;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/prometheus/ {
+            location {{ $subPath }}/prometheus/ {
                 proxy_pass  http://localhost:9090;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/jaeger/ {
+            location {{ $subPath }}/jaeger/ {
                 proxy_pass  http://localhost:16686;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/alertmanager/ {
+            location {{ $subPath }}/alertmanager/ {
                 proxy_pass  http://localhost:9093;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/loki/ {
+            location {{ $subPath }}/loki/ {
                 proxy_pass  http://localhost:3100;
             }
 
             # Self-monitoring
-            location ${CMOS_HTTP_PATH_PREFIX}/_meta/status {
+            location {{ $subPath }}/_meta/status {
                 stub_status;
             }
 
             # TODO (CMOS-98) - eventually these should all just be /couchbase/
 
             # Redirect /ui to its proper place just in case
-            location ~ ^${CMOS_HTTP_PATH_PREFIX}/ui/?$ {
-                return 301 ${CMOS_HTTP_PATH_PREFIX}/couchbase/ui;
+            location ~ ^{{ $subPath }}/ui/?$ {
+                return 301 {{ $subPath }}/couchbase/ui;
             }
 
             # Static assets are served here and there's no easy way to change it
-            location ${CMOS_HTTP_PATH_PREFIX}/ui/assets/ {
+            location {{ $subPath }}/ui/assets/ {
                 proxy_pass  http://localhost:7196;
             }
 
             # UI assumes the cbmultimanager REST API is on /api
-            location ${CMOS_HTTP_PATH_PREFIX}/api/ {
+            location {{ $subPath }}/api/ {
                 # cbmm doesn't yet support path prefixes so strip it
-                rewrite ^${CMOS_HTTP_PATH_PREFIX}/api(.*)$ /api$1;
+                rewrite ^{{ $subPath }}/api(.*)$ /api$1;
                 proxy_pass  http://localhost:7196;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/couchbase {
+            location {{ $subPath }}/couchbase {
                 # Redirect to the UI to avoid a white page
-                rewrite ^${CMOS_HTTP_PATH_PREFIX}/couchbase/?$ /couchbase/ui redirect;
+                rewrite ^{{ $subPath }}/couchbase/?$ /couchbase/ui redirect;
                 # Strip the /couchbase prefix
-                rewrite ^${CMOS_HTTP_PATH_PREFIX}/couchbase/(.*) /$1 break;
+                rewrite ^{{ $subPath }}/couchbase/(.*) /$1 break;
                 proxy_pass http://localhost:7196;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/licenses/ {
+            location {{ $subPath }}/licenses/ {
                 autoindex on;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/support {
+            location {{ $subPath }}/support {
                 alias /tmp/support/;
                 autoindex on;
             }
 
-            location ${CMOS_HTTP_PATH_PREFIX}/config {
+            location {{ $subPath }}/config {
                 proxy_pass http://localhost:7194;
             }
+        {{- if $usingSubPath -}}
         }
+        {{- end -}}
     }
 }

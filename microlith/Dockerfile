@@ -288,6 +288,9 @@ EXPOSE 8080
 # Add generated documentation as well to Nginx
 COPY --from=antora-generator /antora/cmos /html/docs
 
+# Install Gomplate for nginx config
+COPY --from=hairyhenderson/gomplate:stable /gomplate /bin/gomplate
+
 # Couchbase cluster monitor - need these to keep OSS generic
 RUN mkdir -p /data /priv /ui
 
