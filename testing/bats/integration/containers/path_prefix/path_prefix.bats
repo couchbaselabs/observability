@@ -24,11 +24,11 @@ load "$BATS_FILE_ROOT/load.bash"
 load "$HELPERS_ROOT/couchbase-helpers.bash"
 load "$HELPERS_ROOT/url-helpers.bash"
 
-setup_file() {
+setup() {
     timeout 180 docker-compose --project-directory="${BATS_TEST_DIRNAME}" up -d --force-recreate --remove-orphans
 }
 
-teardown_file() {
+teardown() {
     run docker-compose --project-directory="${BATS_TEST_DIRNAME}" logs --timestamps || echo "Unable to get compose output"
     if [ "${SKIP_TEARDOWN:-false}" == "true" ]; then
         skip "Skipping teardown"
