@@ -22,6 +22,16 @@ function wait_for_curl() {
     local MAX_ATTEMPTS=$1
     shift
     local ATTEMPTS=0
+
+    # This function may be run outside of BATS, so ensure `fail` has a definition
+    if [[ $(type -t fail) != function ]]; then
+        function fail() {
+            local message=$1
+            echo "FAIL: $message"
+            exit 1
+        }
+    fi
+
     if [ "${VERBOSITY:-0}" -gt 1 ]; then
         echo "Curl command: curl -s -o /dev/null -f $*"
     fi
