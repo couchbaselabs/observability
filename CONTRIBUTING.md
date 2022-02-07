@@ -186,7 +186,7 @@ Ensure that the documentation looks correct when present in Github.
 
 #### CMOS container
 
-Ensure that the documnetation looks correct when viewed via the landing page.
+Ensure that the documentation looks correct when viewed via the landing page.
 
 If there are certain aspects of the documentation that are only relevant when packaged inside the container, use `ifdef::env-packaged[]` to delimit these.
 For example:

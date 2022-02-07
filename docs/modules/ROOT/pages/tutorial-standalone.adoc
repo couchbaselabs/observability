@@ -1,12 +1,13 @@
 = Stand-Alone Deployment
-
+:icons: font
+:imagesdir: ../assets/images
 ifdef::env-github[]
 :imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
 endif::[]
 
 [abstract]
 While CMOS is designed as an all-in-one stack, it is also possible to deploy all its components separately.
-This tutorial will show you how to do this.
+This tutorial will show you how to configure and deploy each component.
 
 include::partial$tutorial.adoc[]
 
@@ -28,9 +29,9 @@ We also assume that you have Docker installed.
 Create a named Docker network to enable the components to resolve each other by their hostnames:
 
 [source, console]
----
+----
 docker network create cmos
----
+----
 
 == Install Prometheus
 
@@ -46,15 +47,15 @@ global:
 scrape_configs:
   - job_name: couchbase-server
     basic_auth:
-      username: Administrator    # <.>
-      password: password    # <.>
+      username: Administrator <.>
+      password: password <.>
     static_configs:
       - targets:
-          - 10.145.212.101:8091    # <.>
+          - 10.145.212.101:8091 <.>
           - 10.145.212.102:8091
           - 10.145.212.103:8091
         labels:
-          cluster: "Couchbase Server Cluster"    # <.>
+          cluster: "Couchbase Server Cluster" <.>
 ----
 
 <.> This needs to be set to the username of a Couchbase Server user with at least "External Stats Reader" permission.
@@ -80,7 +81,7 @@ docker run -d \
   prom/prometheus
 ----
 
-If it has started successfully, you should be able to access its UI and see your cluster listed on http://localhost:9090/targets:
+If it has started successfully, you should be able to access its UI and see your cluster listed on http://localhost:9090/targets.
 
 
 === Prometheus Alerting Rules
@@ -135,18 +136,17 @@ Refer to the https://prometheus.io/docs/alerting/latest/configuration/#receiver[
 .alertmanager.yml
 [source, yaml]
 ----
-global:
-  #    <.>
+global: <.>
 
-route: #    <.>
+route: <.>
   routes:
-    - matchers: #    <.>
-        - severity =~ (warning|critical) #    <.>
-      receiver: noop #    <.>
-      continue: true #    <.>
+    - matchers: <.>
+        - severity =~ (warning|critical) <.>
+      receiver: noop <.>
+      continue: true <.>
 
 receivers:
-  - name: noop #    <.>
+  - name: noop <.>
 ----
 
 <.> Here we can specify the default settings for the alert receivers.
@@ -213,14 +213,14 @@ By default this is located in `/etc/loki/local-config.yaml`, however we will nam
 .loki.yaml
 [source, yaml]
 ----
-auth_enabled: false    # <.>
+auth_enabled: false <.>
 
 server:
-  http_listen_port: 3100    # <.>
+  http_listen_port: 3100 <.>
   grpc_listen_port: 9096
 
 common:
-  path_prefix: /tmp/loki    # <.>
+  path_prefix: /tmp/loki <.>
   storage:
     filesystem:
       chunks_directory: /tmp/loki/chunks
@@ -235,7 +235,7 @@ schema_config:
   configs:
     - from: 2020-10-24
       store: boltdb-shipper
-      object_store: filesystem    # <.>
+      object_store: filesystem <.>
       schema: v11
       index:
         prefix: index_
@@ -285,13 +285,13 @@ Then, add the following to your Loki config to use the rules:
 [source, yaml]
 ----
 ruler:
-  alertmanager_url: http://alertmanager:9093/    # <.>
+  alertmanager_url: http://alertmanager:9093/ <.>
   enable_alertmanager_v2: true
-  rule_path: /tmp/loki/scratch    # <.>
+  rule_path: /tmp/loki/scratch <.>
   storage:
     type: local
     local:
-      directory: /etc/loki/rules    # <.>
+      directory: /etc/loki/rules <.>
 ----
 
 <.> We configure the URL of the Alertmanager we started earlier, which is where Loki will send its alerts.
@@ -321,7 +321,9 @@ docker run -d \
   grafana/loki
 ----
 
-// TODO fluent bit (CMOS-303)
+== (Optional) Install Fluent Bit
+
+TODO (CMOS-303).
 
 == Install Grafana
 
@@ -340,13 +342,26 @@ docker run -d \
 Once it has started, visit http://localhost:3000 and you should be greeted by the login screen.
 The default credentials are `admin`/`admin`.
 
-Once you are in, navigate to the Configuration option on the left sidebar menu and select Data Sources, then click Add Data Source.
-Select Prometheus as your first data source and configure it for the Prometheus we started earlier:
+Once you are in, navigate to the "Configuration option" on the left sidebar menu (cog wheel) and select Data Sources, then click Add Data Source.
+Select Prometheus as your first data source and configure it for the Prometheus we started earlier.
 
-// TODO: image goes here
+Recall that we created a custom network `cmos` so our containers could resolve each other by name, and that Prometheus uses port `:9090` for API access.
+Therefore, we should set the URL for the data source to `http://prometheus:9090`. We use basic auth, entering in the configured User and Password as `Administrator` and `password`.
 
-Perform the same steps to add Loki:
+image::tutorial-standalone-grafana-datasources.png[Add previous Prometheus configuration]
 
-// TODO: image goes here
+The rest of the settings can be left as defaults. Click "Save and test" to check Grafana can successfully contact Prometheus:
 
-_Add in note about Grafana declarative provisioning._
+image::tutorial-standalone-prometheus-check.png[Check the Data Source is working]
+
+If this fails, please check your configuration:
+
+1. Are both containers on the `cmos` network?
+2. Is the correct container name for Prometheus specified in the URL field?
+3. Is the correct port for Prometheus specified in the URL field?
+
+If Grafana reports success, perform the same steps to add Loki - substituting the URL for `http://loki:3100`.
+
+=== Conclusion
+
+Congratulations! You have now configured all of the components of CMOS individually.
