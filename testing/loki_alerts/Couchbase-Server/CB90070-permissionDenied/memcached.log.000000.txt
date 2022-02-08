@@ -1,0 +1,2 @@
+20220120-092212/couchbase.log:cat: Permission denied
+20220120-092212/couchbase.log:cat: Permission denied
