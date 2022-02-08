@@ -239,10 +239,8 @@ __EOF__
     assert_success
 
     # https://grafana.com/docs/loki/latest/api/#get-ready
-    run curl --show-error --silent "$local_service_url/loki/ready"
-    # assert_failure
-    # Nginx reverse proxy gives us a page for a 404
-    assert_output --partial "404 Not Found"
+    run curl -fsS "$local_service_url/loki/ready"
+    assert_failure
 
     pkill -F "${pid_file}"
     rm -f "${pid_file}"
