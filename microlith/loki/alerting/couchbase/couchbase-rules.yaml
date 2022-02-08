@@ -291,3 +291,21 @@ groups:
             If the Data Service is rolled back to 0, it means the service is attempting to resynchronize the entirety of the data set.
           remediation: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues.
             If you experience any, then please contact Couchbase Technical Support.
+
+      - alert: CB90070-permissionDenied
+        expr: |
+          count_over_time({file="memcached.log"} |= "Permission denied" [1h]) >0
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90070
+          health_check_name: permissionDenied
+          cluster: '{{ $labels.couchbase_cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: "Permission denied errors (node: {{ $labels.hostname }})"
+          description: Found permission denied errors in memcached.log, this is possibly due to misconfiguration.
+            This is potentially due to other applications locking Couchbase Server files.
+          remediation: Check that there are no other applications locking files in your Couchbase Server directory.
+            If this does not solve the problem, please contact Couchbase Support.

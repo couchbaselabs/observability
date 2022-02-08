@@ -173,6 +173,17 @@ If you experience any, then please contact Couchbase Technical Support.
 
 *Further Reading*: https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/[Couchbase DCP Rollback]
 
+[#CB90070]
+=== Service DCP Rollback to Zero (CB90067)
+
+*Background*: Couchbase Server has been denied permission to access resources.
+This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
+
+*Condition*: Found permission denied errors in memcached.log.
+
+*Remediation*: Check that there are no other applications locking files in your Couchbase Server directory.
+If this does not solve the problem, please contact Couchbase Support.
+
 // end::group-node[]
 
 // tag::group-bucket[]
