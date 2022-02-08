@@ -20,9 +20,10 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
+  "gnetId": null,
   "graphTooltip": 0,
-  "id": 24,
-  "iteration": 1644293104549,
+  "id": 7,
+  "iteration": 1644322875884,
   "links": [
     {
       "asDropdown": false,
@@ -77,6 +78,7 @@
   "panels": [
     {
       "collapsed": false,
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -89,10 +91,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -168,68 +167,53 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Total",
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests_250ms{cluster_name=~\"$cluster_name\",instance=\"$node\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests_250ms{cluster=~\"$cluster\",instance=\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "> 250ms",
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests_500ms{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests_500ms{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "> 500ms",
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests_1000ms{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests_1000ms{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "> 1000ms",
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests_5000ms{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests_5000ms{cluster=~\"$cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -238,12 +222,9 @@
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_queued_requests{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_queued_requests{cluster=~\"$cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -256,10 +237,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -335,85 +313,67 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_at_plus{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_at_plus{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "at_plus",
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_cancelled{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_cancelled{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "cancelled",
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_invalid_requests{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_invalid_requests{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "invalid",
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_scan_plus{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_scan_plus{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "scan_plus",
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_unbounded{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_unbounded{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "unbounded",
           "refId": "E"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_transactions{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_transactions{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "transactions",
           "refId": "F"
@@ -423,10 +383,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "The number o N1QL errors, warnings, invalid requests and queued requests",
       "fieldConfig": {
         "defaults": {
@@ -502,12 +459,9 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_errors{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_errors{cluster=~\"$cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -515,12 +469,9 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_warnings{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_warnings{cluster=~\"$cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -529,12 +480,9 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_invalid_requests{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_invalid_requests{cluster=~\"$cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -543,12 +491,9 @@
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_errors{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_errors{cluster=~\"$cluster\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -561,10 +506,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -640,57 +582,45 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_updates{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_updates{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "UPDATEs",
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_selects{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_selects{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "SELECTs",
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_inserts{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_inserts{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "INSERTs",
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_deletes{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_deletes{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "DELETEs",
           "refId": "D"
@@ -700,10 +630,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -779,29 +706,23 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_index_scans{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_index_scans{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "index scan",
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(rate(n1ql_primary_scans{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
+          "expr": "sum(rate(n1ql_primary_scans{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "primary scan",
           "refId": "A"
@@ -811,10 +732,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "Average Execution Time (Overall), Average Service Time (time spent executing)",
       "fieldConfig": {
         "defaults": {
@@ -889,12 +807,9 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "avg(n1ql_avg_req_time{cluster_name=~\"$cluster_name\"}) by(cluster_name)",
+          "expr": "avg(n1ql_avg_req_time{cluster=~\"$cluster\"}) by(cluster)",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -903,12 +818,9 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "-avg(n1ql_avg_svc_time{cluster_name=~\"$cluster_name\"}) by(cluster_name)",
+          "expr": "-avg(n1ql_avg_svc_time{cluster=~\"$cluster\"}) by(cluster)",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -921,10 +833,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "Results Per Second",
       "fieldConfig": {
         "defaults": {
@@ -1000,12 +909,9 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(n1ql_avg_result_count{cluster_name=~\"$cluster_name\"})",
+          "expr": "sum(n1ql_avg_result_count{cluster=~\"$cluster\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1018,10 +924,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "Average bytes of the response size",
       "fieldConfig": {
         "defaults": {
@@ -1097,12 +1000,9 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(n1ql_avg_response_size{cluster_name=~\"$cluster_name\"})",
+          "expr": "sum(n1ql_avg_response_size{cluster=~\"$cluster\"})",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -1115,10 +1015,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1194,57 +1091,45 @@
       "pluginVersion": "8.2.3",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_actions{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])\n)",
+          "expr": "sum(\n    increase(n1ql_audit_actions{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Actions",
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_actions_failed{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])\n)",
+          "expr": "sum(\n    increase(n1ql_audit_actions_failed{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Failed Actions",
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_requests_total{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])\n)",
+          "expr": "sum(\n    increase(n1ql_audit_requests_total{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Requests",
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_requests_filtered{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])\n)",
+          "expr": "sum(\n    increase(n1ql_audit_requests_filtered{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
           "format": "time_series",
           "hide": false,
-          "interval": "$__rate_interval",
+          "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Filtered Requests",
           "refId": "D"
@@ -1255,6 +1140,7 @@
     },
     {
       "collapsed": false,
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1267,10 +1153,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1315,15 +1198,12 @@
         "text": {},
         "textMode": "value"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.2.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(increase(n1ql_requests{cluster_name=~\"$cluster_name\"}[$__range]))",
+          "expr": "sum(increase(n1ql_requests{cluster=~\"$cluster\"}[$__range]))",
           "interval": "",
           "legendFormat": "queries",
           "refId": "A"
@@ -1333,10 +1213,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1386,12 +1263,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "increase(n1ql_requests{cluster_name=~\"$cluster_name\"}[$__range])",
+          "expr": "increase(n1ql_requests{cluster=~\"$cluster\"}[$__range])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1401,10 +1275,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1454,12 +1325,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "increase(n1ql_errors{cluster_name=~\"$cluster_name\"}[$__range])",
+          "expr": "increase(n1ql_errors{cluster=~\"$cluster\"}[$__range])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1469,10 +1337,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1522,12 +1387,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "n1ql_avg_req_time{cluster_name=~\"$cluster_name\"}",
+          "expr": "n1ql_avg_req_time{cluster=~\"$cluster\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1537,10 +1399,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1589,12 +1448,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "n1ql_avg_svc_time{cluster_name=~\"$cluster_name\"}",
+          "expr": "n1ql_avg_svc_time{cluster=~\"$cluster\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1604,10 +1460,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1657,12 +1510,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "n1ql_avg_response_size{cluster_name=~\"$cluster_name\"}",
+          "expr": "n1ql_avg_response_size{cluster=~\"$cluster\"}",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1672,10 +1522,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1725,59 +1572,44 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(increase(n1ql_requests{cluster_name=~\"$cluster_name\"}[$__range]))\n-\nsum(increase(n1ql_requests_250ms{cluster_name=~\"$cluster_name\"}[$__range]))",
+          "expr": "sum(increase(n1ql_requests{cluster=~\"$cluster\"}[$__range]))\n-\nsum(increase(n1ql_requests_250ms{cluster=~\"$cluster\"}[$__range]))",
           "interval": "",
           "legendFormat": "0-250ms",
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(increase(\n  n1ql_requests_250ms{cluster_name=~\"$cluster_name\"}[$__range]\n))",
+          "expr": "sum(increase(\n  n1ql_requests_250ms{cluster=~\"$cluster\"}[$__range]\n))",
           "hide": false,
           "interval": "",
           "legendFormat": "250-499ms",
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n  increase(n1ql_requests_500ms{cluster_name=~\"$cluster_name\"}[$__range])\n)",
+          "expr": "sum(\n  increase(n1ql_requests_500ms{cluster=~\"$cluster\"}[$__range])\n)",
           "hide": false,
           "interval": "",
           "legendFormat": "500-999ms",
           "refId": "C"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n  increase(n1ql_requests_1000ms{cluster_name=~\"$cluster_name\"}[$__range])\n)",
+          "expr": "sum(\n  increase(n1ql_requests_1000ms{cluster=~\"$cluster\"}[$__range])\n)",
           "hide": false,
           "interval": "",
           "legendFormat": "1000-4999ms",
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n  increase(n1ql_requests_5000ms{cluster_name=~\"$cluster_name\"}[$__range])\n)",
+          "expr": "sum(\n  increase(n1ql_requests_5000ms{cluster=~\"$cluster\"}[$__range])\n)",
           "hide": false,
           "interval": "",
           "legendFormat": ">5000ms",
@@ -1788,10 +1620,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1841,12 +1670,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "sum(\n  increase(n1ql_requests{cluster_name=~\"$cluster_name\"}[$__range])\n) by (instance)\n-\nsum(\n  increase(n1ql_requests_250ms{cluster_name=~\"$cluster_name\"}[$__range])\n) by (instance)",
+          "expr": "sum(\n  increase(n1ql_requests{cluster=~\"$cluster\"}[$__range])\n) by (instance)\n-\nsum(\n  increase(n1ql_requests_250ms{cluster=~\"$cluster\"}[$__range])\n) by (instance)",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -1856,10 +1682,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1909,12 +1732,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "increase(n1ql_requests_250ms{cluster_name=~\"$cluster_name\"}[$__range])",
+          "expr": "increase(n1ql_requests_250ms{cluster=~\"$cluster\"}[$__range])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1924,10 +1744,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -1977,12 +1794,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "increase(n1ql_requests_500ms{cluster_name=~\"$cluster_name\"}[$__range])",
+          "expr": "increase(n1ql_requests_500ms{cluster=~\"$cluster\"}[$__range])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -1992,10 +1806,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2045,12 +1856,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "increase(n1ql_requests_1000ms{cluster_name=~\"$cluster_name\"}[$__range])",
+          "expr": "increase(n1ql_requests_1000ms{cluster=~\"$cluster\"}[$__range])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2060,10 +1868,7 @@
       "type": "piechart"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${datasource}"
-      },
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -2113,12 +1918,9 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
+          "datasource": null,
           "exemplar": true,
-          "expr": "increase(n1ql_requests_5000ms{cluster_name=~\"$cluster_name\"}[$__range])",
+          "expr": "increase(n1ql_requests_5000ms{cluster=~\"$cluster\"}[$__range])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -2128,7 +1930,8 @@
       "type": "piechart"
     },
     {
-      "collapsed": true,
+      "collapsed": false,
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2136,2693 +1939,2533 @@
         "y": 33
       },
       "id": 53,
-      "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "Overall CPU Utilization of each Query Node. \n\nRequires Node Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 4,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 34
-          },
-          "id": 55,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{cluster_name=~\"$cluster_name\",instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "metric": "process_namegroup_cpu_seconds_total",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "title": "CPU Utilization ",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The CPU usage of the cbq-engine process. \n\nRequires Process Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 4,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "percentunit"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 34
-          },
-          "id": 57,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{cluster_name=~\"$cluster_name\",instance=~\"$node\",groupname=~\"cbq-engine\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{groupname}} - {{instance}}",
-              "metric": "process_namegroup_cpu_seconds_total",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "title": "cbq-engine CPU Usage",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The overall memory utilization of each query node. \n\nRequires Node Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 4,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": false,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 41
-          },
-          "id": 59,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}\n  ) by (instance)\n)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}}",
-              "metric": "process_namegroup_cpu_seconds_total",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "title": "Memory Utilization ",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The overall memory usage of the cbq-engine process. \n\nRequires Process Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 4,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "decbytes"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 41
-          },
-          "id": 61,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\",groupname=~\"cbq-engine\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\",groupname=~\"cbq-engine\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{groupname}} - {{instance}}",
-              "metric": "process_namegroup_cpu_seconds_total",
-              "refId": "A",
-              "step": 10
-            }
-          ],
-          "title": "cbq-engine Memory Usage",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The number of bytes read from or written to the device per second.\n\nRequires Node Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "(-) Read / Write (+)",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "Bps"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sda_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#7EB26D",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdb_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#EAB839",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdc_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#6ED0E0",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdd_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#EF843C",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sde_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E24D42",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sda1.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#584477",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sda2_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#BA43A9",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sda3_.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#F4D598",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdb1.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#0A50A1",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdb2.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#BF1B00",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdb3.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E0752D",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdc1.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#962D82",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdc2.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#614D93",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdc3.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#9AC48A",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdd1.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#65C5DB",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdd2.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#F9934E",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdd3.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#EA6460",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sde1.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E0F9D7",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sdd2.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#FCEACA",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byRegexp",
-                  "options": "/.*sde3.*/"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#F9E2D2",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 48
-          },
-          "id": 63,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "lastNotNull",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "-sum(rate(node_disk_read_bytes_total{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "Read bytes - {{instance}}",
-              "refId": "A",
-              "step": 240
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(node_disk_written_bytes_total{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "Write bytes - {{instance}}",
-              "refId": "B",
-              "step": 240
-            }
-          ],
-          "title": "Disk Operations",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "(-) Read / Write (+)",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 4,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "always",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "Bps"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 48
-          },
-          "id": 65,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{cluster_name=~\"$cluster_name\",instance=~\"$node\",groupname=~\"cbq-engine\"}[$__rate_interval])) by (groupname, instance)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "{{groupname}} - read - {{instance}}",
-              "metric": "namedprocess_namegroup_read_bytes_total",
-              "refId": "A",
-              "step": 10
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{cluster_name=~\"$cluster_name\",instance=~\"$node\",groupname=~\"cbq-engine\"}[$__rate_interval])) by (groupname, instance)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "{{groupname}} - write - {{instance}}",
-              "metric": "namedprocess_namegroup_read_bytes_total",
-              "refId": "B",
-              "step": 10
-            }
-          ],
-          "title": "cbq-engine Disk Operations",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "Basic network info per interface.\n\nRequires Node Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "(-) RX / TX (+)",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 40,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "bps"
-            },
-            "overrides": [
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Recv_bytes_eth2"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#7EB26D",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Recv_bytes_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#0A50A1",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Recv_drop_eth2"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#6ED0E0",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Recv_drop_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E0F9D7",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Recv_errs_eth2"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#BF1B00",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Recv_errs_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#CCA300",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Trans_bytes_eth2"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#7EB26D",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Trans_bytes_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#0A50A1",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Trans_drop_eth2"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#6ED0E0",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Trans_drop_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#E0F9D7",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Trans_errs_eth2"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#BF1B00",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "Trans_errs_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#CCA300",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "recv_bytes_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#0A50A1",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "recv_drop_eth0"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#99440A",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "recv_drop_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#967302",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "recv_errs_eth0"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#BF1B00",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "recv_errs_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#890F02",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "trans_bytes_eth0"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#7EB26D",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "trans_bytes_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#0A50A1",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "trans_drop_eth0"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#99440A",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "trans_drop_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#967302",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "trans_errs_eth0"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#BF1B00",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              },
-              {
-                "matcher": {
-                  "id": "byName",
-                  "options": "trans_errs_lo"
-                },
-                "properties": [
-                  {
-                    "id": "color",
-                    "value": {
-                      "fixedColor": "#890F02",
-                      "mode": "fixed"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 0,
-            "y": 55
-          },
-          "id": 67,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "min",
-                "max"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(node_network_transmit_bytes_total{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} - TX",
-              "refId": "B",
-              "step": 240
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "-sum(rate(node_network_receive_bytes_total{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{instance}} - RX",
-              "refId": "A",
-              "step": 240
-            }
-          ],
-          "title": "Network Traffic",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The number of open file descriptors for the cbq-engine process. \n\nRequires Process Exporter",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 20,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 2,
-                "pointSize": 4,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "auto",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "short"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 7,
-            "w": 12,
-            "x": 12,
-            "y": 55
-          },
-          "id": 69,
-          "interval": "1m",
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [
-                "mean",
-                "max",
-                "min"
-              ],
-              "displayMode": "table",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{cluster_name=~\"$cluster_name\",instance=~\"$node\",groupname=~\"cbq-engine\"}[$__rate_interval])\n) by (groupname, instance)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 2,
-              "legendFormat": "{{groupname}} - {{instance}}",
-              "refId": "A"
-            }
-          ],
-          "title": "cbq-engine Open File Descriptors",
-          "type": "timeseries"
-        }
-      ],
+      "panels": [],
       "title": "Resources",
       "type": "row"
     },
     {
-      "collapsed": true,
+      "datasource": null,
+      "description": "Overall CPU Utilization of each Query Node. \n\nRequires Node Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 34
+      },
+      "id": 55,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{cluster=~\"$cluster\",instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{instance}}",
+          "metric": "process_namegroup_cpu_seconds_total",
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "title": "CPU Utilization ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The CPU usage of the cbq-engine process. \n\nRequires Process Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 34
+      },
+      "id": 57,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{cluster=~\"$cluster\",instance=~\"$node\",groupname=~\"cbq-engine\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{groupname}} - {{instance}}",
+          "metric": "process_namegroup_cpu_seconds_total",
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "title": "cbq-engine CPU Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The overall memory utilization of each query node. \n\nRequires Node Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 41
+      },
+      "id": 59,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{cluster=~\"$cluster\",instance=~\"$node\"}\n  ) by (instance)\n)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{instance}}",
+          "metric": "process_namegroup_cpu_seconds_total",
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "title": "Memory Utilization ",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The overall memory usage of the cbq-engine process. \n\nRequires Process Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 41
+      },
+      "id": 61,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{cluster=~\"$cluster\",instance=~\"$node\",groupname=~\"cbq-engine\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{cluster=~\"$cluster\",instance=~\"$node\",groupname=~\"cbq-engine\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{groupname}} - {{instance}}",
+          "metric": "process_namegroup_cpu_seconds_total",
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "title": "cbq-engine Memory Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The number of bytes read from or written to the device per second.\n\nRequires Node Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "(-) Read / Write (+)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7EB26D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EAB839",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#6ED0E0",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EF843C",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E24D42",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#584477",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda2_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BA43A9",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sda3_.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F4D598",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0A50A1",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdb3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E0752D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#962D82",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#614D93",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdc3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#9AC48A",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#65C5DB",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F9934E",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#EA6460",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde1.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E0F9D7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sdd2.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#FCEACA",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.*sde3.*/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#F9E2D2",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 48
+      },
+      "id": 63,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "-sum(rate(node_disk_read_bytes_total{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "Read bytes - {{instance}}",
+          "refId": "A",
+          "step": 240
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(node_disk_written_bytes_total{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "Write bytes - {{instance}}",
+          "refId": "B",
+          "step": 240
+        }
+      ],
+      "title": "Disk Operations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "(-) Read / Write (+)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "always",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "Bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 48
+      },
+      "id": 65,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{cluster=~\"$cluster\",instance=~\"$node\",groupname=~\"cbq-engine\"}[$__rate_interval])) by (groupname, instance)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 1,
+          "legendFormat": "{{groupname}} - read - {{instance}}",
+          "metric": "namedprocess_namegroup_read_bytes_total",
+          "refId": "A",
+          "step": 10
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{cluster=~\"$cluster\",instance=~\"$node\",groupname=~\"cbq-engine\"}[$__rate_interval])) by (groupname, instance)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "$__rate_interval",
+          "intervalFactor": 1,
+          "legendFormat": "{{groupname}} - write - {{instance}}",
+          "metric": "namedprocess_namegroup_read_bytes_total",
+          "refId": "B",
+          "step": 10
+        }
+      ],
+      "title": "cbq-engine Disk Operations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "Basic network info per interface.\n\nRequires Node Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "(-) RX / TX (+)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 40,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Recv_bytes_eth2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7EB26D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Recv_bytes_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0A50A1",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Recv_drop_eth2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#6ED0E0",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Recv_drop_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E0F9D7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Recv_errs_eth2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Recv_errs_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CCA300",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trans_bytes_eth2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7EB26D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trans_bytes_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0A50A1",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trans_drop_eth2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#6ED0E0",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trans_drop_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#E0F9D7",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trans_errs_eth2"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Trans_errs_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#CCA300",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "recv_bytes_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0A50A1",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "recv_drop_eth0"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#99440A",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "recv_drop_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#967302",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "recv_errs_eth0"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "recv_errs_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#890F02",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trans_bytes_eth0"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#7EB26D",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trans_bytes_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#0A50A1",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trans_drop_eth0"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#99440A",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trans_drop_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#967302",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trans_errs_eth0"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#BF1B00",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "trans_errs_lo"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "#890F02",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 55
+      },
+      "id": 67,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "min",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(node_network_transmit_bytes_total{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{instance}} - TX",
+          "refId": "B",
+          "step": 240
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "-sum(rate(node_network_receive_bytes_total{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
+          "format": "time_series",
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{instance}} - RX",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "Network Traffic",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The number of open file descriptors for the cbq-engine process. \n\nRequires Process Exporter",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 4,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 55
+      },
+      "id": 69,
+      "interval": "1m",
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{cluster=~\"$cluster\",instance=~\"$node\",groupname=~\"cbq-engine\"}[$__rate_interval])\n) by (groupname, instance)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "$__rate_interval",
+          "intervalFactor": 2,
+          "legendFormat": "{{groupname}} - {{instance}}",
+          "refId": "A"
+        }
+      ],
+      "title": "cbq-engine Open File Descriptors",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 34
+        "y": 62
       },
       "id": 71,
-      "panels": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "rgba(50, 172, 45, 0.97)",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 85
-                  },
-                  {
-                    "color": "rgba(245, 54, 54, 0.9)",
-                    "value": 95
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 0,
-            "y": 35
-          },
-          "id": 74,
-          "links": [],
-          "options": {
-            "orientation": "vertical",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
-            "text": {}
-          },
-          "pluginVersion": "8.3.4",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{cluster_name=~\"$cluster_name\",instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A",
-              "step": 240
-            }
-          ],
-          "title": "CPU Utilization",
-          "type": "gauge"
-        },
-        {
-          "datasource": {
-            "uid": "$datasource"
-          },
-          "description": "Non available RAM memory",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "decimals": 0,
-              "mappings": [],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "rgba(50, 172, 45, 0.97)",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 80
-                  },
-                  {
-                    "color": "rgba(245, 54, 54, 0.9)",
-                    "value": 90
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 6,
-            "y": 35
-          },
-          "hideTimeOverride": false,
-          "id": 76,
-          "links": [],
-          "options": {
-            "orientation": "vertical",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
-            "text": {}
-          },
-          "pluginVersion": "8.3.4",
-          "targets": [
-            {
-              "exemplar": true,
-              "expr": "(\n  100 \n  - \n  avg(\n    (\n      node_memory_MemAvailable_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}\n      * \n      100\n    ) \n    / \n    node_memory_MemTotal_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}\n) by (instance) )",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "",
-              "refId": "B",
-              "step": 240
-            }
-          ],
-          "title": " RAM Used",
-          "type": "gauge"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "max": 100,
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "rgba(50, 172, 45, 0.97)",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 80
-                  },
-                  {
-                    "color": "rgba(245, 54, 54, 0.9)",
-                    "value": 90
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 12,
-            "y": 35
-          },
-          "id": 78,
-          "links": [],
-          "options": {
-            "orientation": "vertical",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
-            "text": {}
-          },
-          "pluginVersion": "8.3.4",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "100 - avg(\n  (\n    node_filesystem_avail_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\",mountpoint=~\"/\"} \n    * \n    100\n  ) \n  / \n  node_filesystem_size_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\",mountpoint=~\"/\"}\n) by (instance)\n",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "",
-              "refId": "A",
-              "step": 240
-            }
-          ],
-          "title": "Disk Used",
-          "type": "gauge"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "Used Swap",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "index": 0,
-                      "text": "0%"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "max": 100,
-              "min": 0,
-              "noValue": "0",
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "rgba(50, 172, 45, 0.97)",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 10
-                  },
-                  {
-                    "color": "rgba(245, 54, 54, 0.9)",
-                    "value": 25
-                  }
-                ]
-              },
-              "unit": "percent"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 18,
-            "y": 35
-          },
-          "id": 80,
-          "links": [],
-          "options": {
-            "orientation": "vertical",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "showThresholdLabels": false,
-            "showThresholdMarkers": true,
-            "text": {}
-          },
-          "pluginVersion": "8.3.4",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "avg(\n  (\n    (\n      node_memory_SwapTotal_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"} \n      - \n      node_memory_SwapFree_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}\n    )\n  ) \n  / \n  (\n    node_memory_SwapTotal_bytes{cluster_name=~\"$cluster_name\",instance=~\"$node\"} \n  )\n) by (instance) * 100",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "",
-              "refId": "A",
-              "step": 240
-            }
-          ],
-          "title": "SWAP Used",
-          "type": "gauge"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${datasource}"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ops"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 0,
-            "y": 40
-          },
-          "id": 89,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_requests{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "Total",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_requests_250ms{cluster_name=~\"$cluster_name\",instance=\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "> 250ms",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_requests_500ms{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "> 500ms",
-              "refId": "D"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_requests_1000ms{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "> 1000ms",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_requests_5000ms{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "> 5000ms",
-              "refId": "E"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${datasource}"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_queued_requests{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "queued",
-              "refId": "F"
-            }
-          ],
-          "title": "N1QL Queries",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ops"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 8,
-            "y": 40
-          },
-          "id": 90,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_at_plus{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "at_plus",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_cancelled{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "cancelled",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_invalid_requests{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "invalid",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_scan_plus{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "scan_plus",
-              "refId": "D"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_unbounded{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "unbounded",
-              "refId": "E"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_transactions{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "transactions",
-              "refId": "F"
-            }
-          ],
-          "title": "N1QL Requests",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The number o N1QL errors, warnings, invalid requests and queued requests",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "cps"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 16,
-            "y": 40
-          },
-          "id": 82,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_errors{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "Errors",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_warnings{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "Warnings",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_invalid_requests{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "Invalid Requests",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_errors{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "Queued Requests",
-              "refId": "D"
-            }
-          ],
-          "title": "N1QL errors/warnings",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ops"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 0,
-            "y": 45
-          },
-          "id": 84,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_updates{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "UPDATEs",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_selects{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "SELECTs",
-              "refId": "A"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_inserts{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "INSERTs",
-              "refId": "C"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_deletes{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "DELETEs",
-              "refId": "D"
-            }
-          ],
-          "title": "N1QL Operations",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ops"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 8,
-            "y": 45
-          },
-          "id": 91,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_index_scans{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "index scan",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "sum(rate(n1ql_primary_scans{cluster_name=~\"$cluster_name\"}[$__rate_interval])) by (cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "$__rate_interval",
-              "intervalFactor": 1,
-              "legendFormat": "primary scan",
-              "refId": "A"
-            }
-          ],
-          "title": "N1QL Index Scans",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "Average Execution Time (Overall), Average Service Time (time spent executing)",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "(-) Service Time / Request Time (+)",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ns"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 16,
-            "y": 45
-          },
-          "id": 15,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "hidden",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "avg(n1ql_avg_req_time{cluster_name=~\"$cluster_name\",instance=~\"$node\"}) by(cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "Request Time",
-              "refId": "B"
-            },
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "-avg(n1ql_avg_svc_time{cluster_name=~\"$cluster_name\",instance=~\"$node\"}) by(cluster_name)",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "Service Time",
-              "refId": "A"
-            }
-          ],
-          "title": "Average Execution Time",
-          "type": "timeseries"
-        }
-      ],
+      "panels": [],
       "repeat": "node",
       "title": "Node: $node",
       "type": "row"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 85
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 63
+      },
+      "id": 74,
+      "links": [],
+      "options": {
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{cluster=~\"$cluster\",instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
+          "hide": false,
+          "interval": "$__rate_interval",
+          "intervalFactor": 1,
+          "legendFormat": "{{instance}}",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "CPU Utilization",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "description": "Non available RAM memory",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "decimals": 0,
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 80
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 63
+      },
+      "hideTimeOverride": false,
+      "id": 76,
+      "links": [],
+      "options": {
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "(\n  100 \n  - \n  avg(\n    (\n      node_memory_MemAvailable_bytes{cluster=~\"$cluster\",instance=~\"$node\"}\n      * \n      100\n    ) \n    / \n    node_memory_MemTotal_bytes{cluster=~\"$cluster\",instance=~\"$node\"}\n) by (instance) )",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "B",
+          "step": 240
+        }
+      ],
+      "title": " RAM Used",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 80
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 63
+      },
+      "id": 78,
+      "links": [],
+      "options": {
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "100 - avg(\n  (\n    node_filesystem_avail_bytes{cluster=~\"$cluster\",instance=~\"$node\",mountpoint=~\"/\"} \n    * \n    100\n  ) \n  / \n  node_filesystem_size_bytes{cluster=~\"$cluster\",instance=~\"$node\",mountpoint=~\"/\"}\n) by (instance)\n",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "Disk Used",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "description": "Used Swap",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "index": 0,
+                  "text": "0%"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "noValue": "0",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "rgba(50, 172, 45, 0.97)",
+                "value": null
+              },
+              {
+                "color": "rgba(237, 129, 40, 0.89)",
+                "value": 10
+              },
+              {
+                "color": "rgba(245, 54, 54, 0.9)",
+                "value": 25
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 63
+      },
+      "id": 80,
+      "links": [],
+      "options": {
+        "orientation": "vertical",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.2.7",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "avg(\n  (\n    (\n      node_memory_SwapTotal_bytes{cluster=~\"$cluster\",instance=~\"$node\"} \n      - \n      node_memory_SwapFree_bytes{cluster=~\"$cluster\",instance=~\"$node\"}\n    )\n  ) \n  / \n  (\n    node_memory_SwapTotal_bytes{cluster=~\"$cluster\",instance=~\"$node\"} \n  )\n) by (instance) * 100",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "SWAP Used",
+      "type": "gauge"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 68
+      },
+      "id": 89,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_requests{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Total",
+          "refId": "B"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_requests_250ms{cluster=~\"$cluster\",instance=\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "> 250ms",
+          "refId": "C"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_requests_500ms{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "> 500ms",
+          "refId": "D"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_requests_1000ms{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "> 1000ms",
+          "refId": "A"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_requests_5000ms{cluster=~\"$cluster\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "> 5000ms",
+          "refId": "E"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_queued_requests{cluster=~\"$cluster\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "queued",
+          "refId": "F"
+        }
+      ],
+      "title": "N1QL Queries",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 68
+      },
+      "id": 90,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_at_plus{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "at_plus",
+          "refId": "B"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_cancelled{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "cancelled",
+          "refId": "A"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_invalid_requests{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "invalid",
+          "refId": "C"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_scan_plus{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "scan_plus",
+          "refId": "D"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_unbounded{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "unbounded",
+          "refId": "E"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_transactions{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "transactions",
+          "refId": "F"
+        }
+      ],
+      "title": "N1QL Requests",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "The number o N1QL errors, warnings, invalid requests and queued requests",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "cps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 68
+      },
+      "id": 82,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_errors{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Errors",
+          "refId": "A"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_warnings{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Warnings",
+          "refId": "B"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_invalid_requests{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Invalid Requests",
+          "refId": "C"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_errors{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Queued Requests",
+          "refId": "D"
+        }
+      ],
+      "title": "N1QL errors/warnings",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 0,
+        "y": 73
+      },
+      "id": 84,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_updates{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "UPDATEs",
+          "refId": "B"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_selects{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "SELECTs",
+          "refId": "A"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_inserts{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "INSERTs",
+          "refId": "C"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_deletes{cluster=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "DELETEs",
+          "refId": "D"
+        }
+      ],
+      "title": "N1QL Operations",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ops"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 8,
+        "y": 73
+      },
+      "id": 91,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_index_scans{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "index scan",
+          "refId": "B"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_primary_scans{cluster=~\"$cluster\"}[$__rate_interval])) by (cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "primary scan",
+          "refId": "A"
+        }
+      ],
+      "title": "N1QL Index Scans",
+      "type": "timeseries"
+    },
+    {
+      "datasource": null,
+      "description": "Average Execution Time (Overall), Average Service Time (time spent executing)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "(-) Service Time / Request Time (+)",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 8,
+        "x": 16,
+        "y": 73
+      },
+      "id": 15,
+      "links": [],
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "pluginVersion": "8.2.3",
+      "targets": [
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "avg(n1ql_avg_req_time{cluster=~\"$cluster\",instance=~\"$node\"}) by(cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Request Time",
+          "refId": "B"
+        },
+        {
+          "datasource": null,
+          "exemplar": true,
+          "expr": "-avg(n1ql_avg_svc_time{cluster=~\"$cluster\",instance=~\"$node\"}) by(cluster)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Service Time",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Execution Time",
+      "type": "timeseries"
     }
   ],
-  "refresh": "30s",
-  "schemaVersion": 34,
+  "refresh": "15s",
+  "schemaVersion": 32,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -4833,42 +4476,20 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Prometheus",
-          "value": "Prometheus"
-        },
-        "hide": 0,
-        "includeAll": false,
-        "label": "Datasource",
-        "multi": false,
-        "name": "datasource",
-        "options": [],
-        "query": "prometheus",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "Demo Cluster 1",
-          "value": "Demo Cluster 1"
-        },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(n1ql_requests,cluster_name)",
+        "allValue": null,
+        "current": {},
+        "datasource": null,
+        "definition": "label_values(n1ql_requests,cluster)",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
         "multi": false,
-        "name": "cluster_name",
+        "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(n1ql_requests,cluster_name)",
+          "query": "label_values(n1ql_requests,cluster)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -4878,6 +4499,7 @@
         "type": "query"
       },
       {
+        "allValue": null,
         "current": {
           "selected": true,
           "text": [
@@ -4887,11 +4509,10 @@
             "$__all"
           ]
         },
-        "datasource": {
-          "type": "prometheus",
-          "uid": "${datasource}"
-        },
-        "definition": "label_values(n1ql_requests{cluster_name=~\"$cluster_name\"}, instance)",
+        "datasource": null,
+        "definition": "label_values(n1ql_requests{cluster=~\"$cluster\"}, instance)",
+        "description": null,
+        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Query Nodes",
@@ -4899,7 +4520,7 @@
         "name": "node",
         "options": [],
         "query": {
-          "query": "label_values(n1ql_requests{cluster_name=~\"$cluster_name\"}, instance)",
+          "query": "label_values(n1ql_requests{cluster=~\"$cluster\"}, instance)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -4930,6 +4551,5 @@
   "timezone": "",
   "title": "Query Service",
   "uid": "89ydpf5nz",
-  "version": 22,
-  "weekStart": ""
+  "version": 6
 }
