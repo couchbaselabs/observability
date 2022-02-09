@@ -1,19 +1,24 @@
 ---
+# Note: this playbook is only used for OSS builds. Non-OSS builds use antora-container-playbook-proprietary instead.
 site:
     title: Couchbase Monitoring and Observability Stack
     url: /cmos
     start_page: cmos::index.adoc
 content:
     sources:
-        - url: ../workspace/
+        - url: ./
           branches: HEAD
           start_path: docs
+runtime:
+    cache_dir: ./build/cache
+    log:
+      level: all
 ui:
     bundle:
         url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
-        snapshot: true
 asciidoc:
     attributes:
+        env-packaged: ''
         env-oss: ''
         sect-links: ''
         sect-anchors: ''

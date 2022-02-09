@@ -15,3 +15,5 @@ asciidoc:
     attributes:
         env-packaged: ''
         env-oss: ''
+        sect-links: ''
+        sect-anchors: ''

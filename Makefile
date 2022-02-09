@@ -163,5 +163,9 @@ clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
 	rm -f microlith/git-commit.txt
 
+docs:
+	docker-compose -f docs/docker-compose.yml up -d
+	docker exec antora sh -c "onchange -i antora-playbook.yml 'docs/**' -- antora generate antora-playbook.yml"
+
 docs-license-analysis:
 	tools/tern-report.sh
