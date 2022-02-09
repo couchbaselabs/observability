@@ -15,5 +15,3 @@ ui:
 asciidoc:
     attributes:
         env-packaged: ''
-        sect-links: ''
-        sect-anchors: ''
