@@ -33,6 +33,10 @@ Create a named Docker network to enable the components to resolve each other by 
 docker network create cmos
 ----
 
+== Install Cluster Monitor
+
+TODO (https://issues.couchbase.com/browse/CMOS-313)
+
 == Install Prometheus
 
 First, create a configuration file for Prometheus - by convention this is called `prometheus.yml`.
@@ -323,7 +327,7 @@ docker run -d \
 
 == (Optional) Install Fluent Bit
 
-TODO (CMOS-303).
+TODO (https://issues.couchbase.com/browse/CMOS-303).
 
 == Install Grafana
 

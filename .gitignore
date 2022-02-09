@@ -23,4 +23,5 @@ testing/.vagrant
 testing/bats/integration/kubernetes/resources/default-microlith.yaml
 testing/bats/integration/kubernetes/resources/helm/couchbase-cluster-logging-values.yaml
 .DS_Store
+node_modules
 *.log

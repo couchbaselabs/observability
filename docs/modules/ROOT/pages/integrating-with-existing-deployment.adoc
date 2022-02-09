@@ -1,0 +1,32 @@
+= Integrating CMOS with an existing monitoring pipeline
+:icons: font
+:imagesdir: ../assets/images
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
+[abstract]
+It is possible to integrate CMOS with existing monitoring pipelines.
+This can be achieved through additional configuration of existing Prometheus, Alertmanager, and Grafana instances.
+
+include::partial$tutorial.adoc[]
+
+== Overview
+In this tutorial we will detail the steps needed to configure existing Prometheus, Alertmanager, and Grafana instances.
+
+== Pre-Requisites
+You will need to have Cluster Monitor installed.
+If this is not the case, please see our documentation on how to xref:integrating-with-existing-deployment#_prometheus[install Cluster Monitor].
+
+== Prometheus
+- Configuring scrape configs for your Couchbase cluster
+
+=== Alertmanager
+- Downloading and installing alert templates
+
+== Grafana
+- Installing the required Grafana plugins
+- Downloading and installing our dashboards
+- Configuring Grafana's datasources
+  * Prometheus
+  * Cluster Monitor (JSON API)
