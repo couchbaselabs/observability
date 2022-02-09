@@ -305,7 +305,7 @@ groups:
           node: '{{ $labels.hostname }}'
         annotations:
           title: "Permission denied errors (node: {{ $labels.hostname }})"
-          description: Found permission denied errors in memcached.log, this is possibly due to misconfiguration.
-            This is potentially due to other applications locking Couchbase Server files.
+          description: Couchbase Server has been denied permission to access resources.
+            This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
           remediation: Check that there are no other applications locking files in your Couchbase Server directory.
             If this does not solve the problem, please contact Couchbase Support.
