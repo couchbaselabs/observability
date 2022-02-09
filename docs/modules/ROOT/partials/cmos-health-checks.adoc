@@ -174,7 +174,7 @@ If you experience any, then please contact Couchbase Technical Support.
 *Further Reading*: https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/[Couchbase DCP Rollback]
 
 [#CB90070]
-=== Service DCP Rollback to Zero (CB90067)
+=== Permission Denied Errors (CB90070)
 
 *Background*: Couchbase Server has been denied permission to access resources.
 This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
