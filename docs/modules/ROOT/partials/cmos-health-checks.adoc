@@ -181,7 +181,7 @@ This is potentially due to other applications locking Couchbase Server files, or
 
 *Condition*: Found permission denied errors in memcached.log.
 
-*Remediation*: Check that there are no other applications locking files in your Couchbase Server directory.
+*Remediation*: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
 If this does not solve the problem, please contact Couchbase Support.
 
 // end::group-node[]

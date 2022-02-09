@@ -307,5 +307,5 @@ groups:
           title: "Permission denied errors (node: {{ $labels.hostname }})"
           description: Couchbase Server has been denied permission to access resources.
             This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
-          remediation: Check that there are no other applications locking files in your Couchbase Server directory.
+          remediation: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
             If this does not solve the problem, please contact Couchbase Support.
