@@ -442,6 +442,20 @@ If you experience any, then please contact Couchbase Technical Support.</p>
 <p><strong>Further Reading</strong>: <a href="https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/">Couchbase DCP Rollback</a></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90070"><a class="anchor" href="#CB90070"></a>Permission Denied Errors (CB90070)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: Couchbase Server has been denied permission to access resources.
+This is potentially due to other applications locking Couchbase Server files, or misconfiguration.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: Found permission denied errors in memcached.log.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
+If this does not solve the problem, please contact Couchbase Support.</p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
