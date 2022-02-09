@@ -1,2 +1,2 @@
-│2022-02-09T14:13:17.631996+00:00 WARNING (travel-sample) CouchKVStore::openDB: error:error opening file [Permission denied]
-│2022-02-09T14:13:17.631996+00:00 WARNING (travel-sample) CouchKVStore::openDB: error:error opening file [Permission denied]
+2022-02-09T14:13:17.631996+00:00 WARNING (travel-sample) CouchKVStore::openDB: error:error opening file [Permission denied]
+2022-02-09T14:13:17.631996+00:00 WARNING (travel-sample) CouchKVStore::openDB: error:error opening file [Permission denied]
