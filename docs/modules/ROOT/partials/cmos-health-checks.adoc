@@ -251,15 +251,15 @@ If the problem persists, then please contact Couchbase Technical Support.
 [#CB90071]
 === Compaction Failure (CB90071)
 
-*Background*: Auto-Compaction can be set to run either at a specific time, or when bucket storage becomes too low.
-Auto-Compaction requires some free space in order to run, if there is none available then compaction cannot run.
+*Background*: Auto-Compaction can be set to run either at a specific time, or when fragmentation hits a specific level.
+Auto-Compaction requires some free space in order to run, so if there is none available then compaction cannot run.
 
-*Condition*: Auto-Compaction on bucket can fail if there is insufficient available storage.
+*Condition*: Auto-Compaction on bucket can fail if there is insufficient disk space available.
 
-*Remediation*: Allocate more storage to the nodes in bucket, {{ $labels.bucket }} and attempt to rerun Auto-Compaction.
-You may also create a new cluster, with more storage, and use XDCR to transfer the files over to that, which should give you the space required for Auto-Compaction.
+*Remediation*: Allocate more storage to existing Data Service nodes, or more Data Service nodes to the cluster, and attempt to rerun Auto-Compaction.
+You may also create a new cluster, with more storage, and use unidirectional XDCR to transfer the files over, which should give you the space required for Auto-Compaction.
 If that is not possible, please contact Couchbase Technical Support.
 
-*Further Reading*:
+*Further Reading*: https://docs.couchbase.com/server/current/manage/manage-settings/configure-compact-settings.html[Auto-Compaction]
 
 // end::group-bucket[]
