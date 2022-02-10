@@ -15,5 +15,3 @@ ui:
 asciidoc:
     attributes:
         env-oss: ''
-        sect-links: ''
-        sect-anchors: ''
