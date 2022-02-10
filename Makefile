@@ -164,7 +164,7 @@ clean: container-clean
 	rm -f microlith/git-commit.txt
 
 docs:
-	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml rm -fsv
+	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml down -v --rmi local
 
 docs-license-analysis:
 	tools/tern-report.sh
