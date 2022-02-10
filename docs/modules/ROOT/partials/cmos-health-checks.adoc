@@ -252,7 +252,7 @@ If the problem persists, then please contact Couchbase Technical Support.
 === Compaction Failure (CB90071)
 
 *Background*: Auto-Compaction can be set to run either at a specific time, or when fragmentation hits a specific level.
-Auto-Compaction requires some free space in order to run, so if there is none available then compaction cannot run.
+Auto-Compaction requires some free space on disk in order to run, so if there is none available then compaction cannot run.
 
 *Condition*: Auto-Compaction on bucket can fail if there is insufficient disk space available.
 
