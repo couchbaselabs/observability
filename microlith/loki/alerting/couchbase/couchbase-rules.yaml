@@ -312,7 +312,7 @@ groups:
 
       - alert: CB90071-compactionFailure
         expr: |
-          count_over_time({file="error.log"} |= "Cannot compact database" [1h]) >0
+          count_over_time({file="debug.log"} |= "Cannot compact database" [1h]) >0
         labels:
           job: couchbase_fluent_bit
           kind: bucket

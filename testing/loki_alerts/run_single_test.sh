@@ -96,7 +96,7 @@ function fluent_bit_config_for() {
         memcached.log.000000.txt)
             echo "in-memcached-log.conf"
             ;;
-        babysitter.log)
+        babysitter.log|debug.log)
             echo "in-erlang-multiline-log.conf"
             ;;
         *)
