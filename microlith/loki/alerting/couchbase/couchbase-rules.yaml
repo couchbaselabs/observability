@@ -309,3 +309,22 @@ groups:
             This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
           remediation: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
             If this does not solve the problem, please contact Couchbase Support.
+
+      - alert: CB90071-compactionFailure
+        expr: |
+          count_over_time({file="error.log"} |= "Cannot compact database" [1h]) >0
+        labels:
+          job: couchbase_fluent_bit
+          kind: bucket
+          severity: critical
+          health_check_id: CB90071
+          health_check_name: compactionFailure
+          cluster: '{{ $labels.couchbase_cluster }}'
+          node: '{{ $labels.hostname }}'
+          bucket: '{{ $labels.bucket }}'
+        annotations:
+          title: "Compaction failed. (cluster: {{ $labels.couchbase_cluster }})"
+          description: Auto-Compaction on bucket, {{ $labels.bucket }}, has failed due to insufficient available storage.
+          remediation: Allocate more storage to the nodes in bucket, {{ $labels.bucket }} and attempt to rerun Auto-Compaction.
+            You may also create a new cluster, with more storage, and use XDCR to transfer the files over to that, which should give you the space required for Auto-Compaction.
+            If that is not possible, please contact Couchbase Technical Support.
