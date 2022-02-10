@@ -3,7 +3,7 @@ services:
       container_name: antora
       build:
         context: .
-      command: http-server build/site -c-1
+      command: sh -c "(http-server build/site -c-1 &) && (onchange -i antora-playbook.yml 'docs/**' -- antora generate antora-playbook.yml)"
       volumes:
         - ./antora.yml:/antora/docs/antora.yml
         - ./antora-container-playbook-dev.yml:/antora/antora-playbook.yml
