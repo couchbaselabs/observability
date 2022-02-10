@@ -176,9 +176,9 @@ You can preview AsciiDoc code in a number of different ways.
 
 #### Antora in a Docker container (recommended) ####
 
-Run `make docs` in the top-level directory. This will create an Antora docker container, which will rebuild the documentation on every change, serving the docs at `http://localhost:4040`. Make sure to refresh the page in your browser to see any changes you make.
+Run `make docs` in the top-level directory. This will create an Antora docker container, which will rebuild the documentation on every change, serving the docs at `http://localhost:4040`. Make sure to refresh the page in your browser to see any changes you make. _Note: currently this will only preview the OSS docs - the cbmultimanager docs will not be included. This may lead to various broken references and warnings._
 
-The container runs without the `-d` flag specified, i.e., running in the foreground. This will print all logged output to your terminal - useful for viewing Antora warnings.
+The container runs without the `-d` flag specified, i.e., running in the foreground. This will print all logged output to your terminal - useful for viewing Antora warnings. 
 
 Once you are finished, simply hit CTRL+C in the terminal you ran `make docs`. This will stop and remove the container and its volumes.
 
