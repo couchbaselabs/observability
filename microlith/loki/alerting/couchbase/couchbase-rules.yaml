@@ -5,7 +5,7 @@ groups:
 
       - alert: CB90036-memcachedCrash
         expr: |
-          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h]) > 0
+          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h])
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -44,7 +44,7 @@ groups:
         expr: |
           sum(count_over_time(
             {file="memcached.log"} |= `Invalid format specified for "DCP_OPEN"` |= `Reason:"Key length exceeds 250"` | json hostname="hostname" [5m]
-          )) by (couchbase_cluster, hostname) > 0
+          )) by (cluster, hostname) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -52,9 +52,9 @@ groups:
           severity: critical
           health_check_id: CB90033
           health_check_name: longDcpNames
-          cluster: '{{ $labels.couchbase_cluster }}'
+          cluster: '{{ $labels.cluster }}'
         annotations:
-          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.couchbase_cluster }})
+          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.cluster }})
           description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
@@ -62,7 +62,7 @@ groups:
         expr: |
           sum(count_over_time(
             {file="memcached.log"} |= "Response::setKeylen: key cannot exceed 1 byte" | json hostname="hostname" [5m]
-          )) by (couchbase_cluster, hostname) > 0
+          )) by (cluster, hostname) > 0
         for: 1m
         labels:
           job: couchbase_fluent_bit
@@ -70,9 +70,9 @@ groups:
           severity: critical
           health_check_id: CB90033
           health_check_name: longDcpNames
-          cluster: '{{ $labels.couchbase_cluster }}'
+          cluster: '{{ $labels.cluster }}'
         annotations:
-          title: Long DCP Names (MB-34280) (cluster {{ $labels.couchbase_cluster }})
+          title: Long DCP Names (MB-34280) (cluster {{ $labels.cluster }})
           description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
           remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
@@ -273,3 +273,39 @@ groups:
           title: "Large Number of Dropped Ticks Detected (node: {{ $labels.hostname }})"
           description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
           remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
+
+      - alert: CB90067-serviceRollback
+        expr: |
+          count_over_time( {file="memcached.log"} |= "requires rollback to seqno:0" != "eq_dcpq:replication" [1h]) > 0
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90067
+          health_check_name: serviceRollback
+          cluster: '{{ $labels.couchbase_cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: "Service DCP Rollback to Zero (node: {{ $labels.hostname }})"
+          description: A service has been forced to DCP rollback to zero.
+            If the Data Service is rolled back to 0, it means the service is attempting to resynchronize the entirety of the data set.
+          remediation: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues.
+            If you experience any, then please contact Couchbase Technical Support.
+
+      - alert: CB90070-permissionDenied
+        expr: |
+          count_over_time({file="memcached.log"} |= "Permission denied" [1h]) >0
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: warning
+          health_check_id: CB90070
+          health_check_name: permissionDenied
+          cluster: '{{ $labels.couchbase_cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: "Permission denied errors (node: {{ $labels.hostname }})"
+          description: Couchbase Server has been denied permission to access resources.
+            This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
+          remediation: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
+            If this does not solve the problem, please contact Couchbase Support.

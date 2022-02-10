@@ -22,7 +22,9 @@ function wait_for_curl() {
     local MAX_ATTEMPTS=$1
     shift
     local ATTEMPTS=0
-    echo "Curl command: curl -s -o /dev/null -f $*"
+    if [ "${VERBOSITY:-0}" -gt 1 ]; then
+        echo "Curl command: curl -s -o /dev/null -f $*"
+    fi
     until curl -s -o /dev/null -f "$@"; do
         # Prevent an infinite loop - at 2 seconds per go this is 10 minutes
         if [ $ATTEMPTS -gt "300" ]; then

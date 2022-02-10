@@ -65,6 +65,9 @@ config-svc-test-unit:
 config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
+test-loki-rules:
+	testing/loki_alerts/run_all.sh
+
 # NOTE: This target is only for local development.
 container: CBMULTIMANAGER_REF ?= master
 container: build
@@ -159,6 +162,10 @@ container-clean: examples-clean
 clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
 	rm -f microlith/git-commit.txt
+
+docs:
+	# || true is needed so the Makefile does not error when hitting CTRL+C
+	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml down
 
 docs-license-analysis:
 	tools/tern-report.sh

@@ -1,0 +1,6 @@
+2021-12-31T10:32:53.855923+00:00 INFO ---------- Opening logfile: /opt/couchbase/var/lib/couchbase/logs/memcached.log.000000.txt
+2021-12-31T10:32:53.856861+00:00 INFO Couchbase version 7.0.2-6703 starting.
+2021-12-31T10:32:53.856871+00:00 INFO recalculate_max_connections: {"max_fds":200000,"max_connections":65000,"system_connections":5000,"engine_fds":133982}
+2021-12-31T10:32:53.856906+00:00 INFO Breakpad enabled. Minidumps will be written to '/opt/couchbase/var/lib/couchbase/crash'
+2021-12-31T10:32:53.857135+00:00 INFO Using SLA configuration: {"COMPACT_DB":{"slow":"1800 s"},"CREATE_BUCKET":{"slow":"5 s"},"DELETE_BUCKET":{"slow":"10 s"},"SELECT_BUCKET":{"slow":"10 ms"},"SEQNO_PERSISTENCE":{"slow":"30 s"},"comment":"Current MCBP SLA configuration","default":{"slow":"500 ms"},"version":1}
+2021-12-31T10:33:00.209875+00:00 WARNING 60: Slow operation: {"bucket":"beer-sample","cid":"127.0.0.1:57425/0","command":"SELECT_BUCKET","duration":"13 ms","packet":{"bodylen":11,"cas":0,"datatype":"raw","extlen":0,"key":"<ud>beer-sample</ud>","keylen":11,"magic":"ClientRequest","opaque":0,"opcode":"SELECT_BUCKET","vbucket":0},"peer":"{\"ip\":\"127.0.0.1\",\"port\":57425}","response":"Success","trace":"request=15332435473648:12767 execute=15332435473648:12767","worker_tid":140254451812096}

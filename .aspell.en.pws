@@ -1,4 +1,4 @@
-personal_ws-1.1 en 88
+personal_ws-1.1 en 91
 AGPL
 CAO
 CMOS
@@ -87,3 +87,6 @@ vBucket
 vBuckets
 virtualised
 backoffs
+resynchronize
+backoff
+misconfiguration
