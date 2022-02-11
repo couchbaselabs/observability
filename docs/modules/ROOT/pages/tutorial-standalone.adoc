@@ -87,7 +87,7 @@ docker run -d \
   prom/prometheus
 ----
 
-If it has started successfully, you should be able to access its UI and see your cluster listed on http://localhost:9090/targets.
+If it starts successfully, you should be able to access its UI and see your cluster listed on http://localhost:9090/targets.
 
 
 === Prometheus Alerting Rules
