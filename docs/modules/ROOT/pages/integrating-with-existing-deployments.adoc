@@ -46,7 +46,7 @@ Follow the instructions in the http://localhost:4040/cmos/0.1/tutorial-standalon
 
 === Install all required Grafana plugins
 
-The linked instructions for each plugin offer a Grafana cloud one-click install, a CLI-based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
+The linked instructions for each plugin offer a Grafana cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
 If you prefer to use configuration files, or run in a Docker container, you may prefer an alternative install method (see below).
 
 . https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
