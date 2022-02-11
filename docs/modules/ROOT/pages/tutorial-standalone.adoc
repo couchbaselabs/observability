@@ -6,6 +6,7 @@ ifdef::env-github[]
 endif::[]
 
 [abstract]
+== Introduction
 While CMOS is designed as an all-in-one stack, it is also possible to deploy all its components separately.
 This tutorial will show you how to configure and deploy each component.
 
