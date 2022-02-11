@@ -6,8 +6,8 @@ ifdef::env-github[]
 endif::[]
 
 [abstract]
-It is possible to integrate CMOS with existing monitoring pipelines.
-This can be achieved through additional configuration of existing Prometheus, Alertmanager, and Grafana instances.
+== Introduction
+Integration of CMOS with your current monitoring pipelines can be achieved through configuration of existing Prometheus, Alertmanager, and Grafana instances
 
 include::partial$tutorial.adoc[]
 

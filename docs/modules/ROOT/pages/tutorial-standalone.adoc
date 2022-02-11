@@ -26,9 +26,9 @@ You may wish to read xref:integrating-with-existing-deployments.adoc[].
 We assume that you already have a Couchbase Server cluster running.
 If not, refer to the xref:7.0@server:install:getting-started[installation options] to deploy a cluster.
 
-We also assume that you have Docker installed.
+We also assume that you have Docker installed. If not, follow the https://docs.docker.com/engine/install/[official Docker installation instructions].
 
-Create a named Docker network to enable the components to resolve each other by their hostnames:
+First, create a named Docker network to enable the components to resolve each other by their hostnames:
 
 [source, console]
 ----
@@ -64,16 +64,15 @@ scrape_configs:
           cluster: "Couchbase Server Cluster" <.>
 ----
 
-<.> This needs to be set to the username of a Couchbase Server user with at least "External Stats Reader" permission.
-<.> This needs to be set to the password of the above user.
-<.> Here we specify the addresses of all the nodes in your cluster.
-    The port number needs to be the management port - use 18091 if you have TLS enabled.
+<.> `username` should be set to a Couchbase Server user with at least "External Stats Reader" permission.
+<.> `password` should be the password of the above user.
+<.> `targets` should specify the addresses of all the nodes in your cluster.
+    The port number needs to be the management port - use `:18091` if you have TLS enabled.
     There are other ways of configuring it that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
-<.> This label will be added to all metrics from this cluster.
-    The value should match the name the cluster is configured to use in the Web Console.
-    If you wish, you can add additional labels here (e.g., environment, datacenter...)
+<.> Any labels defined here will be added to **all** metrics from this cluster - you may want to configure e.g., `environment`, `datacenter` etc.
+    The label `cluster` is required, and should match the name the cluster is configured to use in the Web Console.
 
-Then, run Prometheus, mounting your configuration file inside the container.
+Next, run Prometheus, mounting your configuration file inside the container.
 If you want to persist your data across restarts, you can also mount the default data directory.
 
 [source, console]
@@ -92,9 +91,9 @@ If it has started successfully, you should be able to access its UI and see your
 
 === Prometheus Alerting Rules
 
-You can reuse the CMOS alert definitions to get alerts about events in your cluster.
+CMOS ships with pre-made alert definitions which can alert you about certain events in your cluster. 
 
-First, download the rule definitions:
+To take advantage of these, first download the rule definitions:
 
 [source, console]
 ----
@@ -155,14 +154,14 @@ receivers:
   - name: noop <.>
 ----
 
-<.> Here we can specify the default settings for the alert receivers.
-<.> This is the default route.
+<.> `global` specifies the default settings for all alert receivers.
+<.> `route` is the default route.
     Alertmanager routes form a tree - alerts enter the tree through this node, and descend through it until they reach a route with `continue: false` set.
 <.> The default route must match every alert, so we define a child route that will only match certain alerts.
-<.> Here we specify which alerts will match this route - in this case, those with a severity of either `warning` or `critical`.
-<.> Here we specify which receiver matching alerts are sent to - in this case we are using `noop`.
+<.> `matchers` specifies which alerts will match this route - in this case, those with a severity of either `warning` or `critical`.
+<.> `receiver` specifies which receiver matching alerts are sent to - in this case we are using `noop`.
 <.> If `continue` is set, the alert will proceed through this route's sibling routes, otherwise it will stop here.
-<.> Here we define our receivers - we only define one, named `noop`, but you will likely define others.
+<.> `receivers` is where we define all receivers. In this case, we only define one, named `noop`, but you will likely define others.
 
 Then, run an Alertmanager container:
 
@@ -205,8 +204,8 @@ docker kill -s HUP prometheus
 
 [TIP]
 ====
-When we previously added the rules file, we needed to stop and restart the Prometheus container.
-However, we did not need to restart it when we only modified the configuration file.
+When previously adding the rules file, it was necessary to stop and restart the Prometheus container.
+However, it is not necessary to restart it only modifying the configuration file.
 This is because the `prometheus.yml` is mounted inside the container, so it will pick up any changes we make to it without needing to restart it.
 We still need to tell it to reload the file, but there's no need for a restart if there are no other changes apart from the configuration file.
 ====
@@ -275,8 +274,8 @@ docker run -d \
 
 === Loki Alerting Rules
 
-Just like Prometheus, Loki allows you to configure rules that send alerts if certain LogQL queries match your logs.
-The format of the rules file is almost identical to Prometheus', the only difference being that it uses LogQL instead of PromQL.
+Just like Prometheus, Loki allows you to configure rules that send alerts if certain https://grafana.com/docs/loki/latest/logql/log_queries/[LogQL queries] match your logs.
+The format of the rules file is almost identical to Prometheus', the only difference being that it uses https://grafana.com/docs/loki/latest/logql/[LogQL] instead of PromQL.
 
 You can reuse the rules that ship with CMOS in your own Loki installation. First, download them:
 
