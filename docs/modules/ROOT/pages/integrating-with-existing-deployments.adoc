@@ -45,14 +45,17 @@ Follow the instructions in the http://localhost:4040/cmos/0.1/tutorial-standalon
 == Grafana
 
 === Install all required Grafana plugins
-Currently we require:
 
-- https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
+The linked instructions for each plugin offer a Grafana cloud one-click install, a CLI-based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
+If you prefer to use configuration files, or run in a Docker container, you may prefer an alternative install method (see below).
 
-Alternatively, if you: 
+. https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
 
-- Provision Grafana v7.1+ through the use of configuration files, you should https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your configuration file]. 
-- Are running Grafana in a Docker container, simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage. 
+==== Alternative install methods
+If you:
+
+- Provision Grafana v7.1+ through the use of configuration files, you can https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your configuration file]. 
+- Are running Grafana in a Docker container, you can simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage (linked under "installation instructions" for each). 
 
 === Download and install CMOS dashboards
 
