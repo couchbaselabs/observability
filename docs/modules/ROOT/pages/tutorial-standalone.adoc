@@ -93,7 +93,7 @@ If it has started successfully, you should be able to access its UI and see your
 
 You can reuse the CMOS alert definitions to get alerts about events in your cluster.
 
-First, download the rule defitions:
+First, download the rule definitions:
 
 [source, console]
 ----
@@ -125,7 +125,7 @@ docker run -d \
   prom/prometheus
 ----
 
-You should now be able to see the rules if you visit http://localhost:9090/rules (you may need to un-hide inactive rules):
+You should now be able to see the rules if you visit http://localhost:9090/rules (you may need to unhide inactive rules):
 
 Now Prometheus is testing the incoming metrics against these rules, but it is not firing alerts yet.
 In the next step we will add Alertmanager.
@@ -344,7 +344,7 @@ docker run -d \
   grafana/grafana-oss
 ----
 
-=== Configuring Grafana Datasources
+=== Configuring Grafana Data Sources
 
 Once it has started, visit http://localhost:3000 and you should be greeted by the login screen.
 The default credentials are `admin`/`admin`.
@@ -353,7 +353,7 @@ Once you are in, navigate to the "Configuration option" on the left sidebar menu
 Select Prometheus as your first data source and configure it for the Prometheus we started earlier.
 
 Recall that we created a custom network `cmos` so our containers could resolve each other by name, and that Prometheus uses port `:9090` for API access.
-Therefore, we should set the URL for the data source to `http://prometheus:9090`. We use basic auth, entering in the configured User and Password as `Administrator` and `password`.
+Therefore, we should set the URL for the data source to `http://prometheus:9090`. We use `basicAuth`, entering in the configured User and Password as `Administrator` and `password`.
 
 image::tutorial-standalone-grafana-datasources.png[Add previous Prometheus configuration]
 
