@@ -248,4 +248,18 @@ If the problem persists, then please contact Couchbase Technical Support.
 
 *Further Reading*: xref:7.0@server:metrics-reference:data-service-metrics.adoc#kv_ep_storage_age_second[Data Service Metrics], xref:7.0@server:install:sizing-general.adoc#sizing-data-service-nodes[Sizing Data Service Nodes]
 
+[#CB90071]
+=== Compaction Failure (CB90071)
+
+*Background*: Auto-Compaction can be set to run either at a specific time, or when fragmentation hits a specific level.
+Auto-Compaction requires some free space on disk in order to run, so if there is none available then compaction cannot run.
+
+*Condition*: Auto-Compaction on bucket can fail if there is insufficient disk space available.
+
+*Remediation*: Allocate more storage to existing Data Service nodes, or more Data Service nodes to the cluster, and attempt to rerun Auto-Compaction.
+You may also create a new cluster, with more storage, and use unidirectional XDCR to transfer the files over, which should give you the space required for Auto-Compaction.
+If that is not possible, please contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/manage/manage-settings/configure-compact-settings.html[Auto-Compaction]
+
 // end::group-bucket[]
