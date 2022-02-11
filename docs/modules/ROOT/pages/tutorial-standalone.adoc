@@ -13,7 +13,7 @@ include::partial$tutorial.adoc[]
 
 == Overview
 
-Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry-standard tooling to observe the state of a running Couchbase cluster.
+Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry-standard tooling to observe the state of a running Couchbase Server cluster.
 
 If you already have all the components of the stack in your deployment, it is easy to connect them all into a complete monitoring solution and take advantage of all the features, including the advanced health checking capabilities of the Couchbase Cluster Monitor.
 
