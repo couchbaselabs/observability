@@ -18,7 +18,8 @@ Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, o
 If you already have all the components of the stack in your deployment, it is easy to connect them all into a complete monitoring solution and take advantage of all the features, including the advanced health checking capabilities of the Couchbase Cluster Monitor.
 
 In this tutorial, we will use Docker to configure all the components individually from scratch.
-However, if you already have some of these components deployed, you can skip the respective sections.
+However, if you already have some of these components deployed, you can skip the respective sections. 
+You may wish to read xref:integrating-with-existing-deployments.adoc[].
 
 == Pre-Requisites
 

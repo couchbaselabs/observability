@@ -14,9 +14,9 @@ include::partial$tutorial.adoc[]
 == Overview
 In this tutorial we will detail the steps needed to configure existing Prometheus, Alertmanager, and Grafana instances to integrate with Couchbase Monitoring and Observability Stack (CMOS).
 
-Depending on which you already have instances for, you may need to consult our xref:tutorial-standalone.adoc[Standalone Installation tutorial], which has independent sections on how to install each component.
+Depending on which you already have instances for, you may need to consult our xref:tutorial-standalone.adoc[Standalone Installation tutorial], which has sections on how to install each component.
 
-Each section within this page is designed to be independent, so only follow the configuration steps required.
+Each section within these tutorials designed to be independent, so only follow the configuration steps required.
 
 == Pre-Requisites
 You will need to have Cluster Monitor installed.
@@ -50,12 +50,9 @@ Currently we require:
 - https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
 
 Alternatively, if you: 
+
 - Provision Grafana v7.1+ through the use of configuration files, you should https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your configuration file]. 
 - Are running Grafana in a Docker container, simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage. 
-
-----
-
-----
 
 === Download and install CMOS dashboards
 
@@ -86,7 +83,7 @@ Enable `basicAuth`, with the user and password you configured.
 If you are provisioning Grafana as-code, then your `grafana.ini` may look something like this:
 [source, console]  
 ----
-...
+      ...
    - name: JSON API
       type: marcusolsson-json-datasource
       url: http://localhost:7196/api/v1
@@ -96,5 +93,5 @@ If you are provisioning Grafana as-code, then your `grafana.ini` may look someth
     - name: Alertmanager API
       type: marcusolsson-json-datasource
       url: http://localhost:9093/alertmanager/api/v2
-...
+      ...
 ---- 
