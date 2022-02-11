@@ -77,7 +77,7 @@ options:
 
 Now we have the required plugins and dashboards installed, we need to configure the required Data Sources:
 
-. **Prometheus** - if you're running Grafana, you likely already have a Prometheus instance configured as a datasource. 
+. **Prometheus** - if you're running Grafana, you likely already have a Prometheus instance configured as a Data Source. 
 If not, the Standalone tutorial has instructions on xref:tutorial-standalone.adoc#_configuring_grafana_datasources[adding a Prometheus Data Source].
 . **Cluster Monitor (JSON API)** - click on _Add Data Source_ and select "JSON API". The URL should point to the Cluster Monitor, which listens on port `:7196`, with a sub-path of `/api/v1`. 
 Enable `basicAuth`, with the user and password you configured.
