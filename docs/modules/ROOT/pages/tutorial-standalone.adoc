@@ -14,6 +14,7 @@ include::partial$tutorial.adoc[]
 == Overview
 
 Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry-standard tooling to observe the state of a running Couchbase cluster.
+
 If you already have all the components of the stack in your deployment, it is easy to connect them all into a complete monitoring solution and take advantage of all the features, including the advanced health checking capabilities of the Couchbase Cluster Monitor.
 
 In this tutorial, we will use Docker to configure all the components individually from scratch.
@@ -343,6 +344,8 @@ docker run -d \
   grafana/grafana-oss
 ----
 
+=== Configuring Grafana Datasources
+
 Once it has started, visit http://localhost:3000 and you should be greeted by the login screen.
 The default credentials are `admin`/`admin`.
 
@@ -365,7 +368,3 @@ If this fails, please check your configuration:
 3. Is the correct port for Prometheus specified in the URL field?
 
 If Grafana reports success, perform the same steps to add Loki - substituting the URL for `http://loki:3100`.
-
-=== Conclusion
-
-Congratulations! You have now configured all of the components of CMOS individually.
