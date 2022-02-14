@@ -350,7 +350,7 @@ docker run -d --rm \
 <.> `prometheus` - the name (resolving to IP) of the Prometheus Docker container, on port `9090` (Prometheus), and port `9093` (Alertmanager).
 <.> `job=couchbase-server` is the label we gave to the Couchbase Server Prometheus `scrape_config`.
 
-Note that, when Prometheus auto-discovery is enabled, cbmultimanager will assume all your clusters are in Prometheus and stop monitoring any that are not.
+Note that, when Prometheus auto-discovery is enabled, the Cluster Monitor will assume all your clusters are in Prometheus and stop monitoring any that are not.
 
 == Install Grafana
 

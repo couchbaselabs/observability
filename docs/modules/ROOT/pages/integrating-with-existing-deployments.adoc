@@ -6,7 +6,8 @@ ifdef::env-github[]
 endif::[]
 
 [abstract]
-You can integrate CMOS with your existing Prometheus, Alertmanager, and Grafana monitoring system.
+You can integrate CMOS with your existing Prometheus, Alertmanager, and Grafana monitoring system. 
+This tutorial documents how to configure each component in order to achieve this.
 
 include::partial$tutorial.adoc[]
 
