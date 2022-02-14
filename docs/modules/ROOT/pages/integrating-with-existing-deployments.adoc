@@ -26,17 +26,17 @@ Once you have completed all of the below steps you may need to restart Prometheu
 
 You will need to modify your existing Prometheus configuration file - this is typically named `prometheus.yml`.
 
-See our xref:tutorial-standalone.html#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server `scrape_config`.
+See our xref:tutorial-standalone.adoc#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server `scrape_config`.
 
 === Install Prometheus Alerting Rules
 
-Follow the Standalone tutorial instructions on xref:tutorial-standalone.html#_prometheus_alerting_rules[Installing Prometheus Alerting rules].
+Follow the Standalone tutorial instructions on xref:tutorial-standalone.adoc#_prometheus_alerting_rules[Installing Prometheus Alerting rules].
 
 == Alertmanager
 
 === Downloading and installing Alert templates
 
-Follow the instructions in the xref:tutorial-standalone.html#_prometheus_alerting_rules[Standalone example guide].
+Follow the instructions in the xref:tutorial-standalone.adoc#_prometheus_alerting_rules[Standalone example guide].
 
 == Cluster Monitor
 
