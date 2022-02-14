@@ -34,13 +34,13 @@ endif::env-packaged[]
 
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
+* xref:integrating-with-existing-deployments.adoc[Integrating with existing monitoring pipelines]
 * xref:deployment-fluentbit.adoc[Fluent Bit deployment]
 
 .Tutorials
 * xref:tutorial-onpremise.adoc[On-premise example]
 * xref:tutorial-kubernetes.adoc[Kubernetes example]
 * xref:tutorial-standalone.adoc[Standalone example]
-* xref:integrating-with-existing-deployments.adoc[Integrating with existing monitoring pipelines]
 
 .Further Information
 * xref:prerequisite-and-setup.adoc[Pre-requisites]

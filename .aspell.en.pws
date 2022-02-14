@@ -91,7 +91,6 @@ resynchronize
 backoff
 misconfiguration
 TLS
-TODO
 alertmanager
 datacenter
 hostnames

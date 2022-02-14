@@ -6,8 +6,7 @@ ifdef::env-github[]
 endif::[]
 
 [abstract]
-== Introduction
-Integration of CMOS with your current monitoring pipelines can be achieved through configuration of existing Prometheus, Alertmanager, and Grafana instances
+You can integrate CMOS with your existing Prometheus, Alertmanager, and Grafana monitoring system.
 
 include::partial$tutorial.adoc[]
 
@@ -18,10 +17,6 @@ Depending on which you already have instances for, you may need to consult our x
 
 Each section within these tutorials designed to be independent, so only follow the configuration steps required.
 
-== Pre-Requisites
-You will need to have Cluster Monitor installed.
-If this is not the case, please see our documentation on how to xref:tutorial-standalone.adoc#_install_cluster_monitor[install Cluster Monitor].
-
 == Prometheus
 
 Once you have completed all of the below steps you may need to restart Prometheus to apply the configuration changes.
@@ -30,23 +25,27 @@ Once you have completed all of the below steps you may need to restart Prometheu
 
 You will need to modify your existing Prometheus configuration file - this is typically named `prometheus.yml`.
 
-See our http://localhost:4040/cmos/0.1/tutorial-standalone.html#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase `scrape_config`.
+See our xref:tutorial-standalone.html#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server `scrape_config`.
 
 === Install Prometheus Alerting Rules
 
-Follow the Standalone tutorial instructions on http://localhost:4040/cmos/0.1/tutorial-standalone.html#_prometheus_alerting_rules[Installing Prometheus Alerting rules].
+Follow the Standalone tutorial instructions on xref:tutorial-standalone.html#_prometheus_alerting_rules[Installing Prometheus Alerting rules].
 
 == Alertmanager
 
 === Downloading and installing Alert templates
 
-Follow the instructions in the http://localhost:4040/cmos/0.1/tutorial-standalone.html#_prometheus_alerting_rules[Standalone example guide].
+Follow the instructions in the xref:tutorial-standalone.html#_prometheus_alerting_rules[Standalone example guide].
+
+== Cluster Monitor
+
+See xref:tutorial-standalone.adoc#_install_cluster_monitor on how to run the Cluster Monitor and configure it to discover your Prometheus and Alertmanager instances.
 
 == Grafana
 
 === Install all required Grafana plugins
 
-The linked instructions for each plugin offer a Grafana cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
+The linked instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
 If you prefer to use configuration files, or run in a Docker container, you may prefer an alternative install method (see below).
 
 . https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
@@ -98,3 +97,8 @@ If you are provisioning Grafana as-code, then your `grafana.ini` may look someth
       url: http://localhost:9093/alertmanager/api/v2
       ...
 ---- 
+
+== Next Steps
+
+You should now have a complete CMOS stack up and running. 
+You may wish to build upon and change the existing Grafana dashboards and Prometheus / Alertmanager alerts for your use-case.
