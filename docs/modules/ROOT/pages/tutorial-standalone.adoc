@@ -205,7 +205,7 @@ docker kill -s HUP prometheus
 
 [TIP]
 ====
-When previously adding the rules file, it was necessary to stop and restart the Prometheus container.
+When previously adding the rules file, it was necessary to stop and re-create the Prometheus container.
 However, it is not necessary to restart it only modifying the configuration file.
 This is because the `prometheus.yml` is mounted inside the container, so it will pick up any changes we make to it without needing to restart it.
 We still need to tell it to reload the file, but there's no need for a restart if there are no other changes apart from the configuration file.
