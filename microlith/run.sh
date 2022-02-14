@@ -33,12 +33,13 @@ function log() {
 }
 
 # Expose all nested config variables to make it simple to see
-if [[ "${CMOS_HTTP_PATH_PREFIX:-}" == */ ]]; then
-    log "Error: invalid configuration - CMOS_HTTP_PATH_PREFIX ('$CMOS_HTTP_PATH_PREFIX') ends with a trailing slash."
-    log "Please remove the trailing slash."
-    exit 1
-fi
+
+# Strip off a trailing slash, just in case the user left one in
 export CMOS_HTTP_PATH_PREFIX=${CMOS_HTTP_PATH_PREFIX:-""}
+if [[ "${CMOS_HTTP_PATH_PREFIX:-}" == */ ]]; then
+    # This bit of Bash trickery removes a trailing slash if there is one - http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
+    CMOS_HTTP_PATH_PREFIX=${CMOS_HTTP_PATH_PREFIX%/}
+fi
 
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
@@ -68,7 +69,7 @@ export CB_MULTI_ENABLE_ADMIN_API=${CB_MULTI_ENABLE_ADMIN_API:-true}
 export CB_MULTI_ENABLE_CLUSTER_API=${CB_MULTI_ENABLE_CLUSTER_API:-true}
 export CB_MULTI_ENABLE_EXTENDED_API=${CB_MULTI_ENABLE_EXTENDED_API:-true}
 if [[ -z "${DISABLE_ALERTMANAGER+}" ]]; then
-    export CB_MULTI_ALERTMANAGER_URLS=${CB_MULTI_ALERTMANAGER_URLS:-"http://localhost:9093${CMOS_PATH_PREFIX}alertmanager"}
+    export CB_MULTI_ALERTMANAGER_URLS=${CB_MULTI_ALERTMANAGER_URLS:-"http://localhost:9093${CMOS_PATH_PREFIX}/alertmanager"}
 fi
 export CB_MULTI_ALERTMANAGER_RESEND_DELAY=${CB_MULTI_ALERTMANAGER_RESEND_DELAY:-"1m"}
 
