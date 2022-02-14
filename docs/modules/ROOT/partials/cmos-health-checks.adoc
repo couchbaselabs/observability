@@ -184,6 +184,28 @@ This is potentially due to other applications locking Couchbase Server files, or
 *Remediation*: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
 If this does not solve the problem, please contact Couchbase Support.
 
+[#CB90072]
+=== Data Service Connection Limit (CB90072)
+
+*Background*: By default, the maximum number of connections to the Data Service is limited to 65,000, of which 5,000 are reserved for internal system services.
+If this limit is exceeded, clients will fail to connect to your Couchbase cluster.
+
+The default limit is high enough that it is unlikely to be legitimately exceeded in production.
+If it is exceeded, the most likely cause is application code failing to shut down connections properly.
+
+*Condition*: Warning if the number of connections is above 80% of the default limit (60,000).
+Upgraded to an alert if the limit is exceeded, or log messages are seen that indicate that client connections are being rejected because of the limit.
+
+[NOTE]
+====
+It is possible to modify this limit.
+However, if this is done, you will need to adjust this health check's threshold accordingly, otherwise it may produce false positives or negatives.
+====
+
+*Remediation*: Review your application code to ensure that it is closing Couchbase connections properly.
+
+*Further Reading*: https://docs.couchbase.com/server/current/rest-api/rest-manage-cluster-connections.html[Managing Cluster Connections]
+
 // end::group-node[]
 
 // tag::group-bucket[]
