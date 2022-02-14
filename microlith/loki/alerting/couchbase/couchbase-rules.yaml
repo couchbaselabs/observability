@@ -328,3 +328,19 @@ groups:
           remediation: Allocate more storage to existing Data Service nodes, or more Data Service nodes to the cluster, and attempt to rerun Auto-Compaction.
             You may also create a new cluster, with more storage, and use unidirectional XDCR to transfer the files over, which should give you the space required for Auto-Compaction.
             If that is not possible, please contact Couchbase Technical Support.
+
+      - alert: CB90072-kvConnectionLimit
+        expr: |
+          count_over_time({file="memcached.log"} |= "Shutting down client as we're running out of connections" [1h]) >0
+        labels:
+          job: couchbase_fluent_bit
+          kind: node
+          severity: critical
+          health_check_id: CB90072
+          health_check_name: kvConnectionLimit
+          cluster: '{{ $labels.couchbase_cluster }}'
+          node: '{{ $labels.hostname }}'
+        annotations:
+          title: "Data Service Connection Limit Exceeded (node: {{ $labels.hostname }})"
+          description: Client connections have been rejected because the maximum number of connections has been exceeded.
+          remediation: Ensure your applications are appropriately closing their Couchbase connections.
