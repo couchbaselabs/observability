@@ -6,6 +6,7 @@ FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.31.1 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
 FROM jaegertracing/all-in-one:1.29.0 as jaegaer-official
+FROM hairyhenderson/gomplate:stable AS gomplate-official
 
 FROM golang:1.17 as builder
 # Builder image so ignore pinning and we do want recommended packages
@@ -286,7 +287,10 @@ COPY nginx/ /etc/nginx/
 COPY html/ /html/
 EXPOSE 8080
 # Add generated documentation as well to Nginx
-COPY --from=antora-generator /antora/cmos /html/cmos
+COPY --from=antora-generator /antora/cmos /html/docs
+
+# Install Gomplate for nginx config
+COPY --from=gomplate-official /gomplate /bin/gomplate
 
 # Couchbase cluster monitor - need these to keep OSS generic
 RUN mkdir -p /data /priv /ui

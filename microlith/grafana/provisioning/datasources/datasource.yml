@@ -14,13 +14,13 @@ datasources:
     - name: Loki
       type: loki
       access: proxy
-      url: http://localhost:3100
+      url: http://localhost:3100${CMOS_HTTP_PATH_PREFIX}
       jsonData:
           maxLines: 1000
     - name: Prometheus
       type: prometheus
       access: proxy
-      url: http://localhost:9090/prometheus
+      url: http://localhost:9090${CMOS_HTTP_PATH_PREFIX}/prometheus
       basicAuth: false
       isDefault: true
   # <map> fields that will be converted to json and stored in json_data
@@ -46,4 +46,4 @@ datasources:
       basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
     - name: Alertmanager API
       type: marcusolsson-json-datasource
-      url: http://localhost:9093/alertmanager/api/v2
+      url: http://localhost:9093${CMOS_HTTP_PATH_PREFIX}/alertmanager/api/v2
