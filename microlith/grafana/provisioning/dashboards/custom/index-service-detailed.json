@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 26,
-  "iteration": 1644945548191,
+  "iteration": 1644956342908,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1507,6 +1507,333 @@
       "id": 160,
       "panels": [
         {
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "thresholds"
+              },
+              "custom": {
+                "align": "auto",
+                "displayMode": "auto",
+                "filterable": true
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              }
+            },
+            "overrides": [
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "CPU Utilization"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "percent"
+                  },
+                  {
+                    "id": "custom.width",
+                    "value": 143
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Memory Size"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "decbytes"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Memory Resident"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "decbytes"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Memory Share"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "decbytes"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Minor Page Faults"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  },
+                  {
+                    "id": "displayName",
+                    "value": "Minor Page Faults / sec"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Major Page Faults"
+                },
+                "properties": [
+                  {
+                    "id": "unit",
+                    "value": "short"
+                  },
+                  {
+                    "id": "displayName",
+                    "value": "Major Page Faults / sec"
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Node"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 388
+                  }
+                ]
+              },
+              {
+                "matcher": {
+                  "id": "byName",
+                  "options": "Process"
+                },
+                "properties": [
+                  {
+                    "id": "custom.width",
+                    "value": 133
+                  }
+                ]
+              }
+            ]
+          },
+          "gridPos": {
+            "h": 9,
+            "w": 24,
+            "x": 0,
+            "y": 22
+          },
+          "id": 39028,
+          "options": {
+            "footer": {
+              "fields": "",
+              "reducer": [
+                "sum"
+              ],
+              "show": false
+            },
+            "showHeader": true,
+            "sortBy": [
+              {
+                "desc": true,
+                "displayName": "CPU Utilization"
+              }
+            ]
+          },
+          "pluginVersion": "8.3.4",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "sysproc_cpu_utilization{cluster_name=\"$cluster\",instance=~\"$node\"}",
+              "format": "table",
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "sysproc_mem_size{cluster_name=\"$cluster\",instance=~\"$node\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "sysproc_mem_resident{cluster_name=\"$cluster\",instance=~\"$node\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "sysproc_mem_share{cluster_name=\"$cluster\",instance=~\"$node\"}",
+              "format": "table",
+              "hide": false,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "format": "table",
+              "hide": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "E"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "format": "table",
+              "hide": true,
+              "instant": true,
+              "interval": "",
+              "legendFormat": "",
+              "refId": "F"
+            }
+          ],
+          "title": "System Processes",
+          "transformations": [
+            {
+              "id": "labelsToFields",
+              "options": {}
+            },
+            {
+              "id": "merge",
+              "options": {}
+            },
+            {
+              "id": "groupBy",
+              "options": {
+                "fields": {
+                  "Value #A": {
+                    "aggregations": [
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Value #B": {
+                    "aggregations": [
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Value #C": {
+                    "aggregations": [
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Value #D": {
+                    "aggregations": [
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Value #E": {
+                    "aggregations": [
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "Value #F": {
+                    "aggregations": [
+                      "lastNotNull"
+                    ],
+                    "operation": "aggregate"
+                  },
+                  "instance": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  },
+                  "proc": {
+                    "aggregations": [],
+                    "operation": "groupby"
+                  }
+                }
+              }
+            },
+            {
+              "id": "organize",
+              "options": {
+                "excludeByName": {},
+                "indexByName": {},
+                "renameByName": {
+                  "Value #A (lastNotNull)": "CPU Utilization",
+                  "Value #B (lastNotNull)": "Memory Size",
+                  "Value #C (lastNotNull)": "Memory Resident",
+                  "Value #D (lastNotNull)": "Memory Share",
+                  "Value #E (lastNotNull)": "Minor Page Faults",
+                  "Value #F (lastNotNull)": "Major Page Faults",
+                  "instance": "Node",
+                  "proc": "Process"
+                }
+              }
+            }
+          ],
+          "type": "table"
+        },
+        {
           "datasource": {
             "type": "prometheus",
             "uid": "$datasource"
@@ -1552,7 +1879,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1568,7 +1896,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 23
+            "y": 31
           },
           "id": 8857,
           "interval": "1m",
@@ -1654,7 +1982,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1670,7 +1999,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 23
+            "y": 31
           },
           "id": 8859,
           "interval": "1m",
@@ -1756,7 +2085,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1772,7 +2102,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 30
+            "y": 38
           },
           "id": 11735,
           "interval": "1m",
@@ -1857,7 +2187,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1873,7 +2204,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 30
+            "y": 38
           },
           "id": 14611,
           "interval": "1m",
@@ -1958,7 +2289,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2275,7 +2607,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 37
+            "y": 45
           },
           "id": 17492,
           "interval": "1m",
@@ -2374,7 +2706,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2390,7 +2723,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 37
+            "y": 45
           },
           "id": 17490,
           "interval": "1m",
@@ -2491,7 +2824,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2853,7 +3187,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 44
+            "y": 52
           },
           "id": 20369,
           "interval": "1m",
@@ -2951,7 +3285,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2967,7 +3302,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 44
+            "y": 52
           },
           "id": 23246,
           "interval": "1m",
@@ -5950,7 +6285,7 @@
       {
         "allValue": "",
         "current": {
-          "selected": true,
+          "selected": false,
           "text": "",
           "value": ""
         },
@@ -6070,6 +6405,6 @@
   "timezone": "",
   "title": "Couchbase Index Service",
   "uid": "nRFu_9EZk",
-  "version": 20,
+  "version": 22,
   "weekStart": ""
 }

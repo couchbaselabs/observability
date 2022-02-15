@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 34,
-  "iteration": 1644890305436,
+  "iteration": 1644951222434,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -955,7 +955,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1079,7 +1080,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 1
+            "y": 26
           },
           "id": 497,
           "options": {
@@ -1163,7 +1164,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1177,7 +1178,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1311,7 +1312,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1327,7 +1329,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 10
+            "y": 35
           },
           "id": 499,
           "interval": "1m",
@@ -1412,7 +1414,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1428,7 +1431,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 10
+            "y": 35
           },
           "id": 501,
           "interval": "1m",
@@ -1514,7 +1517,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1530,7 +1534,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 17
+            "y": 42
           },
           "id": 503,
           "interval": "1m",
@@ -1615,7 +1619,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1631,7 +1636,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 17
+            "y": 42
           },
           "id": 505,
           "interval": "1m",
@@ -1716,7 +1721,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2033,7 +2039,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 24
+            "y": 49
           },
           "id": 507,
           "interval": "1m",
@@ -2132,7 +2138,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2148,7 +2155,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 24
+            "y": 49
           },
           "id": 509,
           "interval": "1m",
@@ -2249,7 +2256,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2611,7 +2619,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 31
+            "y": 56
           },
           "id": 511,
           "interval": "1m",
@@ -2709,7 +2717,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2725,7 +2734,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 31
+            "y": 56
           },
           "id": 513,
           "interval": "1m",
@@ -3497,7 +3506,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 27
+            "y": 28
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -3580,7 +3589,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -3596,7 +3606,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 27
+            "y": 28
           },
           "id": 426,
           "options": {
@@ -3666,7 +3676,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -3682,7 +3693,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 27
+            "y": 28
           },
           "id": 424,
           "options": {
@@ -3727,7 +3738,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 33
+            "y": 34
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -3810,7 +3821,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -3826,7 +3838,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 33
+            "y": 34
           },
           "id": 427,
           "options": {
@@ -3896,7 +3908,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -3912,7 +3925,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 33
+            "y": 34
           },
           "id": 431,
           "options": {
@@ -3957,7 +3970,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 39
+            "y": 40
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4040,7 +4053,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4056,7 +4070,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 39
+            "y": 40
           },
           "id": 430,
           "options": {
@@ -4126,7 +4140,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4142,7 +4157,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 39
+            "y": 40
           },
           "id": 432,
           "options": {
@@ -4187,7 +4202,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 45
+            "y": 46
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4270,7 +4285,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4286,7 +4302,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 45
+            "y": 46
           },
           "id": 428,
           "options": {
@@ -4356,7 +4372,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4372,7 +4389,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 45
+            "y": 46
           },
           "id": 433,
           "options": {
@@ -4417,7 +4434,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 51
+            "y": 52
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4500,7 +4517,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4516,7 +4534,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 51
+            "y": 52
           },
           "id": 429,
           "options": {
@@ -4586,7 +4604,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4602,7 +4621,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 51
+            "y": 52
           },
           "id": 434,
           "options": {
@@ -4661,7 +4680,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 28
+            "y": 29
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4744,7 +4763,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4760,7 +4780,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 28
+            "y": 29
           },
           "id": 438,
           "options": {
@@ -4830,7 +4850,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4846,7 +4867,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 28
+            "y": 29
           },
           "id": 440,
           "options": {
@@ -4891,7 +4912,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 34
+            "y": 35
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4974,7 +4995,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4990,7 +5012,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 34
+            "y": 35
           },
           "id": 441,
           "options": {
@@ -5060,7 +5082,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5076,7 +5099,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 34
+            "y": 35
           },
           "id": 442,
           "options": {
@@ -5121,7 +5144,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 40
+            "y": 41
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5204,7 +5227,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5220,7 +5244,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 40
+            "y": 41
           },
           "id": 443,
           "options": {
@@ -5290,7 +5314,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5306,7 +5331,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 40
+            "y": 41
           },
           "id": 444,
           "options": {
@@ -5365,7 +5390,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 29
+            "y": 78
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5382,7 +5407,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -5390,7 +5415,7 @@
               "refId": "A"
             }
           ],
-          "title": "Chronicle Disk Latency (append)/sec Heatmap",
+          "title": "Chronicle Disk Latency (append) Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -5448,7 +5473,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5464,7 +5490,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 29
+            "y": 78
           },
           "id": 415,
           "options": {
@@ -5484,14 +5510,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (append)/sec - 50th Percentile",
+          "title": "Chronicle Disk Latency (append) - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -5534,7 +5560,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5550,7 +5577,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 29
+            "y": 78
           },
           "id": 439,
           "options": {
@@ -5577,7 +5604,7 @@
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (append)/sec - 99th Percentile",
+          "title": "Chronicle Disk Latency (append) - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -5595,7 +5622,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 35
+            "y": 84
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5612,7 +5639,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -5678,7 +5705,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5694,7 +5722,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 35
+            "y": 84
           },
           "id": 417,
           "options": {
@@ -5714,14 +5742,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (prepare_snapshot)/sec - 50th Percentile",
+          "title": "Chronicle Disk Latency (prepare_snapshot) - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -5764,7 +5792,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5780,7 +5809,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 35
+            "y": 84
           },
           "id": 421,
           "options": {
@@ -5807,7 +5836,7 @@
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (prepare_snapshot)/sec - 99th Percentile",
+          "title": "Chronicle Disk Latency (prepare_snapshot) - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -5825,7 +5854,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 41
+            "y": 90
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5842,7 +5871,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -5908,7 +5937,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5924,7 +5954,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 41
+            "y": 90
           },
           "id": 418,
           "options": {
@@ -5944,14 +5974,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (sync)/sec - 50th Percentile",
+          "title": "Chronicle Disk Latency (sync) - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -5994,7 +6024,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6010,7 +6041,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 41
+            "y": 90
           },
           "id": 422,
           "options": {
@@ -6037,7 +6068,7 @@
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (sync)/sec - 99th Percentile",
+          "title": "Chronicle Disk Latency (sync) - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -6055,7 +6086,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 47
+            "y": 96
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6072,7 +6103,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -6080,7 +6111,7 @@
               "refId": "A"
             }
           ],
-          "title": "Chronicle Disk Latency (delete)/sec Heatmap",
+          "title": "Chronicle Disk Latency (delete) Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -6138,7 +6169,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6154,7 +6186,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 47
+            "y": 96
           },
           "id": 419,
           "options": {
@@ -6174,14 +6206,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (delete)/sec - 50th Percentile",
+          "title": "Chronicle Disk Latency (delete) - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -6224,7 +6256,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6240,7 +6273,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 47
+            "y": 96
           },
           "id": 423,
           "options": {
@@ -6260,14 +6293,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.99, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (delete)/sec - 99th Percentile",
+          "title": "Chronicle Disk Latency (delete) - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -6285,7 +6318,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 53
+            "y": 102
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6302,7 +6335,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -6368,7 +6401,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6384,7 +6418,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 53
+            "y": 102
           },
           "id": 420,
           "options": {
@@ -6404,14 +6438,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (delete_snapshot)/sec - 50th Percentile",
+          "title": "Chronicle Disk Latency (delete_snapshot) - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -6454,7 +6488,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6470,7 +6505,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 53
+            "y": 102
           },
           "id": 425,
           "options": {
@@ -6490,14 +6525,14 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.99, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
               "refId": "C"
             }
           ],
-          "title": "Chronicle Disk Latency (delete_snapshot)/sec - 99th Percentile",
+          "title": "Chronicle Disk Latency (delete_snapshot) - 99th Percentile",
           "type": "timeseries"
         }
       ],
@@ -6529,7 +6564,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 30
+            "y": 79
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6554,7 +6589,7 @@
               "refId": "A"
             }
           ],
-          "title": "MRU Cache Lookup Time Heatmap",
+          "title": "MRU Cache Lookup Time  Rate Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -6612,7 +6647,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6628,7 +6664,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 30
+            "y": 79
           },
           "id": 448,
           "options": {
@@ -6655,7 +6691,7 @@
               "refId": "C"
             }
           ],
-          "title": "MRU Cache Lookup Time - 50th Percentile",
+          "title": "MRU Cache Lookup Time Rate - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -6698,7 +6734,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6714,7 +6751,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 30
+            "y": 79
           },
           "id": 449,
           "options": {
@@ -6741,7 +6778,7 @@
               "refId": "C"
             }
           ],
-          "title": "MRU Cache Lookup Time - 99th Percentile",
+          "title": "MRU Cache Lookup Time  Rate- 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -6759,7 +6796,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 36
+            "y": 85
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6784,7 +6821,7 @@
               "refId": "A"
             }
           ],
-          "title": "MRU Cache Lock Time (item) Heatmap",
+          "title": "MRU Cache Lock Time (item)  Rate Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -6842,7 +6879,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6858,7 +6896,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 36
+            "y": 85
           },
           "id": 453,
           "options": {
@@ -6885,7 +6923,7 @@
               "refId": "C"
             }
           ],
-          "title": "MRU Cache Lock Time (Item) - 50th Percentile",
+          "title": "MRU Cache Lock Time (Item) Rate - 50th Percentile",
           "type": "timeseries"
         },
         {
@@ -6928,7 +6966,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6944,7 +6983,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 36
+            "y": 85
           },
           "id": 454,
           "options": {
@@ -6971,7 +7010,7 @@
               "refId": "C"
             }
           ],
-          "title": "MRU Cache Lock Time (Item) - 99th Percentile",
+          "title": "MRU Cache Lock Time (Item)  Rate - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -6989,7 +7028,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 42
+            "y": 91
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7006,7 +7045,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -7072,7 +7111,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7088,7 +7128,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 42
+            "y": 91
           },
           "id": 450,
           "options": {
@@ -7108,7 +7148,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -7158,7 +7198,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7174,7 +7215,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 42
+            "y": 91
           },
           "id": 455,
           "options": {
@@ -7194,7 +7235,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, rate(cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.99, cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -7219,7 +7260,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 48
+            "y": 97
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7236,7 +7277,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -7302,7 +7343,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7318,7 +7360,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 48
+            "y": 97
           },
           "id": 451,
           "options": {
@@ -7338,7 +7380,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -7388,7 +7430,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7404,7 +7447,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 48
+            "y": 97
           },
           "id": 456,
           "options": {
@@ -7424,7 +7467,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, rate(cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.99, cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -7449,7 +7492,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 54
+            "y": 103
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7466,7 +7509,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -7532,7 +7575,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7548,7 +7592,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 54
+            "y": 103
           },
           "id": 452,
           "options": {
@@ -7568,7 +7612,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -7618,7 +7662,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7634,7 +7679,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 54
+            "y": 103
           },
           "id": 457,
           "options": {
@@ -7693,7 +7738,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 31
+            "y": 32
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7776,7 +7821,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7792,7 +7838,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 31
+            "y": 32
           },
           "id": 462,
           "options": {
@@ -7862,7 +7908,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7878,7 +7925,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 31
+            "y": 32
           },
           "id": 469,
           "options": {
@@ -7923,7 +7970,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 37
+            "y": 38
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8006,7 +8053,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8022,7 +8070,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 37
+            "y": 38
           },
           "id": 460,
           "options": {
@@ -8092,7 +8140,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8108,7 +8157,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 37
+            "y": 38
           },
           "id": 461,
           "options": {
@@ -8153,7 +8202,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 43
+            "y": 44
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8236,7 +8285,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8252,7 +8302,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 43
+            "y": 44
           },
           "id": 463,
           "options": {
@@ -8322,7 +8372,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8338,7 +8389,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 43
+            "y": 44
           },
           "id": 465,
           "options": {
@@ -8397,7 +8448,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 32
+            "y": 33
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8414,7 +8465,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -8480,7 +8531,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8496,7 +8548,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 32
+            "y": 33
           },
           "id": 468,
           "options": {
@@ -8516,7 +8568,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -8566,7 +8618,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8582,7 +8635,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 32
+            "y": 33
           },
           "id": 464,
           "options": {
@@ -8602,7 +8655,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, rate(cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.99, cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -8627,7 +8680,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 38
+            "y": 39
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8644,7 +8697,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "sum by(le) (cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -8710,7 +8763,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8726,7 +8780,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 38
+            "y": 39
           },
           "id": 470,
           "options": {
@@ -8746,7 +8800,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.50, rate(cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.50, cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -8796,7 +8850,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8812,7 +8867,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 38
+            "y": 39
           },
           "id": 471,
           "options": {
@@ -8832,7 +8887,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, rate(cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "expr": "histogram_quantile(0.99, cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
               "hide": false,
               "interval": "",
               "legendFormat": "{{instance}}",
@@ -8973,6 +9028,6 @@
   "timezone": "",
   "title": "Couchbase Cluster Manager",
   "uid": "c7r5pwVuA",
-  "version": 20,
+  "version": 22,
   "weekStart": ""
 }

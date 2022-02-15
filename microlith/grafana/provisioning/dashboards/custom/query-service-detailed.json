@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 25,
-  "iteration": 1644945733380,
+  "iteration": 1644956529078,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1230,7 +1230,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1438,7 +1439,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1452,7 +1453,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1586,7 +1587,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1687,7 +1689,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1789,7 +1792,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1890,7 +1894,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -1991,7 +1996,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2407,7 +2413,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2524,7 +2531,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -2984,7 +2992,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -3040,7 +3049,7 @@
           "type": "timeseries"
         }
       ],
-      "title": "Resources",
+      "title": "Node Resources",
       "type": "row"
     },
     {
@@ -6899,6 +6908,6 @@
   "timezone": "",
   "title": "Couchbase Query Service",
   "uid": "2FWOC_EZk",
-  "version": 5,
+  "version": 6,
   "weekStart": ""
 }

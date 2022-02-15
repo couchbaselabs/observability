@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 40,
-  "iteration": 1644897131926,
+  "id": 42,
+  "iteration": 1644951027308,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1579,7 +1579,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1593,7 +1593,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1916,7 +1916,7 @@
                 "scaleDistribution": {
                   "type": "linear"
                 },
-                "showPoints": "auto",
+                "showPoints": "never",
                 "spanNulls": false,
                 "stacking": {
                   "group": "A",
@@ -1980,7 +1980,7 @@
               "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{instance=~\"$node\"}\n  ) by (instance)\n)",
               "format": "time_series",
               "interval": "",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{instance}}",
               "metric": "process_namegroup_cpu_seconds_total",
               "refId": "A",
@@ -2486,7 +2486,7 @@
               "expr": "sum(rate(node_disk_written_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
               "format": "time_series",
               "interval": "",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "Write bytes - {{instance}}",
               "refId": "B",
               "step": 240
@@ -2500,7 +2500,7 @@
               "expr": "-sum(rate(node_disk_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
               "format": "time_series",
               "interval": "",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "Read bytes - {{instance}}",
               "refId": "A",
               "step": 240
@@ -3065,7 +3065,7 @@
               "expr": "sum(rate(node_network_transmit_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
               "format": "time_series",
               "interval": "",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{instance}} - TX",
               "refId": "B",
               "step": 240
@@ -3079,7 +3079,7 @@
               "expr": "-sum(rate(node_network_receive_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
               "format": "time_series",
               "interval": "",
-              "intervalFactor": 2,
+              "intervalFactor": 1,
               "legendFormat": "{{instance}} - RX",
               "refId": "A",
               "step": 240
@@ -3300,6 +3300,6 @@
   "timezone": "",
   "title": "Couchbase Analytics Service",
   "uid": "1wB2tqV9n",
-  "version": 4,
+  "version": 2,
   "weekStart": ""
 }

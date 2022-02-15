@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 32,
-  "iteration": 1644889139235,
+  "id": 43,
+  "iteration": 1644955262849,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -1200,7 +1200,7 @@
             "h": 9,
             "w": 24,
             "x": 0,
-            "y": 3
+            "y": 22
           },
           "id": 388,
           "options": {
@@ -1284,7 +1284,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1298,7 +1298,7 @@
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "table",
-              "hide": false,
+              "hide": true,
               "instant": true,
               "interval": "",
               "legendFormat": "",
@@ -1449,7 +1449,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 12
+            "y": 31
           },
           "id": 193,
           "interval": "1m",
@@ -1552,7 +1552,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 12
+            "y": 31
           },
           "id": 175,
           "interval": "1m",
@@ -1655,7 +1655,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 19
+            "y": 38
           },
           "id": 195,
           "interval": "1m",
@@ -1757,7 +1757,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 19
+            "y": 38
           },
           "id": 179,
           "interval": "1m",
@@ -2160,7 +2160,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 26
+            "y": 45
           },
           "id": 197,
           "interval": "1m",
@@ -2276,7 +2276,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 26
+            "y": 45
           },
           "id": 185,
           "interval": "1m",
@@ -2740,7 +2740,7 @@
             "h": 7,
             "w": 12,
             "x": 0,
-            "y": 33
+            "y": 52
           },
           "id": 450,
           "interval": "1m",
@@ -2855,7 +2855,7 @@
             "h": 7,
             "w": 12,
             "x": 12,
-            "y": 33
+            "y": 52
           },
           "id": 187,
           "interval": "1m",
@@ -2923,7 +2923,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 1
+            "y": 23
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -3023,7 +3023,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 1
+            "y": 23
           },
           "id": 405,
           "options": {
@@ -3163,7 +3163,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 1
+            "y": 23
           },
           "id": 406,
           "options": {
@@ -3191,7 +3191,7 @@
               "refId": "C"
             }
           ],
-          "title": "GET - 99th Percentile",
+          "title": "GET/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -3209,7 +3209,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 8
+            "y": 30
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -3309,7 +3309,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 8
+            "y": 30
           },
           "id": 407,
           "options": {
@@ -3449,7 +3449,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 8
+            "y": 30
           },
           "id": 408,
           "options": {
@@ -3477,7 +3477,7 @@
               "refId": "C"
             }
           ],
-          "title": "SET - 99th Percentile",
+          "title": "SET/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -3495,7 +3495,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 15
+            "y": 37
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -3595,7 +3595,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 15
+            "y": 37
           },
           "id": 409,
           "options": {
@@ -3735,7 +3735,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 15
+            "y": 37
           },
           "id": 410,
           "options": {
@@ -3763,7 +3763,7 @@
               "refId": "C"
             }
           ],
-          "title": "GET_CLUSTER_CONFIG - 99th Percentile",
+          "title": "GET_CLUSTER_CONFIG/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -3781,7 +3781,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 22
+            "y": 44
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -3881,7 +3881,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 22
+            "y": 44
           },
           "id": 411,
           "options": {
@@ -4021,7 +4021,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 22
+            "y": 44
           },
           "id": 412,
           "options": {
@@ -4049,7 +4049,7 @@
               "refId": "C"
             }
           ],
-          "title": "GET_ALL_VB_SEQNOS - 99th Percentile",
+          "title": "GET_ALL_VB_SEQNOS/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -4067,7 +4067,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 29
+            "y": 51
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4167,7 +4167,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 29
+            "y": 51
           },
           "id": 417,
           "options": {
@@ -4307,7 +4307,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 29
+            "y": 51
           },
           "id": 418,
           "options": {
@@ -4335,7 +4335,7 @@
               "refId": "C"
             }
           ],
-          "title": "STAT - 99th Percentile",
+          "title": "STAT/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -4353,7 +4353,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 36
+            "y": 58
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4453,7 +4453,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 36
+            "y": 58
           },
           "id": 415,
           "options": {
@@ -4593,7 +4593,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 36
+            "y": 58
           },
           "id": 416,
           "options": {
@@ -4621,7 +4621,7 @@
               "refId": "C"
             }
           ],
-          "title": "SELECT_BUCKET - 99th Percentile",
+          "title": "SELECT_BUCKET/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -4639,7 +4639,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 43
+            "y": 65
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4739,7 +4739,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 43
+            "y": 65
           },
           "id": 419,
           "options": {
@@ -4879,7 +4879,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 43
+            "y": 65
           },
           "id": 420,
           "options": {
@@ -4907,7 +4907,7 @@
               "refId": "C"
             }
           ],
-          "title": "COLLECTIONS_GET_MANIFEST - 99th Percentile",
+          "title": "COLLECTIONS_GET_MANIFEST/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -4925,7 +4925,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 50
+            "y": 72
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -4942,7 +4942,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -4950,7 +4950,7 @@
               "refId": "A"
             }
           ],
-          "title": "HELLO/sec Heatmap",
+          "title": "HELLO Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -5025,9 +5025,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 50
+            "y": 72
           },
-          "id": 413,
+          "id": 505,
           "options": {
             "legend": {
               "calcs": [],
@@ -5045,7 +5045,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5058,7 +5058,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5071,7 +5071,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5084,7 +5084,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5097,7 +5097,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5105,7 +5105,7 @@
               "refId": "E"
             }
           ],
-          "title": "HELLO/sec - Percentiles",
+          "title": "HELLO - Percentiles",
           "type": "timeseries"
         },
         {
@@ -5165,7 +5165,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 50
+            "y": 72
           },
           "id": 414,
           "options": {
@@ -5185,7 +5185,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5211,7 +5211,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 57
+            "y": 79
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5228,7 +5228,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -5236,7 +5236,7 @@
               "refId": "A"
             }
           ],
-          "title": "SET_PARAM/sec Heatmap",
+          "title": "SET_PARAM Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -5311,9 +5311,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 57
+            "y": 79
           },
-          "id": 421,
+          "id": 413,
           "options": {
             "legend": {
               "calcs": [],
@@ -5331,7 +5331,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5344,7 +5344,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5357,7 +5357,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5370,7 +5370,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5383,7 +5383,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5391,7 +5391,7 @@
               "refId": "E"
             }
           ],
-          "title": "SET_PARAM/sec - Percentiles",
+          "title": "SET_PARAM - Percentiles",
           "type": "timeseries"
         },
         {
@@ -5451,9 +5451,9 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 57
+            "y": 79
           },
-          "id": 422,
+          "id": 511,
           "options": {
             "legend": {
               "calcs": [],
@@ -5471,7 +5471,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5497,7 +5497,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 64
+            "y": 86
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5514,7 +5514,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -5522,7 +5522,7 @@
               "refId": "A"
             }
           ],
-          "title": "SET_VBUCKET/sec Heatmap",
+          "title": "SET_VBUCKET Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -5597,9 +5597,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 64
+            "y": 86
           },
-          "id": 423,
+          "id": 502,
           "options": {
             "legend": {
               "calcs": [],
@@ -5617,7 +5617,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5630,7 +5630,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5643,7 +5643,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5656,7 +5656,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5669,7 +5669,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5677,7 +5677,7 @@
               "refId": "E"
             }
           ],
-          "title": "SET_VBUCKET/sec - Percentiles",
+          "title": "SET_VBUCKET - Percentiles",
           "type": "timeseries"
         },
         {
@@ -5737,9 +5737,9 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 64
+            "y": 86
           },
-          "id": 424,
+          "id": 510,
           "options": {
             "legend": {
               "calcs": [],
@@ -5757,7 +5757,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5783,7 +5783,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 71
+            "y": 93
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -5800,7 +5800,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -5808,7 +5808,7 @@
               "refId": "A"
             }
           ],
-          "title": "ENABLE_TRAFFIC/sec Heatmap",
+          "title": "ENABLE_TRAFFIC Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -5883,9 +5883,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 71
+            "y": 93
           },
-          "id": 425,
+          "id": 503,
           "options": {
             "legend": {
               "calcs": [],
@@ -5903,7 +5903,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5916,7 +5916,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5929,7 +5929,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5942,7 +5942,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5955,7 +5955,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -5963,7 +5963,7 @@
               "refId": "E"
             }
           ],
-          "title": "ENABLE_TRAFFIC/sec - Percentiles",
+          "title": "ENABLE_TRAFFIC - Percentiles",
           "type": "timeseries"
         },
         {
@@ -6023,9 +6023,9 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 71
+            "y": 93
           },
-          "id": 426,
+          "id": 509,
           "options": {
             "legend": {
               "calcs": [],
@@ -6043,7 +6043,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6069,7 +6069,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 78
+            "y": 100
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6086,7 +6086,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -6094,7 +6094,7 @@
               "refId": "A"
             }
           ],
-          "title": "GET_ERROR_MAP/sec Heatmap",
+          "title": "GET_ERROR_MAP Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -6169,9 +6169,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 78
+            "y": 100
           },
-          "id": 427,
+          "id": 504,
           "options": {
             "legend": {
               "calcs": [],
@@ -6189,7 +6189,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6202,7 +6202,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6215,7 +6215,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6228,7 +6228,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6241,7 +6241,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6249,7 +6249,7 @@
               "refId": "E"
             }
           ],
-          "title": "GET_ERROR_MAP/sec - Percentiles",
+          "title": "GET_ERROR_MAP - Percentiles",
           "type": "timeseries"
         },
         {
@@ -6309,9 +6309,9 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 78
+            "y": 100
           },
-          "id": 428,
+          "id": 508,
           "options": {
             "legend": {
               "calcs": [],
@@ -6329,7 +6329,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6355,7 +6355,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 85
+            "y": 107
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6372,7 +6372,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -6380,7 +6380,7 @@
               "refId": "A"
             }
           ],
-          "title": "SET_CLUSTER_CONFIG/sec Heatmap",
+          "title": "SET_CLUSTER_CONFIG Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -6455,9 +6455,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 85
+            "y": 107
           },
-          "id": 429,
+          "id": 506,
           "options": {
             "legend": {
               "calcs": [],
@@ -6475,7 +6475,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6488,7 +6488,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6501,7 +6501,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6514,7 +6514,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6527,7 +6527,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6535,7 +6535,7 @@
               "refId": "E"
             }
           ],
-          "title": "SET_CLUSTER_CONFIG/sec - Percentiles",
+          "title": "SET_CLUSTER_CONFIG - Percentiles",
           "type": "timeseries"
         },
         {
@@ -6595,9 +6595,9 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 85
+            "y": 107
           },
-          "id": 430,
+          "id": 507,
           "options": {
             "legend": {
               "calcs": [],
@@ -6615,7 +6615,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6655,7 +6655,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 2
+            "y": 24
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -6738,7 +6738,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6754,9 +6755,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 2
+            "y": 24
           },
-          "id": 432,
+          "id": 472,
           "options": {
             "legend": {
               "calcs": [],
@@ -6774,7 +6775,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6787,7 +6788,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6800,7 +6801,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6813,7 +6814,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6826,7 +6827,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6877,7 +6878,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -6893,7 +6895,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 2
+            "y": 24
           },
           "id": 434,
           "options": {
@@ -6913,7 +6915,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -6921,7 +6923,7 @@
               "refId": "C"
             }
           ],
-          "title": "Disk Updates - 99th Percentile",
+          "title": "Disk Updates/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -6939,7 +6941,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 9
+            "y": 31
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7022,7 +7024,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7038,9 +7041,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 9
+            "y": 31
           },
-          "id": 438,
+          "id": 474,
           "options": {
             "legend": {
               "calcs": [],
@@ -7058,7 +7061,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7071,7 +7074,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7084,7 +7087,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7097,7 +7100,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7110,7 +7113,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7161,7 +7164,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7177,7 +7181,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 9
+            "y": 31
           },
           "id": 439,
           "options": {
@@ -7197,7 +7201,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7205,7 +7209,7 @@
               "refId": "C"
             }
           ],
-          "title": "Disk Commits - 99th Percentile",
+          "title": "Disk Commits/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -7223,7 +7227,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 16
+            "y": 38
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7306,7 +7310,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7322,9 +7327,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 16
+            "y": 38
           },
-          "id": 437,
+          "id": 475,
           "options": {
             "legend": {
               "calcs": [],
@@ -7342,7 +7347,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7355,7 +7360,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7368,7 +7373,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7381,7 +7386,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7394,7 +7399,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7445,7 +7450,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7461,7 +7467,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 16
+            "y": 38
           },
           "id": 440,
           "options": {
@@ -7481,7 +7487,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7489,7 +7495,7 @@
               "refId": "C"
             }
           ],
-          "title": "Disk Inserts - 99th Percentile",
+          "title": "Disk Inserts/sec - 99th Percentile",
           "type": "timeseries"
         },
         {
@@ -7507,7 +7513,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 23
+            "y": 45
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7590,7 +7596,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7606,9 +7613,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 23
+            "y": 45
           },
-          "id": 435,
+          "id": 476,
           "options": {
             "legend": {
               "calcs": [],
@@ -7626,7 +7633,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7639,7 +7646,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7652,7 +7659,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7665,7 +7672,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7678,7 +7685,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7729,7 +7736,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7745,7 +7753,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 23
+            "y": 45
           },
           "id": 441,
           "options": {
@@ -7765,7 +7773,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7791,7 +7799,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 30
+            "y": 52
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -7808,7 +7816,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -7816,7 +7824,7 @@
               "refId": "A"
             }
           ],
-          "title": "Disk vBucket Deletes/sec Heatmap",
+          "title": "Disk vBucket Deletes Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -7874,7 +7882,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7890,9 +7899,9 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 30
+            "y": 52
           },
-          "id": 436,
+          "id": 473,
           "options": {
             "legend": {
               "calcs": [],
@@ -7910,7 +7919,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7923,7 +7932,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7936,7 +7945,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7949,7 +7958,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7962,7 +7971,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7970,7 +7979,7 @@
               "refId": "E"
             }
           ],
-          "title": "Disk vBucket Deletes/sec - Percentiles",
+          "title": "Disk vBucket Deletes - Percentiles",
           "type": "timeseries"
         },
         {
@@ -8013,7 +8022,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -8029,7 +8039,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 30
+            "y": 52
           },
           "id": 442,
           "options": {
@@ -8049,7 +8059,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -8086,68 +8096,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
             "x": 0,
-            "y": 6
-          },
-          "heatmap": {},
-          "hideZeroBuckets": true,
-          "highlightCards": true,
-          "id": 237,
-          "legend": {
-            "show": true
-          },
-          "reverseYBuckets": false,
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval]))",
-              "format": "heatmap",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{le}}",
-              "refId": "A"
-            }
-          ],
-          "title": "DCP_SNAPSHOT_MARKER/sec Heatmap",
-          "tooltip": {
-            "show": true,
-            "showHistogram": true
-          },
-          "tooltipDecimals": 2,
-          "type": "heatmap",
-          "xAxis": {
-            "show": true
-          },
-          "yAxis": {
-            "decimals": 1,
-            "format": "s",
-            "logBase": 1,
-            "show": true
-          },
-          "yBucketBound": "auto"
-        },
-        {
-          "cards": {},
-          "color": {
-            "cardColor": "#b4ff00",
-            "colorScale": "sqrt",
-            "colorScheme": "interpolateSpectral",
-            "exponent": 0.5,
-            "mode": "spectrum"
-          },
-          "dataFormat": "tsbuckets",
-          "description": "",
-          "gridPos": {
-            "h": 9,
-            "w": 8,
-            "x": 8,
-            "y": 6
+            "y": 25
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8191,6 +8143,234 @@
           "yBucketBound": "auto"
         },
         {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 25
+          },
+          "id": 484,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_MUTATION/sec - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 25
+          },
+          "id": 488,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_MUTATION/sec - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
           "cards": {},
           "color": {
             "cardColor": "#b4ff00",
@@ -8202,10 +8382,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
-            "x": 16,
-            "y": 6
+            "x": 0,
+            "y": 32
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8249,6 +8429,234 @@
           "yBucketBound": "auto"
         },
         {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 32
+          },
+          "id": 483,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_NOOP/sec - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 32
+          },
+          "id": 489,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_NOOP/sec - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
           "cards": {},
           "color": {
             "cardColor": "#b4ff00",
@@ -8260,10 +8668,296 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
             "x": 0,
-            "y": 15
+            "y": 39
+          },
+          "heatmap": {},
+          "hideZeroBuckets": true,
+          "highlightCards": true,
+          "id": 237,
+          "legend": {
+            "show": true
+          },
+          "reverseYBuckets": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval]))",
+              "format": "heatmap",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{le}}",
+              "refId": "A"
+            }
+          ],
+          "title": "DCP_SNAPSHOT_MARKER/sec Heatmap",
+          "tooltip": {
+            "show": true,
+            "showHistogram": true
+          },
+          "tooltipDecimals": 2,
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "decimals": 1,
+            "format": "s",
+            "logBase": 1,
+            "show": true
+          },
+          "yBucketBound": "auto"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 39
+          },
+          "id": 482,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_SNAPSHOT_MARKER/sec - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 39
+          },
+          "id": 490,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_SNAPSHOT_MARKER/sec - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateSpectral",
+            "exponent": 0.5,
+            "mode": "spectrum"
+          },
+          "dataFormat": "tsbuckets",
+          "description": "",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 46
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8307,62 +9001,232 @@
           "yBucketBound": "auto"
         },
         {
-          "cards": {},
-          "color": {
-            "cardColor": "#b4ff00",
-            "colorScale": "sqrt",
-            "colorScheme": "interpolateSpectral",
-            "exponent": 0.5,
-            "mode": "spectrum"
-          },
-          "dataFormat": "tsbuckets",
           "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
             "x": 8,
-            "y": 15
+            "y": 46
           },
-          "heatmap": {},
-          "hideZeroBuckets": true,
-          "highlightCards": true,
-          "id": 238,
-          "legend": {
-            "show": true
+          "id": 481,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
           },
-          "reverseYBuckets": false,
           "targets": [
             {
               "datasource": {
                 "type": "prometheus",
                 "uid": "SHZqSh-7k"
               },
-              "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_STREAM_REQ\"}[$__rate_interval]))",
-              "format": "heatmap",
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
               "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{le}}",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
               "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
             }
           ],
-          "title": "DCP_STREAM_REQ/sec Heatmap",
-          "tooltip": {
-            "show": true,
-            "showHistogram": true
+          "title": "DCP_BUFFER_ACKNOWLEDGEMENT/sec - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
           },
-          "tooltipDecimals": 2,
-          "type": "heatmap",
-          "xAxis": {
-            "show": true
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 46
           },
-          "yAxis": {
-            "decimals": 1,
-            "format": "s",
-            "logBase": 1,
-            "show": true
+          "id": 491,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
           },
-          "yBucketBound": "auto"
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_BUFFER_ACKNOWLEDGEMENT/sec - 99th Percentile",
+          "type": "timeseries"
         },
         {
           "cards": {},
@@ -8376,10 +9240,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
-            "x": 16,
-            "y": 15
+            "x": 0,
+            "y": 53
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8396,7 +9260,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_OPEN\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_OPEN\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -8404,7 +9268,7 @@
               "refId": "A"
             }
           ],
-          "title": "DCP_OPEN/sec Heatmap",
+          "title": "DCP_OPEN Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -8423,6 +9287,234 @@
           "yBucketBound": "auto"
         },
         {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 53
+          },
+          "id": 480,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_OPEN - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 53
+          },
+          "id": 492,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_OPEN - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
           "cards": {},
           "color": {
             "cardColor": "#b4ff00",
@@ -8434,10 +9526,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
             "x": 0,
-            "y": 24
+            "y": 60
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -8454,7 +9546,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_GET_FAILOVER_LOG\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_GET_FAILOVER_LOG\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -8462,7 +9554,7 @@
               "refId": "A"
             }
           ],
-          "title": "DCP_GET_FAILOVER_LOG/sec Heatmap",
+          "title": "DCP_GET_FAILOVER_LOG Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -8481,6 +9573,234 @@
           "yBucketBound": "auto"
         },
         {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 60
+          },
+          "id": 485,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_GET_FAILOVER_LOG - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 60
+          },
+          "id": 493,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_GET_FAILOVER_LOG - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
           "cards": {},
           "color": {
             "cardColor": "#b4ff00",
@@ -8492,15 +9812,15 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
-            "x": 8,
-            "y": 24
+            "x": 0,
+            "y": 67
           },
           "heatmap": {},
           "hideZeroBuckets": true,
           "highlightCards": true,
-          "id": 231,
+          "id": 238,
           "legend": {
             "show": true
           },
@@ -8512,7 +9832,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_ADD_STREAM\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_STREAM_REQ\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -8520,7 +9840,7 @@
               "refId": "A"
             }
           ],
-          "title": "DCP_ADD_STREAM/sec Heatmap",
+          "title": "DCP_STREAM_REQ Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -8537,6 +9857,520 @@
             "show": true
           },
           "yBucketBound": "auto"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 67
+          },
+          "id": 486,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_STREAM_REQ - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 67
+          },
+          "id": 494,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_STREAM_REQ - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
+          "cards": {},
+          "color": {
+            "cardColor": "#b4ff00",
+            "colorScale": "sqrt",
+            "colorScheme": "interpolateSpectral",
+            "exponent": 0.5,
+            "mode": "spectrum"
+          },
+          "dataFormat": "tsbuckets",
+          "description": "",
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 0,
+            "y": 74
+          },
+          "heatmap": {},
+          "hideZeroBuckets": true,
+          "highlightCards": true,
+          "id": 231,
+          "legend": {
+            "show": true
+          },
+          "reverseYBuckets": false,
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": false,
+              "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_ADD_STREAM\"})",
+              "format": "heatmap",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{le}}",
+              "refId": "A"
+            }
+          ],
+          "title": "DCP_ADD_STREAM Heatmap",
+          "tooltip": {
+            "show": true,
+            "showHistogram": true
+          },
+          "tooltipDecimals": 2,
+          "type": "heatmap",
+          "xAxis": {
+            "show": true
+          },
+          "yAxis": {
+            "decimals": 1,
+            "format": "s",
+            "logBase": 1,
+            "show": true
+          },
+          "yBucketBound": "auto"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 74
+          },
+          "id": 487,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "DCP_ADD_STREAM - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 74
+          },
+          "id": 495,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "DCP_ADD_STREAM - 99th Percentile",
+          "type": "timeseries"
         }
       ],
       "title": "Performance - DCP",
@@ -8609,7 +10443,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 8
+            "y": 26
           },
           "id": 265,
           "options": {
@@ -8696,7 +10530,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 8
+            "y": 26
           },
           "id": 266,
           "options": {
@@ -8783,7 +10617,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 8
+            "y": 26
           },
           "id": 277,
           "options": {
@@ -8870,7 +10704,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 14
+            "y": 32
           },
           "id": 268,
           "options": {
@@ -8957,7 +10791,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 14
+            "y": 32
           },
           "id": 267,
           "options": {
@@ -9044,7 +10878,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 14
+            "y": 32
           },
           "id": 278,
           "options": {
@@ -9131,7 +10965,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 20
+            "y": 38
           },
           "id": 270,
           "options": {
@@ -9218,7 +11052,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 20
+            "y": 38
           },
           "id": 269,
           "options": {
@@ -9305,7 +11139,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 20
+            "y": 38
           },
           "id": 279,
           "options": {
@@ -9392,7 +11226,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 26
+            "y": 44
           },
           "id": 272,
           "options": {
@@ -9479,7 +11313,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 26
+            "y": 44
           },
           "id": 271,
           "options": {
@@ -9566,7 +11400,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 26
+            "y": 44
           },
           "id": 280,
           "options": {
@@ -9653,7 +11487,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 32
+            "y": 50
           },
           "id": 274,
           "options": {
@@ -9740,7 +11574,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 32
+            "y": 50
           },
           "id": 273,
           "options": {
@@ -9827,7 +11661,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 32
+            "y": 50
           },
           "id": 281,
           "options": {
@@ -9914,7 +11748,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 38
+            "y": 56
           },
           "id": 276,
           "options": {
@@ -10001,7 +11835,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 38
+            "y": 56
           },
           "id": 275,
           "options": {
@@ -10088,7 +11922,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 38
+            "y": 56
           },
           "id": 282,
           "options": {
@@ -10175,7 +12009,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 44
+            "y": 62
           },
           "id": 283,
           "options": {
@@ -10262,7 +12096,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 44
+            "y": 62
           },
           "id": 284,
           "options": {
@@ -10349,7 +12183,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 44
+            "y": 62
           },
           "id": 285,
           "options": {
@@ -10405,10 +12239,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
             "x": 0,
-            "y": 11
+            "y": 27
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10425,7 +12259,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"majority_and_persist_on_master\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -10433,7 +12267,7 @@
               "refId": "A"
             }
           ],
-          "title": "majority_and_persist_on_master/sec Heatmap",
+          "title": "majority_and_persist_on_master - Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -10452,6 +12286,234 @@
           "yBucketBound": "auto"
         },
         {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 27
+          },
+          "id": 496,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "majority_and_persist_on_master - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 27
+          },
+          "id": 497,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "majority_and_persist_on_master - 99th Percentile",
+          "type": "timeseries"
+        },
+        {
           "cards": {},
           "color": {
             "cardColor": "#b4ff00",
@@ -10463,10 +12525,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
-            "x": 8,
-            "y": 11
+            "x": 0,
+            "y": 34
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10483,7 +12545,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"majority\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"majority\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -10491,7 +12553,7 @@
               "refId": "A"
             }
           ],
-          "title": "majority/sec Heatmap",
+          "title": "majority Heatmap",
           "tooltip": {
             "show": true,
             "showHistogram": true
@@ -10510,6 +12572,234 @@
           "yBucketBound": "auto"
         },
         {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 34
+          },
+          "id": 499,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "majority - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 34
+          },
+          "id": 501,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "majority- 99th Percentile",
+          "type": "timeseries"
+        },
+        {
           "cards": {},
           "color": {
             "cardColor": "#b4ff00",
@@ -10521,10 +12811,10 @@
           "dataFormat": "tsbuckets",
           "description": "",
           "gridPos": {
-            "h": 9,
+            "h": 7,
             "w": 8,
-            "x": 16,
-            "y": 11
+            "x": 0,
+            "y": 41
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10541,7 +12831,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"persist_to_majority\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"persist_to_majority\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -10566,6 +12856,234 @@
             "show": true
           },
           "yBucketBound": "auto"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 8,
+            "y": 41
+          },
+          "id": 498,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "50th Percentile",
+              "refId": "C"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "90th Percentile",
+              "refId": "A"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "95th Percentile",
+              "refId": "B"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99th Percentile",
+              "refId": "D"
+            },
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "99.9th Percentile",
+              "refId": "E"
+            }
+          ],
+          "title": "majority_and_persist_on_master - Percentiles",
+          "type": "timeseries"
+        },
+        {
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 0,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": false,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green",
+                    "value": null
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "s"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 7,
+            "w": 8,
+            "x": 16,
+            "y": 41
+          },
+          "id": 500,
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "single"
+            }
+          },
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "legendFormat": "{{bucket}}",
+              "refId": "C"
+            }
+          ],
+          "title": "majority_and_persist_on_master - 99th Percentile",
+          "type": "timeseries"
         }
       ],
       "title": "Performance - KV Sync",
@@ -10596,7 +13114,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 5
+            "y": 28
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10613,7 +13131,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -10679,7 +13197,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -10695,7 +13214,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 5
+            "y": 28
           },
           "id": 444,
           "options": {
@@ -10715,7 +13234,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10728,7 +13247,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10741,7 +13260,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10754,7 +13273,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10767,7 +13286,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10775,7 +13294,7 @@
               "refId": "E"
             }
           ],
-          "title": "Background Load/sec - Percentiles",
+          "title": "Background Load - Percentiles",
           "type": "timeseries"
         },
         {
@@ -10818,7 +13337,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -10834,7 +13354,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 5
+            "y": 28
           },
           "id": 446,
           "options": {
@@ -10854,7 +13374,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -10880,7 +13400,7 @@
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 12
+            "y": 35
           },
           "heatmap": {},
           "hideZeroBuckets": true,
@@ -10897,7 +13417,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": false,
-              "expr": "sum by(le) (rate(kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
+              "expr": "sum by(le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
               "format": "heatmap",
               "interval": "",
               "intervalFactor": 1,
@@ -10963,7 +13483,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -10979,7 +13500,7 @@
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 12
+            "y": 35
           },
           "id": 447,
           "options": {
@@ -10999,7 +13520,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.5, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -11012,7 +13533,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.9, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -11025,7 +13546,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.95, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -11038,7 +13559,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -11051,7 +13572,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.999, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -11102,7 +13623,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -11118,7 +13640,7 @@
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 12
+            "y": 35
           },
           "id": 448,
           "options": {
@@ -11138,7 +13660,7 @@
                 "uid": "SHZqSh-7k"
               },
               "exemplar": true,
-              "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
+              "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}))",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -11219,7 +13741,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 4
+            "y": 64
           },
           "id": 398,
           "options": {
@@ -11305,7 +13827,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 4
+            "y": 64
           },
           "id": 399,
           "options": {
@@ -11391,7 +13913,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 4
+            "y": 64
           },
           "id": 401,
           "options": {
@@ -11477,7 +13999,7 @@
             "h": 6,
             "w": 8,
             "x": 0,
-            "y": 10
+            "y": 70
           },
           "id": 400,
           "options": {
@@ -11563,7 +14085,7 @@
             "h": 6,
             "w": 8,
             "x": 8,
-            "y": 10
+            "y": 70
           },
           "id": 402,
           "options": {
@@ -11649,7 +14171,7 @@
             "h": 6,
             "w": 8,
             "x": 16,
-            "y": 10
+            "y": 70
           },
           "id": 403,
           "options": {
@@ -11844,6 +14366,6 @@
   "timezone": "",
   "title": "Couchbase Data Service",
   "uid": "YN7rEplPuB",
-  "version": 44,
+  "version": 3,
   "weekStart": ""
 }
