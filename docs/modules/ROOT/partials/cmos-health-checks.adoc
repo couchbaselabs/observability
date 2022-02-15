@@ -10,6 +10,17 @@ If a node fails to respond, this can indicate that the node is down, its CPU is 
 
 *Remediation*: Check the node's status and resource usage.
 
+[#CB90073]
+=== Dropped DCP Mutations (CB90073)
+
+*Background*: This can be an indication of MB-41255 and can affect data integrity.
+
+*Condition*: Dropped DCP mutations found in memcached.log.
+
+*Remediation*: 
+
+*Further Reading*: https://issues.couchbase.com/browse/MB-41255[MB-41255] 
+
 // end::group-cluster[]
 
 // tag::group-node[]
