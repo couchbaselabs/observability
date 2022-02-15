@@ -17,9 +17,9 @@ If a node fails to respond, this can indicate that the node is down, its CPU is 
 
 *Condition*: Dropped DCP mutations found in memcached.log.
 
-*Remediation*: 
+*Remediation*: If you experience data integrity issues, update to a more recent version of Couchbase Server.
 
-*Further Reading*: https://issues.couchbase.com/browse/MB-41255[MB-41255] 
+*Further Reading*: https://issues.couchbase.com/browse/MB-41255[MB-41255]
 
 // end::group-cluster[]
 

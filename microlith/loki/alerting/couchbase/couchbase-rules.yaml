@@ -360,4 +360,4 @@ groups:
           title: "Dropped DCP Mutations on cluster (cluster: {{ $labels.couchbase_cluster }})"
           description: Dropped DCP mutations found in memcached.log.
             This can be an indication of MB-41255 and can affect data integrity.
-          remediation: 
+          remediation: If you experience data integrity issues, update to a more recent version of Couchbase Server.
