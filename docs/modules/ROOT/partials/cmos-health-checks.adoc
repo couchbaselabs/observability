@@ -173,6 +173,39 @@ If you experience any, then please contact Couchbase Technical Support.
 
 *Further Reading*: https://blog.couchbase.com/couchbase-dcp-rollback-qa-tests/[Couchbase DCP Rollback]
 
+[#CB90070]
+=== Permission Denied Errors (CB90070)
+
+*Background*: Couchbase Server has been denied permission to access resources.
+This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
+
+*Condition*: Found permission denied errors in memcached.log.
+
+*Remediation*: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
+If this does not solve the problem, please contact Couchbase Support.
+
+[#CB90072]
+=== Data Service Connection Limit (CB90072)
+
+*Background*: By default, the maximum number of connections to the Data Service is limited to 65,000, of which 5,000 are reserved for internal system services.
+If this limit is exceeded, clients will fail to connect to your Couchbase cluster.
+
+The default limit is high enough that it is unlikely to be legitimately exceeded in production.
+If it is exceeded, the most likely cause is application code failing to shut down connections properly.
+
+*Condition*: Warning if the number of connections is above 80% of the default limit (60,000).
+Upgraded to an alert if the limit is exceeded, or log messages are seen that indicate that client connections are being rejected because of the limit.
+
+[NOTE]
+====
+It is possible to modify this limit.
+However, if this is done, you will need to adjust this health check's threshold accordingly, otherwise it may produce false positives or negatives.
+====
+
+*Remediation*: Review your application code to ensure that it is closing Couchbase connections properly.
+
+*Further Reading*: https://docs.couchbase.com/server/current/rest-api/rest-manage-cluster-connections.html[Managing Cluster Connections]
+
 // end::group-node[]
 
 // tag::group-bucket[]
@@ -236,5 +269,19 @@ If that time breaches 100 seconds, then a critical alert is produced.
 If the problem persists, then please contact Couchbase Technical Support.
 
 *Further Reading*: xref:7.0@server:metrics-reference:data-service-metrics.adoc#kv_ep_storage_age_second[Data Service Metrics], xref:7.0@server:install:sizing-general.adoc#sizing-data-service-nodes[Sizing Data Service Nodes]
+
+[#CB90071]
+=== Compaction Failure (CB90071)
+
+*Background*: Auto-Compaction can be set to run either at a specific time, or when fragmentation hits a specific level.
+Auto-Compaction requires some free space on disk in order to run, so if there is none available then compaction cannot run.
+
+*Condition*: Auto-Compaction on bucket can fail if there is insufficient disk space available.
+
+*Remediation*: Allocate more storage to existing Data Service nodes, or more Data Service nodes to the cluster, and attempt to rerun Auto-Compaction.
+You may also create a new cluster, with more storage, and use unidirectional XDCR to transfer the files over, which should give you the space required for Auto-Compaction.
+If that is not possible, please contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/manage/manage-settings/configure-compact-settings.html[Auto-Compaction]
 
 // end::group-bucket[]

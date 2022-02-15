@@ -22,16 +22,26 @@ function wait_for_curl() {
     local MAX_ATTEMPTS=$1
     shift
     local ATTEMPTS=0
+
+    # This function may be run outside of BATS, so ensure `fail` has a definition
+    if [[ $(type -t fail) != function ]]; then
+        function fail() {
+            local message=$1
+            echo "FAIL: $message"
+            exit 1
+        }
+    fi
+
     if [ "${VERBOSITY:-0}" -gt 1 ]; then
         echo "Curl command: curl -s -o /dev/null -f $*"
     fi
     until curl -s -o /dev/null -f "$@"; do
         # Prevent an infinite loop - at 2 seconds per go this is 10 minutes
         if [ $ATTEMPTS -gt "300" ]; then
-            fail "wait_for_curl ultimate max exceeded"
+            fail "wait_for_curl ultimate max exceeded: $*"
         fi
         if [ $ATTEMPTS -gt "$MAX_ATTEMPTS" ]; then
-            fail "unable to perform cURL"
+            fail "unable to perform cURL: $*"
         fi
         ATTEMPTS=$((ATTEMPTS+1))
         sleep 2

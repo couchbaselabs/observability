@@ -176,7 +176,7 @@ function start_smoke_cluster() {
             # Can't just use COUCHBASE_SERVER_HOSTS as they won't be accessible outside the container network
             local mgmt_port
             mgmt_port=$(docker inspect test_couchbase1 -f '{{with index .NetworkSettings.Ports "8091/tcp"}}{{ with index . 0 }}{{ .HostPort }}{{end}}{{end}}')
-            wait_for_url 10 "http://localhost:$mgmt_port/ui"
+            wait_for_url 20 "http://localhost:$mgmt_port/ui"
             initialize_couchbase_cluster "docker run --rm -i --network cmos_test $COUCHBASE_SERVER_IMAGE /opt/couchbase/bin/couchbase-cli"
             _start_cmos --network=cmos_test
             ;;

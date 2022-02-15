@@ -163,5 +163,9 @@ clean: container-clean
 	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
 	rm -f microlith/git-commit.txt
 
+docs:
+	# || true is needed so the Makefile does not error when hitting CTRL+C
+	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml down
+
 docs-license-analysis:
 	tools/tern-report.sh

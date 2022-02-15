@@ -1,0 +1,119 @@
+daemon off;
+worker_processes 1;
+pid        /tmp/nginx.pid;
+error_log stderr notice;
+events {
+    worker_connections 1024;
+}
+
+http {
+    include                 mime.types;
+    default_type            application/octet-stream;
+    access_log              /dev/stdout;
+    sendfile                on;
+    keepalive_timeout       65;
+    proxy_temp_path         /tmp/proxy_temp;
+    client_body_temp_path   /tmp/client_temp;
+    fastcgi_temp_path       /tmp/fastcgi_temp;
+    uwsgi_temp_path         /tmp/uwsgi_temp;
+    scgi_temp_path          /tmp/scgi_temp;
+
+    server {
+        listen  8080;
+
+        {{- $rootPath := "/" -}}
+        {{- $subPath := "" -}}
+        {{- $usingSubPath := false -}}
+
+        {{- if and (ne (env.Getenv "CMOS_HTTP_PATH_PREFIX") "") (ne (env.Getenv "CMOS_HTTP_PATH_PREFIX") "/") -}}
+            {{ $subPath = .Env.CMOS_HTTP_PATH_PREFIX | strings.TrimSuffix "/" }}
+            {{ $rootPath = $subPath }}
+            {{ $usingSubPath = true }}
+        {{- end -}}
+        
+        {{- if not $usingSubPath }}
+
+        root /html;
+
+        {{ else }}
+
+        location = / {
+            return 303 {{ $rootPath }};
+        }
+
+        location {{ $rootPath }} {
+            alias    /html;
+
+        {{ end -}}
+
+            index   index.html;
+
+            location ~ {{ $subPath }}/grafana/ {
+                proxy_pass  http://localhost:3000;
+            }
+
+            location {{ $subPath }}/prometheus/ {
+                proxy_pass  http://localhost:9090;
+            }
+
+            location {{ $subPath }}/jaeger/ {
+                proxy_pass  http://localhost:16686;
+            }
+
+            location {{ $subPath }}/alertmanager/ {
+                proxy_pass  http://localhost:9093;
+            }
+
+            location {{ $subPath }}/loki/ {
+                proxy_pass  http://localhost:3100;
+            }
+
+            # Self-monitoring
+            location {{ $subPath }}/_meta/status {
+                stub_status;
+            }
+
+            # TODO (CMOS-98) - eventually these should all just be /couchbase/
+
+            # Redirect /ui to its proper place just in case
+            location ~ ^{{ $subPath }}/ui/?$ {
+                return 301 {{ $subPath }}/couchbase/ui;
+            }
+
+            # Static assets are served here and there's no easy way to change it
+            location {{ $subPath }}/ui/assets/ {
+                proxy_pass  http://localhost:7196;
+            }
+
+            # UI assumes the cbmultimanager REST API is on /api
+            location {{ $subPath }}/api/ {
+                # cbmm doesn't yet support path prefixes so strip it
+                rewrite ^{{ $subPath }}/api(.*)$ /api$1;
+                proxy_pass  http://localhost:7196;
+            }
+
+            location {{ $subPath }}/couchbase {
+                # Redirect to the UI to avoid a white page
+                rewrite ^{{ $subPath }}/couchbase/?$ /couchbase/ui redirect;
+                # Strip the /couchbase prefix
+                rewrite ^{{ $subPath }}/couchbase/(.*) /$1 break;
+                proxy_pass http://localhost:7196;
+            }
+
+            location {{ $subPath }}/licenses/ {
+                autoindex on;
+            }
+
+            location {{ $subPath }}/support {
+                alias /tmp/support/;
+                autoindex on;
+            }
+
+            location {{ $subPath }}/config {
+                proxy_pass http://localhost:7194;
+            }
+        {{- if $usingSubPath -}}
+        }
+        {{- end -}}
+    }
+}

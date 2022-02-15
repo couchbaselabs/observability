@@ -24,5 +24,6 @@ testing/bats/integration/kubernetes/resources/default-microlith.yaml
 testing/bats/integration/kubernetes/resources/helm/couchbase-cluster-logging-values.yaml
 testing/loki_alerts/fluent-bit.conf
 .DS_Store
+node_modules
 *.log
 !testing/loki_alerts/*/*/*.log
