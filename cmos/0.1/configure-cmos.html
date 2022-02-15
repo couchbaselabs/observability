@@ -220,6 +220,35 @@ If you choose to disable a service, this is achieved by setting the correspondin
 </div>
 </div>
 <div class="sect1">
+<h2 id="_running_behind_a_reverse_proxy"><a class="anchor" href="#_running_behind_a_reverse_proxy"></a>Running behind a reverse proxy</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>CMOS can be run behind a reverse proxy in your deployments.
+There are two ways of running it: on a subdomain (e.g. <code>cmos.example.com</code>), or on a sub-path (e.g. <code>example.com/cmos</code>).</p>
+</div>
+<div class="paragraph">
+<p>If running on a subdomain, you do not need to change any CMOS configuration, just point your reverse proxy at port 8080 on the CMOS container.</p>
+</div>
+<div class="paragraph">
+<p>If you are running on a sub-path, you will need to set the <code>CMOS_HTTP_PATH_PREFIX</code> environment variable to ensure all the services reflect this, for example <code>docker run -e "CMOS_HTTP_PATH_PREFIX=/cmos" &#8230;&#8203;</code>.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If using sub-paths, the <code>CMOS_HTTP_PATH_PREFIX</code> variable <strong>must not</strong> have a trailing slash (e.g. <code>/cmos</code> rather than <code>/cmos/</code>), otherwise CMOS may fail to start.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_logging"><a class="anchor" href="#_logging"></a>Logging</h2>
 <div class="sectionbody">
 <div class="paragraph">
