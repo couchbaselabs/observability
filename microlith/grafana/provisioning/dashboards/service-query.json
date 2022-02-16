@@ -1,4 +1,41 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.4"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -20,10 +57,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1638367099980,
+  "id": null,
+  "iteration": 1645037455645,
   "links": [
     {
       "asDropdown": false,
@@ -77,7 +113,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -122,11 +157,15 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
-          "expr": "sum(irate(n1ql_warnings{cluster=`$cluster`}[$__rate_interval]))",
+          "expr": "sum(irate(n1ql_warnings{cluster_name=~\"$cluster\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -136,7 +175,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -204,8 +242,12 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
-          "expr": "irate(n1ql_errors{cluster=`$cluster`}[$__rate_interval])",
+          "expr": "irate(n1ql_errors{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}} (last $__interval)",
           "refId": "A"
@@ -215,7 +257,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "description": "This is in the past time range, i.e., the value set in the top-right corner of \"Last X time unit\" (defaults to 30 minutes).",
       "fieldConfig": {
         "defaults": {
@@ -232,7 +273,7 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "short"
         },
         "overrides": [
           {
@@ -367,11 +408,15 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_250ms{cluster=`$cluster`}[$__range])))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_250ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -380,8 +425,12 @@
           "refId": "B"
         },
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_500ms{cluster=`$cluster`}[$__range])))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_500ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -389,16 +438,24 @@
           "refId": "D"
         },
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_1000ms{cluster=`$cluster`}[$__range])))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\"}[$__range])))",
           "instant": true,
           "interval": "",
           "legendFormat": "1000ms",
           "refId": "A"
         },
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_5000ms{cluster=`$cluster`}[$__range])))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -411,7 +468,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -478,8 +534,12 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
-          "expr": "irate(n1ql_requests{cluster=`$cluster`}[$__rate_interval])",
+          "expr": "irate(n1ql_requests{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -489,7 +549,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -556,8 +615,12 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
-          "expr": "rate(n1ql_request_time{cluster=`$cluster`}[$__rate_interval]) / rate(n1ql_requests{cluster=`$cluster`}[$__rate_interval])",
+          "expr": "rate(n1ql_request_time{cluster_name=~\"$cluster\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -568,7 +631,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -579,12 +642,8 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {},
-        "datasource": null,
-        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
+        "definition": "label_values(n1ql_requests,cluster_name)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -592,14 +651,15 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "query": "label_values(n1ql_requests,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query"
+        "type": "query",
+        "datasource": "${DS_PROMETHEUS}"
       }
     ]
   },
@@ -623,5 +683,6 @@
   "timezone": "",
   "title": "Query Service",
   "uid": "89ydpf5nz",
-  "version": 17
+  "version": 3,
+  "weekStart": ""
 }
