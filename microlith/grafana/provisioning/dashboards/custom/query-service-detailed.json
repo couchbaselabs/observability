@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 25,
-  "iteration": 1645044113602,
+  "iteration": 1645048792789,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -467,6 +467,600 @@
       "type": "stat"
     },
     {
+      "cards": {},
+      "color": {
+        "cardColor": "#b4ff00",
+        "colorScale": "sqrt",
+        "colorScheme": "interpolateSpectral",
+        "exponent": 0.5,
+        "mode": "spectrum"
+      },
+      "dataFormat": "tsbuckets",
+      "description": "",
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 6
+      },
+      "heatmap": {},
+      "hideZeroBuckets": true,
+      "highlightCards": true,
+      "id": 175,
+      "legend": {
+        "show": true
+      },
+      "reverseYBuckets": false,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": false,
+          "expr": "avg by (le) (\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"5000\", \"\", \"\"))",
+          "format": "heatmap",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{le}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Queries/sec Heatmap",
+      "tooltip": {
+        "show": true,
+        "showHistogram": true
+      },
+      "tooltipDecimals": 2,
+      "type": "heatmap",
+      "xAxis": {
+        "show": true
+      },
+      "yAxis": {
+        "decimals": 1,
+        "format": "ms",
+        "logBase": 1,
+        "show": true
+      },
+      "yBucketBound": "auto"
+    },
+    {
+      "cards": {},
+      "color": {
+        "cardColor": "#b4ff00",
+        "colorScale": "sqrt",
+        "colorScheme": "interpolateSpectral",
+        "exponent": 0.5,
+        "mode": "spectrum"
+      },
+      "dataFormat": "tsbuckets",
+      "description": "",
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 6
+      },
+      "heatmap": {},
+      "hideZeroBuckets": true,
+      "highlightCards": true,
+      "id": 176,
+      "legend": {
+        "show": true
+      },
+      "reverseYBuckets": false,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": false,
+          "expr": "avg by (le) (\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"5000\", \"\", \"\")\n)",
+          "format": "heatmap",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{le}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Queries in Range Heatmap",
+      "tooltip": {
+        "show": true,
+        "showHistogram": true
+      },
+      "tooltipDecimals": 2,
+      "type": "heatmap",
+      "xAxis": {
+        "show": true
+      },
+      "yAxis": {
+        "decimals": 1,
+        "format": "ms",
+        "logBase": 1,
+        "show": true
+      },
+      "yBucketBound": "auto"
+    },
+    {
+      "cards": {},
+      "color": {
+        "cardColor": "#b4ff00",
+        "colorScale": "sqrt",
+        "colorScheme": "interpolateSpectral",
+        "exponent": 0.5,
+        "mode": "spectrum"
+      },
+      "dataFormat": "tsbuckets",
+      "description": "",
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 6
+      },
+      "heatmap": {},
+      "hideZeroBuckets": true,
+      "highlightCards": true,
+      "id": 178,
+      "legend": {
+        "show": true
+      },
+      "reverseYBuckets": false,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": false,
+          "expr": "avg by (le) (\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"5000\", \"\", \"\")\n)",
+          "format": "heatmap",
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "{{le}}",
+          "refId": "A"
+        }
+      ],
+      "title": "Queries All-time Heatmap",
+      "tooltip": {
+        "show": true,
+        "showHistogram": true
+      },
+      "tooltipDecimals": 2,
+      "type": "heatmap",
+      "xAxis": {
+        "show": true
+      },
+      "yAxis": {
+        "decimals": 1,
+        "format": "ms",
+        "logBase": 1,
+        "show": true
+      },
+      "yBucketBound": "auto"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 13
+      },
+      "id": 180,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.5, avg by (le) (\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"+Inf\", \"\", \"\")))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "50th Percentile",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.9, avg by (le) (\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"+Inf\", \"\", \"\")))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "90th Percentile",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.95, avg by (le) (\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"+Inf\", \"\", \"\")))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "95th Percentile",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, avg by (le) (\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"+Inf\", \"\", \"\")))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99th Percentile",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.999, avg by (le) (\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n    -\n    rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n  , \"le\", \"+Inf\", \"\", \"\")))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99.9th Percentile",
+          "refId": "E"
+        }
+      ],
+      "title": "Queries/sec - Percentiles",
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 13
+      },
+      "id": 181,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.5, avg by (le) (\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "50th Percentile",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.9, avg by (le) (\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "90th Percentile",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.95, avg by (le) (\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "95th Percentile",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, avg by (le) (\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99th Percentile",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.999, avg by (le) (\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    increase(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n    -\n    increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__range])\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99.9th Percentile",
+          "refId": "E"
+        }
+      ],
+      "title": "Queries in Range - Percentiles",
+      "type": "timeseries"
+    },
+    {
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 13
+      },
+      "id": 182,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.5, avg by (le) (\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "50th Percentile",
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.9, avg by (le) (\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "90th Percentile",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.95, avg by (le) (\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "95th Percentile",
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.99, avg by (le) (\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99th Percentile",
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "histogram_quantile(0.999, avg by (le) (\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_250ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"250\", \"\", \"\")\n  or \n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_500ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"500\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"1000\", \"\", \"\")\n  or\n  label_replace(\n    n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}\n    -\n    n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  , \"le\", \"+Inf\", \"\", \"\")\n))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "legendFormat": "99.9th Percentile",
+          "refId": "E"
+        }
+      ],
+      "title": "Queries All-Time - Percentiles",
+      "type": "timeseries"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "${datasource}"
@@ -529,7 +1123,7 @@
         "h": 5,
         "w": 8,
         "x": 0,
-        "y": 6
+        "y": 20
       },
       "id": 81,
       "links": [],
@@ -710,7 +1304,7 @@
         "h": 5,
         "w": 8,
         "x": 8,
-        "y": 6
+        "y": 20
       },
       "id": 87,
       "links": [],
@@ -869,7 +1463,7 @@
               }
             ]
           },
-          "unit": "cps"
+          "unit": "short"
         },
         "overrides": []
       },
@@ -877,7 +1471,7 @@
         "h": 5,
         "w": 8,
         "x": 16,
-        "y": 6
+        "y": 20
       },
       "id": 13,
       "links": [],
@@ -1001,7 +1595,7 @@
         "h": 5,
         "w": 8,
         "x": 0,
-        "y": 11
+        "y": 25
       },
       "id": 17,
       "links": [],
@@ -1154,7 +1748,7 @@
         "h": 5,
         "w": 8,
         "x": 8,
-        "y": 11
+        "y": 25
       },
       "id": 88,
       "links": [],
@@ -1264,7 +1858,7 @@
         "h": 5,
         "w": 8,
         "x": 16,
-        "y": 11
+        "y": 25
       },
       "id": 83,
       "links": [],
@@ -1318,7 +1912,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 16
+        "y": 30
       },
       "id": 148,
       "panels": [
@@ -3157,7 +3751,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 31
       },
       "id": 25,
       "panels": [
@@ -4051,7 +4645,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 18
+        "y": 32
       },
       "id": 140,
       "panels": [
@@ -4929,7 +5523,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 19
+        "y": 33
       },
       "id": 142,
       "panels": [
@@ -4979,7 +5573,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -4995,7 +5590,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 20
+            "y": 34
           },
           "id": 119,
           "links": [],
@@ -5075,7 +5670,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5091,7 +5687,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 20
+            "y": 34
           },
           "id": 116,
           "links": [],
@@ -5171,7 +5767,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5187,7 +5784,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 20
+            "y": 34
           },
           "id": 118,
           "links": [],
@@ -5267,7 +5864,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5283,7 +5881,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 25
+            "y": 39
           },
           "id": 117,
           "links": [],
@@ -5363,7 +5961,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5379,7 +5978,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 25
+            "y": 39
           },
           "id": 120,
           "links": [],
@@ -5458,7 +6057,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5474,7 +6074,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 25
+            "y": 39
           },
           "id": 135,
           "links": [],
@@ -5553,7 +6153,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5569,7 +6170,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 30
+            "y": 44
           },
           "id": 112,
           "links": [],
@@ -5648,7 +6249,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -5664,7 +6266,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 30
+            "y": 44
           },
           "id": 167,
           "links": [],
@@ -5708,7 +6310,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 20
+        "y": 34
       },
       "id": 106,
       "panels": [
@@ -6396,7 +6998,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 21
+        "y": 35
       },
       "id": 146,
       "panels": [
@@ -6462,7 +7064,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 37
+            "y": 22
           },
           "id": 21,
           "links": [],
@@ -6558,7 +7160,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 37
+            "y": 22
           },
           "id": 114,
           "links": [],
@@ -6654,7 +7256,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 37
+            "y": 22
           },
           "id": 134,
           "links": [],
@@ -6750,7 +7352,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 42
+            "y": 27
           },
           "id": 109,
           "links": [],
@@ -6793,7 +7395,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 22
+        "y": 36
       },
       "id": 144,
       "panels": [
@@ -6859,7 +7461,7 @@
             "h": 5,
             "w": 6,
             "x": 0,
-            "y": 38
+            "y": 23
           },
           "id": 115,
           "links": [],
@@ -6955,7 +7557,7 @@
             "h": 5,
             "w": 6,
             "x": 6,
-            "y": 38
+            "y": 23
           },
           "id": 138,
           "links": [],
@@ -7051,7 +7653,7 @@
             "h": 5,
             "w": 6,
             "x": 12,
-            "y": 38
+            "y": 23
           },
           "id": 137,
           "links": [],
@@ -7147,7 +7749,7 @@
             "h": 5,
             "w": 6,
             "x": 18,
-            "y": 38
+            "y": 23
           },
           "id": 136,
           "links": [],
@@ -7219,8 +7821,8 @@
       {
         "current": {
           "selected": false,
-          "text": "Demo Cluster 3",
-          "value": "Demo Cluster 3"
+          "text": "",
+          "value": ""
         },
         "datasource": {
           "type": "prometheus",
@@ -7296,6 +7898,6 @@
   "timezone": "",
   "title": "Couchbase Query Service",
   "uid": "2FWOC_EZk",
-  "version": 10,
+  "version": 14,
   "weekStart": ""
 }
