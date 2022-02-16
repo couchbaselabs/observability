@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": 25,
-  "iteration": 1644956529078,
+  "iteration": 1645044113602,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -38,6 +38,433 @@
       "panels": [],
       "title": "Overview",
       "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EF843C",
+                "value": 60
+              },
+              {
+                "color": "#EAB839",
+                "value": 80
+              },
+              {
+                "color": "#E24D42",
+                "value": 95
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 113,
+      "links": [],
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "avg(n1ql_load{cluster_name=~\"$cluster\",instance=~\"$node\"})",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Results",
+          "refId": "B"
+        }
+      ],
+      "title": "N1QL Load",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "Results Per Second",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 171,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "avg(rate(n1ql_result_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Results",
+          "refId": "B"
+        }
+      ],
+      "title": "Avg. N1QL Result Count",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "Average bytes of the response size",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "min": 0,
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "decbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 92,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "avg(rate(n1ql_result_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Response Size",
+          "refId": "B"
+        }
+      ],
+      "title": "Average Response Size",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "Average Execution Time (Overall), Average Service Time (time spent executing)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 12,
+        "y": 1
+      },
+      "id": 170,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "avg(rate(n1ql_request_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "Average Request Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "Average Service Time (time spent executing)",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 16,
+        "y": 1
+      },
+      "id": 168,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "avg(rate(n1ql_service_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Service Time",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "$datasource"
+      },
+      "description": "The time spent waiting to be executed",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "links": [],
+          "mappings": [],
+          "noValue": "N/A",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ns"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 20,
+        "y": 1
+      },
+      "id": 169,
+      "links": [],
+      "options": {
+        "colorMode": "none",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.3.4",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "avg((rate(n1ql_request_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) - (rate(n1ql_service_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "",
+          "refId": "B"
+        }
+      ],
+      "title": "Average Queue Time",
+      "type": "stat"
     },
     {
       "datasource": {
@@ -102,7 +529,7 @@
         "h": 5,
         "w": 8,
         "x": 0,
-        "y": 1
+        "y": 6
       },
       "id": 81,
       "links": [],
@@ -166,7 +593,7 @@
             "uid": "${datasource}"
           },
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests_1000ms{cluster_name=~\"$cluster_name\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests_1000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -180,7 +607,7 @@
             "uid": "${datasource}"
           },
           "exemplar": true,
-          "expr": "sum(rate(n1ql_requests_5000ms{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_requests_5000ms{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -194,13 +621,27 @@
             "uid": "${datasource}"
           },
           "exemplar": true,
-          "expr": "sum(rate(n1ql_queued_requests{cluster_name=~\"$cluster_name\"}[$__rate_interval]))",
+          "expr": "sum(rate(n1ql_queued_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "queued",
           "refId": "F"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${datasource}"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_prepared{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "prepared",
+          "refId": "G"
         }
       ],
       "title": "N1QL Queries",
@@ -269,7 +710,7 @@
         "h": 5,
         "w": 8,
         "x": 8,
-        "y": 1
+        "y": 6
       },
       "id": 87,
       "links": [],
@@ -436,7 +877,7 @@
         "h": 5,
         "w": 8,
         "x": 16,
-        "y": 1
+        "y": 6
       },
       "id": 13,
       "links": [],
@@ -458,7 +899,7 @@
             "uid": "SHZqSh-7k"
           },
           "exemplar": true,
-          "expr": "sum(rate(n1ql_errors{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(increase(n1ql_errors{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -471,7 +912,7 @@
             "uid": "SHZqSh-7k"
           },
           "exemplar": true,
-          "expr": "sum(rate(n1ql_warnings{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(increase(n1ql_warnings{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
@@ -485,27 +926,13 @@
             "uid": "SHZqSh-7k"
           },
           "exemplar": true,
-          "expr": "sum(rate(n1ql_invalid_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "sum(increase(n1ql_invalid_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Invalid Requests",
           "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(rate(n1ql_errors{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Queued Requests",
-          "refId": "D"
         }
       ],
       "title": "N1QL errors/warnings",
@@ -574,7 +1001,7 @@
         "h": 5,
         "w": 8,
         "x": 0,
-        "y": 6
+        "y": 11
       },
       "id": 17,
       "links": [],
@@ -645,6 +1072,20 @@
           "intervalFactor": 1,
           "legendFormat": "DELETEs",
           "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": true,
+          "expr": "sum(rate(n1ql_transactions{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (cluster_name)",
+          "format": "time_series",
+          "hide": false,
+          "interval": "",
+          "intervalFactor": 1,
+          "legendFormat": "Transactions",
+          "refId": "E"
         }
       ],
       "title": "N1QL Operations",
@@ -713,7 +1154,7 @@
         "h": 5,
         "w": 8,
         "x": 8,
-        "y": 6
+        "y": 11
       },
       "id": 88,
       "links": [],
@@ -740,7 +1181,7 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "index scan",
+          "legendFormat": "Index Scans",
           "refId": "B"
         },
         {
@@ -754,7 +1195,7 @@
           "hide": false,
           "interval": "",
           "intervalFactor": 1,
-          "legendFormat": "primary scan",
+          "legendFormat": "Primary Scans",
           "refId": "A"
         }
       ],
@@ -823,7 +1264,7 @@
         "h": 5,
         "w": 8,
         "x": 16,
-        "y": 6
+        "y": 11
       },
       "id": 83,
       "links": [],
@@ -872,339 +1313,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "Results Per Second",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 0,
-        "y": 11
-      },
-      "id": 113,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(rate(n1ql_result_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Results",
-          "refId": "B"
-        }
-      ],
-      "title": "N1QL Result Count",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "Average bytes of the response size",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "decbytes"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 8,
-        "y": 11
-      },
-      "id": 92,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "single"
-        }
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(rate(n1ql_result_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Response Size",
-          "refId": "B"
-        }
-      ],
-      "title": "Average Response Size",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "$datasource"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": true,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "links": [],
-          "mappings": [],
-          "min": 0,
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "short"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 5,
-        "w": 8,
-        "x": 16,
-        "y": 11
-      },
-      "id": 93,
-      "links": [],
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "pluginVersion": "8.2.3",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_actions{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Actions",
-          "refId": "B"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_actions_failed{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Failed Actions",
-          "refId": "A"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Requests",
-          "refId": "C"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "SHZqSh-7k"
-          },
-          "exemplar": true,
-          "expr": "sum(\n    increase(n1ql_audit_requests_filtered{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])\n)",
-          "format": "time_series",
-          "hide": false,
-          "interval": "",
-          "intervalFactor": 1,
-          "legendFormat": "Filtered Requests",
-          "refId": "D"
-        }
-      ],
-      "title": "N1QL Audit",
-      "type": "timeseries"
-    },
-    {
       "collapsed": true,
       "gridPos": {
         "h": 1,
@@ -1230,8 +1338,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1587,8 +1694,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1689,8 +1795,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1792,8 +1897,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1894,8 +1998,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1996,8 +2099,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2413,8 +2515,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2531,8 +2632,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -2992,8 +3092,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -4018,7 +4117,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 35
+            "y": 19
           },
           "id": 107,
           "links": [],
@@ -4114,7 +4213,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 35
+            "y": 19
           },
           "id": 108,
           "links": [],
@@ -4210,7 +4309,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 35
+            "y": 19
           },
           "id": 126,
           "links": [],
@@ -4306,7 +4405,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 40
+            "y": 24
           },
           "id": 121,
           "links": [],
@@ -4402,7 +4501,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 40
+            "y": 24
           },
           "id": 124,
           "links": [],
@@ -4498,7 +4597,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 40
+            "y": 24
           },
           "id": 123,
           "links": [],
@@ -4594,7 +4693,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 45
+            "y": 29
           },
           "id": 125,
           "links": [],
@@ -4690,7 +4789,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 45
+            "y": 29
           },
           "id": 111,
           "links": [],
@@ -4786,7 +4885,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 45
+            "y": 29
           },
           "id": 127,
           "links": [],
@@ -4896,7 +4995,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 36
+            "y": 20
           },
           "id": 119,
           "links": [],
@@ -4992,7 +5091,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 36
+            "y": 20
           },
           "id": 116,
           "links": [],
@@ -5088,7 +5187,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 36
+            "y": 20
           },
           "id": 118,
           "links": [],
@@ -5184,7 +5283,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 41
+            "y": 25
           },
           "id": 117,
           "links": [],
@@ -5280,7 +5379,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 41
+            "y": 25
           },
           "id": 120,
           "links": [],
@@ -5312,6 +5411,291 @@
             }
           ],
           "title": "N1QL Queries (>5000ms)",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "description": "Average Service Time (time spent executing)",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ns"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 16,
+            "y": 25
+          },
+          "id": 135,
+          "links": [],
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.2.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "rate(n1ql_service_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{instance}}",
+              "refId": "A"
+            }
+          ],
+          "title": "Average Service Time",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "description": "Average Execution Time (Overall), Average Service Time (time spent executing)",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ns"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 0,
+            "y": 30
+          },
+          "id": 112,
+          "links": [],
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.2.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "rate(n1ql_request_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{instance}}",
+              "refId": "B"
+            }
+          ],
+          "title": "Average Request Time",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "description": "The time spent waiting to be executed",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ns"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 8,
+            "y": 30
+          },
+          "id": 167,
+          "links": [],
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.2.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "(rate(n1ql_request_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) - (rate(n1ql_service_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{instance}}",
+              "refId": "B"
+            }
+          ],
+          "title": "Average Queue Time",
           "type": "timeseries"
         }
       ],
@@ -5390,7 +5774,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 37
+            "y": 21
           },
           "id": 131,
           "links": [],
@@ -5486,7 +5870,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 37
+            "y": 21
           },
           "id": 110,
           "links": [],
@@ -5582,7 +5966,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 37
+            "y": 21
           },
           "id": 130,
           "links": [],
@@ -5678,7 +6062,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 42
+            "y": 26
           },
           "id": 129,
           "links": [],
@@ -5774,7 +6158,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 42
+            "y": 26
           },
           "id": 122,
           "links": [],
@@ -5806,6 +6190,200 @@
             }
           ],
           "title": "N1QL Transactions",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "description": "",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "percent"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 16,
+            "y": 26
+          },
+          "id": 172,
+          "links": [],
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.2.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "n1ql_load{cluster_name=~\"$cluster\",instance=~\"$node\"}",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{instance}}",
+              "refId": "F"
+            }
+          ],
+          "title": "N1QL Load",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "description": "Prepared Executions per second",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "max": 100,
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "ops"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 0,
+            "y": 31
+          },
+          "id": 173,
+          "links": [],
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.2.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "rate(n1ql_prepared{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "format": "time_series",
+              "hide": false,
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{instance}}",
+              "refId": "F"
+            }
+          ],
+          "title": "N1QL Prepared ",
           "type": "timeseries"
         }
       ],
@@ -5884,7 +6462,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 22
+            "y": 37
           },
           "id": 21,
           "links": [],
@@ -5916,196 +6494,6 @@
             }
           ],
           "title": "N1QL Result Count",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "Average Service Time (time spent executing)",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ns"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 8,
-            "y": 22
-          },
-          "id": 135,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "hidden",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "rate(n1ql_service_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "Service Time",
-              "refId": "A"
-            }
-          ],
-          "title": "Average Service Time",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "Average Execution Time (Overall), Average Service Time (time spent executing)",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ns"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 16,
-            "y": 22
-          },
-          "id": 112,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "hidden",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "rate(n1ql_request_time{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
-              "format": "time_series",
-              "hide": false,
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "B"
-            }
-          ],
-          "title": "Average Request Time",
           "type": "timeseries"
         },
         {
@@ -6169,8 +6557,8 @@
           "gridPos": {
             "h": 5,
             "w": 8,
-            "x": 0,
-            "y": 27
+            "x": 8,
+            "y": 37
           },
           "id": 114,
           "links": [],
@@ -6202,101 +6590,6 @@
             }
           ],
           "title": "Average Response Size",
-          "type": "timeseries"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "$datasource"
-          },
-          "description": "The number o N1QL errors",
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "palette-classic"
-              },
-              "custom": {
-                "axisLabel": "",
-                "axisPlacement": "auto",
-                "barAlignment": 0,
-                "drawStyle": "line",
-                "fillOpacity": 10,
-                "gradientMode": "none",
-                "hideFrom": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": false
-                },
-                "lineInterpolation": "linear",
-                "lineWidth": 1,
-                "pointSize": 5,
-                "scaleDistribution": {
-                  "type": "linear"
-                },
-                "showPoints": "never",
-                "spanNulls": true,
-                "stacking": {
-                  "group": "A",
-                  "mode": "none"
-                },
-                "thresholdsStyle": {
-                  "mode": "off"
-                }
-              },
-              "links": [],
-              "mappings": [],
-              "min": 0,
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green"
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "cps"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 8,
-            "x": 8,
-            "y": 27
-          },
-          "id": 109,
-          "links": [],
-          "options": {
-            "legend": {
-              "calcs": [],
-              "displayMode": "list",
-              "placement": "bottom"
-            },
-            "tooltip": {
-              "mode": "multi"
-            }
-          },
-          "pluginVersion": "8.2.3",
-          "targets": [
-            {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "SHZqSh-7k"
-              },
-              "exemplar": true,
-              "expr": "rate(n1ql_errors{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
-              "format": "time_series",
-              "interval": "",
-              "intervalFactor": 1,
-              "legendFormat": "{{instance}}",
-              "refId": "A"
-            }
-          ],
-          "title": "N1QL Errors",
           "type": "timeseries"
         },
         {
@@ -6361,7 +6654,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 27
+            "y": 37
           },
           "id": 134,
           "links": [],
@@ -6393,6 +6686,101 @@
             }
           ],
           "title": "N1QL Warnings",
+          "type": "timeseries"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "$datasource"
+          },
+          "description": "The number o N1QL errors",
+          "fieldConfig": {
+            "defaults": {
+              "color": {
+                "mode": "palette-classic"
+              },
+              "custom": {
+                "axisLabel": "",
+                "axisPlacement": "auto",
+                "barAlignment": 0,
+                "drawStyle": "line",
+                "fillOpacity": 10,
+                "gradientMode": "none",
+                "hideFrom": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                },
+                "lineInterpolation": "linear",
+                "lineWidth": 1,
+                "pointSize": 5,
+                "scaleDistribution": {
+                  "type": "linear"
+                },
+                "showPoints": "never",
+                "spanNulls": true,
+                "stacking": {
+                  "group": "A",
+                  "mode": "none"
+                },
+                "thresholdsStyle": {
+                  "mode": "off"
+                }
+              },
+              "links": [],
+              "mappings": [],
+              "min": 0,
+              "thresholds": {
+                "mode": "absolute",
+                "steps": [
+                  {
+                    "color": "green"
+                  },
+                  {
+                    "color": "red",
+                    "value": 80
+                  }
+                ]
+              },
+              "unit": "cps"
+            },
+            "overrides": []
+          },
+          "gridPos": {
+            "h": 5,
+            "w": 8,
+            "x": 0,
+            "y": 42
+          },
+          "id": 109,
+          "links": [],
+          "options": {
+            "legend": {
+              "calcs": [],
+              "displayMode": "list",
+              "placement": "bottom"
+            },
+            "tooltip": {
+              "mode": "multi"
+            }
+          },
+          "pluginVersion": "8.2.3",
+          "targets": [
+            {
+              "datasource": {
+                "type": "prometheus",
+                "uid": "SHZqSh-7k"
+              },
+              "exemplar": true,
+              "expr": "rate(n1ql_errors{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "format": "time_series",
+              "interval": "",
+              "intervalFactor": 1,
+              "legendFormat": "{{instance}}",
+              "refId": "A"
+            }
+          ],
+          "title": "N1QL Errors",
           "type": "timeseries"
         }
       ],
@@ -6471,7 +6859,7 @@
             "h": 5,
             "w": 6,
             "x": 0,
-            "y": 23
+            "y": 38
           },
           "id": 115,
           "links": [],
@@ -6567,7 +6955,7 @@
             "h": 5,
             "w": 6,
             "x": 6,
-            "y": 23
+            "y": 38
           },
           "id": 138,
           "links": [],
@@ -6663,7 +7051,7 @@
             "h": 5,
             "w": 6,
             "x": 12,
-            "y": 23
+            "y": 38
           },
           "id": 137,
           "links": [],
@@ -6759,7 +7147,7 @@
             "h": 5,
             "w": 6,
             "x": 18,
-            "y": 23
+            "y": 38
           },
           "id": 136,
           "links": [],
@@ -6831,8 +7219,8 @@
       {
         "current": {
           "selected": false,
-          "text": "",
-          "value": ""
+          "text": "Demo Cluster 3",
+          "value": "Demo Cluster 3"
         },
         "datasource": {
           "type": "prometheus",
@@ -6908,6 +7296,6 @@
   "timezone": "",
   "title": "Couchbase Query Service",
   "uid": "2FWOC_EZk",
-  "version": 6,
+  "version": 10,
   "weekStart": ""
 }
