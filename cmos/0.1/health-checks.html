@@ -227,6 +227,24 @@ If a node fails to respond, this can indicate that the node is down, its CPU is 
 <p><strong>Remediation</strong>: Check the node&#8217;s status and resource usage.</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90073"><a class="anchor" href="#CB90073"></a>Dropped DCP Mutations (CB90073)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: This can be an indication of a Couchbase Server Issue (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1.
+This issue can affect data integrity.
+DCP mutations track any documents made to Couchbase Server and do Documents.
+If you drop DCP mutations, then changes to documents may be lost.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: Dropped DCP mutations found in memcached.log.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: If you experience data integrity issues, update to a more recent version of Couchbase Server.</p>
+</div>
+<div class="paragraph">
+<p><strong>Further Reading</strong>: <a href="https://issues.couchbase.com/browse/MB-41255">MB-41255</a></p>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
