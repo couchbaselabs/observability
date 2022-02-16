@@ -357,7 +357,9 @@ groups:
           cluster: '{{ $labels.couchbase_cluster }}'
           node: '{{ $labels.hostname }}'
         annotations:
-          title: "Dropped DCP Mutations on cluster (cluster: {{ $labels.couchbase_cluster }})"
-          description: Dropped DCP mutations found in memcached.log.
-            This can be an indication of a Couchbase Server Issue  (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1. This issue can affect data integrity.
+          title: "Dropped DCP Mutations on cluster (node: {{ $labels.hostname }})"
+          description: |
+            Dropped DCP mutations found in memcached.log.
+            This can be an indication of a Couchbase Server Issue (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1.
+            This issue can affect data integrity.
           remediation: If you experience data integrity issues, update to a more recent version of Couchbase Server.
