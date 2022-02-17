@@ -560,11 +560,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cluster 0",
-          "value": "Cluster 0"
-        },
+        "current": {},
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -582,15 +578,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "current": {},
         "definition": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
         "hide": 0,
         "includeAll": true,

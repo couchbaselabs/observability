@@ -795,11 +795,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "definition": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
         "hide": 2,
         "includeAll": true,

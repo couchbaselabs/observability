@@ -22,7 +22,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
   "id": 19,
-  "iteration": 1645094012859,
+  "iteration": 1645098202422,
   "links": [
     {
       "asDropdown": false,
@@ -3100,11 +3100,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cluster 1",
-          "value": "Cluster 1"
-        },
+        "current": {},
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -3123,11 +3119,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": false,
-          "text": "13047981baca41a8c8fc436a8b728ef4",
-          "value": "13047981baca41a8c8fc436a8b728ef4"
-        },
+        "current": {},
         "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
         "hide": 2,
         "includeAll": false,
@@ -3140,28 +3132,6 @@
         },
         "refresh": 1,
         "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
-        "skipUrlSync": false,
-        "sort": 0,
-        "type": "query"
-      },
-      {
-        "current": {
-          "selected": false,
-          "text": "node2.local",
-          "value": "node2.local"
-        },
-        "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
-        "hide": 2,
-        "includeAll": false,
-        "multi": false,
-        "name": "node",
-        "options": [],
-        "query": {
-          "query": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
-          "refId": "StandardVariableQuery"
-        },
-        "refresh": 1,
-        "regex": "/[{,]node_name=\"(.+?)(?::[0-9]*)?\"[,}]/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -3188,6 +3158,6 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

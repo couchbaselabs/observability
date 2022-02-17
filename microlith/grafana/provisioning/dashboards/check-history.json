@@ -302,11 +302,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "All",
-          "value": "$__all"
-        },
+        "current": {},
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": true,

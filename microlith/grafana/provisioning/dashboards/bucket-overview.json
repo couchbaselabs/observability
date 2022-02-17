@@ -942,11 +942,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cluster 1",
-          "value": "Cluster 1"
-        },
+        "current": {},
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -964,11 +960,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": false,
-          "text": "13047981baca41a8c8fc436a8b728ef4",
-          "value": "13047981baca41a8c8fc436a8b728ef4"
-        },
+        "current": {},
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "hide": 2,
         "includeAll": false,
@@ -986,11 +978,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": false,
-          "text": "beer-sample",
-          "value": "beer-sample"
-        },
+        "current": {},
         "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
         "hide": 0,
         "includeAll": false,

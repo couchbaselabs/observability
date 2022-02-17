@@ -699,11 +699,7 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Cluster 0",
-          "value": "Cluster 0"
-        },
+        "current": {},
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -722,15 +718,7 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
+        "current": {},
         "definition": "label_values(multimanager_bucket_checker_status,bucket)",
         "hide": 0,
         "includeAll": true,
