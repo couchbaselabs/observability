@@ -113,7 +113,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "avg by (index) (rate(fts_total_request_time{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -200,7 +200,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_queries{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -287,7 +287,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_term_searchers_finished{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -374,7 +374,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_queries_slow{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -461,7 +461,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_bytes_query_results{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -548,7 +548,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_term_searchers{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -635,7 +635,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_queries_error{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -722,7 +722,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_internal_queries{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -809,7 +809,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (index) (rate(fts_total_queries_timeout{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -896,7 +896,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "avg by (index) (fts_avg_queries_latency{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -983,7 +983,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "avg by (index) (fts_avg_internal_queries_latency{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -1070,7 +1070,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "avg by (index) (fts_avg_grpc_queries_latency{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -1258,7 +1258,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_cpu_utilization{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1271,7 +1271,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_size{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1285,7 +1285,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_resident{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1299,7 +1299,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_share{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1313,7 +1313,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1327,7 +1327,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1507,7 +1507,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
@@ -1610,7 +1610,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{instance=~\"$node\",groupname=~\"(cbft).*\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
@@ -1713,7 +1713,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{instance=~\"$node\"}\n  ) by (instance)\n)",
@@ -1815,7 +1815,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"(cbft).*\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"(cbft).*\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2219,7 +2219,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_disk_written_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -2233,7 +2233,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_disk_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -2334,7 +2334,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(cbft).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2349,7 +2349,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(cbft).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2798,7 +2798,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_network_transmit_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2812,7 +2812,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_network_receive_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2913,7 +2913,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(cbft).*\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -3015,7 +3015,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_root_filesegments{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3101,7 +3101,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (rate(fts_total_compaction_written_bytes{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -3187,7 +3187,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_files_on_disk{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3273,7 +3273,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_bytes_used_disk_by_root{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3359,7 +3359,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_bytes_used_disk{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3459,7 +3459,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_doc_count{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3545,7 +3545,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_recs_to_persist{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3631,7 +3631,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (rate(fts_total_bytes_indexed{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -3717,7 +3717,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_pindexes_actual{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3729,7 +3729,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_pindexes_target{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3815,7 +3815,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_mutations_to_index{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -3901,7 +3901,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (fts_num_root_memorysegments{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"})",
@@ -4001,7 +4001,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (rate(fts_total_grpc_internal_queries{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -4087,7 +4087,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (increase(fts_total_grpc_queries_error{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -4173,7 +4173,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (rate(fts_total_grpc_queries_timeout{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -4259,7 +4259,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by (index) (rate(fts_total_grpc_queries_slow{cluster_name=~\"$cluster\",instance=~\"$node\",bucket=~\"$bucket\",index=~\"$fts_index\"}[$__rate_interval]))",
@@ -4315,7 +4315,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(fts_num_pindexes_actual,cluster_name)",
         "hide": 0,
@@ -4346,7 +4346,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(fts_num_pindexes_actual{cluster_name=~\"$cluster\"},bucket)",
         "hide": 0,
@@ -4377,7 +4377,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(fts_num_pindexes_actual{cluster_name=~\"$cluster\",bucket=~\"$bucket\"},index)",
         "hide": 0,
@@ -4408,7 +4408,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(fts_num_pindexes_actual{cluster_name=~\"$cluster\"},instance)",
         "hide": 0,

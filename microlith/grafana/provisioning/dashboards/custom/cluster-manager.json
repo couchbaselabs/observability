@@ -113,7 +113,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (instance) (rate(cm_http_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\",user!~\"-|@\"}[$__rate_interval]))",
@@ -204,7 +204,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "topk(10, sum by (path) (rate(cm_http_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -291,7 +291,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (user) (rate(cm_http_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\",user!~\"-|@\"}[$__rate_interval]))",
@@ -382,7 +382,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "topk(5,sum by (user) (rate(cm_http_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\",user!~\"-|@\"}[$__rate_interval])))",
@@ -469,7 +469,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (method) (rate(cm_http_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -556,7 +556,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (code) (rate(cm_http_requests_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -643,7 +643,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "rate(cm_web_cache_hits_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -730,7 +730,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "rate(cm_web_cache_updates_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -817,7 +817,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "rate(cm_web_cache_inner_hits_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -904,7 +904,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "rate(cm_request_hibernates_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -916,7 +916,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "rate(cm_request_unhibernates_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1104,7 +1104,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_cpu_utilization{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1117,7 +1117,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_size{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1131,7 +1131,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_resident{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1145,7 +1145,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_share{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1159,7 +1159,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1173,7 +1173,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1353,7 +1353,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{cluster_name=~\"$cluster\",instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
@@ -1455,7 +1455,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{instance=~\"$node\",groupname=~\"(ns_server|goport|gosecrets|godu|saslauthd-port|beam-smp|portsigar).*\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
@@ -1558,7 +1558,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{cluster_name=~\"$cluster\",instance=~\"$node\"}\n  ) by (instance)\n)",
@@ -1660,7 +1660,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(ns_server|goport|gosecrets|godu|saslauthd-port|beam-smp|portsigar).*\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(ns_server|goport|gosecrets|godu|saslauthd-port|beam-smp|portsigar).*\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2064,7 +2064,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_disk_written_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -2078,7 +2078,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_disk_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -2179,7 +2179,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(ns_server|goport|gosecrets|godu|saslauthd-port|beam-smp|portsigar).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2195,7 +2195,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(ns_server|goport|gosecrets|godu|saslauthd-port|beam-smp|portsigar).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2643,7 +2643,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_network_receive_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2657,7 +2657,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_network_transmit_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2758,7 +2758,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(ns_server|goport|gosecrets|godu|saslauthd-port|beam-smp|portsigar).*\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2816,7 +2816,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -2918,7 +2918,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3004,7 +3004,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3046,7 +3046,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_status_latency_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3148,7 +3148,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_status_latency_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3234,7 +3234,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_status_latency_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3276,7 +3276,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_timer_lag_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3378,7 +3378,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_timer_lag_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3464,7 +3464,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_timer_lag_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3520,7 +3520,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"goxdcr\"}[$__rate_interval]))",
@@ -3623,7 +3623,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"goxdcr\"}[$__rate_interval]))",
@@ -3710,7 +3710,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"goxdcr\"}[$__rate_interval]))",
@@ -3752,7 +3752,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"indexer\"}[$__rate_interval]))",
@@ -3855,7 +3855,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"indexer\"}[$__rate_interval]))",
@@ -3942,7 +3942,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"indexer\"}[$__rate_interval]))",
@@ -3984,7 +3984,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"eventing\"}[$__rate_interval]))",
@@ -4087,7 +4087,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"eventing\"}[$__rate_interval]))",
@@ -4174,7 +4174,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"eventing\"}[$__rate_interval]))",
@@ -4216,7 +4216,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"prometheus\"}[$__rate_interval]))",
@@ -4319,7 +4319,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"prometheus\"}[$__rate_interval]))",
@@ -4406,7 +4406,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"prometheus\"}[$__rate_interval]))",
@@ -4448,7 +4448,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"fts\"}[$__rate_interval]))",
@@ -4551,7 +4551,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"fts\"}[$__rate_interval]))",
@@ -4638,7 +4638,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_outgoing_http_requests_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"fts\"}[$__rate_interval]))",
@@ -4694,7 +4694,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_memcached_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -4797,7 +4797,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, avg by(bucket, le) (rate(cm_memcached_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4884,7 +4884,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by(bucket, le) (rate(cm_memcached_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4926,7 +4926,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_memcached_q_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -5029,7 +5029,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, avg by(bucket, le) (rate(cm_memcached_q_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -5116,7 +5116,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by(bucket, le) (rate(cm_memcached_q_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -5158,7 +5158,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_memcached_e2e_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -5261,7 +5261,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, avg by(bucket, le) (rate(cm_memcached_e2e_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -5348,7 +5348,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by(bucket, le) (rate(cm_memcached_e2e_call_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])))",
@@ -5404,7 +5404,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"})",
@@ -5507,7 +5507,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"})",
@@ -5594,7 +5594,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"append\",instance=~\"$node\"}[$__rate_interval]))",
@@ -5636,7 +5636,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"})",
@@ -5739,7 +5739,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"})",
@@ -5826,7 +5826,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"prepare_snapshot\",instance=~\"$node\"}[$__rate_interval]))",
@@ -5868,7 +5868,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"})",
@@ -5971,7 +5971,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"})",
@@ -6058,7 +6058,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"sync\",instance=~\"$node\"}[$__rate_interval]))",
@@ -6100,7 +6100,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"})",
@@ -6203,7 +6203,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"})",
@@ -6290,7 +6290,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete\",instance=~\"$node\"})",
@@ -6332,7 +6332,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"})",
@@ -6435,7 +6435,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"})",
@@ -6522,7 +6522,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, cm_chronicle_disk_latency_seconds_bucket{cluster_name=~\"$cluster\",op=\"delete_snapshot\",instance=~\"$node\"})",
@@ -6578,7 +6578,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_mru_cache_lookup_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -6681,7 +6681,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_mru_cache_lookup_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -6768,7 +6768,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_mru_cache_lookup_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -6810,7 +6810,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"item\"}[$__rate_interval]))",
@@ -6913,7 +6913,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"item\"}[$__rate_interval]))",
@@ -7000,7 +7000,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"item\"}[$__rate_interval]))",
@@ -7042,7 +7042,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"})",
@@ -7145,7 +7145,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"})",
@@ -7232,7 +7232,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, cm_mru_cache_lock_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\",type=\"housekeeping\"})",
@@ -7274,7 +7274,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -7377,7 +7377,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -7464,7 +7464,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, cm_mru_cache_add_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -7506,7 +7506,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -7609,7 +7609,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -7696,7 +7696,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_mru_cache_flush_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -7752,7 +7752,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_lease_aquirer_time_inflight_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -7855,7 +7855,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_lease_aquirer_time_inflight_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -7942,7 +7942,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_lease_aquirer_time_inflight_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -7984,7 +7984,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_lease_aquirer_start_time_minus_prev_acquire_estimate_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -8087,7 +8087,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_lease_aquirer_start_time_minus_prev_acquire_estimate_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -8174,7 +8174,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_lease_aquirer_start_time_minus_prev_acquire_estimate_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -8216,7 +8216,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(cm_lease_aquirer_prev_acquire_estimate_minus_start_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -8319,7 +8319,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, rate(cm_lease_aquirer_prev_acquire_estimate_minus_start_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -8406,7 +8406,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, rate(cm_lease_aquirer_prev_acquire_estimate_minus_start_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -8462,7 +8462,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -8565,7 +8565,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -8652,7 +8652,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, cm_ns_config_merger_run_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -8694,7 +8694,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -8797,7 +8797,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.50, cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -8884,7 +8884,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, cm_ns_config_merger_sleep_time_seconds_bucket{cluster_name=~\"$cluster\",instance=~\"$node\"})",

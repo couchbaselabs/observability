@@ -100,7 +100,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "count(count by(targetClusterUUID,sourceBucketName,targetBucketName) ((xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",instance=~\"$node\",pipelineType=\"$pipeline\"})))",
@@ -176,7 +176,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "avg(\n    (xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0 * 100) \n    / \n    (\n      xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}  \n      + \n      xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0\n    )\n)",
@@ -246,7 +246,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",instance=~\"$node\",op=~\"del_meta|get_meta|set_meta\"}[$__rate_interval]))",
@@ -316,7 +316,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",instance=~\"$node\",pipelineType=\"$pipeline\"})",
@@ -392,7 +392,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(irate(xdcr_data_replicated_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval]))",
@@ -582,7 +582,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_cpu_utilization{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -595,7 +595,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_size{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -609,7 +609,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_resident{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -623,7 +623,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_share{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -637,7 +637,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -651,7 +651,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -831,7 +831,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
@@ -934,7 +934,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{instance=~\"$node\",groupname=~\"(memcached|goxdcr).*\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
@@ -1037,7 +1037,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{instance=~\"$node\"}\n  ) by (instance)\n)",
@@ -1139,7 +1139,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"(memcached|goxdcr).*\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"(memcached|goxdcr).*\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -1543,7 +1543,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_disk_read_bytes_total{instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -1557,7 +1557,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_disk_written_bytes_total{instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -1658,7 +1658,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{instance=~\"$node\",groupname=~\"(memcached|goxdcr).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -1673,7 +1673,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{instance=~\"$node\",groupname=~\"(memcached|goxdcr).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2122,7 +2122,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_network_transmit_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2136,7 +2136,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_network_receive_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2236,7 +2236,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{instance=~\"$node\",groupname=~\"(memcached|goxdcr).*\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2364,7 +2364,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    (xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0 * 100) \n    / \n    (\n      xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}  \n      + \n      xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0\n    )\n) by(targetClusterUUID, sourceBucketName, targetBucketName)",
@@ -2472,7 +2472,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    (xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0 * 100) \n    / \n    (\n      xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}  \n      + \n      xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0\n    )\n) by(sourceBucketName)",
@@ -2580,7 +2580,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    (xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0 * 100) \n    / \n    (\n      xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}  \n      + \n      xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"} > 0\n    )\n) by(instance)",
@@ -2672,7 +2672,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID, sourceBucketName, targetBucketName)",
@@ -2764,7 +2764,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID, sourceBucketName, targetBucketName)",
@@ -2856,7 +2856,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_changes_left_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -2948,7 +2948,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_docs_rep_queue_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID, sourceBucketName, targetBucketName)",
@@ -3040,7 +3040,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_docs_rep_queue_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID, sourceBucketName, targetBucketName)",
@@ -3132,7 +3132,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_docs_rep_queue_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -3224,7 +3224,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_datapool_failed_gets_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -3316,7 +3316,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_datapool_failed_gets_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -3408,7 +3408,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_datapool_failed_gets_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -3500,7 +3500,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_num_checkpoints_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -3592,7 +3592,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_num_checkpoints_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -3684,7 +3684,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_num_checkpoints_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -3776,7 +3776,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_num_failedckpts_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -3868,7 +3868,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_num_failedckpts_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -3960,7 +3960,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_num_failedckpts_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -4052,7 +4052,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_size_rep_queue_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -4144,7 +4144,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_size_rep_queue_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (sourceBucketName)",
@@ -4236,7 +4236,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(xdcr_size_rep_queue_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -4345,7 +4345,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=~\"set_meta|get_meta|del_meta|set_ret_meta|del_ret_meta\"}[$__rate_interval])) by (bucket)",
@@ -4441,7 +4441,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=\"set_meta\"}[$__rate_interval])) by (bucket)",
@@ -4537,7 +4537,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=\"del_meta\"}[$__rate_interval])) by (bucket)",
@@ -4633,7 +4633,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=\"get_meta\"}[$__rate_interval])) by (bucket)",
@@ -4729,7 +4729,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=\"set_ret_meta\"}[$__rate_interval])) by (bucket)",
@@ -4825,7 +4825,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=\"del_ret_meta\"}[$__rate_interval])) by (bucket)",
@@ -4921,7 +4921,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$source_bucket\",instance=~\"$node\",op=\"get_meta_for_set_meta\"}[$__rate_interval])) by (bucket)",
@@ -5029,7 +5029,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_data_merged_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -5121,7 +5121,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_data_merged_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -5213,7 +5213,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_data_merged_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -5305,7 +5305,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_data_replicated_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -5397,7 +5397,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_data_replicated_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -5489,7 +5489,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_data_replicated_bytes{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -5595,7 +5595,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_resp_wait_time_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -5687,7 +5687,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_resp_wait_time_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -5779,7 +5779,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_resp_wait_time_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -5871,7 +5871,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_throttle_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -5963,7 +5963,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_throttle_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -6055,7 +6055,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_throttle_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -6147,7 +6147,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_throughput_throttle_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -6239,7 +6239,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_throughput_throttle_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -6331,7 +6331,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_throughput_throttle_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -6423,7 +6423,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_time_committing_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -6515,7 +6515,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_time_committing_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -6607,7 +6607,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_time_committing_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -6699,7 +6699,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_docs_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -6791,7 +6791,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_docs_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (sourceBucketName)",
@@ -6883,7 +6883,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_docs_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -6975,7 +6975,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_get_doc_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -7067,7 +7067,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_get_doc_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (sourceBucketName)",
@@ -7159,7 +7159,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_get_doc_latency_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -7251,7 +7251,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_merge_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -7343,7 +7343,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_merge_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (sourceBucketName)",
@@ -7435,7 +7435,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_merge_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -7527,7 +7527,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_meta_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -7619,7 +7619,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_meta_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (sourceBucketName)",
@@ -7711,7 +7711,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(xdcr_wtavg_meta_latency_seconds {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}) by (instance)",
@@ -7817,7 +7817,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -7909,7 +7909,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -8001,7 +8001,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -8093,7 +8093,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_add_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -8185,7 +8185,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_add_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -8277,7 +8277,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_add_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -8369,7 +8369,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_deletion_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -8461,7 +8461,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_deletion_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -8553,7 +8553,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_deletion_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -8645,7 +8645,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_checked_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -8737,7 +8737,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_checked_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -8829,7 +8829,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_checked_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -8921,7 +8921,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_cloned_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -9013,7 +9013,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_cloned_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -9105,7 +9105,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_cloned_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -9197,7 +9197,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_merged_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -9289,7 +9289,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_merged_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -9381,7 +9381,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_merged_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -9473,7 +9473,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_opt_repd_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -9565,7 +9565,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_opt_repd_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -9657,7 +9657,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_opt_repd_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -9749,7 +9749,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -9841,7 +9841,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_processed_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -9933,7 +9933,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_processed_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -10025,7 +10025,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_stripped_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -10117,7 +10117,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_stripped_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -10209,7 +10209,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_stripped_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -10301,7 +10301,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -10393,7 +10393,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -10485,7 +10485,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -10577,7 +10577,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_target_docs_skipped_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -10669,7 +10669,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_target_docs_skipped_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -10761,7 +10761,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_target_docs_skipped_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -10867,7 +10867,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_deletion_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -10959,7 +10959,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_deletion_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -11051,7 +11051,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_deletion_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -11143,7 +11143,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -11235,7 +11235,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -11327,7 +11327,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -11419,7 +11419,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_unable_to_filter_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -11511,7 +11511,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_unable_to_filter_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -11603,7 +11603,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_unable_to_filter_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -11695,7 +11695,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -11787,7 +11787,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -11879,7 +11879,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_filtered_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -11971,7 +11971,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -12063,7 +12063,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -12155,7 +12155,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_filtered_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -12261,7 +12261,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_docs_merged_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -12353,7 +12353,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_docs_merged_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -12445,7 +12445,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_docs_merged_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -12537,7 +12537,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -12629,7 +12629,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_docs_written_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -12721,7 +12721,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_docs_written_total {cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -12827,7 +12827,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_deletion_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -12919,7 +12919,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_deletion_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -13011,7 +13011,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_deletion_docs_written_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -13103,7 +13103,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_docs_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -13195,7 +13195,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_docs_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -13287,7 +13287,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_docs_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -13379,7 +13379,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_expiry_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -13471,7 +13471,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_expiry_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -13563,7 +13563,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_expiry_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -13655,7 +13655,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_set_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -13747,7 +13747,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_set_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -13839,7 +13839,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_set_failed_cr_source_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -13945,7 +13945,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_dcp_datach_length_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -14037,7 +14037,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_dcp_datach_length_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -14129,7 +14129,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_dcp_datach_length_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -14221,7 +14221,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(irate(xdcr_dcp_dispatch_time_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -14313,7 +14313,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_dcp_dispatch_time_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -14405,7 +14405,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_dcp_dispatch_time_seconds{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -14497,7 +14497,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_deletion_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -14589,7 +14589,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_deletion_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -14681,7 +14681,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(increase(xdcr_deletion_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -14773,7 +14773,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -14865,7 +14865,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -14957,7 +14957,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_docs_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -15049,7 +15049,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -15141,7 +15141,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -15233,7 +15233,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_expiry_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",
@@ -15325,7 +15325,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (targetClusterUUID,sourceBucketName,targetBucketName)",
@@ -15417,7 +15417,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (sourceBucketName)",
@@ -15509,7 +15509,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(irate(xdcr_set_received_from_dcp_total{cluster_name=~\"$cluster\",targetClusterUUID=~\"$remote_cluster_id\",sourceBucketName=~\"$source_bucket\",targetBucketName=~\"$target_bucket\",instance=~\"$node\",pipelineType=\"$pipeline\"}[$__rate_interval])) by (instance)",

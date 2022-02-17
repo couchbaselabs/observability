@@ -324,7 +324,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "index_memory_used{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -339,7 +339,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "index_items_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -353,7 +353,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "index_avg_scan_latency{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -367,7 +367,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "index_resident_percent{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -381,7 +381,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "rate(index_num_requests{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -395,7 +395,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "index_avg_item_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -409,7 +409,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": false,
           "expr": "index_data_size_on_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -628,7 +628,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_items_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -720,7 +720,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_avg_item_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -811,7 +811,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_cache_hits{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -903,7 +903,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_cache_misses{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -995,7 +995,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_memory_used{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1086,7 +1086,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_avg_scan_latency{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1179,7 +1179,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_resident_percent{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1271,7 +1271,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_disk_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1363,7 +1363,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_num_docs_indexed{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -1455,7 +1455,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_num_docs_pending{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1548,7 +1548,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_num_docs_queued{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1641,7 +1641,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_frag_percent{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1733,7 +1733,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_num_requests{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -1825,7 +1825,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_data_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -1917,7 +1917,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_recs_in_mem{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",
@@ -2009,7 +2009,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_total_scan_duration{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -2101,7 +2101,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_num_rows_returned{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -2193,7 +2193,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "rate(index_scan_bytes_read{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}[$__rate_interval])",
@@ -2285,7 +2285,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "index_recs_on_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\",index=~\"($index)( \\\\(replica.*)?\"}",

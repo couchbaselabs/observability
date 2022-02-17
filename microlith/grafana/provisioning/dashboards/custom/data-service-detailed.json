@@ -122,7 +122,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(increase(kv_ep_data_read_failed{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -220,7 +220,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(increase(kv_ep_item_commit_failed{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -317,7 +317,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(increase(kv_ep_data_write_failed{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -414,7 +414,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(increase(kv_ep_tmp_oom_errors{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -510,7 +510,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(increase(kv_ep_oom_errors{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -598,7 +598,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(rate(kv_read_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -685,7 +685,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "kv_curr_connections{cluster_name=~\"$cluster\",instance=~\"$node\"}",
@@ -772,7 +772,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "kv_system_connections{cluster_name=~\"$cluster\",instance=~\"$node\"}",
@@ -859,7 +859,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(rate(kv_written_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -946,7 +946,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "kv_daemon_connections{cluster_name=~\"$cluster\",instance=~\"$node\"}",
@@ -1033,7 +1033,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum(increase(kv_conn_yields{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -1224,7 +1224,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_cpu_utilization{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1237,7 +1237,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_size{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1251,7 +1251,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_resident{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1265,7 +1265,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_share{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -1279,7 +1279,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1293,7 +1293,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1473,7 +1473,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
@@ -1576,7 +1576,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{instance=~\"$node\",groupname=~\"(memcached|projector).*\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
@@ -1679,7 +1679,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{instance=~\"$node\"}\n  ) by (instance)\n)",
@@ -1781,7 +1781,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"(memcached|projector).*\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"(memcached|projector).*\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2185,7 +2185,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_disk_written_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -2199,7 +2199,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_disk_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -2300,7 +2300,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(memcached|projector).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2315,7 +2315,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(memcached|projector).*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2764,7 +2764,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_network_transmit_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2778,7 +2778,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_network_receive_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2879,7 +2879,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"(memcached|projector).*\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2937,7 +2937,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval]))",
@@ -3040,7 +3040,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3053,7 +3053,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3066,7 +3066,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3079,7 +3079,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3092,7 +3092,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3180,7 +3180,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3223,7 +3223,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval]))",
@@ -3326,7 +3326,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3339,7 +3339,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3352,7 +3352,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3365,7 +3365,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3378,7 +3378,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3466,7 +3466,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3509,7 +3509,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\"}[$__rate_interval]))",
@@ -3612,7 +3612,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3625,7 +3625,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3638,7 +3638,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3651,7 +3651,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3664,7 +3664,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3752,7 +3752,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_CLUSTER_CONFIG\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3795,7 +3795,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\"}[$__rate_interval]))",
@@ -3898,7 +3898,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3911,7 +3911,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3924,7 +3924,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3937,7 +3937,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\",instance=~\"$node\"}[$__rate_interval])))",
@@ -3950,7 +3950,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4038,7 +4038,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ALL_VB_SEQNOS\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4081,7 +4081,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\"}[$__rate_interval]))",
@@ -4184,7 +4184,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4197,7 +4197,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4210,7 +4210,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4223,7 +4223,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4236,7 +4236,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4324,7 +4324,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"STAT\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4367,7 +4367,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\"}[$__rate_interval]))",
@@ -4470,7 +4470,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4483,7 +4483,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4496,7 +4496,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4509,7 +4509,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4522,7 +4522,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4610,7 +4610,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SELECT_BUCKET\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4653,7 +4653,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\"}[$__rate_interval]))",
@@ -4756,7 +4756,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4769,7 +4769,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4782,7 +4782,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4795,7 +4795,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4808,7 +4808,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4896,7 +4896,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"COLLECTIONS_GET_MANIFEST\",instance=~\"$node\"}[$__rate_interval])))",
@@ -4939,7 +4939,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\"})",
@@ -5042,7 +5042,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
@@ -5055,7 +5055,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
@@ -5068,7 +5068,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
@@ -5081,7 +5081,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
@@ -5094,7 +5094,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
@@ -5182,7 +5182,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"HELLO\",instance=~\"$node\"}))",
@@ -5225,7 +5225,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\"})",
@@ -5328,7 +5328,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
@@ -5341,7 +5341,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
@@ -5354,7 +5354,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
@@ -5367,7 +5367,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
@@ -5380,7 +5380,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
@@ -5468,7 +5468,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_PARAM\",instance=~\"$node\"}))",
@@ -5511,7 +5511,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\"})",
@@ -5614,7 +5614,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
@@ -5627,7 +5627,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
@@ -5640,7 +5640,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
@@ -5653,7 +5653,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
@@ -5666,7 +5666,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
@@ -5754,7 +5754,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_VBUCKET\",instance=~\"$node\"}))",
@@ -5797,7 +5797,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\"})",
@@ -5900,7 +5900,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
@@ -5913,7 +5913,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
@@ -5926,7 +5926,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
@@ -5939,7 +5939,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
@@ -5952,7 +5952,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
@@ -6040,7 +6040,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"ENABLE_TRAFFIC\",instance=~\"$node\"}))",
@@ -6083,7 +6083,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\"})",
@@ -6186,7 +6186,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
@@ -6199,7 +6199,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
@@ -6212,7 +6212,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
@@ -6225,7 +6225,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
@@ -6238,7 +6238,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
@@ -6326,7 +6326,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET_ERROR_MAP\",instance=~\"$node\"}))",
@@ -6369,7 +6369,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\"})",
@@ -6472,7 +6472,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
@@ -6485,7 +6485,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
@@ -6498,7 +6498,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
@@ -6511,7 +6511,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
@@ -6524,7 +6524,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
@@ -6612,7 +6612,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET_CLUSTER_CONFIG\",instance=~\"$node\"}))",
@@ -6669,7 +6669,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\"}[$__rate_interval]))",
@@ -6772,7 +6772,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
@@ -6785,7 +6785,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
@@ -6798,7 +6798,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
@@ -6811,7 +6811,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
@@ -6824,7 +6824,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
@@ -6912,7 +6912,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"update\",instance=~\"$node\"}[$__rate_interval])))",
@@ -6955,7 +6955,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\"}[$__rate_interval]))",
@@ -7058,7 +7058,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7071,7 +7071,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7084,7 +7084,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7097,7 +7097,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7110,7 +7110,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7198,7 +7198,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"commit\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7241,7 +7241,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\"}[$__rate_interval]))",
@@ -7344,7 +7344,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7357,7 +7357,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7370,7 +7370,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7383,7 +7383,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7396,7 +7396,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7484,7 +7484,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"insert\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7527,7 +7527,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\"}[$__rate_interval]))",
@@ -7630,7 +7630,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7643,7 +7643,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7656,7 +7656,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7669,7 +7669,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7682,7 +7682,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7770,7 +7770,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"del\",instance=~\"$node\"}[$__rate_interval])))",
@@ -7813,7 +7813,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\"})",
@@ -7916,7 +7916,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
@@ -7929,7 +7929,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
@@ -7942,7 +7942,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
@@ -7955,7 +7955,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
@@ -7968,7 +7968,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
@@ -8056,7 +8056,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_disk_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",op=\"vb_del\",instance=~\"$node\"}))",
@@ -8113,7 +8113,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_MUTATION\"}[$__rate_interval]))",
@@ -8216,7 +8216,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
@@ -8229,7 +8229,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
@@ -8242,7 +8242,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
@@ -8255,7 +8255,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
@@ -8268,7 +8268,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
@@ -8356,7 +8356,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_MUTATION\"}[$__rate_interval])))",
@@ -8399,7 +8399,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_NOOP\"}[$__rate_interval]))",
@@ -8502,7 +8502,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
@@ -8515,7 +8515,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
@@ -8528,7 +8528,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
@@ -8541,7 +8541,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
@@ -8554,7 +8554,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
@@ -8642,7 +8642,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_NOOP\"}[$__rate_interval])))",
@@ -8685,7 +8685,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval]))",
@@ -8788,7 +8788,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
@@ -8801,7 +8801,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
@@ -8814,7 +8814,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
@@ -8827,7 +8827,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
@@ -8840,7 +8840,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
@@ -8928,7 +8928,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_SNAPSHOT_MARKER\"}[$__rate_interval])))",
@@ -8971,7 +8971,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval]))",
@@ -9074,7 +9074,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
@@ -9087,7 +9087,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
@@ -9100,7 +9100,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
@@ -9113,7 +9113,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
@@ -9126,7 +9126,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
@@ -9214,7 +9214,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_BUFFER_ACKNOWLEDGEMENT\"}[$__rate_interval])))",
@@ -9257,7 +9257,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_OPEN\"})",
@@ -9360,7 +9360,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
@@ -9373,7 +9373,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
@@ -9386,7 +9386,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
@@ -9399,7 +9399,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
@@ -9412,7 +9412,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
@@ -9500,7 +9500,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_OPEN\"}))",
@@ -9543,7 +9543,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_GET_FAILOVER_LOG\"})",
@@ -9646,7 +9646,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
@@ -9659,7 +9659,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
@@ -9672,7 +9672,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
@@ -9685,7 +9685,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
@@ -9698,7 +9698,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
@@ -9786,7 +9786,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_GET_FAILOVER_LOG\"}))",
@@ -9829,7 +9829,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_STREAM_REQ\"})",
@@ -9932,7 +9932,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
@@ -9945,7 +9945,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
@@ -9958,7 +9958,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
@@ -9971,7 +9971,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
@@ -9984,7 +9984,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
@@ -10072,7 +10072,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_STREAM_REQ\"}))",
@@ -10115,7 +10115,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"DCP_ADD_STREAM\"})",
@@ -10218,7 +10218,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
@@ -10231,7 +10231,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
@@ -10244,7 +10244,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
@@ -10257,7 +10257,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
@@ -10270,7 +10270,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
@@ -10358,7 +10358,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",opcode=\"DCP_ADD_STREAM\"}))",
@@ -10460,7 +10460,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (kv_dcp_backoff{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -10547,7 +10547,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (kv_dcp_backoff{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -10634,7 +10634,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket, connection_type) (kv_dcp_backoff{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -10721,7 +10721,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (kv_dcp_connection_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -10808,7 +10808,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (kv_dcp_connection_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -10895,7 +10895,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket, connection_type) (kv_dcp_connection_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -10982,7 +10982,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (kv_dcp_items_remaining{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"})",
@@ -11069,7 +11069,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (kv_dcp_items_remaining{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"})",
@@ -11156,7 +11156,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket, connection_type) (kv_dcp_items_remaining{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"})",
@@ -11243,7 +11243,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (rate(kv_dcp_items_sent{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -11330,7 +11330,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (rate(kv_dcp_items_sent{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -11417,7 +11417,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (connection_type, bucket) (rate(kv_dcp_items_sent{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -11504,7 +11504,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (kv_dcp_producer_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"})",
@@ -11591,7 +11591,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (kv_dcp_producer_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"})",
@@ -11678,7 +11678,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket, connection_type) (kv_dcp_producer_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"})",
@@ -11765,7 +11765,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (irate(kv_dcp_total_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -11852,7 +11852,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (irate(kv_dcp_total_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -11939,7 +11939,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket, connection_type) (irate(kv_dcp_total_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -12026,7 +12026,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, bucket) (irate(kv_dcp_total_uncompressed_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -12113,7 +12113,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance, connection_type) (irate(kv_dcp_total_uncompressed_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -12200,7 +12200,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket, connection_type) (irate(kv_dcp_total_uncompressed_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\",connection_type=~\".+\"}[$__rate_interval]))",
@@ -12256,7 +12256,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"})",
@@ -12359,7 +12359,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12372,7 +12372,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12385,7 +12385,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12398,7 +12398,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12411,7 +12411,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12499,7 +12499,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12542,7 +12542,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"majority\"})",
@@ -12645,7 +12645,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
@@ -12658,7 +12658,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
@@ -12671,7 +12671,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
@@ -12684,7 +12684,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
@@ -12697,7 +12697,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
@@ -12785,7 +12785,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority\"}))",
@@ -12828,7 +12828,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",level=\"persist_to_majority\"})",
@@ -12931,7 +12931,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12944,7 +12944,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12957,7 +12957,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12970,7 +12970,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -12983,7 +12983,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -13071,7 +13071,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_sync_write_commit_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\",level=\"majority_and_persist_on_master\"}))",
@@ -13128,7 +13128,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -13231,7 +13231,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13244,7 +13244,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13257,7 +13257,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13270,7 +13270,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13283,7 +13283,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13371,7 +13371,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_bg_load_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13414,7 +13414,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sum by(le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
@@ -13517,7 +13517,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.5, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13530,7 +13530,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.9, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13543,7 +13543,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.95, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13556,7 +13556,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13569,7 +13569,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.999, avg by (le) (kv_bg_wait_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",instance=~\"$node\"}))",
@@ -13657,7 +13657,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "histogram_quantile(0.99, avg without (instance) (kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\",instance=~\"$node\"}))",
@@ -13758,7 +13758,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance) (rate(kv_ep_warmup_time_seconds{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
@@ -13844,7 +13844,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket) (rate(kv_ep_warmup_time_seconds{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
@@ -13930,7 +13930,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket) (increase(kv_ep_warmup_dups{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
@@ -14016,7 +14016,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance) (increase(kv_ep_warmup_dups{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
@@ -14102,7 +14102,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (instance) (increase(kv_ep_warmup_oom{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
@@ -14188,7 +14188,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum without (bucket) (increase(kv_ep_warmup_oom{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",

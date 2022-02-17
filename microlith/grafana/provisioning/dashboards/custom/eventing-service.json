@@ -113,7 +113,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by (functionName) (eventing_dcp_backlog{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -200,7 +200,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (rate(eventing_on_update_success{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -287,7 +287,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (rate(eventing_on_delete_success{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -374,7 +374,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (rate(eventing_on_delete_failure{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -461,7 +461,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (rate(eventing_on_update_failure{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -548,7 +548,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (eventing_agg_queue_memory{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -635,7 +635,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (eventing_agg_queue_size{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -722,7 +722,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "SHZqSh-7k"
+            "uid": "$datasource"
           },
           "exemplar": true,
           "expr": "sum by(functionName) (eventing_worker_spawn_counter{cluster_name=~\"$cluster\",instance=~\"$node\"})",
@@ -910,7 +910,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_cpu_utilization{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -923,7 +923,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_size{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -937,7 +937,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_resident{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -951,7 +951,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "sysproc_mem_share{cluster_name=\"$cluster\",instance=~\"$node\"}",
@@ -965,7 +965,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_minor_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -979,7 +979,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": false,
               "expr": "rate(sysproc_major_faults_raw{cluster_name=\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
@@ -1159,7 +1159,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 - (\n avg(\n    rate(\n      node_cpu_seconds_total{instance=~\"$node\",mode=\"idle\"}[$__rate_interval]\n    )\n  ) by (instance)\n  * 100\n)",
@@ -1262,7 +1262,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n    rate(\n      namedprocess_namegroup_cpu_seconds_total{instance=~\"$node\",groupname=~\"eventing.*\",mode=~\"user|system\"}[$__rate_interval]\n    ) \n) by (instance, groupname)",
@@ -1365,7 +1365,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "100 * (\n  1 \n  - \n  (\n    avg(\n      avg_over_time(\n        node_memory_MemFree_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Cached_bytes{instance=~\"$node\"}[$__rate_interval]\n      ) + \n      avg_over_time(\n        node_memory_Buffers_bytes{instance=~\"$node\"}[$__rate_interval]\n      )\n    ) by (instance)\n  )\n  / \n  avg(node_memory_MemTotal_bytes{instance=~\"$node\"}\n  ) by (instance)\n)",
@@ -1467,7 +1467,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"eventing.*\",memtype=\"swapped\"}[$__rate_interval])\n  + \n  ignoring (memtype) avg_over_time(namedprocess_namegroup_memory_bytes{instance=~\"$node\",groupname=~\"eventing.*\",memtype=\"resident\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -1871,7 +1871,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_disk_written_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -1885,7 +1885,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_disk_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])) by (instance)",
@@ -1986,7 +1986,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(namedprocess_namegroup_read_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"eventing.*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2001,7 +2001,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(namedprocess_namegroup_write_bytes_total{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"eventing.*\"}[$__rate_interval])) by (groupname, instance)",
@@ -2450,7 +2450,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum(rate(node_network_transmit_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2464,7 +2464,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "-sum(rate(node_network_receive_bytes_total{instance=~\"$node\"}[$__rate_interval])*8) by (instance)",
@@ -2565,7 +2565,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "avg(\n  max_over_time(namedprocess_namegroup_open_filedesc{cluster_name=~\"$cluster\",instance=~\"$node\",groupname=~\"eventing.*\"}[$__rate_interval])\n) by (groupname, instance)",
@@ -2667,7 +2667,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_timer_callback_success{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -2753,7 +2753,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_timer_cancel_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -2839,7 +2839,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_timer_create_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -2925,7 +2925,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_timer_callback_failure{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3011,7 +3011,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_timer_context_size_exception_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3097,7 +3097,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_timer_create_failure{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3183,7 +3183,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_timer_msg_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3269,7 +3269,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_timer_callback_missing_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3369,7 +3369,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_bucket_op_exception_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3455,7 +3455,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_bkt_ops_cas_mismatch_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3541,7 +3541,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_n1ql_op_exception_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3627,7 +3627,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_timeout_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3713,7 +3713,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (increase(eventing_checkpoint_failure_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3813,7 +3813,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_mutation_sent_to_worker{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3899,7 +3899,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_mutations_msg_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -3985,7 +3985,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_deletion_sent_to_worker{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -4071,7 +4071,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_delete_msg_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -4157,7 +4157,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_expiry_sent_to_worker{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -4243,7 +4243,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_mutation_suppressed_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -4329,7 +4329,7 @@
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "SHZqSh-7k"
+                "uid": "$datasource"
               },
               "exemplar": true,
               "expr": "sum by(functionName) (rate(eventing_dcp_deletion_suppressed_counter{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
@@ -4387,7 +4387,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(eventing_on_update_success,cluster_name)",
         "hide": 0,
@@ -4414,7 +4414,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(eventing_on_update_success{cluster_name=~\"$cluster\"},functionName)",
         "hide": 0,
@@ -4441,7 +4441,7 @@
         },
         "datasource": {
           "type": "prometheus",
-          "uid": "${datasource}"
+          "uid": "$datasource"
         },
         "definition": "label_values(eventing_on_update_success{cluster_name=~\"$cluster\"},instance)",
         "hide": 0,
