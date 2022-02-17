@@ -103,13 +103,13 @@ providers:
 
 Now we have the required plugins and dashboards installed, we need to configure Data Sources.
 
-. **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select "JSON API". 
-  - The URL should point to the Cluster Monitor, which listens on port `:7196`, with a sub-path of `/api/v1`.
+. **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_. 
+  - The URL should point to the Cluster Monitor with a sub-path of `/api/v1`. The port should be `:7196`.
   - Enable `basicAuth`, with the user and password you configured.
 . **Prometheus** - this should already be configured as a Data Source.
 . **Alertmanager** - this should already be configured as a Data Source. 
   However, some of the dashboards query the Alertmanager API and so you will need to add a new Data Source in the same way as you did for the Cluster Monitor.
-  - This should be named _Alertmanager API_, of type _JSON API_, and the URL should point to your Alertmanager instance. 
+  - This should be named _Alertmanager API_, also of type _JSON API_, and the URL should point to your Alertmanager instance. 
   - Configure any authentication as needed.
 
 If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your `grafana.yml` should look something like this:
@@ -159,13 +159,14 @@ scrape_configs:
 <.> `password` should be the password of the above user.
 <.> `targets` should specify the addresses of all the nodes in your cluster.
     The port number needs to be the management port - use `:18091` if you have TLS enabled.
-    There are other ways of configuring it that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
+    There are alternative configuration options that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
 <.> Any labels defined here will be added to **all** metrics from this cluster - you may want to configure e.g., `environment`, `datacenter` etc.
     The label `cluster` is required, and should match the name the cluster is configured to use in the Web Console.
 
-And add another `scrape_config` job for the previously-installed Cluster Monitor:
+Add another `scrape_config` job for the previously-installed Cluster Monitor:
 
 .prometheus.yml
+[source, yaml]
 ----
 ...
 - job_name: couchbase-cluster-monitor
@@ -184,7 +185,8 @@ And add another `scrape_config` job for the previously-installed Cluster Monitor
 <.> `targets` is a list of Cluster Monitor instances for Prometheus to retrieve metrics from. 
   For now this should be a single server IP, listening on port `7196`.
 
-Restart Prometheus, and navigate to the Web UI. If this was successful you should see your cluster listed on the page `/targets`.
+Restart Prometheus, and navigate to the Web UI. 
+If this was successful you should see your cluster listed on the page `/targets`.
 
 === Prometheus: Alerting Rules
 
@@ -212,7 +214,8 @@ rule_files:
 If you have existing alert definitions, simply add the `prometheus-rules.yaml` file to the same directory, and specify `*.yaml` as the target for `rule_files`.
 ====
 
-Restart Prometheus once more, and navigate to the Web UI. You should be able to see the new rules listed on the `/rules` page.
+Restart Prometheus once more, and navigate to the Web UI. 
+You should be able to see the new rules listed on the `/rules` page.
 You may need to unhide inactive rules.
 
 === Alertmanager
