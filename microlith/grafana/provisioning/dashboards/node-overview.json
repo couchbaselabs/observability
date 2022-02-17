@@ -20,10 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 1,
-  "id": 10,
-  "iteration": 1639146266530,
+  "id": 6,
+  "iteration": 1645094095725,
   "links": [
     {
       "asDropdown": false,
@@ -76,7 +75,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -88,7 +86,10 @@
       "type": "row"
     },
     {
-      "datasource": "JSON API",
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "PD5070BC1AA9F8304"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -115,7 +116,6 @@
         "y": 1
       },
       "id": 12,
-      "interval": null,
       "options": {
         "colorMode": "value",
         "graphMode": "none",
@@ -131,7 +131,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -149,14 +149,15 @@
           "urlPath": "/clusters/$cluster_uuid/node/$node_uuid"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Version",
       "transformations": [],
       "type": "stat"
     },
     {
-      "datasource": "JSON API",
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "PD5070BC1AA9F8304"
+      },
       "description": "Click on each service to be taken to its dashboard page.",
       "fieldConfig": {
         "defaults": {
@@ -289,7 +290,7 @@
         "text": {},
         "textMode": "name"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -351,7 +352,10 @@
       "type": "stat"
     },
     {
-      "datasource": "-- Mixed --",
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -451,6 +455,13 @@
       },
       "id": 22,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -459,10 +470,13 @@
           }
         ]
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "exemplar": true,
           "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} >= 0",
           "format": "table",
@@ -473,7 +487,10 @@
         },
         {
           "cacheDurationSeconds": 5,
-          "datasource": "Alertmanager API",
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "PC245499EF542F9C5"
+          },
           "fields": [
             {
               "jsonPath": "$[*].labels.health_check_id",
@@ -529,7 +546,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -541,7 +557,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -626,7 +641,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -708,7 +722,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -793,7 +806,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -872,7 +884,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -882,12 +894,12 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "Cluster 1",
+          "value": "Cluster 1"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -905,15 +917,14 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "13047981baca41a8c8fc436a8b728ef4",
+          "value": "13047981baca41a8c8fc436a8b728ef4"
+        },
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "cluster_uuid",
         "options": [],
@@ -928,12 +939,12 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Node",
@@ -951,15 +962,14 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "c801f8ec7d577aaf10685bd3165c520b",
+          "value": "c801f8ec7d577aaf10685bd3165c520b"
+        },
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "node_uuid",
         "options": [],
@@ -995,5 +1005,6 @@
   "timezone": "",
   "title": "Node Overview",
   "uid": "Dx-2iOc7k",
-  "version": 2
+  "version": 1,
+  "weekStart": ""
 }

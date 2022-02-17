@@ -20,10 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 12,
-  "iteration": 1639146577623,
+  "id": 9,
+  "iteration": 1645094109410,
   "links": [
     {
       "asDropdown": false,
@@ -45,7 +44,10 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": "-- Mixed --",
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -177,6 +179,13 @@
       },
       "id": 43,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -185,10 +194,13 @@
           }
         ]
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
           "exemplar": true,
           "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\",bucket=\"$bucket\"} >= 0",
           "instant": true,
@@ -198,7 +210,10 @@
         },
         {
           "cacheDurationSeconds": 5,
-          "datasource": "Alertmanager API",
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "PC245499EF542F9C5"
+          },
           "fields": [
             {
               "jsonPath": "$[*].labels.health_check_id",
@@ -265,7 +280,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -317,7 +331,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -332,7 +346,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -375,7 +388,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -397,7 +410,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -445,9 +457,16 @@
       },
       "id": 35,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -507,7 +526,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -589,7 +607,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -753,7 +770,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -834,7 +850,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -917,7 +932,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -927,15 +942,14 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "Cluster 1",
+          "value": "Cluster 1"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "cluster",
         "options": [],
@@ -950,15 +964,14 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "13047981baca41a8c8fc436a8b728ef4",
+          "value": "13047981baca41a8c8fc436a8b728ef4"
+        },
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "cluster_uuid",
         "options": [],
@@ -973,15 +986,14 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "beer-sample",
+          "value": "beer-sample"
+        },
         "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "bucket",
         "options": [],
@@ -1017,5 +1029,6 @@
   "timezone": "",
   "title": "Bucket Overview",
   "uid": "H8M3rE5nk",
-  "version": 2
+  "version": 1,
+  "weekStart": ""
 }

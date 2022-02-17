@@ -20,10 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 12,
-  "iteration": 1638784015203,
+  "id": 16,
+  "iteration": 1645094084153,
   "links": [
     {
       "asDropdown": false,
@@ -78,7 +77,6 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -91,7 +89,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -151,7 +148,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -166,7 +163,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -226,7 +222,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -241,7 +237,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -323,7 +318,10 @@
       "type": "timeseries"
     },
     {
-      "datasource": "JSON API",
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "PD5070BC1AA9F8304"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -373,6 +371,13 @@
       },
       "id": 30,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -381,7 +386,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -482,7 +487,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -523,7 +527,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -557,7 +561,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -570,7 +573,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -657,7 +659,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -744,7 +745,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -828,7 +828,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -912,7 +911,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -996,7 +994,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1080,7 +1077,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "gridPos": {
         "h": 2,
         "w": 8,
@@ -1092,12 +1088,11 @@
         "content": "# Number of documents #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": null,
       "gridPos": {
         "h": 2,
         "w": 8,
@@ -1109,12 +1104,11 @@
         "content": "# Dataset size on disk #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": null,
       "gridPos": {
         "h": 2,
         "w": 8,
@@ -1126,12 +1120,11 @@
         "content": "# Dataset size in memory #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "transparent": true,
       "type": "text"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1175,7 +1168,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
@@ -1191,7 +1184,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1233,7 +1225,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
@@ -1249,7 +1241,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1291,7 +1282,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
@@ -1307,7 +1298,6 @@
     },
     {
       "collapsed": true,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1317,7 +1307,6 @@
       "id": 10,
       "panels": [
         {
-          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1356,8 +1345,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "#ccccdbb0",
-                    "value": null
+                    "color": "#ccccdbb0"
                   }
                 ]
               }
@@ -1395,7 +1383,6 @@
           "type": "timeseries"
         },
         {
-          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1434,8 +1421,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1477,7 +1463,6 @@
           "type": "timeseries"
         },
         {
-          "datasource": null,
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1516,8 +1501,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1563,7 +1547,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -1574,12 +1558,12 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "Cluster 1",
+          "value": "Cluster 1"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -1597,7 +1581,6 @@
         "type": "query"
       },
       {
-        "allValue": null,
         "current": {
           "selected": true,
           "text": [
@@ -1607,10 +1590,7 @@
             "$__all"
           ]
         },
-        "datasource": null,
         "definition": "label_values(multimanager_bucket_checker_status,bucket)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Bucket",
@@ -1628,12 +1608,12 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "13047981baca41a8c8fc436a8b728ef4",
+          "value": "13047981baca41a8c8fc436a8b728ef4"
+        },
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": false,
         "label": "",
@@ -1672,5 +1652,6 @@
   "timezone": "",
   "title": "Data Service",
   "uid": "4vnZHfcnk",
-  "version": 10
+  "version": 1,
+  "weekStart": ""
 }

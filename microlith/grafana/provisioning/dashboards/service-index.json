@@ -20,10 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1638372982203,
+  "id": 18,
+  "iteration": 1645094143351,
   "links": [
     {
       "asDropdown": false,
@@ -77,7 +76,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -120,7 +118,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -135,7 +133,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -177,7 +174,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -193,7 +190,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -235,7 +231,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -250,7 +246,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -292,7 +287,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -307,7 +302,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "description": "Indexes that have never been scanned and may be redundant.",
       "fieldConfig": {
         "defaults": {
@@ -374,10 +368,17 @@
       },
       "id": 8,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -418,7 +419,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -500,7 +500,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -577,7 +576,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -617,7 +615,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -632,7 +630,6 @@
       "type": "bargauge"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -672,7 +669,7 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -689,7 +686,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -700,12 +697,12 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": {
+          "selected": false,
+          "text": "Cluster 0",
+          "value": "Cluster 0"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -723,7 +720,6 @@
         "type": "query"
       },
       {
-        "allValue": null,
         "current": {
           "selected": true,
           "text": [
@@ -733,10 +729,7 @@
             "$__all"
           ]
         },
-        "datasource": null,
         "definition": "label_values(multimanager_bucket_checker_status,bucket)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Bucket",
@@ -775,5 +768,6 @@
   "timezone": "",
   "title": "Index Service",
   "uid": "zlHletp7k",
-  "version": 3
+  "version": 1,
+  "weekStart": ""
 }
