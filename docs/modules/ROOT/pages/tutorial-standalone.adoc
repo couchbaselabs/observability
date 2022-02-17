@@ -93,7 +93,7 @@ To take advantage of these, first download the rule definitions:
 
 [source, console]
 ----
-wget -O prometheus-rules https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/prometheus/alerting/couchbase/couchbase-rules.yaml
+wget -O prometheus-rules.yaml https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/prometheus/alerting/couchbase/couchbase-rules.yaml
 ----
 
 Then, modify your Prometheus config to include the path where they will be stored:
