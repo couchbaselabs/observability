@@ -47,3 +47,6 @@ endif::env-packaged[]
 * xref:health-checks.adoc[Health Checks]
 * xref:licensing.adoc[Licensing]
 * xref:support.adoc[Support]
+
+.In progress
+* xref:integrating-with-existing-deployments-collapsed.adoc[Integrating With Existing Deployments 2]
