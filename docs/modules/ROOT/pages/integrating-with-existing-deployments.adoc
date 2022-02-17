@@ -14,7 +14,7 @@ include::partial$tutorial.adoc[]
 == Overview
 In this tutorial we will detail the steps needed to configure existing Prometheus, Alertmanager, and Grafana instances to integrate with Couchbase Monitoring and Observability Stack (CMOS).
 
-Depending on which you already have instances for, you may need to consult our xref:tutorial-standalone.adoc[Standalone Installation tutorial], which has sections on how to install each component.
+Depending on which parts of the stack you are already running, you may need to consult our xref:tutorial-standalone.adoc[Standalone Installation tutorial], which has sections on how to install each component.
 
 Each section within these tutorials designed to be independent, so only follow the configuration steps required.
 
@@ -26,7 +26,7 @@ Once you have completed all of the below steps you may need to restart Prometheu
 
 You will need to modify your existing Prometheus configuration file (typically named `prometheus.yml`).
 
-See our xref:tutorial-standalone.adoc#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server `scrape_config`.
+See our xref:tutorial-standalone.adoc#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server / Cluster Monitor `scrape_config`.
 
 === Install Prometheus Alerting Rules
 
@@ -40,14 +40,14 @@ Follow the instructions in the xref:tutorial-standalone.adoc#_prometheus_alertin
 
 == Cluster Monitor
 
-See xref:tutorial-standalone.adoc#_install_cluster_monitor[Install Cluster Monitor] on how to run the Cluster Monitor and configure it to discover your Prometheus and Alertmanager instances.
+See xref:tutorial-standalone.adoc#_install_cluster_monitor[Install Cluster Monitor] on how to run the Cluster Monitor.
 
 == Grafana
 
 === Install all required Grafana plugins
 
 The linked instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
-If you prefer to use configuration files, or run in a Docker container, you may prefer an alternative install method (see below).
+If you prefer to use configuration files, or run Grafana in a Docker container, you may prefer an alternative install method (see below).
 
 . https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
 
@@ -72,7 +72,7 @@ enabled = true
 path = <desired path>/dashboards
 ----
 
-If you are using https://grafana.com/docs/grafana/latest/administration/provisioning/[provisioning], you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`).
+If you are using https://grafana.com/docs/grafana/latest/administration/provisioning/[Grafana provisioning], you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`).
 For example:
 
 [source, console]
@@ -93,7 +93,7 @@ providers:
 Now we have the required plugins and dashboards installed, we need to configure the required Data Sources:
 
 . **Prometheus** - if you're running Grafana, you likely already have a Prometheus instance configured as a Data Source. 
-If not, the Standalone tutorial has instructions on xref:tutorial-standalone.adoc#_configuring_grafana_datasources[adding a Prometheus Data Source].
+If not, the Standalone tutorial has instructions on xref:tutorial-standalone.adoc#_configuring_grafana_data_sources[adding a Prometheus Data Source].
 . **Cluster Monitor (JSON API)** - click on _Add Data Source_ and select "JSON API". The URL should point to the Cluster Monitor, which listens on port `:7196`, with a sub-path of `/api/v1`. 
 Enable `basicAuth`, with the user and password you configured.
 . **Alertmanager** - this should follow the same steps as JSON API, except the URL will be `protocol://FQDN:9093/alertmanager/api/v2`, and `basicAuth` may not be required. 
@@ -115,7 +115,7 @@ If you are utilizing Grafana provisioning for dashboards, then your `grafana.yml
 ---- 
 
 If this is not the case (i.e., you only configure a `grafana.ini` file), you will need to add these Data Sources using the web UI. 
-Follow the xref:tutorial-standalone.adoc#_configuring_grafana_data_sources[] instructions for a general guide on how to do this.
+Follow the xref:tutorial-standalone.adoc#_configuring_grafana_data_sources[Configuring Grafana Data Sources] instructions for a general guide on how to do this.
 
 == Next Steps
 
