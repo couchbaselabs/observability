@@ -10,6 +10,20 @@ If a node fails to respond, this can indicate that the node is down, its CPU is 
 
 *Remediation*: Check the node's status and resource usage.
 
+[#CB90073]
+=== Dropped DCP Mutations (CB90073)
+
+*Background*: This can be an indication of a Couchbase Server Issue (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1.
+This issue can affect data integrity.
+DCP mutations track any documents made to Couchbase Server and do Documents. 
+If you drop DCP mutations, then changes to documents may be lost.
+
+*Condition*: Dropped DCP mutations found in memcached.log.
+
+*Remediation*: If you experience data integrity issues, update to a more recent version of Couchbase Server.
+
+*Further Reading*: https://issues.couchbase.com/browse/MB-41255[MB-41255]
+
 // end::group-cluster[]
 
 // tag::group-node[]

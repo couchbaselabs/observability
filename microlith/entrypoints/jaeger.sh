@@ -15,7 +15,7 @@
 
 set -ex
 
-JAEGER_URL_SUBPATH=${JAEGER_URL_SUBPATH-/jaeger}
+JAEGER_URL_SUBPATH=${JAEGER_URL_SUBPATH:-/jaeger}
 JAEGER_CONFIG_FILE=${JAEGER_CONFIG_FILE:-/etc/jaeger/config.json}
 SPAN_STORAGE_TYPE=${SPAN_STORAGE_TYPE:-memory}
 
@@ -38,4 +38,5 @@ __EOF__
 
 /go/bin/all-in-one-linux --query.base-path="${JAEGER_URL_SUBPATH}" \
                          --query.ui-config="${JAEGER_CONFIG_FILE}" \
+                         --metrics-http-route="${CMOS_HTTP_PATH_PREFIX:-}/metrics" \
                          --admin.http.host-port ":14269"

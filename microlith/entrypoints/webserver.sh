@@ -14,4 +14,10 @@
 # limitations under the License.
 
 set -ex
+
+# Ensure we set a default value
+export CMOS_HTTP_PATH_PREFIX=${CMOS_HTTP_PATH_PREFIX:-/}
+
+/bin/gomplate -f /etc/nginx/nginx.conf.tmpl -o /etc/nginx/nginx.conf
+
 /docker-entrypoint.sh nginx

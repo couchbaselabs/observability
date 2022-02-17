@@ -13,9 +13,10 @@ So we link to this page, which lives under /grafana, and redirects to /cmos.
 <body>
 You will be redirected to the requested page shortly. If nothing happens, <a id="docsLink">click here</a>.
 <script>
-    const target = window.location.origin + window.location.hash.replace(/^#/, "");
-    document.getElementById("docsLink").setAttribute("href", target);
-    window.location.replace(target);
+    const target = window.location.hash.replace(/^#/, "");
+    const pathPrefix = window.location.href.replace(/\/grafana\/public\/cmos-doc-redirect.html.*$/, "");
+    document.getElementById("docsLink").setAttribute("href", pathPrefix + target);
+    window.location.replace(pathPrefix + target);
 </script>
 </body>
 </html>

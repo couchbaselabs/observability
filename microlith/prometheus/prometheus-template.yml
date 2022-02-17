@@ -34,10 +34,11 @@ alerting:
 
 scrape_configs:
     - job_name: prometheus
-      metrics_path: /prometheus/metrics
+      metrics_path: ${CMOS_HTTP_PATH_PREFIX}/prometheus/metrics
       static_configs:
           - targets: [localhost:9090]
     - job_name: couchbase-grafana
+      metrics_path: ${CMOS_HTTP_PATH_PREFIX}/metrics
       file_sd_configs:
           - files:
                 - couchbase/monitoring/*.json
