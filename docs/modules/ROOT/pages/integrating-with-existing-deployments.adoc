@@ -72,7 +72,7 @@ enabled = true
 path = <desired path>/dashboards
 ----
 
-If you are using provisioning, you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`).
+If you are using https://grafana.com/docs/grafana/latest/administration/provisioning/[provisioning], you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`).
 For example:
 
 [source, console]
