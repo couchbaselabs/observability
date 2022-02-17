@@ -1,53 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": [],
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "bargauge",
-      "name": "Bar gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "8.3.4"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -70,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1645037688290,
+  "id": 54,
+  "iteration": 1645063965415,
   "links": [
     {
       "asDropdown": false,
@@ -168,10 +119,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
@@ -228,10 +176,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(fts_doc_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "format": "time_series",
@@ -289,10 +234,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "sum(fts_num_bytes_used_ram{cluster_name=~\"$cluster\"})",
           "instant": true,
@@ -349,10 +291,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "sum(fts_num_bytes_used_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "instant": true,
@@ -444,10 +383,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})) == 0",
           "format": "table",
@@ -556,10 +492,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval])))",
           "interval": "",
@@ -641,10 +574,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(fts_num_mutations_to_index{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}) by (bucket,index)",
           "interval": "",
@@ -698,10 +628,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "topk(5, sum by (bucket, index) (fts_num_bytes_used_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
@@ -756,10 +683,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "topk(5, avg by (bucket, index) (fts_avg_queries_latency{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "format": "time_series",
@@ -785,7 +709,11 @@
   "templating": {
     "list": [
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
         "definition": "label_values(fts_total_request_time,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -801,11 +729,18 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "definition": "label_values(fts_total_request_time{cluster_name=~\"$cluster\"},bucket)",
         "hide": 0,
         "includeAll": true,
@@ -821,8 +756,7 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       }
     ]
   },

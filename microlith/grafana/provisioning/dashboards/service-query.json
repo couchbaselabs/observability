@@ -1,41 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": [],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "8.3.4"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -58,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1645037455645,
+  "id": 53,
+  "iteration": 1645064734751,
   "links": [
     {
       "asDropdown": false,
@@ -160,10 +123,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(irate(n1ql_warnings{cluster_name=~\"$cluster\"}[$__rate_interval]))",
           "interval": "",
@@ -242,10 +202,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(n1ql_errors{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
@@ -411,10 +368,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "round(sum(increase(n1ql_requests_250ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
@@ -425,10 +379,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "round(sum(increase(n1ql_requests_500ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
@@ -438,10 +389,7 @@
           "refId": "D"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "round(sum(increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\"}[$__range])))",
           "instant": true,
@@ -450,10 +398,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "round(sum(increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
@@ -534,10 +479,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(n1ql_requests{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
@@ -615,10 +557,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "rate(n1ql_request_time{cluster_name=~\"$cluster\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
@@ -642,7 +581,11 @@
   "templating": {
     "list": [
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "Demo Cluster 2",
+          "value": "Demo Cluster 2"
+        },
         "definition": "label_values(n1ql_requests,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -658,8 +601,7 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       }
     ]
   },

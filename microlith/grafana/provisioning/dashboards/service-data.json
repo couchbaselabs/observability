@@ -1,53 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": [],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "8.3.4"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "text",
-      "name": "Text",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -70,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1645035685505,
+  "id": 50,
+  "iteration": 1645064065808,
   "links": [
     {
       "asDropdown": false,
@@ -200,10 +151,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "topk(3, sum by (bucket) (kv_ep_data_read_failed{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
@@ -278,10 +226,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "topk(3, sum by (bucket) (kv_ep_data_write_failed{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
@@ -364,10 +309,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum (irate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval])) by (bucket)",
           "interval": "",
@@ -581,10 +523,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(kv_curr_connections{cluster_name=~\"$cluster\"})",
           "format": "time_series",
@@ -594,10 +533,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(kv_daemon_connections{cluster_name=~\"$cluster\"})",
           "hide": false,
@@ -607,10 +543,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(kv_system_connections{cluster_name=~\"$cluster\"})",
           "hide": false,
@@ -710,10 +643,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "histogram_quantile(\n0.50,\nsum by(le,bucket) (\nrate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval])\n)\n)",
           "hide": false,
@@ -800,10 +730,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval])))",
           "hide": false,
@@ -887,10 +814,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval])))",
           "hide": false,
@@ -974,10 +898,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval])))",
           "hide": false,
@@ -1061,10 +982,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval])))",
           "hide": false,
@@ -1148,10 +1066,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval])))",
           "hide": false,
@@ -1260,10 +1175,7 @@
       "repeatDirection": "v",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "sum by (bucket) (kv_curr_items{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "instant": true,
@@ -1321,10 +1233,7 @@
       "repeatDirection": "v",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": false,
           "expr": "topk(3, sum by (bucket) (couch_docs_actual_disk_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
@@ -1382,10 +1291,7 @@
       "repeatDirection": "v",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "topk(3, sum by (bucket) (kv_collection_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "interval": "",
@@ -1444,8 +1350,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "#ccccdbb0",
-                    "value": null
+                    "color": "#ccccdbb0"
                   }
                 ]
               }
@@ -1472,10 +1377,7 @@
           "pluginVersion": "8.2.7",
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
+              "datasource": null,
               "exemplar": true,
               "expr": "sum (kv_dcp_items_remaining{cluster_name=~\"$cluster\",connection_type!=\"\"}) by (connection_type)",
               "interval": "",
@@ -1525,8 +1427,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1557,10 +1458,7 @@
           },
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
+              "datasource": null,
               "exemplar": true,
               "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster_name=~\"$cluster\",connection_type!=\"\"}[$__rate_interval]))",
               "interval": "",
@@ -1610,8 +1508,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -1641,10 +1538,7 @@
           },
           "targets": [
             {
-              "datasource": {
-                "type": "prometheus",
-                "uid": "${DS_PROMETHEUS}"
-              },
+              "datasource": null,
               "exemplar": true,
               "expr": "sum by (bucket, connection_type) (kv_dcp_backoff{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
               "interval": "",
@@ -1672,7 +1566,12 @@
   "templating": {
     "list": [
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "Demo Cluster 2",
+          "value": "Demo Cluster 2"
+        },
+        "datasource": null,
         "definition": "label_values(kv_curr_items,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -1688,11 +1587,15 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 3,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "datasource": null,
         "definition": "label_values(kv_curr_items,bucket)",
         "hide": 0,
         "includeAll": true,
@@ -1708,11 +1611,16 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
+        "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status{cluster_name=~\"$cluster\"}, cluster_uuid)",
         "hide": 2,
         "includeAll": false,
@@ -1728,8 +1636,7 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       }
     ]
   },
@@ -1753,6 +1660,6 @@
   "timezone": "",
   "title": "Data Service",
   "uid": "4vnZHfcnk",
-  "version": 5,
+  "version": 1,
   "weekStart": ""
 }

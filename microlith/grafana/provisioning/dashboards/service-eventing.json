@@ -1,41 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__elements": [],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "8.3.4"
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "timeseries",
-      "name": "Time series",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -58,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1645036424975,
+  "id": 51,
+  "iteration": 1645064014525,
   "links": [
     {
       "asDropdown": false,
@@ -156,10 +119,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum(group by (functionName) (eventing_agg_queue_size{cluster_name=~\"$cluster\"}))",
           "interval": "",
@@ -216,10 +176,7 @@
       "pluginVersion": "8.3.4",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "round(sum(increase(eventing_on_update_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__range])))",
           "interval": "",
@@ -227,10 +184,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "round(sum(increase(eventing_on_delete_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__range])))",
           "hide": false,
@@ -239,10 +193,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "round(sum(increase(eventing_timeout_count{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__range])))",
           "hide": false,
@@ -334,10 +285,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum by (functionName) (eventing_agg_queue_size{cluster_name=~\"$cluster\",functionName=~\"$func_name\"})",
           "interval": "",
@@ -416,10 +364,7 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "sum by (functionName) (eventing_agg_queue_memory{cluster_name=~\"$cluster\",functionName=~\"$func_name\"})",
           "interval": "",
@@ -497,10 +442,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(eventing_on_update_success{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "interval": "",
@@ -508,10 +450,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(eventing_on_delete_success{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "hide": false,
@@ -590,10 +529,7 @@
       },
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(eventing_on_update_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "interval": "",
@@ -601,10 +537,7 @@
           "refId": "A"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(eventing_on_delete_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "hide": false,
@@ -613,10 +546,7 @@
           "refId": "B"
         },
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
+          "datasource": null,
           "exemplar": true,
           "expr": "irate(eventing_timeout_count{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
@@ -641,7 +571,11 @@
   "templating": {
     "list": [
       {
-        "current": {},
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
         "definition": "label_values(eventing_on_update_success,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -656,11 +590,18 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       },
       {
-        "current": {},
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
         "definition": "label_values(eventing_on_update_success{cluster_name=~\"$cluster\"},functionName)",
         "hide": 0,
         "includeAll": true,
@@ -676,8 +617,7 @@
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
-        "type": "query",
-        "datasource": "${DS_PROMETHEUS}"
+        "type": "query"
       }
     ]
   },
