@@ -35,33 +35,6 @@ First, create a named Docker network to enable the components to resolve each ot
 docker network create cmos
 ----
 
-== Install Cluster Monitor
-
-We plan for the image to be distributed on DockerHub, but currently this is not available. 
-If you have a preview image given to you by Couchbase, use this. 
-
-Run the Docker container, providing Prometheus and Alertmanager URLs to enable auto-discovery and configuration (after we have installed and configured them):
-[source, console]
-----
-docker run -d --rm \
-  -p 7196:7196 \ <.>
-  --network cmos \
-  --prometheus-url http://prometheus:9090 <.>
-  --alertmanager-urls http://prometheus:9093
-  --prometheus-label-selector job=couchbase-server <.>
-  --couchbase-user Administrator
-  --couchbase-password password
-  --name cluster_monitor \
-  <YOUR IMAGE HERE>
-----
-
-<.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
-<.> `prometheus` - the name (resolving to IP) of the Prometheus Docker container, on port `9090` (Prometheus), and port `9093` (Alertmanager).
-<.> `job=couchbase-server` is the label we gave to the Couchbase Server Prometheus `scrape_config`.
-
-Note that, when Prometheus auto-discovery is enabled, the Cluster Monitor will assume all your clusters are in Prometheus and stop monitoring any that are not.
-
-
 == Install Prometheus
 
 First, create a configuration file for Prometheus - by convention this is called `prometheus.yml`.
@@ -360,6 +333,29 @@ docker run -d \
 == (Optional) Install Fluent Bit
 
 https://issues.couchbase.com/browse/CMOS-303
+
+
+== Install Cluster Monitor
+
+We plan for the image to be distributed on DockerHub, but currently this is not available. 
+If you have a preview image given to you by Couchbase, use this. 
+
+Run the Docker container:
+[source, console]
+----
+docker run -d --rm \
+  -p 7196:7196 \ <.>
+  --network cmos \
+  --prometheus-label-selector job=couchbase-server <.>
+  --couchbase-user Administrator
+  --couchbase-password password
+  --name cluster_monitor \
+  <YOUR IMAGE HERE>
+----
+
+<.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
+<.> `job=couchbase-server` is the label we gave to the Couchbase Server Prometheus `scrape_config` earlier.
+
 
 == Install Grafana
 
