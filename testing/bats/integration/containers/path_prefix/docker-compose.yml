@@ -13,7 +13,8 @@ services:
         depends_on:
             - cb1
         environment:
-            CB_SERVER_AUTH_USER: prometheus
-            CB_SERVER_AUTH_PASSWORD: prometheus
+            CB_SERVER_AUTH_USER: Administrator
+            CB_SERVER_AUTH_PASSWORD: password
+            CMOS_HTTP_PATH_PREFIX: /cmos
         volumes:
             - ./cb1.json:/etc/prometheus/couchbase/custom/cb1.json

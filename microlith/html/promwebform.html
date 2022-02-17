@@ -161,12 +161,12 @@
       <div x-show="loading">Loading, please wait&hellip;</div>
       <div x-show="success">
         Cluster successfully added! Go to
-        <a href="/grafana/?orgId=1">Grafana</a> to see its health. Please note
+        <a href="grafana/?orgId=1">Grafana</a> to see its health. Please note
         that it may take up to 60 seconds for all data to be available.
       </div>
       <div x-show="error.length > 0" x-text="error" style="color: red; font-weight: bold;"></div>
     </div>
-    <script defer src="/alpine-3.4.2.min.js"></script>
+    <script defer src="alpine-3.4.2.min.js"></script>
     <script>
       document.addEventListener("alpine:init", function () {
         Alpine.data("generator", function () {
@@ -253,6 +253,7 @@
             },
 
             async configure() {
+              const pathPrefix = window.location.href.replace("/promwebform.html", "");
               this.error = "";
               this.success = false;
               if (!this.validate()) {
@@ -261,7 +262,7 @@
               this.loading = true;
               try {
                 if (this.doProm) {
-                  await fetch("/config/api/v1/clusters/add", {
+                  await fetch(`${pathPrefix}/config/api/v1/clusters/add`, {
                     method: "post",
                     headers: {
                       "Content-Type": "application/json",
@@ -297,7 +298,7 @@
                 }
 
                 if (this.doCBMM) {
-                  await fetch("/couchbase/api/v1/clusters", {
+                  await fetch(`${pathPrefix}/couchbase/api/v1/clusters`, {
                     method: "post",
                     headers: {
                       "Content-Type": "application/json",
@@ -347,7 +348,7 @@
                     );
                 }
 
-                await fetch("/prometheus/-/reload", { method: "post" })
+                await fetch(`${pathPrefix}/prometheus/-/reload`, { method: "post" })
                   .then((resp) => {
                     if (resp.status !== 200) {
                       return Promise.reject(
