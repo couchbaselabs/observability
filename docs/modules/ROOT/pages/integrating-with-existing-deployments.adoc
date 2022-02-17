@@ -101,7 +101,7 @@ Enable `basicAuth`, with the user and password you configured.
 If you are utilizing Grafana provisioning for dashboards, then your `grafana.yml` may look something like this:
 [source, console]  
 ----
-      ...
+...
    - name: JSON API
       type: marcusolsson-json-datasource
       url: http://localhost:7196/api/v1
@@ -111,7 +111,7 @@ If you are utilizing Grafana provisioning for dashboards, then your `grafana.yml
     - name: Alertmanager API
       type: marcusolsson-json-datasource
       url: http://localhost:9093/alertmanager/api/v2
-      ...
+...
 ---- 
 
 If this is not the case (i.e., you only configure a `grafana.ini` file), you will need to add these Data Sources using the web UI. 

@@ -83,7 +83,7 @@ If you want to persist your data across restarts, you can also mount the default
 ----
 docker run -d \
   -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
-  -v /tmp/prometheus/data:/prometheus \ # Remove this if you do not want to persist the data.
+  -v /tmp/prometheus/data:/prometheus \ # Persist data across restarts.
   -p 9090:9090 \
   --network cmos \
   --name prometheus \
@@ -122,7 +122,7 @@ docker rm -f prometheus
 docker run -d \
   -v $(pwd)/prometheus.yml:/etc/prometheus/prometheus.yml \
   -v $(pwd)/prometheus-rules.yaml:/etc/prometheus/alerting/couchbase-rules.yaml \
-  -v /tmp/prometheus/data:/prometheus \ # Remove this if you do not want to persist the data.
+  -v /tmp/prometheus/data:/prometheus \ # Persist data across restarts.
   -p 9090:9090 \
   --network cmos \
   --name prometheus \
@@ -140,6 +140,7 @@ Just like Prometheus, Alertmanager is configured using a YAML file, which by con
 
 Alertmanager can send alerts to a number of destinations, including Slack, email, PagerDuty and others, as well as custom webhooks for receivers it does not natively support.
 In this tutorial we will create a "no-op" receiver, however you will likely want to configure it to dispatch alerts to where your team usually receives them.
+
 Refer to the https://prometheus.io/docs/alerting/latest/configuration/#receiver[Alertmanager documentation^] for details on configuring this.
 
 .alertmanager.yml
@@ -173,7 +174,7 @@ Then, run an Alertmanager container:
 ----
 docker run -d \
   -v $(pwd)/alertmanager/alertmanager.yml:/etc/prometheus/alertmanager/alertmanager.yml \
-  -v /tmp/alertmanager/data:/alertmanager \ # Remove this if you do not want to persist the data.
+  -v /tmp/alertmanager/data:/alertmanager \ # Persist data across restarts.
   -p 9093:9093 \
   --network cmos \
   --name alertmanager \
@@ -269,7 +270,7 @@ Once you have prepared your configuration, run Loki:
 ----
 docker run -d \
   -v $(pwd)/loki.yaml:/etc/loki/local-config.yml \
-  -v /tmp/loki:/tmp/loki \ # Remove this if you do not want to persist the data.
+  -v /tmp/loki:/tmp/loki \ # Persist data across restarts.
   -p 3100:3100 \
   --network cmos \
   --name loki \
@@ -323,7 +324,7 @@ docker rm -f loki
 docker run -d \
   -v $(pwd)/loki.yaml:/etc/loki/local-config.yml \
   -v $(pwd)/loki-rules.yml:/etc/loki/rules/fake/couchbase-rules.yml \
-  -v /tmp/loki:/tmp/loki \ # Remove this if you do not want to persist the data.
+  -v /tmp/loki:/tmp/loki \ # Persist data across restarts.
   -p 3100:3100 \
   --network cmos \
   --name loki \
@@ -358,6 +359,8 @@ docker run -d --rm \
 
 
 == Install Grafana
+
+# This is missing downloading the default dashboards and installing them.
 
 Unlike the other components, Grafana can be configured entirely through a web interface, and thus we do not need to prepare any configuration beforehand.
 Simply run the Docker image:
