@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 25,
-  "iteration": 1645048792899,
+  "id": 59,
+  "iteration": 1645066393018,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -247,9 +247,10 @@
             "uid": "$datasource"
           },
           "exemplar": true,
-          "expr": "avg(rate(n1ql_result_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
+          "expr": "avg(rate(n1ql_result_size{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]))",
           "format": "time_series",
           "hide": false,
+          "instant": false,
           "interval": "",
           "intervalFactor": 1,
           "legendFormat": "Response Size",
@@ -3773,7 +3774,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   }
                 ]
               },
@@ -3785,7 +3787,7 @@
             "h": 8,
             "w": 4,
             "x": 0,
-            "y": 18
+            "y": 32
           },
           "id": 27,
           "options": {
@@ -3848,7 +3850,7 @@
             "h": 8,
             "w": 4,
             "x": 4,
-            "y": 18
+            "y": 32
           },
           "id": 29,
           "options": {
@@ -3926,7 +3928,7 @@
             "h": 8,
             "w": 4,
             "x": 8,
-            "y": 18
+            "y": 32
           },
           "id": 31,
           "options": {
@@ -3994,7 +3996,7 @@
             "h": 8,
             "w": 4,
             "x": 12,
-            "y": 18
+            "y": 32
           },
           "id": 33,
           "options": {
@@ -4061,7 +4063,7 @@
             "h": 8,
             "w": 4,
             "x": 16,
-            "y": 18
+            "y": 32
           },
           "id": 35,
           "options": {
@@ -4129,7 +4131,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 18
+            "y": 32
           },
           "id": 37,
           "options": {
@@ -4197,7 +4199,7 @@
             "h": 8,
             "w": 4,
             "x": 0,
-            "y": 26
+            "y": 40
           },
           "id": 39,
           "options": {
@@ -4313,7 +4315,7 @@
             "h": 8,
             "w": 4,
             "x": 4,
-            "y": 26
+            "y": 40
           },
           "id": 41,
           "options": {
@@ -4381,7 +4383,7 @@
             "h": 8,
             "w": 4,
             "x": 8,
-            "y": 26
+            "y": 40
           },
           "id": 43,
           "options": {
@@ -4449,7 +4451,7 @@
             "h": 8,
             "w": 4,
             "x": 12,
-            "y": 26
+            "y": 40
           },
           "id": 45,
           "options": {
@@ -4527,7 +4529,7 @@
             "h": 8,
             "w": 4,
             "x": 16,
-            "y": 26
+            "y": 40
           },
           "id": 47,
           "options": {
@@ -4595,7 +4597,7 @@
             "h": 8,
             "w": 4,
             "x": 20,
-            "y": 26
+            "y": 40
           },
           "id": 49,
           "options": {
@@ -5573,8 +5575,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -5670,8 +5671,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -5767,8 +5767,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -5864,8 +5863,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -5961,8 +5959,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -6057,8 +6054,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -6153,8 +6149,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -6249,8 +6244,7 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green",
-                    "value": null
+                    "color": "green"
                   },
                   {
                     "color": "red",
@@ -7048,7 +7042,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7064,7 +7059,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 22
+            "y": 36
           },
           "id": 21,
           "links": [],
@@ -7144,7 +7139,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7160,7 +7156,7 @@
             "h": 5,
             "w": 8,
             "x": 8,
-            "y": 22
+            "y": 36
           },
           "id": 114,
           "links": [],
@@ -7182,7 +7178,7 @@
                 "uid": "$datasource"
               },
               "exemplar": true,
-              "expr": "rate(n1ql_result_count{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
+              "expr": "rate(n1ql_result_size{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\",instance=~\"$node\"}[$__rate_interval])",
               "format": "time_series",
               "hide": false,
               "interval": "",
@@ -7240,7 +7236,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7256,7 +7253,7 @@
             "h": 5,
             "w": 8,
             "x": 16,
-            "y": 22
+            "y": 36
           },
           "id": 134,
           "links": [],
@@ -7336,7 +7333,8 @@
                 "mode": "absolute",
                 "steps": [
                   {
-                    "color": "green"
+                    "color": "green",
+                    "value": null
                   },
                   {
                     "color": "red",
@@ -7352,7 +7350,7 @@
             "h": 5,
             "w": 8,
             "x": 0,
-            "y": 27
+            "y": 41
           },
           "id": 109,
           "links": [],
@@ -7898,6 +7896,6 @@
   "timezone": "",
   "title": "Couchbase Query Service",
   "uid": "2FWOC_EZk",
-  "version": 16,
+  "version": 2,
   "weekStart": ""
 }
