@@ -40,7 +40,7 @@ Follow the instructions in the xref:tutorial-standalone.adoc#_prometheus_alertin
 
 == Cluster Monitor
 
-See xref:tutorial-standalone.adoc#_install_cluster_monitor[] on how to run the Cluster Monitor and configure it to discover your Prometheus and Alertmanager instances.
+See xref:tutorial-standalone.adoc#_install_cluster_monitor[Install Cluster Monitor] on how to run the Cluster Monitor and configure it to discover your Prometheus and Alertmanager instances.
 
 == Grafana
 
@@ -98,7 +98,7 @@ If not, the Standalone tutorial has instructions on xref:tutorial-standalone.ado
 Enable `basicAuth`, with the user and password you configured.
 . **Alertmanager** - this should follow the same steps as JSON API, except the URL will be `protocol://FQDN:9093/alertmanager/api/v2`, and `basicAuth` may not be required. 
 
-If you are utilising Grafana provisioning for dashboards, then your `grafana.yml` may look something like this:
+If you are utilizing Grafana provisioning for dashboards, then your `grafana.yml` may look something like this:
 [source, console]  
 ----
       ...
