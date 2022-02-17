@@ -24,7 +24,7 @@ Once you have completed all of the below steps you may need to restart Prometheu
 
 === Configuring the Scrape config for your Couchbase cluster
 
-You will need to modify your existing Prometheus configuration file - this is typically named `prometheus.yml`.
+You will need to modify your existing Prometheus configuration file (typically named `prometheus.yml`).
 
 See our xref:tutorial-standalone.adoc#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server `scrape_config`.
 
@@ -40,7 +40,7 @@ Follow the instructions in the xref:tutorial-standalone.adoc#_prometheus_alertin
 
 == Cluster Monitor
 
-See xref:tutorial-standalone.adoc#_install_cluster_monitor on how to run the Cluster Monitor and configure it to discover your Prometheus and Alertmanager instances.
+See xref:tutorial-standalone.adoc#_install_cluster_monitor[] on how to run the Cluster Monitor and configure it to discover your Prometheus and Alertmanager instances.
 
 == Grafana
 
@@ -54,23 +54,38 @@ If you prefer to use configuration files, or run in a Docker container, you may 
 ==== Alternative install methods
 If you:
 
-- Provision Grafana v7.1+ through the use of configuration files, you can https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your configuration file]. 
-- Are running Grafana in a Docker container, you can simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage (linked under "installation instructions" for each). 
+- Configure Grafana (v7.1+) dashboards through the use of provisioning files: https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your provisioning configuration file]. 
+- Are running Grafana in a Docker container: simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage (linked under "installation instructions" for each). 
 
 === Download and install CMOS dashboards
 
 The dashboards can be found in the official GitHub repository under https://github.com/couchbaselabs/observability/tree/main/microlith/grafana/provisioning/dashboards[microlith/grafana/provisioning/dashboards]/.
 
-Download them and copy them to a folder accessible by your Grafana installation. You will need to update the `path` argument in your Grafana configuration file - this is typically named `grafana.yml`.
+Download them and copy them to a folder accessible by your Grafana installation. 
+
+The relevant setting in the Grafana configuration file, typically named `grafana.ini`, is:
+
+[source, console]
+----
+[dashboards.json]
+enabled = true
+path = <desired path>/dashboards
+----
+
+If you are using provisioning, you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`).
 For example:
 
 [source, console]
 ----
-options:
-      ...
-      # <string, required> path to dashboard files on disk. Required when using the 'file' type
-      path: /etc/grafana/provisioning/dashboards/
-      ...
+providers:
+  ...
+  options:
+    ...
+    # <string, required> path to dashboard files on disk. Required when using the 'file' type
+    path: /etc/grafana/provisioning/dashboards/
+    ...
+  ...
+...
 ----
 
 === Configure Grafana Data Sources
@@ -83,7 +98,7 @@ If not, the Standalone tutorial has instructions on xref:tutorial-standalone.ado
 Enable `basicAuth`, with the user and password you configured.
 . **Alertmanager** - this should follow the same steps as JSON API, except the URL will be `protocol://FQDN:9093/alertmanager/api/v2`, and `basicAuth` may not be required. 
 
-If you are provisioning Grafana as-code, then your `grafana.ini` may look something like this:
+If you are utilising Grafana provisioning for dashboards, then your `grafana.yml` may look something like this:
 [source, console]  
 ----
       ...
@@ -98,6 +113,9 @@ If you are provisioning Grafana as-code, then your `grafana.ini` may look someth
       url: http://localhost:9093/alertmanager/api/v2
       ...
 ---- 
+
+If this is not the case (i.e., you only configure a `grafana.ini` file), you will need to add these Data Sources using the web UI. 
+Follow the xref:tutorial-standalone.adoc#_configuring_grafana_data_sources[] instructions for a general guide on how to do this.
 
 == Next Steps
 
