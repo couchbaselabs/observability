@@ -27,17 +27,11 @@ The environment you wish to integrate CMOS into must have:
 
 === Install Cluster Monitor
 
-The Cluster Monitor can be installed as a binary (`.rpm`), or by downloading a Docker image.
-
-**Binary installation**
-
-_Binary installation steps.... .rpm just install using package manager?..._
-
-**Docker installation**
+The Cluster Monitor can be installed by downloading a Docker image.
 
 [NOTE]
 ====
-We plan for the image to be distributed on DockerHub, but currently this is not available. 
+We plan for the image to be distributed on Docker Hub, but currently this is not available. 
 ====
 
 Run the Docker container, using the preview image given to you by Couchbase:
@@ -46,7 +40,6 @@ Run the Docker container, using the preview image given to you by Couchbase:
 docker run -d --rm \
   -p 7196:7196 \ <.>
   --network cmos \
-  --prometheus-label-selector job=couchbase-server <.>
   --couchbase-user Administrator
   --couchbase-password password
   --name cluster_monitor \
@@ -56,8 +49,6 @@ docker run -d --rm \
 ALSO ADD ALERTMANAGER URLS to configure cluster monitor to send to it
 
 <.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
-<.> `job=couchbase-server` is a label we will create later in this tutorial when configuring Prometheus' `scrape_config` to scrape our Couchbase Server nodes.
-
 === Configure Cluster Monitor
 
 Navigate to the Web GUI, which listens by default on:
@@ -69,13 +60,8 @@ Repeat this for every cluster you wish to add to the Cluster Monitor.
 
 === Install the Agent on your Couchbase Server nodes
 
-[WARNING]
-====
-This agent is experimental. Please read the https://github.com/markspolakovs/yacpe/blob/master/README.md[documentation], specifically its disclaimer, before installation.
-====
-
 See https://issues.couchbase.com/browse/CMOS-210[CMOS-210], which tracks the development (including documentation) of the Agent.
-As there is currently no documentation on the planned deployment, this section cannot be written yet.
+Until this is ready, follow the instructions given to you by your Couchbase representative.
 
 == Configuration
 
