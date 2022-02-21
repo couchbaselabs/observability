@@ -37,6 +37,9 @@ We plan for the image to be distributed on Docker Hub, but currently this is not
 Run the Docker container, using the preview image given to you by Couchbase:
 [source, console]
 ----
+export CLUSTER_MONITOR_USER=admin
+export CLUSTER_MONITOR_PWD=password
+
 docker run -d --rm \
   -p 7196:7196 \ <.>
   --network cmos \
@@ -232,7 +235,7 @@ We assume that you have already configured Prometheus to send alerts to Alertman
 
 Therefore, there is no additional configuration required.
 
-== Lets go
+== Next Steps
 
 Head on over to your Grafana Web UI. 
 Navigate to _Dashboards_, and select _Single Cluster Overview._
