@@ -135,7 +135,7 @@ If you are utilizing Grafana provisioning for dashboards, and would instead like
       url: http://<Alertmanager URL>/api/v2
       // Configure basicAuth as needed.
 ...
----- 
+----
 
 === Prometheus: Scrape config
 
