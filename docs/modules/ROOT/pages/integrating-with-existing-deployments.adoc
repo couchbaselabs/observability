@@ -37,15 +37,11 @@ We plan for the image to be distributed on Docker Hub, but currently this is not
 Run the Docker container, using the preview image given to you by Couchbase:
 [source, console]
 ----
-export CB_MULTI_ADMIN_USER=admin
-export CB_MULTI_ADMIN_PASSWORD=password
-
 docker run -d --rm \
   -p 7196:7196 \ <.>
   --network cmos \
-  --couchbase-user Administrator \
-  --couchbase-password password \
-  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \
+  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \ <.> This is not necessary if you are not using Alertmanager
+  -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password
   --name cluster_monitor \
   <YOUR IMAGE HERE>
 ----
