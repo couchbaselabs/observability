@@ -18,11 +18,22 @@ The environment you wish to integrate CMOS into must have:
 . At least one **Couchbase Server** node;
 . **Prometheus**, with **Alertmanager** installed;
 . **Grafana**, configured to use the Prometheus server as a Data Source;
-. **Docker**, to run the Cluster Monitor.
+
+==== Optional ====
+
+- **Docker**, if using the Cluster Monitor's Docker image instead of the binary.
 
 == Installation
 
 === Install Cluster Monitor
+
+The Cluster Monitor can be installed as a binary (`.rpm`), or by downloading a Docker image.
+
+**Binary installation**
+
+_Binary installation steps.... .rpm just install using package manager?..._
+
+**Docker installation**
 
 [NOTE]
 ====
@@ -42,8 +53,19 @@ docker run -d --rm \
   <YOUR IMAGE HERE>
 ----
 
+ALSO ADD ALERTMANAGER URLS to configure cluster monitor to send to it
+
 <.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
 <.> `job=couchbase-server` is a label we will create later in this tutorial when configuring Prometheus' `scrape_config` to scrape our Couchbase Server nodes.
+
+=== Configure Cluster Monitor
+
+Navigate to the Web GUI, which listens by default on:
+- HTTP: 7196
+- HTTPS: 7197
+
+Then click "Add Cluster" and enter the IP address of a node in the cluster, along with the cluster's configured username and password.
+Repeat this for every cluster you wish to add to the Cluster Monitor.
 
 === Install the Agent on your Couchbase Server nodes
 
