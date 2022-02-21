@@ -54,9 +54,7 @@ ALSO ADD ALERTMANAGER URLS to configure cluster monitor to send to it
 <.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
 === Configure Cluster Monitor
 
-Navigate to the Web GUI, which listens by default on:
-- HTTP: 7196
-- HTTPS: 7197
+Navigate to the Web GUI, which listens by default on port `7196`.
 
 Then click "Add Cluster" and enter the IP address of a node in the cluster, along with the cluster's configured username and password.
 Repeat this for every cluster you wish to add to the Cluster Monitor.
