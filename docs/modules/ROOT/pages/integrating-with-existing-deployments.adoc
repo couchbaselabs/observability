@@ -18,10 +18,7 @@ The environment you wish to integrate CMOS into must have:
 . At least one **Couchbase Server** node;
 . **Prometheus**, with **Alertmanager** installed;
 . **Grafana**, configured to use the Prometheus server as a Data Source;
-
-==== Optional ====
-
-- **Docker**, if using the Cluster Monitor's Docker image instead of the binary.
+- **Docker**, to run the Cluster Monitor's Docker image
 
 == Installation
 
@@ -41,7 +38,7 @@ docker run -d --rm \
   -p 7196:7196 \ <.>
   --network cmos \
   -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \ <.> This is not necessary if you are not using Alertmanager
-  -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password
+  -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password \
   --name cluster_monitor \
   <YOUR IMAGE HERE>
 ----
@@ -174,12 +171,12 @@ Add another `scrape_config` job for the previously-installed Cluster Monitor:
 ----
 ...
 - job_name: couchbase-cluster-monitor
-      basic_auth:
-        username: admin  <.>
-        password: password <.>
-      metrics_path: /api/v1/_prometheus <.>
-      static_configs:
-          - targets: [<Cluster Monitor IP>:7196] <.>
+  basic_auth:
+    username: admin  <.>
+    password: password <.>
+  metrics_path: /api/v1/_prometheus <.>
+  static_configs:
+    - targets: [<Cluster Monitor IP>:7196] <.>
 ...
 ----
 
