@@ -1,4 +1,4 @@
-= Integrating CMOS with an existing monitoring pipeline
+= Integrating CMOS with Existing Monitoring Stacks
 :icons: font
 :imagesdir: ../assets/images
 ifdef::env-github[]
@@ -11,56 +11,80 @@ This tutorial documents how to configure each component in order to achieve this
 
 include::partial$tutorial.adoc[]
 
-== Overview
-In this tutorial we will detail the steps needed to configure existing Prometheus, Alertmanager, and Grafana instances to integrate with Couchbase Monitoring and Observability Stack (CMOS).
+== Pre-requisites
 
-Depending on which parts of the stack you are already running, you may need to consult our xref:tutorial-standalone.adoc[Standalone Installation tutorial], which has sections on how to install each component.
+The environment you wish to integrate CMOS into must have:
 
-Each section within these tutorials designed to be independent, so only follow the configuration steps required.
+. At least one **Couchbase Server** node;
+. **Prometheus**, with **Alertmanager** installed;
+. **Grafana**, configured to use the Prometheus server as a Data Source;
 
-== Prometheus
+==== Optional ====
 
-Once you have completed all of the below steps you may need to restart Prometheus to apply the configuration changes.
+- **Docker**, if using the Cluster Monitor's Docker image instead of the binary.
 
-=== Configuring the Scrape config for your Couchbase cluster
+== Installation
 
-You will need to modify your existing Prometheus configuration file (typically named `prometheus.yml`).
+=== Install Cluster Monitor
 
-See our xref:tutorial-standalone.adoc#_install_prometheus[Install Prometheus] documentation for an example of what this file should look like with an appropriate Couchbase Server / Cluster Monitor `scrape_config`.
+The Cluster Monitor can be installed by downloading a Docker image.
 
-=== Install Prometheus Alerting Rules
+[NOTE]
+====
+We plan for the image to be distributed on Docker Hub, but currently this is not available. 
+====
 
-Follow the Standalone tutorial instructions on xref:tutorial-standalone.adoc#_prometheus_alerting_rules[Installing Prometheus Alerting rules].
+Run the Docker container, using the preview image given to you by Couchbase:
+[source, console]
+----
+export CLUSTER_MONITOR_USER=admin
+export CLUSTER_MONITOR_PWD=password
 
-== Alertmanager
+docker run -d --rm \
+  -p 7196:7196 \ <.>
+  --network cmos \
+  --couchbase-user Administrator
+  --couchbase-password password
+  --name cluster_monitor \
+  <YOUR IMAGE HERE>
+----
 
-=== Downloading and installing Alert templates
+ALSO ADD ALERTMANAGER URLS to configure cluster monitor to send to it
 
-Follow the instructions in the xref:tutorial-standalone.adoc#_prometheus_alerting_rules[Standalone example guide].
+<.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
+=== Configure Cluster Monitor
 
-== Cluster Monitor
+Navigate to the Web GUI, which listens by default on:
+- HTTP: 7196
+- HTTPS: 7197
 
-See xref:tutorial-standalone.adoc#_install_cluster_monitor[Install Cluster Monitor] on how to run the Cluster Monitor.
+Then click "Add Cluster" and enter the IP address of a node in the cluster, along with the cluster's configured username and password.
+Repeat this for every cluster you wish to add to the Cluster Monitor.
 
-== Grafana
+=== Install the Agent on your Couchbase Server nodes
 
-=== Install all required Grafana plugins
+See https://issues.couchbase.com/browse/CMOS-210[CMOS-210], which tracks the development (including documentation) of the Agent.
+Until this is ready, follow the instructions given to you by your Couchbase representative.
 
-The linked instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
-If you prefer to use configuration files, or run Grafana in a Docker container, you may prefer an alternative install method (see below).
+== Configuration
 
-. https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].
+=== Grafana: Plugins
 
-==== Alternative install methods
-If you:
+[NOTE]
+====
+The instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
+====
+
+**Currently, we require only https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].**
+
+However, if you:
 
 - Configure Grafana (v7.1+) dashboards through the use of provisioning files: https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your provisioning configuration file]. 
 - Are running Grafana in a Docker container: simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage (linked under "installation instructions" for each). 
 
-=== Download and install CMOS dashboards
+=== Grafana: Dashboards
 
-The dashboards can be found in the official GitHub repository under https://github.com/couchbaselabs/observability/tree/main/microlith/grafana/provisioning/dashboards[microlith/grafana/provisioning/dashboards]/.
-
+The CMOS dashboards can be found in the official GitHub repository under https://github.com/couchbaselabs/observability/tree/main/microlith/grafana/provisioning/dashboards[microlith/grafana/provisioning/dashboards]/.
 Download them and copy them to a folder accessible by your Grafana installation. 
 
 The relevant setting in the Grafana configuration file, typically named `grafana.ini`, is:
@@ -72,52 +96,146 @@ enabled = true
 path = <desired path>/dashboards
 ----
 
-If you are using https://grafana.com/docs/grafana/latest/administration/provisioning/[Grafana provisioning], you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`).
+If you are using https://grafana.com/docs/grafana/latest/administration/provisioning/[Grafana provisioning], you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`) instead.
 For example:
 
 [source, console]
 ----
 providers:
-  ...
-  options:
-    ...
-    # <string, required> path to dashboard files on disk. Required when using the 'file' type
-    path: /etc/grafana/provisioning/dashboards/
-    ...
-  ...
-...
+    - name: dashboards
+      type: file
+      ...
+      options:
+          path: /etc/grafana/provisioning/dashboards/
+      ...
 ----
 
-=== Configure Grafana Data Sources
+=== Grafana: Data Sources
 
-Now we have the required plugins and dashboards installed, we need to configure the required Data Sources:
+Now we have the required plugins and dashboards installed, we need to configure Data Sources.
 
-. **Prometheus** - if you're running Grafana, you likely already have a Prometheus instance configured as a Data Source. 
-If not, the Standalone tutorial has instructions on xref:tutorial-standalone.adoc#_configuring_grafana_data_sources[adding a Prometheus Data Source].
-. **Cluster Monitor (JSON API)** - click on _Add Data Source_ and select "JSON API". The URL should point to the Cluster Monitor, which listens on port `:7196`, with a sub-path of `/api/v1`. 
-Enable `basicAuth`, with the user and password you configured.
-. **Alertmanager** - this should follow the same steps as JSON API, except the URL will be `protocol://FQDN:9093/alertmanager/api/v2`, and `basicAuth` may not be required. 
+. **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_. 
+  - The URL should point to the Cluster Monitor with a sub-path of `/api/v1`. The port should be `:7196`.
+  - Enable `basicAuth`, with the user and password you configured.
+. **Prometheus** - this should already be configured as a Data Source.
+. **Alertmanager** - this should already be configured as a Data Source. 
+  However, some of the dashboards query the Alertmanager API and so you will need to add a new Data Source in the same way as you did for the Cluster Monitor.
+  - This should be named _Alertmanager API_, also of type _JSON API_, and the URL should point to your Alertmanager instance. 
+  - Configure any authentication as needed.
 
-If you are utilizing Grafana provisioning for dashboards, then your `grafana.yml` may look something like this:
+If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your `grafana.yml` should look something like this:
 [source, console]  
 ----
 ...
    - name: JSON API
       type: marcusolsson-json-datasource
-      url: http://localhost:7196/api/v1
+      url: http://<Cluster Monitor URL>:7196/api/v1
       basicAuth: true
-      basicAuthUser: ${CB_MULTI_ADMIN_USER}
-      basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
+      basicAuthUser: <Cluster Monitor Username>
+      basicAuthPassword: <Cluster Monitor Password>
     - name: Alertmanager API
       type: marcusolsson-json-datasource
-      url: http://localhost:9093/alertmanager/api/v2
+      url: http://<Alertmanager URL>/api/v2
+      // Configure basicAuth as needed.
 ...
----- 
+----
 
-If this is not the case (i.e., you only configure a `grafana.ini` file), you will need to add these Data Sources using the web UI. 
-Follow the xref:tutorial-standalone.adoc#_configuring_grafana_data_sources[Configuring Grafana Data Sources] instructions for a general guide on how to do this.
+=== Prometheus: Scrape config
+
+You will need to modify your existing Prometheus configuration file (typically named `prometheus.yml`).
+Add in a `scrape_config` job for your Couchbase Server nodes:
+
+.prometheus.yml
+[source, yaml]
+----
+global:
+  scrape_interval: 30s
+
+scrape_configs:
+  - job_name: couchbase-server
+    basic_auth:
+      username: Administrator <.>
+      password: password <.>
+    static_configs:
+      - targets:
+          - 10.145.212.101:8091 <.>
+          - 10.145.212.102:8091
+          - 10.145.212.103:8091
+          ...
+        labels:
+          cluster: "Couchbase Server Cluster" <.>
+----
+
+<.> `username` should be set to a Couchbase Server user with at least "External Stats Reader" permission.
+<.> `password` should be the password of the above user.
+<.> `targets` should specify the addresses of all the nodes in your cluster.
+    The port number needs to be the management port - use `:18091` if you have TLS enabled.
+    There are alternative configuration options that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
+<.> Any labels defined here will be added to **all** metrics from this cluster - you may want to configure e.g., `environment`, `datacenter` etc.
+    The label `cluster` is required, and should match the name the cluster is configured to use in the Web Console.
+
+Add another `scrape_config` job for the previously-installed Cluster Monitor:
+
+.prometheus.yml
+[source, yaml]
+----
+...
+- job_name: couchbase-cluster-monitor
+      basic_auth:
+        username: admin  <.>
+        password: password <.>
+      metrics_path: /api/v1/_prometheus <.>
+      static_configs:
+          - targets: [10.145.212.110:7196] <.>
+...
+----
+
+<.> `username` should be the Username you configured for the Cluster Monitor.
+<.> `password` should be the Password you configured for the Cluster Monitor.
+<.> `metrics_path` is the path to the Prometheus server running on the Cluster Monitor. This should not be changed.
+<.> `targets` is a list of Cluster Monitor instances for Prometheus to retrieve metrics from. 
+  For now this should be a single server IP, listening on port `7196`.
+
+Restart Prometheus, and navigate to the Web UI. 
+If this was successful you should see your cluster listed on the page `/targets`.
+
+=== Prometheus: Alerting Rules
+
+CMOS ships with pre-made alert definitions which can alert you about certain events in your cluster. 
+To take advantage of these, first download the rule definitions to somewhere your Prometheus config can access them:
+
+[source, console]
+----
+wget -O prometheus-rules.yaml https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/prometheus/alerting/couchbase/couchbase-rules.yaml
+----
+
+Next, modify your Prometheus configuration file to include this directory. 
+For example, if you downloaded them to `/etc/prometheus/alerting/` then you would add:
+
+.prometheus.yml
+[source, yaml]
+----
+# Insert this at the top level of your prometheus.yml
+rule_files:
+  - /etc/prometheus/alerting/prometheus-rules.yaml
+----
+
+[NOTE]
+====
+If you have existing alert definitions, simply add the `prometheus-rules.yaml` file to the same directory, and specify `*.yaml` as the target for `rule_files`.
+====
+
+Restart Prometheus once more, and navigate to the Web UI. 
+You should be able to see the new rules listed on the `/rules` page.
+You may need to unhide inactive rules.
+
+=== Alertmanager
+
+We assume that you have already configured Prometheus to send alerts to Alertmanager, and that Alertmanager has appropriate receivers created and configured.
+
+Therefore, there is no additional configuration required.
 
 == Next Steps
 
-You should now have a complete CMOS stack up and running. 
-You may wish to build upon and change the existing Grafana dashboards and Prometheus / Alertmanager alerts for your use-case.
+Head on over to your Grafana Web UI. 
+Navigate to _Dashboards_, and select _Single Cluster Overview._
