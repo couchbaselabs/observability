@@ -37,8 +37,8 @@ We plan for the image to be distributed on Docker Hub, but currently this is not
 Run the Docker container, using the preview image given to you by Couchbase:
 [source, console]
 ----
-export CLUSTER_MONITOR_USER=admin
-export CLUSTER_MONITOR_PWD=password
+export CB_MULTI_ADMIN_USER=admin
+export CB_MULTI_ADMIN_PASSWORD=password
 
 docker run -d --rm \
   -p 7196:7196 \ <.>
