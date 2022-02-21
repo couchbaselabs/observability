@@ -20,15 +20,13 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
-  "iteration": 1639648277394,
+  "id": 20,
+  "iteration": 1645094186098,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "gridPos": {
         "h": 4,
         "w": 15,
@@ -40,12 +38,11 @@
         "content": "# Configuration Check\n\nIf all the checks below report OK, and the number of nodes and clusters is right, you're all set! Head over to the [Cluster Overview Dashboard](/d/g-waunKnz/cluster-overview-dashboard) to get started.\n\nIf any report a problem, or the number of nodes does not match your expectations, review the [setup instructions](https://docs.couchbase.com).",
         "mode": "markdown"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "type": "text"
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -58,7 +55,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -121,10 +117,17 @@
       },
       "id": 2,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -166,7 +169,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -211,7 +213,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -226,7 +228,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -261,9 +262,16 @@
       },
       "id": 23,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -301,7 +309,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -336,9 +343,16 @@
       },
       "id": 22,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -382,7 +396,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -396,7 +409,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,7 +454,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -468,7 +480,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "gridPos": {
         "h": 4,
         "w": 12,
@@ -480,11 +491,10 @@
         "content": "**Note:** If the number of nodes for a particular service does not equal the total number of nodes in the cluster, this may be because that node is not configured to run the respective service. In this case, the discrepancy can be ignored.",
         "mode": "markdown"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "type": "text"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -552,10 +562,17 @@
       },
       "id": 20,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -677,7 +694,6 @@
       "type": "table"
     },
     {
-      "datasource": null,
       "description": "If nodes appear in this panel despite both being added to the Cluster Monitor and Prometheus, check if alternate addresses are enabled. If so, ensure you are using the alternate address to refer to the node in your Prometheus service discovery configuration.",
       "fieldConfig": {
         "defaults": {
@@ -713,9 +729,16 @@
       },
       "id": 24,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -766,21 +789,16 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {},
-        "datasource": null,
         "definition": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
-        "description": null,
-        "error": null,
         "hide": 2,
         "includeAll": true,
-        "label": null,
         "multi": false,
         "name": "clusters",
         "options": [],
@@ -816,5 +834,6 @@
   "timezone": "",
   "title": "Configuration Check",
   "uid": "nu7dhVF7k",
-  "version": 4
+  "version": 1,
+  "weekStart": ""
 }
