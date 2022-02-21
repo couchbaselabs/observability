@@ -43,15 +43,15 @@ export CLUSTER_MONITOR_PWD=password
 docker run -d --rm \
   -p 7196:7196 \ <.>
   --network cmos \
-  --couchbase-user Administrator
-  --couchbase-password password
+  --couchbase-user Administrator \
+  --couchbase-password password \
+  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \
   --name cluster_monitor \
   <YOUR IMAGE HERE>
 ----
 
-ALSO ADD ALERTMANAGER URLS to configure cluster monitor to send to it
-
 <.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
+
 === Configure Cluster Monitor
 
 Navigate to the Web GUI, which listens by default on port `7196`.
@@ -156,9 +156,8 @@ scrape_configs:
       password: password <.>
     static_configs:
       - targets:
-          - 10.145.212.101:8091 <.>
-          - 10.145.212.102:8091
-          - 10.145.212.103:8091
+          - <Couchbase Server Node 1 IP>:8091 <.>
+          - <Couchbase Server Node 2 IP>:8091
           ...
         labels:
           cluster: "Couchbase Server Cluster" <.>
@@ -184,7 +183,7 @@ Add another `scrape_config` job for the previously-installed Cluster Monitor:
         password: password <.>
       metrics_path: /api/v1/_prometheus <.>
       static_configs:
-          - targets: [10.145.212.110:7196] <.>
+          - targets: [<Cluster Monitor IP>:7196] <.>
 ...
 ----
 
