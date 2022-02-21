@@ -20,10 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 6,
-  "iteration": 1639668303329,
+  "id": 7,
+  "iteration": 1645094132697,
   "links": [
     {
       "asDropdown": false,
@@ -77,7 +76,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -118,7 +116,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -132,7 +130,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "description": "This is in the past time range, i.e., the value set in the top-right corner of \"Last X time unit\" (defaults to 30 minutes).",
       "fieldConfig": {
         "defaults": {
@@ -175,7 +172,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -206,7 +203,6 @@
     },
     {
       "collapsed": false,
-      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -219,7 +215,6 @@
       "type": "row"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -267,7 +262,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 11,
         "w": 12,
         "x": 0,
         "y": 6
@@ -297,7 +292,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -346,7 +340,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 11,
         "w": 12,
         "x": 12,
         "y": 6
@@ -376,7 +370,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -425,10 +418,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 13,
         "w": 12,
         "x": 0,
-        "y": 18
+        "y": 17
       },
       "id": 2,
       "options": {
@@ -462,7 +455,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -511,10 +503,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
+        "h": 13,
         "w": 12,
         "x": 12,
-        "y": 18
+        "y": 17
       },
       "id": 10,
       "options": {
@@ -557,7 +549,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -568,15 +560,10 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {},
-        "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "cluster",
         "options": [],
@@ -591,20 +578,8 @@
         "type": "query"
       },
       {
-        "allValue": null,
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "datasource": null,
+        "current": {},
         "definition": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Function",
@@ -643,5 +618,6 @@
   "timezone": "",
   "title": "Eventing Service",
   "uid": "R0hxsR2nk",
-  "version": 14
+  "version": 1,
+  "weekStart": ""
 }

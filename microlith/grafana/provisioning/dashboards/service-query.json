@@ -20,10 +20,9 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 3,
-  "iteration": 1638367099980,
+  "id": 8,
+  "iteration": 1645094152721,
   "links": [
     {
       "asDropdown": false,
@@ -77,7 +76,6 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -122,7 +120,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -136,7 +134,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -215,7 +212,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "description": "This is in the past time range, i.e., the value set in the top-right corner of \"Last X time unit\" (defaults to 30 minutes).",
       "fieldConfig": {
         "defaults": {
@@ -367,7 +363,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "exemplar": true,
@@ -411,7 +407,6 @@
       "type": "stat"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -489,7 +484,6 @@
       "type": "timeseries"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -568,7 +562,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -579,12 +573,8 @@
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
-        "datasource": null,
+        "current": { },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -623,5 +613,6 @@
   "timezone": "",
   "title": "Query Service",
   "uid": "89ydpf5nz",
-  "version": 17
+  "version": 1,
+  "weekStart": ""
 }
