@@ -28,7 +28,7 @@ Once you have a local environment configured, you can visit http://localhost:808
 
 1. Click the "share" icon at the top-left of the webpage.
 2. Click export.
-3. Make sure "Export for sharing externally" is NOT ticked, and then click show JSON -> Copy JSON to clipboard.
+3. Make sure "Export for sharing externally" is ticked, and then click show JSON -> Copy JSON to clipboard.
 4. Paste this JSON into the appropriate .JSON file (under .../dashboards), and save it.
 5. Ensure the dashboard's `time` field is:
     ```"time": {

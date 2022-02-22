@@ -1,4 +1,47 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.6"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "text",
+      "name": "Text",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -21,8 +64,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 20,
-  "iteration": 1645094186098,
+  "id": null,
+  "iteration": 1645530118317,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -55,6 +98,10 @@
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -130,7 +177,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "min by (job) (up)",
           "instant": true,
           "interval": "",
@@ -169,6 +220,10 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -216,6 +271,10 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "count(count by (cluster_uuid) (multimanager_cluster_checker_status))",
           "hide": false,
@@ -228,6 +287,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -274,7 +337,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count by (cluster) (cbnode_up) unless count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))",
           "instant": true,
           "interval": "",
@@ -309,6 +376,10 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -355,7 +426,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\"))\nunless\ncount by (cluster) (cbnode_up)",
           "instant": true,
           "interval": "",
@@ -409,6 +484,10 @@
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -457,7 +536,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(cbbucketinfo_up{cluster=${clusters:doublequote}})",
           "hide": false,
           "instant": true,
@@ -466,7 +549,11 @@
           "refId": "A"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node_uuid) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -495,6 +582,10 @@
       "type": "text"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -575,7 +666,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbbucketinfo_up{cluster=${clusters:doublequote}}))",
           "instant": true,
           "interval": "",
@@ -583,7 +678,11 @@
           "refId": "A"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbbucketstat_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -592,7 +691,11 @@
           "refId": "B"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbcbas_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -601,7 +704,11 @@
           "refId": "C"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbeventing_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -610,7 +717,11 @@
           "refId": "D"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbfts_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -619,7 +730,11 @@
           "refId": "E"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbindex_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -628,7 +743,11 @@
           "refId": "F"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbnode_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -637,7 +756,11 @@
           "refId": "G"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -646,7 +769,11 @@
           "refId": "H"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbquery_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -655,7 +782,11 @@
           "refId": "I"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count(count by (node) (cbtask_up{cluster=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
@@ -694,6 +825,10 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "If nodes appear in this panel despite both being added to the Cluster Monitor and Prometheus, check if alternate addresses are enabled. If so, ensure you are using the alternate address to refer to the node in your Prometheus service discovery configuration.",
       "fieldConfig": {
         "defaults": {
@@ -741,7 +876,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "count by (node) (label_replace(count by (node_name) (multimanager_node_checker_status{cluster_name=${clusters:doublequote}}), \"node\", \"$1\", \"node_name\", \"(.*)(?::[0-9]*$)\")) unless count by (instance) (cbnode_up)",
           "instant": true,
           "interval": "",
@@ -795,7 +934,30 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(count by (cluster) (cbnode_up) or count by (cluster) (label_replace(count by (cluster_name) (multimanager_cluster_checker_status), \"cluster\", \"$1\", \"cluster_name\", \"(.*)\")))",
         "hide": 2,
         "includeAll": true,
