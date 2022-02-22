@@ -21,8 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1645094132697,
+  "id": null,
   "links": [
     {
       "asDropdown": false,
@@ -116,11 +115,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(group by (functionName) (eventing_agg_queue_size{cluster=`$cluster`}))",
+          "expr": "sum(group by (functionName) (eventing_agg_queue_size{cluster_name=~\"$cluster\"}))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -172,18 +171,18 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "exemplar": true,
-          "expr": "round(sum(increase(eventing_on_update_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
+          "expr": "round(sum(increase(eventing_on_update_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__range])))",
           "interval": "",
           "legendFormat": "Update",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "round(sum(increase(eventing_on_delete_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
+          "expr": "round(sum(increase(eventing_on_delete_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__range])))",
           "hide": false,
           "interval": "",
           "legendFormat": "Delete",
@@ -191,7 +190,7 @@
         },
         {
           "exemplar": true,
-          "expr": "round(sum(increase(eventing_timeout_count{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
+          "expr": "round(sum(increase(eventing_timeout_count{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__range])))",
           "hide": false,
           "interval": "",
           "legendFormat": "Timeout",
@@ -262,7 +261,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 12,
         "w": 12,
         "x": 0,
         "y": 6
@@ -282,7 +281,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (functionName) (eventing_agg_queue_size{cluster=`$cluster`,functionName=~`^${function:regex}$`})",
+          "expr": "sum by (functionName) (eventing_agg_queue_size{cluster_name=~\"$cluster\",functionName=~\"$func_name\"})",
           "interval": "",
           "legendFormat": "{{ functionName }}",
           "refId": "A"
@@ -340,7 +339,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 12,
         "w": 12,
         "x": 12,
         "y": 6
@@ -360,7 +359,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum by (functionName) (eventing_agg_queue_memory{cluster=`$cluster`,functionName=~`^${function:regex}$`})",
+          "expr": "sum by (functionName) (eventing_agg_queue_memory{cluster_name=~\"$cluster\",functionName=~\"$func_name\"})",
           "interval": "",
           "legendFormat": "{{ functionName }}",
           "refId": "A"
@@ -418,10 +417,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
+        "h": 14,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 18
       },
       "id": 2,
       "options": {
@@ -437,14 +436,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(eventing_on_update_success{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_update_success{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{functionName}} Update",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(eventing_on_delete_success{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_delete_success{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{functionName}} Delete",
@@ -503,10 +502,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
+        "h": 14,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 18
       },
       "id": 10,
       "options": {
@@ -522,14 +521,14 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(eventing_on_update_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_update_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{functionName}} Update",
           "refId": "A"
         },
         {
           "exemplar": true,
-          "expr": "irate(eventing_on_delete_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_delete_failure{cluster_name=~\"$cluster\",functionName=~\"$func_name\"}[$__rate_interval])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{functionName}} Delete",
@@ -560,15 +559,19 @@
   "templating": {
     "list": [
       {
-        "current": {},
-        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "definition": "label_values(eventing_on_update_success,cluster_name)",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "query": "label_values(eventing_on_update_success,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -578,20 +581,28 @@
         "type": "query"
       },
       {
-        "current": {},
-        "definition": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
+        "current": {
+          "selected": true,
+          "text": [
+            "All"
+          ],
+          "value": [
+            "$__all"
+          ]
+        },
+        "definition": "label_values(eventing_on_update_success{cluster_name=~\"$cluster\"},functionName)",
         "hide": 0,
         "includeAll": true,
         "label": "Function",
         "multi": true,
-        "name": "function",
+        "name": "func_name",
         "options": [],
         "query": {
-          "query": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
+          "query": "label_values(eventing_on_update_success{cluster_name=~\"$cluster\"},functionName)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/[{,]functionName=\"(.+?)\"/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"

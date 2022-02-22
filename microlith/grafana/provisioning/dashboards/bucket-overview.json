@@ -21,8 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1645094109410,
+  "id": null,
   "links": [
     {
       "asDropdown": false,
@@ -194,47 +193,19 @@
           }
         ]
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "SHZqSh-7k"
           },
-          "exemplar": true,
+          "exemplar": false,
           "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\",bucket=\"$bucket\"} >= 0",
           "instant": true,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
-        },
-        {
-          "cacheDurationSeconds": 5,
-          "datasource": {
-            "type": "marcusolsson-json-datasource",
-            "uid": "PC245499EF542F9C5"
-          },
-          "fields": [
-            {
-              "jsonPath": "$[*].labels.health_check_id",
-              "name": "id"
-            },
-            {
-              "jsonPath": "$[*].labels.health_check_name",
-              "language": "jsonpath",
-              "name": "name"
-            },
-            {
-              "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]",
-              "language": "jsonata",
-              "name": "Value"
-            }
-          ],
-          "hide": false,
-          "method": "GET",
-          "queryParams": "",
-          "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=kind=bucket&filter=cluster=${cluster:querystring}&filter=bucket=${bucket:querystring}"
         }
       ],
       "title": "Bucket Health Issues",
@@ -331,11 +302,15 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "avg(kv_vb_perc_mem_resident_ratio{bucket=\"$bucket\",cluster=\"$cluster\",state=\"active\"})",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": false,
+          "expr": "avg(kv_vb_perc_mem_resident_ratio{bucket=\"$bucket\",cluster_name=~\"$cluster\",state=\"active\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -388,18 +363,26 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "sum (kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "sum (kv_mem_used_bytes{cluster_name=\"$cluster\",bucket=\"$bucket\"})",
           "interval": "",
           "legendFormat": "In Memory",
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "sum (couch_docs_actual_disk_size{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "sum (couch_docs_actual_disk_size{cluster_name=\"$cluster\",bucket=\"$bucket\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "On Disk",
@@ -466,11 +449,15 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "sum by (scope, collection) (kv_collection_data_size_bytes{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": false,
+          "expr": "sum by (scope, collection) (kv_collection_data_size_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -478,8 +465,12 @@
           "refId": "data_size"
         },
         {
-          "exemplar": true,
-          "expr": "sum by (scope, collection) (kv_collection_item_count{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
+          "exemplar": false,
+          "expr": "sum by (scope, collection) (kv_collection_item_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -596,8 +587,12 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "sum by (op) (rate(kv_ops{cluster=`$cluster`,bucket=`$bucket`}[$__rate_interval]))",
+          "expr": "sum by (op) (rate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "{{ op }}",
           "refId": "A"
@@ -743,26 +738,38 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "avg (kv_ep_mem_low_wat{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "sum (kv_ep_mem_low_wat{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "interval": "",
           "legendFormat": "Low Water Mark",
           "refId": "low_wat"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "avg (kv_ep_mem_high_wat{cluster=\"$cluster\",bucket=\"$bucket\"})",
+          "expr": "sum (kv_ep_mem_high_wat{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "High Water Mark",
           "refId": "high_wat"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"}",
+          "expr": "sum(kv_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "hide": false,
           "interval": "",
-          "legendFormat": "{{instance}}",
+          "legendFormat": "Memory Used",
           "refId": "mem_used"
         }
       ],
@@ -839,8 +846,12 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "sum by (instance) (kv_ep_diskqueue_items{cluster=`$cluster`,bucket=`$bucket`})",
+          "expr": "sum by (instance) (kv_ep_diskqueue_items{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -920,8 +931,12 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "SHZqSh-7k"
+          },
           "exemplar": true,
-          "expr": "histogram_quantile(0.90, irate(kv_cmd_duration_seconds_bucket{opcode=\"GET\",bucket=\"$bucket\",cluster=\"$cluster\"}[$__rate_interval]))",
+          "expr": "histogram_quantile(0.90, rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__range]))",
           "interval": "",
           "legendFormat": "{{ instance }}",
           "refId": "A"
@@ -942,15 +957,20 @@
   "templating": {
     "list": [
       {
-        "current": {},
-        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "definition": "label_values(kv_curr_items,cluster_name)",
         "hide": 0,
         "includeAll": false,
+        "label": "Cluster",
         "multi": false,
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "query": "label_values(kv_curr_items,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -960,37 +980,47 @@
         "type": "query"
       },
       {
-        "current": {},
-        "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+        "current": {
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
+        "definition": "label_values(multimanager_cluster_checker_status{cluster_name=~\"$cluster\"}, cluster_uuid)",
         "hide": 2,
         "includeAll": false,
         "multi": false,
         "name": "cluster_uuid",
         "options": [],
         "query": {
-          "query": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+          "query": "label_values(multimanager_cluster_checker_status{cluster_name=~\"$cluster\"}, cluster_uuid)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
       },
       {
-        "current": {},
-        "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
+        "current": {
+          "selected": false,
+          "text": "B795SE_Reference",
+          "value": "B795SE_Reference"
+        },
+        "definition": "label_values(kv_curr_items{cluster_name=~\"$cluster\"}, bucket)",
         "hide": 0,
         "includeAll": false,
+        "label": "Bucket",
         "multi": false,
         "name": "bucket",
         "options": [],
         "query": {
-          "query": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
+          "query": "label_values(kv_curr_items{cluster_name=~\"$cluster\"}, bucket)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/[{,]bucket=\"(.+?)(?::[0-9]*)?\"[,}]/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
@@ -1017,6 +1047,6 @@
   "timezone": "",
   "title": "Bucket Overview",
   "uid": "H8M3rE5nk",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

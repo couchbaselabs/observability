@@ -21,8 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 8,
-  "iteration": 1645094152721,
+  "id": null,
   "links": [
     {
       "asDropdown": false,
@@ -120,11 +119,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(irate(n1ql_warnings{cluster=`$cluster`}[$__rate_interval]))",
+          "expr": "sum(irate(n1ql_warnings{cluster_name=~\"$cluster\"}[$__rate_interval]))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -202,7 +201,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_errors{cluster=`$cluster`}[$__rate_interval])",
+          "expr": "irate(n1ql_errors{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}} (last $__interval)",
           "refId": "A"
@@ -228,7 +227,7 @@
               }
             ]
           },
-          "unit": "none"
+          "unit": "short"
         },
         "overrides": [
           {
@@ -363,11 +362,11 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_250ms{cluster=`$cluster`}[$__range])))",
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_250ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -376,8 +375,8 @@
           "refId": "B"
         },
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_500ms{cluster=`$cluster`}[$__range])))",
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_500ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -385,16 +384,16 @@
           "refId": "D"
         },
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_1000ms{cluster=`$cluster`}[$__range])))",
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_1000ms{cluster_name=~\"$cluster\"}[$__range])))",
           "instant": true,
           "interval": "",
           "legendFormat": "1000ms",
           "refId": "A"
         },
         {
-          "exemplar": true,
-          "expr": "round(sum(increase(n1ql_requests_5000ms{cluster=`$cluster`}[$__range])))",
+          "exemplar": false,
+          "expr": "round(sum(increase(n1ql_requests_5000ms{cluster_name=~\"$cluster\"}[$__range])))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -474,7 +473,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "irate(n1ql_requests{cluster=`$cluster`}[$__rate_interval])",
+          "expr": "irate(n1ql_requests{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -551,7 +550,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "rate(n1ql_request_time{cluster=`$cluster`}[$__rate_interval]) / rate(n1ql_requests{cluster=`$cluster`}[$__rate_interval])",
+          "expr": "rate(n1ql_request_time{cluster_name=~\"$cluster\"}[$__rate_interval]) / rate(n1ql_requests{cluster_name=~\"$cluster\"}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{instance}}",
           "refId": "A"
@@ -573,8 +572,12 @@
   "templating": {
     "list": [
       {
-        "current": { },
-        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "definition": "label_values(n1ql_requests,cluster_name)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -582,7 +585,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "query": "label_values(n1ql_requests,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
