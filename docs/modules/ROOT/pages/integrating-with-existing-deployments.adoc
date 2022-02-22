@@ -124,12 +124,14 @@ If you are utilizing Grafana provisioning for dashboards, and would instead like
 ...
    - name: JSON API
       type: marcusolsson-json-datasource
+      uid: PD5070BC1AA9F8304
       url: http://<Cluster Monitor URL>:7196/api/v1
       basicAuth: true
       basicAuthUser: <Cluster Monitor Username>
       basicAuthPassword: <Cluster Monitor Password>
     - name: Alertmanager API
       type: marcusolsson-json-datasource
+      uid: PC245499EF542F9C5
       url: http://<Alertmanager URL>/api/v2
       // Configure basicAuth as needed.
 ...
