@@ -31,10 +31,26 @@ do
     fi
 
     # Check that they haven't been shared for external use
-    if jq -e 'has("__requires")' "$source" > /dev/null; then
-      printf "\tFAIL: exported using 'share for external use'\n"
+    if ! jq -e 'has("__requires")' "$source" > /dev/null; then
+      printf "\tFAIL: not exported using 'share for external use'\n"
       exit_code=1
     fi
+
+    # Check that all panels have defined datasources - which one Grafana considers to be the "default" is unpredictable
+    if ! jq -e '.panels | map(select(.type != "row" and .type != "text")) | map(.datasource) | all(. != null)' "$source" >/dev/null; then
+      printf "\tFAIL: panels missing 'datasource': "
+      jq -c '.panels | map(select(.type != "row" and .type != "text")) | map(select(.datasource == null)) | map(.title)' "$source"
+    fi
+
+    # Now, check over all panels and template variables to find the data sources they use,
+    # and ensure that they themselves are variables
+    panel_ds_vars=$(jq -cer '.panels | map(select(.type != "row")) | map(.datasource.uid) | unique | .[] | select(. != null and . != "-- Mixed --") | sub("\\$\\{(?<name>.*)\\}"; "\(.name)")' "$source")
+    template_ds_vars=$(jq -cr '.templating.list | map(select(.type == "query")) | map(if (.datasource | type) == "object" then .datasource.uid else .datasource end) | unique | .[] | sub("\\$\\{(?<name>.*)\\}"; "\(.name)")' "$source")
+    while IFS= read -r var; do
+      if ! jq -e '.templating.list[] | select(.type == "datasource" and .name == "'"$var"'")' "$source" >/dev/null; then
+        printf "\tFAIL: data source %s not defined as a variable\n" "$var"
+      fi
+    done < <(printf "%s\n%s" "$panel_ds_vars" "$template_ds_vars" | sort -u)
 done < <(find "$DASHBOARDS_PATH" -type f -name '*.json' -print0)
 
 exit "$exit_code"

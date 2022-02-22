@@ -1,4 +1,41 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.6"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -21,8 +58,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1645094132697,
+  "id": null,
+  "iteration": 1645529774393,
   "links": [
     {
       "asDropdown": false,
@@ -76,6 +113,10 @@
   "liveNow": false,
   "panels": [
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -119,6 +160,10 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum(group by (functionName) (eventing_agg_queue_size{cluster=`$cluster`}))",
           "interval": "",
@@ -130,6 +175,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "description": "This is in the past time range, i.e., the value set in the top-right corner of \"Last X time unit\" (defaults to 30 minutes).",
       "fieldConfig": {
         "defaults": {
@@ -175,6 +224,10 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "round(sum(increase(eventing_on_update_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
           "interval": "",
@@ -182,6 +235,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "round(sum(increase(eventing_on_delete_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
           "hide": false,
@@ -190,6 +247,10 @@
           "refId": "B"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "round(sum(increase(eventing_timeout_count{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
           "hide": false,
@@ -215,6 +276,10 @@
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -262,7 +327,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 12,
         "w": 12,
         "x": 0,
         "y": 6
@@ -281,6 +346,10 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum by (functionName) (eventing_agg_queue_size{cluster=`$cluster`,functionName=~`^${function:regex}$`})",
           "interval": "",
@@ -292,6 +361,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -340,7 +413,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
+        "h": 12,
         "w": 12,
         "x": 12,
         "y": 6
@@ -359,6 +432,10 @@
       "pluginVersion": "8.2.7",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum by (functionName) (eventing_agg_queue_memory{cluster=`$cluster`,functionName=~`^${function:regex}$`})",
           "interval": "",
@@ -370,6 +447,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -418,10 +499,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
+        "h": 14,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 18
       },
       "id": 2,
       "options": {
@@ -436,6 +517,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "irate(eventing_on_update_success{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "interval": "",
@@ -443,6 +528,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "irate(eventing_on_delete_success{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
@@ -455,6 +544,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -503,10 +596,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 13,
+        "h": 14,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 18
       },
       "id": 10,
       "options": {
@@ -521,6 +614,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "irate(eventing_on_update_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "interval": "",
@@ -528,6 +625,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "irate(eventing_on_delete_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
@@ -536,6 +637,10 @@
           "refId": "B"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "irate(eventing_timeout_count{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
@@ -560,7 +665,30 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -579,6 +707,10 @@
       },
       {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
         "hide": 0,
         "includeAll": true,

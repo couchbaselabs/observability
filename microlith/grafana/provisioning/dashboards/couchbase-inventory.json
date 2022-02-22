@@ -1,4 +1,35 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+      "label": "Couchbase Cluster Monitor API",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.6"
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-json-datasource",
+      "name": "JSON API",
+      "version": "1.3.0"
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -22,7 +53,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 10,
+  "id": null,
   "links": [
     {
       "asDropdown": false,
@@ -42,7 +73,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "PD5070BC1AA9F8304"
+        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
       },
       "description": "A summary view of all Couchbase Clusters within the estate.",
       "fieldConfig": {
@@ -347,7 +378,25 @@
     "couchbase-inventory"
   ],
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "Couchbase Cluster Monitor API",
+          "value": "Couchbase Cluster Monitor API"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+        "options": [],
+        "query": "marcusolsson-json-datasource",
+        "refresh": 1,
+        "regex": "/Couchbase Cluster Monitor/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      }
+    ]
   },
   "time": {
     "from": "now-30m",

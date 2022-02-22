@@ -1,4 +1,61 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_ALERTMANAGER_API",
+      "label": "Alertmanager API",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.6"
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-json-datasource",
+      "name": "JSON API",
+      "version": "1.3.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -21,8 +78,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 9,
-  "iteration": 1645094109410,
+  "id": null,
+  "iteration": 1645529984953,
   "links": [
     {
       "asDropdown": false,
@@ -199,9 +256,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "exemplar": true,
+          "exemplar": false,
           "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\",bucket=\"$bucket\"} >= 0",
           "instant": true,
           "interval": "",
@@ -212,7 +269,7 @@
           "cacheDurationSeconds": 5,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "PC245499EF542F9C5"
+            "uid": "${DS_ALERTMANAGER_API}"
           },
           "fields": [
             {
@@ -280,6 +337,10 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -334,7 +395,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "avg(kv_vb_perc_mem_resident_ratio{bucket=\"$bucket\",cluster=\"$cluster\",state=\"active\"})",
           "instant": true,
           "interval": "",
@@ -346,6 +411,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -391,6 +460,10 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum (kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"})",
           "interval": "",
@@ -398,6 +471,10 @@
           "refId": "A"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum (couch_docs_actual_disk_size{cluster=\"$cluster\",bucket=\"$bucket\"})",
           "hide": false,
@@ -410,6 +487,10 @@
       "type": "stat"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -469,7 +550,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "sum by (scope, collection) (kv_collection_data_size_bytes{cluster=\"$cluster\",bucket=\"$bucket\"})",
           "format": "table",
           "instant": true,
@@ -478,7 +563,11 @@
           "refId": "data_size"
         },
         {
-          "exemplar": true,
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "exemplar": false,
           "expr": "sum by (scope, collection) (kv_collection_item_count{cluster=\"$cluster\",bucket=\"$bucket\"})",
           "format": "table",
           "hide": false,
@@ -526,6 +615,10 @@
       "type": "table"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -596,6 +689,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum by (op) (rate(kv_ops{cluster=`$cluster`,bucket=`$bucket`}[$__rate_interval]))",
           "interval": "",
@@ -607,6 +704,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -743,6 +844,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "avg (kv_ep_mem_low_wat{cluster=\"$cluster\",bucket=\"$bucket\"})",
           "interval": "",
@@ -750,6 +855,10 @@
           "refId": "low_wat"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "avg (kv_ep_mem_high_wat{cluster=\"$cluster\",bucket=\"$bucket\"})",
           "hide": false,
@@ -758,6 +867,10 @@
           "refId": "high_wat"
         },
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "kv_mem_used_bytes{cluster=\"$cluster\",bucket=\"$bucket\"}",
           "hide": false,
@@ -770,6 +883,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -839,6 +956,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sum by (instance) (kv_ep_diskqueue_items{cluster=`$cluster`,bucket=`$bucket`})",
           "interval": "",
@@ -850,6 +971,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -920,6 +1045,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "histogram_quantile(0.90, irate(kv_cmd_duration_seconds_bucket{opcode=\"GET\",bucket=\"$bucket\",cluster=\"$cluster\"}[$__rate_interval]))",
           "interval": "",
@@ -942,7 +1071,48 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Alertmanager API",
+          "value": "Alertmanager API"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DS_ALERTMANAGER_API",
+        "options": [],
+        "query": "marcusolsson-json-datasource",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "/Alertmanager/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -961,6 +1131,10 @@
       },
       {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "hide": 2,
         "includeAll": false,
@@ -979,6 +1153,10 @@
       },
       {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(multimanager_bucket_checker_status{cluster_name=${cluster:doublequote}})",
         "hide": 0,
         "includeAll": false,
