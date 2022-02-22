@@ -122,7 +122,13 @@ If you are utilizing Grafana provisioning for dashboards, and would instead like
 [source, console]  
 ----
 ...
-   - name: JSON API
+    - name: Prometheus (CMOS)
+      type: prometheus
+      uid: PBFA97CFB590B2093
+      url: http://<Prometheus Instance>:>
+      // Add your authentication as required
+    
+    - name: JSON API
       type: marcusolsson-json-datasource
       uid: PD5070BC1AA9F8304
       url: http://<Cluster Monitor URL>:7196/api/v1
