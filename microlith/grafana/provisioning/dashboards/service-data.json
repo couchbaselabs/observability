@@ -21,8 +21,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 16,
-  "iteration": 1645094084153,
+  "id": null,
   "links": [
     {
       "asDropdown": false,
@@ -148,11 +147,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "topk(3, sum by (bucket) (kv_ep_data_read_failed{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "exemplar": false,
+          "expr": "topk(3, sum by (bucket) (kv_ep_data_read_failed{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -222,11 +221,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "topk(3, sum by (bucket) (kv_ep_data_write_failed{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "exemplar": false,
+          "expr": "topk(3, sum by (bucket) (kv_ep_data_write_failed{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -308,7 +307,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum (irate(kv_ops{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])) by (bucket)",
+          "expr": "sum (irate(kv_ops{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval])) by (bucket)",
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -318,10 +317,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "marcusolsson-json-datasource",
-        "uid": "PD5070BC1AA9F8304"
-      },
+      "datasource": "JSON API",
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -386,7 +382,7 @@
           }
         ]
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -527,11 +523,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(kv_curr_connections{cluster=`$cluster`})",
+          "expr": "sum(kv_curr_connections{cluster_name=~\"$cluster\"})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -540,7 +536,7 @@
         },
         {
           "exemplar": true,
-          "expr": "sum(kv_daemon_connections{cluster=`$cluster`})",
+          "expr": "sum(kv_daemon_connections{cluster_name=~\"$cluster\"})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -549,7 +545,7 @@
         },
         {
           "exemplar": true,
-          "expr": "sum(kv_system_connections{cluster=`$cluster`})",
+          "expr": "sum(kv_system_connections{cluster_name=~\"$cluster\"})",
           "hide": false,
           "interval": "",
           "legendFormat": "System",
@@ -648,7 +644,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(\n0.50,\nsum by(le,bucket) (\nrate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])\n)\n)",
+          "expr": "histogram_quantile(\n0.50,\nsum by(le,bucket) (\nrate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval])\n)\n)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -734,7 +730,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -817,7 +813,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"GET\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -900,7 +896,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -983,7 +979,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -1066,7 +1062,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=~\"$cluster\",bucket=~\"$bucket\",opcode=\"SET\"}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -1088,7 +1084,7 @@
         "content": "# Number of documents #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "transparent": true,
       "type": "text"
     },
@@ -1104,7 +1100,7 @@
         "content": "# Dataset size on disk #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "transparent": true,
       "type": "text"
     },
@@ -1120,7 +1116,7 @@
         "content": "# Dataset size in memory #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "transparent": true,
       "type": "text"
     },
@@ -1168,13 +1164,13 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "sum by (bucket) (kv_curr_items{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "exemplar": false,
+          "expr": "sum by (bucket) (kv_curr_items{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
@@ -1225,13 +1221,13 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
         {
-          "exemplar": true,
-          "expr": "topk(3, sum by (bucket) (couch_docs_actual_disk_size{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "exemplar": false,
+          "expr": "topk(3, sum by (bucket) (couch_docs_actual_disk_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
@@ -1282,13 +1278,13 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "8.3.4",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
         {
           "exemplar": true,
-          "expr": "topk(3, sum by (bucket) (kv_collection_mem_used_bytes{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "expr": "topk(3, sum by (bucket) (kv_collection_mem_used_bytes{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -1302,7 +1298,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 46
+        "y": 68
       },
       "id": 10,
       "panels": [
@@ -1356,7 +1352,7 @@
             "h": 8,
             "w": 8,
             "x": 0,
-            "y": 47
+            "y": 69
           },
           "id": 14,
           "options": {
@@ -1373,7 +1369,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,connection_type!=\"\"}) by (connection_type)",
+              "expr": "sum (kv_dcp_items_remaining{cluster_name=~\"$cluster\",connection_type!=\"\"}) by (connection_type)",
               "interval": "",
               "legendFormat": "{{ connection_type }}",
               "refId": "A"
@@ -1437,7 +1433,7 @@
             "h": 8,
             "w": 8,
             "x": 8,
-            "y": 47
+            "y": 69
           },
           "id": 16,
           "options": {
@@ -1453,7 +1449,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster=`$cluster`,connection_type!=\"\"}[$__rate_interval]))",
+              "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster_name=~\"$cluster\",connection_type!=\"\"}[$__rate_interval]))",
               "interval": "",
               "legendFormat": "{{ connection_type }}",
               "refId": "A"
@@ -1516,7 +1512,7 @@
             "h": 8,
             "w": 8,
             "x": 16,
-            "y": 47
+            "y": 69
           },
           "id": 12,
           "options": {
@@ -1532,7 +1528,7 @@
           "targets": [
             {
               "exemplar": true,
-              "expr": "sum by (bucket, connection_type) (kv_dcp_backoff{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+              "expr": "sum by (bucket, connection_type) (kv_dcp_backoff{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
               "interval": "",
               "legendFormat": "{{bucket}} ({{connection_type}})",
               "refId": "A"
@@ -1558,8 +1554,12 @@
   "templating": {
     "list": [
       {
-        "current": {},
-        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+        "current": {
+          "selected": false,
+          "text": "",
+          "value": ""
+        },
+        "definition": "label_values(kv_curr_items,cluster_name)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -1567,18 +1567,22 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "query": "label_values(kv_curr_items,cluster_name)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 3,
         "type": "query"
       },
       {
-        "current": {},
-        "definition": "label_values(multimanager_bucket_checker_status,bucket)",
+        "current": {
+          "selected": false,
+          "text": "All",
+          "value": "$__all"
+        },
+        "definition": "label_values(kv_curr_items,bucket)",
         "hide": 0,
         "includeAll": true,
         "label": "Bucket",
@@ -1586,18 +1590,23 @@
         "name": "bucket",
         "options": [],
         "query": {
-          "query": "label_values(multimanager_bucket_checker_status,bucket)",
+          "query": "label_values(kv_curr_items,bucket)",
           "refId": "StandardVariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 1,
         "type": "query"
       },
       {
-        "current": {},
-        "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+        "current": {
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
+        },
+        "definition": "label_values(multimanager_cluster_checker_status{cluster_name=~\"$cluster\"}, cluster_uuid)",
         "hide": 2,
         "includeAll": false,
         "label": "",
@@ -1605,11 +1614,11 @@
         "name": "cluster_uuid",
         "options": [],
         "query": {
-          "query": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
+          "query": "label_values(multimanager_cluster_checker_status{cluster_name=~\"$cluster\"}, cluster_uuid)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
+        "regex": "",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"
