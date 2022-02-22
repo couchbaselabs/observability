@@ -48,7 +48,7 @@ docker run -d --rm \
 NOTE
 ====
 Docker networking https://docs.docker.com/network/#network-drivers[defaults to bridge], meaning that this container will be able to communicate with any other running Docker containers.
-If your Grafana, Prometheus / Alertmanager instances are not containerised, ensure that the Cluster Monitor container can communicate with them.
+If your Grafana, Prometheus / Alertmanager instances are not containerized, ensure that the Cluster Monitor container can communicate with them.
 ====
 === Configure Cluster Monitor
 
