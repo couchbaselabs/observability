@@ -36,15 +36,20 @@ Run the Docker container, using the preview image given to you by Couchbase:
 ----
 docker run -d --rm \
   -p 7196:7196 \ <.>
-  --network cmos \
-  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \ <.> This is not necessary if you are not using Alertmanager
+  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \ <.> 
   -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password \
   --name cluster_monitor \
   <YOUR IMAGE HERE>
 ----
 
 <.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
+<.> This is not necessary if you are not using Alertmanager
 
+NOTE
+====
+Docker networking https://docs.docker.com/network/#network-drivers[defaults to bridge], meaning that this container will be able to communicate with any other running Docker containers.
+If your Grafana, Prometheus / Alertmanager instances are not containerised, ensure that the Cluster Monitor container can communicate with them.
+====
 === Configure Cluster Monitor
 
 Navigate to the Web GUI, which listens by default on port `7196`.
@@ -82,9 +87,8 @@ The relevant setting in the Grafana configuration file, typically named `grafana
 
 [source, console]
 ----
-[dashboards.json]
-enabled = true
-path = <desired path>/dashboards
+[dashboards]
+default_home_dashboard_path = <path to dashboards>/couchbase-inventory.json
 ----
 
 If you are using https://grafana.com/docs/grafana/latest/administration/provisioning/[Grafana provisioning], you will need to update the `providers.options.path` argument in your provisioning configuration file (typically named `grafana.yml`) instead.
