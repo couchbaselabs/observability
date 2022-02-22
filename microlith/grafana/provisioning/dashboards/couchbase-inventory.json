@@ -21,9 +21,8 @@
   "description": "Overview of all Couchbase clusters known to this instance",
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 10,
   "links": [
     {
       "asDropdown": false,
@@ -41,7 +40,10 @@
   "liveNow": false,
   "panels": [
     {
-      "datasource": "JSON API",
+      "datasource": {
+        "type": "marcusolsson-json-datasource",
+        "uid": "PD5070BC1AA9F8304"
+      },
       "description": "A summary view of all Couchbase Clusters within the estate.",
       "fieldConfig": {
         "defaults": {
@@ -260,6 +262,13 @@
       },
       "id": 2,
       "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -268,7 +277,7 @@
           }
         ]
       },
-      "pluginVersion": "8.2.7",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -331,7 +340,7 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [
     "couchbase",
@@ -360,5 +369,6 @@
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }

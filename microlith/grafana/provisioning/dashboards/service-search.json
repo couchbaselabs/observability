@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 54,
-  "iteration": 1645063965415,
+  "id": 17,
+  "iteration": 1645094163694,
   "links": [
     {
       "asDropdown": false,
@@ -116,12 +116,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
+          "exemplar": true,
+          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -173,12 +172,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
           "exemplar": true,
-          "expr": "sum(fts_doc_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
+          "expr": "sum(fts_doc_count{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -205,7 +203,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -231,12 +229,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "sum(fts_num_bytes_used_ram{cluster_name=~\"$cluster\"})",
+          "exemplar": true,
+          "expr": "sum(fts_num_bytes_used_ram{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -262,7 +259,7 @@
               }
             ]
           },
-          "unit": "decbits"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -288,12 +285,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "sum(fts_num_bytes_used_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
+          "exemplar": true,
+          "expr": "sum(fts_num_bytes_used_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -380,12 +376,11 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})) == 0",
+          "exemplar": true,
+          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster=`$cluster`,bucket=~`${bucket:regex}`})) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -492,9 +487,8 @@
       },
       "targets": [
         {
-          "datasource": null,
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval])))",
+          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -550,8 +544,7 @@
                 "value": 80
               }
             ]
-          },
-          "unit": "short"
+          }
         },
         "overrides": []
       },
@@ -574,9 +567,8 @@
       },
       "targets": [
         {
-          "datasource": null,
           "exemplar": true,
-          "expr": "sum(fts_num_mutations_to_index{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}) by (bucket,index)",
+          "expr": "fts_num_mutations_to_index{cluster=`$cluster`,bucket=~`${bucket:regex}`}",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -601,7 +593,7 @@
               }
             ]
           },
-          "unit": "decbits"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -625,12 +617,11 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "topk(5, sum by (bucket, index) (fts_num_bytes_used_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
+          "exemplar": true,
+          "expr": "topk(5, fts_num_bytes_used_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -656,7 +647,7 @@
               }
             ]
           },
-          "unit": "ms"
+          "unit": "ns"
         },
         "overrides": []
       },
@@ -680,12 +671,11 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "topk(5, avg by (bucket, index) (fts_avg_queries_latency{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
+          "exemplar": true,
+          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -709,12 +699,8 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "",
-          "value": ""
-        },
-        "definition": "label_values(fts_total_request_time,cluster_name)",
+        "current": {},
+        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -722,7 +708,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(fts_total_request_time,cluster_name)",
+          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -732,16 +718,8 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "definition": "label_values(fts_total_request_time{cluster_name=~\"$cluster\"},bucket)",
+        "current": {},
+        "definition": "label_values(multimanager_bucket_checker_status,bucket)",
         "hide": 0,
         "includeAll": true,
         "label": "Bucket",
@@ -749,7 +727,7 @@
         "name": "bucket",
         "options": [],
         "query": {
-          "query": "label_values(fts_total_request_time{cluster_name=~\"$cluster\"},bucket)",
+          "query": "label_values(multimanager_bucket_checker_status,bucket)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -780,6 +758,6 @@
   "timezone": "",
   "title": "Search Service",
   "uid": "5O4ki2tnz",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

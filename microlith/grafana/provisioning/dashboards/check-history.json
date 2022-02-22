@@ -20,15 +20,13 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "gnetId": null,
   "graphTooltip": 0,
-  "id": 7,
-  "iteration": 1639563154403,
+  "id": 1,
+  "iteration": 1645094175243,
   "links": [],
   "liveNow": false,
   "panels": [
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -119,7 +117,6 @@
       "type": "state-timeline"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -209,7 +206,6 @@
       "type": "state-timeline"
     },
     {
-      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -300,18 +296,14 @@
     }
   ],
   "refresh": "15s",
-  "schemaVersion": 32,
+  "schemaVersion": 34,
   "style": "dark",
   "tags": [],
   "templating": {
     "list": [
       {
-        "allValue": null,
         "current": {},
-        "datasource": null,
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
-        "description": null,
-        "error": null,
         "hide": 0,
         "includeAll": true,
         "label": "Cluster",
@@ -350,5 +342,6 @@
   "timezone": "",
   "title": "Check History",
   "uid": "3FgtRlvnk",
-  "version": 18
+  "version": 1,
+  "weekStart": ""
 }

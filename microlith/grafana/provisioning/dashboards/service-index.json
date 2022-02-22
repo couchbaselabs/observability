@@ -21,8 +21,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 52,
-  "iteration": 1645064698531,
+  "id": 18,
+  "iteration": 1645094143351,
   "links": [
     {
       "asDropdown": false,
@@ -118,12 +118,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "count(count by (bucket, scope, collection, index) (index_resident_percent{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
+          "exemplar": true,
+          "expr": "count(count by (bucket, scope, collection, index) (index_resident_percent{cluster=`$cluster`, bucket=~`${bucket:regex}`}))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -175,12 +174,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "sum(index_items_count{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
+          "exemplar": true,
+          "expr": "sum(index_items_count{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -207,7 +205,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -233,12 +231,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "sum(index_memory_used{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
+          "exemplar": true,
+          "expr": "sum(index_memory_used{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -264,7 +261,7 @@
               }
             ]
           },
-          "unit": "decbytes"
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -290,12 +287,11 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "sum(index_data_size_on_disk{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
+          "exemplar": true,
+          "expr": "sum(index_data_size_on_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{instance}}",
@@ -382,12 +378,11 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "(sum by (bucket, scope, collection, index) (index_num_requests{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})) == 0",
+          "exemplar": true,
+          "expr": "(sum by (bucket, scope, collection, index) (index_num_requests{cluster=`$cluster`,bucket=~`${bucket:regex}`})) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -493,9 +488,8 @@
       },
       "targets": [
         {
-          "datasource": null,
           "exemplar": true,
-          "expr": "rate(index_num_requests{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}[$__rate_interval])",
+          "expr": "rate(index_num_requests{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])",
           "instant": false,
           "interval": "",
           "legendFormat": "{{index}}",
@@ -571,9 +565,8 @@
       },
       "targets": [
         {
-          "datasource": null,
           "exemplar": true,
-          "expr": "sum(index_num_docs_pending{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}) by (index)",
+          "expr": "sum(index_num_docs_pending{cluster=`$cluster`,bucket=~`${bucket:regex}`}) by (index)",
           "interval": "",
           "legendFormat": "{{index}}",
           "refId": "A"
@@ -622,12 +615,11 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "topk(5, index_data_size{cluster_name=~\"$cluster\",bucket=~\"$bucket\"})",
+          "exemplar": true,
+          "expr": "topk(5, index_data_size{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -677,12 +669,11 @@
         "showUnfilled": true,
         "text": {}
       },
-      "pluginVersion": "8.3.4",
+      "pluginVersion": "8.3.6",
       "targets": [
         {
-          "datasource": null,
-          "exemplar": false,
-          "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency{cluster_name=~\"$cluster\",bucket=~\"$bucket\"}))",
+          "exemplar": true,
+          "expr": "topk(5, sum by (bucket, index) (index_avg_scan_latency{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -706,12 +697,8 @@
   "templating": {
     "list": [
       {
-        "current": {
-          "selected": false,
-          "text": "Demo Cluster 2",
-          "value": "Demo Cluster 2"
-        },
-        "definition": "label_values(index_memory_quota,cluster_name)",
+        "current": {},
+        "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -719,7 +706,7 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(index_memory_quota,cluster_name)",
+          "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -729,16 +716,8 @@
         "type": "query"
       },
       {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
-        },
-        "definition": "label_values(index_num_requests{cluster_name=~\"$cluster\"},bucket)",
+        "current": {},
+        "definition": "label_values(multimanager_bucket_checker_status,bucket)",
         "hide": 0,
         "includeAll": true,
         "label": "Bucket",
@@ -746,7 +725,7 @@
         "name": "bucket",
         "options": [],
         "query": {
-          "query": "label_values(index_num_requests{cluster_name=~\"$cluster\"},bucket)",
+          "query": "label_values(multimanager_bucket_checker_status,bucket)",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
@@ -777,6 +756,6 @@
   "timezone": "",
   "title": "Index Service",
   "uid": "zlHletp7k",
-  "version": 2,
+  "version": 1,
   "weekStart": ""
 }

@@ -19,6 +19,7 @@ datasources:
           maxLines: 1000
     - name: Prometheus
       type: prometheus
+      uid: PBFA97CFB590B2093
       access: proxy
       url: http://localhost:9090${CMOS_HTTP_PATH_PREFIX}/prometheus
       basicAuth: false
@@ -40,10 +41,12 @@ datasources:
       url: http://localhost:16686/
     - name: JSON API
       type: marcusolsson-json-datasource
+      uid: PD5070BC1AA9F8304
       url: http://localhost:7196/api/v1
       basicAuth: true
       basicAuthUser: ${CB_MULTI_ADMIN_USER}
       basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
     - name: Alertmanager API
       type: marcusolsson-json-datasource
+      uid: PC245499EF542F9C5
       url: http://localhost:9093${CMOS_HTTP_PATH_PREFIX}/alertmanager/api/v2
