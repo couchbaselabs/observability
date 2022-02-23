@@ -45,7 +45,7 @@ docker run -d --rm \
 <.> If you are using TLS, you will need to add `-p 7197:7197` to also expose port `7197`.
 <.> This is not necessary if you are not using Alertmanager
 
-NOTE
+[NOTE]
 ====
 Docker networking https://docs.docker.com/network/#network-drivers[defaults to bridge], meaning that this container will be able to communicate with any other running Docker containers.
 If your Grafana, Prometheus / Alertmanager instances are not containerized, ensure that the Cluster Monitor container can communicate with them.
@@ -121,14 +121,7 @@ Now we have the required plugins and dashboards installed, we need to configure 
 If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your `grafana.yml` should look something like this:
 [source, console]  
 ----
-...
-    - name: Prometheus (CMOS)
-      type: prometheus
-      uid: PBFA97CFB590B2093
-      url: http://<Prometheus Instance>:>
-      // Add your authentication as required
-    
-    - name: JSON API
+    - name: Cluster Monitor
       type: marcusolsson-json-datasource
       uid: PD5070BC1AA9F8304
       url: http://<Cluster Monitor URL>:7196/api/v1
@@ -174,7 +167,11 @@ scrape_configs:
     The port number needs to be the management port - use `:18091` if you have TLS enabled.
     There are alternative configuration options that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
 <.> Any labels defined here will be added to **all** metrics from this cluster - you may want to configure e.g., `environment`, `datacenter` etc.
-    The label `cluster` is required, and should match the name the cluster is configured to use in the Web Console.
+
+[IMPORTANT]
+====
+The `cluster` label is required, and should match the name the cluster is configured to use in the Web Console.
+====
 
 Add another `scrape_config` job for the previously-installed Cluster Monitor:
 
