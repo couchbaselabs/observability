@@ -87,7 +87,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
   "id": null,
-  "iteration": 1645531048785,
+  "iteration": 1645695075131,
   "links": [
     {
       "asDropdown": false,
@@ -1103,13 +1103,19 @@
                         "text": "Active"
                       },
                       "inactiveAdded": {
+                        "color": "dark-yellow",
                         "index": 2,
                         "text": "Pending Rebalance"
                       },
                       "inactiveFailed": {
-                        "color": "#e02f44b0",
+                        "color": "orange",
                         "index": 1,
                         "text": "Failed Over"
+                      },
+                      "unhealthy": {
+                        "color": "dark-red",
+                        "index": 3,
+                        "text": "Unhealthy"
                       }
                     },
                     "type": "value"
@@ -1177,7 +1183,7 @@
               "name": "Services"
             },
             {
-              "jsonPath": "$.nodes_summary[*].cluster_membership",
+              "jsonPath": "$.nodes_summary[*] ~> $map(function($node) {\n  $node.status = \"healthy\"\n  ? $node.cluster_membership\n  : $node.status\n})",
               "language": "jsonata",
               "name": "State"
             },
