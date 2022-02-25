@@ -87,7 +87,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
   "id": null,
-  "iteration": 1645531048785,
+  "iteration": 1645790856821,
   "links": [
     {
       "asDropdown": false,
@@ -2627,7 +2627,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sys_mem_free{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
+          "expr": "sys_mem_actual_used{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -3363,6 +3363,6 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
