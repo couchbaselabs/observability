@@ -117,7 +117,7 @@ Now we have the required plugins and dashboards installed, we need to configure 
 [NOTE]
 ====
 If adding through the web UI, both Cluster Monitor and Alertmanager will return 404.
-This is expected and not an issue - the dashboards use sub-paths of these configured URLs which are themselves valid and exist.]
+This is expected and not an issue - the dashboards use sub-paths of these configured URLs which are themselves valid and exist.
 ====
 
 . **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_. 
@@ -125,8 +125,7 @@ This is expected and not an issue - the dashboards use sub-paths of these config
   - The URL should point to the Cluster Monitor with a sub-path of `/api/v1`. The port should be `:7196`.
   - Enable `basicAuth`, with the user and password you configured.
 . **Prometheus** - this should already be configured as a Data Source.
-. **Alertmanager** - this should already be configured as a Data Source. 
-  However, some of the dashboards query the Alertmanager API and so you will need to add a new Data Source in the same way as you did for the Cluster Monitor.
+. **Alertmanager** - add a new Data Source in the same way as you did for the Cluster Monitor.
   - This should be named _Alertmanager API_, also of type _JSON API_, and the URL should point to your Alertmanager instance. 
   - Configure any authentication as needed.
 
