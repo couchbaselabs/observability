@@ -121,6 +121,12 @@ Now we have the required plugins and dashboards installed, we need to configure 
   - Configure any authentication as needed.
 
 If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your `grafana.yml` should look something like this:
+
+[IMPORTANT]
+====
+The names of these two data sources must match the below snippet exactly, otherwise the dashboards may fail to provision.
+====
+
 [source, console]  
 ----
     - name: Cluster Monitor
