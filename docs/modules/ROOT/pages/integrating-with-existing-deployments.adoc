@@ -140,7 +140,7 @@ The names of these two data sources must match the below snippet exactly, otherw
       type: marcusolsson-json-datasource
       uid: PC245499EF542F9C5
       url: http://<Alertmanager URL>/api/v2
-      // Configure basicAuth as needed.
+      # Configure basicAuth as needed.
 ...
 ----
 
