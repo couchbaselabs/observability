@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Integrating CMOS with Existing Monitoring Stacks :: Couchbase Monitoring and Observability Stack</title>
+    <meta name="generator" content="Antora 2.3.4">
+    <link rel="stylesheet" href="../../_/css/site.css">
+    <script>var uiRootPath = '../../_'</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/cmos">Couchbase Monitoring and Observability Stack</a>
+      <button class="navbar-burger" data-target="topbar-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#">Home</a>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Products</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Product A</a>
+            <a class="navbar-item" href="#">Product B</a>
+            <a class="navbar-item" href="#">Product C</a>
+          </div>
+        </div>
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link" href="#">Services</a>
+          <div class="navbar-dropdown">
+            <a class="navbar-item" href="#">Service A</a>
+            <a class="navbar-item" href="#">Service B</a>
+            <a class="navbar-item" href="#">Service C</a>
+          </div>
+        </div>
+        <div class="navbar-item">
+          <span class="control">
+            <a class="button is-primary" href="#">Download</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container" data-component="cmos" data-version="0.1">
+  <aside class="nav">
+    <div class="panels">
+<div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <h3 class="title"><a href="index.html">Couchbase Monitoring and Observability Stack</a></h3>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Introduction</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="index.html">Home</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="quickstart.html">Quick start guide</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Architecture</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="architecture.html">Architecture overview</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Components</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-alertmanager.html">Alertmanager</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-grafana.html">Grafana</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-loki.html">Loki</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="component-prometheus.html">Prometheus</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Configuration</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="configure-cmos.html">CMOS Configuration</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Deployment</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-onpremise.html">On-premise deployment</a>
+  </li>
+  <li class="nav-item is-current-page" data-depth="1">
+    <a class="nav-link" href="integrating-with-existing-deployments.html">Integrating with existing monitoring pipelines</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="deployment-fluentbit.html">Fluent Bit deployment</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Tutorials</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-onpremise.html">On-premise example</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="tutorial-kubernetes.html">Kubernetes example</a>
+  </li>
+</ul>
+  </li>
+  <li class="nav-item" data-depth="0">
+    <button class="nav-item-toggle"></button>
+    <span class="nav-text">Further Information</span>
+<ul class="nav-list">
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="prerequisite-and-setup.html">Pre-requisites</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="health-checks.html">Health Checks</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="licensing.html">Licensing</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="support.html">Support</a>
+  </li>
+</ul>
+  </li>
+</ul>
+  </nav>
+</div>
+<div class="nav-panel-explore" data-panel="explore">
+  <div class="context">
+    <span class="title">Couchbase Monitoring and Observability Stack</span>
+    <span class="version">0.1</span>
+  </div>
+  <ul class="components">
+    <li class="component is-current">
+      <a class="title" href="index.html">Couchbase Monitoring and Observability Stack</a>
+      <ul class="versions">
+        <li class="version is-current is-latest">
+          <a href="index.html">0.1</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+<button class="nav-toggle"></button>
+  <a href="index.html" class="home-link"></a>
+<nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
+    <li>Deployment</li>
+    <li><a href="integrating-with-existing-deployments.html">Integrating with existing monitoring pipelines</a></li>
+  </ul>
+</nav>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/integrating-with-existing-deployments.adoc">Edit this Page</a></div>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Integrating CMOS with Existing Monitoring Stacks</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+You can integrate CMOS with your existing Prometheus, Alertmanager, and Grafana monitoring system.
+This tutorial documents how to configure each component in order to achieve this.
+</blockquote>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Tutorials are provided to demonstrate how a particular problem may be solved.
+Tutorials are accurate at the time of writing but rely heavily on third party software.
+The third party software is not directly supported by Couchbase.
+For further help in the event of a problem, contact the relevant software maintainer.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pre_requisites"><a class="anchor" href="#_pre_requisites"></a>Pre-requisites</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The environment you wish to integrate CMOS into must have:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>At least one <strong>Couchbase Server</strong> node;</p>
+</li>
+<li>
+<p><strong>Prometheus</strong>, with <strong>Alertmanager</strong> installed;</p>
+</li>
+<li>
+<p><strong>Grafana</strong>, configured to use the Prometheus server as a Data Source;</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Docker</strong>, to run the Cluster Monitor&#8217;s Docker image</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installation"><a class="anchor" href="#_installation"></a>Installation</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_install_cluster_monitor"><a class="anchor" href="#_install_cluster_monitor"></a>Install Cluster Monitor</h3>
+<div class="paragraph">
+<p>The Cluster Monitor can be installed by downloading a Docker image.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>We plan for the image to be distributed on Docker Hub, but currently this is not available.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Run the Docker container, using the preview image given to you by Couchbase:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">docker run -d --rm \
+  -p 7196:7196 \ <i class="conum" data-value="1"></i><b>(1)</b>
+  -e CB_MULTI_ALERTMANAGER_URLS=http://&lt;Alertmanager IP&gt;:9093 \ <i class="conum" data-value="2"></i><b>(2)</b>
+  -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password \
+  --name cluster_monitor \
+  &lt;YOUR IMAGE HERE&gt;</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>If you are using TLS, you will need to add <code>-p 7197:7197</code> to also expose port <code>7197</code>.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>This is not necessary if you are not using Alertmanager</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Docker networking <a href="https://docs.docker.com/network/#network-drivers">defaults to bridge</a>, meaning that this container will be able to communicate with any other running Docker containers.
+If your Grafana, Prometheus / Alertmanager instances are not containerized, ensure that the Cluster Monitor container can communicate with them.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configure_cluster_monitor"><a class="anchor" href="#_configure_cluster_monitor"></a>Configure Cluster Monitor</h3>
+<div class="paragraph">
+<p>Navigate to the Web GUI, which listens by default on port <code>7196</code>.
+Sign in using the credentials you provided as environment variables when you started the Cluster Monitor earlier (by default, <code>admin</code>/<code>password</code>).</p>
+</div>
+<div class="paragraph">
+<p>Then click "Add Cluster" and enter the IP address of a node in the cluster, along with the cluster&#8217;s configured username and password.
+Repeat this for every cluster you wish to add to the Cluster Monitor.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_install_the_agent_on_your_couchbase_server_nodes"><a class="anchor" href="#_install_the_agent_on_your_couchbase_server_nodes"></a>Install the Agent on your Couchbase Server nodes</h3>
+<div class="paragraph">
+<p>See <a href="https://issues.couchbase.com/browse/CMOS-210">CMOS-210</a>, which tracks the development (including documentation) of the Agent.
+Until this is ready, follow the instructions given to you by your Couchbase representative.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_grafana_plugins"><a class="anchor" href="#_grafana_plugins"></a>Grafana: Plugins</h3>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a <code>.zip</code> file which can be unpacked manually into your Grafana plugins directory.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p><strong>Currently, we require only <a href="https://grafana.com/grafana/plugins/marcusolsson-json-datasource/">JSON API</a>, which has associated <a href="https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation">installation instructions</a>.</strong></p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Grafana Cloud</strong>: search for the plugin <code>marcusolsson-json-datasource</code> and click install</p>
+</li>
+<li>
+<p><strong>Command-line</strong>: <code>grafana-cli plugins install marcusolsson-json-datasource</code></p>
+</li>
+<li>
+<p><strong>Manual download</strong>: <em>see linked instructions for latest file</em></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>However, if you:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Configure Grafana (v7.1+) dashboards through the use of provisioning files: <a href="https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins">specify the plugins to install in your provisioning configuration file</a>.</p>
+</li>
+<li>
+<p>Are running Grafana in a Docker container: simply pass through an additional environment variable <code>GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION</code> where the <code>$PLUGIN_NAME</code> and latest <code>$VERSION</code> can be found on the plugin&#8217;s homepage (linked under "installation instructions" for each).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grafana_dashboards"><a class="anchor" href="#_grafana_dashboards"></a>Grafana: Dashboards</h3>
+<div class="paragraph">
+<p>The CMOS dashboards can be found in the official GitHub repository under <a href="https://github.com/couchbaselabs/observability/tree/main/microlith/grafana/provisioning/dashboards">microlith/grafana/provisioning/dashboards</a>/.
+Download them and copy them to a folder accessible by your Grafana installation.</p>
+</div>
+<div class="paragraph">
+<p>The relevant setting in the Grafana configuration file, typically named <code>grafana.ini</code>, is:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">[dashboards]
+default_home_dashboard_path = &lt;path to dashboards&gt;/couchbase-inventory.json</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you are using <a href="https://grafana.com/docs/grafana/latest/administration/provisioning/">Grafana provisioning</a>, you will need to update the <code>providers.options.path</code> argument in your provisioning configuration file (typically named <code>grafana.yml</code>) instead.
+For example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">providers:
+    - name: dashboards
+      type: file
+      ...
+      options:
+          path: /etc/grafana/provisioning/dashboards/
+      ...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_grafana_data_sources"><a class="anchor" href="#_grafana_data_sources"></a>Grafana: Data Sources</h3>
+<div class="paragraph">
+<p>Now we have the required plugins and dashboards installed, we need to configure Data Sources.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If adding through the web UI, both Cluster Monitor and Alertmanager will return 404.
+This is expected and not an issue - the dashboards use sub-paths of these configured URLs which are themselves valid and exist.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Cluster Monitor (JSON API)</strong>, via the Web UI: click on <em>Add Data Source</em> and select <em>JSON API</em>.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This must be named <code>Couchbase Cluster Monitor API</code>.</p>
+</li>
+<li>
+<p>The URL should point to the Cluster Monitor with a sub-path of <code>/api/v1</code>. The port should be <code>:7196</code>.</p>
+</li>
+<li>
+<p>Enable <code>basicAuth</code>, with the user and password you configured.</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Prometheus</strong> - this should already be configured as a Data Source.</p>
+</li>
+<li>
+<p><strong>Alertmanager</strong> - add a new Data Source in the same way as you did for the Cluster Monitor.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>This should be named <em>Alertmanager API</em>, also of type <em>JSON API</em>, and the URL should point to your Alertmanager instance.</p>
+</li>
+<li>
+<p>Configure any authentication as needed.</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your <code>grafana.yml</code> should look something like this:</p>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The names of these two data sources must match the below snippet exactly, otherwise the dashboards may fail to provision.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">    - name: Couchbase Cluster Monitor API
+      type: marcusolsson-json-datasource
+      uid: PD5070BC1AA9F8304
+      url: http://&lt;Cluster Monitor URL&gt;:7196/api/v1
+      basicAuth: true
+      basicAuthUser: &lt;Cluster Monitor Username&gt;
+      basicAuthPassword: &lt;Cluster Monitor Password&gt;
+    - name: Alertmanager API
+      type: marcusolsson-json-datasource
+      uid: PC245499EF542F9C5
+      url: http://&lt;Alertmanager URL&gt;/api/v2
+      # Configure basicAuth as needed.
+...</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prometheus_scrape_config"><a class="anchor" href="#_prometheus_scrape_config"></a>Prometheus: Scrape config</h3>
+<div class="paragraph">
+<p>You will need to modify your existing Prometheus configuration file (typically named <code>prometheus.yml</code>).
+Add in a <code>scrape_config</code> job for your Couchbase Server nodes:</p>
+</div>
+<div class="listingblock">
+<div class="title">prometheus.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">global:
+  scrape_interval: 30s
+
+scrape_configs:
+  - job_name: couchbase-server
+    basic_auth:
+      username: Administrator <i class="conum" data-value="1"></i><b>(1)</b>
+      password: password <i class="conum" data-value="2"></i><b>(2)</b>
+    static_configs:
+      - targets:
+          - &lt;Couchbase Server Node 1 IP&gt;:8091 <i class="conum" data-value="3"></i><b>(3)</b>
+          - &lt;Couchbase Server Node 2 IP&gt;:8091
+          ...
+        labels:
+          cluster: "Couchbase Server Cluster" <i class="conum" data-value="4"></i><b>(4)</b></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>username</code> should be set to a Couchbase Server user with at least "External Stats Reader" permission.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>password</code> should be the password of the above user.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>targets</code> should specify the addresses of all the nodes in your cluster.
+The port number needs to be the management port: <code>8091</code> by default, or <code>:18091</code> if you have TLS enabled.
+Note that if you are not on Couchbase Server 7+, you should use the port that your chosen exporter uses - if this is <code>cbhealthagent</code> this will be <code>9092</code>.
+There are alternative configuration options that do not require hard-coding the addresses - refer to the <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config" target="_blank" rel="noopener">Prometheus documentation</a> for more details.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Any labels defined here will be added to <strong>all</strong> metrics from this cluster - you may want to configure e.g., <code>environment</code>, <code>datacenter</code> etc.</td>
+</tr>
+</table>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-important" title="Important"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The <code>cluster</code> label is required, and must match the name the cluster is configured to use in the Web Console.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Add another <code>scrape_config</code> job for the previously-installed Cluster Monitor:</p>
+</div>
+<div class="listingblock">
+<div class="title">prometheus.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml">...
+- job_name: couchbase-cluster-monitor
+  basic_auth:
+    username: admin  <i class="conum" data-value="1"></i><b>(1)</b>
+    password: password <i class="conum" data-value="2"></i><b>(2)</b>
+  metrics_path: /api/v1/_prometheus <i class="conum" data-value="3"></i><b>(3)</b>
+  static_configs:
+    - targets: [&lt;Cluster Monitor IP&gt;:7196] <i class="conum" data-value="4"></i><b>(4)</b>
+...</code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td><code>username</code> should be the Username you configured for the Cluster Monitor.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td><code>password</code> should be the Password you configured for the Cluster Monitor.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td><code>metrics_path</code> is the path to the Prometheus server running on the Cluster Monitor. This should not be changed.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td><code>targets</code> is a list of Cluster Monitor instances for Prometheus to retrieve metrics from.
+For now this should be a single server IP, listening on port <code>7196</code>.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Restart Prometheus, and navigate to the Web UI.
+If this was successful you should see your cluster listed on the page <code>/targets</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prometheus_alerting_rules"><a class="anchor" href="#_prometheus_alerting_rules"></a>Prometheus: Alerting Rules</h3>
+<div class="paragraph">
+<p>CMOS ships with pre-made alert definitions which can alert you about certain events in your cluster.
+To take advantage of these, first download the rule definitions to somewhere your Prometheus config can access them:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">wget -O prometheus-rules.yaml https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/prometheus/alerting/couchbase/couchbase-rules.yaml</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Next, modify your Prometheus configuration file to include this directory.
+For example, if you downloaded them to <code>/etc/prometheus/alerting/</code> then you would add:</p>
+</div>
+<div class="listingblock">
+<div class="title">prometheus.yml</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-yaml hljs" data-lang="yaml"># Insert this at the top level of your prometheus.yml
+rule_files:
+  - /etc/prometheus/alerting/prometheus-rules.yaml</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you have existing alert definitions, simply add the <code>prometheus-rules.yaml</code> file to the same directory, and specify <code>*.yaml</code> as the target for <code>rule_files</code>.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Restart Prometheus once more, and navigate to the Web UI.
+You should be able to see the new rules listed on the <code>/rules</code> page.
+You may need to unhide inactive rules.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_alertmanager"><a class="anchor" href="#_alertmanager"></a>Alertmanager</h3>
+<div class="paragraph">
+<p>We assume that you have already configured Prometheus to send alerts to Alertmanager, and that Alertmanager has appropriate receivers created and configured.</p>
+</div>
+<div class="paragraph">
+<p>Therefore, there is no additional configuration required.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next Steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Head on over to your Grafana Web UI.
+Navigate to <em>Dashboards</em>, and select <em>Single Cluster Overview.</em></p>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script src="../../_/js/site.js"></script>
+<script async src="../../_/js/vendor/highlight.js"></script>
+  </body>
+</html>
