@@ -129,7 +129,7 @@ The names of these two data sources must match the below snippet exactly, otherw
 
 [source, console]  
 ----
-    - name: Cluster Monitor
+    - name: Couchbase Cluster Monitor API
       type: marcusolsson-json-datasource
       uid: PD5070BC1AA9F8304
       url: http://<Cluster Monitor URL>:7196/api/v1
