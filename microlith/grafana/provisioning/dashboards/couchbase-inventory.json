@@ -1,7 +1,7 @@
 {
   "__inputs": [
     {
-      "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+      "name": "DS_COUCHBASE_CLUSTER MONITOR API",
       "label": "Couchbase Cluster Monitor API",
       "description": "",
       "type": "datasource",
@@ -54,6 +54,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
+  "iteration": 1645791199990,
   "links": [
     {
       "asDropdown": false,
@@ -66,6 +67,18 @@
       "tooltip": "",
       "type": "link",
       "url": "/public/cmos-doc-redirect.html#/promwebform.html"
+    },
+    {
+      "asDropdown": false,
+      "icon": "info",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Provide Feedback",
+      "tooltip": "",
+      "type": "link",
+      "url": "mailto:cmos-preview@couchbase.com?subject=CMOS%20Preview%20Feedback"
     }
   ],
   "liveNow": false,
@@ -73,7 +86,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
       },
       "description": "A summary view of all Couchbase Clusters within the estate.",
       "fieldConfig": {
@@ -418,6 +431,6 @@
   "timezone": "",
   "title": "Couchbase Inventory",
   "uid": "ldfS-1F7z",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

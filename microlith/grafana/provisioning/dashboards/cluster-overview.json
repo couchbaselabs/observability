@@ -1,7 +1,7 @@
 {
   "__inputs": [
     {
-      "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+      "name": "DS_COUCHBASE_CLUSTER MONITOR API",
       "label": "Couchbase Cluster Monitor API",
       "description": "",
       "type": "datasource",
@@ -87,7 +87,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
   "id": null,
-  "iteration": 1645790856821,
+  "iteration": 1645791219928,
   "links": [
     {
       "asDropdown": false,
@@ -102,6 +102,18 @@
       "tooltip": "",
       "type": "dashboards",
       "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "info",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Provide Feedback",
+      "tooltip": "",
+      "type": "link",
+      "url": "mailto:cmos-preview@couchbase.com?subject=CMOS%20Preview%20Feedback"
     }
   ],
   "liveNow": false,
@@ -120,7 +132,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
       },
       "fieldConfig": {
         "defaults": {
@@ -187,7 +199,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
       },
       "description": "",
       "fieldConfig": {
@@ -369,7 +381,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
       },
       "description": "Click on each service to be taken to its dashboard page.",
       "fieldConfig": {
@@ -566,7 +578,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
       },
       "fieldConfig": {
         "defaults": {
@@ -633,7 +645,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
       },
       "fieldConfig": {
         "defaults": {
@@ -1153,7 +1165,7 @@
           "cacheDurationSeconds": 0,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+            "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
           },
           "fields": [
             {
@@ -1528,7 +1540,7 @@
           "cacheDurationSeconds": 0,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+            "uid": "${DS_COUCHBASE_CLUSTER MONITOR API}"
           },
           "fields": [
             {
@@ -3363,6 +3375,6 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 2,
+  "version": 5,
   "weekStart": ""
 }
