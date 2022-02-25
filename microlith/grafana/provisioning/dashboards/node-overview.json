@@ -1,4 +1,69 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+      "label": "Couchbase Cluster Monitor API",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    },
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_ALERTMANAGER_API",
+      "label": "Alertmanager API",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.6"
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-json-datasource",
+      "name": "JSON API",
+      "version": "1.3.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -21,8 +86,8 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 6,
-  "iteration": 1645094095725,
+  "id": null,
+  "iteration": 1645530997206,
   "links": [
     {
       "asDropdown": false,
@@ -88,7 +153,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "PD5070BC1AA9F8304"
+        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
       },
       "description": "",
       "fieldConfig": {
@@ -134,7 +199,11 @@
       "pluginVersion": "8.3.6",
       "targets": [
         {
-          "cacheDurationSeconds": 0,
+          "cacheDurationSeconds": 300,
+          "datasource": {
+            "type": "marcusolsson-json-datasource",
+            "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+          },
           "fields": [
             {
               "jsonPath": "$.version ~> function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")}",
@@ -142,10 +211,9 @@
               "name": "Version"
             }
           ],
-          "hide": false,
           "method": "GET",
           "queryParams": "",
-          "refId": "B",
+          "refId": "A",
           "urlPath": "/clusters/$cluster_uuid/node/$node_uuid"
         }
       ],
@@ -156,7 +224,7 @@
     {
       "datasource": {
         "type": "marcusolsson-json-datasource",
-        "uid": "PD5070BC1AA9F8304"
+        "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
       },
       "description": "Click on each service to be taken to its dashboard page.",
       "fieldConfig": {
@@ -421,7 +489,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -439,7 +507,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -475,9 +543,9 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "${DS_PROMETHEUS}"
           },
-          "exemplar": true,
+          "exemplar": false,
           "expr": "multimanager_node_checker_status{cluster_name=${cluster:doublequote},node_name=~`${node:regex}(:[0-9]*)?`} >= 0",
           "format": "table",
           "instant": true,
@@ -489,7 +557,7 @@
           "cacheDurationSeconds": 5,
           "datasource": {
             "type": "marcusolsson-json-datasource",
-            "uid": "PC245499EF542F9C5"
+            "uid": "${DS_ALERTMANAGER_API}"
           },
           "fields": [
             {
@@ -557,6 +625,10 @@
       "type": "row"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -630,6 +702,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sys_cpu_utilization_rate{instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
@@ -641,6 +717,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -711,6 +791,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sysproc_cpu_utilization{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
@@ -722,6 +806,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -795,6 +883,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sys_mem_free{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
           "interval": "",
@@ -806,6 +898,10 @@
       "type": "timeseries"
     },
     {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${DS_PROMETHEUS}"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -872,6 +968,10 @@
       },
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${DS_PROMETHEUS}"
+          },
           "exemplar": true,
           "expr": "sysproc_mem_resident{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
@@ -894,7 +994,65 @@
   "templating": {
     "list": [
       {
+        "current": {
+          "selected": false,
+          "text": "Prometheus",
+          "value": "Prometheus"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "label": "datasource",
+        "multi": false,
+        "name": "DS_PROMETHEUS",
+        "options": [],
+        "query": "prometheus",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Alertmanager API",
+          "value": "Alertmanager API"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DS_ALERTMANAGER_API",
+        "options": [],
+        "query": "marcusolsson-json-datasource",
+        "queryValue": "",
+        "refresh": 1,
+        "regex": "/Alertmanager/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
+        "current": {
+          "selected": false,
+          "text": "Couchbase Cluster Monitor API",
+          "value": "Couchbase Cluster Monitor API"
+        },
+        "hide": 2,
+        "includeAll": false,
+        "multi": false,
+        "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+        "options": [],
+        "query": "marcusolsson-json-datasource",
+        "refresh": 1,
+        "regex": "/Couchbase Cluster Monitor/",
+        "skipUrlSync": false,
+        "type": "datasource"
+      },
+      {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
         "hide": 0,
         "includeAll": false,
@@ -914,6 +1072,10 @@
       },
       {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(max by (cluster_uuid) (multimanager_cluster_checker_status{cluster_name=${cluster:doublequote}}))",
         "hide": 2,
         "includeAll": false,
@@ -932,6 +1094,10 @@
       },
       {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(multimanager_node_checker_status{cluster_name=${cluster:doublequote}})",
         "hide": 0,
         "includeAll": true,
@@ -951,6 +1117,10 @@
       },
       {
         "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
         "definition": "query_result(max by (node_uuid) (multimanager_node_checker_status{node_name=~`${node:regex}(:[0-9]*)?`}))",
         "hide": 2,
         "includeAll": false,
@@ -989,6 +1159,6 @@
   "timezone": "",
   "title": "Node Overview",
   "uid": "Dx-2iOc7k",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }
