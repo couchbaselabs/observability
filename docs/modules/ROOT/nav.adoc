@@ -40,7 +40,6 @@ endif::env-packaged[]
 .Tutorials
 * xref:tutorial-onpremise.adoc[On-premise example]
 * xref:tutorial-kubernetes.adoc[Kubernetes example]
-* xref:tutorial-standalone.adoc[Standalone example]
 
 .Further Information
 * xref:prerequisite-and-setup.adoc[Pre-requisites]

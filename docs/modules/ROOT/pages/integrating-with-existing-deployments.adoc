@@ -73,6 +73,10 @@ The instructions for each plugin offer a Grafana Cloud one-click install, a comm
 
 **Currently, we require only https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].**
 
+- **Grafana Cloud**: search for the plugin "marcusolsson-json-datasource" and click install
+- **Command-line**: `grafana-cli plugins install marcusolsson-json-datasource`
+- **Manual download**: _see linked instructions for latest file_
+
 However, if you:
 
 - Configure Grafana (v7.1+) dashboards through the use of provisioning files: https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your provisioning configuration file]. 
@@ -108,6 +112,12 @@ providers:
 === Grafana: Data Sources
 
 Now we have the required plugins and dashboards installed, we need to configure Data Sources.
+
+[NOTE]
+====
+If adding through the web UI, both Cluster Monitor and Alertmanager will return 404.
+This is expected and not an issue - the dashboards use sub-paths of these configured URLs which are themselves valid and exist.]
+====
 
 . **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_. 
   - The URL should point to the Cluster Monitor with a sub-path of `/api/v1`. The port should be `:7196`.
@@ -164,7 +174,8 @@ scrape_configs:
 <.> `username` should be set to a Couchbase Server user with at least "External Stats Reader" permission.
 <.> `password` should be the password of the above user.
 <.> `targets` should specify the addresses of all the nodes in your cluster.
-    The port number needs to be the management port - use `:18091` if you have TLS enabled.
+    The port number needs to be the management port: `8091` by default, or `:18091` if you have TLS enabled. 
+    Note that if you are not on Couchbase Server 7+, you should use the port that your chosen exporter uses - if this is `cbhealthagent` this will be `9092`.
     There are alternative configuration options that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
 <.> Any labels defined here will be added to **all** metrics from this cluster - you may want to configure e.g., `environment`, `datacenter` etc.
 
