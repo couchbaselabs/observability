@@ -74,7 +74,7 @@ The instructions for each plugin offer a Grafana Cloud one-click install, a comm
 
 **Currently, we require only https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].**
 
-- **Grafana Cloud**: search for the plugin "marcusolsson-json-datasource" and click install
+- **Grafana Cloud**: search for the plugin `marcusolsson-json-datasource` and click install
 - **Command-line**: `grafana-cli plugins install marcusolsson-json-datasource`
 - **Manual download**: _see linked instructions for latest file_
 
