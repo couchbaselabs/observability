@@ -53,6 +53,7 @@ If your Grafana, Prometheus / Alertmanager instances are not containerized, ensu
 === Configure Cluster Monitor
 
 Navigate to the Web GUI, which listens by default on port `7196`.
+Sign in using the credentials you provided as environment variables when you started the Cluster Monitor earlier (by default, `admin`/`password`).
 
 Then click "Add Cluster" and enter the IP address of a node in the cluster, along with the cluster's configured username and password.
 Repeat this for every cluster you wish to add to the Cluster Monitor.
@@ -120,6 +121,7 @@ This is expected and not an issue - the dashboards use sub-paths of these config
 ====
 
 . **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_. 
+  - This must be named `Couchbase Cluster Monitor API`.
   - The URL should point to the Cluster Monitor with a sub-path of `/api/v1`. The port should be `:7196`.
   - Enable `basicAuth`, with the user and password you configured.
 . **Prometheus** - this should already be configured as a Data Source.
@@ -129,9 +131,15 @@ This is expected and not an issue - the dashboards use sub-paths of these config
   - Configure any authentication as needed.
 
 If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your `grafana.yml` should look something like this:
+
+[IMPORTANT]
+====
+The names of these two data sources must match the below snippet exactly, otherwise the dashboards may fail to provision.
+====
+
 [source, console]  
 ----
-    - name: Cluster Monitor
+    - name: Couchbase Cluster Monitor API
       type: marcusolsson-json-datasource
       uid: PD5070BC1AA9F8304
       url: http://<Cluster Monitor URL>:7196/api/v1
@@ -142,7 +150,7 @@ If you are utilizing Grafana provisioning for dashboards, and would instead like
       type: marcusolsson-json-datasource
       uid: PC245499EF542F9C5
       url: http://<Alertmanager URL>/api/v2
-      // Configure basicAuth as needed.
+      # Configure basicAuth as needed.
 ...
 ----
 
@@ -181,7 +189,7 @@ scrape_configs:
 
 [IMPORTANT]
 ====
-The `cluster` label is required, and should match the name the cluster is configured to use in the Web Console.
+The `cluster` label is required, and must match the name the cluster is configured to use in the Web Console.
 ====
 
 Add another `scrape_config` job for the previously-installed Cluster Monitor:
