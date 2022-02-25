@@ -170,7 +170,7 @@ scrape_configs:
 
 [IMPORTANT]
 ====
-The `cluster` label is required, and should match the name the cluster is configured to use in the Web Console.
+The `cluster` label is required, and must match the name the cluster is configured to use in the Web Console.
 ====
 
 Add another `scrape_config` job for the previously-installed Cluster Monitor:
