@@ -90,3 +90,13 @@ backoffs
 resynchronize
 backoff
 misconfiguration
+TLS
+alertmanager
+datacenter
+hostnames
+loki
+natively
+webhooks
+yaml
+yml
+unhide
