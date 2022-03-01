@@ -87,7 +87,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": null,
-  "iteration": 1645530997206,
+  "iteration": 1645790966748,
   "links": [
     {
       "asDropdown": false,
@@ -888,7 +888,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sys_mem_free{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
+          "expr": "sys_mem_actual_used{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
           "interval": "",
           "legendFormat": "{{ instance }}",
           "refId": "A"

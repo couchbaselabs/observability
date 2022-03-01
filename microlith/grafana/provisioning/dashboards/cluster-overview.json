@@ -87,7 +87,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
   "id": null,
-  "iteration": 1645531048785,
+  "iteration": 1645791219928,
   "links": [
     {
       "asDropdown": false,
@@ -102,6 +102,18 @@
       "tooltip": "",
       "type": "dashboards",
       "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "info",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Provide Feedback",
+      "tooltip": "",
+      "type": "link",
+      "url": "mailto:cmos-preview@couchbase.com?subject=CMOS%20Preview%20Feedback"
     }
   ],
   "liveNow": false,
@@ -2627,7 +2639,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sys_mem_free{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
+          "expr": "sys_mem_actual_used{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -3363,6 +3375,6 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 1,
+  "version": 5,
   "weekStart": ""
 }
