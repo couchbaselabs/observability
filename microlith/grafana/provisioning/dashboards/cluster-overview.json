@@ -87,7 +87,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 2,
   "id": null,
-  "iteration": 1645695075131,
+  "iteration": 1645791219928,
   "links": [
     {
       "asDropdown": false,
@@ -102,6 +102,18 @@
       "tooltip": "",
       "type": "dashboards",
       "url": ""
+    },
+    {
+      "asDropdown": false,
+      "icon": "info",
+      "includeVars": false,
+      "keepTime": false,
+      "tags": [],
+      "targetBlank": true,
+      "title": "Provide Feedback",
+      "tooltip": "",
+      "type": "link",
+      "url": "mailto:cmos-preview@couchbase.com?subject=CMOS%20Preview%20Feedback"
     }
   ],
   "liveNow": false,
@@ -1772,7 +1784,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -1790,7 +1802,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2017,7 +2029,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2052,7 +2064,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2278,7 +2290,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2314,7 +2326,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "/public/cmos-doc-redirect.html#/docs/cmos/0.1/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -2633,7 +2645,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sys_mem_free{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
+          "expr": "sys_mem_actual_used{cluster=${cluster:doublequote}} / \nsys_mem_total{cluster=${cluster:doublequote}}",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -3369,6 +3381,6 @@
   "timezone": "",
   "title": "Single Cluster Overview",
   "uid": "UEZRQMc7z",
-  "version": 1,
+  "version": 5,
   "weekStart": ""
 }
