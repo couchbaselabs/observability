@@ -489,7 +489,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
@@ -507,7 +507,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checkers Info",
-                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
