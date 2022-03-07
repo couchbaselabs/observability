@@ -2,12 +2,10 @@
 
 You will need a Docker daemon - on Linux use your respective package manager, on macOS or Windows you can use https://www.docker.com/products/docker-desktop[Docker Desktop^].
 
-You will also need a Couchbase Server cluster running and accessible - for testing we recommend using https://github.com/couchbaselabs/vagrants[Vagrant^] or https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html[Docker^]. If you are using Couchbase Server 6.6, you will need the https://github.com/couchbase/couchbase-exporter[Couchbase Prometheus Exporter^] set up on each of your Couchbase Server nodes.
+You will also need a Couchbase Server cluster running and accessible - if you do not already have a test cluster available, we recommend using https://github.com/couchbaselabs/vagrants[Vagrant^] or https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html[Docker^] to start one up.
+Note that CMOS is built for Couchbase Server 7.0 and above, and Prometheus metrics may not be available on versions below 7.0.
 
-. Clone the couchbaselabs/observability repo: `git clone git@github.com:couchbaselabs/observability.git`
-. Part of CMOS is the proprietary Couchbase Cluster Monitor, found in https://github.com/couchbaselabs/cbmultimanager[this private repository^]. Note that it is not required to download the Couchbase Cluster Monitor locally to run CMOS. If you want to build CMOS to use it, https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent[set up your local SSH agent^].
-. If you want to include the Cluster Monitor, build the container: `make container`. Otherwise use: `make container-oss`
-. Run the container: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1` (if your Couchbase Server is running in Docker, you may need to set https://docs.docker.com/network/[extra options^] to permit them to communicate.)
+. Run the container: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:latest` (if your Couchbase Server is running in Docker, you may need to set https://docs.docker.com/network/[extra options^] to permit them to communicate)
 . Browse to http://localhost:8080
 . Click "Add Cluster" and follow the instructions
 

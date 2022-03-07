@@ -209,7 +209,7 @@
                   {
                     "targetBlank": true,
                     "title": "Checker Documentation",
-                    "url": "https://docs-staging.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
                   }
                 ]
               }
