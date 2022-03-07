@@ -204,21 +204,13 @@
 <p>You will need a Docker daemon - on Linux use your respective package manager, on macOS or Windows you can use <a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener">Docker Desktop</a>.</p>
 </div>
 <div class="paragraph">
-<p>You will also need a Couchbase Server cluster running and accessible - for testing we recommend using <a href="https://github.com/couchbaselabs/vagrants" target="_blank" rel="noopener">Vagrant</a> or <a href="https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html" target="_blank" rel="noopener">Docker</a>. If you are using Couchbase Server 6.6, you will need the <a href="https://github.com/couchbase/couchbase-exporter" target="_blank" rel="noopener">Couchbase Prometheus Exporter</a> set up on each of your Couchbase Server nodes.</p>
+<p>You will also need a Couchbase Server cluster running and accessible - if you do not already have a test cluster available, we recommend using <a href="https://github.com/couchbaselabs/vagrants" target="_blank" rel="noopener">Vagrant</a> or <a href="https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html" target="_blank" rel="noopener">Docker</a> to start one up.
+Note that CMOS is built for Couchbase Server 7.0 and above, and Prometheus metrics may not be available on versions below 7.0.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Clone the couchbaselabs/observability repo: <code>git clone <a href="mailto:git@github.com">git@github.com</a>:couchbaselabs/observability.git</code></p>
-</li>
-<li>
-<p>Part of CMOS is the proprietary Couchbase Cluster Monitor, found in <a href="https://github.com/couchbaselabs/cbmultimanager" target="_blank" rel="noopener">this private repository</a>. Note that it is not required to download the Couchbase Cluster Monitor locally to run CMOS. If you want to build CMOS to use it, <a href="https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent" target="_blank" rel="noopener">set up your local SSH agent</a>.</p>
-</li>
-<li>
-<p>If you want to include the Cluster Monitor, build the container: <code>make container</code>. Otherwise use: <code>make container-oss</code></p>
-</li>
-<li>
-<p>Run the container: <code>docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1</code> (if your Couchbase Server is running in Docker, you may need to set <a href="https://docs.docker.com/network/" target="_blank" rel="noopener">extra options</a> to permit them to communicate.)</p>
+<p>Run the container: <code>docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:latest</code> (if your Couchbase Server is running in Docker, you may need to set <a href="https://docs.docker.com/network/" target="_blank" rel="noopener">extra options</a> to permit them to communicate)</p>
 </li>
 <li>
 <p>Browse to <a href="http://localhost:8080" class="bare">http://localhost:8080</a></p>
