@@ -3,8 +3,25 @@
   <head>
     <meta charset="utf-8" />
     <title>Add Cluster | CMOS</title>
+    <link rel="stylesheet" href="styles.css">
   </head>
-  <body>
+  <body class="doc">
+      <header class="header fixed-top">
+      <div class="header-top-row">
+          <div class="container">
+              <nav class="navbar navbar-expand-md flex-nowrap justify-content-between navbar-new-top">
+                  <ul class="navbar-brand-list">
+                    <li class="brand-logo">
+                      <a class="navbar-brand" href="https://www.couchbase.com">
+                        <img src="img/couchbase-logo.svg" alt="Couchbase">
+                      </a>
+                    </li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+    </header>
+    <main class="container">
     <h1>Configuration</h1>
     <p>This form runs on the CMOS container so enter valid hostnames or addresses that are resolvable from it.
       Do not enter localhost or 127.0.0.1 for example as that will resolve to the CMOS container itself.</p>
@@ -122,10 +139,10 @@
           </div>
         </fieldset>
         <div>
-          <button type="submit" @click.prevent="configure()" :disabled="!(doProm || doCBMM)">
+          <button type="submit" class="btn btn-primary" @click.prevent="configure()" :disabled="!(doProm || doCBMM)">
             Add Cluster
           </button>
-          <button type="submit" @click.prevent="generate()" :disabled="!(doProm || doCBMM)">
+          <button type="button" class="btn btn-grey-reverse" @click.prevent="generate()" :disabled="!(doProm || doCBMM)">
             Show Manual Configuration Steps
           </button>
         </div>
@@ -166,6 +183,18 @@
       </div>
       <div x-show="error.length > 0" x-text="error" style="color: red; font-weight: bold;"></div>
     </div>
+    </main>
+    <footer style="margin: 2em;">
+      <div class="footer-terms">
+        <div class="footer-terms-copyright">
+            <span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
+        </div>
+        <div class="footer-terms-links">
+          <a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
+          <a href="https://www.couchbase.com/support-policy">Support Policy</a>
+        </div>
+      </div>
+    </footer>
     <script defer src="alpine-3.4.2.min.js"></script>
     <script>
       document.addEventListener("alpine:init", function () {
