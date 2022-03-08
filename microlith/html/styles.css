@@ -169,12 +169,6 @@ i {
 	}
 }
 
-[type=checkbox]:checked,
-[type=checkbox]:not(:checked) {
-	position: absolute;
-	left: -9999px
-}
-
 [type=checkbox]:checked+label,
 [type=checkbox]:not(:checked)+label {
 	position: relative;
@@ -186,7 +180,6 @@ i {
 [type=checkbox]:checked+label:before,
 [type=checkbox]:not(:checked)+label:before {
 	content: "";
-	position: absolute;
 	left: 0;
 	top: 0;
 	width: 25px;
@@ -200,7 +193,6 @@ i {
 [type=checkbox]:checked+label:after,
 [type=checkbox]:not(:checked)+label:after {
 	content: "\2713\0020";
-	position: absolute;
 	top: 0;
 	left: 0;
 	font-size: .875rem;
