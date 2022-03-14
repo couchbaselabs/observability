@@ -16,8 +16,8 @@ include::partial$tutorial.adoc[]
 The environment you wish to integrate CMOS into must have:
 
 . At least one **Couchbase Server** node;
-. **Prometheus**, with **Alertmanager** installed;
-. **Grafana**, configured to use the Prometheus server as a Data Source;
+. **Prometheus 2.26 or later**, with **Alertmanager 0.23.0 or later** installed;
+. **Grafana 8.3.0 or later**, configured to use the Prometheus server as a Data Source;
 - **Docker**, to run the Cluster Monitor's Docker image
 
 == Installation
@@ -27,7 +27,7 @@ The environment you wish to integrate CMOS into must have:
 Currently there is no separate image containing just the Cluster Monitor - you can follow issue https://issues.couchbase.com/browse/CMOS-351[CMOS-351^] for updates on this option.
 However, it is possible to use the main CMOS container with all other services disabled for this purpose.
 
-Run the Docker container, using the preview image given to you by Couchbase:
+Run the Docker container, using the image from Docker Hub:
 [source, console]
 ----
 docker run -d --rm \

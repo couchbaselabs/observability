@@ -20,7 +20,7 @@ If the web server is enabled, it can also be accessed on `/support`.
 
 [WARNING]
 ====
-At the time of writing, no redaction or sanitization is performed on the output, and it is likely that it will include passwords or other credentials.
+No redaction or sanitization is performed on the output, and it is likely that it will include passwords or other credentials.
 We recommend inspecting the generated output before uploading it to Couchbase for review.
 ====
 
