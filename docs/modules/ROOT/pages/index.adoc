@@ -40,10 +40,10 @@ CMOS is provided as a Developer Preview and may have bugs, missing features, or 
 Below is an incomplete list of issues that we plan to address in a future release.
 To see the full list or report any issues you encounter, please check the JIRA board and Forums linked below.
 
+* The landing page may not be fully functional on Mozilla Firefox (link:https://issues.couchbase.com/browse/CMOS-363[CMOS-363^])
 * Grafana dashboards may show incorrect information if two clusters with the same name are added (link:https://issues.couchbase.com/browse/CMOS-203[CMOS-203^])
 * Buckets may persist in dashboards after they are dropped (link:https://issues.couchbase.com/browse/CMOS-231[CMOS-231^])
 * Prometheus scrape targets are not updated if nodes are added or removed from the cluster (https://issues.couchbase.com/browse/CMOS-106[CMOS-106^])
-* Currently there is no official support or documentation for integrating into existing Prometheus/Loki/Grafana configurations (link:https://issues.couchbase.com/browse/CMOS-166[CMOS-166^])
 * When Couchbase Server is running in containers or on Kubernetes, CPU and memory statistics may display data from the host node rather than the container (link:https://issues.couchbase.com/browse/CMOS-233[CMOS-233^])
 
 == Feedback and support

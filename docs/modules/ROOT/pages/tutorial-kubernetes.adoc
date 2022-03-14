@@ -13,32 +13,8 @@ CMOS can be deployed to monitor the Couchbase clusters deployed via https://docs
 
 == Deploy CMOS
 
-=== Kube State Metrics
-
-Kube-state-metrics is a simple service that listens to the Kubernetes API server and generates metrics about the state of the Kubernetes objects.
-It will provide many metrics which are not available by default in Kubernetes.
-
-A prerequisite to configuring CMOS is to install https://github.com/kubernetes/kube-state-metrics[kube-state-metrics^].
-If it is not already installed, you can install it using the following helm commands.
-
-[source,console]
-----
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm upgrade --install kube-state-metrics prometheus-community/kube-state-metrics
-----
-
-If you don’t have helm, you can install it by running the following commands.
-
-[source,console]
-----
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3
-chmod +x get_helm.sh
-./get_helm.sh
-----
-
 CMOS is deployed on Kubernetes platform using a standard set of resources like Deployment, Services etc.
-The Following sections describe how to deploy these standard objects.
+The following sections describe how to deploy these standard objects.
 They also include information on configuring these services.
 
 === Prometheus Configuration
