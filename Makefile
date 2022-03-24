@@ -220,7 +220,11 @@ test-native:
 	testing/run-native.sh ${TEST_SUITE}
 
 .PHONY: test
-test: clean container-oss test-native test-containers test-kubernetes
+test: clean test-unit container-oss test-native test-containers test-kubernetes
+
+.PHONY: test-unit
+test-unit:
+	DOCKER_BUILDKIT=1 docker build --target=unit-test config-svc/
 
 .PHONY: generate-screenshots
 generate-screenshots: container-oss
