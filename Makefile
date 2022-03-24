@@ -94,10 +94,6 @@ ifndef OSS
 BINARIES := $(BINARIES) cbmultimanager cbeventlog cbhealthagent
 endif
 
-# This is the path where cbmultimanager is checked out.
-# This should match the manifest.xml.
-CBMULTIMANAGER_PATH := $(UPSTREAMDIR)/cbmultimanager
-
 ###############################################################################
 # Static/Generated Variables
 # These shouldn't need to be touched in most circumstances.
@@ -112,6 +108,10 @@ TMP_DOCS_DIR := microlith/docs
 CMOSCFG_SRC_DIR := config-svc
 CMOSCFG_TMP_DRC_DIR := microlith/config-svc
 
+# This is the path where cbmultimanager is checked out.
+# This should match the manifest.xml.
+CBMULTIMANAGER_PATH := $(UPSTREAMDIR)/cbmultimanager
+
 # Extract the various components of the image target
 IMAGE_PLATFORM := $(word 1,$(subst -, ,$(IMAGE_TARGET)))
 IMAGE_OS := $(word 2,$(subst -, ,$(IMAGE_TARGET)))
@@ -124,7 +124,7 @@ IMAGE_BINARY_TARGET := $(IMAGE_OS)-$(IMAGE_ARCH)
 ###############################################################################
 
 # Variable for propagating build arguments.
-BUILD_ENV := VERSION=$(VERSION) BLD_NUM=$(BLD_NUM) UPSTREAMDIR=$(abspath $(UPSTREAMDIR))
+BUILD_ENV := VERSION=$(VERSION) BLD_NUM=$(BLD_NUM) UPSTREAMDIR=$(abspath $(UPSTREAMDIR)) ARTIFACTSDIR=$(abspath $(ARTIFACTSDIR))
 
 # These are the directories that need to exist for the build to work
 # Note: ARTIFACTSDIR is not here, because it'd conflict with the phony `dist` target
@@ -160,7 +160,7 @@ images-clean:
 .PHONY: dist
 dist: image-artifacts
 ifndef OSS
-	$(MAKE) -C $(CBMULTIMANAGER_PATH) dist -e $(BUILD_ENV) -e ARTIFACTSDIR=$(abspath $(ARTIFACTSDIR))
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) dist -e $(BUILD_ENV)
 endif
 
 # This one builds the container images locally.
@@ -173,7 +173,63 @@ container: dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
 .PHONY: container-oss
 container-oss:
 	$(MAKE) -e OSS=true image-artifacts
-	tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz couchbase/observability-stack-oss:v1
+	tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz couchbase/observability-stack:v1
+
+######################################################################################
+# Testing-related targets
+
+# NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
+# Install pre-commit then run: pre-commit run --all-files
+.PHONY: Lint
+lint: container-lint
+	tools/asciidoc-lint.sh
+	tools/shellcheck.sh
+	ansible-lint
+	tools/licence-lint.sh
+	tools/dashboards-lint.sh
+	tools/rules-lint.sh
+	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
+
+.PHONY: test-loki-rules
+test-loki-rules:
+	testing/loki_alerts/run_all.sh
+
+.PHONY: container-lint
+	tools/hadolint.sh
+
+.PHONY: container-scan
+container-scan: container
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image \
+		--severity "HIGH,CRITICAL" --ignore-unfixed --exit-code 1 --no-progress \
+		couchbase/observability-stack:$(VERSION)-$(BLD_NUM)
+	-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -e CI=true wagoodman/dive \
+		couchbase/observability-stack:$(VERSION)-$(BLD_NUM)
+
+.PHONY: test-kubernetes
+test-kubernetes: TEST_SUITE ?= integration/kubernetes
+test-kubernetes:
+	# TODO (CMOS-97): no smoke suite for kubernetes yet
+	testing/run-k8s.sh ${TEST_SUITE}
+
+.PHONY: test-containers
+test-containers:
+	testing/run-containers.sh ${TEST_SUITE}
+
+.PHONY: test-native
+test-native:
+	testing/run-native.sh ${TEST_SUITE}
+
+.PHONY: test
+test: clean container-oss test-native test-containers test-kubernetes
+
+.PHONY: generate-screenshots
+generate-screenshots: container-oss
+	tools/generate-screenshots.sh
+
+.PHONY: docs
+docs:
+	# || true is needed so the Makefile does not error when hitting CTRL+C
+	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml down
 
 ######################################################################################
 
@@ -229,7 +285,6 @@ microlith/cbmultimanager-docs: $(wildcard $(CBMULTIMANAGER_PATH/docs/**))
 
 microlith/entrypoints/cbmultimanager.sh: $(CBMULTIMANAGER_PATH)/docker/couchbase-cluster-monitor-entrypoint.sh
 	cp $< $@
-
 endif
 
 microlith/config-svc: $(wildcard $(CMOSCFG_SRC_DIR/**))
