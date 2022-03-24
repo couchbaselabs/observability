@@ -36,7 +36,7 @@ jobs:
 
             - name: Build OSS container and export
               run: |
-                  make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999
+                  make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999 -e OSS=true
                   tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_0.0.0-999.tgz couchbaselabs/observability-stack:${{ github.sha }}
                   docker save --output /tmp/cmos-image.tar couchbaselabs/observability-stack:${{ github.sha }}
 
