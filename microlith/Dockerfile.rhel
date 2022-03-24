@@ -61,7 +61,7 @@ RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 FROM registry.access.redhat.com/ubi8/ubi-minimal:8.5
 ARG PROD_VERSION
 ARG PROD_BUILD
-# hadolint ignore=DL3018
+# hadolint ignore=DL3041
 RUN microdnf update && microdnf install -y bash openssl libcap shadow-utils nginx tar && microdnf clean all
 
 COPY --from=grafana-official /usr/share/grafana /usr/share/grafana
@@ -121,7 +121,7 @@ WORKDIR $GF_PATHS_HOME
 # SC2155: declare and assign separately to avoid masking return values - we're using the working upstream
 # DL3046: high UID is fine and required to match upstream - image size is irrelevant for bloated microlith and then even more so with UBI
 # hadolint ignore=DL4006,SC2155,DL3046
-RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
+RUN export GF_GID_NAME="$(getent group $GF_GID | cut -d':' -f1)" && \
     mkdir -p "$GF_PATHS_HOME/.aws" && \
     groupadd --system -g $GF_GID grafana && \
     useradd --system -u $GF_UID -g grafana grafana && \
