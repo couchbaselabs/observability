@@ -7,7 +7,7 @@
       PATH: '{{ ansible_env.PATH }}:/usr/local/go/bin'
   tasks:
       - name: Install required packages
-        package:
+        ansible.builtin.package:
             name:
                 - git
                 - wget
@@ -22,34 +22,34 @@
         when: couchbase_server_version is version('7.0.0', 'lt')
         block:
             - name: Download Golang
-              get_url:
+              ansible.builtin.get_url:
                   url: https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
                   dest: /tmp/golang.tar.gz
             - name: Install Golang
-              unarchive:
+              ansible.builtin.unarchive:
                   src: /tmp/golang.tar.gz
                   remote_src: true
                   dest: /usr/local/
               become: true
             - name: Create directory for couchbase-exporter
-              file:
+              ansible.builtin.file:
                   path: /opt/couchbase-exporter
                   state: directory
                   owner: vagrant
                   group: vagrant
-                  mode: 0777
+                  mode: 0777 # noqa risky-file-permissions
               become: true
             - name: Download couchbase-exporter sources
-              git:
+              ansible.builtin.git:
                   repo: https://github.com/couchbase/couchbase-exporter.git
                   dest: /opt/couchbase-exporter
             - name: Build couchbase-exporter
-              command:
+              ansible.builtin.command:
                   cmd: go build -o ./couchbase-exporter .
                   chdir: /opt/couchbase-exporter
                   creates: /opt/couchbase-exporter/couchbase-exporter
             - name: Set up couchbase-exporter systemd service
-              template:
+              ansible.builtin.template:
                   src: couchbase-exporter.service.j2
                   dest: /etc/systemd/system/couchbase-exporter.service
                   owner: root
@@ -57,11 +57,11 @@
                   mode: 0644
               become: true
             - name: Start couchbase-exporter
-              systemd:
+              ansible.builtin.systemd:
                   name: couchbase-exporter.service
                   state: started
                   daemon_reload: true
               become: true
             - name: Wait for couchbase-exporter to start
-              wait_for:
+              ansible.builtin.wait_for:
                   port: 9091
