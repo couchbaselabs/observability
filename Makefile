@@ -30,37 +30,15 @@
 # we need to ensure that the same binary goes into both (otherwise the builds
 # become non-reproducible).
 #
-
-###############################################################################
-
-# That's the requirements of the build system. Now we come to some self-imposed
-# requirements.
-#
 # Caveat for all the above: cbmultimanager is private, but observability is
 # public. To allow for building the latter without the former, some of the make
 # recipes modify their behaviour if the `OSS` variable is set.
-#
-# First, the binaries. All the binaries in both couchbase-cluster-monitor and
-# couchbase-observability-stack have their `package main` in a folder named
-# `*/cmd/$BINARY`. We will build these  and copy them to $ARTIFACTSDIR.
-#
-# Linux builds (for now the only kind) are always done inside Docker. This is
-# done to ensure the builds stay reproducible. It *is* possible to manually
-# build a binary, e.g. for development, but this should not be used for any
-# builds anywhere other than a developer's laptop.
-#
-# To minimise duplication, these binary builds are done using the same
-# Dockerfile for all the binaries ()
 
 ################################################################################
 # Variables
 # ---------
 # These can be changed by the build system, or however you see fit.
 ################################################################################
-
-# Product defines the product/application name, and has a bearing on
-# what the package artifacts are called.
-PRODUCT := couchbase-observability-stack
 
 # These are overidden by the build system, so need to be optional
 # if undefined.  The build system also doesn't use -e to override
@@ -69,8 +47,7 @@ VERSION ?= 0.0.0
 BLD_NUM ?= 999
 
 # This controls the build version of docker used.
-# The only caveat, is the build system doesn't use this as the source
-# of truth, so you'll want to update the defaults found in ./docker/...
+# Note that this is a separate variable for cbmultimanager's builds.
 GO_VERSION := 1.17.2
 
 # The target controls what's built as regards cross compilation.
@@ -84,16 +61,6 @@ IMAGE_TARGET := docker-linux-amd64
 # These are all the Docker images that we can produce
 IMAGES := couchbase-observability-stack
 
-ifndef OSS
-IMAGES := $(IMAGES) couchbase-cluster-monitor
-endif
-
-# These are all the static binaries that we can produce.
-BINARIES := 
-ifndef OSS
-BINARIES := $(BINARIES) cbmultimanager cbeventlog cbhealthagent
-endif
-
 ###############################################################################
 # Static/Generated Variables
 # These shouldn't need to be touched in most circumstances.
@@ -103,13 +70,14 @@ endif
 BUILDDIR := build
 ARTIFACTSDIR := dist
 DOCSDIR := docs
+# This must match manifest.xml (in couchbase/manifest).
 UPSTREAMDIR := upstream
 TMP_DOCS_DIR := microlith/docs
 CMOSCFG_SRC_DIR := config-svc
 CMOSCFG_TMP_DRC_DIR := microlith/config-svc
 
 # This is the path where cbmultimanager is checked out.
-# This should match the manifest.xml.
+# This should match the manifest.xml (in couchbase/manifest).
 CBMULTIMANAGER_PATH := $(UPSTREAMDIR)/cbmultimanager
 
 # Extract the various components of the image target
@@ -126,9 +94,9 @@ IMAGE_BINARY_TARGET := $(IMAGE_OS)-$(IMAGE_ARCH)
 # Variable for propagating build arguments.
 BUILD_ENV := VERSION=$(VERSION) BLD_NUM=$(BLD_NUM) UPSTREAMDIR=$(abspath $(UPSTREAMDIR)) ARTIFACTSDIR=$(abspath $(ARTIFACTSDIR))
 
-# These are the directories that need to exist for the build to work
-# Note: ARTIFACTSDIR is not here, because it'd conflict with the phony `dist` target
-DIRECTORIES := $(BUILDDIR) microlith/bin # FIXME variable
+# These are the directories that need to exist for the build to work.
+# NOTE: dist-dir is *not* here, as that confuses Make.
+DIRECTORIES := $(BUILDDIR) microlith/bin
 
 # Use GNU Tar where available
 ifneq (, $(shell which gtar))
@@ -141,6 +109,10 @@ endif
 
 # Ensure the Makefile is clean by disabling all implicit rules
 .SUFFIXES:
+
+# Generic development rule, will just build the image
+.PHONY: all
+all: container
 
 # Clean up any potential mess
 .PHONY: clean
@@ -158,10 +130,10 @@ images-clean:
 	-docker rmi couchbase/observability-stack-oss:v1
 
 .PHONY: dist
-dist: image-artifacts
-ifndef OSS
+dist: dist-dir
 	$(MAKE) -C $(CBMULTIMANAGER_PATH) dist -e $(BUILD_ENV)
-endif
+	$(MAKE) image-artifacts -e $(BUILD_ENV)
+
 
 # This one builds the container images locally.
 # As a nice consequence, it also tests that the build system would be able to
@@ -236,6 +208,7 @@ docs:
 	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml down
 
 ######################################################################################
+# Image-related targets
 
 .PHONY: image-artifacts
 image-artifacts: dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
@@ -250,35 +223,38 @@ dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
 	microlith/docs \
 	microlith/cbmultimanager-docs \
 	microlith/config-svc \
-	microlith/git-commit.txt \
-	| dist-dir
+	microlith/git-commit.txt 
 else
 dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
 	microlith/Dockerfile.oss \
 	microlith/docs \
 	microlith/config-svc \
-	microlith/git-commit.txt \
-	| dist-dir
+	microlith/git-commit.txt 
 endif
 ifdef OSS
+# Use the OSS dockerfile instead
 	$(eval TARFLAGS := --exclude Dockerfile --transform='flags=r;s|Dockerfile.oss|Dockerfile|')
 endif
 	$(TAR) $(TARFLAGS) -C microlith -czf $@ $(foreach file,$(shell echo microlith/*),$(notdir $(file)))
+
+microlith/Dockerfile.oss: microlith/Dockerfile
+	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' $< > $@
+
+###############################################################################
+# Image dependencies
 
 ifndef OSS
 microlith/bin/cbmultimanager-$(IMAGE_BINARY_TARGET):
 	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbmultimanager-$(IMAGE_BINARY_TARGET) -e $(BUILD_ENV) -e BINARY_TARGET=$(IMAGE_BINARY_TARGET)
 	cp $(CBMULTIMANAGER_PATH)/build/cbmultimanager-$(IMAGE_BINARY_TARGET) $@
 
+microlith/entrypoints/cbmultimanager.sh: $(CBMULTIMANAGER_PATH)/docker/couchbase-cluster-monitor-entrypoint.sh
+	cp $< $@
+
 microlith/bin/cbeventlog-$(IMAGE_BINARY_TARGET):
 	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbeventlog-$(IMAGE_BINARY_TARGET) -e $(BUILD_ENV) -e BINARY_TARGET=$(IMAGE_BINARY_TARGET)
 	cp $(CBMULTIMANAGER_PATH)/build/cbeventlog-$(IMAGE_BINARY_TARGET) $@
 endif
-
-
-microlith/Dockerfile.oss: microlith/Dockerfile
-	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' $< > $@
-
 
 microlith/docs: $(wildcard $(DOCSDIR/**))
 	cp -R $(DOCSDIR) $@
@@ -286,9 +262,6 @@ microlith/docs: $(wildcard $(DOCSDIR/**))
 ifndef OSS
 microlith/cbmultimanager-docs: $(wildcard $(CBMULTIMANAGER_PATH/docs/**))
 	cp -R $(CBMULTIMANAGER_PATH)/docs $@
-
-microlith/entrypoints/cbmultimanager.sh: $(CBMULTIMANAGER_PATH)/docker/couchbase-cluster-monitor-entrypoint.sh
-	cp $< $@
 endif
 
 microlith/config-svc: $(wildcard $(CMOSCFG_SRC_DIR/**))
@@ -300,12 +273,10 @@ microlith/git-commit.txt:
 	echo "Revision: $(revision)" >> microlith/git-commit.txt
 	echo "Git commit: $(GIT_REVISION)" >> microlith/git-commit.txt
 
-# This is slightly funky because `dist` above is a phony target, but is *also*
-# the name of a real directory.
-.PHONY: dist-dir
-dist-dir:
-	mkdir -p $(ARTIFACTSDIR)
-
 # Helper to make any directories required (except `dist` itself).
 $(DIRECTORIES):
 	mkdir -p $@
+
+.PHONY: dist-dir
+dist-dir:
+	mkdir -p $(ARTIFACTSDIR)
