@@ -211,7 +211,7 @@ docs:
 # Image-related targets
 
 .PHONY: image-artifacts
-image-artifacts: dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
+image-artifacts: dist-dir dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
 
 ifndef OSS
 dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
