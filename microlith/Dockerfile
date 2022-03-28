@@ -156,7 +156,7 @@ RUN if [ ! $(getent group "$GF_GID") ]; then \
     fi
 
 # hadolint ignore=DL3059,DL4006,SC2155
-RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
+RUN export GF_GID_NAME="$(getent group $GF_GID | cut -d':' -f1)" && \
     mkdir -p "$GF_PATHS_HOME/.aws" && \
     adduser -S -u $GF_UID -G "$GF_GID_NAME" grafana && \
     mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
