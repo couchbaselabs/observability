@@ -43,8 +43,8 @@ RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
 
 # Statically build it to allow reuse on Alpine Linux
 RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo,noui -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
+    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo,noui -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
 
 FROM node:16-alpine3.14 as ui-builder
 
