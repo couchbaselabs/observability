@@ -35,7 +35,7 @@ jobs:
               uses: docker/setup-buildx-action@v1
 
             - name: Setup NodeJS
-              uses: actions/setup-node@v2
+              uses: actions/setup-node@v3
               with:
                   node-version: '17'
                   cache: 'npm'
