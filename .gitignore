@@ -8,10 +8,13 @@ test-dist/
 # Documentation output
 .cache/
 microlith/docs/
+microlith/cbmultimanager-docs
 tools/tern/
 tools/tern-output*
 # config-svc build
 microlith/config-svc
+# created as part of make, really lives in cbmultimanager
+microlith/entrypoints/cbmultimanager.sh
 # Test
 *-actual.yaml
 microlith/Dockerfile.oss
@@ -27,3 +30,5 @@ testing/loki_alerts/fluent-bit.conf
 node_modules
 *.log
 !testing/loki_alerts/*/*/*.log
+
+upstream/
