@@ -40,6 +40,8 @@
 # These can be changed by the build system, or however you see fit.
 ################################################################################
 
+PRODUCT := couchbase-observability-stack
+
 # These are overidden by the build system, so need to be optional
 # if undefined.  The build system also doesn't use -e to override
 # so we need to be careful here.
@@ -58,8 +60,13 @@ GO_VERSION := 1.17.2
 BINARY_TARGET := $(shell go env GOHOSTOS)-$(shell go env GOHOSTARCH)
 IMAGE_TARGET := docker-linux-amd64
 
-# These are all the Docker images that we can produce
+# These are all the Docker images that we can produce.
+# NOTE: when adding a new image, ensure you've asked Build Team to set up the
+# registries beforehand, otherwise the build may break.
 IMAGES := couchbase-observability-stack
+ifndef OSS
+IMAGES := $(IMAGES) couchbase-cluster-monitor
+endif
 
 ###############################################################################
 # Static/Generated Variables
@@ -129,23 +136,40 @@ images-clean:
 	-docker rmi couchbase/observability-stack:v1
 	-docker rmi couchbase/observability-stack-oss:v1
 
+# This target is special: it's invoked by the build system, and needs to
+# prepare everything that will be archived.
+# NOTE: it uses the BINARY_TARGET of the machine it's running on, which for
+# developers will likely be darwin-amd64, but will be linux-amd64 in the build
+# system, which can have confusing results. For this reason, it's not
+# recommended to use it by hand.
+# It's declared as phony, even though it's a real directory, to make it
+# always rebuild.
 .PHONY: dist
 dist: dist-dir
+ifndef OSS
 	$(MAKE) -C $(CBMULTIMANAGER_PATH) dist -e $(BUILD_ENV)
+# cbmultimanager also creates an image .tar.gz, which is useless - we'll
+# produce one tarball with both images
+	-rm dist/couchbase-cluster-monitor-image_$(VERSION)-$(BLD_NUM).tgz
+endif
 	$(MAKE) image-artifacts -e $(BUILD_ENV)
 
 
-# This one builds the container images locally.
+# This one builds the container images locally from the artifact archive.
 # As a nice consequence, it also tests that the build system would be able to
 # build them properly.
 .PHONY: container
-container: dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
-	tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz couchbase/observability-stack:v1
+container: image-artifacts
+	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
+		TAG=v1 tools/build-container-from-archive.sh "$$archive" ;\
+	done
 
 .PHONY: container-oss
 container-oss:
 	$(MAKE) -e OSS=true image-artifacts
-	tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz couchbase/observability-stack:v1
+	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
+		TAG=v1 tools/build-container-from-archive.sh "$$archive" ;\
+	done
 
 ######################################################################################
 # Testing-related targets
@@ -210,11 +234,21 @@ docs:
 ######################################################################################
 # Image-related targets
 
+# Finally, this creates the Docker image archives.
 .PHONY: image-artifacts
-image-artifacts: dist-dir dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
+image-artifacts: $(addprefix $(BUILDDIR)/images/,$(IMAGES)) | dist-dir
+	tar -C $(BUILDDIR)/images -czf $(ARTIFACTSDIR)/$(PRODUCT)-image_$(VERSION)-$(BLD_NUM).tgz $(IMAGES)
 
 ifndef OSS
-dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
+$(BUILDDIR)/images/couchbase-cluster-monitor:
+# NOTE: here `build` is really upstream/couchbase-cluster-monitor/build
+# Trying to override it in its various recursive make invocations causes problems, so instead build
+# it in its root and then copy it over
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) build/images/couchbase-cluster-monitor -e $(BUILD_ENV)
+	cp -R $(CBMULTIMANAGER_PATH)/build/images/couchbase-cluster-monitor $@
+	cp $(CBMULTIMANAGER_PATH)/docker/Dockerfile.couchbase-cluster-monitor $@/Dockerfile
+
+$(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/bin \
 	microlith/bin/cbmultimanager-$(IMAGE_BINARY_TARGET) \
 	microlith/bin/cbeventlog-$(IMAGE_BINARY_TARGET) \
@@ -225,17 +259,18 @@ dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
 	microlith/config-svc \
 	microlith/git-commit.txt 
 else
-dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
+$(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/Dockerfile.oss \
 	microlith/docs \
 	microlith/config-svc \
 	microlith/git-commit.txt 
 endif
+	mkdir -p $@
+	cp -r microlith/* $@
 ifdef OSS
-# Use the OSS dockerfile instead
-	$(eval TARFLAGS := --exclude Dockerfile --transform='flags=r;s|Dockerfile.oss|Dockerfile|')
+	rm $@/Dockerfile
+	mv $@/Dockerfile.oss $@/Dockerfile
 endif
-	$(TAR) $(TARFLAGS) -C microlith -czf $@ $(foreach file,$(shell echo microlith/*),$(notdir $(file)))
 
 microlith/Dockerfile.oss: microlith/Dockerfile
 	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' $< > $@

@@ -1,5 +1,4 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 # Copyright 2021 Couchbase, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -exuo pipefail
+
 if [ $# -eq 0 ]; then
     echo "No image file supplied."
     echo "Usage: build-container-from-archive.sh path/to/image.tgz"
@@ -22,17 +23,32 @@ fi
 
 file=$1
 
-if [ $# -eq 2 ]; then
-    tag=$2
-else
-    file_basename=$(basename "$file")
-    tag=${file_basename%%.tgz}
-    tag=${tag%%.tar.gz}
-    tag=$(echo "$tag" | sed -E 's/^couchbase-(.+)-image_(.+)$/couchbase\/\1:\2/')
-fi
+VERSION=${VERSION:-0.2.0}
+BLD_NUM=${BLD_NUM:-278}
+TAG=${TAG:-}
 
+function build_single_image() {
+    local artifacts_path=$1
+    local product_name=$2
+    local tag=""
+    if [ -z "$TAG" ]; then
+        tag="couchbase/${product_name#couchbase-}:${VERSION}-${BLD_NUM}"
+    else
+        tag="couchbase/${product_name#couchbase-}:$TAG"
+    fi
+    echo "Test-building Docker image $tag..."
+    docker build --build-arg PROD_VERSION="$VERSION" --build-arg PROD_BUILD="$BLD_NUM" -t "$tag" "$artifacts_path"
+}
 
-echo "Test-building Docker image $tag..."
 tmpdir=$(mktemp -d)
 tar -C "$tmpdir" -zxvf "$file"
-docker build -t "$tag" --build-arg PROD_VERSION=0.2.0 --build-arg PROD_BUILD=278 "$tmpdir"
+
+if [ -f "$tmpdir/Dockerfile" ]; then
+    product_name=$(basename "$file")
+    product_name=${product_name%-image*}
+    build_single_image "$tmpdir" "$product_name"
+else
+    for product_path in "$tmpdir"/*; do
+        build_single_image "$product_path" "$(basename "$product_path")"
+    done
+fi
