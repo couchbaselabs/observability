@@ -32,30 +32,6 @@ COPY config-svc/ .
 RUN go mod download && \
     CGO_ENABLED=0 GOOS=linux go build -trimpath -a -o /bin/cmoscfg -tags netgo ./cmd/cmoscfg
 
-# Couchbase proprietary start
-# Standalone as need to use --mount option
-ARG CBMULTIMANAGER_REF=master
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager
-RUN --mount=type=ssh git clone --depth 1 --branch ${CBMULTIMANAGER_REF} git@github.com:couchbaselabs/cbmultimanager.git /src/github.com/couchbaselabs/cbmultimanager/
-
-# Output our commit information to a file we can access
-RUN git rev-parse HEAD > /etc/couchbase/git-commit.txt
-
-# Statically build it to allow reuse on Alpine Linux
-RUN go mod download && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/cbmultimanager ./cluster-monitor/cmd/cbmultimanager && \
-    CGO_ENABLED=1 GOOS=linux go build -trimpath -a -ldflags '-linkmode external -extldflags "-static"' -tags netgo -o /bin/cbeventlog ./cluster-monitor/cmd/cbeventlog
-
-FROM node:16-alpine3.14 as ui-builder
-
-# Just copy over rather than clone
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/ui/ /src/github.com/couchbaselabs/cbmultimanager/ui/
-WORKDIR /src/github.com/couchbaselabs/cbmultimanager/ui
-# We reverse proxy it to /couchbase/ so fix up the base and asset paths to account for this
-RUN npm install && npm run build -- --base-href=/couchbase/ui/ --deploy-url=/couchbase/ui/
-
-# Couchbase proprietary end
-
 # Generate documentation and include locally as a static site
 # We do not include Antora, just use it: https://gitlab.com/antora/docker-antora/-/blob/main/LICENSE
 FROM antora/antora:3.0.0-alpha.9 as antora-generator
@@ -77,17 +53,16 @@ RUN apk add --upgrade --no-cache git && \
 COPY docs/ /antora/docs/
 
 # Couchbase proprietary start
-
-# Copy over the files from cbmultimanager rather than letting Antora clone it, for consistency and local testing
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/docs /antora/cbmultimanager
+COPY cbmultimanager-docs/ /antora/cbmultimanager
 RUN git init /antora/cbmultimanager && \
     touch /antora/cbmultimanager/.gitignore && \
     git -C /antora/cbmultimanager add . && \
     git -C /antora/cbmultimanager commit -m "ignore me"
+
 # antora-container-playbook defaults to OSS, override it
 COPY docs/antora-container-playbook-proprietary.yml /antora/docs/antora-container-playbook.yml
-
 # Couchbase proprietary end
+
 
 RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 
@@ -156,7 +131,7 @@ RUN if [ ! $(getent group "$GF_GID") ]; then \
     fi
 
 # hadolint ignore=DL3059,DL4006,SC2155
-RUN export GF_GID_NAME=$(getent group $GF_GID | cut -d':' -f1) && \
+RUN export GF_GID_NAME="$(getent group $GF_GID | cut -d':' -f1)" && \
     mkdir -p "$GF_PATHS_HOME/.aws" && \
     adduser -S -u $GF_UID -G "$GF_GID_NAME" grafana && \
     mkdir -p "$GF_PATHS_PROVISIONING/datasources" \
@@ -304,17 +279,13 @@ RUN openssl req -x509 -nodes -days 365 \
     -newkey rsa:2048 \
     -keyout /priv/server.key -out /priv/server.crt;
 
-COPY --from=builder /bin/cbmultimanager /bin/cbmultimanager
-COPY --from=builder /bin/cbeventlog /bin/cbeventlog
-COPY --from=builder /src/github.com/couchbaselabs/cbmultimanager/entrypoint.sh /entrypoints/couchbase-cluster-monitor.sh
-COPY --from=builder /etc/couchbase/git-commit.txt /etc/couchbase-cluster-monitor-release.txt
-COPY --from=ui-builder /src/github.com/couchbaselabs/cbmultimanager/ui/dist/app/ /ui/
+COPY ./bin/cbmultimanager-linux-amd64 /bin/cbmultimanager
+COPY ./bin/cbeventlog-linux-amd64 /bin/cbeventlog
 
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
 EXPOSE 7196 7197
 
-# TODO (CMOS-230): this assumes couchbase-cluster-monitor and couchbase-observability-stack have the same version number
 RUN mkdir -p /licenses && \
     curl -Lo /licenses/couchbase-cluster-monitor-notices.txt \
     https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-cluster-monitor/blackduck/${PROD_VERSION}/notices.txt

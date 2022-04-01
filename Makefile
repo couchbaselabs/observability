@@ -1,171 +1,282 @@
-bldNum = $(if $(BLD_NUM),$(BLD_NUM),999)
-version = $(if $(VERSION),$(VERSION),1.0.0)
-productVersion = $(version)-$(bldNum)
-ARTIFACTS = build/artifacts/
+################################################################################
+# CMOS Build Process
+################################################################################
 
-# This allows the container tags to be explicitly set.
-DOCKER_USER = couchbase
-DOCKER_TAG = v1
+# To understand the way this Makefile works, and the reasoning for it, there are
+# a few important concepts to understand relating to how this fits into the
+# wider Couchbase build process. Couchbase employees can also refer to
+# https://hub.internal.couchbase.com/confluence/display/CR/Grand+Unified+Build+and+Release+Process+for+Operator
+#
+# Essentially, for Docker images, the build happens in two phases, which for the
+# purposes of these comments we will refer to as "compile" and "assemble". The
+# gist of it is:
+# 1. Build system checks out the couchbase-observability-stack manifest.xml
+#    and runs `make dist`. This is the "compile" stage.
+# 2. `make dist` creates a directory called `dist` and places its artifacts there.
+#    These can be either:
+#    a) Artifacts to release directly as they are - these must contain
+#       `${VERSION}-${BUILD_NUMBER}` somewhere in the file name.
+#    b) One or more .tgz files named `${PRODUCT}-image_${VERSION}-${BUILD_NUMBER}.tgz` -
+#       these must contain all the files needed to build a Docker image,
+#       including a Dockerfile.
+#    These artifacts are all uploaded to the (internal) build server.
+# 3. The .tgz image files are passed to a separate job which unpacks them,
+#    runs `docker build`, and uploads the generated images to an internal registry.
+#    This is the "assemble" stage.
+#
+# One other important consideration is that this same Makefile is used to run
+# the builds for both couchbase/observability-stack *and* couchbase/cluster-monitor.
+# The reason is that both of these require the `cbmultimanager` binary, and
+# we need to ensure that the same binary goes into both (otherwise the builds
+# become non-reproducible).
+#
+# Caveat for all the above: cbmultimanager is private, but observability is
+# public. To allow for building the latter without the former, some of the make
+# recipes modify their behaviour if the `OSS` variable is set.
 
-# What exact revision is this?
-GIT_REVISION := $(shell git rev-parse HEAD)
+################################################################################
+# Variables
+# ---------
+# These can be changed by the build system, or however you see fit.
+################################################################################
 
-# Set this to, for example beta1, for a beta release.
-# This will affect the "-v" version strings and docker images.
-# This is analogous to revisions in DEB and RPM archives.
-revision = $(if $(REVISION),$(REVISION),)
+# These are overidden by the build system, so need to be optional
+# if undefined.  The build system also doesn't use -e to override
+# so we need to be careful here.
+VERSION ?= 0.0.0
+BLD_NUM ?= 999
 
-.PHONY: all build clean config-svc-lint container container-clean container-lint container-oss container-public container-scan dist \
-        docs docs-generate-markdown docs-license-analysis docs-lint examples-clean example-kubernetes example-containers example-multi \
-		lint test test-containers test-dist test-kubernetes test-native
+# This controls the build version of docker used.
+# Note that this is a separate variable for cbmultimanager's builds.
+GO_VERSION := 1.17.2
 
-# TODO: add 'test examples'
-all: build clean container container-lint container-oss container-scan dist lint test-dist
+# The target controls what's built as regards cross compilation.
+# These are similar to target triplets in the C world e.g. x86_64-unknown-linux.
+# The syntax is <platform>-<os>-<arch>.
+# <platform> is always "docker" right now - it's reserved for future use (e.g. OpenShift)
+# <os> and <arch> are valid GOOS and GOARCH values respectively (e.g. linux/amd64)
+BINARY_TARGET := $(shell go env GOHOSTOS)-$(shell go env GOHOSTARCH)
+IMAGE_TARGET := docker-linux-amd64
 
-# We need to copy docs in for packaging: https://github.com/moby/moby/issues/1676
-# The other option is to tar things up and pass as the build context: tar -czh . | docker build -
-build:
-	rm -rf microlith/docs/
-	cp -R docs/ microlith/docs/
-	rm -rf microlith/config-svc/
-	cp -R config-svc microlith/config-svc/
-	echo "Version: $(version)" >> microlith/git-commit.txt
-	echo "Build: $(productVersion)" > microlith/git-commit.txt
-	echo "Revision: $(revision)" >> microlith/git-commit.txt
-	echo "Git commit: $(GIT_REVISION)" >> microlith/git-commit.txt
+# These are all the Docker images that we can produce
+IMAGES := couchbase-observability-stack
 
-image-artifacts: build
-	mkdir -p $(ARTIFACTS)
-	cp -rv microlith/* $(ARTIFACTS)
+###############################################################################
+# Static/Generated Variables
+# These shouldn't need to be touched in most circumstances.
+###############################################################################
 
-# This target (and only this target) is invoked by the production build job.
-# This job will archive all files that end up in the dist/ directory.
-dist: image-artifacts
-	rm -rf dist
-	mkdir -p dist
-	tar -C $(ARTIFACTS) -czvf dist/couchbase-observability-stack-image_$(productVersion).tgz .
-	rm -rf $(ARTIFACTS)
+# Static configuration parameters.
+BUILDDIR := build
+ARTIFACTSDIR := dist
+DOCSDIR := docs
+# This must match manifest.xml (in couchbase/manifest).
+UPSTREAMDIR := upstream
+TMP_DOCS_DIR := microlith/docs
+CMOSCFG_SRC_DIR := config-svc
+CMOSCFG_TMP_DRC_DIR := microlith/config-svc
+
+# This is the path where cbmultimanager is checked out.
+# This should match the manifest.xml (in couchbase/manifest).
+CBMULTIMANAGER_PATH := $(UPSTREAMDIR)/cbmultimanager
+
+# Extract the various components of the image target
+IMAGE_PLATFORM := $(word 1,$(subst -, ,$(IMAGE_TARGET)))
+IMAGE_OS := $(word 2,$(subst -, ,$(IMAGE_TARGET)))
+IMAGE_ARCH := $(word 3,$(subst -, ,$(IMAGE_TARGET)))
+IMAGE_BINARY_TARGET := $(IMAGE_OS)-$(IMAGE_ARCH)
+
+###############################################################################
+# Dynamic/Derived Variables
+# These shouldn't need to be touched by hand at all.
+###############################################################################
+
+# Variable for propagating build arguments.
+BUILD_ENV := VERSION=$(VERSION) BLD_NUM=$(BLD_NUM) UPSTREAMDIR=$(abspath $(UPSTREAMDIR)) ARTIFACTSDIR=$(abspath $(ARTIFACTSDIR))
+
+# These are the directories that need to exist for the build to work.
+# NOTE: dist-dir is *not* here, as that confuses Make.
+DIRECTORIES := $(BUILDDIR) microlith/bin
+
+# Use GNU Tar where available
+ifneq (, $(shell which gtar))
+TAR := gtar
+else
+TAR := tar
+endif
+
+###############################################################################
+
+# Ensure the Makefile is clean by disabling all implicit rules
+.SUFFIXES:
+
+# Generic development rule, will just build the image
+.PHONY: all
+all: container
+
+# Clean up any potential mess
+.PHONY: clean
+clean: images-clean
+	rm -rf $(ARTIFACTSDIR) $(BUILDDIR) microlith/bin microlith/cbmultimanager-docs microlith/docs microlith/config-svc
+	-rm microlith/git-commit.txt
+ifndef oss
+	rm -rf microlith/cbmultimanager-docs
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) -e $(BUILD_ENV) clean
+endif
+
+.PHONY: images-clean
+images-clean:
+	-docker rmi couchbase/observability-stack:v1
+	-docker rmi couchbase/observability-stack-oss:v1
+
+.PHONY: dist
+dist: dist-dir
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) dist -e $(BUILD_ENV)
+	$(MAKE) image-artifacts -e $(BUILD_ENV)
+
+
+# This one builds the container images locally.
+# As a nice consequence, it also tests that the build system would be able to
+# build them properly.
+.PHONY: container
+container: dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
+	tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz couchbase/observability-stack:v1
+
+.PHONY: container-oss
+container-oss:
+	$(MAKE) -e OSS=true image-artifacts
+	tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz couchbase/observability-stack:v1
+
+######################################################################################
+# Testing-related targets
 
 # NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
 # Install pre-commit then run: pre-commit run --all-files
-lint: config-svc-lint container-lint
+.PHONY: Lint
+lint: container-lint
 	tools/asciidoc-lint.sh
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
 	tools/dashboards-lint.sh
 	tools/rules-lint.sh
-
-config-svc-build:
-	DOCKER_BUILDKIT=1 docker build -t ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG} config-svc/
-
-config-svc-test-unit:
-	DOCKER_BUILDKIT=1 docker build --target=unit-test config-svc/
-
-config-svc-lint:
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
 
+.PHONY: test-loki-rules
 test-loki-rules:
 	testing/loki_alerts/run_all.sh
 
-# NOTE: This target is only for local development.
-container: CBMULTIMANAGER_REF ?= master
-container: build
-# Set the same variables the official builds set (https://github.com/couchbase/build-tools/blob/7a44c105cf8768a7f758e80968b357eb37c08fc0/k8s-microservice/jenkins/util/build-k8s-images.sh#L82-L86)
-	DOCKER_BUILDKIT=1 docker build --ssh default -f microlith/Dockerfile \
-		--build-arg CBMULTIMANAGER_REF=${CBMULTIMANAGER_REF} --build-arg PROD_VERSION=$(version) --build-arg PROD_BUILD=$(bldNum) \
-		-t ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
-		microlith/
-
-container-oss: export PROD_VERSION=$(version)
-container-oss: export PROD_BUILD=$(bldNum)
-container-oss: build
-	tools/build-oss-container.sh
-
-container-lint:
+.PHONY: container-lint
 	tools/hadolint.sh
 
+.PHONY: container-scan
 container-scan: container
-	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy \
-		--severity "HIGH,CRITICAL" --ignore-unfixed --exit-code 1 --no-progress ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
+	docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image \
+		--severity "HIGH,CRITICAL" --ignore-unfixed --exit-code 1 --no-progress \
+		couchbase/observability-stack:$(VERSION)-$(BLD_NUM)
 	-docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -e CI=true wagoodman/dive \
-		${DOCKER_USER}/observability-stack:${DOCKER_TAG}
+		couchbase/observability-stack:$(VERSION)-$(BLD_NUM)
 
-# This target pushes the containers to a public repository.
-# A typical one liner to deploy to the cloud would be:
-# 	make container-public -e DOCKER_USER=couchbase DOCKER_TAG=2.0.0
-container-public: container
-	docker push ${DOCKER_USER}/observability-stack:${DOCKER_TAG}
-
-# Build and run the examples
-example-kubernetes: container
-	examples/kubernetes/run.sh
-
-example-containers: container
-	examples/containers/run.sh
-
-example-multi: container
-	examples/containers/multi/run.sh
-
-# Deal with automated testing
+.PHONY: test-kubernetes
 test-kubernetes: TEST_SUITE ?= integration/kubernetes
 test-kubernetes:
 	# TODO (CMOS-97): no smoke suite for kubernetes yet
 	testing/run-k8s.sh ${TEST_SUITE}
 
+.PHONY: test-containers
 test-containers:
 	testing/run-containers.sh ${TEST_SUITE}
 
+.PHONY: test-native
 test-native:
 	testing/run-native.sh ${TEST_SUITE}
 
-test-unit: config-svc-test-unit
+.PHONY: test
+test: clean test-unit container-oss test-native test-containers test-kubernetes
 
-test: clean container-oss test-native test-containers test-kubernetes
+.PHONY: test-unit
+test-unit:
+	DOCKER_BUILDKIT=1 docker build --target=unit-test config-svc/
 
-# Runs up the CMOS and takes screenshots
+.PHONY: generate-screenshots
 generate-screenshots: container-oss
 	tools/generate-screenshots.sh
 
-# Special target to verify the internal release pipeline will work as well
-# Take the archive we would make and extract it to a local directory to then run the docker builds on
-test-dist: CBMULTIMANAGER_REF ?= master
-test-dist: dist
-	rm -rf test-dist/
-	mkdir -p test-dist/
-	tar -xzvf dist/couchbase-observability-stack-image_$(productVersion).tgz -C test-dist/
-	docker build \
-		-f test-dist/Dockerfile \
-		--build-arg CBMULTIMANAGER_REF=${CBMULTIMANAGER_REF} --build-arg PROD_VERSION=$(version) --build-arg PROD_BUILD=$(bldNum) \
-		test-dist/ \
-		-t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
-
-test-dist-oss: dist
-	rm -rf test-dist/
-	mkdir -p test-dist/
-	tar -xzvf dist/couchbase-observability-stack-image_$(productVersion).tgz -C test-dist/
-	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' "test-dist/Dockerfile" > "test-dist/Dockerfile.oss"
-	docker build -f test-dist/Dockerfile.oss --build-arg PROD_VERSION=$(version) --build-arg PROD_BUILD=$(bldNum) test-dist/ -t ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG}
-
-examples-clean: 
-	-examples/containers/stop.sh
-	rm -f examples/containers/logs/*.log
-	-examples/kubernetes/stop.sh
-	-examples/containers/multi/stop.sh
-
-container-clean: examples-clean
-	docker rmi -f ${DOCKER_USER}/observability-stack:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-test-dist:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-docs-generator:${DOCKER_TAG} \
-				  ${DOCKER_USER}/observability-stack-config-service:${DOCKER_TAG}
-
-clean: container-clean
-	rm -rf $(ARTIFACTS) bin/ dist/ test-dist/ build/ .cache/ microlith/html/cmos/ microlith/docs/ microlith/config-svc/
-	rm -f microlith/git-commit.txt
-
+.PHONY: docs
 docs:
 	# || true is needed so the Makefile does not error when hitting CTRL+C
 	(docker-compose -f docs/docker-compose.yml up || true) && docker-compose -f docs/docker-compose.yml down
 
-docs-license-analysis:
-	tools/tern-report.sh
+######################################################################################
+# Image-related targets
+
+.PHONY: image-artifacts
+image-artifacts: dist-dir dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz
+
+ifndef OSS
+dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
+	microlith/bin \
+	microlith/bin/cbmultimanager-$(IMAGE_BINARY_TARGET) \
+	microlith/bin/cbeventlog-$(IMAGE_BINARY_TARGET) \
+	microlith/entrypoints/cbmultimanager.sh \
+	microlith/Dockerfile \
+	microlith/docs \
+	microlith/cbmultimanager-docs \
+	microlith/config-svc \
+	microlith/git-commit.txt 
+else
+dist/couchbase-observability-stack-image_$(VERSION)-$(BLD_NUM).tgz: \
+	microlith/Dockerfile.oss \
+	microlith/docs \
+	microlith/config-svc \
+	microlith/git-commit.txt 
+endif
+ifdef OSS
+# Use the OSS dockerfile instead
+	$(eval TARFLAGS := --exclude Dockerfile --transform='flags=r;s|Dockerfile.oss|Dockerfile|')
+endif
+	$(TAR) $(TARFLAGS) -C microlith -czf $@ $(foreach file,$(shell echo microlith/*),$(notdir $(file)))
+
+microlith/Dockerfile.oss: microlith/Dockerfile
+	sed '/^# Couchbase proprietary start/,/^# Couchbase proprietary end/d' $< > $@
+
+###############################################################################
+# Image dependencies
+
+ifndef OSS
+microlith/bin/cbmultimanager-$(IMAGE_BINARY_TARGET):
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbmultimanager-$(IMAGE_BINARY_TARGET) -e $(BUILD_ENV) -e BINARY_TARGET=$(IMAGE_BINARY_TARGET)
+	cp $(CBMULTIMANAGER_PATH)/build/cbmultimanager-$(IMAGE_BINARY_TARGET) $@
+
+microlith/entrypoints/cbmultimanager.sh: $(CBMULTIMANAGER_PATH)/docker/couchbase-cluster-monitor-entrypoint.sh
+	cp $< $@
+
+microlith/bin/cbeventlog-$(IMAGE_BINARY_TARGET):
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbeventlog-$(IMAGE_BINARY_TARGET) -e $(BUILD_ENV) -e BINARY_TARGET=$(IMAGE_BINARY_TARGET)
+	cp $(CBMULTIMANAGER_PATH)/build/cbeventlog-$(IMAGE_BINARY_TARGET) $@
+endif
+
+microlith/docs: $(wildcard $(DOCSDIR/**))
+	cp -R $(DOCSDIR) $@
+
+ifndef OSS
+microlith/cbmultimanager-docs: $(wildcard $(CBMULTIMANAGER_PATH/docs/**))
+	cp -R $(CBMULTIMANAGER_PATH)/docs $@
+endif
+
+microlith/config-svc: $(wildcard $(CMOSCFG_SRC_DIR/**))
+	cp -R $(CMOSCFG_SRC_DIR) $@
+
+microlith/git-commit.txt:
+	echo "Version: $(version)" >> microlith/git-commit.txt
+	echo "Build: $(productVersion)" > microlith/git-commit.txt
+	echo "Revision: $(revision)" >> microlith/git-commit.txt
+	echo "Git commit: $(GIT_REVISION)" >> microlith/git-commit.txt
+
+# Helper to make any directories required (except `dist` itself).
+$(DIRECTORIES):
+	mkdir -p $@
+
+.PHONY: dist-dir
+dist-dir:
+	mkdir -p $(ARTIFACTSDIR)
