@@ -1,0 +1,25 @@
+= Release Notes
+
+== Installation
+
+For installation instructions, refer to the xref:quickstart.adoc[CMOS Quick Start] page.
+
+== Release
+
+=== New Features and Behavioral Changes
+// TODO
+
+=== Fixed Issues
+// TODO
+
+=== Known Issues
+// TODO
+
+== Feedback
+// TODO
+
+== Licenses for Third-Party Components
+// TODO
+
+== More Information
+// TODO
