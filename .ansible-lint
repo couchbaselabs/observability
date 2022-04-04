@@ -4,6 +4,7 @@ skip_list:
   - comments       # Disable error on single space with comments
   - git-latest     # All this usage is in testing
   - package-latest
+  - risky-file-permissions
 exclude_paths:
   - .cache/        # Implicit unless exclude_paths is defined in config
   - .github/
