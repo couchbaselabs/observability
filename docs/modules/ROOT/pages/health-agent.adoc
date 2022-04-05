@@ -13,7 +13,7 @@ However, it can also assist in setting up a complete observability stack by prov
 
 Download the package:
 
-NOTE: TODO
+// TODO
 
 Install it on your server:
 
@@ -37,7 +37,7 @@ $ sudo systemctl status cbhealthagent
 The Health Agent is intended to be used together with the xref:cluster-monitor.adoc[Cluster Monitor].
 It uses the same credentials as the Cluster Monitor to access the Couchbase Server node it is running on - these are exchanged the first time they communicate.
 
-You can override this behaviour and manually supply the credentials to use using the `--couchbase.username` and `--couchbase.password` command-line parameters (or `COUCHBASE_USERNAME` and `COUCHBASE_PASSWORD` environment variables).
+You can override this behavior and manually supply the credentials to use using the `--couchbase.username` and `--couchbase.password` command-line parameters (or `COUCHBASE_USERNAME` and `COUCHBASE_PASSWORD` environment variables).
 The Agent requires at least Read-Only Admin access.
 
 == Components
