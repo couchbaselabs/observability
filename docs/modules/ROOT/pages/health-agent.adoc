@@ -1,0 +1,85 @@
+= Couchbase Health Agent
+
+[abstract]
+The Health Agent integrates several tools needed for full monitoring of Couchbase Server, including a Prometheus exporter, Fluent Bit, log analysis, and system-level health checks.
+
+== Overview
+
+While it is possible to detect many issues in a running cluster from its metrics, logs, and deep insights provided by the xref:cluster-monitor.adoc[Cluster Monitor], some issues can only be detected at the system level.
+This is the primary task of the Health Agent.
+However, it can also assist in setting up a complete observability stack by providing additional tools, including a Prometheus exporter, pre-configured Fluent Bit, and a log analyzer directly on the node.
+
+== Get Started
+
+Download the package:
+
+NOTE: TODO
+
+Install it on your server:
+
+[source,console]
+----
+$ sudo dpkg -i cbhealthagent-linux-amd64-0.3.0.deb
+# or
+$ sudo yum install cbhealthagent-linux-amd64-0.3.0.rpm
+----
+
+Start it:
+
+[source,console]
+----
+$ sudo systemctl start cbhealthagent
+$ sudo systemctl status cbhealthagent
+----
+
+== Configuration
+
+The Health Agent is intended to be used together with the xref:cluster-monitor.adoc[Cluster Monitor].
+It uses the same credentials as the Cluster Monitor to access the Couchbase Server node it is running on - these are exchanged the first time they communicate.
+
+You can override this behaviour and manually supply the credentials to use using the `--couchbase.username` and `--couchbase.password` command-line parameters (or `COUCHBASE_USERNAME` and `COUCHBASE_PASSWORD` environment variables).
+The Agent requires at least Read-Only Admin access.
+
+== Components
+
+When it starts, the Agent detects the version of Couchbase Server in use by the node it is running on, and dynamically enables or disables its components based on this.
+For example, the Prometheus exporter will not be enabled when the node is running Couchbase Server 7.0 or later, because Couchbase Server includes its own built-in Prometheus metrics.
+
+This can be overridden using the `--features.enable` and `--features.disable` command-line parameters.
+Both accept a comma-separated list of features to forcibly enable or disable, respectively.
+The accepted values are `health-agent`, `fluent-bit`, `log-analyzer`, and `prometheus-exporter`.
+
+The automatic feature detection can also be disabled by passing `--features.auto=false` - in this case, by default no features will be enabled unless `--features.enable` is used.
+
+=== System Health Checks
+
+The Agent performs a number of health checks that cannot be performed in any other way, for example checking kernel parameters or whether the node can reach all the other nodes in the cluster.
+A full list can be seen in the xref:health-checks.adoc[Health Checks reference].
+
+=== Prometheus Exporter
+
+The Agent integrates the https://github.com/couchbaselabs/cmos-prometheus-exporter[CMOS Prometheus Exporter^] for Couchbase Server 6.x and below nodes.
+It translates the statistics from these nodes into the format that Couchbase Server 7.0 uses.
+
+By default, the Exporter can be accessed over HTTP on port 9092 on each node, on `/metrics`.
+
+=== Fluent Bit
+
+The Agent ships with https://fluentbit.io[Fluent Bit^] and the https://github.com/couchbase/couchbase-fluent-bit[Couchbase Fluent Bit configuration^], and automatically configures it to find the Couchbase Server log files.
+
+By default, the Agent's bundled Fluent Bit will only ship logs to the <<log_analyzer,integrated log analyzer>>, however it can be configured to also send them to other destinations, including xref:loki.adoc[Loki], https://docs.fluentbit.io/manual/pipeline/outputs/splunk[Splunk^], https://docs.fluentbit.io/manual/pipeline/outputs/elasticsearch[Elasticsearch^], and other log aggregators.
+This can be done by editing its configuration file, which can be found in `/opt/cbhealthagent/etc/fluent-bit`.
+Refer to the https://docs.fluentbit.io/manual/[Fluent Bit documentation^] for the supported syntax and parameters.
+
+[#log_analyzer]
+=== Log Analyzer
+
+In many deployments, it is undesirable to ship all of Couchbase Server's logs to an external aggregator just to search for messages matching a certain condition.
+This is the job of the Log Analyzer (also referred to as "Hazelnut") - an extension of the Agent's built-in health checks.
+
+It receives live logging from Fluent Bit over a local TCP connection, and searches the logging for messages indicating a potential issue with Couchbase Server.
+These are then reported to a xref:cluster-monitor.adoc[Cluster Monitor] the same way as other health check results would be.
+
+== Next Steps
+
+xref:integrating-with-existing-deployments.adoc[Integrating with Existing Monitoring Pipelines]
