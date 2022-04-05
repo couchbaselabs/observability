@@ -21,6 +21,45 @@ A developer and [contribution guide](./CONTRIBUTING.md) is also available.
 
 Please refer to the support page [here](./docs/modules/ROOT/pages/support.adoc).
 
+## Local build for non-Couchbase Employees
+
+```
+# Checkout code
+git clone git@github.com/couchbaselabs/observability
+
+# Build image locally
+make container -e OSS=true
+
+# Run new image to test code changes
+$ docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1
+```
+
+## Local build for Couchbase Employees
+
+First, checkout the code using repo. This will also checkout the upstream `cbmultimanager` repository:
+
+```
+# Checkout observability and upstream repo
+$ mkdir cmos
+$ cd cmos
+$ repo init -u https://github.com/couchbase/manifest -m couchbase-observability-stack/master.xml
+$ repo sync
+$ cd couchbase-observability-stack
+```
+
+Now produce a local build. Running `make container` runs a script which packages everything in the repo into an image, which can deployed locally:
+
+```
+# Build image from code
+$ make container
+
+# If something has cached in your build and you want to rebuild from scratch, first run
+$ make clean
+
+# Run new image to test code changes
+$ docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:v1
+```
+
 ## Release tagging and branching
 Every release to DockerHub will include a matching identical Git tag here, i.e. the tags on https://hub.docker.com/r/couchbase/observability-stack/tags will have a matching tag in this repository that built them.
 Updates will be pushed to the `main` branch often and then tagged once released as a new image version.

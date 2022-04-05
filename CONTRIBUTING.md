@@ -53,12 +53,31 @@ Run hadolint over your files.
 
 ## Code Contribution Workflow
 
-To start, follow the setup instructions in README.md.
+To start, follow the setup instructions in the [README](./README.md) to checkout the code and build CMOS locally.
 
-Please use a descriptive Git branch name - ideally every change should be associated with a CMOS issue, so name your branch something like `CMOS-1234`.
+Code changes should be submitted through a ['feature' branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow#:~:text=Git%20Feature%20Branch%20Workflow%20is%20branching%20model%20focused%2C,Branch%20Workflow%20can%20be%20incorporated%20into%20other%20workflows). For example:
 
-Please follow this format for your commit messages, as this means they will automatically be associated with Jira tickets when you submit them for review:
+```
+# Create and checkout branch
+$ git branch CMOS-XXX
+$ git checkout CMOS-XXX
 
+# Check we're on our new branch
+$ git branch
+```
+
+Stage and commit any code changes:
+
+```
+# Stage changes
+$ git status
+$ git add <path to files with changes>
+
+# Commit changes
+$ git commit -m "CMOS-XXX: Useful title" -m "A longer commit message giving more context about the code changes"
+```
+
+Please use a descriptive Git branch name - ideally every change should be associated with a CMOS issue, so name your branch something like `CMOS-1234`. Please follow this format for your commit messages, as this means they will automatically be associated with Jira tickets when you submit them for review:
 
 > CMOS-1234: Fix the frobnicator
 >
@@ -81,8 +100,19 @@ Before committing your changes, it's a good idea to run through this checklist. 
 * If you have left any TODO comments, have you filed an associated CMOS issue? (Otherwise they may get forgotten.)
 * If you have made changes to the build or packaging infrastructure, have you validated they will work with Couchbase's internal build infrastructure? (If you're not sure what this means, just ask a maintainer, and they'll help you out.)
 * If you have made any changes to Grafana dashboards, have you included a screenshot? If appropriate, highlight any areas you have changed. (It means we don't need to start up an instance just to see how it looks.)
+* Have the changes been validated locally? If possible, simulate the issue in a local environment (a Couchbase Server cluster deployed with Docker, Vagrants, AWS, etc.) and add this environment to the local CMOS build to check that any issues are detected as expected.
 
-Once all the above can be ticked off, go ahead and file a pull request! If you are not a member of the couchbaselabs GitHub organization, you may need to fork the repository - the process is explained on this [GitHub help article](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
+Once all the above can be ticked off, go ahead and check you're up-to-date with the remote branch, push your changes to the remote branch and file a pull request!
+
+```
+$ pwd
+  cmos/couchbase-observability-stack
+
+$ git fetch --all && git rebase couchbaselabs/main # Ensure local branch is up-to-date with remote branch 
+$ git push -u couchbaselabs CMOS-XXX # Push changes to remote branch
+```
+
+If you are not a member of the couchbaselabs GitHub organization, you may need to fork the repository - the process is explained on this [GitHub help article](https://docs.github.com/en/get-started/quickstart/contributing-to-projects).
 
 When your pull request is in, it will automatically have a battery of automatic tests and linters run against it, and it will be reviewed by a human (another developer on the project). If either of these come back to you with change requests, don't panic - simply fix up your code, push a new commit, and repeat the process until it is ready for merge. Don't feel put down if we request changes - even our most experienced developers rarely have a perfect PR on the first try.
 
@@ -90,6 +120,18 @@ GitHub has an auto-merge feature, which will automatically merge a pull request 
 It is not enabled by default.
 The convention we use is for the reviewer of the PR to enable it once they're happy - then it'll be automatically merged once CI passes.
 The author of a PR should not enable auto-merge.
+
+**Note for Couchbase Employees**: If you are a Couchbase Employee, and are contributing to the (private upstream) `cbmultimanager` repository, then please note that we currently use [Gerrit](https://review.couchbase.org/q/project:cbmultimanager+is:open) for submitting changes to `cbmultimanager` and GitHub's code review system for the `observability` repository itself. Please refer to the [Contributing Changes via Gerrit](https://hub.internal.couchbase.com/confluence/pages/viewpage.action?spaceKey=CR&title=Contributing+Changes+via+Gerrit) documentation for more details about getting started with Gerrit.
+
+To ensure your local branch is up-to-date with any changes to the `cbmultimanager` repository before pushing to the remote branch, please run the following:
+
+```
+$ pwd
+  cmos/couchbase-observability-stack/upstream/cbmultimanager
+
+# Ensure local branch is up-to-date with remote branch
+$ git fetch --all && git rebase couchbaselabspriv/master
+```
 
 ## Testing
 
