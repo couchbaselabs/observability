@@ -17,20 +17,29 @@ ifdef::env-packaged[]
 
 endif::env-packaged[]
 
-.Architecture
+.Key Concepts
 * xref:architecture.adoc[Architecture overview]
 * xref:deployment-microlith.adoc[Microlith container deployment]
 * xref:cluster-monitor.adoc[Couchbase Cluster Monitor component]
 * xref:deployment-distributed.adoc[Distributed microservices deployment]
 
 .Components
-* xref:component-alertmanager.adoc[Alertmanager]
-* xref:component-grafana.adoc[Grafana]
-* xref:component-loki.adoc[Loki]
+** Metrics
 * xref:component-prometheus.adoc[Prometheus]
+* xref:component-exporter.adoc[Exporter]
+** Logging
+* xref:component-fluent-bit.adoc[Fluent Bit]
+* xref:component-loki.adoc[Loki]
+** Visualization
+* xref:component-grafana.adoc[Grafana]
+** Alerting 
+* xref:component-alertmanager.adoc[Alertmanager]
+** Tracing
+* xref:component-jaeger.adoc[Jaeger]
 
 .Configuration
 * xref:configure-cmos.adoc[CMOS Configuration]
+* xref:security-considerations.adoc[Security Considerations]
 
 .Deployment
 * xref:deployment-onpremise.adoc[On-premise deployment]
@@ -40,9 +49,17 @@ endif::env-packaged[]
 .Tutorials
 * xref:tutorial-onpremise.adoc[On-premise example]
 * xref:tutorial-kubernetes.adoc[Kubernetes example]
+* xref:tutorial-host-level-metrics-node-exporter.adoc[Host-Level Metrics with the Node Exporter]
+* xref:tutorial-systemd-exporter.adoc[Systemd Exporter]
+* xref:tutorial-process-exporter.adoc[Process Exporter]
+* xref:tutorial-pushgateway.adoc[Pushgateway]
 
 .Further Information
 * xref:prerequisite-and-setup.adoc[Pre-requisites]
-* xref:health-checks.adoc[Health Checks]
 * xref:licensing.adoc[Licensing]
 * xref:support.adoc[Support]
+* xref:release-notes.adoc[Release Notes]
+
+.Reference
+* xref:cluster-monitor-api.adoc[Cluster Monitor API]
+* xref:health-checks.adoc[Health Checks]

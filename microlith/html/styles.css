@@ -617,17 +617,6 @@ main strong[id]:before {
 	top: -.75em
 }
 
-@supports (-moz-appearance:none) {
-	main a[id],
-	main code[id],
-	main em[id],
-	main span:not(.MathJax):not(.math)[id],
-	main strong[id] {
-		border-top: 7.1rem solid transparent;
-		pointer-events: none
-	}
-}
-
 main blockquote,
 main p {
 	-webkit-hyphens: auto;
