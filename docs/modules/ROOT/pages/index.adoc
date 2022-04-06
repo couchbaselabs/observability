@@ -24,8 +24,7 @@ We essentially need to support two fairly distinct types of user:
 == Caveats and restrictions
 
 * CMOS is built for Couchbase Server 7.0 and above.
-  Lower versions are supported but some features might be missing.
-  We intend to improve support for lower versions in future releases, however Couchbase Server 7.0 and above will remain the primary target of development.
+  Lower versions are supported but may need additional tools (such as the xref:health-agent.adoc[Health Agent]) to use all features.
 * Limited cross-version compatibility by supporting migrating from previous version to latest version.
   Best efforts will be made but the intention is this iterates often and no backwards compatibility is provided.
   We will show how to migrate from X-1 to X but no more than that, users should be following an agile lifecycle of constant upgrade.
