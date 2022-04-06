@@ -78,9 +78,9 @@ jobs:
 
             - name: Run ${{ matrix.server-version }} tests
               run: |
-                  make TEST_SUITE=all test-containers -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make TEST_SUITE=all test-containers -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
                   # CMOS-97
-                  make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
 
             - name: Capture cmosinfo if something went wrong
               if: ${{ failure() }}
@@ -134,7 +134,7 @@ jobs:
 
             - name: Run ${{ matrix.server-version }} tests
               run: |
-                  make TEST_SUITE=all test-native -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make TEST_SUITE=all test-native -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
 
             - name: Capture cmosinfo if something went wrong
               if: ${{ failure() }}
