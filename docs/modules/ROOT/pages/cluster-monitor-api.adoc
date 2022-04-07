@@ -1,4 +1,5 @@
 = Cluster Monitor API
+:page-status: UNDER CONSTRUCTION
 
 [abstract]
 The Couchbase Cluster Monitor has a RESTful API for management and checking the status of configured clusters.
