@@ -19,6 +19,6 @@ The CMOS Exporter is also integrated into the xref:health-agent.adoc[Couchbase H
 
 == Links
 
-* xref:server:manage:monitor/set-up-prometheus-for-monitoring.adoc[Set up Prometheus for monitoring Couchbase Server (7.0 and up)]
+* xref:server:manage:monitor/set-up-prometheus-for-monitoring.adoc[Set up Prometheus for Monitoring Couchbase Server (7.0 and up)]
 * xref:health-agent.adoc[Couchbase Health Agent]
 * xref:integrating-with-existing-deployments.adoc[Integrating with Existing Monitoring Pipelines]

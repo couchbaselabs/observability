@@ -37,6 +37,6 @@ These can be changed by adding `-e CB_MULTI_ADMIN_USER=username` and/or `-e CB_M
 
 * xref:architecture.adoc[Architecture overview]
 * xref:health-agent.adoc[Health Agent]
-* xref:integrating-with-existing-deployments.adoc[Integrating with existing monitoring pipelines]
+* xref:integrating-with-existing-deployments.adoc[Integrating with Existing Monitoring Pipelines]
 * xref:health-checks.adoc[Health Checks]
 * xref:cluster-monitor-api.adoc[Cluster Monitor API Reference]

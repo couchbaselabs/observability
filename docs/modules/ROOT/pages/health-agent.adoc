@@ -61,7 +61,7 @@ A full list can be seen in the xref:health-checks.adoc[Health Checks reference].
 The Agent integrates the https://github.com/couchbaselabs/cmos-prometheus-exporter[CMOS Prometheus Exporter^] for Couchbase Server 6.x and below nodes.
 It translates the statistics from these nodes into the format that Couchbase Server 7.0 uses.
 
-By default, the Exporter can be accessed over HTTP on port 9092 on each node, on `/metrics`.
+By default, the Exporter can be accessed over HTTP on port `9092` on each node, on `/metrics`.
 
 === Fluent Bit
 

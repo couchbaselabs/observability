@@ -173,7 +173,7 @@ scrape_configs:
 <.> `targets` should specify the addresses of all the nodes in your cluster.
     For a Couchbase Server 7+ cluster the port number needs to be the management port: `8091` by default, or `:18091` if you have TLS enabled. 
     For clusters below Couchbase Server 7.0, you should use the port that your Prometheus exporter uses.
-    If you are using the xref:health-agent.adoc[Health Agent], this will be 9092.
+    If you are using the xref:health-agent.adoc[Health Agent], this will be `9092`.
     There are alternative configuration options that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
 <.> Any labels defined here will be added to **all** metrics from this cluster - you may want to configure e.g., `environment`, `datacenter` etc.
 

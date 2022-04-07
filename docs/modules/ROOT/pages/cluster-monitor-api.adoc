@@ -11,7 +11,7 @@ This page is still under construction.
 == Authentication
 
 All requests to the REST API need to be authenticated.
-The API uses Basic authentication, using the administrator username and password.
+The API uses Basic Authentication, using the administrator username and password.
 
 == Prometheus Metrics
 
@@ -30,7 +30,8 @@ multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c0
 multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2
 ----
 
-The values of each metric represents the current status of each checker. The integer values have the following meanings:
+The values of each metric represent the current status of each checker.
+The integer values have the following meanings:
 
 * 0: Good (no action required)
 * 10: Info (potential best practice violation)
