@@ -1,31 +1,42 @@
 = Cluster Monitor
 
-Couchbase cluster monitor is a core component of CMOS that provides cluster-level information via a Prometheus endpoint.
-If Couchbase cluster monitor is enabled, it will output the status of its checkers to Prometheus like the following:
+[abstract]
+The Couchbase Cluster Monitor provides monitoring insights that would not be otherwise possible with log, metric, and trace analysis.
 
+== Overview
+
+While it is possible to diagnose basic Couchbase Server issues through its metrics and logs, more in-depth troubleshooting and health checking requires in-depth analysis.
+The Couchbase Cluster Monitor is a component of CMOS that provides this level of insight.
+
+When running, it periodically performs a set of health checks against all the configured clusters, and outputs their results to the other components of CMOS - for example, displaying the overview of the cluster in xref:component-grafana.adoc[Grafana], or sending alerts via xref:component-alertmanager.adoc[Alertmanager].
+The full list of checks it performs can be found on the xref:health-checks.adoc[Health Checks] page.
+
+[NOTE]
+====
+The advanced health checks are only available for Couchbase Server Enterprise Edition clusters.
+====
+
+== Get Started
+
+The Couchbase Cluster Monitor is enabled by default in the xref:deployment-microlith.adoc[CMOS container].
+Its web interface can be accessed on `http://<CMOS HOST>:8080/couchbase/ui`.
+
+It can also be deployed stand-alone using Docker:
+
+[source, console]
 ----
-# HELP multimanager_cluster_checker_status Checker results for cluster level checkers
-# TYPE multimanager_cluster_checker_status gauge
-multimanager_cluster_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90002",name="singleOrTwoNodeCluster"} 0
-# HELP multimanager_node_checker_status Checker results for node level checkers
-# TYPE multimanager_node_checker_status gauge
-multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90001",name="oneServicePerNode",node_name="10.145.212.101:18091",node_uuid="730c37dace488f37f47c397f376c1c05"} 1
-# HELP multimanager_bucket_checker_status Checker results for bucket level checkers
-# TYPE multimanager_bucket_checker_status gauge
-multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2
+$ docker pull couchbase/cluster-monitor
+$ docker run -d -p 7196-7197:7196-7197 --name cluster_monitor couchbase/cluster-monitor
 ----
 
-The values of each metric represents the current status of the checker. The integer values have the following meanings:
-
-* 0: Good (everything is fine, no action required)
-* 1: Warn (potential issue, worth investigating)
-* 2: Alert (serious issue, action required)
-* 3: Info (informational only, no action required)
-* 4: Missing (checker failed to run or information was not available)
+It will now be accessible on http://localhost:7196.
+The default credentials are `admin`/`password`.
+These can be changed by adding `-e CB_MULTI_ADMIN_USER=username` and/or `-e CB_MULTI_ADMIN_PASSWORD=password` to the `docker run` command.
 
 == Next steps
 
 * xref:architecture.adoc[Architecture overview]
-* xref:deployment-microlith.adoc[Microlith container deployment]
-* xref:deployment-onpremise.adoc[On-premise deployment]
-* xref:tutorial-onpremise.adoc[On-premise example]
+* xref:health-agent.adoc[Health Agent]
+* xref:integrating-with-existing-deployments.adoc[Integrating with Existing Monitoring Pipelines]
+* xref:health-checks.adoc[Health Checks]
+* xref:cluster-monitor-api.adoc[Cluster Monitor API Reference]

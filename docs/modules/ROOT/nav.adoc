@@ -20,7 +20,8 @@ endif::env-packaged[]
 .Key Concepts
 * xref:architecture.adoc[Architecture overview]
 * xref:deployment-microlith.adoc[Microlith container deployment]
-* xref:cluster-monitor.adoc[Couchbase Cluster Monitor component]
+* xref:cluster-monitor.adoc[Couchbase Cluster Monitor]
+* xref:health-agent.adoc[Couchbase Health Agent]
 * xref:deployment-distributed.adoc[Distributed microservices deployment]
 
 .Components
