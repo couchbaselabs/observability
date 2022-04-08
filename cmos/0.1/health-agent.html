@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Exporter :: Couchbase Monitoring and Observability Stack</title>
+    <title>Couchbase Health Agent :: Couchbase Monitoring and Observability Stack</title>
     <meta name="generator" content="Antora 2.3.4">
     <link rel="stylesheet" href="../../_/css/site.css">
     <script>var uiRootPath = '../../_'</script>
@@ -80,7 +80,7 @@
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor</a>
   </li>
-  <li class="nav-item" data-depth="1">
+  <li class="nav-item is-current-page" data-depth="1">
     <a class="nav-link" href="health-agent.html">Couchbase Health Agent</a>
   </li>
   <li class="nav-item" data-depth="1">
@@ -99,7 +99,7 @@
   <li class="nav-item" data-depth="2">
     <a class="nav-link" href="component-prometheus.html">Prometheus</a>
   </li>
-  <li class="nav-item is-current-page" data-depth="2">
+  <li class="nav-item" data-depth="2">
     <a class="nav-link" href="component-exporter.html">Exporter</a>
   </li>
 </ul>
@@ -255,24 +255,23 @@
 <nav class="breadcrumbs" aria-label="breadcrumbs">
   <ul>
     <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
-    <li>Components</li>
-    <li>Metrics</li>
-    <li><a href="component-exporter.html">Exporter</a></li>
+    <li>Key Concepts</li>
+    <li><a href="health-agent.html">Couchbase Health Agent</a></li>
   </ul>
 </nav>
-  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/component-exporter.adoc">Edit this Page</a></div>
+  <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/health-agent.adoc">Edit this Page</a></div>
   </div>
   <div class="content">
 <aside class="toc sidebar" data-title="Contents" data-levels="2">
   <div class="toc-menu"></div>
 </aside>
 <article class="doc">
-<h1 class="page">Exporter</h1>
+<h1 class="page">Couchbase Health Agent</h1>
 <div id="preamble">
 <div class="sectionbody">
 <div class="quoteblock abstract">
 <blockquote>
-Services that do not expose native Prometheus metrics need an exporter to integrate with Prometheus.
+The Health Agent integrates several tools needed for full monitoring of Couchbase Server, including a Prometheus exporter, Fluent Bit, log analysis, and system-level health checks.
 </blockquote>
 </div>
 </div>
@@ -281,8 +280,9 @@ Services that do not expose native Prometheus metrics need an exporter to integr
 <h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Some tools can natively expose Prometheus metrics, while others need an agent to convert between its internal format and Prometheus' metrics data model.
-In Prometheus this is referred to as an <em>exporter</em>.</p>
+<p>While it is possible to detect many issues in a running cluster from its metrics, logs, and deep insights provided by the <a href="cluster-monitor.html" class="page">Cluster Monitor</a>, some issues can only be detected at the system level.
+This is the primary task of the Health Agent.
+However, it can also assist in setting up a complete observability stack by providing additional tools, including a Prometheus exporter, pre-configured Fluent Bit, and a log analyzer directly on the node.</p>
 </div>
 </div>
 </div>
@@ -290,34 +290,103 @@ In Prometheus this is referred to as an <em>exporter</em>.</p>
 <h2 id="_get_started"><a class="anchor" href="#_get_started"></a>Get Started</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase Server 7.0 and above has built-in Prometheus metrics with no need for an exporter.
-An exporter is needed to present Prometheus metrics from a cluster running Couchbase Server 6.x and below.</p>
+<p>Download the package:</p>
 </div>
 <div class="paragraph">
-<p>There are a number of exporters available, provided by both Couchbase and third parties.
-The recommended exporter to use with CMOS is the <a href="https://github.com/couchbaselabs/cmos-prometheus-exporter">CMOS Prometheus Exporter</a>, as it presents metrics in the same format as Couchbase Server 7.0&#8217;s native metrics.
-While it does not cover all the metrics exposed by Couchbase Server, it covers the majority needed for day-to-day operational monitoring.</p>
+<p>Install it on your server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ sudo dpkg -i cbhealthagent-linux-amd64-0.3.0.deb
+# or
+$ sudo yum install cbhealthagent-linux-amd64-0.3.0.rpm</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>The CMOS Exporter is also integrated into the <a href="health-agent.html" class="page">Couchbase Health Agent</a>.</p>
+<p>Start it:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ sudo systemctl start cbhealthagent
+$ sudo systemctl status cbhealthagent</code></pre>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_links"><a class="anchor" href="#_links"></a>Links</h2>
+<h2 id="_configuration"><a class="anchor" href="#_configuration"></a>Configuration</h2>
 <div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><a href="#server:manage:monitor/set-up-prometheus-for-monitoring.adoc" class="page unresolved">Set up Prometheus for Monitoring Couchbase Server (7.0 and up)</a></p>
-</li>
-<li>
-<p><a href="health-agent.html" class="page">Couchbase Health Agent</a></p>
-</li>
-<li>
+<div class="paragraph">
+<p>The Health Agent is intended to be used together with the <a href="cluster-monitor.html" class="page">Cluster Monitor</a>.
+It uses the same credentials as the Cluster Monitor to access the Couchbase Server node it is running on - these are exchanged the first time they communicate.</p>
+</div>
+<div class="paragraph">
+<p>You can override this behavior and manually supply the credentials to use using the <code>--couchbase.username</code> and <code>--couchbase.password</code> command-line parameters (or <code>COUCHBASE_USERNAME</code> and <code>COUCHBASE_PASSWORD</code> environment variables).
+The Agent requires at least Read-Only Admin access.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_components"><a class="anchor" href="#_components"></a>Components</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When it starts, the Agent detects the version of Couchbase Server in use by the node it is running on, and dynamically enables or disables its components based on this.
+For example, the Prometheus exporter will not be enabled when the node is running Couchbase Server 7.0 or later, because Couchbase Server includes its own built-in Prometheus metrics.</p>
+</div>
+<div class="paragraph">
+<p>This can be overridden using the <code>--features.enable</code> and <code>--features.disable</code> command-line parameters.
+Both accept a comma-separated list of features to forcibly enable or disable, respectively.
+The accepted values are <code>health-agent</code>, <code>fluent-bit</code>, <code>log-analyzer</code>, and <code>prometheus-exporter</code>.</p>
+</div>
+<div class="paragraph">
+<p>The automatic feature detection can also be disabled by passing <code>--features.auto=false</code> - in this case, by default no features will be enabled unless <code>--features.enable</code> is used.</p>
+</div>
+<div class="sect2">
+<h3 id="_system_health_checks"><a class="anchor" href="#_system_health_checks"></a>System Health Checks</h3>
+<div class="paragraph">
+<p>The Agent performs a number of health checks that cannot be performed in any other way, for example checking kernel parameters or whether the node can reach all the other nodes in the cluster.
+A full list can be seen in the <a href="health-checks.html" class="page">Health Checks reference</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prometheus_exporter"><a class="anchor" href="#_prometheus_exporter"></a>Prometheus Exporter</h3>
+<div class="paragraph">
+<p>The Agent integrates the <a href="https://github.com/couchbaselabs/cmos-prometheus-exporter" target="_blank" rel="noopener">CMOS Prometheus Exporter</a> for Couchbase Server 6.x and below nodes.
+It translates the statistics from these nodes into the format that Couchbase Server 7.0 uses.</p>
+</div>
+<div class="paragraph">
+<p>By default, the Exporter can be accessed over HTTP on port <code>9092</code> on each node, on <code>/metrics</code>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_fluent_bit"><a class="anchor" href="#_fluent_bit"></a>Fluent Bit</h3>
+<div class="paragraph">
+<p>The Agent ships with <a href="https://fluentbit.io" target="_blank" rel="noopener">Fluent Bit</a> and the <a href="https://github.com/couchbase/couchbase-fluent-bit" target="_blank" rel="noopener">Couchbase Fluent Bit configuration</a>, and automatically configures it to find the Couchbase Server log files.</p>
+</div>
+<div class="paragraph">
+<p>By default, the Agent&#8217;s bundled Fluent Bit will only ship logs to the <a href="#log_analyzer">integrated log analyzer</a>, however it can be configured to also send them to other destinations, including <a href="#loki.adoc" class="page unresolved">Loki</a>, <a href="https://docs.fluentbit.io/manual/pipeline/outputs/splunk" target="_blank" rel="noopener">Splunk</a>, <a href="https://docs.fluentbit.io/manual/pipeline/outputs/elasticsearch" target="_blank" rel="noopener">Elasticsearch</a>, and other log aggregators.
+This can be done by editing its configuration file, which can be found in <code>/opt/cbhealthagent/etc/fluent-bit</code>.
+Refer to the <a href="https://docs.fluentbit.io/manual/" target="_blank" rel="noopener">Fluent Bit documentation</a> for the supported syntax and parameters.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="log_analyzer"><a class="anchor" href="#log_analyzer"></a>Log Analyzer</h3>
+<div class="paragraph">
+<p>In many deployments, it is undesirable to ship all of Couchbase Server&#8217;s logs to an external aggregator just to search for messages matching a certain condition.
+This is the job of the Log Analyzer (also referred to as "Hazelnut") - an extension of the Agent&#8217;s built-in health checks.</p>
+</div>
+<div class="paragraph">
+<p>It receives live logging from Fluent Bit over a local TCP connection, and searches the logging for messages indicating a potential issue with Couchbase Server.
+These are then reported to a <a href="cluster-monitor.html" class="page">Cluster Monitor</a> the same way as other health check results would be.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_next_steps"><a class="anchor" href="#_next_steps"></a>Next Steps</h2>
+<div class="sectionbody">
+<div class="paragraph">
 <p><a href="integrating-with-existing-deployments.html" class="page">Integrating with Existing Monitoring Pipelines</a></p>
-</li>
-</ul>
 </div>
 </div>
 </div>

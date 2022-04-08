@@ -78,7 +78,10 @@
     <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="health-agent.html">Couchbase Health Agent</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
@@ -325,11 +328,7 @@ For further help in the event of a problem, contact the relevant software mainta
 <div class="sect2">
 <h3 id="_install_cluster_monitor"><a class="anchor" href="#_install_cluster_monitor"></a>Install Cluster Monitor</h3>
 <div class="paragraph">
-<p>Currently there is no separate image containing just the Cluster Monitor - you can follow issue <a href="https://issues.couchbase.com/browse/CMOS-351" target="_blank" rel="noopener">CMOS-351</a> for updates on this option.
-However, it is possible to use the main CMOS container with all other services disabled for this purpose.</p>
-</div>
-<div class="paragraph">
-<p>Run the Docker container, using the preview image given to you by Couchbase:</p>
+<p>If you are not using the <a href="deployment-microlith.html" class="page">"microlith" image</a>, you can deploy the Cluster Monitor stand-alone using Docker:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -338,10 +337,7 @@ However, it is possible to use the main CMOS container with all other services d
   -e CB_MULTI_ALERTMANAGER_URLS=http://&lt;Alertmanager IP&gt;:9093 \ <i class="conum" data-value="2"></i><b>(2)</b>
   -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password \
   --name cluster_monitor \
-  -e DISABLE_PROMETHEUS=true -e DISABLE_GRAFANA=true \
-  -e DISABLE_ALERT_MANAGER=true -e DISABLE_LOKI=true \
-  -e DISABLE_JAEGER=true -e DISABLE_CMOSCFG=true -e DISABLE_WEBSERVER=true \
-  couchbase/observability-stack:latest</code></pre>
+  couchbase/cluster-monitor:latest</code></pre>
 </div>
 </div>
 <div class="colist arabic">
@@ -597,6 +593,7 @@ scrape_configs:
 <td><code>targets</code> should specify the addresses of all the nodes in your cluster.
 For a Couchbase Server 7+ cluster the port number needs to be the management port: <code>8091</code> by default, or <code>:18091</code> if you have TLS enabled.
 For clusters below Couchbase Server 7.0, you should use the port that your Prometheus exporter uses.
+If you are using the <a href="health-agent.html" class="page">Health Agent</a>, this will be <code>9092</code>.
 There are alternative configuration options that do not require hard-coding the addresses - refer to the <a href="https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config" target="_blank" rel="noopener">Prometheus documentation</a> for more details.</td>
 </tr>
 <tr>

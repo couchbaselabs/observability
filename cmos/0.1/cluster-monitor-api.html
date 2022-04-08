@@ -78,7 +78,10 @@
     <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
   </li>
   <li class="nav-item" data-depth="1">
-    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="health-agent.html">Couchbase Health Agent</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
@@ -264,7 +267,83 @@
 </aside>
 <article class="doc">
 <h1 class="page">Cluster Monitor API</h1>
-
+<div id="preamble">
+<div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+The Couchbase Cluster Monitor has a RESTful API for management and checking the status of configured clusters.
+</blockquote>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This page is still under construction.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_authentication"><a class="anchor" href="#_authentication"></a>Authentication</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>All requests to the REST API need to be authenticated.
+The API uses Basic Authentication, using the administrator username and password.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_prometheus_metrics"><a class="anchor" href="#_prometheus_metrics"></a>Prometheus Metrics</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Cluster Monitor exposes its Prometheus metrics on <code>/api/v1/_prometheus</code> and <code>/api/v1/metrics</code>.
+The exposed metrics look like the following:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre># HELP multimanager_cluster_checker_status Checker results for cluster level checkers
+# TYPE multimanager_cluster_checker_status gauge
+multimanager_cluster_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90002",name="singleOrTwoNodeCluster"} 0
+# HELP multimanager_node_checker_status Checker results for node level checkers
+# TYPE multimanager_node_checker_status gauge
+multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90001",name="oneServicePerNode",node_name="10.145.212.101:18091",node_uuid="730c37dace488f37f47c397f376c1c05"} 1
+# HELP multimanager_bucket_checker_status Checker results for bucket level checkers
+# TYPE multimanager_bucket_checker_status gauge
+multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The values of each metric represent the current status of each checker.
+The integer values have the following meanings:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>0: Good (no action required)</p>
+</li>
+<li>
+<p>10: Info (potential best practice violation)</p>
+</li>
+<li>
+<p>20: Warn (potential issue, worth investigating)</p>
+</li>
+<li>
+<p>30: Alert (serious issue, action required)</p>
+</li>
+<li>
+<p>-1: Missing (checker failed to run or information was not available)</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 </article>
   </div>
 </main>

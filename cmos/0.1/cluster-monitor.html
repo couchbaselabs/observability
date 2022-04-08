@@ -78,7 +78,10 @@
     <a class="nav-link" href="deployment-microlith.html">Microlith container deployment</a>
   </li>
   <li class="nav-item is-current-page" data-depth="1">
-    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor component</a>
+    <a class="nav-link" href="cluster-monitor.html">Couchbase Cluster Monitor</a>
+  </li>
+  <li class="nav-item" data-depth="1">
+    <a class="nav-link" href="health-agent.html">Couchbase Health Agent</a>
   </li>
   <li class="nav-item" data-depth="1">
     <a class="nav-link" href="deployment-distributed.html">Distributed microservices deployment</a>
@@ -253,7 +256,7 @@
   <ul>
     <li><a href="index.html">Couchbase Monitoring and Observability Stack</a></li>
     <li>Key Concepts</li>
-    <li><a href="cluster-monitor.html">Couchbase Cluster Monitor component</a></li>
+    <li><a href="cluster-monitor.html">Couchbase Cluster Monitor</a></li>
   </ul>
 </nav>
   <div class="edit-this-page"><a href="https://github.com/couchbaselabs/observability/edit/main/docs/modules/ROOT/pages/cluster-monitor.adoc">Edit this Page</a></div>
@@ -266,44 +269,60 @@
 <h1 class="page">Cluster Monitor</h1>
 <div id="preamble">
 <div class="sectionbody">
+<div class="quoteblock abstract">
+<blockquote>
+The Couchbase Cluster Monitor provides monitoring insights that would not be otherwise possible with log, metric, and trace analysis.
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_overview"><a class="anchor" href="#_overview"></a>Overview</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Couchbase cluster monitor is a core component of CMOS that provides cluster-level information via a Prometheus endpoint.
-If Couchbase cluster monitor is enabled, it will output the status of its checkers to Prometheus like the following:</p>
+<p>While it is possible to diagnose basic Couchbase Server issues through its metrics and logs, more in-depth troubleshooting and health checking requires in-depth analysis.
+The Couchbase Cluster Monitor is a component of CMOS that provides this level of insight.</p>
+</div>
+<div class="paragraph">
+<p>When running, it periodically performs a set of health checks against all the configured clusters, and outputs their results to the other components of CMOS - for example, displaying the overview of the cluster in <a href="component-grafana.html" class="page">Grafana</a>, or sending alerts via <a href="component-alertmanager.html" class="page">Alertmanager</a>.
+The full list of checks it performs can be found on the <a href="health-checks.html" class="page">Health Checks</a> page.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The advanced health checks are only available for Couchbase Server Enterprise Edition clusters.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_get_started"><a class="anchor" href="#_get_started"></a>Get Started</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The Couchbase Cluster Monitor is enabled by default in the <a href="deployment-microlith.html" class="page">CMOS container</a>.
+Its web interface can be accessed on <code><a href="http://&lt;CMOS" class="bare">http://&lt;CMOS</a> HOST&gt;:8080/couchbase/ui</code>.</p>
+</div>
+<div class="paragraph">
+<p>It can also be deployed stand-alone using Docker:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre># HELP multimanager_cluster_checker_status Checker results for cluster level checkers
-# TYPE multimanager_cluster_checker_status gauge
-multimanager_cluster_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90002",name="singleOrTwoNodeCluster"} 0
-# HELP multimanager_node_checker_status Checker results for node level checkers
-# TYPE multimanager_node_checker_status gauge
-multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90001",name="oneServicePerNode",node_name="10.145.212.101:18091",node_uuid="730c37dace488f37f47c397f376c1c05"} 1
-# HELP multimanager_bucket_checker_status Checker results for bucket level checkers
-# TYPE multimanager_bucket_checker_status gauge
-multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2</pre>
+<pre class="highlightjs highlight"><code class="language-console hljs" data-lang="console">$ docker pull couchbase/cluster-monitor
+$ docker run -d -p 7196-7197:7196-7197 --name cluster_monitor couchbase/cluster-monitor</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The values of each metric represents the current status of the checker. The integer values have the following meanings:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>0: Good (everything is fine, no action required)</p>
-</li>
-<li>
-<p>1: Warn (potential issue, worth investigating)</p>
-</li>
-<li>
-<p>2: Alert (serious issue, action required)</p>
-</li>
-<li>
-<p>3: Info (informational only, no action required)</p>
-</li>
-<li>
-<p>4: Missing (checker failed to run or information was not available)</p>
-</li>
-</ul>
+<p>It will now be accessible on <a href="http://localhost:7196" class="bare">http://localhost:7196</a>.
+The default credentials are <code>admin</code>/<code>password</code>.
+These can be changed by adding <code>-e CB_MULTI_ADMIN_USER=username</code> and/or <code>-e CB_MULTI_ADMIN_PASSWORD=password</code> to the <code>docker run</code> command.</p>
 </div>
 </div>
 </div>
@@ -316,13 +335,16 @@ multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Tes
 <p><a href="architecture.html" class="page">Architecture overview</a></p>
 </li>
 <li>
-<p><a href="deployment-microlith.html" class="page">Microlith container deployment</a></p>
+<p><a href="health-agent.html" class="page">Health Agent</a></p>
 </li>
 <li>
-<p><a href="deployment-onpremise.html" class="page">On-premise deployment</a></p>
+<p><a href="integrating-with-existing-deployments.html" class="page">Integrating with Existing Monitoring Pipelines</a></p>
 </li>
 <li>
-<p><a href="tutorial-onpremise.html" class="page">On-premise example</a></p>
+<p><a href="health-checks.html" class="page">Health Checks</a></p>
+</li>
+<li>
+<p><a href="cluster-monitor-api.html" class="page">Cluster Monitor API Reference</a></p>
 </li>
 </ul>
 </div>
