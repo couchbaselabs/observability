@@ -302,7 +302,7 @@ If that is not possible, please contact Couchbase Technical Support.
 === Active vBuckets Resident Ratio (CB90087)
 *Background*: Active vBuckets Resident Ratio going below certain thresholds might lead to performance issues due to significant memory pressure.
 
-*Condition*: Warn if Active vBuckets Resident Ratio drops below 10 percent and alert if the same drops below 5 percent.
+*Condition*: By default, warn if Active vBuckets Resident Ratio drops below 10 percent and alert if the same drops below 5 percent.
 
 *Remediation*: Allocate sufficient memory for the bucket.
 
