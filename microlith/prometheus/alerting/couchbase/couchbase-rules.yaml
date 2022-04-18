@@ -166,7 +166,7 @@ groups:
         remediation: Ensure your applications are appropriately closing their Couchbase connections.
 
     - alert: CB90087-activeVbucketResidentRatio-warn
-      expr: kv_vb_perc_mem_resident_ratio{state="active"}  < 0.1
+      expr: kv_vb_perc_mem_resident_ratio{state="active"} < 0.1
       for: 1m
       labels:
         job: couchbase_prometheus
@@ -179,7 +179,7 @@ groups:
         severity: warning
       annotations:
         title: " Resident Ratio of Active vBuckets is low "
-        description: Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}}  on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
+        description: Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
         remediation: Increase memory allocation for bucket
 
     - alert: CB90087-activeVbucketResidentRatio-alert
@@ -196,5 +196,5 @@ groups:
         severity: critical
       annotations:
         title: " Resident Ratio of Active vBuckets too low"
-        description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}}  on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
+        description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
         remediation: Increase memory allocation for bucket
