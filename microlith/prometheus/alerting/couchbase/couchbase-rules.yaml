@@ -196,5 +196,5 @@ groups:
         severity: critical
       annotations:
         title: " Resident Ratio of Active vBuckets too low"
-        description: Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}}  on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
+        description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}}  on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
         remediation: Increase memory allocation for bucket
