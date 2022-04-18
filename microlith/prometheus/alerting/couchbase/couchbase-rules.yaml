@@ -197,7 +197,3 @@ groups:
       annotations:
         title: " Resident Ratio of Active Vbuckets too low in bucket {{$labels.bucket}}  on node - {{$labels.instance}} (cluster {{ $labels.cluster }}) "
         remediation: Increase memory allocation for bucket
-
-      
-
-
