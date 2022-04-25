@@ -178,9 +178,9 @@ groups:
         bucket: '{{ $labels.bucket }}'
         severity: warning
       annotations:
-        title: " Resident Ratio of Active vBuckets is low "
-        description: Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
-        remediation: Increase memory allocation for bucket
+        title: "Resident Ratio of Active vBuckets is low."
+        description: Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }}).
+        remediation: Increase memory allocation for bucket.
 
     - alert: CB90087-activeVbucketResidentRatio-alert
       expr: kv_vb_perc_mem_resident_ratio{state="active"} < 0.05
@@ -195,6 +195,6 @@ groups:
         bucket: '{{ $labels.bucket }}'
         severity: critical
       annotations:
-        title: " Resident Ratio of Active vBuckets too low"
-        description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }})
-        remediation: Increase memory allocation for bucket
+        title: "Resident Ratio of Active vBuckets too low."
+        description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }}).
+        remediation: Increase memory allocation for bucket.
