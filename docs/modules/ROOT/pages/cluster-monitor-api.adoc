@@ -1,4 +1,41 @@
 = Cluster Monitor API
+:page-status: UNDER CONSTRUCTION
 
 [abstract]
-// TODO
+The Couchbase Cluster Monitor has a RESTful API for management and checking the status of configured clusters.
+
+[NOTE]
+====
+This page is still under construction.
+====
+
+== Authentication
+
+All requests to the REST API need to be authenticated.
+The API uses Basic Authentication, using the administrator username and password.
+
+== Prometheus Metrics
+
+The Cluster Monitor exposes its Prometheus metrics on `/api/v1/_prometheus` and `/api/v1/metrics`.
+The exposed metrics look like the following:
+
+----
+# HELP multimanager_cluster_checker_status Checker results for cluster level checkers
+# TYPE multimanager_cluster_checker_status gauge
+multimanager_cluster_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90002",name="singleOrTwoNodeCluster"} 0
+# HELP multimanager_node_checker_status Checker results for node level checkers
+# TYPE multimanager_node_checker_status gauge
+multimanager_node_checker_status{cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90001",name="oneServicePerNode",node_name="10.145.212.101:18091",node_uuid="730c37dace488f37f47c397f376c1c05"} 1
+# HELP multimanager_bucket_checker_status Checker results for bucket level checkers
+# TYPE multimanager_bucket_checker_status gauge
+multimanager_bucket_checker_status{bucket="pillowfight",cluster_name="CMOS 7 Test",cluster_uuid="7ce7c09b3514e83792724b8a530b66e0",id="CB90009",name="missingActiveVBuckets"} 2
+----
+
+The values of each metric represent the current status of each checker.
+The integer values have the following meanings:
+
+* 0: Good (no action required)
+* 10: Info (potential best practice violation)
+* 20: Warn (potential issue, worth investigating)
+* 30: Alert (serious issue, action required)
+* -1: Missing (checker failed to run or information was not available)
