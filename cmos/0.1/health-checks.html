@@ -683,6 +683,18 @@ If that is not possible, please contact Couchbase Technical Support.</p>
 <p><strong>Further Reading</strong>: <a href="https://docs.couchbase.com/server/current/manage/manage-settings/configure-compact-settings.html">Auto-Compaction</a></p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="CB90087"><a class="anchor" href="#CB90087"></a>Active vBuckets Resident Ratio (CB90087)</h3>
+<div class="paragraph">
+<p><strong>Background</strong>: Active vBuckets Resident Ratio going below certain thresholds might lead to performance issues due to significant memory pressure.</p>
+</div>
+<div class="paragraph">
+<p><strong>Condition</strong>: By default, warn if Active vBuckets Resident Ratio drops below 10 percent and alert if the same drops below 5 percent.</p>
+</div>
+<div class="paragraph">
+<p><strong>Remediation</strong>: Allocate sufficient memory for the bucket.</p>
+</div>
+</div>
 </div>
 </div>
 </article>
