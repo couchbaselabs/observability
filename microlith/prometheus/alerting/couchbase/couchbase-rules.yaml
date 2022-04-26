@@ -215,6 +215,6 @@ groups:
       annotations:
         title: "Exceeded High Memory Watermark Limit"
         description: Bucket {{ $labels.bucket }} has exceeded the high memory watermark limit on cluster - {{ $labels.cluster }} and has not stabilised.
-          May cause deadlocks or block incoming writes and rebalances, with risk of out of memory condition.
+          May cause deadlocks, block incoming writes, rebalance issues or out of memory conditions.
         remediation: Need to increase bucket memory or check ejection policy. 
           If this pertains, contact Couchbase Technical Support.
