@@ -226,7 +226,7 @@ However, if this is done, you will need to adjust this health check's threshold 
 *Background*: If a bucket's memory usage crosses the high water mark, ejection will be triggered.
 By default, the high water mark is set to 85% of the bucket's quota.
 If the bucket's memory usage exceeds this for a long period of time, it is possible that not enough data can be ejected to bring it down below the low water mark, and there is a risk of an out-of-memory condition.
-May cause deadlocks or block incoming writes and rebalances.
+May cause deadlocks, block incoming writes, rebalance issues or out of memory conditions.
 
 *Condition*: High Memory Watermark for bucket exceeded memory limit for a long time.
 
