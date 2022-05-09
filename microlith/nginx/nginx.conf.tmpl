@@ -75,13 +75,9 @@ http {
 
             # TODO (CMOS-98) - eventually these should all just be /couchbase/
 
-            # Redirect /ui to its proper place just in case
-            location ~ ^{{ $subPath }}/ui/?$ {
-                return 301 {{ $subPath }}/couchbase/ui;
-            }
 
-            location {{ $subPath }}/couchbase/ui/ {
-                proxy_pass http://localhost:7196/couchbase/ui;
+            location {{ $subPath }}/monitor {
+                proxy_pass http://localhost:7196/monitor;
             }
 
             # UI assumes the cbmultimanager REST API is on /api
