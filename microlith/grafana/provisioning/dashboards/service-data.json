@@ -231,7 +231,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum (irate(kv_ops{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])) by (bucket)",
+          "expr": "sum (irate(kv_ops{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])) by (bucket)",
           "interval": "",
           "legendFormat": "{{bucket}}",
           "refId": "A"
@@ -457,7 +457,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(kv_curr_connections{cluster=`$cluster`})",
+          "expr": "sum(kv_curr_connections{cluster_name=`$cluster`})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -470,7 +470,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(kv_daemon_connections{cluster=`$cluster`})",
+          "expr": "sum(kv_daemon_connections{cluster_name=`$cluster`})",
           "hide": false,
           "instant": false,
           "interval": "",
@@ -483,7 +483,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(kv_system_connections{cluster=`$cluster`})",
+          "expr": "sum(kv_system_connections{cluster_name=`$cluster`})",
           "hide": false,
           "interval": "",
           "legendFormat": "System",
@@ -565,7 +565,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "sum by (bucket) (increase(kv_ep_data_read_failed{cluster=`$cluster`,bucket=~`${bucket:regex}`}[24h]))",
+          "expr": "sum by (bucket) (increase(kv_ep_data_read_failed{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}[24h]))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -647,7 +647,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "sum by (bucket) (increase(kv_ep_data_write_failed{cluster=`$cluster`,bucket=~`${bucket:regex}`}[24h]))",
+          "expr": "sum by (bucket) (increase(kv_ep_data_write_failed{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}[24h]))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -754,7 +754,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "histogram_quantile(\n0.50,\nsum by(le,bucket) (\nrate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])\n)\n)",
+          "expr": "histogram_quantile(\n0.50,\nsum by(le,bucket) (\nrate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])\n)\n)",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -848,7 +848,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -939,7 +939,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"GET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -1030,7 +1030,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -1121,7 +1121,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -1212,7 +1212,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"SET\",bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "hide": false,
           "interval": "",
           "legendFormat": "{{bucket}}",
@@ -1328,7 +1328,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "sum by (bucket) (kv_curr_items{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "expr": "sum by (bucket) (kv_curr_items{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
@@ -1393,7 +1393,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "topk(3, sum by (bucket) (couch_docs_actual_disk_size{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "expr": "topk(3, sum by (bucket) (couch_docs_actual_disk_size{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}))",
           "instant": true,
           "interval": "",
           "legendFormat": "{{ bucket }}",
@@ -1458,7 +1458,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "topk(3, sum by (bucket) (kv_collection_mem_used_bytes{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "expr": "topk(3, sum by (bucket) (kv_collection_mem_used_bytes{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}))",
           "interval": "",
           "legendFormat": "{{ bucket }}",
           "refId": "A"
@@ -1551,7 +1551,7 @@
                 "uid": "${DS_PROMETHEUS}"
               },
               "exemplar": true,
-              "expr": "sum (kv_dcp_items_remaining{cluster=`$cluster`,connection_type!=\"\"}) by (connection_type)",
+              "expr": "sum (kv_dcp_items_remaining{cluster_name=`$cluster`,connection_type!=\"\"}) by (connection_type)",
               "interval": "",
               "legendFormat": "{{ connection_type }}",
               "refId": "A"
@@ -1639,7 +1639,7 @@
                 "uid": "${DS_PROMETHEUS}"
               },
               "exemplar": true,
-              "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster=`$cluster`,connection_type!=\"\"}[$__rate_interval]))",
+              "expr": "sum by (connection_type) (irate(kv_dcp_items_sent{cluster_name=`$cluster`,connection_type!=\"\"}[$__rate_interval]))",
               "interval": "",
               "legendFormat": "{{ connection_type }}",
               "refId": "A"
@@ -1726,7 +1726,7 @@
                 "uid": "${DS_PROMETHEUS}"
               },
               "exemplar": true,
-              "expr": "sum by (bucket, connection_type) (kv_dcp_backoff{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+              "expr": "sum by (bucket, connection_type) (kv_dcp_backoff{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})",
               "interval": "",
               "legendFormat": "{{bucket}} ({{connection_type}})",
               "refId": "A"

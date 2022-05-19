@@ -364,7 +364,7 @@
           "options": {
             "excludeByName": {
               "Time": true,
-              "{cluster=\"Dev Kicks with 6.6\"}": true
+              "{cluster_name=\"Dev Kicks with 6.6\"}": true
             },
             "indexByName": {},
             "renameByName": {
@@ -454,7 +454,7 @@
             "excludeByName": {
               "Time": true,
               "Value": true,
-              "{cluster=\"Dev Kicks with 6.6\"}": true
+              "{cluster_name=\"Dev Kicks with 6.6\"}": true
             },
             "indexByName": {
               "Time": 0,
@@ -541,7 +541,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(cbbucketinfo_up{cluster=${clusters:doublequote}})",
+          "expr": "count(cbbucketinfo_up{cluster_name=${clusters:doublequote}})",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -671,7 +671,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbbucketinfo_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbbucketinfo_up{cluster_name=${clusters:doublequote}}))",
           "instant": true,
           "interval": "",
           "legendFormat": "cbbucketinfo",
@@ -683,7 +683,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbbucketstat_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbbucketstat_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -696,7 +696,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbcbas_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbcbas_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -709,7 +709,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbeventing_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbeventing_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -722,7 +722,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbfts_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbfts_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -735,7 +735,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbindex_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbindex_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -748,7 +748,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbnode_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbnode_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -761,7 +761,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbpernode_bucketstats_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -774,7 +774,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbquery_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbquery_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -787,7 +787,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (node) (cbtask_up{cluster=${clusters:doublequote}}))",
+          "expr": "count(count by (node) (cbtask_up{cluster_name=${clusters:doublequote}}))",
           "hide": false,
           "instant": true,
           "interval": "",
@@ -913,7 +913,7 @@
             "excludeByName": {
               "Time": true,
               "Value": true,
-              "{cluster=\"Dev Kicks with 6.6\"}": true,
+              "{cluster_name=\"Dev Kicks with 6.6\"}": true,
               "{node=\"35.223.87.116:18091\"}": true
             },
             "indexByName": {},
@@ -969,7 +969,7 @@
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
-        "regex": "/{cluster=\"(.+?)\"/",
+        "regex": "/{cluster_name=\"(.+?)\"/",
         "skipUrlSync": false,
         "sort": 0,
         "type": "query"

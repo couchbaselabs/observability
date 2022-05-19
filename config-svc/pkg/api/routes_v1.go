@@ -134,7 +134,7 @@ func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, 
 	staticConfig := prometheus.StaticConfig{
 		Targets: make([]string, len(cluster.Nodes)),
 		Labels: map[string]string{
-			"cluster": cluster.ClusterName,
+			"cluster_name": cluster.ClusterName,
 		},
 	}
 

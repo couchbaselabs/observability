@@ -290,7 +290,7 @@
                   {
                     "targetBlank": false,
                     "title": "Cluster overview dashboard",
-                    "url": "/d/UEZRQMc7z/single-cluster-overview?var-cluster=${__data.fields.Name}"
+                    "url": "/d/UEZRQMc7z/single-cluster-overview?var-cluster_name=${__data.fields.Name}"
                   }
                 ]
               }
