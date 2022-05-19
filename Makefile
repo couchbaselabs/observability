@@ -57,8 +57,9 @@ GO_VERSION := 1.17.2
 # The syntax is <platform>-<os>-<arch>.
 # <platform> is always "docker" right now - it's reserved for future use (e.g. OpenShift)
 # <os> and <arch> are valid GOOS and GOARCH values respectively (e.g. linux/amd64)
-BINARY_TARGET := $(shell go env GOHOSTOS)-$(shell go env GOHOSTARCH)
-IMAGE_TARGET := docker-linux-amd64
+HOSTARCH = $(shell go env GOHOSTARCH)
+BINARY_TARGET := $(shell go env GOHOSTOS)-$(HOSTARCH)
+IMAGE_TARGET := docker-linux-$(HOSTARCH)
 
 # These are all the Docker images that we can produce.
 # NOTE: when adding a new image, ensure you've asked Build Team to set up the
@@ -161,14 +162,14 @@ endif
 .PHONY: container
 container: image-artifacts
 	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
-		TAG=v1 tools/build-container-from-archive.sh "$$archive" ;\
+		TAG=v1 tools/build-container-from-archive.sh "$$archive" $(HOSTARCH);\
 	done
 
 .PHONY: container-oss
 container-oss:
 	$(MAKE) -e OSS=true image-artifacts
 	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
-		TAG=v1 tools/build-container-from-archive.sh "$$archive" ;\
+		TAG=v1 tools/build-container-from-archive.sh "$$archive" $(HOSTARCH);\
 	done
 
 ######################################################################################

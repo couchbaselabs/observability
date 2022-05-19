@@ -30,6 +30,7 @@ TAG=${TAG:-}
 function build_single_image() {
     local artifacts_path=$1
     local product_name=$2
+    local arch=$3
     local tag=""
     if [ -z "$TAG" ]; then
         tag="couchbase/${product_name#couchbase-}:${VERSION}-${BLD_NUM}"
@@ -37,7 +38,7 @@ function build_single_image() {
         tag="couchbase/${product_name#couchbase-}:$TAG"
     fi
     echo "Test-building Docker image $tag..."
-    docker build --build-arg PROD_VERSION="$VERSION" --build-arg PROD_BUILD="$BLD_NUM" -t "$tag" "$artifacts_path"
+    docker build --build-arg PROD_VERSION="$VERSION" --build-arg PROD_BUILD="$BLD_NUM" --build-arg arch="$arch" -t "$tag" "$artifacts_path"
 }
 
 tmpdir=$(mktemp -d)
@@ -46,9 +47,10 @@ tar -C "$tmpdir" -zxvf "$file"
 if [ -f "$tmpdir/Dockerfile" ]; then
     product_name=$(basename "$file")
     product_name=${product_name%-image*}
-    build_single_image "$tmpdir" "$product_name"
+    echo $2
+    build_single_image "$tmpdir" "$product_name" "$2"
 else
     for product_path in "$tmpdir"/*; do
-        build_single_image "$product_path" "$(basename "$product_path")"
+        build_single_image "$product_path" "$(basename "$product_path")" "$2"
     done
 fi
