@@ -47,7 +47,6 @@ tar -C "$tmpdir" -zxvf "$file"
 if [ -f "$tmpdir/Dockerfile" ]; then
     product_name=$(basename "$file")
     product_name=${product_name%-image*}
-    echo $2
     build_single_image "$tmpdir" "$product_name" "$2"
 else
     for product_path in "$tmpdir"/*; do
