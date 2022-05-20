@@ -22,6 +22,7 @@ if [ $# -eq 0 ]; then
 fi
 
 file=$1
+arch=$2
 
 VERSION=${VERSION:-0.2.0}
 BLD_NUM=${BLD_NUM:-278}
@@ -47,9 +48,9 @@ tar -C "$tmpdir" -zxvf "$file"
 if [ -f "$tmpdir/Dockerfile" ]; then
     product_name=$(basename "$file")
     product_name=${product_name%-image*}
-    build_single_image "$tmpdir" "$product_name" "$2"
+    build_single_image "$tmpdir" "$product_name" "$arch"
 else
     for product_path in "$tmpdir"/*; do
-        build_single_image "$product_path" "$(basename "$product_path")" "$2"
+        build_single_image "$product_path" "$(basename "$product_path")" "$arch"
     done
 fi
