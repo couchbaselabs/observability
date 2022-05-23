@@ -1,35 +1,35 @@
 ---
 # This is a template file we use so we can substitute environment variables at launch
 global:
-    scrape_interval: 30s
-    evaluation_interval: 30s
+  scrape_interval: 30s
+  evaluation_interval: 30s
   # scrape_timeout is set to the global default (10s).
 
   # Attach these labels to any time series or alerts when communicating with
   # external systems (federation, remote storage, Alertmanager).
-    external_labels:
-        monitor: couchbase-observability-stack
+  external_labels:
+    monitor: couchbase-observability-stack
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 rule_files:
   # All Couchbase default rules go here
-    - /etc/prometheus/alerting/couchbase/*.yaml
-    - /etc/prometheus/alerting/couchbase/*.yml
+- /etc/prometheus/alerting/couchbase/*.yaml
+- /etc/prometheus/alerting/couchbase/*.yml
   # All custom rules can go here: relative to this file
-    - alerting/*.yaml
-    - alerting/*.yml
+- alerting/*.yaml
+- alerting/*.yml
 
 alerting:
-    alertmanagers:
-        - scheme: http
+  alertmanagers:
+  - scheme: http
     # tls_config:
     #   ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
     # bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-          path_prefix: /alertmanager/
+    path_prefix: /alertmanager/
     # Assumption is we always have AlertManager with Prometheus
-          static_configs:
-              - targets:
-                    - localhost:9093
+    static_configs:
+    - targets:
+      - localhost:9093
     # Discover alert manager instances using K8s service discovery
     # kubernetes_sd_configs:
     #   - role: pod
@@ -48,56 +48,56 @@ alerting:
     #   action: drop
 
 scrape_configs:
-    - job_name: prometheus
-      metrics_path: /prometheus/metrics
-      static_configs:
-          - targets: [localhost:9090]
+- job_name: prometheus
+  metrics_path: /prometheus/metrics
+  static_configs:
+  - targets: [localhost:9090]
 
-    - job_name: couchbase-grafana
-      file_sd_configs:
-          - files:
-                - /etc/prometheus/couchbase/monitoring/*.json
-            refresh_interval: 30s
+- job_name: couchbase-grafana
+  file_sd_configs:
+  - files:
+    - /etc/prometheus/couchbase/monitoring/*.json
+    refresh_interval: 30s
 
   # TODO: add unauthenticated endpoint
-    - job_name: couchbase-cluster-monitor
-      basic_auth:
-          username: admin
-          password: password
-      metrics_path: /api/v1/_prometheus
+- job_name: couchbase-cluster-monitor
+  basic_auth:
+    username: admin
+    password: password
+  metrics_path: /api/v1/_prometheus
     # For basic auth we cannot use file_sd
-      static_configs:
-          - targets: [localhost:7196]
+  static_configs:
+  - targets: [localhost:7196]
 
   # Used for kubernetes deployment as we can discover the end points to scrape from the API
-    - job_name: couchbase-kubernetes-pods
+- job_name: couchbase-kubernetes-pods
       # Server 7 requires authentication
-      basic_auth:
-          username: Administrator
-          password: password
-      kubernetes_sd_configs:
-          - role: pod
-      relabel_configs:
+  basic_auth:
+    username: Administrator
+    password: password
+  kubernetes_sd_configs:
+  - role: pod
+  relabel_configs:
       # Scrape pods labelled with app=couchbase and then only port 8091 (server 7), 9091 (exporter) or 2020 (fluent bit)
-          - source_labels: [__meta_kubernetes_pod_label_app]
-            action: keep
-            regex: couchbase
-          - source_labels: [__meta_kubernetes_pod_container_port_number]
-            action: keep
-            regex: (8091|9091|2020)
-          - action: labelmap
-            regex: __meta_kubernetes_pod_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: kubernetes_namespace
-          - source_labels: [__meta_kubernetes_pod_name]
-            action: replace
-            target_label: kubernetes_pod_name
-          - source_labels: [__meta_kubernetes_pod_label_couchbase_cluster]
-            action: replace
-            target_label: cluster
+  - source_labels: [__meta_kubernetes_pod_label_app]
+    action: keep
+    regex: couchbase
+  - source_labels: [__meta_kubernetes_pod_container_port_number]
+    action: keep
+    regex: (8091|9091|2020)
+  - action: labelmap
+    regex: __meta_kubernetes_pod_label_(.+)
+  - source_labels: [__meta_kubernetes_namespace]
+    action: replace
+    target_label: kubernetes_namespace
+  - source_labels: [__meta_kubernetes_pod_name]
+    action: replace
+    target_label: kubernetes_pod_name
+  - source_labels: [__meta_kubernetes_pod_label_couchbase_cluster]
+    action: replace
+    target_label: cluster
 
   # Kube-state-metrics default service to scrape
-    - job_name: kube-state-metrics
-      static_configs:
-          - targets: [kube-state-metrics:8080]
+- job_name: kube-state-metrics
+  static_configs:
+  - targets: [kube-state-metrics:8080]

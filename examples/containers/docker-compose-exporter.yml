@@ -5,18 +5,18 @@
 version: '3'
 
 networks:
-    back:
+  back:
 
 services:
     # Exporter required for server <7
-    exporter:
-        container_name: exporter
-        image: couchbase/exporter:1.0.5
-        command:
-            - --couchbase-address=db1
-        ports:
-            - 9091:9091
-        depends_on:
-            - db1
-        networks:
-            - back
+  exporter:
+    container_name: exporter
+    image: couchbase/exporter:1.0.5
+    command:
+    - --couchbase-address=db1
+    ports:
+    - 9091:9091
+    depends_on:
+    - db1
+    networks:
+    - back

@@ -1,34 +1,34 @@
 ---
 name: Publish to GitHub Pages
 on:
-    push:
-        branches: [main]
-        paths:
-            - docs/**
-    workflow_dispatch:
-        inputs:
-            ref:
-                description: Branch, tag, or commit SHA to run against
-                required: false
-                default: main
+  push:
+    branches: [main]
+    paths:
+    - docs/**
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag, or commit SHA to run against
+        required: false
+        default: main
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-              with:
-                  ref: ${{ github.event.inputs.ref || 'main' }}
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.inputs.ref || 'main' }}
 
-            - name: Run Antora
-              uses: kameshsampath/antora-site-action@v0.2.4
-              with:
-                  antora_playbook: docs/antora-gh-playbook.yml
+    - name: Run Antora
+      uses: kameshsampath/antora-site-action@v0.2.4
+      with:
+        antora_playbook: docs/antora-gh-playbook.yml
 
-            - name: Deploy to GitHub Pages
-              uses: JamesIves/github-pages-deploy-action@v4.2.3
-              with:
-                  GITHUB_TOKEN: ${{ github.token}}
-                  FOLDER: docs/build/site/
-                  BRANCH: gh-pages
-                  COMMIT_MESSAGE: '[CI] Publish Documentation for ${{ github.sha }}'
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4.2.3
+      with:
+        GITHUB_TOKEN: ${{ github.token}}
+        FOLDER: docs/build/site/
+        BRANCH: gh-pages
+        COMMIT_MESSAGE: '[CI] Publish Documentation for ${{ github.sha }}'

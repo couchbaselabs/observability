@@ -1,15 +1,16 @@
 ---
 services:
-    docs:
-        container_name: antora
-        build:
-            context: .
-        image: docs_preview
-        command: sh -c "(http-server build/site -c-1 &) && (onchange -i antora-playbook.yml 'docs/**' -- antora generate antora-playbook.yml)"
-        volumes:
-            - ./antora.yml:/antora/docs/antora.yml
-            - ./antora-container-playbook-dev.yml:/antora/antora-playbook.yml
-            - ./modules:/antora/docs/modules/
-        user: 0:0
-        ports:
-            - 4040:8080
+  docs:
+    container_name: antora
+    build:
+      context: .
+    image: docs_preview
+    command: sh -c "(http-server build/site -c-1 &) && (onchange -i antora-playbook.yml 'docs/**' -- antora
+      generate antora-playbook.yml)"
+    volumes:
+    - ./antora.yml:/antora/docs/antora.yml
+    - ./antora-container-playbook-dev.yml:/antora/antora-playbook.yml
+    - ./modules:/antora/docs/modules/
+    user: 0:0
+    ports:
+    - 4040:8080

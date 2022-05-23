@@ -1,17 +1,17 @@
 ---
 site:
-    title: Couchbase Monitoring and Observability Stack
-    url: /cmos
-    start_page: cmos::index.adoc
+  title: Couchbase Monitoring and Observability Stack
+  url: /cmos
+  start_page: cmos::index.adoc
 content:
-    sources:
-        - url: /antora/docs
-          branches: HEAD
-        - url: /antora/cbmultimanager
-          branches: HEAD
+  sources:
+  - url: /antora/docs
+    branches: HEAD
+  - url: /antora/cbmultimanager
+    branches: HEAD
 ui:
-    bundle:
-        url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
+  bundle:
+    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
 asciidoc:
-    attributes:
-        env-packaged: ''
+  attributes:
+    env-packaged: ''

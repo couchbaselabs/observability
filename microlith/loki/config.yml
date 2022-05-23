@@ -2,40 +2,40 @@
 auth_enabled: false
 
 server:
-    http_listen_port: 3100
-    grpc_listen_port: 9096
-    http_path_prefix: ${CMOS_HTTP_PATH_PREFIX:-/}
+  http_listen_port: 3100
+  grpc_listen_port: 9096
+  http_path_prefix: ${CMOS_HTTP_PATH_PREFIX:-/}
 
 common:
-    path_prefix: /tmp/loki
-    storage:
-        filesystem:
-            chunks_directory: /tmp/loki/chunks
-            rules_directory: /tmp/loki/rules
-    replication_factor: 1
-    ring:
-        instance_addr: 127.0.0.1
-        kvstore:
-            store: inmemory
+  path_prefix: /tmp/loki
+  storage:
+    filesystem:
+      chunks_directory: /tmp/loki/chunks
+      rules_directory: /tmp/loki/rules
+  replication_factor: 1
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: inmemory
 
 schema_config:
-    configs:
-        - from: 2020-10-24
-          store: boltdb-shipper
-          object_store: filesystem
-          schema: v11
-          index:
-              prefix: index_
-              period: 24h
+  configs:
+  - from: 2020-10-24
+    store: boltdb-shipper
+    object_store: filesystem
+    schema: v11
+    index:
+      prefix: index_
+      period: 24h
 
 ruler:
-    alertmanager_url: http://localhost:9093/alertmanager
-    enable_alertmanager_v2: true
+  alertmanager_url: http://localhost:9093/alertmanager
+  enable_alertmanager_v2: true
   # These two are overridden in tests - the default values should track the defaults in https://grafana.com/docs/loki/latest/configuration/#ruler_config
-    evaluation_interval: ${LOKI_RULER_EVALUATION_INTERVAL:-1m}
-    resend_delay: ${LOKI_RULER_RESEND_DELAY:-1m}
-    rule_path: /tmp/loki/scratch
-    storage:
-        type: local
-        local:
-            directory: /etc/loki/rules
+  evaluation_interval: ${LOKI_RULER_EVALUATION_INTERVAL:-1m}
+  resend_delay: ${LOKI_RULER_RESEND_DELAY:-1m}
+  rule_path: /tmp/loki/scratch
+  storage:
+    type: local
+    local:
+      directory: /etc/loki/rules
