@@ -1,104 +1,105 @@
+---
 openapi: 3.0.3
 info:
-  title: Couchbase Monitoring & Observability Stack - Configuration Service
-  description: REST API of the Configuration Service
-  version: v1
-  contact:
-    name: Couchbase, Inc.
-    url: https://couchbase.com
-    email: info@couchbase.com
-  license:
-    name: Apache 2.0
-    url: https://www.apache.org/licenses/LICENSE-2.0
+    title: Couchbase Monitoring & Observability Stack - Configuration Service
+    description: REST API of the Configuration Service
+    version: v1
+    contact:
+        name: Couchbase, Inc.
+        url: https://couchbase.com
+        email: info@couchbase.com
+    license:
+        name: Apache 2.0
+        url: https://www.apache.org/licenses/LICENSE-2.0
 servers:
-  - description: Local Microlith
-    url: http://localhost:8080/config/api/v1
-  - description: Local Development
-    url: http://localhost:7194/api/v1
+    - description: Local Microlith
+      url: http://localhost:8080/config/api/v1
+    - description: Local Development
+      url: http://localhost:7194/api/v1
 paths:
 
-  /openapi.json:
-    get:
-      summary: Outputs the OpenAPI specification for this API.
-      responses:
-        '200':
-          description: OpenAPI 3.0 specification for this API
-          content:
-            application/json:
-              schema:
-                type: object
+    /openapi.json:
+        get:
+            summary: Outputs the OpenAPI specification for this API.
+            responses:
+                '200':
+                    description: OpenAPI 3.0 specification for this API
+                    content:
+                        application/json:
+                            schema:
+                                type: object
 
-  /clusters/add:
-    post:
-      summary: Add a new Couchbase cluster to Prometheus
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Cluster"
-      responses:
-        '200':
-          description: Cluster added successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                additionalProperties: false
-                required: [ok]
-                properties:
-                  ok:
-                    type: boolean
-                    enum: [true]
+    /clusters/add:
+        post:
+            summary: Add a new Couchbase cluster to Prometheus
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Cluster'
+            responses:
+                '200':
+                    description: Cluster added successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                additionalProperties: false
+                                required: [ok]
+                                properties:
+                                    ok:
+                                        type: boolean
+                                        enum: [true]
 
-  /collectInformation:
-    post: # avoid accidental activation by GET
-      summary: Collects diagnostic information about CMOS for Support analysis.
-      responses:
-        '200':
-          description: Stream of logging output from collect-information.sh
-          content:
-            text/plain:
+    /collectInformation:
+        post: # avoid accidental activation by GET
+            summary: Collects diagnostic information about CMOS for Support analysis.
+            responses:
+                '200':
+                    description: Stream of logging output from collect-information.sh
+                    content:
+                        text/plain:
 
 
 components:
-  schemas:
-    Cluster:
-      type: object
-      additionalProperties: false
-      required: [couchbaseConfig, hostname]
-      properties:
-        name:
-          type: string
-        couchbaseConfig:
-          type: object
-          additionalProperties: false
-          required: [username, password]
-          properties:
-            managementPort:
-              type: number
-              default: 8091
-            username:
-              type: string
-            password:
-              type: string
-            useTLS:
-              type: boolean
-        metricsConfig:
-          type: object
-          additionalProperties: false
-          properties:
-            metricsPort:
-              type: number
-        hostname:
-          type: string
-    ErrorResponse:
-      type: object
-      additionalProperties: false
-      required: [ok, error]
-      properties:
-        ok:
-          type: boolean
-          enum: [false]
-        error:
-          type: string
+    schemas:
+        Cluster:
+            type: object
+            additionalProperties: false
+            required: [couchbaseConfig, hostname]
+            properties:
+                name:
+                    type: string
+                couchbaseConfig:
+                    type: object
+                    additionalProperties: false
+                    required: [username, password]
+                    properties:
+                        managementPort:
+                            type: number
+                            default: 8091
+                        username:
+                            type: string
+                        password:
+                            type: string
+                        useTLS:
+                            type: boolean
+                metricsConfig:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                        metricsPort:
+                            type: number
+                hostname:
+                    type: string
+        ErrorResponse:
+            type: object
+            additionalProperties: false
+            required: [ok, error]
+            properties:
+                ok:
+                    type: boolean
+                    enum: [false]
+                error:
+                    type: string

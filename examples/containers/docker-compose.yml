@@ -75,7 +75,7 @@ services:
         container_name: logging
         image: ${FLUENT_BIT_IMAGE}
         ports:
-            - "2020:2020"
+            - 2020:2020
         depends_on:
             - db1
             - couchbase-cmos

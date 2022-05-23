@@ -15,7 +15,7 @@ If a node fails to respond, this can indicate that the node is down, its CPU is 
 
 *Background*: This can be an indication of a Couchbase Server Issue (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1.
 This issue can affect data integrity.
-DCP mutations track any documents made to Couchbase Server and do Documents. 
+DCP mutations track any documents made to Couchbase Server and do Documents.
 If you drop DCP mutations, then changes to documents may be lost.
 
 *Condition*: Dropped DCP mutations found in memcached.log.

@@ -1,67 +1,67 @@
 ---
-- hosts: couchbase
-  vars:
-      go_version: 1.17.2
-  environment:
-      GOROOT: /usr/local/go
-      PATH: '{{ ansible_env.PATH }}:/usr/local/go/bin'
-  tasks:
-      - name: Install required packages
-        ansible.builtin.package:
-            name:
-                - git
-                - wget
+    - hosts: couchbase
+      vars:
+          go_version: 1.17.2
+      environment:
+          GOROOT: /usr/local/go
+          PATH: '{{ ansible_env.PATH }}:/usr/local/go/bin'
+      tasks:
+          - name: Install required packages
+            ansible.builtin.package:
+                name:
+                    - git
+                    - wget
                 # Needed to avoid Git using TLS 1.1 which GitHub rejects
-                - nss
-                - curl
-                - libcurl
-                - python2 # TODO: ideally we'd be using 3
-            state: latest
-        become: true
-      - name: Install Cloud-Native Prometheus Exporter
-        when: couchbase_server_version is version('7.0.0', 'lt')
-        block:
-            - name: Download Golang
-              ansible.builtin.get_url:
-                  url: https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
-                  dest: /tmp/golang.tar.gz
-            - name: Install Golang
-              ansible.builtin.unarchive:
-                  src: /tmp/golang.tar.gz
-                  remote_src: true
-                  dest: /usr/local/
-              become: true
-            - name: Create directory for couchbase-exporter
-              ansible.builtin.file:
-                  path: /opt/couchbase-exporter
-                  state: directory
-                  owner: vagrant
-                  group: vagrant
-                  mode: 0777 # noqa risky-file-permissions
-              become: true
-            - name: Download couchbase-exporter sources
-              ansible.builtin.git:
-                  repo: https://github.com/couchbase/couchbase-exporter.git
-                  dest: /opt/couchbase-exporter
-            - name: Build couchbase-exporter
-              ansible.builtin.command:
-                  cmd: go build -o ./couchbase-exporter .
-                  chdir: /opt/couchbase-exporter
-                  creates: /opt/couchbase-exporter/couchbase-exporter
-            - name: Set up couchbase-exporter systemd service
-              ansible.builtin.template:
-                  src: couchbase-exporter.service.j2
-                  dest: /etc/systemd/system/couchbase-exporter.service
-                  owner: root
-                  group: root
-                  mode: 0644
-              become: true
-            - name: Start couchbase-exporter
-              ansible.builtin.systemd:
-                  name: couchbase-exporter.service
-                  state: started
-                  daemon_reload: true
-              become: true
-            - name: Wait for couchbase-exporter to start
-              ansible.builtin.wait_for:
-                  port: 9091
+                    - nss
+                    - curl
+                    - libcurl
+                    - python2 # TODO: ideally we'd be using 3
+                state: latest
+            become: true
+          - name: Install Cloud-Native Prometheus Exporter
+            when: couchbase_server_version is version('7.0.0', 'lt')
+            block:
+                - name: Download Golang
+                  ansible.builtin.get_url:
+                      url: https://golang.org/dl/go{{ go_version }}.linux-amd64.tar.gz
+                      dest: /tmp/golang.tar.gz
+                - name: Install Golang
+                  ansible.builtin.unarchive:
+                      src: /tmp/golang.tar.gz
+                      remote_src: true
+                      dest: /usr/local/
+                  become: true
+                - name: Create directory for couchbase-exporter
+                  ansible.builtin.file:
+                      path: /opt/couchbase-exporter
+                      state: directory
+                      owner: vagrant
+                      group: vagrant
+                      mode: 0777 # noqa risky-file-permissions
+                  become: true
+                - name: Download couchbase-exporter sources
+                  ansible.builtin.git:
+                      repo: https://github.com/couchbase/couchbase-exporter.git
+                      dest: /opt/couchbase-exporter
+                - name: Build couchbase-exporter
+                  ansible.builtin.command:
+                      cmd: go build -o ./couchbase-exporter .
+                      chdir: /opt/couchbase-exporter
+                      creates: /opt/couchbase-exporter/couchbase-exporter
+                - name: Set up couchbase-exporter systemd service
+                  ansible.builtin.template:
+                      src: couchbase-exporter.service.j2
+                      dest: /etc/systemd/system/couchbase-exporter.service
+                      owner: root
+                      group: root
+                      mode: 0644
+                  become: true
+                - name: Start couchbase-exporter
+                  ansible.builtin.systemd:
+                      name: couchbase-exporter.service
+                      state: started
+                      daemon_reload: true
+                  become: true
+                - name: Wait for couchbase-exporter to start
+                  ansible.builtin.wait_for:
+                      port: 9091

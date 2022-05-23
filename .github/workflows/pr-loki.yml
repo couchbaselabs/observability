@@ -17,11 +17,11 @@ jobs:
         timeout-minutes: 15
         steps:
             - run: |
-                echo "ref: ${{ github.event.inputs.ref }}"
-                echo "user: ${{ github.event.inputs.user }}"
+                  echo "ref: ${{ github.event.inputs.ref }}"
+                  echo "user: ${{ github.event.inputs.user }}"
 
             - name: Checkout code
               uses: actions/checkout@v3
-            
+
             - name: Run tests
               run: make test-loki-rules

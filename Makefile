@@ -176,7 +176,7 @@ container-oss:
 # Testing-related targets
 
 # NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
-# Install pre-commit then run: pre-commit run --all-files
+# Install pre-commit then run: `pre-commit install` then run: `pre-commit run --all-files`
 .PHONY: Lint
 lint: container-lint
 	tools/asciidoc-lint.sh
@@ -258,13 +258,13 @@ $(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/docs \
 	microlith/cbmultimanager-docs \
 	microlith/config-svc \
-	microlith/git-commit.txt 
+	microlith/git-commit.txt
 else
 $(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/Dockerfile.oss \
 	microlith/docs \
 	microlith/config-svc \
-	microlith/git-commit.txt 
+	microlith/git-commit.txt
 endif
 	mkdir -p $@
 	cp -r microlith/* $@

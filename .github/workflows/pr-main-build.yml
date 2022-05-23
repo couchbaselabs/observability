@@ -11,16 +11,16 @@ on:
 jobs:
   # Ensure we always run unit tests
     run-unit-tests:
-      name: Run PR unit tests
-      runs-on: ubuntu-latest
-      timeout-minutes: 5
-      steps:
-          - name: Checkout code
-            uses: actions/checkout@v3
+        name: Run PR unit tests
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v3
 
-          - name: Run makefile target for unit tests
-            run: |
-                make test-unit
+            - name: Run makefile target for unit tests
+              run: |
+                  make test-unit
 
   # Build an image to share across jobs
     build-oss-container:
@@ -86,8 +86,8 @@ jobs:
               if: ${{ failure() }}
               uses: actions/upload-artifact@v2
               with:
-                name: test-failure-cmosinfo-${{ matrix.server-version }}
-                path: testing/diagnostics/cmosinfo/*
+                  name: test-failure-cmosinfo-${{ matrix.server-version }}
+                  path: testing/diagnostics/cmosinfo/*
 
   # TODO: once CMOS-97 is done, add something similar for k8s
 

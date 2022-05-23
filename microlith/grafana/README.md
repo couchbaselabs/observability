@@ -36,12 +36,12 @@ Once you have a local environment configured, you can visit http://localhost:808
         "to": "now"
     ```
 
-    If this is set to some specific date and time and not `now-3h`/`now`, the dashboard will break on re-provisioning as the data does not exist. 
-    
+    If this is set to some specific date and time and not `now-3h`/`now`, the dashboard will break on re-provisioning as the data does not exist.
+
 There is a [linter](/tools/dashboards-lint.sh) to check the dashboards do not have a set time or are exported for sharing externally.
 
 ## Pull Request best practices ##
 
-It is recommended to add a screenshot to the Pull Request to display the changes made. Make sure that the input source you use is reproduceable and the way to reproduce it is documented. The easiest way to do this may be to use one of the examples. 
+It is recommended to add a screenshot to the Pull Request to display the changes made. Make sure that the input source you use is reproduceable and the way to reproduce it is documented. The easiest way to do this may be to use one of the examples.
 
 Additionally, as some changes/behaviours are not easily captured by screenshots, it may be acceptable to recommend to test using an example - along with a detailed description of the intended behaviour and changes.

@@ -23,7 +23,7 @@ cluster:
                 metadata:
                     annotations:
                         # Match all logs
-                        fluentbit.couchbase.com/loki_match: "*"
+                        fluentbit.couchbase.com/loki_match: '*'
                         # Send to this SVC
                         fluentbit.couchbase.com/loki_host: loki.default
             volumeMounts:
