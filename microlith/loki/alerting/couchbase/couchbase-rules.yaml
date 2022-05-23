@@ -80,7 +80,8 @@ groups:
 
           - alert: CB90044-babysitterManagedProcessCrash
             expr: |
-                count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
+                count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | json message="message" | line_format "{{.message}}"
+                | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
             for: 1m
             labels:
                 job: couchbase_fluent_bit
@@ -186,7 +187,8 @@ groups:
 
           - alert: CB90052-malformedvBuckets
             expr: |
-                count_over_time({file="memcached.log"} |~ "malformed data in file" |json message="message" | line_format "{{.message}}" | pattern "<_>WARNING (<m_bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
+                count_over_time({file="memcached.log"} |~ "malformed data in file" |json message="message" | line_format "{{.message}}"
+                | pattern "<_>WARNING (<m_bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
             for: 1m
             labels:
                 job: couchbase_fluent_bit
@@ -207,7 +209,8 @@ groups:
 
           - alert: CB90056-connectionsRejected
             expr: |
-                count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 0
+                count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}"
+                | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 0
             for: 1m
             labels:
                 job: couchbase_fluent_bit
@@ -245,7 +248,8 @@ groups:
 
           - alert: CB90062-droppedTicks-instances # fires when over 4 instances of dropped ticks are detected
             expr: |
-                count(count_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_> Dropped <ticks> ticks<_>" [1h])) > 4
+                count(count_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}"
+                | pattern "<_> Dropped <ticks> ticks<_>" [1h])) > 4
             for: 1m
             labels:
                 job: couchbase_fluent_bit
@@ -264,7 +268,8 @@ groups:
 
           - alert: CB90062-droppedTicks-max # fires when over 10 dropped ticks are detected on any collector
             expr: |
-                sum((sum_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_>(Collector: <collector>) Dropped <ticks> ticks" | unwrap ticks  [1h])) > 10)
+                sum((sum_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}"
+                | pattern "<_>(Collector: <collector>) Dropped <ticks> ticks" | unwrap ticks  [1h])) > 10)
             for: 1m
             labels:
                 job: couchbase_fluent_bit
