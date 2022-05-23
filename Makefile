@@ -176,7 +176,7 @@ container-oss:
 # Testing-related targets
 
 # NOTE: on Ansible linting failure due to YAML formatting, a pre-commit hook can be used to autoformat: https://pre-commit.com/
-# Install pre-commit then run: `pre-commit install` then run: `pre-commit run --all-files`
+# Install pre-commit then run: `pre-commit run --all-files`
 .PHONY: Lint
 lint: container-lint
 	tools/asciidoc-lint.sh

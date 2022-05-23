@@ -23,7 +23,9 @@ groups:
           - alert: CB90037-slowOperations
             expr: |
                 sum(count_over_time (
-                {file="memcached.log"} |= "Slow operation:" !~ `(CREATE_BUCKET|CMD_SEQNO_PERSISTENCE|CMD_COMPACT_DB)` | label_format cluster=couchbase_cluster | json message="message",hostname="hostname" | line_format "{{.message}}" | pattern "<_>Slow operation: <payload>" | line_format "{{.payload}}" | json
+                {file="memcached.log"} |= "Slow operation:" !~ `(CREATE_BUCKET|CMD_SEQNO_PERSISTENCE|CMD_COMPACT_DB)` | label_format cluster=couchbase_cluster
+                | json message="message",hostname="hostname" | line_format "{{.message}}" | pattern "<_>Slow operation: <payload>" | line_format "{{.payload}}"
+                | json
                 [5m])) by (cluster, node, bucket) > 0
             for: 1m
             labels:
