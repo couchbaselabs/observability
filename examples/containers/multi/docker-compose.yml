@@ -1,12 +1,12 @@
 ---
 services:
-  cmos:
-    container_name: cmos
-    image: ${CMOS_IMAGE}
-    ports:
-    - 8080:8080
+    cmos:
+        container_name: cmos
+        image: ${CMOS_IMAGE}
+        ports:
+            - 8080:8080
         # Add to custom network so CMOS and server/exporter containers can communicate and resolve container names to IPs
-    networks:
-    - shared_network
+        networks:
+            - shared_network
 networks:
-  shared_network:
+    shared_network:

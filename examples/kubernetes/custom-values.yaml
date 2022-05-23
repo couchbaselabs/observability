@@ -1,37 +1,37 @@
 ---
 cluster:
-  logging:
-    server:
-      enabled: true
-      sidecar:
-        image: couchbase/fluent-bit:1.1.3
-  monitoring:
-    prometheus:
-      enabled: false       # We're using server 7 metrics directly
-  security:
+    logging:
+        server:
+            enabled: true
+            sidecar:
+                image: couchbase/fluent-bit:1.1.3
+    monitoring:
+        prometheus:
+            enabled: false # We're using server 7 metrics directly
+    security:
         # To simplify for scraping we hardcode the credentials.
         # They should be auto-generated really and the Secret value
         # used by mounting into CMOS (or getting it to retrieve during
         # startup).
-    username: Administrator
-    password: password
-  servers:
+        username: Administrator
+        password: password
+    servers:
         # We use custom annotations to forward to CMOS Loki
-    default:
-      size: 3
-      pod:
-        metadata:
-          annotations:
+        default:
+            size: 3
+            pod:
+                metadata:
+                    annotations:
                         # Match all logs
-            fluentbit.couchbase.com/loki_match: '*'
+                        fluentbit.couchbase.com/loki_match: '*'
                         # Send to this SVC
-            fluentbit.couchbase.com/loki_host: loki.default
-      volumeMounts:
-        default: couchbase
-  volumeClaimTemplates:
-  - metadata:
-      name: couchbase
-    spec:
-      resources:
-        requests:
-          storage: 1Gi
+                        fluentbit.couchbase.com/loki_host: loki.default
+            volumeMounts:
+                default: couchbase
+    volumeClaimTemplates:
+        - metadata:
+              name: couchbase
+          spec:
+              resources:
+                  requests:
+                      storage: 1Gi

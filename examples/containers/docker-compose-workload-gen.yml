@@ -5,15 +5,15 @@
 version: '3'
 
 networks:
-  back:
+    back:
 
 services:
-  workload:
-    container_name: workload
-    image: ${COUCHBASE_SERVER_IMAGE}
-    volumes:
-    - ./workload-gen.sh:/entrypoint.sh
-    depends_on:
-    - db1
-    networks:
-    - back
+    workload:
+        container_name: workload
+        image: ${COUCHBASE_SERVER_IMAGE}
+        volumes:
+            - ./workload-gen.sh:/entrypoint.sh
+        depends_on:
+            - db1
+        networks:
+            - back
