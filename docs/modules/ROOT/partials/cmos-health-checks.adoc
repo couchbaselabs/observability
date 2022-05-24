@@ -220,6 +220,21 @@ However, if this is done, you will need to adjust this health check's threshold 
 
 *Further Reading*: https://docs.couchbase.com/server/current/rest-api/rest-manage-cluster-connections.html[Managing Cluster Connections]
 
+[#CB90090]
+=== High Memory Watermark Limit Exceeded (CB90090)
+
+*Background*: If a bucket's memory usage crosses the high water mark, ejection will be triggered.
+By default, the high water mark is set to 85% of the bucket's quota.
+If the bucket's memory usage exceeds this for a long period of time, it is possible that not enough data can be ejected to bring it down below the low water mark, and there is a risk of an out-of-memory condition.
+May cause deadlocks, block incoming writes, rebalance issues or out of memory conditions.
+
+*Condition*: High Memory Watermark for bucket exceeded memory limit for a long time.
+
+*Remediation*: Increase bucket memory or check ejection policy. 
+If this pertains, contact Couchbase Technical Support.
+
+*Further Reading*: https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html#ejection[Bucket Ejection]
+
 // end::group-node[]
 
 // tag::group-bucket[]

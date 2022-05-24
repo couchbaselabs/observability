@@ -198,3 +198,23 @@ groups:
         title: "Resident Ratio of Active vBuckets too low."
         description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }}).
         remediation: Increase memory allocation for bucket.
+
+    - alert: CB90090-highMemoryWatermark
+      expr: |
+        (kv_mem_used_bytes / kv_ep_max_size) > (kv_ep_mem_high_wat_percent_ratio * 100)
+      for: 5m
+      labels:
+        job: couchbase_prometheus
+        kind: bucket
+        health_check_id: CB90090
+        health_check_name: highMemoryWatermark
+        cluster: '{{ $labels.cluster }}'
+        node: '{{ $labels.instance }}'
+        bucket: '{{ $labels.bucket }}'
+        severity: warning
+      annotations:
+        title: "Exceeded High Memory Watermark Limit"
+        description: Bucket {{ $labels.bucket }} has exceeded the high memory watermark limit on cluster - {{ $labels.cluster }} and has not stabilised.
+          May cause deadlocks, block incoming writes, rebalance issues or out of memory conditions.
+        remediation: Need to increase bucket memory or check ejection policy. 
+          If this pertains, contact Couchbase Technical Support.
