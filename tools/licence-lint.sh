@@ -35,10 +35,12 @@ do
     fi
 done < <(find "${SCRIPT_DIR}/.." \
             -type d -path "*/go" -prune -o \
+            -type f -path "*/microlith/entrypoints/cbmultimanager.sh" -prune -o \
             -type d -path "*/tools/bats" -prune -o \
             -type d -path "*/tools/tern" -prune -o \
             -type d -path '*/testing/diagnostics' -prune -o \
             -type d -path "*/testing/screenshots/node_modules" -prune -o \
+            -type d -path "*/upstream" -prune -o \
             -type f \( -name '*.go' -o -name '*.sh' -o -name '*.bash' -o -name '*.bats' \) -print0)
 
 exit $exit_code

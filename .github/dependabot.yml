@@ -6,7 +6,7 @@ updates:
       directory: /
       schedule:
           interval: daily
-    - package-ecosystem: "docker"
-      directory: "/microlith"
+    - package-ecosystem: docker
+      directory: /microlith
       schedule:
-          interval: "daily"
+          interval: daily

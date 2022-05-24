@@ -17,7 +17,7 @@ set -u
 ################
 # This script stops and deletes all containers with the "cbs_server_exp" image, removes the image itself,
 # and prunes any hanging images. Because these containers are started with the '--rm' flag, any associated
-# anonymous volumes are also removed. 
+# anonymous volumes are also removed.
 # Finally the CMOS container is removed, with its network and volumes deleted.
 ################
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -32,7 +32,7 @@ docker ps -a --filter "ancestor=cbs_server_exp" --format '{{.ID }}' | xargs dock
 echo "All cbs_server_exp containers deleted successfully."
 
 # Delete the cbs_server_exp image - this needs to be here as we are using the CLI and so have no
-# reference to containers to be able to stop them without the image name. container-clean removes the 
+# reference to containers to be able to stop them without the image name. container-clean removes the
 # tag. By moving to docker-compose for nodes this will be avoided.
 docker rmi -f "cbs_server_exp"
 echo "cbs_server_exp image deleted."
@@ -44,4 +44,3 @@ popd || exit
 
 echo "------------------------------------"
 echo "Example stopped and cleaned successfully."
-

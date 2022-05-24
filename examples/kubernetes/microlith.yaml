@@ -48,7 +48,7 @@ spec:
                   ports:
                       - name: http
                         containerPort: 8080
-                      - name: loki # So we can push logs to it
+                      - name: loki  # So we can push logs to it
                         containerPort: 3100
                   env:
                       - name: KUBERNETES_DEPLOYMENT
@@ -67,8 +67,8 @@ spec:
                         value: password
                   volumeMounts:
                       - name: prometheus-config-volume
-                        mountPath: /etc/prometheus/custom # keep /etc/prometheus for any defaults
-      # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
+                        mountPath: /etc/prometheus/custom   # keep /etc/prometheus for any defaults
+                # Now we watch for changes to the volumes and auto-reload the prometheus configuration if seen
                 - name: prometheus-config-watcher
                   image: weaveworks/watch:master-9199bf5
                   args: [-v, -t, -p=/etc/prometheus/custom, curl, -X, POST, --fail, -o, '-', -sS, http://localhost:8080/prometheus/-/reload]
@@ -107,3 +107,4 @@ spec:
     selector:
         run: couchbase-grafana
 ---
+...

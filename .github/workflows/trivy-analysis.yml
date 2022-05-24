@@ -26,8 +26,8 @@ jobs:
 
             - name: Build an image from Dockerfile
               run: |
-                make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999 -e OSS=true
-                tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_0.0.0-999.tgz
+                  make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999 -e OSS=true
+                  tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_0.0.0-999.tgz
 
             - name: Run Trivy vulnerability scanner
               uses: aquasecurity/trivy-action@master

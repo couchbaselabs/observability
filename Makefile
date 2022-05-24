@@ -182,6 +182,7 @@ lint: container-lint
 	tools/shellcheck.sh
 	ansible-lint
 	tools/licence-lint.sh
+	tools/licence-lint-cbmultimanager.sh
 	tools/dashboards-lint.sh
 	tools/rules-lint.sh
 	docker run --rm -i -v  ${PWD}/config-svc:/app -w /app golangci/golangci-lint:v1.42.1 golangci-lint run -v
@@ -257,13 +258,13 @@ $(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/docs \
 	microlith/cbmultimanager-docs \
 	microlith/config-svc \
-	microlith/git-commit.txt 
+	microlith/git-commit.txt
 else
 $(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/Dockerfile.oss \
 	microlith/docs \
 	microlith/config-svc \
-	microlith/git-commit.txt 
+	microlith/git-commit.txt
 endif
 	mkdir -p $@
 	cp -r microlith/* $@

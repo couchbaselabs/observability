@@ -1,365 +1,387 @@
 ---
 groups:
-  - name: Couchbase-Server
-    rules:
+    - name: Couchbase-Server
+      rules:
 
-      - alert: CB90036-memcachedCrash
-        expr: |
-          count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h])
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90036
-          health_check_name: memcachedCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: Data Service Crash ({{ $labels.hostname }})
-          description: The Data Service on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
-          remediation: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
+          - alert: CB90036-memcachedCrash
+            expr: |
+                count_over_time({file="memcached.log"} |= "Breakpad caught crash" | json | label_format cluster=couchbase_cluster [1h])
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: warning
+                health_check_id: CB90036
+                health_check_name: memcachedCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: Data Service Crash ({{ $labels.hostname }})
+                description: The Data Service on {{ $labels.hostname }} (cluster {{ $labels.cluster }}) has crashed.
+                remediation: Review memcached.log to identify the cause, or contact Couchbase Technical Support.
 
-      - alert: CB90037-slowOperations
-        expr: |
-          sum(count_over_time (
-          {file="memcached.log"} |= "Slow operation:" !~ `(CREATE_BUCKET|CMD_SEQNO_PERSISTENCE|CMD_COMPACT_DB)` | label_format cluster=couchbase_cluster | json message="message",hostname="hostname" | line_format "{{.message}}" | pattern "<_>Slow operation: <payload>" | line_format "{{.payload}}" | json
-          [5m])) by (cluster, node, bucket) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: bucket
-          severity: info
-          health_check_id: CB90037
-          health_check_name: slowOperations
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          bucket: '{{ $labels.bucket }}'
-        annotations:
-          title: Slow KV Operations ({{ $labels.hostname }})
-          description: Slow operations reported on {{ $labels.hostname }} for bucket {{$labels.bucket}}.
-          remediation: Review system resource usage on {{ $labels.hostname }}.
+          - alert: CB90037-slowOperations
+            expr: >
+                sum(count_over_time (
+                {file="memcached.log"} |= "Slow operation:" !~ `(CREATE_BUCKET|CMD_SEQNO_PERSISTENCE|CMD_COMPACT_DB)` | label_format cluster=couchbase_cluster
+                | json message="message",hostname="hostname" | line_format "{{.message}}" | pattern "<_>Slow operation: <payload>"
+                | line_format "{{.payload}}" | json[5m])) by (cluster, node, bucket) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: bucket
+                severity: info
+                health_check_id: CB90037
+                health_check_name: slowOperations
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+                bucket: '{{ $labels.bucket }}'
+            annotations:
+                title: Slow KV Operations ({{ $labels.hostname }})
+                description: Slow operations reported on {{ $labels.hostname }} for bucket {{$labels.bucket}}.
+                remediation: Review system resource usage on {{ $labels.hostname }}.
 
-      - alert: CB90033-longDcpNames-failedDcpOpen
-        expr: |
-          sum(count_over_time(
-            {file="memcached.log"} |= `Invalid format specified for "DCP_OPEN"` |= `Reason:"Key length exceeds 250"` | json hostname="hostname" [5m]
-          )) by (cluster, hostname) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: cluster # even though this is technically node-level logging, the issue is cluster-level
-          severity: critical
-          health_check_id: CB90033
-          health_check_name: longDcpNames
-          cluster: '{{ $labels.cluster }}'
-        annotations:
-          title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.cluster }})
-          description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
-          remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
+          - alert: CB90033-longDcpNames-failedDcpOpen
+            expr: >
+                sum(count_over_time(
+                  {file="memcached.log"} |= `Invalid format specified for "DCP_OPEN"` |= `Reason:"Key length exceeds 250"` | json hostname="hostname" [5m]
+                )) by (cluster, hostname) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: cluster   # even though this is technically node-level logging, the issue is cluster-level
+                severity: critical
+                health_check_id: CB90033
+                health_check_name: longDcpNames
+                cluster: '{{ $labels.cluster }}'
+            annotations:
+                title: DCP Connection Failures due to MB-34280 (cluster {{ $labels.cluster }})
+                description: Node {{ $labels.hostname }} has reported failures establishing DCP connections due to long connection names (known issue MB-34280).
+                remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
-      - alert: CB90033-longDcpNames-failedResponse
-        expr: |
-          sum(count_over_time(
-            {file="memcached.log"} |= "Response::setKeylen: key cannot exceed 1 byte" | json hostname="hostname" [5m]
-          )) by (cluster, hostname) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: cluster # even though this is technically node-level logging, the issue is cluster-level
-          severity: critical
-          health_check_id: CB90033
-          health_check_name: longDcpNames
-          cluster: '{{ $labels.cluster }}'
-        annotations:
-          title: Long DCP Names (MB-34280) (cluster {{ $labels.cluster }})
-          description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
-          remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
+          - alert: CB90033-longDcpNames-failedResponse
+            expr: |
+                sum(count_over_time(
+                  {file="memcached.log"} |= "Response::setKeylen: key cannot exceed 1 byte" | json hostname="hostname" [5m]
+                )) by (cluster, hostname) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: cluster   # even though this is technically node-level logging, the issue is cluster-level
+                severity: critical
+                health_check_id: CB90033
+                health_check_name: longDcpNames
+                cluster: '{{ $labels.cluster }}'
+            annotations:
+                title: Long DCP Names (MB-34280) (cluster {{ $labels.cluster }})
+                description: Node {{ $labels.hostname }} has reported errors due to long connection names (known issue MB-34280).
+                remediation: Reduce the lengths of your nodes' hostnames, or contact Couchbase Technical Support.
 
-      - alert: CB90044-babysitterManagedProcessCrash
-        expr: |
-          count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | json message="message" | line_format "{{.message}}" | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90044
-          health_check_name: babysitterManagedProcessCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          process: '{{ $labels.process }}'
-          reason: '{{$labels.reason}}'
-        annotations:
-          title: Process managed by babysitter has crashed ({{ $labels.hostname }})
-          description: "The following proccess managed by Couchbase Server's babysitter has crashed with the message: {{ $labels.process }} - {{$labels.reason}}"
-          remediation: Contact Couchbase Technical Support.
+          - alert: CB90044-babysitterManagedProcessCrash
+            expr: >
+                count_over_time({file="babysitter.log"} |~ ".*Cushion managed supervisor for.*failed:.*" | json message="message" | line_format "{{.message}}"
+                | pattern "<_>Cushion managed supervisor for <process> failed: <reason>" [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90044
+                health_check_name: babysitterManagedProcessCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+                process: '{{ $labels.process }}'
+                reason: '{{$labels.reason}}'
+            annotations:
+                title: Process managed by babysitter has crashed ({{ $labels.hostname }})
+                description: >
+                    The following proccess managed by Couchbase Server's babysitter has crashed with the message:
+                    {{ $labels.process }} - {{$labels.reason}}
+                remediation: Contact Couchbase Technical Support.
 
-      - alert: CB90046-indexerCrash
-        expr: |
-          count_over_time({file="indexer.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90046
-          health_check_name: indexerCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: Index Service Crash ({{ $labels.hostname }})
-          description: "Index Service on node: {{ $labels.hostname }} has crashed."
-          remediation: Review indexer.log to identify the cause, or contact Couchbase Technical Support.
+          - alert: CB90046-indexerCrash
+            expr: |
+                count_over_time({file="indexer.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90046
+                health_check_name: indexerCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: Index Service Crash ({{ $labels.hostname }})
+                description: 'Index Service on node: {{ $labels.hostname }} has crashed.'
+                remediation: Review indexer.log to identify the cause, or contact Couchbase Technical Support.
 
-# CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log (https://issues.couchbase.com/browse/K8S-2585)
+          # CB90047-queryCrash, currently couchbase-fluent-bit does not work with query.log (https://issues.couchbase.com/browse/K8S-2585)
 
-      - alert: CB90048-goxdcrCrash
-        expr: |
-          count_over_time({file="goxdcr.log"} |~ ".*(panic|SIGABRT:).*" | json [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90048
-          health_check_name: goxdcrCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: XDCR Crash ({{ $labels.hostname }})
-          description: "XDCR on node: {{ $labels.hostname }} has crashed."
-          remediation: Review goxdcr.log to identify the cause, or contact Couchbase Technical Support.
+          - alert: CB90048-goxdcrCrash
+            expr: |
+                count_over_time({file="goxdcr.log"} |~ ".*(panic|SIGABRT:).*" | json [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90048
+                health_check_name: goxdcrCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: XDCR Crash ({{ $labels.hostname }})
+                description: 'XDCR on node: {{ $labels.hostname }} has crashed.'
+                remediation: Review goxdcr.log to identify the cause, or contact Couchbase Technical Support.
 
-      - alert: CB90049-ftsCrash
-        expr: |
-          count_over_time({file="fts.log"} |~ ".*(panic:|fatal error|fatal, err).*" | json [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90049
-          health_check_name: ftsCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: Full Text Search Crash ({{ $labels.hostname }})
-          description: "FTS Service on node: {{ $labels.hostname }} has crashed."
-          remediation: Review fts.log to identify the cause, or contact Couchbase Technical Support.
+          - alert: CB90049-ftsCrash
+            expr: |
+                count_over_time({file="fts.log"} |~ ".*(panic:|fatal error|fatal, err).*" | json [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90049
+                health_check_name: ftsCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: Full Text Search Crash ({{ $labels.hostname }})
+                description: 'FTS Service on node: {{ $labels.hostname }} has crashed.'
+                remediation: Review fts.log to identify the cause, or contact Couchbase Technical Support.
 
-      - alert: CB90050-eventingCrash
-        expr: |
-          count_over_time({file="eventing.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90050
-          health_check_name: eventingCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: Eventing Crash ({{ $labels.hostname }})
-          description: "Eventing Service on node: {{ $labels.hostname }} has crashed."
-          remediation: Review eventing.log to identify the cause, or contact Couchbase Technical Support.
+          - alert: CB90050-eventingCrash
+            expr: |
+                count_over_time({file="eventing.log"} |~ ".*(panic:|fatal error:).*" | json [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90050
+                health_check_name: eventingCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: Eventing Crash ({{ $labels.hostname }})
+                description: 'Eventing Service on node: {{ $labels.hostname }} has crashed.'
+                remediation: Review eventing.log to identify the cause, or contact Couchbase Technical Support.
 
-      - alert: CB90051-analyticsCrash
-        expr: |
-          count_over_time({file="analytics_debug.log"} |~ ".*JVM halting.*" | json [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90051
-          health_check_name: analyticsCrash
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: Analytics Crash ({{ $labels.hostname }})
-          description: "Analytics on node: {{ $labels.hostname }} has crashed."
-          remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.
+          - alert: CB90051-analyticsCrash
+            expr: |
+                count_over_time({file="analytics_debug.log"} |~ ".*JVM halting.*" | json [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90051
+                health_check_name: analyticsCrash
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: Analytics Crash ({{ $labels.hostname }})
+                description: 'Analytics on node: {{ $labels.hostname }} has crashed.'
+                remediation: Review analytics_debug.log to identify the cause, or contact Couchbase Technical Support.
 
-      - alert: CB90052-malformedvBuckets
-        expr: |
-          count_over_time({file="memcached.log"} |~ "malformed data in file" |json message="message" | line_format "{{.message}}" | pattern "<_>WARNING (<m_bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: bucket
-          severity: warning
-          health_check_id: CB90052
-          health_check_name: malformedvBuckets
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          bucket: '{{ $labels.m_bucket}}' # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
-          vbucket: '{{ $labels.vbucket }}'
-        annotations:
-          title: "Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.bucket}}, on node: {{ $labels.hostname }}"
-          description: "Files in vbucket, {{ $labels.vbucket }}, have been corrupted"
-          remediation: "Review your infrastructure for signs of disk problems or any other issues. Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data: `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`, then take the response and provide it to Couchbase Technical Support."
+          - alert: CB90052-malformedvBuckets
+            expr: >
+                count_over_time({file="memcached.log"} |~ "malformed data in file" |json message="message" | line_format "{{.message}}"
+                | pattern "<_>WARNING (<m_bucket>)<_>malformed data in file<_>, <vbucket>" [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: bucket
+                severity: warning
+                health_check_id: CB90052
+                health_check_name: malformedvBuckets
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+                bucket: '{{ $labels.m_bucket}}'   # when using K8s there is a `bucket` label but this wont be available to all users, hence this label
+                vbucket: '{{ $labels.vbucket }}'
+            annotations:
+                title: 'Malformed vBucket ({{ $labels.vbucket }}) in bucket: {{ $labels.bucket}}, on node: {{ $labels.hostname }}'
+                description: Files in vbucket, {{ $labels.vbucket }}, have been corrupted
+                remediation: >
+                    Review your infrastructure for signs of disk problems or any other issues.
+                    Alternatively, navigate to your Data storage directory and enter the following command, making sure to fill in the correct data:
+                    `/opt/couchbase/bin/couch_dbck --verbose --json <couchbase_server_data_directory>/<bucket>/<malformed_vb_file>`,
+                    then take the response and provide it to Couchbase Technical Support.
 
-      - alert: CB90056-connectionsRejected
-        expr: |
-          count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" | pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90056
-          health_check_name: connectionsRejected
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          current_limit: '{{ $labels.current_limit }}'
-          total: '{{ $labels.total }}'
-        annotations:
-          title: "Too Many Open Connections to Memcached (Node: {{ $labels.hostname }})"
-          description: "Memcached has reached the maximum number of open connections (Current/Limit{{ $labels.current_limit }}, Total: {{ $labels.total}}), this means it will start rejecting new connections"
-          remediation: Contact your network/application team to see if there are any applications keeping open a large number of connections.
+          - alert: CB90056-connectionsRejected
+            expr: >
+                count_over_time({file="memcached.log"} |= "Too many open connections" | json message="message" | line_format "{{.message}}" |
+                pattern "<_>WARNING Too many open connections. Current/Limit for port 11210: <current_limit>; total: <total> " [24h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90056
+                health_check_name: connectionsRejected
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+                current_limit: '{{ $labels.current_limit }}'
+                total: '{{ $labels.total }}'
+            annotations:
+                title: 'Too Many Open Connections to Memcached (Node: {{ $labels.hostname }})'
+                description: >
+                    Memcached has reached the maximum number of open connections (Current/Limit{{ $labels.current_limit }},
+                    Total: {{ $labels.total}}), this means it will start rejecting new connections.
+                remediation: Contact your network/application team to see if there are any applications keeping open a large number of connections.
 
-      - alert: CB90057-memcachedTimeJumps
-        expr: |
-          count_over_time({file="memcached.log"} |= "system clock changed?" | json [1h]) > 0
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90057
-          health_check_name: memcachedTimeJumps
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: "Time Jumps Detected in memcached.log (Node: {{ $labels.hostname }})"
-          description: Time jumps occur when the cluster manager process (`beam.smp`) has not been scheduled by the CPU, or not scheduled enough for a significant period of time.
-          remediation: Check for evidence of your node being over provisioned or for evidence of VM resource contention.
+          - alert: CB90057-memcachedTimeJumps
+            expr: |
+                count_over_time({file="memcached.log"} |= "system clock changed?" | json [1h]) > 0
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: warning
+                health_check_id: CB90057
+                health_check_name: memcachedTimeJumps
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: 'Time Jumps Detected in memcached.log (Node: {{ $labels.hostname }})'
+                description: Time jumps occur when the cluster manager process (`beam.smp`) has not been scheduled by the CPU, or not scheduled enough for
+                    a significant period of time.
+                remediation: Check for evidence of your node being over provisioned or for evidence of VM resource contention.
 
-      - alert: CB90062-droppedTicks-instances # fires when over 4 instances of dropped ticks are detected
-        expr: |
-          count(count_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_> Dropped <ticks> ticks<_>" [1h])) > 4
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90062
-          health_check_name: droppedTicks
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          collector: '{{ $labels.collector }}'
-          ticks: '{{ $labels.ticks }}'
-        annotations:
-          title: "Multiple Instances of Dropped Ticks on Node: {{ $labels.hostname }}"
-          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
-          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
+          - alert: CB90062-droppedTicks-instances   # fires when over 4 instances of dropped ticks are detected
+            expr: >
+                count(count_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" |
+                pattern "<_> Dropped <ticks> ticks<_>" [1h])) > 4
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: warning
+                health_check_id: CB90062
+                health_check_name: droppedTicks
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+                collector: '{{ $labels.collector }}'
+                ticks: '{{ $labels.ticks }}'
+            annotations:
+                title: 'Multiple Instances of Dropped Ticks on Node: {{ $labels.hostname }}'
+                description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
+                remediation: >
+                    Increase number of CPUs available to Couchbase Server or,
+                    if you are running a virtualised environment, check for VM overcommitment.
 
-      - alert: CB90062-droppedTicks-max # fires when over 10 dropped ticks are detected on any collector
-        expr: |
-          sum((sum_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" | pattern "<_>(Collector: <collector>) Dropped <ticks> ticks" | unwrap ticks  [1h])) > 10)
-        for: 1m
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90062
-          health_check_name: droppedTicks
-          cluster: '{{ $labels.cluster }}'
-          node: '{{ $labels.hostname }}'
-          ticks: '{{ $labels.ticks }}'
-        annotations:
-          title: "Large Number of Dropped Ticks Detected (node: {{ $labels.hostname }})"
-          description: Couchbase Server nodes regularly send heartbeat ticks to each other. Dropped ticks are usually a sign of resource contention.
-          remediation: Increase number of CPUs available to Couchbase Server or, if you are running a virtualised environment, check for VM overcommitment.
+          - alert: CB90062-droppedTicks-max   # fires when over 10 dropped ticks are detected on any collector
+            expr: >
+                sum((sum_over_time({file="debug.log"} |= "stats:warn" | json message="message" | line_format "{{.message}}" |
+                pattern "<_>(Collector: <collector>) Dropped <ticks> ticks" | unwrap ticks  [1h])) > 10)
+            for: 1m
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: warning
+                health_check_id: CB90062
+                health_check_name: droppedTicks
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.hostname }}'
+                ticks: '{{ $labels.ticks }}'
+            annotations:
+                title: 'Large Number of Dropped Ticks Detected (node: {{ $labels.hostname }})'
+                description: >
+                    Couchbase Server nodes regularly send heartbeat ticks to each other.
+                    Dropped ticks are usually a sign of resource contention.
+                remediation: >
+                    Increase number of CPUs available to Couchbase Server or,
+                    if you are running a virtualised environment, check for VM overcommitment.
 
-      - alert: CB90067-serviceRollback
-        expr: |
-          count_over_time( {file="memcached.log"} |= "requires rollback to seqno:0" != "eq_dcpq:replication" [1h]) > 0
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90067
-          health_check_name: serviceRollback
-          cluster: '{{ $labels.couchbase_cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: "Service DCP Rollback to Zero (node: {{ $labels.hostname }})"
-          description: A service has been forced to DCP rollback to zero.
-            If the Data Service is rolled back to 0, it means the service is attempting to resynchronize the entirety of the data set.
-          remediation: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues.
-            If you experience any, then please contact Couchbase Technical Support.
+          - alert: CB90067-serviceRollback
+            expr: |
+                count_over_time( {file="memcached.log"} |= "requires rollback to seqno:0" != "eq_dcpq:replication" [1h]) > 0
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: warning
+                health_check_id: CB90067
+                health_check_name: serviceRollback
+                cluster: '{{ $labels.couchbase_cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: 'Service DCP Rollback to Zero (node: {{ $labels.hostname }})'
+                description: A service has been forced to DCP rollback to zero. If the Data Service is rolled back to 0, it means the service is attempting
+                    to resynchronize the entirety of the data set.
+                remediation: This is typically a symptom of another problem, you should monitor your cluster closely for any further issues. If you experience
+                    any, then please contact Couchbase Technical Support.
 
-      - alert: CB90070-permissionDenied
-        expr: |
-          count_over_time({file="memcached.log"} |= "Permission denied" [1h]) >0
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: warning
-          health_check_id: CB90070
-          health_check_name: permissionDenied
-          cluster: '{{ $labels.couchbase_cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: "Permission denied errors (node: {{ $labels.hostname }})"
-          description: Couchbase Server has been denied permission to access resources.
-            This is potentially due to other applications locking Couchbase Server files, or misconfiguration.
-          remediation: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly configured.
-            If this does not solve the problem, please contact Couchbase Support.
+          - alert: CB90070-permissionDenied
+            expr: |
+                count_over_time({file="memcached.log"} |= "Permission denied" [1h]) >0
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: warning
+                health_check_id: CB90070
+                health_check_name: permissionDenied
+                cluster: '{{ $labels.couchbase_cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: 'Permission denied errors (node: {{ $labels.hostname }})'
+                description: Couchbase Server has been denied permission to access resources. This is potentially due to other applications locking Couchbase
+                    Server files, or misconfiguration.
+                remediation: Check that there are no other applications locking files in your Couchbase Server directory, and that permissions are correctly
+                    configured. If this does not solve the problem, please contact Couchbase Support.
 
-      - alert: CB90071-compactionFailure
-        expr: |
-          count_over_time({file="debug.log"} |= "Cannot compact database" [1h]) >0
-        labels:
-          job: couchbase_fluent_bit
-          kind: bucket
-          severity: critical
-          health_check_id: CB90071
-          health_check_name: compactionFailure
-          cluster: '{{ $labels.couchbase_cluster }}'
-          node: '{{ $labels.hostname }}'
-          bucket: '{{ $labels.bucket }}'
-        annotations:
-          title: "Compaction failed. (cluster: {{ $labels.couchbase_cluster }})"
-          description: Auto-Compaction on bucket {{ $labels.bucket }}, has failed due to insufficient available storage.
-          remediation: Allocate more storage to existing Data Service nodes, or more Data Service nodes to the cluster, and attempt to rerun Auto-Compaction.
-            You may also create a new cluster, with more storage, and use unidirectional XDCR to transfer the files over, which should give you the space required for Auto-Compaction.
-            If that is not possible, please contact Couchbase Technical Support.
+          - alert: CB90071-compactionFailure
+            expr: |
+                count_over_time({file="debug.log"} |= "Cannot compact database" [1h]) >0
+            labels:
+                job: couchbase_fluent_bit
+                kind: bucket
+                severity: critical
+                health_check_id: CB90071
+                health_check_name: compactionFailure
+                cluster: '{{ $labels.couchbase_cluster }}'
+                node: '{{ $labels.hostname }}'
+                bucket: '{{ $labels.bucket }}'
+            annotations:
+                title: 'Compaction failed. (cluster: {{ $labels.couchbase_cluster }})'
+                description: Auto-Compaction on bucket {{ $labels.bucket }}, has failed due to insufficient available storage.
+                remediation: >
+                    Allocate more storage to existing Data Service nodes, or more Data Service nodes to the cluster, and attempt to rerun Auto-Compaction.
+                    You may also create a new cluster, with more storage, and use unidirectional XDCR to transfer the files over, which should give you
+                    the space required for Auto-Compaction. If that is not possible, please contact Couchbase Technical Support.
 
-      - alert: CB90072-kvConnectionLimit
-        expr: |
-          count_over_time({file="memcached.log"} |= "Shutting down client as we're running out of connections" [1h]) >0
-        labels:
-          job: couchbase_fluent_bit
-          kind: node
-          severity: critical
-          health_check_id: CB90072
-          health_check_name: kvConnectionLimit
-          cluster: '{{ $labels.couchbase_cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: "Data Service Connection Limit Exceeded (node: {{ $labels.hostname }})"
-          description: Client connections have been rejected because the maximum number of connections has been exceeded.
-          remediation: Ensure your applications are appropriately closing their Couchbase connections.
+          - alert: CB90072-kvConnectionLimit
+            expr: |
+                count_over_time({file="memcached.log"} |= "Shutting down client as we're running out of connections" [1h]) >0
+            labels:
+                job: couchbase_fluent_bit
+                kind: node
+                severity: critical
+                health_check_id: CB90072
+                health_check_name: kvConnectionLimit
+                cluster: '{{ $labels.couchbase_cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: 'Data Service Connection Limit Exceeded (node: {{ $labels.hostname }})'
+                description: Client connections have been rejected because the maximum number of connections has been exceeded.
+                remediation: Ensure your applications are appropriately closing their Couchbase connections.
 
-      - alert: CB90073-droppedDCPMutations
-        expr: |
-          count_over_time({file="memcached.log"} |= "Dropping mutation" [1h]) >0
-        labels:
-          job: couchbase_fluent_bit
-          kind: cluster
-          severity: critical
-          health_check_id: CB90073
-          health_check_name: droppedDCPMutations
-          cluster: '{{ $labels.couchbase_cluster }}'
-          node: '{{ $labels.hostname }}'
-        annotations:
-          title: "Dropped DCP Mutations on cluster (node: {{ $labels.hostname }})"
-          description: |
-            Dropped DCP mutations found in memcached.log.
-            This can be an indication of a Couchbase Server Issue (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1.
-            This issue can affect data integrity.
-          remediation: If you experience data integrity issues, update to a more recent version of Couchbase Server.
+          - alert: CB90073-droppedDCPMutations
+            expr: |
+                count_over_time({file="memcached.log"} |= "Dropping mutation" [1h]) >0
+            labels:
+                job: couchbase_fluent_bit
+                kind: cluster
+                severity: critical
+                health_check_id: CB90073
+                health_check_name: droppedDCPMutations
+                cluster: '{{ $labels.couchbase_cluster }}'
+                node: '{{ $labels.hostname }}'
+            annotations:
+                title: 'Dropped DCP Mutations on cluster (node: {{ $labels.hostname }})'
+                description: |
+                    Dropped DCP mutations found in memcached.log.
+                    This can be an indication of a Couchbase Server Issue (MB-41255) which was fixed in versions: 6.0.5, 6.5.2 and 6.6.1.
+                    This issue can affect data integrity.
+                remediation: If you experience data integrity issues, update to a more recent version of Couchbase Server.

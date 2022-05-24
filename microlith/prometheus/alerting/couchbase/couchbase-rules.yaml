@@ -1,220 +1,223 @@
 ---
 groups:
-  - name: Couchbase-Server
-    rules:
+    - name: Couchbase-Server
+      rules:
 
-    - alert: CB90038-statsCollectionFailed
-      expr: |
-        up{job=~`couchbase-server.*`} == 0
-      for: 30s
-      labels:
-        job: couchbase_prometheus
-        kind: node
-        health_check_id: CB90038
-        health_check_name: statsCollectionFailed
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        severity: critical
-      annotations:
-        title: Could not collect stats from {{ $labels.instance }} (cluster {{ $labels.cluster }})
-        description: Statistics collection failed from node {{ $labels.instance }}. Either it is down or its CPU is overloaded.
-        remediation: Verify the node's status and examine other metrics and health check results.
+          - alert: CB90038-statsCollectionFailed
+            expr: |
+                up{job=~`couchbase-server.*`} == 0
+            for: 30s
+            labels:
+                job: couchbase_prometheus
+                kind: node
+                health_check_id: CB90038
+                health_check_name: statsCollectionFailed
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                severity: critical
+            annotations:
+                title: Could not collect stats from {{ $labels.instance }} (cluster {{ $labels.cluster }})
+                description: Statistics collection failed from node {{ $labels.instance }}. Either it is down or its CPU is overloaded.
+                remediation: Verify the node's status and examine other metrics and health check results.
 
-    - alert: CB90041-cpuStolenRate
-      expr: |
-        sys_cpu_stolen_rate > 3
-      for: 30s
-      labels:
-        job: couchbase_prometheus
-        kind: node
-        health_check_id: CB90041
-        health_check_name: cpuStolenRate
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        severity: warning
-      annotations:
-        title: High CPU steal rate on {{ $labels.instance }} (cluster {{ $labels.cluster }})
-        description: The percentage of time that the virtual CPU on node {{ $labels.instance }} is waiting for a real CPU is above 3%.
-          This can be due to the fact that a virtual Machine is undersized or the hypervisor is overcommited.
-        remediation: Increase the resources available to the VM or reduce the number of VMs on the host machine.
+          - alert: CB90041-cpuStolenRate
+            expr: |
+                sys_cpu_stolen_rate > 3
+            for: 30s
+            labels:
+                job: couchbase_prometheus
+                kind: node
+                health_check_id: CB90041
+                health_check_name: cpuStolenRate
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                severity: warning
+            annotations:
+                title: High CPU steal rate on {{ $labels.instance }} (cluster {{ $labels.cluster }})
+                description: The percentage of time that the virtual CPU on node {{ $labels.instance }} is waiting for a real CPU is above 3%. This can
+                    be due to the fact that a virtual Machine is undersized or the hypervisor is overcommited.
+                remediation: Increase the resources available to the VM or reduce the number of VMs on the host machine.
 
-    - alert: CB90043-diskCommitFail
-      expr: |
-        increase(kv_ep_data_write_failed[1m]) > 0
-      for: 0m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90043
-        health_check_name: diskCommitFail
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: critical
-      annotations:
-        title: "Disk Commit Fail on bucket: {{ $labels.bucket }}"
-        description: A disk commit has failed on {{ $labels.bucket }} (cluster {{ $labels.cluster }}, node {{ $labels.instance }}).
-        remediation: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
+          - alert: CB90043-diskCommitFail
+            expr: |
+                increase(kv_ep_data_write_failed[1m]) > 0
+            for: 0m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90043
+                health_check_name: diskCommitFail
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: critical
+            annotations:
+                title: 'Disk Commit Fail on bucket: {{ $labels.bucket }}'
+                description: A disk commit has failed on {{ $labels.bucket }} (cluster {{ $labels.cluster }}, node {{ $labels.instance }}).
+                remediation: Review your infrastructure for signs of disk problems or any other issues, or contact Couchbase Technical Support.
 
-    - alert: CB90055-metadataOverhead-Warning
-      expr: |
-        (kv_total_memory_overhead_bytes / kv_ep_max_size) > 0.5 < 0.9
-      for: 0m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90055
-        health_check_name: metadataOverhead
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: warning
-      annotations:
-        title: "Metadata Overhead Above 50% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: The percentage of memory that is taken up by metadata is over 50%
-        remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+          - alert: CB90055-metadataOverhead-Warning
+            expr: |
+                (kv_total_memory_overhead_bytes / kv_ep_max_size) > 0.5 < 0.9
+            for: 0m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90055
+                health_check_name: metadataOverhead
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: warning
+            annotations:
+                title: 'Metadata Overhead Above 50% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}'
+                description: The percentage of memory that is taken up by metadata is over 50%
+                remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have
+                    an adverse effect on performance).
 
-    - alert: CB90055-metadataOverhead-Alert
-      expr: |
-        (kv_total_memory_overhead_bytes / kv_ep_max_size) >= 0.9
-      for: 0m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90055
-        health_check_name: metadataOverhead
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: critical
-      annotations:
-        title: "Metadata Overhead Above 90% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}"
-        description: The percentage of memory that is taken up by metadata is over 90%
-        remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have an adverse effect on performance).
+          - alert: CB90055-metadataOverhead-Alert
+            expr: |
+                (kv_total_memory_overhead_bytes / kv_ep_max_size) >= 0.9
+            for: 0m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90055
+                health_check_name: metadataOverhead
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: critical
+            annotations:
+                title: 'Metadata Overhead Above 90% on Bucket: {{ $labels.bucket }}, Node: {{ $labels.instance }}'
+                description: The percentage of memory that is taken up by metadata is over 90%
+                remediation: Increase memory allocation for bucket or change the evictionPolicy of the bucket from `Value-only` (be aware this will have
+                    an adverse effect on performance).
 
-    - alert: CB90061-diskWriteQueueLength-Alert
-      expr: |
-        kv_ep_storage_age_seconds > 99
-      for: 1m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90061
-        health_check_name: diskWriteQueueLength
-        cluster: '{{ $labels.cluster }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: critical
-      annotations:
-        title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
-        description: The age of items in the disk write queue is over 100 seconds.
-        remediation: Review your hardware for malfunctions or sizing issues. 
-          If the problem persists, then please contact Couchbase Technical Support. 
+          - alert: CB90061-diskWriteQueueLength-Alert
+            expr: |
+                kv_ep_storage_age_seconds > 99
+            for: 1m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90061
+                health_check_name: diskWriteQueueLength
+                cluster: '{{ $labels.cluster }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: critical
+            annotations:
+                title: 'Long disk write queue on Bucket: {{ $labels.bucket }}'
+                description: The age of items in the disk write queue is over 100 seconds.
+                remediation: Review your hardware for malfunctions or sizing issues. If the problem persists, then please contact Couchbase Technical Support.
 
-    - alert: CB90061-diskWriteQueueLength-Warn
-      expr: |
-        kv_ep_storage_age_seconds > 50 < 100
-      for: 1m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90061
-        health_check_name: diskWriteQueueLength
-        cluster: '{{ $labels.cluster }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: warning
-      annotations:
-        title: "Long disk write queue on Bucket: {{ $labels.bucket }}"
-        description: The age of items in the disk write queue is over 50 seconds.
-        remediation: Review your hardware for malfunctions or sizing issues. 
-          If the problem persists, then please contact Couchbase Technical Support. 
+          - alert: CB90061-diskWriteQueueLength-Warn
+            expr: |
+                kv_ep_storage_age_seconds > 50 < 100
+            for: 1m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90061
+                health_check_name: diskWriteQueueLength
+                cluster: '{{ $labels.cluster }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: warning
+            annotations:
+                title: 'Long disk write queue on Bucket: {{ $labels.bucket }}'
+                description: The age of items in the disk write queue is over 50 seconds.
+                remediation: Review your hardware for malfunctions or sizing issues. If the problem persists, then please contact Couchbase Technical Support.
 
-    - alert: CB90072-kvConnectionLimit-warn
-      # 80% of the default limit (65,000 total of which 5,000 reserved for the system)
-      expr: |
-        kv_curr_connections > 48000
-      for: 5m
-      labels:
-        job: couchbase_prometheus
-        kind: node
-        health_check_id: CB90072
-        health_check_name: kvConnectionLimit
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        severity: warning
-      annotations:
-        title: "Approaching Data Service Connection Limit (cluster {{ $labels.cluster }})"
-        description: Node {{ $labels.instance}} has {{ humanize $value }} open Data Service connections out of 60,000.
-          If this limit is exceeded, applications may fail to connect.
-        remediation: Ensure your applications are appropriately closing their Couchbase connections.
+          - alert: CB90072-kvConnectionLimit-warn
+            # 80% of the default limit (65,000 total of which 5,000 reserved for the system)
+            expr: |
+                kv_curr_connections > 48000
+            for: 5m
+            labels:
+                job: couchbase_prometheus
+                kind: node
+                health_check_id: CB90072
+                health_check_name: kvConnectionLimit
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                severity: warning
+            annotations:
+                title: Approaching Data Service Connection Limit (cluster {{ $labels.cluster }})
+                description: Node {{ $labels.instance}} has {{ humanize $value }} open Data Service connections out of 60,000. If this limit is exceeded,
+                    applications may fail to connect.
+                remediation: Ensure your applications are appropriately closing their Couchbase connections.
 
-    - alert: CB90072-kvConnectionLimit-alert
-      expr: |
-        kv_curr_connections > 60000
-      for: 5m
-      labels:
-        job: couchbase_prometheus
-        kind: node
-        health_check_id: CB90072
-        health_check_name: kvConnectionLimit
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        severity: critical
-      annotations:
-        title: "Exceeded Data Service Connection Limit (cluster {{ $labels.cluster }})"
-        description: Node {{ $labels.instance}} has {{ humanize $value }} open Data Service connections out of 60,000.
-          Applications may fail to connect.
-        remediation: Ensure your applications are appropriately closing their Couchbase connections.
+          - alert: CB90072-kvConnectionLimit-alert
+            expr: |
+                kv_curr_connections > 60000
+            for: 5m
+            labels:
+                job: couchbase_prometheus
+                kind: node
+                health_check_id: CB90072
+                health_check_name: kvConnectionLimit
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                severity: critical
+            annotations:
+                title: Exceeded Data Service Connection Limit (cluster {{ $labels.cluster }})
+                description: Node {{ $labels.instance}} has {{ humanize $value }} open Data Service connections out of 60,000. Applications may fail to
+                    connect.
+                remediation: Ensure your applications are appropriately closing their Couchbase connections.
 
-    - alert: CB90087-activeVbucketResidentRatio-warn
-      expr: kv_vb_perc_mem_resident_ratio{state="active"} < 0.1
-      for: 1m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90087
-        health_check_name: activeVbucketResidentRatio
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: warning
-      annotations:
-        title: "Resident Ratio of Active vBuckets is low."
-        description: Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }}).
-        remediation: Increase memory allocation for bucket.
+          - alert: CB90087-activeVbucketResidentRatio-warn
+            expr: kv_vb_perc_mem_resident_ratio{state="active"} < 0.1
+            for: 1m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90087
+                health_check_name: activeVbucketResidentRatio
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: warning
+            annotations:
+                title: Resident Ratio of Active vBuckets is low.
+                description: >
+                    Resident Ratio of Active vBuckets is low in bucket {{$labels.bucket}} on node -
+                    {{$labels.instance}} (cluster {{ $labels.cluster}}).
+                remediation: Increase memory allocation for bucket.
 
-    - alert: CB90087-activeVbucketResidentRatio-alert
-      expr: kv_vb_perc_mem_resident_ratio{state="active"} < 0.05
-      for: 1m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90087
-        health_check_name: activeVbucketResidentRatio
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: critical
-      annotations:
-        title: "Resident Ratio of Active vBuckets too low."
-        description: Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node - {{$labels.instance}} (cluster {{ $labels.cluster }}).
-        remediation: Increase memory allocation for bucket.
+          - alert: CB90087-activeVbucketResidentRatio-alert
+            expr: kv_vb_perc_mem_resident_ratio{state="active"} < 0.05
+            for: 1m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90087
+                health_check_name: activeVbucketResidentRatio
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: critical
+            annotations:
+                title: Resident Ratio of Active vBuckets too low.
+                description: >
+                    Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node -
+                    {{$labels.instance}} (cluster {{ $labels.cluster}}).
+                remediation: Increase memory allocation for bucket.
 
-    - alert: CB90090-highMemoryWatermark
-      expr: |
-        (kv_mem_used_bytes / kv_ep_max_size) > (kv_ep_mem_high_wat_percent_ratio * 100)
-      for: 5m
-      labels:
-        job: couchbase_prometheus
-        kind: bucket
-        health_check_id: CB90090
-        health_check_name: highMemoryWatermark
-        cluster: '{{ $labels.cluster }}'
-        node: '{{ $labels.instance }}'
-        bucket: '{{ $labels.bucket }}'
-        severity: warning
-      annotations:
-        title: "Exceeded High Memory Watermark Limit"
-        description: Bucket {{ $labels.bucket }} has exceeded the high memory watermark limit on cluster - {{ $labels.cluster }} and has not stabilised.
-          May cause deadlocks, block incoming writes, rebalance issues or out of memory conditions.
-        remediation: Need to increase bucket memory or check ejection policy. 
-          If this pertains, contact Couchbase Technical Support.
+          - alert: CB90090-highMemoryWatermark
+            expr: |
+                (kv_mem_used_bytes / kv_ep_max_size) > (kv_ep_mem_high_wat_percent_ratio * 100)
+            for: 5m
+            labels:
+                job: couchbase_prometheus
+                kind: bucket
+                health_check_id: CB90090
+                health_check_name: highMemoryWatermark
+                cluster: '{{ $labels.cluster }}'
+                node: '{{ $labels.instance }}'
+                bucket: '{{ $labels.bucket }}'
+                severity: warning
+            annotations:
+                title: Exceeded High Memory Watermark Limit
+                description: Bucket {{ $labels.bucket }} has exceeded the high memory watermark limit on cluster - {{ $labels.cluster }} and has not stabilised.
+                    May cause deadlocks, block incoming writes, rebalance issues or out of memory conditions.
+                remediation: Need to increase bucket memory or check ejection policy. If this pertains, contact Couchbase Technical Support.

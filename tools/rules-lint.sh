@@ -46,4 +46,3 @@ for source in $rule_files; do
 done
 
 exit "$exit_code"
-

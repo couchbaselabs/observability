@@ -7,7 +7,7 @@ cluster:
                 image: couchbase/fluent-bit:1.1.3
     monitoring:
         prometheus:
-            enabled: false # We're using server 7 metrics directly
+            enabled: false  # We're using server 7 metrics directly
     security:
         # To simplify for scraping we hardcode the credentials.
         # They should be auto-generated really and the Secret value
@@ -23,7 +23,7 @@ cluster:
                 metadata:
                     annotations:
                         # Match all logs
-                        fluentbit.couchbase.com/loki_match: "*"
+                        fluentbit.couchbase.com/loki_match: '*'
                         # Send to this SVC
                         fluentbit.couchbase.com/loki_host: loki.default
             volumeMounts:
