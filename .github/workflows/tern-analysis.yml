@@ -1,3 +1,4 @@
+---
 name: tern-license-analysis
 on:
     push:
@@ -25,11 +26,11 @@ jobs:
             - uses: philips-labs/tern-action@v1.3.0
               id: scan
               with:
-                image: couchbaselabs/observability-stack:${{ github.sha }}
-                format: human
-                output: cmos-tern.out
+                  image: couchbaselabs/observability-stack:${{ github.sha }}
+                  format: human
+                  output: cmos-tern.out
 
             - uses: actions/upload-artifact@v2
               with:
-                name: tern
-                path: ${{ steps.scan.outputs.file }}
+                  name: tern
+                  path: ${{ steps.scan.outputs.file }}

@@ -25,7 +25,7 @@
 function start_new_nodes() {
 
     local num_nodes=$1
-    local nodes_ready=() 
+    local nodes_ready=()
 
     echo "---- Starting $num_nodes nodes ----"
 
@@ -61,7 +61,7 @@ function start_new_nodes() {
             echo "..."
             sleep 5
         fi
-        # Bash does not support boolean operators on true/false and the evaluation of 0 or 1 as true/false changes 
+        # Bash does not support boolean operators on true/false and the evaluation of 0 or 1 as true/false changes
         # depending on the context and would be much harder to understand
     done
 
@@ -93,7 +93,7 @@ function _docker_exec_with_retry() {
         else
             echo "Couchbase Server is not ready, waiting ${retry_time[$i]} seconds before retrying..."
             sleep "${retry_time[$i]}"
-            
+
         fi
     done
     echo "Max retries reached while executing $command, $container failed for reason: $output"
@@ -109,7 +109,7 @@ function _add_nodes_to_cluster() {
     local server_pwd=$4
 
     local j=$((start+1))
-    for ((j; j<start+to_provision; j++)); do 
+    for ((j; j<start+to_provision; j++)); do
 
         local node="node$j"
         _docker_exec_with_retry $node "/opt/couchbase/bin/couchbase-cli node-init --cluster \"http://localhost:8091\" \
@@ -138,15 +138,15 @@ function _load_sample_buckets() {
         -d '[$sample_buckets_json]' || echo 'failed'" "[]"
 
     echo "- Sample buckets ${sample_buckets_json} loading in the background..."
-    
+
     if $load; then # Start cbpillowfight and n1qlback to simulate a non-zero load (NOT stress test)
         sleep 10
-        
+
         for bucket in "${sample_buckets[@]}"; do
             # Block until bucket is ready
             _docker_exec_with_retry "$uid" "curl -s -u \"$server_user\":\"$server_pwd\" http://localhost:8091/pools/default/buckets/$bucket \
                 || echo 'failed'" "{"
-            { 
+            {
                 _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-pillowfight -u \"$server_user\" -P \"$server_pwd\" \
                 -U http://localhost/$bucket -B 2 -I 100 --rate-limit 20 || echo 'failed'" "Running." &
             } 1>/dev/null 2>&1
@@ -156,20 +156,20 @@ function _load_sample_buckets() {
                 {
                     docker cp "$SCRIPT_DIR"/helpers/demo-queries.txt "$uid":./
                     _docker_exec_with_retry "$uid" "/opt/couchbase/bin/cbc-n1qlback -U http://localhost/$bucket \
-                    -u \"$server_user\" -P \"$server_pwd\" -t 1 -f ./demo-queries.txt || echo 'failed'" "Loaded" & 
+                    -u \"$server_user\" -P \"$server_pwd\" -t 1 -f ./demo-queries.txt || echo 'failed'" "Loaded" &
                 } 1>/dev/null 2>&1
                 echo "  - Demo queries started against travel-sample"
             fi
         done
     fi
-    
-}
-        
-# Pre-conditions: 
-#   - $num_nodes containers running Couchbase Server (uninitialised)/exporter 
 
-# Post-conditions: 
-#   - All CBS/exporter nodes initialised and partitioned as evenly as possible into 
+}
+
+# Pre-conditions:
+#   - $num_nodes containers running Couchbase Server (uninitialised)/exporter
+
+# Post-conditions:
+#   - All CBS/exporter nodes initialised and partitioned as evenly as possible into
 #     $num_clusters clusters, with a rebalance occurring after the last node is added
 #   - $num_clusters nodes will be running the Data Service, the rest Index/Query, with quotas
 #     specified by $data_alloc and $index_alloc
@@ -184,7 +184,7 @@ function configure_servers() {
     local load=$6
     local oss_flag=$7
 
-    local data_alloc 
+    local data_alloc
     local index_alloc
     # Allocate 70% of the specified RAM quota to the service (query has no quota)
     # awk used as bash does not support operations with decimals
@@ -204,7 +204,7 @@ function configure_servers() {
         # Calculate the number of nodes to provision in this cluster
         local to_provision=$(( nodes_left / (num_clusters - i) )) # (Integer division, Bash does not support decimals)
         local start=$(( num_nodes - nodes_left ))
-        
+
         # Create and initialize cluster
         local uid="node$start"
         local clust_name="Cluster $i"
@@ -217,7 +217,7 @@ function configure_servers() {
         echo "** $clust_name created **"
 
         # Register cluster with CBMM if non-OSS build
-        if ! $oss_flag; then 
+        if ! $oss_flag; then
             local cmos_cmd="curl -s -u $CLUSTER_MONITOR_USER:$CLUSTER_MONITOR_PWD -X POST -d \
               '{\"user\":\"$server_user\",\"password\":\"$server_pwd\", \"host\":\"http://$uid.local:8091\"}' \
             'http://localhost:8080/couchbase/api/v1/clusters'"
@@ -257,7 +257,7 @@ function configure_servers() {
 
         # Load sample buckets
         _load_sample_buckets "$uid" "$load" "$server_user" "$server_pwd" "${sample_buckets[@]}"
-    
+
         echo "Cluster configuration complete."
         echo "---------------------------------"
         echo ""

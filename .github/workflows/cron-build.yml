@@ -6,11 +6,11 @@ on:
     schedule:
         - cron: 0 4 * * *
     workflow_dispatch:
-      inputs:
-        ref:
-          description: Branch, tag, or commit SHA to run the tests against
-          required: false
-          default: main
+        inputs:
+            ref:
+                description: Branch, tag, or commit SHA to run the tests against
+                required: false
+                default: main
 
 jobs:
   # Build an image to share across jobs
@@ -22,7 +22,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
               with:
-                ref: ${{ github.event.inputs.ref || 'main' }}
+                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v1
@@ -51,7 +51,7 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
               with:
-                ref: ${{ github.event.inputs.ref || 'main' }}
+                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Download artifact
               uses: actions/download-artifact@v2
@@ -85,8 +85,8 @@ jobs:
               if: ${{ failure() }}
               uses: actions/upload-artifact@v2
               with:
-                name: test-failure-cmosinfo-${{ matrix.server-version }}-containers
-                path: testing/diagnostics/cmosinfo/*
+                  name: test-failure-cmosinfo-${{ matrix.server-version }}-containers
+                  path: testing/diagnostics/cmosinfo/*
 
     build-test-oss-native:
         name: CICD for the OSS variant (Native)
@@ -101,15 +101,15 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v3
               with:
-                ref: ${{ github.event.inputs.ref || 'main' }}
+                  ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Apply VirtualBox workaround for networking issues
               # (https://www.virtualbox.org/ticket/20636#comment:20)
               # Ensure anyone can read it who needs to as well.
               run: |
-                sudo mkdir -p /etc/vbox/
-                sudo sh -c 'echo "* 0.0.0.0/0 ::/0" >> /etc/vbox/networks.conf'
-                sudo chmod a+r /etc/vbox/networks.conf
+                  sudo mkdir -p /etc/vbox/
+                  sudo sh -c 'echo "* 0.0.0.0/0 ::/0" >> /etc/vbox/networks.conf'
+                  sudo chmod a+r /etc/vbox/networks.conf
 
             - name: Setup Docker
               uses: docker-practice/actions-setup-docker@master
@@ -139,5 +139,5 @@ jobs:
               if: ${{ failure() }}
               uses: actions/upload-artifact@v2
               with:
-                name: test-failure-cmosinfo-${{ matrix.server-version }}-native
-                path: testing/diagnostics/cmosinfo/*
+                  name: test-failure-cmosinfo-${{ matrix.server-version }}-native
+                  path: testing/diagnostics/cmosinfo/*

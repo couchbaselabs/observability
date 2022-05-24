@@ -160,10 +160,10 @@ scrape_configs:
 EOF
 ----
 
-<.> `rule_files`: Prometheus is configured to load rules via rule_files. 
+<.> `rule_files`: Prometheus is configured to load rules via rule_files.
 You can extend rules by adding rule_files under the `alerting/` directory.
 Note that the `alerting/` directory is a relative path to the prometheus configuration file.
-By default the complete path is `/etc/prometheus/custom/alerting/`. 
+By default the complete path is `/etc/prometheus/custom/alerting/`.
 Refer to the <<Observability Stack>> section for volume mounts.
 
 <.> `alerting`: Alert manager is shipped and enabled by default in the CMOS.
@@ -184,7 +184,7 @@ kubectl create configmap prometheus-config-cmos --from-file=./prometheus/custom/
 
 Kubernetes controls access to its resources using Role Based Access Control (RBAC).
 In order to monitor the Couchbase cluster, the CMOS deployment must communicate with the cluster and discover it.
-The example YAML file handles this for you. 
+The example YAML file handles this for you.
 Create it by running the below command in the kubernetes console.
 
 [source,console]
@@ -407,7 +407,7 @@ There are two aspects required here:
 - Provide an Ingress controller, which is Nginx in this case.
 - Set up Ingress to forward to our CMOS service.
 
-For a production system it is likely an `Ingress` controller will already be deployed with appropriate rules. 
+For a production system it is likely an `Ingress` controller will already be deployed with appropriate rules.
 
 Follow this https://kubernetes.github.io/ingress-nginx/deploy/[Nginx Ingress Controller^] guideline to setup it.
 
@@ -485,10 +485,10 @@ image::prometheus-target-failing-k8s.png[]
 
 With Grafana, multiple dashboards for monitoring a Couchbase cluster are provided out of the box.
 You can list all the dashboards using the https://grafana.com/docs/grafana/latest/dashboards/search/#dashboard-search[search dashboard option^].
-You may create https://grafana.com/docs/grafana/latest/getting-started/getting-started/#step-3-create-a-dashboard[additional dashboards^] as per your needs. 
+You may create https://grafana.com/docs/grafana/latest/getting-started/getting-started/#step-3-create-a-dashboard[additional dashboards^] as per your needs.
 The following are some out-of-the-box dashboards.
 
-=== Couchbase Cluster Overview Metrics 
+=== Couchbase Cluster Overview Metrics
 
 Couchbase cluster overview metrics dashboard can be accessible on Grafana with name as: `single-cluster-overview`.
 This dashboard displays a number of items including Couchbase nodes, buckets available, version information, health check warnings, and which services are running.

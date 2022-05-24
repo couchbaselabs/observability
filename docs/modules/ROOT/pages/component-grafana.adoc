@@ -17,7 +17,7 @@ endif::[]
 .Grafana in CMOS
 image::component-grafana.png[]
 
-In CMOS, Grafana is linked to data sources such as https://prometheus.io[Prometheus^] and https://grafana.com/Loki[Loki^]. 
+In CMOS, Grafana is linked to data sources such as https://prometheus.io[Prometheus^] and https://grafana.com/Loki[Loki^].
 Prometheus scrapes couchbase metrics and stores these data points in the prometheus server.
 Using dashboards in Grafana, users can visualize metrics from the Prometheus server.
 Logs from Couchbase are sent to Loki, and then exposed in the Grafana dashboards.
