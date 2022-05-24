@@ -43,7 +43,7 @@ jobs:
 
             - name: Generate screenshots
               run: |
-                  make generate-screenshots -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make generate-screenshots -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
 
             - name: Upload screenshots
               uses: actions/upload-artifact@v2
