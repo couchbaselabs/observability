@@ -75,21 +75,15 @@ http {
 
             # TODO (CMOS-98) - eventually these should all just be /couchbase/
 
-            # Redirect /ui to its proper place just in case
-            location ~ ^{{ $subPath }}/ui/?$ {
-                return 301 {{ $subPath }}/couchbase/ui;
-            }
 
-            # Static assets are served here and there's no easy way to change it
-            location {{ $subPath }}/ui/assets/ {
-                proxy_pass  http://localhost:7196;
+            location {{ $subPath }}/monitor {
+                proxy_pass http://localhost:7196/monitor;
             }
 
             # UI assumes the cbmultimanager REST API is on /api
             location {{ $subPath }}/api/ {
                 # cbmm doesn't yet support path prefixes so strip it
-                rewrite ^{{ $subPath }}/api(.*)$ /api$1;
-                proxy_pass  http://localhost:7196;
+                proxy_pass  http://localhost:7196/api/;
             }
 
             location {{ $subPath }}/couchbase {
