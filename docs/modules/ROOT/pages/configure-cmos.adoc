@@ -171,12 +171,12 @@ The installation of CMOS comes with default alerting rules located in the `/etc/
 
 [NOTE]
 The default rules are not intended to be modified by the user.
-Changing the default rules could result in unexpected and unwanted behavior, so it should be avoided.  
+Changing the default rules could result in unexpected and unwanted behavior, so it should be avoided.
 
 To add custom alerts, you can place your custom alert rules file to `/etc/prometheus/alerting/custom/` directory.
 
-Using https://github.com/lablabs/prometheus-alert-overrider[prometheus-alert-overrider^], you can also override or disable a rule by putting it in the `/etc/prometheus/alerting/overrides/` directory. 
-Below is an example of how to override a base rule. 
+Using https://github.com/lablabs/prometheus-alert-overrider[prometheus-alert-overrider^], you can also override or disable a rule by putting it in the `/etc/prometheus/alerting/overrides/` directory.
+Below is an example of how to override a base rule.
 
 [console]
 ----
@@ -203,12 +203,12 @@ groups:
       rules:
           - alert: alert_override
             # list of rules to be overridden, accepts regexp
-            override: ["KubernetesNodeReady"] 
-            # if set to false, only base rules are changed and no new rules 
+            override: ["KubernetesNodeReady"]
+            # if set to false, only base rules are changed and no new rules
             # are created
             enabled: false
             # this expression will be negated and inserted into all rules
-            # matching the values in override. 
+            # matching the values in override.
             expr: '{kubernetes_cluster="kube-dev"}'
             for: 30s
             labels:

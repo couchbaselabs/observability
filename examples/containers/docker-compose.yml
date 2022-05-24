@@ -10,6 +10,7 @@ networks:
     front:
     back:
 
+
 services:
 
     # This first section is the main thrust of the microlith, it runs the all-in-one container up
@@ -26,7 +27,8 @@ services:
             # Grafana password (default)
             # - GF_SECURITY_ADMIN_PASSWORD=password
             # Now to tune some rules for Prometheus: http://localhost:8080/prometheus/rules#Couchbase-Server
-            - COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=75 # default is 100
+            - COUCHBASE_ACTIVE_RESIDENT_RATIO_ALERT_THRESHOLD=75
+            # default is 100
         volumes:
             # This location stores any dynamic Prometheus info (e.g. targets to scrape)
             # Update as necessary and it should be automatically picked up at the next interval (30 seconds)
@@ -75,7 +77,7 @@ services:
         container_name: logging
         image: ${FLUENT_BIT_IMAGE}
         ports:
-            - "2020:2020"
+            - 2020:2020
         depends_on:
             - db1
             - couchbase-cmos

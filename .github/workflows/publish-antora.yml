@@ -28,7 +28,7 @@ jobs:
             - name: Deploy to GitHub Pages
               uses: JamesIves/github-pages-deploy-action@v4.2.3
               with:
-                    GITHUB_TOKEN: "${{ github.token}}"
-                    FOLDER: docs/build/site/
-                    BRANCH: 'gh-pages'
-                    COMMIT_MESSAGE: "[CI] Publish Documentation for ${{ github.sha }}"
+                  GITHUB_TOKEN: ${{ github.token}}
+                  FOLDER: docs/build/site/
+                  BRANCH: gh-pages
+                  COMMIT_MESSAGE: '[CI] Publish Documentation for ${{ github.sha }}'

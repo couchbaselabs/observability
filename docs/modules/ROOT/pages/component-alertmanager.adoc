@@ -32,7 +32,7 @@ In CMOS, the Alertmanager is included and enabled by default.
 It ships with a set of standard built-in rules to group alerts based on multiple alert parameters.
 Additionally, it can be customized to send notifications to different https://prometheus.io/docs/alerting/configuration[receiver^] endpoints.
 
- 
+
 The CMOS Alertmanager can be deployed xref:tutorial-onpremise.adoc[on premise] or using xref:tutorial-kubernetes.adoc[Kubernetes].
 Check out the reference xref:architecture.adoc[Couchbase Monitoring and Observability Stack] (CMOS) architecture to learn more.
 

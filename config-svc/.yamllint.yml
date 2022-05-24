@@ -1,0 +1,10 @@
+---
+extends: default
+
+ignore: |
+    .github/
+    microlith/alertmanager/config.yml
+
+rules:
+    line-length:
+        max: 160

@@ -33,7 +33,7 @@ endif::env-packaged[]
 * xref:component-loki.adoc[Loki]
 ** Visualization
 * xref:component-grafana.adoc[Grafana]
-** Alerting 
+** Alerting
 * xref:component-alertmanager.adoc[Alertmanager]
 ** Tracing
 * xref:component-jaeger.adoc[Jaeger]

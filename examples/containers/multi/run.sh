@@ -16,15 +16,15 @@
 
 #####
 
-# Pre-conditions: 
+# Pre-conditions:
 #   - No containers named "cmos" or "node$i" where $i is an integer up to the number
-#     of nodes desired in the cluster ($NUM_NODES). Checked by the script and handled by 
+#     of nodes desired in the cluster ($NUM_NODES). Checked by the script and handled by
 #     the user, either via destroying them manually (e.g., make clean) or agreeing to them
 #     being removed by the script.
 #   - The couchbase/observability-stack Docker image built (handled by the Makefile)
 
-# Post-conditions: 
-#   - A single container named "cmos" with the CMOS Microlith running. 
+# Post-conditions:
+#   - A single container named "cmos" with the CMOS Microlith running.
 #   - A total of $NUM_NODES containers with the specified Couchbase Server version
 #     and Prometheus exporter installed, partitioned as evenly as possible into $NUM_CLUSTERS
 #   - cbmultimanager configured to monitor all clusters

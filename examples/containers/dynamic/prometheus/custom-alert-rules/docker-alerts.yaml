@@ -9,12 +9,14 @@ groups:
                 severity: warning
             annotations:
                 summary: Server under high load
-                description: Docker host is under high load, the avg load 1m is at {{ $value}}. Reported by instance {{ $labels.instance }} of job {{ $labels.job
-                    }}.
+                description: >
+                    Docker host is under high load, the avg load 1m is at {{ $value}}. Reported by instance {{ $labels.instance }}
+                    of job {{ $labels.job}}.
 
           - alert: high_memory_load
-            expr: (sum(node_memory_MemTotal_bytes) - sum(node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) ) / sum(node_memory_MemTotal_bytes)
-                * 100 > 85
+            expr: >
+                (sum(node_memory_MemTotal_bytes) - sum(node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes) ) /
+                sum(node_memory_MemTotal_bytes) * 100 > 85
             for: 30s
             labels:
                 severity: warning

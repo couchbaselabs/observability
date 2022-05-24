@@ -6,7 +6,7 @@ ifdef::env-github[]
 endif::[]
 
 [abstract]
-You can integrate CMOS with your existing Prometheus, Alertmanager, and Grafana monitoring system. 
+You can integrate CMOS with your existing Prometheus, Alertmanager, and Grafana monitoring system.
 This tutorial documents how to configure each component in order to achieve this.
 
 include::partial$tutorial.adoc[]
@@ -30,7 +30,7 @@ If you are not using the xref:deployment-microlith.adoc["microlith" image], you 
 ----
 docker run -d --rm \
   -p 7196:7196 \ <.>
-  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \ <.> 
+  -e CB_MULTI_ALERTMANAGER_URLS=http://<Alertmanager IP>:9093 \ <.>
   -e CB_MULTI_ADMIN_USER=admin -e CB_MULTI_ADMIN_PASSWORD=password \
   --name cluster_monitor \
   couchbase/cluster-monitor:latest
@@ -59,7 +59,7 @@ Repeat this for every cluster you wish to add to the Cluster Monitor.
 
 [NOTE]
 ====
-The instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory. 
+The instructions for each plugin offer a Grafana Cloud one-click install, a command-line based install for a running instance, or a `.zip` file which can be unpacked manually into your Grafana plugins directory.
 ====
 
 **Currently, we require only https://grafana.com/grafana/plugins/marcusolsson-json-datasource/[JSON API], which has associated https://grafana.com/grafana/plugins/marcusolsson-json-datasource/?tab=installation[installation instructions].**
@@ -70,13 +70,13 @@ The instructions for each plugin offer a Grafana Cloud one-click install, a comm
 
 However, if you:
 
-- Configure Grafana (v7.1+) dashboards through the use of provisioning files: https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your provisioning configuration file]. 
-- Are running Grafana in a Docker container: simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage (linked under "installation instructions" for each). 
+- Configure Grafana (v7.1+) dashboards through the use of provisioning files: https://grafana.com/docs/grafana/latest/administration/provisioning/#plugins[specify the plugins to install in your provisioning configuration file].
+- Are running Grafana in a Docker container: simply pass through an additional environment variable `GF_INSTALL_PLUGINS=$PLUGIN_NAME $VERSION` where the `$PLUGIN_NAME` and latest `$VERSION` can be found on the plugin's homepage (linked under "installation instructions" for each).
 
 === Grafana: Dashboards
 
 The CMOS dashboards can be found in the official GitHub repository under https://github.com/couchbaselabs/observability/tree/main/microlith/grafana/provisioning/dashboards[microlith/grafana/provisioning/dashboards]/.
-Download them and copy them to a folder accessible by your Grafana installation. 
+Download them and copy them to a folder accessible by your Grafana installation.
 
 The relevant setting in the Grafana configuration file, typically named `grafana.ini`, is:
 
@@ -110,13 +110,13 @@ If adding through the web UI, both Cluster Monitor and Alertmanager will return 
 This is expected and not an issue - the dashboards use sub-paths of these configured URLs which are themselves valid and exist.
 ====
 
-. **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_. 
+. **Cluster Monitor (JSON API)**, via the Web UI: click on _Add Data Source_ and select _JSON API_.
   - This must be named `Couchbase Cluster Monitor API`.
   - The URL should point to the Cluster Monitor with a sub-path of `/api/v1`. The port should be `:7196`.
   - Enable `basicAuth`, with the user and password you configured.
 . **Prometheus** - this should already be configured as a Data Source.
 . **Alertmanager** - add a new Data Source in the same way as you did for the Cluster Monitor.
-  - This should be named _Alertmanager API_, also of type _JSON API_, and the URL should point to your Alertmanager instance. 
+  - This should be named _Alertmanager API_, also of type _JSON API_, and the URL should point to your Alertmanager instance.
   - Configure any authentication as needed.
 
 If you are utilizing Grafana provisioning for dashboards, and would instead like to specify this in a configuration file, then your `grafana.yml` should look something like this:
@@ -126,7 +126,7 @@ If you are utilizing Grafana provisioning for dashboards, and would instead like
 The names of these two data sources must match the below snippet exactly, otherwise the dashboards may fail to provision.
 ====
 
-[source, console]  
+[source, console]
 ----
     - name: Couchbase Cluster Monitor API
       type: marcusolsson-json-datasource
@@ -171,7 +171,7 @@ scrape_configs:
 <.> `username` should be set to a Couchbase Server user with at least "External Stats Reader" permission.
 <.> `password` should be the password of the above user.
 <.> `targets` should specify the addresses of all the nodes in your cluster.
-    For a Couchbase Server 7+ cluster the port number needs to be the management port: `8091` by default, or `:18091` if you have TLS enabled. 
+    For a Couchbase Server 7+ cluster the port number needs to be the management port: `8091` by default, or `:18091` if you have TLS enabled.
     For clusters below Couchbase Server 7.0, you should use the port that your Prometheus exporter uses.
     If you are using the xref:health-agent.adoc[Health Agent], this will be `9092`.
     There are alternative configuration options that do not require hard-coding the addresses - refer to the https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config[Prometheus documentation^] for more details.
@@ -201,15 +201,15 @@ Add another `scrape_config` job for the previously-installed Cluster Monitor:
 <.> `username` should be the Username you configured for the Cluster Monitor.
 <.> `password` should be the Password you configured for the Cluster Monitor.
 <.> `metrics_path` is the path to the Prometheus server running on the Cluster Monitor. This should not be changed.
-<.> `targets` is a list of Cluster Monitor instances for Prometheus to retrieve metrics from. 
+<.> `targets` is a list of Cluster Monitor instances for Prometheus to retrieve metrics from.
   For now this should be a single server IP, listening on port `7196`.
 
-Restart Prometheus, and navigate to the Web UI. 
+Restart Prometheus, and navigate to the Web UI.
 If this was successful you should see your cluster listed on the page `/targets`.
 
 === Prometheus: Alerting Rules
 
-CMOS ships with pre-made alert definitions which can alert you about certain events in your cluster. 
+CMOS ships with pre-made alert definitions which can alert you about certain events in your cluster.
 To take advantage of these, first download the rule definitions to somewhere your Prometheus config can access them:
 
 [source, console]
@@ -217,7 +217,7 @@ To take advantage of these, first download the rule definitions to somewhere you
 wget -O prometheus-rules.yaml https://raw.githubusercontent.com/couchbaselabs/observability/main/microlith/prometheus/alerting/couchbase/couchbase-rules.yaml
 ----
 
-Next, modify your Prometheus configuration file to include this directory. 
+Next, modify your Prometheus configuration file to include this directory.
 For example, if you downloaded them to `/etc/prometheus/alerting/` then you would add:
 
 .prometheus.yml
@@ -233,7 +233,7 @@ rule_files:
 If you have existing alert definitions, simply add the `prometheus-rules.yaml` file to the same directory, and specify `*.yaml` as the target for `rule_files`.
 ====
 
-Restart Prometheus once more, and navigate to the Web UI. 
+Restart Prometheus once more, and navigate to the Web UI.
 You should be able to see the new rules listed on the `/rules` page.
 You may need to unhide inactive rules.
 
@@ -245,5 +245,5 @@ Therefore, there is no additional configuration required.
 
 == Next Steps
 
-Head on over to your Grafana Web UI. 
+Head on over to your Grafana Web UI.
 Navigate to _Dashboards_, and select _Single Cluster Overview._
