@@ -29,8 +29,9 @@ jobs:
 
             - name: Build OSS container and export
               run: |
-                  make container-oss -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
-                  docker save --output /tmp/cmos-image.tar couchbaselabs/observability-stack:${{ github.sha }}
+                  make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999 -e OSS=true
+                  TAG=${{ github.sha }} tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_0.0.0-999.tgz
+                  docker save --output /tmp/cmos-image.tar couchbase/observability-stack:${{ github.sha }}
 
             - name: Upload artifact
               uses: actions/upload-artifact@v2
@@ -77,9 +78,9 @@ jobs:
 
             - name: Run ${{ matrix.server-version }} tests
               run: |
-                  make TEST_SUITE=all test-containers -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make TEST_SUITE=all test-containers -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
                   # CMOS-97
-                  make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make TEST_SUITE=integration/kubernetes test-kubernetes -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
 
             - name: Capture cmosinfo if something went wrong
               if: ${{ failure() }}
@@ -133,7 +134,7 @@ jobs:
 
             - name: Run ${{ matrix.server-version }} tests
               run: |
-                  make TEST_SUITE=all test-native -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbaselabs -e DOCKER_TAG=${{ github.sha }}
+                  make TEST_SUITE=all test-native -e COUCHBASE_SERVER_VERSION=${{ matrix.server-version }} -e DOCKER_USER=couchbase -e DOCKER_TAG=${{ github.sha }}
 
             - name: Capture cmosinfo if something went wrong
               if: ${{ failure() }}

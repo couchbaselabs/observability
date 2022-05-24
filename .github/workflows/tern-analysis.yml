@@ -20,12 +20,13 @@ jobs:
 
             - name: Build an image from Dockerfile
               run: |
-                  make container-oss -e CMOS_IMAGE=couchbaselabs/observability-stack:${{ github.sha }}
+                make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999 -e OSS=true
+                TAG=${{ github.sha }} tools/build-container-from-archive.sh dist/couchbase-observability-stack-image_0.0.0-999.tgz
 
             - uses: philips-labs/tern-action@v1.3.0
               id: scan
               with:
-                image: couchbaselabs/observability-stack:${{ github.sha }}
+                image: couchbase/observability-stack:${{ github.sha }}
                 format: human
                 output: cmos-tern.out
 
