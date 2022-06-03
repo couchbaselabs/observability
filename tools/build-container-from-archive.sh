@@ -39,7 +39,7 @@ function build_single_image() {
         tag="couchbase/${product_name#couchbase-}:$TAG"
     fi
     echo "Test-building Docker image $tag..."
-    docker build --build-arg PROD_VERSION="$VERSION" --build-arg PROD_BUILD="$BLD_NUM" --build-arg arch="$arch" -t "$tag" "$artifacts_path"
+    docker buildx build --load --build-arg PROD_VERSION="$VERSION" --build-arg PROD_BUILD="$BLD_NUM" -t "$tag" "$artifacts_path"
 }
 
 tmpdir=$(mktemp -d)
