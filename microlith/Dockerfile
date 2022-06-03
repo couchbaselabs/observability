@@ -1,5 +1,6 @@
 ARG PROD_VERSION=1.0.0
 ARG PROD_BUILD=999
+ARG arch=amd64
 
 FROM grafana/grafana:8.3.6 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
@@ -70,6 +71,7 @@ RUN antora --to-dir /antora/cmos/ /antora/docs/antora-container-playbook.yml
 FROM nginx:alpine
 ARG PROD_VERSION
 ARG PROD_BUILD
+ARG arch
 
 # hadolint ignore=DL3018
 RUN apk add --upgrade --no-cache ca-certificates bash libcap openssl musl-utils tzdata tini curl libgcc fts gettext jq sudo
@@ -89,8 +91,8 @@ COPY --from=prometheus-official /usr/share/prometheus/consoles/ /usr/share/prome
 ARG KUBECTL_VERSION=v1.22.3
 ENV KUBECTL_VERSION=$KUBECTL_VERSION
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl" && \
-	chmod +x kubectl && \
-	mv kubectl /usr/local/bin/
+    chmod +x kubectl && \
+    mv kubectl /usr/local/bin/
 
 # Add the Prometheus config handling tool
 # https://github.com/lablabs/prometheus-alert-overrider
@@ -103,10 +105,10 @@ RUN chmod a+x /bin/prometheus_merge
 ARG HELM_VERSION=v3.7.1
 ENV HELM_VERSION=$HELM_VERSION
 RUN curl -LO "https://get.helm.sh/helm-$HELM_VERSION-linux-amd64.tar.gz" && \
-	mkdir -p "/usr/local/helm-$HELM_VERSION" && \
-	tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
-	ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
-	rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
+    mkdir -p "/usr/local/helm-$HELM_VERSION" && \
+    tar -xzf "helm-$HELM_VERSION-linux-amd64.tar.gz" -C "/usr/local/helm-$HELM_VERSION" && \
+    ln -s "/usr/local/helm-$HELM_VERSION/linux-amd64/helm" /usr/local/bin/helm && \
+    rm -f "helm-$HELM_VERSION-linux-amd64.tar.gz"
 
 # Try to keep the originals as they are and fix anything later to make it easy to merge changes
 
@@ -279,8 +281,8 @@ RUN openssl req -x509 -nodes -days 365 \
     -newkey rsa:2048 \
     -keyout /priv/server.key -out /priv/server.crt;
 
-COPY ./bin/cbmultimanager-linux-amd64 /bin/cbmultimanager
-COPY ./bin/cbeventlog-linux-amd64 /bin/cbeventlog
+COPY ./bin/cbmultimanager-linux-${arch} /bin/cbmultimanager
+COPY ./bin/cbeventlog-linux-${arch} /bin/cbeventlog
 
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
