@@ -161,7 +161,6 @@ endif
 # build them properly.
 .PHONY: container
 container: image-artifacts
-	docker buildx create --name multiplatform --use --platform linux/arm64,linux/amd64
 	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
 		TAG=v1 tools/build-container-from-archive.sh "$$archive" $(HOSTARCH);\
 	done
@@ -169,7 +168,6 @@ container: image-artifacts
 .PHONY: container-oss
 container-oss:
 	$(MAKE) -e OSS=true image-artifacts
-	docker buildx create --name multiplatform --use
 	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
 		TAG=v1 tools/build-container-from-archive.sh "$$archive" $(HOSTARCH);\
 	done
