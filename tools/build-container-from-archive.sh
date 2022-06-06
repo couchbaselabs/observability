@@ -22,7 +22,6 @@ if [ $# -eq 0 ]; then
 fi
 
 file=$1
-arch=$2
 
 VERSION=${VERSION:-0.2.0}
 BLD_NUM=${BLD_NUM:-278}
@@ -31,7 +30,6 @@ TAG=${TAG:-}
 function build_single_image() {
     local artifacts_path=$1
     local product_name=$2
-    local arch=$3
     local tag=""
     if [ -z "$TAG" ]; then
         tag="couchbase/${product_name#couchbase-}:${VERSION}-${BLD_NUM}"
@@ -48,9 +46,9 @@ tar -C "$tmpdir" -zxvf "$file"
 if [ -f "$tmpdir/Dockerfile" ]; then
     product_name=$(basename "$file")
     product_name=${product_name%-image*}
-    build_single_image "$tmpdir" "$product_name" "$arch"
+    build_single_image "$tmpdir" "$product_name"
 else
     for product_path in "$tmpdir"/*; do
-        build_single_image "$product_path" "$(basename "$product_path")" "$arch"
+        build_single_image "$product_path" "$(basename "$product_path")"
     done
 fi
