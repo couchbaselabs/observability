@@ -282,11 +282,11 @@ RUN openssl req -x509 -nodes -days 365 \
     -newkey rsa:2048 \
     -keyout /priv/server.key -out /priv/server.crt;
 
-# COPY ./bin/cbmultimanager-linux-${arch} /bin/cbmultimanager
-# COPY ./bin/cbeventlog-linux-${arch} /bin/cbeventlog
+COPY ./bin/cbmultimanager-linux-${arch} /bin/cbmultimanager
+COPY ./bin/cbeventlog-linux-${arch} /bin/cbeventlog
 
-COPY ./bin/cbmultimanager-linux-${TARGETARCH} /bin/cbmultimanager
-COPY ./bin/cbeventlog-linux-${TARGETARCH} /bin/cbeventlog
+# COPY ./bin/cbmultimanager-linux-${TARGETARCH} /bin/cbmultimanager
+# COPY ./bin/cbeventlog-linux-${TARGETARCH} /bin/cbeventlog
 
 RUN chmod a+x /bin/cbmultimanager /bin/cbeventlog
 
