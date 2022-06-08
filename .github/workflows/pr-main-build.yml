@@ -24,7 +24,7 @@ jobs:
 
   # Build an image to share across jobs
     build-amd-oss-container:
-        name: Build OSS container for testing
+        name: Build amd OSS container for testing
         runs-on: ubuntu-20.04
         timeout-minutes: 10
         steps:
@@ -34,6 +34,14 @@ jobs:
             - name: Set up Docker Buildx
               uses: docker/setup-buildx-action@v1
 
+            - name: Inspect builder
+                run: |
+                  echo "Name:      ${{ steps.buildx.outputs.name }}"
+                  echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
+                  echo "Status:    ${{ steps.buildx.outputs.status }}"
+                  echo "Flags:     ${{ steps.buildx.outputs.flags }}"
+                  echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
+            
             - name: Build OSS container and export
               run: |
                   make image-artifacts -e VERSION=0.0.0 -e BLD_NUM=999 -e BINARY_TARGET=linux-arm64 IMAGE_BINARY_TARGET=linux-arm64 OSS=true
@@ -47,7 +55,7 @@ jobs:
                   path: /tmp/cmos-image.tar
 
     smoke-test-amd-oss-containers:
-        name: Smoke tests - OSS - containers
+        name: Smoke tests - amd OSS - containers
         needs: build-amd-oss-container
         runs-on: ubuntu-20.04
         timeout-minutes: 60
@@ -90,7 +98,7 @@ jobs:
                   path: testing/diagnostics/cmosinfo/*
 
     build-arm-oss-container:
-        name: Build OSS container for testing
+        name: Build arm OSS container for testing
         runs-on: ubuntu-20.04
         timeout-minutes: 10
         steps:
@@ -113,7 +121,7 @@ jobs:
                   path: /tmp/cmos-image.tar
 
     smoke-test-arm-oss-containers:
-        name: Smoke tests - OSS - containers
+        name: Smoke tests - arm OSS - containers
         needs: build-arm-oss-container
         runs-on: ubuntu-20.04
         timeout-minutes: 60
