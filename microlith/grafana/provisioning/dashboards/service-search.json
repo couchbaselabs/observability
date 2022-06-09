@@ -177,7 +177,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "expr": "count(count by (bucket, scope, collection, index) (fts_doc_count{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}))",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -241,7 +241,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(fts_doc_count{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "expr": "sum(fts_doc_count{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -306,7 +306,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "sum(fts_num_bytes_used_ram{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "expr": "sum(fts_num_bytes_used_ram{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -370,7 +370,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "sum(fts_num_bytes_used_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "expr": "sum(fts_num_bytes_used_disk{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "",
@@ -469,7 +469,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster=`$cluster`,bucket=~`${bucket:regex}`})) == 0",
+          "expr": "(sum by (bucket, scope, collection, index) (fts_total_queries{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})) == 0",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -585,7 +585,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
+          "expr": "topk(5, sum by (bucket, index) (rate(fts_total_queries{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}[$__rate_interval])))",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -673,7 +673,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "fts_num_mutations_to_index{cluster=`$cluster`,bucket=~`${bucket:regex}`}",
+          "expr": "fts_num_mutations_to_index{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}",
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
           "refId": "A"
@@ -734,7 +734,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "topk(5, fts_num_bytes_used_disk{cluster=`$cluster`,bucket=~`${bucket:regex}`})",
+          "expr": "topk(5, fts_num_bytes_used_disk{cluster_name=`$cluster`,bucket=~`${bucket:regex}`})",
           "instant": true,
           "interval": "",
           "legendFormat": "{{bucket}} / {{index}}",
@@ -796,7 +796,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": false,
-          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{cluster=`$cluster`,bucket=~`${bucket:regex}`}))",
+          "expr": "topk(5, sum by (bucket, index) (fts_avg_queries_latency{cluster_name=`$cluster`,bucket=~`${bucket:regex}`}))",
           "format": "time_series",
           "instant": true,
           "interval": "",

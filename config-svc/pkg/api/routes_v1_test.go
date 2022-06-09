@@ -100,7 +100,7 @@ func TestPostClustersAdd(t *testing.T) {
         - targets:
             - test:8091
           labels:
-            cluster: Test Cluster
+            cluster_name: Test Cluster
 `, string(result))
 	})
 
@@ -161,7 +161,7 @@ func TestPostClustersAdd(t *testing.T) {
         - targets:
             - test:9999
           labels:
-            cluster: Test Cluster
+            cluster_name: Test Cluster
 `, string(result))
 	})
 }
