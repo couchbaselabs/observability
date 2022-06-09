@@ -165,7 +165,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum(group by (functionName) (eventing_agg_queue_size{cluster=`$cluster`}))",
+          "expr": "sum(group by (functionName) (eventing_agg_queue_size{cluster_name=`$cluster`}))",
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -229,7 +229,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "round(sum(increase(eventing_on_update_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
+          "expr": "round(sum(increase(eventing_on_update_failure{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
           "interval": "",
           "legendFormat": "Update",
           "refId": "A"
@@ -240,7 +240,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "round(sum(increase(eventing_on_delete_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
+          "expr": "round(sum(increase(eventing_on_delete_failure{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
           "hide": false,
           "interval": "",
           "legendFormat": "Delete",
@@ -252,7 +252,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "round(sum(increase(eventing_timeout_count{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
+          "expr": "round(sum(increase(eventing_timeout_count{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__range])))",
           "hide": false,
           "interval": "",
           "legendFormat": "Timeout",
@@ -351,7 +351,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum by (functionName) (eventing_agg_queue_size{cluster=`$cluster`,functionName=~`^${function:regex}$`})",
+          "expr": "sum by (functionName) (eventing_agg_queue_size{cluster_name=`$cluster`,functionName=~`^${function:regex}$`})",
           "interval": "",
           "legendFormat": "{{ functionName }}",
           "refId": "A"
@@ -437,7 +437,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sum by (functionName) (eventing_agg_queue_memory{cluster=`$cluster`,functionName=~`^${function:regex}$`})",
+          "expr": "sum by (functionName) (eventing_agg_queue_memory{cluster_name=`$cluster`,functionName=~`^${function:regex}$`})",
           "interval": "",
           "legendFormat": "{{ functionName }}",
           "refId": "A"
@@ -522,7 +522,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "irate(eventing_on_update_success{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_update_success{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{functionName}} Update",
           "refId": "A"
@@ -533,7 +533,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "irate(eventing_on_delete_success{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_delete_success{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{functionName}} Delete",
@@ -619,7 +619,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "irate(eventing_on_update_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_update_failure{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "interval": "",
           "legendFormat": "{{functionName}} Update",
           "refId": "A"
@@ -630,7 +630,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "irate(eventing_on_delete_failure{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_on_delete_failure{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{functionName}} Delete",
@@ -642,7 +642,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "irate(eventing_timeout_count{cluster=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
+          "expr": "irate(eventing_timeout_count{cluster_name=`$cluster`,functionName=~`^${function:regex}$`}[$__rate_interval])",
           "hide": false,
           "interval": "",
           "legendFormat": "{{functionName}} Timeout",
@@ -711,7 +711,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
-        "definition": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
+        "definition": "query_result(present_over_time(eventing_on_update_success{cluster_name=`$cluster`}[$__range]))",
         "hide": 0,
         "includeAll": true,
         "label": "Function",
@@ -719,7 +719,7 @@
         "name": "function",
         "options": [],
         "query": {
-          "query": "query_result(present_over_time(eventing_on_update_success{cluster=`$cluster`}[$__range]))",
+          "query": "query_result(present_over_time(eventing_on_update_success{cluster_name=`$cluster`}[$__range]))",
           "refId": "StandardVariableQuery"
         },
         "refresh": 1,
