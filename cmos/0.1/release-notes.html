@@ -276,15 +276,150 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_release"><a class="anchor" href="#_release"></a>Release</h2>
+<h2 id="_release_0_3"><a class="anchor" href="#_release_0_3"></a>Release 0.3</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_new_features_and_behavioral_changes"><a class="anchor" href="#_new_features_and_behavioral_changes"></a>New Features and Behavioral Changes</h3>
-
+<h3 id="_features"><a class="anchor" href="#_features"></a>Features</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-454" target="_blank" rel="noopener">CMOS-454</a> - <code>Fix Linting in CMOS and cbmultimanager</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-444" target="_blank" rel="noopener">CMOS-444</a> - <code>Cluster Monitor add ability to attach additional labels.</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-434" target="_blank" rel="noopener">CMOS-434</a> - <code>Fluent Bit config is in the wrong place</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-424" target="_blank" rel="noopener">CMOS-424</a> - <code>Adding custom fields in hazelnut</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-413" target="_blank" rel="noopener">CMOS-413</a> - <code>Check for projector getting doc values that are too big</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-412" target="_blank" rel="noopener">CMOS-412</a> - <code>Check for unsupported JRE vendor/version</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-411" target="_blank" rel="noopener">CMOS-411</a> - <code>Check for reverse lookup to avoid prometheus load config delays</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-409" target="_blank" rel="noopener">CMOS-409</a> - <code>Document cbhealthagent high-level behaviour</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-408" target="_blank" rel="noopener">CMOS-408</a> - <code>Document high-level architecture of cbmultimanager</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-407" target="_blank" rel="noopener">CMOS-407</a> - <code>Expand details about contributing to observability repo</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-394" target="_blank" rel="noopener">CMOS-394</a> - <code>Document using CMOS with a 6.x cluster</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-390" target="_blank" rel="noopener">CMOS-390</a> - <code>Move checker metadata out of Go code</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-387" target="_blank" rel="noopener">CMOS-387</a> - <code>Fix linter violations</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-381" target="_blank" rel="noopener">CMOS-381</a> - <code>Agent: allow for known-credentials in addition to cbmultimanager auth</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-380" target="_blank" rel="noopener">CMOS-380</a> - <code>Check for non-CB processes on CB ports</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-379" target="_blank" rel="noopener">CMOS-379</a> - <code>Unbreak Docker builds</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-372" target="_blank" rel="noopener">CMOS-372</a> - <code>Check if a bucket has fewer nodes than on cluster</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-365" target="_blank" rel="noopener">CMOS-365</a> - <code>Auto-failover timeout against virtual machine node</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-362" target="_blank" rel="noopener">CMOS-362</a> - <code>Merge All Bucket Count Checkers</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-361" target="_blank" rel="noopener">CMOS-361</a> - <code>Don&#8217;t require creating a TLS certificate/key</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-360" target="_blank" rel="noopener">CMOS-360</a> - <code>Non-Default Vbuckets Counts not supported</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-359" target="_blank" rel="noopener">CMOS-359</a> - <code>Check for buckets vulnerable to incorrectly applied max TTL</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-351" target="_blank" rel="noopener">CMOS-351</a> - <code>Provide a “cluster monitor only” build of CMOS</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-314" target="_blank" rel="noopener">CMOS-314</a> - <code>Add a check to see if the node uses SAN storage</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-276" target="_blank" rel="noopener">CMOS-276</a> - <code>Agent: Rework authentication and bootstrapping</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-260" target="_blank" rel="noopener">CMOS-260</a> - <code>Rework UI serving code and allow embedding UI</code></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
-<h3 id="_fixed_issues"><a class="anchor" href="#_fixed_issues"></a>Fixed Issues</h3>
-
+<h3 id="_bug_fixes"><a class="anchor" href="#_bug_fixes"></a>Bug Fixes</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-455" target="_blank" rel="noopener">CMOS-455</a> - <code>Infinite recursion bug</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-443" target="_blank" rel="noopener">CMOS-443</a> - <code>cbmultimanager is sending cluster label and it should be cluster_name</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-441" target="_blank" rel="noopener">CMOS-441</a> - <code>Security update puppeteer / node-fetch</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-440" target="_blank" rel="noopener">CMOS-440</a> - <code>Security: update angular-devkit</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-430" target="_blank" rel="noopener">CMOS-430</a> - <code>update minimist from 1.2.5 to 1.2.6</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-427" target="_blank" rel="noopener">CMOS-427</a> - <code>cbmultimanager dies if it fails to connect to agent</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-425" target="_blank" rel="noopener">CMOS-425</a> - <code>cluster monitor doesn&#8217;t appear under CMOS :8080/ui</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-416" target="_blank" rel="noopener">CMOS-416</a> - <code>Agent port failing to get agent checkers</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-415" target="_blank" rel="noopener">CMOS-415</a> - <code>Built fluent-bit doesn&#8217;t start on ubuntu</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-414" target="_blank" rel="noopener">CMOS-414</a> - <code>Agent port errors aren&#8217;t logged correctly</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-402" target="_blank" rel="noopener">CMOS-402</a> - <code>Build version not set correctly</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-399" target="_blank" rel="noopener">CMOS-399</a> - <code>Agent: dependency on invalid OpenSSL package on Debian</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-385" target="_blank" rel="noopener">CMOS-385</a> - <code>UI: opening pages by deep link leads to redirect loop</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-364" target="_blank" rel="noopener">CMOS-364</a> - <code>Checker runs aren&#8217;t cancelled if a cluster is removed during the run</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-363" target="_blank" rel="noopener">CMOS-363</a> - <code>Landing page links are unclickable on Firefox</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-319" target="_blank" rel="noopener">CMOS-319</a> - <code>Agent: re-initialize if the agent returns to Waiting state</code></p>
+</li>
+<li>
+<p>Issue: <a href="https://issues.couchbase.com/browse/CMOS-68" target="_blank" rel="noopener">CMOS-68</a> - <code>Unnecessary duplication of memcached clients</code></p>
+</li>
+</ul>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_known_issues"><a class="anchor" href="#_known_issues"></a>Known Issues</h3>
@@ -299,7 +434,7 @@
 </div>
 </div>
 <div class="sect1">
-<h2 id="_licenses_for_third_party_components"><a class="anchor" href="#_licenses_for_third_party_components"></a>Licenses for Third-Party Components</h2>
+<h2 id="_licences_for_third_party_components"><a class="anchor" href="#_licences_for_third_party_components"></a>Licences for Third-Party Components</h2>
 <div class="sectionbody">
 
 </div>
