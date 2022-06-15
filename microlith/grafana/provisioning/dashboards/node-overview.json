@@ -579,7 +579,7 @@
           "method": "GET",
           "queryParams": "",
           "refId": "B",
-          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=kind=node&filter=cluster=${cluster:querystring}&filter=node=~\"${node:regex}(?::[0-9]*)$\""
+          "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=kind=node&filter=cluster_name=${cluster:querystring}&filter=node=~\"${node:regex}(?::[0-9]*)$\""
         }
       ],
       "title": "Health Check Warnings",
@@ -796,7 +796,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sysproc_cpu_utilization{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
+          "expr": "sysproc_cpu_utilization{cluster_name=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
           "legendFormat": "{{ proc }}",
           "refId": "A"
@@ -888,7 +888,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sys_mem_actual_used{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
+          "expr": "sys_mem_actual_used{cluster_name=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`} / \nsys_mem_total{cluster_name=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?`}",
           "interval": "",
           "legendFormat": "{{ instance }}",
           "refId": "A"
@@ -973,7 +973,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "exemplar": true,
-          "expr": "sysproc_mem_resident{cluster=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
+          "expr": "sysproc_mem_resident{cluster_name=${cluster:doublequote},instance=~`${node:regex}(:[0-9]*)?$`}",
           "interval": "",
           "legendFormat": "{{ proc }}",
           "refId": "A"
