@@ -52,7 +52,9 @@ type IssueStatus struct {
 	Name string `json:"name"`
 }
 type GetIssuesResponse struct {
-	Issues []Issue `json:"issues"`
+	Issues     []Issue `json:"issues"`
+	MaxResults int     `json:"maxResults"`
+	Total      int     `json:"total"`
 }
 
 type JiraClient struct {
@@ -63,8 +65,8 @@ type JiraClient struct {
 func (jc *JiraClient) GetIssues(projectName, fixVersion string) ([]Issue, error) {
 
 	reqJson, err := json.Marshal(map[string]any{
-		"jql":    "fixVersion = " + fixVersion + " AND project=" + projectName + " AND resolution != Unresolved",
-		"fields": []string{"resolution", "status", "summary", "description", "issuetype"}})
+		"jql": "fixVersion = " + fixVersion + " AND project=" + projectName + " AND resolution != Unresolved",
+	})
 
 	if err != nil {
 		return nil, err
@@ -93,6 +95,11 @@ func (jc *JiraClient) GetIssues(projectName, fixVersion string) ([]Issue, error)
 	json.Unmarshal(queryResponse, getRes)
 	if err != nil {
 		return nil, err
+	}
+
+	if getRes.MaxResults == getRes.Total {
+		//TODO: implement this
+		log.Panic("Need to retrieve more issues")
 	}
 	return getRes.Issues, nil
 

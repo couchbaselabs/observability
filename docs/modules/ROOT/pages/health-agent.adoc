@@ -13,16 +13,20 @@ However, it can also assist in setting up a complete observability stack by prov
 
 Download the package:
 
-// TODO
+- https://packages.couchbase.com/couchbase-observability-stack/dp2/cbhealthagent-linux-amd64-dp2.deb[`cbhealthagent-linux-amd64.deb`^]
+- https://packages.couchbase.com/couchbase-observability-stack/dp2/cbhealthagent-linux-amd64-dp2.rpm[`cbhealthagent-linux-amd64.rpm`^]
+
+This package contains `cbhealth-agent`, Fluent Bit, and the required Fluent Bit configuration for parsing Couchbase Server logs.
 
 Install it on your server:
 
 [source,console]
 ----
-$ sudo dpkg -i cbhealthagent-linux-amd64-0.3.0.deb
+$ sudo dpkg -i cbhealthagent-linux-amd64-dp2.deb
 # or
-$ sudo yum install cbhealthagent-linux-amd64-0.3.0.rpm
+$ sudo yum install cbhealthagent-linux-amd64-dp2.rpm
 ----
+
 
 Start it:
 
