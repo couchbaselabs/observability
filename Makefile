@@ -57,8 +57,9 @@ GO_VERSION := 1.17.2
 # The syntax is <platform>-<os>-<arch>.
 # <platform> is always "docker" right now - it's reserved for future use (e.g. OpenShift)
 # <os> and <arch> are valid GOOS and GOARCH values respectively (e.g. linux/amd64)
-BINARY_TARGET := $(shell go env GOHOSTOS)-$(shell go env GOHOSTARCH)
-IMAGE_TARGET := docker-linux-amd64
+HOSTARCH = $(shell go env GOHOSTARCH)
+BINARY_TARGET := $(shell go env GOHOSTOS)-$(HOSTARCH)
+IMAGE_TARGET := docker-linux-$(HOSTARCH)
 
 # These are all the Docker images that we can produce.
 # NOTE: when adding a new image, ensure you've asked Build Team to set up the
@@ -161,14 +162,14 @@ endif
 .PHONY: container
 container: image-artifacts
 	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
-		TAG=v1 tools/build-container-from-archive.sh "$$archive" ;\
+		TAG=v1 tools/build-container-from-archive.sh "$$archive" $(HOSTARCH);\
 	done
 
 .PHONY: container-oss
 container-oss:
 	$(MAKE) -e OSS=true image-artifacts
 	for archive in $(ARTIFACTSDIR)/*-image*.tgz; do \
-		TAG=v1 tools/build-container-from-archive.sh "$$archive" ;\
+		TAG=v1 tools/build-container-from-archive.sh "$$archive" $(HOSTARCH);\
 	done
 
 ######################################################################################
@@ -251,8 +252,10 @@ $(BUILDDIR)/images/couchbase-cluster-monitor:
 
 $(BUILDDIR)/images/couchbase-observability-stack: \
 	microlith/bin \
-	microlith/bin/cbmultimanager-$(IMAGE_BINARY_TARGET) \
-	microlith/bin/cbeventlog-$(IMAGE_BINARY_TARGET) \
+	microlith/bin/cbmultimanager-linux-amd64 \
+	microlith/bin/cbeventlog-linux-amd64 \
+	microlith/bin/cbmultimanager-linux-arm64 \
+	microlith/bin/cbeventlog-linux-arm64 \
 	microlith/entrypoints/cbmultimanager.sh \
 	microlith/Dockerfile \
 	microlith/docs \
@@ -280,16 +283,16 @@ microlith/Dockerfile.oss: microlith/Dockerfile
 # Image dependencies
 
 ifndef OSS
-microlith/bin/cbmultimanager-$(IMAGE_BINARY_TARGET):
-	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbmultimanager-$(IMAGE_BINARY_TARGET) -e $(BUILD_ENV) -e BINARY_TARGET=$(IMAGE_BINARY_TARGET)
-	cp $(CBMULTIMANAGER_PATH)/build/cbmultimanager-$(IMAGE_BINARY_TARGET) $@
+microlith/bin/cbmultimanager-%:
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbmultimanager-$* -e $(BUILD_ENV) -e BINARY_TARGET=$*
+	cp $(CBMULTIMANAGER_PATH)/build/cbmultimanager-$* $@
 
 microlith/entrypoints/cbmultimanager.sh: $(CBMULTIMANAGER_PATH)/docker/couchbase-cluster-monitor-entrypoint.sh
 	cp $< $@
 
-microlith/bin/cbeventlog-$(IMAGE_BINARY_TARGET):
-	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbeventlog-$(IMAGE_BINARY_TARGET) -e $(BUILD_ENV) -e BINARY_TARGET=$(IMAGE_BINARY_TARGET)
-	cp $(CBMULTIMANAGER_PATH)/build/cbeventlog-$(IMAGE_BINARY_TARGET) $@
+microlith/bin/cbeventlog-%:
+	$(MAKE) -C $(CBMULTIMANAGER_PATH) $(BUILDDIR)/cbeventlog-$* -e $(BUILD_ENV) -e BINARY_TARGET=$*
+	cp $(CBMULTIMANAGER_PATH)/build/cbeventlog-$* $@
 endif
 
 microlith/docs: $(wildcard $(DOCSDIR/**))
