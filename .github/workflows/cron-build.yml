@@ -54,7 +54,7 @@ jobs:
                   ref: ${{ github.event.inputs.ref || 'main' }}
 
             - name: Download artifact
-              uses: actions/download-artifact@v2
+              uses: actions/download-artifact@v3
               with:
                   name: cmos-image
                   path: /tmp
@@ -115,7 +115,7 @@ jobs:
               uses: docker-practice/actions-setup-docker@master
 
             - name: Download artifact
-              uses: actions/download-artifact@v2
+              uses: actions/download-artifact@v3
               with:
                   name: cmos-image
                   path: /tmp
