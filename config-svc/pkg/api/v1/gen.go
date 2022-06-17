@@ -14,4 +14,4 @@
 
 package v1
 
-//go:generate oapi-codegen -package v1 -generate types,server,spec -o generated.go -alias-types cmos_config_api.yaml
+//go:generate oapi-codegen -old-config-style -package v1 -generate types,server,spec -o generated.go -alias-types cmos_config_api.yaml
