@@ -80,6 +80,12 @@
         <fieldset>
           <div>
             <label>
+              <input type="checkbox" x-model="doSGW" />
+              Add Sync Gateway Instance?
+            </label>
+          </div>
+          <div>
+            <label>
               <input type="checkbox" x-model="doProm" />
               Add to Prometheus?
             </label>
@@ -89,6 +95,42 @@
               <input type="checkbox" x-model="doCBMM" />
               Add to Couchbase Cluster Monitor?
             </label>
+          </div>
+        </fieldset>
+        <fieldset x-show="doSGW">
+          <legend>
+            <h2>Sync Gateway configuration</h2>
+          </legend>
+          <div>
+            <label for="serverHost">Sync Gateway Hostname:</label>
+            <input
+              type="text"
+              id="serverHost"
+              x-model="sgwHostname"
+              placeholder=""
+              pattern="^\s*[^\S]+\s*$"
+              required
+            />
+          </div>
+          <div>
+            <label for="serverUser">Sync Gateway API Admin Username:</label>
+            <input
+              type="text"
+              id="serverUser"
+              x-model="sgwUsername"
+              placeholder="api-admin"
+              required
+            />
+          </div>
+          <div>
+            <label for="serverPwd">Sync Gateway API Admin Password:</label>
+            <input
+              type="password"
+              id="serverPwd"
+              x-model="sgwPassword"
+              placeholder="password"
+              required
+            />
           </div>
         </fieldset>
         <fieldset x-show="doProm">
@@ -205,15 +247,20 @@
             hostname: "",
             serverUsername: "",
             serverPassword: "",
+            sgwHostname: "",
+            sgwUsername: "",
+            sgwPassword: "",
 
             cbmmUsername: "admin",
             cbmmPassword: "password",
 
             prometheusPort: 9091,
+            sgwPrometheusPort: 4986,
 
             yamlPrometheus: "",
             healthcheckCommand: "",
 
+            doSGW: true,
             doProm: true,
             doCBMM: true,
 
@@ -322,6 +369,39 @@
                     .catch((e) =>
                       Promise.reject(
                         `Failed to add node to Prometheus: ${String(e)}`
+                      )
+                    );
+                }
+                if (this.doSGW) {
+                  await fetch(`${pathPrefix}/config/api/v1/sgw/add`, { 
+                    method: "post",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      hostname: this.sgwHostname,
+                      SgwConfig: {
+                        username: this.sgwUsername,
+                        password: this.sgwPassword,
+                      },
+                      metricsConfig: this.sgwPrometheusPort === null || String(this.sgwPrometheusPort) === "" ? null : {
+                        metricsPort: parseInt(this.sgwPrometheusPort, 10),
+                      }
+                    }),
+                  })
+                    .then(async (resp) => {
+                      if (resp.status !== 200) {
+                        const data = await resp.json();
+                        throw new Error(
+                          `received unexpected status ${resp.status}: ${
+                            "err" in data ? data.err : JSON.stringify(data)
+                          }`
+                        );
+                      }
+                    })
+                    .catch((e) =>
+                      Promise.reject(
+                        `Failed to add Sync Gateway to Prometheus: ${String(e)}`
                       )
                     );
                 }
