@@ -93,6 +93,7 @@ func TestPostClustersAdd(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, basePromConfig+`    # CMOS managed
     - job_name: couchbase-server-managed-1
+      metrics_path: /metrics
       basic_auth:
         username: Administrator
         password: asdasd
@@ -154,6 +155,7 @@ func TestPostClustersAdd(t *testing.T) {
 		require.NoError(t, err)
 		require.Equal(t, basePromConfig+`    # CMOS managed
     - job_name: couchbase-server-managed-1
+      metrics_path: /metrics
       basic_auth:
         username: ""
         password: ""
@@ -166,6 +168,50 @@ func TestPostClustersAdd(t *testing.T) {
 	})
 }
 
+func TestPostSgwAdd(t *testing.T) {
+	t.Run("CreateConfig", func(t *testing.T) {
+		promCfgPath := setupForSGWTest(t)
+
+		e := echo.New()
+		req := httptest.NewRequest(http.MethodPost, "/api/v1/sgw/add", bytes.NewReader([]byte(fmt.Sprintf(`{
+			"hostname": "%s",
+			"sgwConfig": {
+				"username": "Administrator",
+				"password": "asdasd"
+			}
+		}`, "test"))))
+		req.Header.Set("Content-Type", "application/json")
+		rec := httptest.NewRecorder()
+		ctx := e.NewContext(req, rec)
+		h := &Server{
+			baseLogger: zap.NewNop(),
+			logger:     zap.NewNop(),
+			echo:       e,
+			production: true,
+		}
+
+		err := h.PostSgwAdd(ctx)
+		require.NoError(t, err)
+
+		require.Equal(t, http.StatusOK, rec.Code)
+
+		result, err := os.ReadFile(promCfgPath)
+		require.NoError(t, err)
+		require.Equal(t, basePromConfig+`    # CMOS managed
+    - job_name: sync-gateway-managed-1
+      metrics_path: /_metrics
+      basic_auth:
+        username: Administrator
+        password: asdasd
+      static_configs:
+        - targets:
+            - test:4986
+          labels: {}
+`, string(result))
+	})
+
+}
+
 func setupForTest(t *testing.T, opts cbrest.TestClusterOptions) (string, *cbrest.TestCluster) {
 	testDir := t.TempDir()
 	promCfg := filepath.Join(testDir, "prometheus.yml")
@@ -176,4 +222,14 @@ func setupForTest(t *testing.T, opts cbrest.TestClusterOptions) (string, *cbrest
 	testCluster := cbrest.NewTestCluster(t, opts)
 	fmt.Println(testCluster.URL())
 	return promCfg, testCluster
+}
+
+func setupForSGWTest(t *testing.T) string {
+	testDir := t.TempDir()
+	promCfg := filepath.Join(testDir, "prometheus.yml")
+	err := os.WriteFile(promCfg, []byte(basePromConfig), 0o666)
+	require.NoError(t, err)
+	require.NoError(t, os.Setenv("PROMETHEUS_CONFIG_FILE", promCfg))
+
+	return promCfg
 }
