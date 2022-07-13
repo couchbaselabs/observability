@@ -51,7 +51,8 @@ func TestConfigAddNewScrape(t *testing.T) {
 	require.NoError(t, err)
 
 	value.ScrapeConfigs = append(value.ScrapeConfigs, &ScrapeConfig{
-		JobName: "added",
+		JobName:     "added",
+		MetricsPath: "/metrics",
 		StaticConfigs: []StaticConfig{
 			{
 				Targets: []string{"test"},
@@ -63,6 +64,7 @@ func TestConfigAddNewScrape(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, testYaml+`    # CMOS managed
     - job_name: added
+      metrics_path: /metrics
       basic_auth:
         username: ""
         password: ""

@@ -94,6 +94,66 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	// Job name needs to be unique
 	scrapeConfig.JobName = fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1)
 
+	// Sync Gateway metrics path is metrics
+	scrapeConfig.MetricsPath = "/metrics"
+
+	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, scrapeConfig)
+
+	configYaml, err := yaml.Marshal(&cfg)
+	if err != nil {
+		return fmt.Errorf("failed to marshal Prometheus config: %w", err)
+	}
+
+	err = overwriteFileContents(cfgFile, configYaml)
+	if err != nil {
+		return err
+	}
+
+	return ctx.JSON(http.StatusOK, map[string]interface{}{
+		"ok": true,
+	})
+}
+
+func (s *Server) PostSgwAdd(ctx echo.Context) error {
+	var data v1.PostSgwAddJSONRequestBody
+	// need to write new scrape config for SGW
+	if err := ctx.Bind(&data); err != nil {
+		return err
+	}
+
+	metricsPort := 4986
+
+	scrapeConfig := createScrapeConfigForSGW(
+		data.SgwConfig.Username,
+		data.SgwConfig.Password,
+		data.Hostname,
+		metricsPort,
+	)
+
+	cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
+	if cfgPath == "" {
+		cfgPath = defaultPrometheusConfigPath
+	}
+	cfgFile, err := os.OpenFile(cfgPath, os.O_RDWR, 0)
+	if err != nil {
+		return fmt.Errorf("failed to open Prometheus config: %w", err)
+	}
+	defer cfgFile.Close()
+	existingConfig, err := io.ReadAll(cfgFile)
+	if err != nil {
+		return fmt.Errorf("failed to read Prometheus config: %w", err)
+	}
+	var cfg prometheus.Configuration
+	if err := yaml.Unmarshal(existingConfig, &cfg); err != nil {
+		return fmt.Errorf("failed to parse Prometheus config: %w", err)
+	}
+
+	// Job name needs to be unique
+	scrapeConfig.JobName = fmt.Sprintf("sync-gateway-managed-%d", len(cfg.ScrapeConfigs)+1)
+
+	// Sync Gateway metrics path is _metrics
+	scrapeConfig.MetricsPath = "/_metrics"
+
 	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, scrapeConfig)
 
 	configYaml, err := yaml.Marshal(&cfg)
@@ -168,6 +228,27 @@ func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, 
 	}
 
 	return &scrapeConfig, nil
+}
+
+func createScrapeConfigForSGW(username, password string, hostname string,
+	metricsPort int) *prometheus.ScrapeConfig {
+	staticConfig := prometheus.StaticConfig{
+		Targets: make([]string, 1),
+	}
+
+	staticConfig.Targets[0] = fmt.Sprintf("%s:%d", hostname, metricsPort)
+
+	scrapeConfig := prometheus.ScrapeConfig{
+		StaticConfigs: []prometheus.StaticConfig{staticConfig},
+	}
+	scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
+		BasicAuth: prometheus.BasicAuthConfig{
+			Username: username,
+			Password: password,
+		},
+	}
+
+	return &scrapeConfig
 }
 
 func overwriteFileContents(file *os.File, contents []byte) error {

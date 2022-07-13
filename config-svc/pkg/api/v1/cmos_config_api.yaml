@@ -52,6 +52,30 @@ paths:
                                         type: boolean
                                         enum: [true]
 
+    /sgw/add:
+        post:
+            summary: Add a new Sync Gateway cluster to Prometheus
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Sgw'
+            repsonses:
+                '200':
+                    description: Sync Gateway added successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                additionalProperties: false
+                                required: [ok]
+                                properties:
+                                    ok:
+                                        type: boolean
+                                        enum: [true]
+
+
     /collectInformation:
         post:   # avoid accidental activation by GET
             summary: Collects diagnostic information about CMOS for Support analysis.
@@ -85,6 +109,29 @@ components:
                             type: string
                         useTLS:
                             type: boolean
+                metricsConfig:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                        metricsPort:
+                            type: number
+                hostname:
+                    type: string
+        Sgw:
+            type: object
+            required: [sgwConfig, hostname]
+            properties:
+                name:
+                    type: string
+                SgwConfig:
+                    type: object
+                    additionalProperties: false
+                    required: [username, password]
+                    properties:
+                        username:
+                            type: string
+                        password:
+                            type: string
                 metricsConfig:
                     type: object
                     additionalProperties: false

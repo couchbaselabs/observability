@@ -35,8 +35,8 @@ type HTTPClientConfig struct {
 
 type ScrapeConfig struct {
 	// The job name to which the job label is set by default.
-	JobName string `yaml:"job_name"`
-
+	JobName          string           `yaml:"job_name"`
+	MetricsPath      string           `yaml:"metrics_path"`
 	HTTPClientConfig HTTPClientConfig `yaml:",inline"`
 	StaticConfigs    []StaticConfig   `yaml:"static_configs,omitempty"`
 }
