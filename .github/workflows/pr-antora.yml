@@ -23,7 +23,7 @@ jobs:
                   antora_playbook: docs/antora-gh-playbook.yml
 
             - name: Upload documentation
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: cmos-documentation
                   path: docs/build/site/

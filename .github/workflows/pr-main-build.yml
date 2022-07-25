@@ -41,7 +41,7 @@ jobs:
                   docker save --output /tmp/cmos-image.tar couchbase/observability-stack:${{ github.sha }}
 
             - name: Upload artifact
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: cmos-image
                   path: /tmp/cmos-image.tar
@@ -84,7 +84,7 @@ jobs:
 
             - name: Capture cmosinfo if something went wrong
               if: ${{ failure() }}
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: test-failure-cmosinfo-${{ matrix.server-version }}
                   path: testing/diagnostics/cmosinfo/*
@@ -110,7 +110,7 @@ jobs:
                   docker save --output /tmp/cmos-image.tar couchbase/observability-stack:${{ github.sha }}
 
             - name: Upload artifact
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: cmos-image
                   path: /tmp/cmos-image.tar
@@ -156,7 +156,7 @@ jobs:
 
             - name: Capture cmosinfo if something went wrong
               if: ${{ failure() }}
-              uses: actions/upload-artifact@v2
+              uses: actions/upload-artifact@v3
               with:
                   name: test-failure-cmosinfo-${{ matrix.server-version }}
                   path: testing/diagnostics/cmosinfo/*
