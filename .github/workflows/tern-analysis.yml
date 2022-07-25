@@ -30,7 +30,7 @@ jobs:
                   format: human
                   output: cmos-tern.out
 
-            - uses: actions/upload-artifact@v2
+            - uses: actions/upload-artifact@v3
               with:
                   name: tern
                   path: ${{ steps.scan.outputs.file }}
