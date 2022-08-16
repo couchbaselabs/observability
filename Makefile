@@ -50,7 +50,7 @@ BLD_NUM ?= 999
 
 # This controls the build version of docker used.
 # Note that this is a separate variable for cbmultimanager's builds.
-GO_VERSION := 1.17.2
+GO_VERSION := 1.19.0
 
 # The target controls what's built as regards cross compilation.
 # These are similar to target triplets in the C world e.g. x86_64-unknown-linux.

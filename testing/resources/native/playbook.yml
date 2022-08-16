@@ -1,7 +1,7 @@
 ---
 - hosts: couchbase
   vars:
-      go_version: 1.17.2
+      go_version: 1.19
   environment:
       GOROOT: /usr/local/go
       PATH: '{{ ansible_env.PATH }}:/usr/local/go/bin'

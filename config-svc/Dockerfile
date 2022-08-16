@@ -1,4 +1,4 @@
-FROM golang:1.17 AS codebase
+FROM golang:1.19 AS codebase
 # Cache Go dependencies as separate layer
 COPY go.mod go.sum /app/
 WORKDIR /app

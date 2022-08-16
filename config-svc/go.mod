@@ -1,6 +1,6 @@
 module github.com/couchbaselabs/observability/config-svc
 
-go 1.17
+go 1.19
 
 require (
 	github.com/brpaz/echozap v1.1.2

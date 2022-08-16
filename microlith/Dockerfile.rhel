@@ -27,7 +27,7 @@ RUN dnf update -y && dnf install -y curl tar && dnf clean all
 WORKDIR /opt/
 # UBI base so no need to worry about shell pipe failing options
 # hadolint ignore=DL4006
-RUN curl -s https://dl.google.com/go/go1.17.1.linux-amd64.tar.gz | tar xz
+RUN curl -s https://dl.google.com/go/go1.19.linux-amd64.tar.gz | tar xz
 ENV PATH="/opt/go/bin:${PATH}"
 
 ARG PROM_CONFIG_TOOL_VERSION=v0.3.0
