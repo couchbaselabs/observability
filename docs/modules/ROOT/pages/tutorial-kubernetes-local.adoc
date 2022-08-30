@@ -1,4 +1,4 @@
-=  Configure CMOS for Kubernetes deployment
+=  Configure CMOS for Kubernetes deployment on local using KIND
 
 include::partial$tutorial.adoc[]
 
