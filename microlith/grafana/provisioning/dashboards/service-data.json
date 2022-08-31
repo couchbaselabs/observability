@@ -23,7 +23,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.3.6"
+      "version": "9.1.1"
     },
     {
       "type": "datasource",
@@ -309,7 +309,7 @@
           }
         ]
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "cacheDurationSeconds": 0,
@@ -449,7 +449,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -557,7 +557,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -639,7 +639,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -1234,7 +1234,7 @@
         "content": "# Number of documents #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "transparent": true,
       "type": "text"
     },
@@ -1250,7 +1250,7 @@
         "content": "# Dataset size on disk #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "transparent": true,
       "type": "text"
     },
@@ -1266,7 +1266,7 @@
         "content": "# Dataset size in memory #",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "transparent": true,
       "type": "text"
     },
@@ -1318,7 +1318,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
@@ -1383,7 +1383,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [
@@ -1448,7 +1448,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "repeat": "bucket",
       "repeatDirection": "v",
       "targets": [

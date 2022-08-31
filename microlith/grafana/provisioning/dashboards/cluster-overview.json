@@ -31,7 +31,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.3.6"
+      "version": "9.1.1"
     },
     {
       "type": "datasource",
@@ -174,7 +174,7 @@
           "text": {},
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -242,7 +242,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -313,7 +313,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "datasource": {
@@ -514,7 +514,7 @@
           "text": {},
           "textMode": "name"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -620,7 +620,7 @@
           "text": {},
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -687,7 +687,7 @@
           "text": {},
           "textMode": "auto"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -758,7 +758,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "datasource": {
@@ -874,7 +874,7 @@
           "text": {},
           "textMode": "value"
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "datasource": {
@@ -1165,7 +1165,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -1540,7 +1540,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "cacheDurationSeconds": 0,
@@ -1857,7 +1857,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "datasource": {
@@ -2119,7 +2119,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "datasource": {
@@ -2381,7 +2381,7 @@
             }
           ]
         },
-        "pluginVersion": "8.3.6",
+        "pluginVersion": "9.1.1",
         "targets": [
           {
             "datasource": {

@@ -42,10 +42,11 @@ datasources:
     - name: Couchbase Cluster Monitor API
       type: marcusolsson-json-datasource
       uid: PD5070BC1AA9F8304
-      url: http://localhost:7196/api/v1
+      url: http://localhost:8080/api/v1
       basicAuth: true
       basicAuthUser: ${CB_MULTI_ADMIN_USER}
-      basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
+      secureJsonData:
+        basicAuthPassword: ${CB_MULTI_ADMIN_PASSWORD}
     - name: Alertmanager API
       type: marcusolsson-json-datasource
       uid: PC245499EF542F9C5

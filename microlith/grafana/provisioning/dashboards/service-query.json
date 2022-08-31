@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.3.6"
+      "version": "9.1.1"
     },
     {
       "type": "datasource",
@@ -161,7 +161,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -420,7 +420,7 @@
         "text": {},
         "textMode": "value_and_name"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {

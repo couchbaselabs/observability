@@ -15,7 +15,7 @@
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "8.3.6"
+      "version": "9.1.1"
     },
     {
       "type": "datasource",
@@ -81,7 +81,7 @@
         "content": "# Configuration Check\n\nIf all the checks below report OK, and the number of nodes and clusters is right, you're all set! Head over to the [Cluster Overview Dashboard](/d/g-waunKnz/cluster-overview-dashboard) to get started.\n\nIf any report a problem, or the number of nodes does not match your expectations, review the [setup instructions](https://docs.couchbase.com).",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "type": "text"
     },
     {
@@ -174,7 +174,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -268,7 +268,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -334,7 +334,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -423,7 +423,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -533,7 +533,7 @@
         "text": {},
         "textMode": "auto"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -578,7 +578,7 @@
         "content": "**Note:** If the number of nodes for a particular service does not equal the total number of nodes in the cluster, this may be because that node is not configured to run the respective service. In this case, the discrepancy can be ignored.",
         "mode": "markdown"
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "type": "text"
     },
     {
@@ -663,7 +663,7 @@
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
@@ -873,7 +873,7 @@
         },
         "showHeader": true
       },
-      "pluginVersion": "8.3.6",
+      "pluginVersion": "9.1.1",
       "targets": [
         {
           "datasource": {
