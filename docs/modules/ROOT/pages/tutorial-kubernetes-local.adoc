@@ -272,6 +272,11 @@ In this configure file, you can see that the cluster role is defined by specifyi
 The actual CMOS workload runs as a Kubernetes deployment along with other supporting services.
 Create it by running the below command in the Kubernetes console.
 
+[WARNING]
+If developing on Apple M1(ARM based) machines, it is recommened to build your own image and use it in deployments. The OS/ARCH of the image `couchbase/observability-stack:latest` on Dockerhub is `linux/amd64`. For details, refer to https://github.com/couchbaselabs/observability#local-build-for-non-couchbase-employees[CMOS README^]. 
+You can either upload the new image in your own repository or use https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster[`kind load`^] to save it in the KIND cluster.
+
+
 [source,console]
 ----
 cat <<EOF | kubectl apply -f -
@@ -291,7 +296,7 @@ spec:
        spec:
            containers:
                - name: cmos
-                 image: couchbase/observability-stack:v1
+                 image: couchbase/observability-stack:latest # <.>
                  ports:
                      - name: http
                        containerPort: 8080
@@ -324,6 +329,9 @@ spec:
                      name: prometheus-config-cmos
 EOF
 ----
+
+<.> The `couchbase/observability-stack:latest` image used can be found on https://hub.docker.com/r/couchbase/observability-stack/tags[Dockerhub^] here. For custom image build and use, see above.
+
 
 After the observability dashboard is deployed, we need to create a service to access CMOS.
 Create it by running the below command in the kubernetes console.
