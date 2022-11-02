@@ -9,7 +9,7 @@ FROM prom/alertmanager:v0.23.0 as alertmanager-official
 FROM jaegertracing/all-in-one:1.29.0 as jaegaer-official
 FROM hairyhenderson/gomplate:stable AS gomplate-official
 
-FROM golang:1.17 as builder
+FROM golang:1.19.3 as builder
 # Builder image so ignore pinning and we do want recommended packages
 # hadolint ignore=DL3008,DL3015
 RUN apt-get update && apt-get install -y sqlcipher libssl-dev openssl openssh-client && \
