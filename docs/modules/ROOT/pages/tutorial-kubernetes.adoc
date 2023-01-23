@@ -225,7 +225,7 @@ spec:
        spec:
            containers:
                - name: couchbase-grafana
-                 image: couchbase/observability-stack:v1
+                 image: couchbase/observability-stack
                  ports:
                      - name: http
                        containerPort: 8080
