@@ -2,7 +2,7 @@ ARG PROD_VERSION=1.0.0
 ARG PROD_BUILD=999
 ARG arch=amd64
 
-FROM grafana/grafana:8.3.6 as grafana-official
+FROM grafana/grafana:9.3.6 as grafana-official
 FROM grafana/loki:2.4.1 as loki-official
 FROM prom/prometheus:v2.33.3 as prometheus-official
 FROM prom/alertmanager:v0.23.0 as alertmanager-official
