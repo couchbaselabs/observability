@@ -1,0 +1,16 @@
+---
+skip_list:
+  - line-length
+  - comments       # Disable error on single space with comments
+  - git-latest     # All this usage is in testing
+  - package-latest
+  - risky-file-permissions
+exclude_paths:
+  - microlith/alertmanager/
+  - .cache/        # Implicit unless exclude_paths is defined in config
+  - .github/
+  - docs/          # Make sure to exclude all the Antora stuff as it picks up the playbooks
+  - microlith/prometheus/alerting/ # Prom alert rules
+parseable: true
+use_default_rules: true
+verbosity: 1

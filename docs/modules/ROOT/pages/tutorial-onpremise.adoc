@@ -1,0 +1,126 @@
+= Configure CMOS for On-premises deployment
+
+include::partial$tutorial.adoc[]
+
+== Overview
+
+Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry standard tooling to observe the state of a Couchbase cluster.
+CMOS can be deployed using Docker or any container runtime.
+
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
+.Microlith runtime image
+image::microlith-runtime.png[]
+
+=== Installation
+
+At this moment, we only support deployment of CMOS using containers.
+Use docker to start the CMOS container.
+Alternatively, you can also use Linux container tools such as link:https://podman.io[Podman^].
+To install CMOS run the command below:
+
+[source,console]
+----
+docker run --name=cmos --rm -d -P couchbase/observability-stack:latest
+----
+
+==== Port Configuration
+
+CMOS contains multiple services, each running on their own default port such as Grafana (3000), Prometheus (9090), Alertmanager (9093), Landing page (8080), and Loki (3100).
+You can also access different services using path-based routing through the landing page.
+
+=== Verification
+
+You can verify whether the CMOS container is up and running by navigating to the CMOS landing page on port 8080.
+
+To check the port mapping in your host, run the command below:
+
+[source,console]
+----
+docker container port cmos 8080
+----
+
+[console]
+----
+# output
+0.0.0.0:55124
+:::55124
+----
+
+.CMOS landing image
+image::cmos-landing.png[]
+
+==== Add Cluster
+
+If you don't have an existing Couchbase cluster setup, you can install it from https://docs.couchbase.com/server/current/install/getting-started-docker.html#section_jvt_zvj_42b[here^].
+To monitor a Couchbase cluster, you can add it using the add cluster option on the landing page.
+
+.Add cluster image
+image::add-cluster-vm.png[]
+
+As soon as you add a cluster, you will see a Grafana URL where you can view inventory and metrics of Couchbase server clusters.
+
+.Couchbase inventory image
+image::couchbase-inventory-vm.png[]
+
+==== Prometheus
+
+From the landing page, you can go to the prometheus target page and check if the added cluster target is up or down.
+
+.Prometheus target image
+image::prometheus-target-vm.png[]
+
+==== Grafana
+
+From the landing page, you can go to Grafana and check the graphs.
+CMOS comes with pre-installed dashboards to monitor the Couchbase cluster.
+Dashboards with tag `couchbase-7` are relevant for Couchbase server version 7+.
+For more information, check the Grafana configuration section.
+
+.Couchbase cluster overview image
+image::couchbase-cluster-overview-vm.png[]
+
+==== Alerts
+
+CMOS comes with pre-installed alert rules to monitor the Couchbase cluster.
+Navigate to the Prometheus UI to see the rules, or Alertmanager to see the alerts.
+For more information check the prometheus and alerting configuration section.
+
+.Alert rules image
+image::prometheus-alert-rules.png[]
+
+.Alerts image
+image::prometheus-alerts.png[]
+
+==== Loki
+
+Loki, which is shipped with Grafana, allows access to logs of various components.
+You can configure it via Configuration > Data sources > Loki > Explore.
+
+[NOTE]
+====
+You will need to install and configure Fluent Bit on your Couchbase Server nodes before logs will be sent to Loki.
+Refer to the xref:deployment-fluentbit.adoc[Fluent Bit install guidance].
+====
+
+.Loki explore dashboard image
+image::loki-explore-dashboard.png[]
+
+From the Log browser, you can enter a custom Loki query or select appropriate labels to see the logs.
+
+.Loki log browser image
+image::loki-log-browser.png[]
+
+After that select the “Show logs” to view logs.
+You can also build  https://grafana.com/docs/grafana/latest/getting-started/getting-started/#step-3-create-a-dashboard[custom Grafana dashboards^] based on your needs.
+
+.Loki logs image
+image::loki-logs.png[]
+
+=== Next steps
+
+* xref:architecture.adoc[Architecture overview]
+* xref:deployment-microlith.adoc[Microlith container deployment]
+* xref:cluster-monitor.adoc[Couchbase Cluster Monitor component]

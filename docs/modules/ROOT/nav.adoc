@@ -1,0 +1,66 @@
+.Introduction
+* xref:index.adoc[Home]
+* xref:quickstart.adoc[Quick start guide]
+
+ifdef::env-packaged[]
+
+.Configuration
+* link:/promwebform.html[Add Cluster^]
+* link:/prometheus/alerts/[Prometheus Alerts^]
+* link:/prometheus/rules/[Prometheus Rules^]
+* link:/prometheus/targets/[Prometheus Targets^]
+
+.Tooling
+* link:/alertmanager/[Alert Manager^]
+* link:/grafana/[Grafana^]
+* link:/prometheus/[Prometheus^]
+
+endif::env-packaged[]
+
+.Key Concepts
+* xref:architecture.adoc[Architecture overview]
+* xref:deployment-microlith.adoc[Microlith container deployment]
+* xref:cluster-monitor.adoc[Couchbase Cluster Monitor]
+* xref:health-agent.adoc[Couchbase Health Agent]
+* xref:deployment-distributed.adoc[Distributed microservices deployment]
+
+.Components
+** Metrics
+* xref:component-prometheus.adoc[Prometheus]
+* xref:component-exporter.adoc[Exporter]
+** Logging
+* xref:component-fluent-bit.adoc[Fluent Bit]
+* xref:component-loki.adoc[Loki]
+** Visualization
+* xref:component-grafana.adoc[Grafana]
+** Alerting
+* xref:component-alertmanager.adoc[Alertmanager]
+** Tracing
+* xref:component-jaeger.adoc[Jaeger]
+
+.Configuration
+* xref:configure-cmos.adoc[CMOS Configuration]
+* xref:security-considerations.adoc[Security Considerations]
+
+.Deployment
+* xref:deployment-onpremise.adoc[On-premise deployment]
+* xref:integrating-with-existing-deployments.adoc[Integrating with existing monitoring pipelines]
+* xref:deployment-fluentbit.adoc[Fluent Bit deployment]
+
+.Tutorials
+* xref:tutorial-onpremise.adoc[On-premise example]
+* xref:tutorial-kubernetes.adoc[Kubernetes example]
+* xref:tutorial-host-level-metrics-node-exporter.adoc[Host-Level Metrics with the Node Exporter]
+* xref:tutorial-systemd-exporter.adoc[Systemd Exporter]
+* xref:tutorial-process-exporter.adoc[Process Exporter]
+* xref:tutorial-pushgateway.adoc[Pushgateway]
+
+.Further Information
+* xref:prerequisite-and-setup.adoc[Pre-requisites]
+* xref:licensing.adoc[Licensing]
+* xref:support.adoc[Support]
+* xref:release-notes.adoc[Release Notes]
+
+.Reference
+* xref:cluster-monitor-api.adoc[Cluster Monitor API]
+* xref:health-checks.adoc[Health Checks]

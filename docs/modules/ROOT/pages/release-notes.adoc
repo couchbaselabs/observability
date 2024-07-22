@@ -1,0 +1,64 @@
+// THIS FILE IS AUTO-GENERATED - DO NOT EDIT
+= Release Notes
+
+== Installation
+
+For installation instructions, refer to the xref:quickstart.adoc[CMOS Quick Start] page.
+
+== Release 0.3
+
+=== Features
+* Issue: https://issues.couchbase.com/browse/CMOS-454[CMOS-454^] - `Fix Linting in CMOS and cbmultimanager`
+* Issue: https://issues.couchbase.com/browse/CMOS-444[CMOS-444^] - `Cluster Monitor add ability to attach additional labels.`
+* Issue: https://issues.couchbase.com/browse/CMOS-434[CMOS-434^] - `Fluent Bit config is in the wrong place`
+* Issue: https://issues.couchbase.com/browse/CMOS-424[CMOS-424^] - `Adding custom fields in hazelnut`
+* Issue: https://issues.couchbase.com/browse/CMOS-413[CMOS-413^] - `Check for projector getting doc values that are too big`
+* Issue: https://issues.couchbase.com/browse/CMOS-412[CMOS-412^] - `Check for unsupported JRE vendor/version`
+* Issue: https://issues.couchbase.com/browse/CMOS-411[CMOS-411^] - `Check for reverse lookup to avoid prometheus load config delays`
+* Issue: https://issues.couchbase.com/browse/CMOS-409[CMOS-409^] - `Document cbhealthagent high-level behaviour`
+* Issue: https://issues.couchbase.com/browse/CMOS-408[CMOS-408^] - `Document high-level architecture of cbmultimanager`
+* Issue: https://issues.couchbase.com/browse/CMOS-407[CMOS-407^] - `Expand details about contributing to observability repo`
+* Issue: https://issues.couchbase.com/browse/CMOS-394[CMOS-394^] - `Document using CMOS with a 6.x cluster`
+* Issue: https://issues.couchbase.com/browse/CMOS-390[CMOS-390^] - `Move checker metadata out of Go code`
+* Issue: https://issues.couchbase.com/browse/CMOS-387[CMOS-387^] - `Fix linter violations`
+* Issue: https://issues.couchbase.com/browse/CMOS-381[CMOS-381^] - `Agent: allow for known-credentials in addition to cbmultimanager auth`
+* Issue: https://issues.couchbase.com/browse/CMOS-380[CMOS-380^] - `Check for non-CB processes on CB ports`
+* Issue: https://issues.couchbase.com/browse/CMOS-379[CMOS-379^] - `Unbreak Docker builds`
+* Issue: https://issues.couchbase.com/browse/CMOS-372[CMOS-372^] - `Check if a bucket has fewer nodes than on cluster`
+* Issue: https://issues.couchbase.com/browse/CMOS-365[CMOS-365^] - `Auto-failover timeout against virtual machine node`
+* Issue: https://issues.couchbase.com/browse/CMOS-362[CMOS-362^] - `Merge All Bucket Count Checkers`
+* Issue: https://issues.couchbase.com/browse/CMOS-361[CMOS-361^] - `Don't require creating a TLS certificate/key`
+* Issue: https://issues.couchbase.com/browse/CMOS-360[CMOS-360^] - `Non-Default Vbuckets Counts not supported`
+* Issue: https://issues.couchbase.com/browse/CMOS-359[CMOS-359^] - `Check for buckets vulnerable to incorrectly applied max TTL`
+* Issue: https://issues.couchbase.com/browse/CMOS-351[CMOS-351^] - `Provide a “cluster monitor only” build of CMOS`
+* Issue: https://issues.couchbase.com/browse/CMOS-314[CMOS-314^] - `Add a check to see if the node uses SAN storage`
+* Issue: https://issues.couchbase.com/browse/CMOS-276[CMOS-276^] - `Agent: Rework authentication and bootstrapping`
+* Issue: https://issues.couchbase.com/browse/CMOS-260[CMOS-260^] - `Rework UI serving code and allow embedding UI`
+
+=== Bug Fixes
+* Issue: https://issues.couchbase.com/browse/CMOS-455[CMOS-455^] - `Infinite recursion bug`
+* Issue: https://issues.couchbase.com/browse/CMOS-443[CMOS-443^] - `cbmultimanager is sending cluster label and it should be cluster_name`
+* Issue: https://issues.couchbase.com/browse/CMOS-441[CMOS-441^] - `Security update puppeteer / node-fetch`
+* Issue: https://issues.couchbase.com/browse/CMOS-440[CMOS-440^] - `Security: update angular-devkit`
+* Issue: https://issues.couchbase.com/browse/CMOS-430[CMOS-430^] - `update minimist from 1.2.5 to 1.2.6`
+* Issue: https://issues.couchbase.com/browse/CMOS-427[CMOS-427^] - `cbmultimanager dies if it fails to connect to agent`
+* Issue: https://issues.couchbase.com/browse/CMOS-425[CMOS-425^] - `cluster monitor doesn't appear under CMOS :8080/ui`
+* Issue: https://issues.couchbase.com/browse/CMOS-416[CMOS-416^] - `Agent port failing to get agent checkers`
+* Issue: https://issues.couchbase.com/browse/CMOS-415[CMOS-415^] - `Built fluent-bit doesn't start on ubuntu`
+* Issue: https://issues.couchbase.com/browse/CMOS-414[CMOS-414^] - `Agent port errors aren't logged correctly`
+* Issue: https://issues.couchbase.com/browse/CMOS-402[CMOS-402^] - `Build version not set correctly`
+* Issue: https://issues.couchbase.com/browse/CMOS-399[CMOS-399^] - `Agent: dependency on invalid OpenSSL package on Debian`
+* Issue: https://issues.couchbase.com/browse/CMOS-385[CMOS-385^] - `UI: opening pages by deep link leads to redirect loop`
+* Issue: https://issues.couchbase.com/browse/CMOS-364[CMOS-364^] - `Checker runs aren't cancelled if a cluster is removed during the run`
+* Issue: https://issues.couchbase.com/browse/CMOS-363[CMOS-363^] - `Landing page links are unclickable on Firefox`
+* Issue: https://issues.couchbase.com/browse/CMOS-319[CMOS-319^] - `Agent: re-initialize if the agent returns to Waiting state`
+* Issue: https://issues.couchbase.com/browse/CMOS-68[CMOS-68^] - `Unnecessary duplication of memcached clients`
+
+=== Known Issues
+// TODO
+== Feedback
+// TODO
+== Licences for Third-Party Components
+// TODO
+== More Information
+// TODO

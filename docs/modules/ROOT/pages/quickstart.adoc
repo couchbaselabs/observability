@@ -1,0 +1,18 @@
+= Quick Start
+
+You will need a Docker daemon - on Linux use your respective package manager, on macOS or Windows you can use https://www.docker.com/products/docker-desktop[Docker Desktop^].
+
+You will also need a Couchbase Server cluster running and accessible - if you do not already have a test cluster available, we recommend using https://github.com/couchbaselabs/vagrants[Vagrant^] or https://docs.couchbase.com/cloud-native-database/containers/docker-basic-install.html[Docker^] to start one up.
+Note that CMOS is built for Couchbase Server 7.0 and above, and Prometheus metrics may not be available on versions below 7.0.
+
+. Run the container: `docker run --rm -d -p 8080:8080 --name cmos couchbase/observability-stack:latest` (if your Couchbase Server is running in Docker, you may need to set https://docs.docker.com/network/[extra options^] to permit them to communicate)
+. Browse to http://localhost:8080
+. Click "Add Cluster" and follow the instructions
+
+When you are done testing, run `docker stop cmos` to clean up.
+
+== Next steps
+
+* xref:architecture.adoc[Architecture overview]
+* xref:deployment-microlith.adoc[Microlith container deployment]
+* xref:deployment-onpremise.adoc[On-premise deployment]

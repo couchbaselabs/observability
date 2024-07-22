@@ -1,0 +1,6 @@
+2022-01-11T15:24:42.866891+00:00 INFO Couchbase version 7.0.2-6703 starting.
+2022-01-11T15:24:42.866944+00:00 INFO recalculate_max_connections: {"max_fds":1048576,"max_connections":60000,"system_connections":5000,"engine_fds":987549}
+2022-01-11T15:24:42.866955+00:00 INFO Breakpad disabled
+2022-01-11T15:24:42.867345+00:00 INFO Using SLA configuration: {"COMPACT_DB":{"slow":"1800 s"},"CREATE_BUCKET":{"slow":"5 s"},"DELETE_BUCKET":{"slow":"10 s"},"SELECT_BUCKET":{"slow":"10 ms"},"SEQNO_PERSISTENCE":{"slow":"30 s"},"comment":"Current MCBP SLA configuration","default":{"slow":"500 ms"},"version":1}
+2022-01-11T15:24:42.867412+00:00 INFO Enable standard input listener
+2022-01-11T15:24:43.867412+00:00 ERROR 85: exception occurred in runloop during packet execution. Cookie info: [{"aiostat":"success","connection":"[ {\"ip\":\"127.0.0.1\",\"port\":16273} - {\"ip\":\"127.0.0.1\",\"port\":11209} (<ud>@ns_server</ud>) ]","engine_storage":"0x0000000000000000","ewouldblock":false,"packet":{"bodylen":3,"cas":0,"datatype":"raw","extlen":0,"key":"<ud>dcp</ud>","keylen":3,"magic":"ClientRequest","opaque":0,"opcode":"STAT","vbucket":0},"refcount":0}] - closing connection ([ {"ip":"127.0.0.1","port":16273} - {"ip":"127.0.0.1","port":11209} (<ud>@ns_server</ud>) ]): Response::setKeylen: key cannot exceed 1 byte

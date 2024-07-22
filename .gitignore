@@ -1,0 +1,41 @@
+microlith/alertmanager/slack_url
+# Build output
+git-commit.txt
+build/
+dist/
+bin/
+test-dist/
+# Documentation output
+.cache/
+microlith/docs/
+microlith/cbmultimanager-docs
+tools/tern/
+tools/tern-output*
+# config-svc build
+microlith/config-svc
+# created as part of make, really lives in cbmultimanager
+microlith/entrypoints/cbmultimanager.sh
+# Test
+*-actual.yaml
+microlith/Dockerfile.oss
+tools/bats/
+testing/resources/native/vagrants
+testing/resources/native/hosts.ini
+testing/diagnostics/
+testing/.vagrant
+testing/bats/integration/kubernetes/resources/default-microlith.yaml
+testing/bats/integration/kubernetes/resources/helm/couchbase-cluster-logging-values.yaml
+testing/loki_alerts/fluent-bit.conf
+.DS_Store
+node_modules
+*.log
+._.vscode/
+._LICENSE
+.ansible-lint/
+.aspell.en.pws/
+.gitattributes/
+.github/
+.gitignore/
+.idea/
+.vscode/
+upstream/

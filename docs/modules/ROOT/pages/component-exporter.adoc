@@ -1,0 +1,24 @@
+= Exporter
+
+[abstract]
+Services that do not expose native Prometheus metrics need an exporter to integrate with Prometheus.
+
+== Overview
+Some tools can natively expose Prometheus metrics, while others need an agent to convert between its internal format and Prometheus' metrics data model.
+In Prometheus this is referred to as an _exporter_.
+
+== Get Started
+Couchbase Server 7.0 and above has built-in Prometheus metrics with no need for an exporter.
+An exporter is needed to present Prometheus metrics from a cluster running Couchbase Server 6.x and below.
+
+There are a number of exporters available, provided by both Couchbase and third parties.
+The recommended exporter to use with CMOS is the https://github.com/couchbaselabs/cmos-prometheus-exporter[CMOS Prometheus Exporter], as it presents metrics in the same format as Couchbase Server 7.0's native metrics.
+While it does not cover all the metrics exposed by Couchbase Server, it covers the majority needed for day-to-day operational monitoring.
+
+The CMOS Exporter is also integrated into the xref:health-agent.adoc[Couchbase Health Agent].
+
+== Links
+
+* xref:server:manage:monitor/set-up-prometheus-for-monitoring.adoc[Set up Prometheus for Monitoring Couchbase Server (7.0 and up)]
+* xref:health-agent.adoc[Couchbase Health Agent]
+* xref:integrating-with-existing-deployments.adoc[Integrating with Existing Monitoring Pipelines]

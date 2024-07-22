@@ -1,0 +1,12 @@
+---
+# This file contains rules only used for testing.
+# It will not be present in production unless the environment variable LOKI_ALERTS_INCLUDE_TEST is set to 'true'.
+groups:
+    - name: cmos-testing
+      rules:
+
+          - alert: SmokeTest
+            expr: count_over_time({job="cmos-testing"}[1m]) > 0
+            for: 0m
+            labels:
+                job: couchbase_fluent_bit

@@ -1,0 +1,38 @@
+= Prometheus
+
+[abstract]
+Prometheus server in CMOS stack helps to scrape Couchbase Server metrics and generate alerts on them.
+
+== Overview
+
+https://prometheus.io[Prometheus^] is a leading open-source monitoring solution which has become the industry standard for metrics collection and alert generation on cloud platforms.
+With Prometheus, multi-dimensional metric data can be collected from multiple endpoints and stored as time series data along with optional labels.
+
+In a distributed environment, metrics need to be collected in real-time from various sources and alerts need to be triggered based on data trends and threshold deviations.
+As part of the Couchbase Monitoring and Observability Stack (CMOS), Prometheus Server comes with a set of built-in standard rules to create alerts on metrics scraped from Couchbase Server and other CMOS components.
+
+ifdef::env-github[]
+:imagesdir: https://github.com/couchbaselabs/observability/raw/main/docs/modules/ROOT/assets/images
+endif::[]
+
+.Prometheus server in CMOS
+image::component-prometheus.png[]
+
+From Couchbase Server 7, detailed metric endpoints are exposed via a https://docs.couchbase.com/server/current/introduction/whats-new.html#scalable-statistics[Prometheus instance^] built into the server.
+Using a CMOS Prometheus Server that sits outside of the Couchbase Cluster, monitoring can be easily accomplished at scale.
+The CMOS Prometheus Server, when configured, scrapes metrics from Couchbase Server targets along with other components in the stack.
+Alerts are generated based on standard alerting rules that are forwarded to the Alert Manager instance running in the CMOS stack.
+
+== Get Started
+
+The CMOS Prometheus Server is included and enabled by default in CMOS.
+It ships with a default set of Couchbase specific standard alerting rules that trigger alerts, allowing administrators to quickly and easily take actions to mitigate issues.
+Prometheus in CMOS can be deployed xref:tutorial-onpremise.adoc[on premise] or using xref:tutorial-kubernetes.adoc[kubernetes].
+Check out the reference xref:architecture.adoc[Couchbase Monitoring Observability Stack](CMOS) architecture to learn more.
+Learn more about how to further customize Prometheus to scrape metrics from other targets and create new rules in the https://prometheus.io/docs/introduction/first_steps[first steps^].
+
+== Links
+
+* On Premise Tutorial: xref:tutorial-onpremise.adoc[Deploy CMOS on Premise]
+* Kubernetes Tutorial: xref:tutorial-kubernetes.adoc[Deploy CMOS on Kubernetes]
+* Prometheus: https://prometheus.io/docs/introduction/first_steps[First Steps^]

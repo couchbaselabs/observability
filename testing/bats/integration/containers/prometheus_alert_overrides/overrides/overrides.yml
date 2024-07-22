@@ -1,0 +1,11 @@
+---
+groups:
+    - name: BaseOverrides
+      rules:
+          - alert: TestExprOverridden
+            override: [TestExprOverride]
+            expr: overridden{foo="true"}
+          - alert: TestDisable
+            expr: disabled{foo="true"}
+            override: [TestDisabled]
+            enabled: false

@@ -1,0 +1,10 @@
+Portions of this project reuse the following components:
+* Grafana: AGPL 3.0 https://github.com/grafana/grafana/blob/main/LICENSE
+* Grafana JSON API Plugin: Apache 2.0 https://github.com/marcusolsson/grafana-json-datasource/blob/main/LICENSE
+* Loki: AGPL 3.0 https://github.com/grafana/loki/blob/main/LICENSE
+* Prometheus: Apache 2.0 https://github.com/prometheus/prometheus/blob/main/LICENSE
+* Alert Manager: Apache 2.0 https://github.com/prometheus/alertmanager/blob/master/LICENSE
+* Node Exporter: Apache 2.0 https://github.com/prometheus/node_exporter/blob/master/LICENSE
+* Fluent Bit: Apache 2.0 https://github.com/fluent/fluent-bit/blob/master/LICENSE
+* Nginx: https://github.com/nginxinc/docker-nginx/blob/master/LICENSE
+* Alpine.js: https://github.com/alpinejs/alpine/blob/main/LICENSE.md

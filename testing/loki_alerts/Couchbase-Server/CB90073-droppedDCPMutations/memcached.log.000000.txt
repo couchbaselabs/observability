@@ -1,0 +1,2 @@
+2020-10-17T04:41:00.185306+00:00 WARNING 131: DCP (Consumer) eq_dcpq:replication:ns_1@192.168.0.10->192.168.0.8:live-bag - (vb:1) Erroneous (out of sequence) message (expiration) received, with opaque: 2, its seqno (1) is not greater than last received seqno (1); Dropping mutation!
+2020-10-17T05:22:50.073251+00:00 WARNING 131: DCP (Consumer) eq_dcpq:replication:ns_1@192.168.0.10->192.168.0.8:live-bag - (vb:1) Erroneous (out of sequence) message (expiration) received, with opaque: 2, its seqno (1) is not greater than last received seqno (1); Dropping mutation!

@@ -1,0 +1,3418 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+      "label": "Couchbase Cluster Monitor API",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    },
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "Prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    },
+    {
+      "name": "DS_ALERTMANAGER_API",
+      "label": "Alertmanager API",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "marcusolsson-json-datasource",
+      "pluginName": "JSON API"
+    }
+  ],
+  "__elements": [],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.3.6"
+    },
+    {
+      "type": "datasource",
+      "id": "marcusolsson-json-datasource",
+      "name": "JSON API",
+      "version": "1.3.0"
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "stat",
+      "name": "Stat",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "table",
+      "name": "Table",
+      "version": ""
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
+    }
+  ],
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": "-- Grafana --",
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "target": {
+            "limit": 100,
+            "matchAny": false,
+            "tags": [],
+            "type": "dashboard"
+          },
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 2,
+    "id": 1,
+    "iteration": 1652805221060,
+    "links": [
+      {
+        "asDropdown": false,
+        "icon": "external link",
+        "includeVars": false,
+        "keepTime": true,
+        "tags": [
+          "couchbase-inventory"
+        ],
+        "targetBlank": false,
+        "title": "Couchbase Inventory",
+        "tooltip": "",
+        "type": "dashboards",
+        "url": ""
+      },
+      {
+        "asDropdown": false,
+        "icon": "info",
+        "includeVars": false,
+        "keepTime": false,
+        "tags": [],
+        "targetBlank": true,
+        "title": "Provide Feedback",
+        "tooltip": "",
+        "type": "link",
+        "url": "mailto:cmos-preview@couchbase.com?subject=CMOS%20Preview%20Feedback"
+      }
+    ],
+    "liveNow": false,
+    "panels": [
+      {
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 52,
+        "title": "Overview - at a glance",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 7,
+          "x": 0,
+          "y": 1
+        },
+        "id": 70,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "fields": [
+              {
+                "jsonPath": "$cluster",
+                "language": "jsonata",
+                "name": "Cluster Name",
+                "type": "number"
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "A",
+            "urlPath": "/clusters/$cluster_uuid"
+          }
+        ],
+        "title": "Cluster Name",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        },
+        "description": "",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 7,
+          "y": 1
+        },
+        "id": 56,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": true
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "fields": [
+              {
+                "jsonPath": "$count($.nodes_summary[*])",
+                "language": "jsonata",
+                "name": "Number of nodes"
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "A",
+            "urlPath": "/clusters/$cluster_uuid"
+          }
+        ],
+        "title": "Nodes",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Scroll down to \"Health Status\" to see the alerts.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#55a64bb0",
+                  "value": null
+                },
+                {
+                  "color": "#e02f44b0",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 6,
+          "x": 10,
+          "y": 1
+        },
+        "id": 66,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": false,
+            "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 30) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 30)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 30) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 30)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 30) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 30)) - 1)",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "critical_alerts",
+            "refId": "A"
+          },
+          {
+            "cacheDurationSeconds": 5,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_ALERTMANAGER_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$count($)",
+                "language": "jsonata"
+              }
+            ],
+            "hide": false,
+            "method": "GET",
+            "queryParams": "",
+            "refId": "B",
+            "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=cluster_name=\"${cluster:querystring}\"&filter=severity=critical"
+          }
+        ],
+        "title": "Critical Alerts",
+        "transformations": [
+          {
+            "id": "reduce",
+            "options": {
+              "reducers": [
+                "lastNotNull"
+              ]
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Field": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          },
+          {
+            "id": "reduce",
+            "options": {
+              "reducers": [
+                "sum"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        },
+        "description": "Click on each service to be taken to its dashboard page.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#bcbcbc3d",
+                  "value": null
+                },
+                {
+                  "color": "#55a64bb0",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Data"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Data",
+                      "url": "/d/4vnZHfcnk/data-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Index"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Index",
+                      "url": "/d/zlHletp7k/index-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Search"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Search",
+                      "url": "/d/5O4ki2tnz/search-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Query"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Query",
+                      "url": "/d/89ydpf5nz/query-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Eventing"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Eventing Service Overview",
+                      "url": "/d/R0hxsR2nk/eventing-service-overview?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&autofitpanels"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 8,
+          "w": 8,
+          "x": 16,
+          "y": 1
+        },
+        "id": 97,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "max"
+            ],
+            "fields": "/.*/",
+            "values": false
+          },
+          "text": {},
+          "textMode": "name"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "fields": [
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"kv\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Data"
+              },
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"index\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Index"
+              },
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"fts\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Search"
+              },
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"n1ql\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Query"
+              },
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"eventing\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Eventing"
+              },
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"cbas\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Analytics"
+              },
+              {
+                "jsonPath": "$.nodes_summary.services ~> $filter(function($svc) {$svc = \"backup\"}) ~> $count",
+                "language": "jsonata",
+                "name": "Backup"
+              },
+              {
+                "jsonPath": "0",
+                "language": "jsonata",
+                "name": "..."
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "A",
+            "urlPath": "/clusters/$cluster_uuid"
+          }
+        ],
+        "title": "Running Services (clickable!)",
+        "transformations": [
+          {
+            "id": "seriesToRows",
+            "options": {}
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 7,
+          "x": 0,
+          "y": 5
+        },
+        "id": 54,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "/^Version$/",
+            "values": false
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "fields": [
+              {
+                "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
+                "language": "jsonata",
+                "name": "Version",
+                "type": "number"
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "A",
+            "urlPath": "/clusters/$cluster_uuid"
+          }
+        ],
+        "title": "Version",
+        "transformations": [],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "marcusolsson-json-datasource",
+          "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "fixed"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 7,
+          "y": 5
+        },
+        "id": 55,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "area",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": true
+          },
+          "text": {},
+          "textMode": "auto"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "fields": [
+              {
+                "jsonPath": "$count($.buckets_summary[*])",
+                "language": "jsonata",
+                "name": "Number of buckets"
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "A",
+            "urlPath": "/clusters/$cluster_uuid"
+          }
+        ],
+        "title": "Buckets",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Scroll down to \"Health Status\" to see the warnings.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#55a64bb0",
+                  "value": null
+                },
+                {
+                  "color": "#bc4b00",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 10,
+          "y": 5
+        },
+        "id": 117,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 20)) - 1)",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "warnings",
+            "refId": "A"
+          },
+          {
+            "cacheDurationSeconds": 5,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_ALERTMANAGER_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$count($)",
+                "language": "jsonata"
+              }
+            ],
+            "hide": false,
+            "method": "GET",
+            "queryParams": "",
+            "refId": "B",
+            "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=cluster_name=\"${cluster:querystring}\"&filter=severity=warning"
+          }
+        ],
+        "title": "Warnings",
+        "transformations": [
+          {
+            "id": "reduce",
+            "options": {
+              "reducers": [
+                "lastNotNull"
+              ]
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Field": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          },
+          {
+            "id": "reduce",
+            "options": {
+              "reducers": [
+                "sum"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Scroll down to \"Health Status\" for more information.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#55a64bb0",
+                  "value": null
+                },
+                {
+                  "color": "#124490",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 4,
+          "w": 3,
+          "x": 13,
+          "y": 5
+        },
+        "id": 118,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "center",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "text": {},
+          "textMode": "value"
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "scalar(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1) + \nscalar(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1) + \nscalar(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10) or absent(count(multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"} == 10)) - 1)",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "critical_alerts",
+            "refId": "A"
+          },
+          {
+            "cacheDurationSeconds": 5,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_ALERTMANAGER_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$count($)"
+              }
+            ],
+            "hide": false,
+            "method": "GET",
+            "queryParams": "",
+            "refId": "B",
+            "urlPath": "/alerts?filter=job=~\"couchbase_(prometheus|fluent_bit)$\"&filter=severity=info"
+          }
+        ],
+        "title": "Info",
+        "transformations": [
+          {
+            "id": "reduce",
+            "options": {
+              "reducers": [
+                "lastNotNull"
+              ]
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Field": true
+              },
+              "indexByName": {},
+              "renameByName": {}
+            }
+          },
+          {
+            "id": "reduce",
+            "options": {
+              "reducers": [
+                "sum"
+              ]
+            }
+          }
+        ],
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Couchbase recommends a minimum of 8 CPUs, 8GB RAM, and keeping RAM usage below 80%.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "displayMode": "auto",
+              "minWidth": 1
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "CPUs"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 60
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#e02f44b0",
+                        "value": null
+                      },
+                      {
+                        "color": "#55a64bb0",
+                        "value": 8
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "RAM Usage"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 120
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#55a64bb0",
+                        "value": null
+                      },
+                      {
+                        "color": "#e02f44b0",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Total RAM"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 120
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#e02f44b0",
+                        "value": null
+                      },
+                      {
+                        "color": "#55a64bb0",
+                        "value": 8
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Version"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Node"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Node Overview Dashboard",
+                      "url": "/d/Dx-2iOc7k/node-overview-7-x?orgId=1&${cluster:queryparam}&${cluster_uuid:queryparam}&var-node=${__data.fields.Node}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "State"
+              },
+              "properties": [
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "active": {
+                          "color": "#55a64bb0",
+                          "index": 0,
+                          "text": "Active"
+                        },
+                        "inactiveAdded": {
+                          "color": "dark-yellow",
+                          "index": 2,
+                          "text": "Pending Rebalance"
+                        },
+                        "inactiveFailed": {
+                          "color": "orange",
+                          "index": 1,
+                          "text": "Failed Over"
+                        },
+                        "unhealthy": {
+                          "color": "dark-red",
+                          "index": 3,
+                          "text": "Unhealthy"
+                        }
+                      },
+                      "type": "value"
+                    }
+                  ]
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 9
+        },
+        "id": 2,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Health Check Warnings"
+            }
+          ]
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$map($.nodes_summary[*].host, function($h) {\n    $replace(\n      $replace($h, /:\\d+$/, \"\")\n    , /https?:\\/\\//, \"\")\n})",
+                "language": "jsonata",
+                "name": "Node"
+              },
+              {
+                "jsonPath": "$map($.nodes_summary[*].version, function($m) {$join($append($split($m, \"-\")[0], $replace($split($m, \"-\")[2], \"e\", \"E\", 1)), \" \")})",
+                "language": "jsonata",
+                "name": "Version"
+              },
+              {
+                "jsonPath": "$.nodes_summary[*].os",
+                "language": "jsonpath",
+                "name": "Operating System"
+              },
+              {
+                "jsonPath": "$map($.nodes_summary[*], function($node) {\n  $join($sort($map($node.services, function ($svc) {\n    $svc = \"cbas\" ? \"Analytics\" :\n    $svc = \"n1ql\" ? \"Query\" :\n    $svc = \"eventing\" ? \"Eventing\" :\n    $svc = \"index\" ? \"Index\" :\n    $svc = \"fts\" ? \"Search\" :\n    $svc = \"kv\" ? \"Data\" :\n    $svc = \"backup\" ? \"Backup\" : $svc\n  })), \", \")\n})",
+                "language": "jsonata",
+                "name": "Services"
+              },
+              {
+                "jsonPath": "$.nodes_summary[*] ~> $map(function($node) {\n  $node.status = \"healthy\"\n  ? $node.cluster_membership\n  : $node.status\n})",
+                "language": "jsonata",
+                "name": "State"
+              },
+              {
+                "jsonPath": "$map($.nodes_summary, function($n) {$n.cpuCount ? $n.cpuCount : \"(unknown)\"})",
+                "language": "jsonata",
+                "name": "CPUs"
+              },
+              {
+                "jsonPath": "$map($.nodes_summary, function ($node) {\n  $node.mem_total ? $formatNumber($round($node.mem_total / 1024 / 1024 / 1024), \"####;(#0.00)\") : \"(unknown)\"\n})",
+                "language": "jsonata",
+                "name": "Total RAM"
+              },
+              {
+                "jsonPath": "$map($.nodes_summary, function ($node) {\n  ($node.mem_free and $node.mem_total) ? $round((1 - ($node.mem_free / $node.mem_total)) * 100, 2) : \"(unknown)\"\n})",
+                "language": "jsonata",
+                "name": "RAM Usage"
+              },
+              {
+                "jsonPath": "$.nodes_summary[*].node_uuid",
+                "language": "jsonpath",
+                "name": "uuid"
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "A",
+            "urlPath": "/clusters/$cluster_uuid"
+          }
+        ],
+        "title": "Nodes",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {}
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "uuid": true
+              },
+              "indexByName": {},
+              "renameByName": {
+                "Value": "Health Check Warnings",
+                "hostname": "Hostname"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "description": "Couchbase recommends at least one replica, keeping Resident Ratio above 10%, and Quota used below 80%.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "displayMode": "auto",
+              "minWidth": 1
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Quota"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 160
+                },
+                {
+                  "id": "unit",
+                  "value": "decgbytes"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Items Stored"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Quota Used"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 90
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#55a64bb0",
+                        "value": null
+                      },
+                      {
+                        "color": "#e02f44b0",
+                        "value": 80
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "unit",
+                  "value": "percent"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Replicas"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Active Resident Ratio"
+              },
+              "properties": [
+                {
+                  "id": "unit",
+                  "value": "percentunit"
+                },
+                {
+                  "id": "custom.width",
+                  "value": 160
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#e02f44b0",
+                        "value": null
+                      },
+                      {
+                        "color": "#55a64bb0",
+                        "value": 0.1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "index": 0,
+                          "text": "Fetching..."
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "# Indexes"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 80
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Bucket"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Overview Dashboard",
+                      "url": "/d/H8M3rE5nk/bucket-overview?${cluster:queryparam}﻿&var-bucket=${__data.fields.Bucket}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Replicas"
+              },
+              "properties": [
+                {
+                  "id": "custom.width",
+                  "value": 70
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "#ff780ab0",
+                        "value": null
+                      },
+                      {
+                        "color": "#55a64bb0",
+                        "value": 1
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "# Indexes"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                },
+                {
+                  "id": "thresholds",
+                  "value": {
+                    "mode": "absolute",
+                    "steps": [
+                      {
+                        "color": "text",
+                        "value": null
+                      },
+                      {
+                        "color": "#55a64bb3",
+                        "value": 0
+                      }
+                    ]
+                  }
+                },
+                {
+                  "id": "mappings",
+                  "value": [
+                    {
+                      "options": {
+                        "match": "null",
+                        "result": {
+                          "index": 0,
+                          "text": "Fetching..."
+                        }
+                      },
+                      "type": "special"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 14
+        },
+        "id": 48,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "frameIndex": 1,
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "Health Check Warnings"
+            }
+          ]
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "cacheDurationSeconds": 0,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_COUCHBASE_CLUSTER_MONITOR_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$.buckets_summary[*].name",
+                "name": "bucket"
+              },
+              {
+                "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $formatNumber($b.items, \"#,###\")\n})",
+                "language": "jsonata",
+                "name": "Items Stored"
+              },
+              {
+                "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $b.quota / 1024 / 1024 / 1024\n})",
+                "language": "jsonata",
+                "name": "Quota"
+              },
+              {
+                "jsonPath": "$map($.buckets_summary[*], function($b) {\n  $round($b.quota_used, 2)\n})",
+                "language": "jsonata",
+                "name": "Quota Used",
+                "type": "number"
+              },
+              {
+                "jsonPath": "$.buckets_summary[*].num_replicas",
+                "language": "jsonata",
+                "name": "Replicas"
+              }
+            ],
+            "method": "GET",
+            "queryParams": "",
+            "refId": "BaseData",
+            "urlPath": "/clusters/$cluster_uuid"
+          },
+          {
+            "cacheDurationSeconds": 300,
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "count by (bucket) (index_items_count{cluster_name=`$cluster`}) or max by (bucket) (clamp_max(kv_ops{cluster_name=`$cluster`}, 0))",
+            "fields": [
+              {
+                "jsonPath": ""
+              }
+            ],
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "method": "GET",
+            "queryParams": "",
+            "refId": "NumIndexes",
+            "urlPath": ""
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "min by (bucket) (kv_vb_perc_mem_resident_ratio{cluster_name=`$cluster`,state=\"active\"})",
+            "format": "table",
+            "hide": false,
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "ResidentRatio"
+          }
+        ],
+        "title": "Dataset",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {}
+          },
+          {
+            "id": "seriesToColumns",
+            "options": {
+              "byField": "bucket"
+            }
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true
+              },
+              "indexByName": {
+                "Items Stored": 1,
+                "Quota": 2,
+                "Quota Used": 3,
+                "Replicas": 5,
+                "Time": 6,
+                "Value #CheckWarnings": 8,
+                "Value #NumIndexes": 7,
+                "Value #ResidentRatio": 4,
+                "bucket": 0
+              },
+              "renameByName": {
+                "Value #CheckWarnings": "Health Check Warnings",
+                "Value #NumIndexes": "# Indexes",
+                "Value #ResidentRatio": "Active Resident Ratio",
+                "bucket": "Bucket"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 19
+        },
+        "id": 14,
+        "panels": [],
+        "title": "Health Status",
+        "type": "row"
+      },
+      {
+        "description": "",
+        "gridPos": {
+          "h": 5,
+          "w": 24,
+          "x": 0,
+          "y": 20
+        },
+        "id": 120,
+        "options": {
+          "alertName": "",
+          "dashboardAlerts": false,
+          "maxItems": 20,
+          "showInstances": false,
+          "sortOrder": 1,
+          "stateFilter": {
+            "firing": true,
+            "inactive": false,
+            "pending": true
+          }
+        },
+        "title": "Alert Manager Active Alerts",
+        "type": "alertlist"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "displayMode": "auto",
+              "filterable": true,
+              "minWidth": 1
+            },
+            "links": [],
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 0,
+                    "text": "Good"
+                  },
+                  "10": {
+                    "index": 3,
+                    "text": "Info"
+                  },
+                  "20": {
+                    "index": 1,
+                    "text": "Warn"
+                  },
+                  "30": {
+                    "index": 2,
+                    "text": "Alert"
+                  },
+                  "-1": {
+                    "index": 4,
+                    "text": "Missing"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "transparent",
+                  "value": -1
+                },
+                {
+                  "color": "#37872db0",
+                  "value": 0
+                },
+                {
+                  "color": "#c8c8ceb0",
+                  "value": 10
+                },
+                {
+                  "color": "#ff9830b0",
+                  "value": 20
+                },
+                {
+                  "color": "#f2495cb0",
+                  "value": 30
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "State"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Checker Documentation",
+                      "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "State"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Checker Documentation",
+                      "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 7,
+          "x": 0,
+          "y": 25
+        },
+        "id": 68,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "State"
+            }
+          ]
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "multimanager_cluster_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          },
+          {
+            "cacheDurationSeconds": 5,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_ALERTMANAGER_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$[*].labels.health_check_id",
+                "name": "id"
+              },
+              {
+                "jsonPath": "$[*].labels.health_check_name",
+                "language": "jsonpath",
+                "name": "name"
+              },
+              {
+                "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]\n",
+                "language": "jsonata",
+                "name": "Value"
+              }
+            ],
+            "hide": false,
+            "method": "GET",
+            "queryParams": "",
+            "refId": "B",
+            "urlPath": "/alerts?filter=cluster_name=${cluster:querystring}&filter=kind=cluster&filter=job=~\"couchbase_(prometheus|fluent_bit)$\""
+          }
+        ],
+        "title": "Cluster Check Status",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {}
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "cluster_name": true,
+                "cluster_uuid": true,
+                "instance": true,
+                "job": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 7,
+                "cluster_name": 1,
+                "cluster_uuid": 2,
+                "id": 3,
+                "instance": 5,
+                "job": 6,
+                "name": 4
+              },
+              "renameByName": {
+                "Value": "State",
+                "id": "ID",
+                "name": "Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "displayMode": "auto",
+              "filterable": true,
+              "minWidth": 1
+            },
+            "links": [],
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 0,
+                    "text": "Good"
+                  },
+                  "10": {
+                    "index": 3,
+                    "text": "Info"
+                  },
+                  "20": {
+                    "index": 1,
+                    "text": "Warn"
+                  },
+                  "30": {
+                    "index": 2,
+                    "text": "Alert"
+                  },
+                  "-1": {
+                    "index": 4,
+                    "text": "Missing"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "transparent",
+                  "value": -1
+                },
+                {
+                  "color": "#37872db0",
+                  "value": 0
+                },
+                {
+                  "color": "#c8c8ceb0",
+                  "value": 10
+                },
+                {
+                  "color": "#ff9830b0",
+                  "value": 20
+                },
+                {
+                  "color": "#f2495cb0",
+                  "value": 30
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "State"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Checker Documentation",
+                      "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Node"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "title": "Node Overview",
+                      "url": "/d/Dx-2iOc7k/node-overview-7-x?orgId=1&${cluster:queryparam}&$${cluster_uuid:queryparam}&var-node=${__data.fields.Node}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "State"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Checkers Documentation",
+                      "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 8,
+          "x": 7,
+          "y": 25
+        },
+        "id": 105,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "State"
+            }
+          ]
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "multimanager_node_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          },
+          {
+            "cacheDurationSeconds": 5,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_ALERTMANAGER_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$[*].labels.health_check_id",
+                "name": "id"
+              },
+              {
+                "jsonPath": "$[*].labels.health_check_name",
+                "language": "jsonpath",
+                "name": "name"
+              },
+              {
+                "jsonPath": "$[*].labels.node",
+                "language": "jsonpath",
+                "name": "node_name"
+              },
+              {
+                "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]",
+                "language": "jsonata",
+                "name": "Value"
+              }
+            ],
+            "hide": false,
+            "method": "GET",
+            "queryParams": "",
+            "refId": "B",
+            "urlPath": "/alerts?filter=cluster_name=${cluster:querystring}&filter=kind=node&filter=job=~\"couchbase_(prometheus|fluent_bit)$\""
+          }
+        ],
+        "title": "Node Check Status",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {}
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "cluster_name": true,
+                "cluster_uuid": true,
+                "instance": true,
+                "job": true,
+                "node_name": false,
+                "node_uuid": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 8,
+                "cluster_name": 1,
+                "cluster_uuid": 2,
+                "id": 3,
+                "instance": 5,
+                "job": 7,
+                "name": 4,
+                "node_name": 6,
+                "node_uuid": 9
+              },
+              "renameByName": {
+                "Value": "State",
+                "id": "ID",
+                "name": "Name",
+                "node_name": "Node"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "datasource": {
+          "type": "datasource",
+          "uid": "-- Mixed --"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "align": "center",
+              "displayMode": "auto",
+              "filterable": true,
+              "minWidth": 1
+            },
+            "links": [],
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "index": 0,
+                    "text": "Good"
+                  },
+                  "10": {
+                    "index": 3,
+                    "text": "Info"
+                  },
+                  "20": {
+                    "index": 1,
+                    "text": "Warn"
+                  },
+                  "30": {
+                    "index": 2,
+                    "text": "Alert"
+                  },
+                  "-1": {
+                    "index": 4,
+                    "text": "Missing"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "transparent",
+                  "value": null
+                },
+                {
+                  "color": "transparent",
+                  "value": -1
+                },
+                {
+                  "color": "#37872db0",
+                  "value": 0
+                },
+                {
+                  "color": "#c8c8ceb0",
+                  "value": 10
+                },
+                {
+                  "color": "#ff9830b0",
+                  "value": 20
+                },
+                {
+                  "color": "#f2495cb0",
+                  "value": 30
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Value"
+              },
+              "properties": [
+                {
+                  "id": "custom.displayMode",
+                  "value": "color-background-solid"
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "ID"
+              },
+              "properties": [
+                {
+                  "id": "custom.width"
+                },
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Checker Documentation",
+                      "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Bucket"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Bucket Overview",
+                      "url": "/d/H8M3rE5nk/bucket-overview?${cluster:queryparam}﻿&var-bucket=${__data.fields.Bucket}"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "State"
+              },
+              "properties": [
+                {
+                  "id": "links",
+                  "value": [
+                    {
+                      "targetBlank": true,
+                      "title": "Checker Documentation",
+                      "url": "https://docs.couchbase.com/cmos/current/health-checks.html#${__data.fields.ID}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 9,
+          "w": 9,
+          "x": 15,
+          "y": 25
+        },
+        "id": 106,
+        "options": {
+          "footer": {
+            "fields": "",
+            "reducer": [
+              "sum"
+            ],
+            "show": false
+          },
+          "showHeader": true,
+          "sortBy": [
+            {
+              "desc": true,
+              "displayName": "State"
+            }
+          ]
+        },
+        "pluginVersion": "8.3.6",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "multimanager_bucket_checker_status{cluster_uuid=\"$cluster_uuid\"}",
+            "instant": true,
+            "interval": "",
+            "legendFormat": "",
+            "refId": "A"
+          },
+          {
+            "cacheDurationSeconds": 5,
+            "datasource": {
+              "type": "marcusolsson-json-datasource",
+              "uid": "${DS_ALERTMANAGER_API}"
+            },
+            "fields": [
+              {
+                "jsonPath": "$[*].labels.health_check_id",
+                "name": "id"
+              },
+              {
+                "jsonPath": "$[*].labels.health_check_name",
+                "language": "jsonpath",
+                "name": "name"
+              },
+              {
+                "jsonPath": "$[*].labels.bucket",
+                "language": "jsonpath",
+                "name": "bucket"
+              },
+              {
+                "jsonPath": "[$.labels.severity ~> $map(function($a) {\n$a = \"critical\" ? 30 :\n$a = \"warning\" ? 20 :\n$a = \"info\" ? 10 : -1\n})]\n",
+                "language": "jsonata",
+                "name": "Value",
+                "type": "number"
+              }
+            ],
+            "hide": false,
+            "method": "GET",
+            "queryParams": "",
+            "refId": "B",
+            "urlPath": "/alerts?filter=cluster_name=${cluster:querystring}&filter=kind=bucket&filter=job=~\"couchbase_(prometheus|fluent_bit)$\""
+          }
+        ],
+        "title": "Bucket Check Status",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {}
+          },
+          {
+            "id": "merge",
+            "options": {}
+          },
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {
+                "Time": true,
+                "bucket": false,
+                "cluster_name": true,
+                "cluster_uuid": true,
+                "instance": true,
+                "job": true,
+                "node_name": true,
+                "node_uuid": true
+              },
+              "indexByName": {
+                "Time": 0,
+                "Value": 8,
+                "bucket": 5,
+                "cluster_name": 1,
+                "cluster_uuid": 2,
+                "id": 3,
+                "instance": 6,
+                "job": 7,
+                "name": 4
+              },
+              "renameByName": {
+                "Value": "State",
+                "bucket": "Bucket",
+                "id": "ID",
+                "name": "Name"
+              }
+            }
+          }
+        ],
+        "type": "table"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 34
+        },
+        "id": 110,
+        "panels": [],
+        "title": "System resources",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "line"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#73bf69b0",
+                  "value": null
+                },
+                {
+                  "color": "#ebb838b0",
+                  "value": 70
+                },
+                {
+                  "color": "#f2495cb0",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 35
+        },
+        "id": 114,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "sys_cpu_utilization_rate{cluster_name=${cluster:doublequote}}",
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "CPU Utilization",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "#73bf69b0",
+                  "value": null
+                },
+                {
+                  "color": "#ebb838b0",
+                  "value": 0.7
+                },
+                {
+                  "color": "#f2495cb0",
+                  "value": 0.8
+                }
+              ]
+            },
+            "unit": "percentunit"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 35
+        },
+        "id": 116,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "pluginVersion": "8.2.5",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "sys_mem_actual_used{cluster_name=${cluster:doublequote}} / \nsys_mem_total{cluster_name=${cluster:doublequote}}",
+            "format": "time_series",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Memory Usage",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 45
+        },
+        "id": 16,
+        "panels": [],
+        "title": "KPIs - Data Service",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "#3275d9b0",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ops"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 46
+        },
+        "id": 28,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "sum by (instance) (rate(kv_ops{cluster_name=\"$cluster\",op=\"get\"}[$__rate_interval]))",
+            "interval": "",
+            "legendFormat": "{{ instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Reads per second",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic",
+              "seriesBy": "max"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 46
+        },
+        "id": 102,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"GET\"}[$__rate_interval]))))",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "50th percentile (avg)",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"GET\"}[$__rate_interval]))))",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "99th percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"GET\"}[$__rate_interval]))))",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "99.9th percentile",
+            "refId": "B"
+          }
+        ],
+        "title": "Read latency",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "percentage",
+              "steps": [
+                {
+                  "color": "#3275d9b0",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ops"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 56
+        },
+        "id": 107,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "sum by (instance) (rate(kv_ops{cluster_name=\"$cluster\",op=\"set\"}[$__rate_interval]))",
+            "interval": "",
+            "legendFormat": "{{ instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Writes per second",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic",
+              "seriesBy": "last"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "s"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 56
+        },
+        "id": 108,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "max(histogram_quantile(0.50, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"SET\"}[$__rate_interval]))))",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "50th percentile (avg)",
+            "refId": "C"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "max(histogram_quantile(0.99, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"SET\"}[$__rate_interval]))))",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "99th percentile",
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "max(histogram_quantile(0.999, sum by(le,bucket) (rate(kv_cmd_duration_seconds_bucket{cluster_name=`$cluster`,opcode=\"SET\"}[$__rate_interval]))))",
+            "hide": false,
+            "interval": "",
+            "legendFormat": "99.9th percentile",
+            "refId": "B"
+          }
+        ],
+        "title": "Write Latency",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 66
+        },
+        "id": 41,
+        "panels": [],
+        "title": "KPIs - Query Service",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic",
+              "seriesBy": "last"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineStyle": {
+                "fill": "solid"
+              },
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ops"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 0,
+          "y": 67
+        },
+        "id": 20,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "sum by (instance) (rate(n1ql_requests{cluster_name=\"$cluster\"}[$__rate_interval]))",
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Queries Per Second",
+        "type": "timeseries"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic",
+              "seriesBy": "last"
+            },
+            "custom": {
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 40,
+              "gradientMode": "opacity",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "lineInterpolation": "linear",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "ms"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 10,
+          "w": 12,
+          "x": 12,
+          "y": 67
+        },
+        "id": 24,
+        "options": {
+          "legend": {
+            "calcs": [],
+            "displayMode": "list",
+            "placement": "bottom"
+          },
+          "tooltip": {
+            "mode": "single"
+          }
+        },
+        "pluginVersion": "8.2.3",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "exemplar": true,
+            "expr": "increase(n1ql_request_time{cluster_name=\"$cluster\"}[$__rate_interval]) / increase(n1ql_requests{cluster_name=\"$cluster\"}[$__rate_interval]) / 1000000\n",
+            "instant": false,
+            "interval": "",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "title": "Average Query Execution Time",
+        "type": "timeseries"
+      }
+    ],
+    "refresh": "15s",
+    "schemaVersion": 34,
+    "style": "dark",
+    "tags": [
+      "couchbase",
+      "couchbase-7",
+      "couchbase-cluster"
+    ],
+    "templating": {
+      "list": [
+        {
+          "current": {
+            "selected": false,
+            "text": "Prometheus",
+            "value": "Prometheus"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "label": "datasource",
+          "multi": false,
+          "name": "DS_PROMETHEUS",
+          "options": [],
+          "query": "prometheus",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "Alertmanager API",
+            "value": "Alertmanager API"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "multi": false,
+          "name": "DS_ALERTMANAGER_API",
+          "options": [],
+          "query": "marcusolsson-json-datasource",
+          "queryValue": "",
+          "refresh": 1,
+          "regex": "/Alertmanager/",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "Couchbase Cluster Monitor API",
+            "value": "Couchbase Cluster Monitor API"
+          },
+          "hide": 2,
+          "includeAll": false,
+          "multi": false,
+          "name": "DS_COUCHBASE_CLUSTER_MONITOR_API",
+          "options": [],
+          "query": "marcusolsson-json-datasource",
+          "refresh": 1,
+          "regex": "/Couchbase Cluster Monitor/",
+          "skipUrlSync": false,
+          "type": "datasource"
+        },
+        {
+          "current": {
+            "selected": true,
+            "text": "Cluster 0",
+            "value": "Cluster 0"
+          },
+          "datasource": {
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "definition": "label_values(multimanager_cluster_checker_status,cluster_name)",
+          "hide": 0,
+          "includeAll": false,
+          "label": "Cluster",
+          "multi": false,
+          "name": "cluster",
+          "options": [],
+          "query": {
+            "query": "label_values(multimanager_cluster_checker_status,cluster_name)",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "ca19a9c89cdb1e5931aff3969a79cd86",
+            "value": "ca19a9c89cdb1e5931aff3969a79cd86"
+          },
+          "datasource": {
+            "uid": "${DS_PROMETHEUS}"
+          },
+          "definition": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
+          "hide": 2,
+          "includeAll": false,
+          "multi": false,
+          "name": "cluster_uuid",
+          "options": [],
+          "query": {
+            "query": "multimanager_cluster_checker_status{cluster_name=\"$cluster\"}",
+            "refId": "StandardVariableQuery"
+          },
+          "refresh": 1,
+          "regex": "/[{,]cluster_uuid=\"(.+?)\"[,}]/",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-30m",
+      "to": "now"
+    },
+    "timepicker": {
+      "refresh_intervals": [
+        "15s",
+        "30s",
+        "1m",
+        "5m",
+        "15m",
+        "30m",
+        "1h",
+        "2h",
+        "1d"
+      ]
+    },
+    "timezone": "",
+    "title": "Single Cluster Overview",
+    "uid": "UEZRQMc7z",
+    "version": 2,
+    "weekStart": ""
+  }

@@ -1,0 +1,6 @@
+---
+groups:
+    - name: Custom
+      rules:
+          - alert: TestCustom
+            expr: custom

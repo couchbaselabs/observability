@@ -1,0 +1,42 @@
+= Cluster Monitor
+
+[abstract]
+The Couchbase Cluster Monitor provides monitoring insights that would not be otherwise possible with log, metric, and trace analysis.
+
+== Overview
+
+While it is possible to diagnose basic Couchbase Server issues through its metrics and logs, more in-depth troubleshooting and health checking requires in-depth analysis.
+The Couchbase Cluster Monitor is a component of CMOS that provides this level of insight.
+
+When running, it periodically performs a set of health checks against all the configured clusters, and outputs their results to the other components of CMOS - for example, displaying the overview of the cluster in xref:component-grafana.adoc[Grafana], or sending alerts via xref:component-alertmanager.adoc[Alertmanager].
+The full list of checks it performs can be found on the xref:health-checks.adoc[Health Checks] page.
+
+[NOTE]
+====
+The advanced health checks are only available for Couchbase Server Enterprise Edition clusters.
+====
+
+== Get Started
+
+The Couchbase Cluster Monitor is enabled by default in the xref:deployment-microlith.adoc[CMOS container].
+Its web interface can be accessed on `http://<CMOS HOST>:8080/couchbase/ui`.
+
+It can also be deployed stand-alone using Docker:
+
+[source, console]
+----
+$ docker pull couchbase/cluster-monitor
+$ docker run -d -p 7196-7197:7196-7197 --name cluster_monitor couchbase/cluster-monitor
+----
+
+It will now be accessible on http://localhost:7196.
+The default credentials are `admin`/`password`.
+These can be changed by adding `-e CB_MULTI_ADMIN_USER=username` and/or `-e CB_MULTI_ADMIN_PASSWORD=password` to the `docker run` command.
+
+== Next steps
+
+* xref:architecture.adoc[Architecture overview]
+* xref:health-agent.adoc[Health Agent]
+* xref:integrating-with-existing-deployments.adoc[Integrating with Existing Monitoring Pipelines]
+* xref:health-checks.adoc[Health Checks]
+* xref:cluster-monitor-api.adoc[Cluster Monitor API Reference]

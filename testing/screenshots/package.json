@@ -1,0 +1,16 @@
+{
+    "name": "cmos-screenshot-testing",
+    "version": "0.1.0",
+    "description": "",
+    "main": "index.js",
+    "private": true,
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Couchbase, Inc. <info@couchbase.com>",
+    "license": "Apache-2.0",
+    "dependencies": {
+      "@actions/github": "^5.0.0",
+      "puppeteer": "^14.1.1"
+    }
+  }

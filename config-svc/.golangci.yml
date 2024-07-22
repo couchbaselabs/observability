@@ -1,0 +1,36 @@
+---
+linters:
+    enable:
+        - asciicheck
+        - bodyclose
+        - deadcode
+        - dogsled
+        - gofmt
+        - gofumpt
+        - goimports
+        - gosimple
+        - ineffassign
+        - lll
+        - misspell
+        - nakedret
+        - nestif
+        - nolintlint
+        - prealloc
+        - revive
+        - rowserrcheck
+        - sqlclosecheck
+        - staticcheck
+        - structcheck
+        - unconvert
+        - unparam
+        - varcheck
+        - wastedassign
+        - whitespace
+linters-settings:
+    lll:
+        line-length: 120
+    nestif:
+        min-complexity: 6
+    errcheck:
+        exclude-functions:
+            - (*go.uber.org/zap.Logger).Sync
