@@ -190,6 +190,40 @@ async function configureCluster(config)
 
     
 }
+  async function addGrafanaDs(config) {
+
+
+
+
+
+
+    // Prepare the request data
+    const postData = JSON.stringify({
+      host: `${config.hostname}:${config.managementPort}`,
+      user: config.serverUsername,
+      password: config.serverPassword
+    });
+
+    // Basic Auth Token
+    const authToken = 'Basic ' + Buffer.from(`${config.cbmmUsername}:${config.cbmmPassword}`).toString('base64');
+
+    // Request options
+    const options = {
+
+      path: `${pathPrefix}/couchbase/api/v1/clusters`,
+      method: 'POST',
+      port:'8080',
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(postData),
+        'Authorization': authToken
+      }
+    };
+
+   await  sendHttpRequest(options, postData);
+
+
+}
 async function addConfiguration(config) {
 
    
