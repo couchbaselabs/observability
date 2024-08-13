@@ -132,7 +132,7 @@ all: container
 
 # Clean up any potential mess
 .PHONY: clean
-clean: images-clean
+clean: images-clean cbmon-ro
 	rm -rf $(ARTIFACTSDIR) $(BUILDDIR) microlith/bin microlith/cbmultimanager-docs microlith/docs microlith/config-svc
 	-rm microlith/git-commit.txt
 ifndef oss
