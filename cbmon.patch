@@ -1,0 +1,49 @@
+Index: upstream/cbmultimanager/ui/src/app/clusters/onprem/onprem.component.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/upstream/cbmultimanager/ui/src/app/clusters/onprem/onprem.component.html b/upstream/cbmultimanager/ui/src/app/clusters/onprem/onprem.component.html
+--- a/upstream/cbmultimanager/ui/src/app/clusters/onprem/onprem.component.html	
++++ b/upstream/cbmultimanager/ui/src/app/clusters/onprem/onprem.component.html	(date 1723560899622)
+@@ -53,7 +53,7 @@
+         <div class="cbui-table-cell flex-grow-1 flex-right text-right">
+           <i *ngIf="cluster.enterprise" class="icon fa-refresh margin-right-half grayblack-2"
+             (click)="refreshCluster(cluster.uuid); $event.stopPropagation()"></i>
+-          <i class="icon fa-trash grayblack-2" (click)="deleteCluster(cluster.uuid); $event.stopPropagation()"></i>
++
+         </div>
+       </div>
+       <div class="cbui-tablerow-expanded" *ngIf="expanedCluster.get(cluster.uuid)" (click)="$event.stopPropagation()">
+@@ -72,7 +72,7 @@
+             [routerLink]="[cluster.uuid, 'connections']">Connections</button>
+           <button [disabled]="!cluster.enterprise" [queryParamsHandling]="'preserve'"
+             [routerLink]="[cluster.uuid, 'logs']">Logs</button>
+-          <button class="outline" type="button" (click)="openEditClusterModal(cluster.uuid)">Edit</button>
++         
+         </div>
+       </div>
+     </section>
+@@ -81,4 +81,4 @@
+     [(page)]="paginator.currentPage" [pageSize]="paginator.pageSize" [maxSize]="3" [rotate]="true" [ellipses]="false"
+     [boundaryLinks]="true">
+   </ngb-pagination>
+-</div>
+\ No newline at end of file
++</div>
+Index: upstream/cbmultimanager/ui/src/app/clusters/clusters.component.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/upstream/cbmultimanager/ui/src/app/clusters/clusters.component.html b/upstream/cbmultimanager/ui/src/app/clusters/clusters.component.html
+--- a/upstream/cbmultimanager/ui/src/app/clusters/clusters.component.html	
++++ b/upstream/cbmultimanager/ui/src/app/clusters/clusters.component.html	(date 1723559141811)
+@@ -1,6 +1,6 @@
+ <mn-element-cargo depot="actions">
+   <div class="header-controls">
+-    <a id="addHealthCluster" class="outline resp-hide-sml" (click)="openAddClusterModal()"> ADD CLUSTER </a>
++
+   </div>
+ </mn-element-cargo>
+ <div class="main-content width-12 padding-right-min">
