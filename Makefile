@@ -120,7 +120,8 @@ PATCH_DIR = upstream/cbmultimanager/ui/src/app/
 # Target to apply the patch
 cbmon-ro:
 	@echo "Applying patch for cbmon-ro..."
-	patch -p1 < $(PATCH_FILE)
+	patch --force --ignore-whitespace -p1 < $(PATCH_FILE)
+
 
 # Ensure the Makefile is clean by disabling all implicit rules
 .SUFFIXES:
