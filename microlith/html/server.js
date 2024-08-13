@@ -254,8 +254,8 @@ console.info(responseBody);
 
 // Function to add a Grafana datasource
 async function addGrafanaDs(config) {
-  const grafanaKey = await createApiKey(config.hostname);
-  const dsname = config.hostname;
+  const grafanaKey = await createApiKey(config.alias);
+  const dsname = config.alias;
   const datasourceURL = `http://${config.hostname}:8093`;
   const grafanaURL = `${pathPrefix}/grafana/`;
 

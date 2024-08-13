@@ -29,6 +29,10 @@
         <form name="inputForm" id="inputForm">
           <fieldset>
             <div>
+              <label for="alias">Couchbase Server Alias:</label>
+              <input type="text" id="alias" x-model="alias" placeholder="" pattern="^\s*[^\S]+\s*$" required />
+            </div>
+            <div>
               <label for="serverHost">Couchbase Server Hostname:</label>
               <input type="text" id="serverHost" x-model="hostname" placeholder="" pattern="^\s*[^\S]+\s*$" required />
             </div>
@@ -165,6 +169,7 @@
           managementPort: "8091",
           useTLS: false,
           hostname: "",
+          alias: "",
           serverUsername: "",
           serverPassword: "",
           sgwHostname: "",
@@ -189,6 +194,10 @@
           loading: false,
  
           validate() {
+            if (this.alias.trim().length === 0) {
+              this.error = "Alias missing";
+              return false;
+            }
             if (this.hostname.trim().length === 0) {
               this.error = "Hostname invalid";
               return false;
@@ -254,6 +263,7 @@
          getConfig(){
          const config = {
                              hostname: this.hostname,
+                             alias: this.alias,
                              serverUsername: this.serverUsername,
                              serverPassword: this.serverPassword,
                              managementPort: this.managementPort,
