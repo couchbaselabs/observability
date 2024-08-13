@@ -1,63 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Couchbase Monitoring & Observability Stack (CMOS)</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8"/>
+<title>Couchbase CMOS Platform </title>
+<link href="styles.css" rel="stylesheet"/>
 </head>
 <body class="doc">
-  <header class="header fixed-top">
-    <div class="header-top-row">
-        <div class="container">
-            <nav class="navbar navbar-expand-md flex-nowrap justify-content-between navbar-new-top">
-                <ul class="navbar-brand-list">
-                  <li class="brand-logo">
-                    <a class="navbar-brand" href="https://www.couchbase.com">
-                      <img src="img/couchbase-logo.svg" alt="Couchbase">
-                    </a>
-                  </li>
-                </ul>
-            </nav>
-        </div>
-    </div>
-  </header>
-  <main class="container">
-  <h2>Documentation</h2>
-  <ul>
-    <li><a id="cmos-docs" href="docs/index.html">CMOS documentation</a></li>
-  </ul>
-  <h2>Configuration</h2>
-  <ul>
-    <li><a id="prometheus-config" href="promwebform.html">Add Cluster</a></li>
-    <li><a id="prometheus-alerts" href="prometheus/alerts/">Prometheus Alerts</a></li>
-    <li><a id="prometheus-rules" href="prometheus/rules/">Prometheus Rules</a></li>
-    <li><a id="prometheus-targets" href="prometheus/targets/">Prometheus Targets</a></li>
-  </ul>
-  <h2>Tools</h2>
-  <ul>
-    <li><a id="grafana" href="grafana/">Grafana</a></li>
-    <li><a id="prometheus" href="prometheus/">Prometheus</a></li>
-    <li><a id="jaeger" href="jaeger/">Jaeger</a></li>
-    <li><a id="alertmanager" href="alertmanager/">Alert Manager</a></li>
-  </ul>
+  <div style="display: flex; align-items: center; padding: 1rem; position: sticky; top: 0; background-color: white; z-index: 10; justify-content: center;">
+    <img src="img/couchbase-logo.svg" style="width: 150px; height: auto; margin-left: 40px;"/>
+  <div style="font-size: 1.5rem; font-weight: bold; color: #0074e0; text-align: center; flex-grow: 1;">Couchbase CMOS Platform</div>
+</div>
 
-  </main>
+<main class="container"  style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+  <h1>Overview</h1>
+<p>Couchbase Monitoring and Observability Stack (also known as CMOS) is a simple, out-of-the-box solution built using industry standard tooling to observe the state of a Couchbase cluster. To monitor a Couchbase cluster, you can add it using the add cluster option on the landing page. As soon as you add a cluster, you will see a Grafana URL where you can view inventory and metrics of Couchbase server clusters.CMOS comes with pre-installed dashboards to monitor the Couchbase cluster. Dashboards with tag couchbase-7 are relevant for Couchbase server version 7+. </p>
+<div x-data="generator">
 
-  <footer style="margin: 2em;">
-    <p style="text-align: left; margin-bottom: 1em;">
+  <button :disabled="false" onclick="window.location.href='promwebform.html' ;"class="btn btn-primary" style="padding: 10px 20px; font-weight: bold; background-color: #0074e0; border: none; border-radius: 5px; color: white; cursor: pointer;" >
+    Monitor new Cluster
+  </button>
+  <button :disabled="false" onclick="window.location.href='monitor/clusters'; "class="btn btn-grey-reverse" style="padding: 10px 20px; font-weight: bold; background-color: white; border: 2px solid #0074e0; border-radius: 5px; color: #0074e0; cursor: pointer;" type="button">
+    See all clusters
+  </button>
+</div>
+  <p></p>
+<div style="background-color: #f7f7f7; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<h2>Documentation</h2>
+<ul>
+<li><a href="docs/index.html" id="cmos-docs">CMOS documentation</a></li>
+</ul>
+<h2>Configuration</h2>
+<ul>
+
+<li><a href="prometheus/alerts/" id="prometheus-alerts">Prometheus Alerts</a></li>
+<li><a href="prometheus/rules/" id="prometheus-rules">Prometheus Rules</a></li>
+<li><a href="prometheus/targets/" id="prometheus-targets">Prometheus Targets</a></li>
+</ul>
+<h2>Tools</h2>
+<ul>
+<li><a href="grafana/" id="grafana">Grafana</a></li>
+<li><a href="prometheus/" id="prometheus">Prometheus</a></li>
+<li><a href="jaeger/" id="jaeger">Jaeger</a></li>
+<li><a href="alertmanager/" id="alertmanager">Alert Manager</a></li>
+</ul>
+
+</div>
+</main>
+<footer style="margin: 2em;">
+<p style="text-align: left; margin-bottom: 1em;">
       CMOS is licensed under the Apache-2.0 License and contains components under different licenses, including the <a href="https://www.couchbase.com/LA03012021">Couchbase License Agreement</a>.
       By using CMOS, you accept the Couchbase License Agreement.
       See <a href="docs/cmos/0.1/licensing.html">Licensing</a> for more details.
     </p>
-    <div class="footer-terms">
-      <div class="footer-terms-copyright">
-          <span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
-      </div>
-      <div class="footer-terms-links">
-        <a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
-        <a href="https://www.couchbase.com/support-policy">Support Policy</a>
-      </div>
-    </div>
-  </footer>
+<div class="footer-terms">
+<div class="footer-terms-copyright">
+<span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
+</div>
+<div class="footer-terms-links">
+<a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
+<a href="https://www.couchbase.com/support-policy">Support Policy</a>
+</div>
+</div>
+</footer>
 </body>
 </html>
