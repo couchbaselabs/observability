@@ -42,3 +42,5 @@ go version
 echo "Docker and Go installation completed successfully!"
 echo "You might need to log out and log back in to apply the Docker group changes."
 
+#docker tag couchbase/observability-stack:v1 pocan101/bbva-persistence-amd64
+docker run -v bbva:/prometheus -d -p 8080:8080 --name cmos -e PROMETHEUS_STORAGE_MAX_SIZE=12GB pocan101/cmos:bbva-amd64-persistency-3

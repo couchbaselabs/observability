@@ -207,7 +207,7 @@
           },
 
           init() { 
-             this.pathPrefix = "http://localhost:3301"; // Adjust this according to your server setup
+             this.pathPrefix = "http://localhost:3300"; // Adjust this according to your server setup
 
             
             this.$watch("useTLS", () => {
@@ -281,7 +281,7 @@
                            }
 
 
-                           await fetch(this.pathPrefix+'/api/configureCluster', {
+                           await fetch(this.pathPrefix+'/persistency/api/configureCluster', {
                              method: 'POST',
                              headers: {
                                'Content-Type': 'application/json'
@@ -305,7 +305,7 @@
 
           saveConfig(config) {
 
-            fetch(this.pathPrefix+'/api/saveConfig', {
+            fetch(this.pathPrefix+'/persistency/api/saveConfig', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
