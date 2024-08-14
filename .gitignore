@@ -39,7 +39,8 @@ node_modules
 .idea/
 .vscode/
 
-/upstream/cbmultimanager/
+
 /upstream/
 /upstream/cbmultimanager/
-/upstream/cbmultimanager/
+
+/upstream/couchbase-fluent-bit/
