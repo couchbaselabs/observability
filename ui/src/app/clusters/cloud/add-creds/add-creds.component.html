@@ -1,0 +1,54 @@
+<div class="dialog-med">
+  <div class="panel-header">
+    <h2>Add Cloud Credentials</h2>
+    <a (click)="activeModal.dismiss('X')" class="ui-dialog-titlebar-close modal-close"></a>
+  </div>
+  <div class="panel-content forms">
+    <form id="addCloudCreds" (ngSubmit)="submitForm()" class="margin-top-half" [formGroup]="addCloudCredsForm">
+      <div class="formrow">
+        <div class="row"><label for="name-input">Name</label></div>
+        <input id="name-input" type="text" formControlName="name" autocapitalize="off" autocomplete="off"
+          placeholder="Name..." maxlength="30" required>
+        <div class="error error-field" [hidden]="!name?.dirty || !name?.touched">
+            <div [hidden]="!name?.errors?.required">Name is required.</div>
+            <div [hidden]="!name?.errors?.maxLength">
+              Name can only be up to 30 characters.
+            </div>
+        </div>
+      </div>
+      <div class="formrow">
+        <div class="row"><label for="access-key-input">Access Key</label></div>
+        <input id="access-key-input" type="text" formControlName="accessKey" autocapitalize="off" autocomplete="off"
+          placeholder="Access Key ID..." required>
+        <div
+          class="error error-field"
+          [hidden]="!accessKey?.dirty || !accessKey?.touched || !accessKey?.errors?.required">
+          Access key is required.
+        </div>
+      </div>
+      <div class="formrow">
+        <div class="row"><label for="secret-input">Secret</label></div>
+        <input id="secret-input" type="password" formControlName="secret" autocapitalize="off" autocomplete="off"
+          placeholder="Secret..." required>
+        <div
+          class="error error-field"
+          [hidden]="!secret?.dirty || !secret?.touched || !secret?.errors?.required">
+          Secret is required.
+        </div>
+      </div>
+    </form>
+    <div class="error word-wrap margin-top-1" *ngIf="submitErr">{{submitErr}}</div>
+  </div>
+  <div class="panel-footer">
+    <a (click)="activeModal.dismiss()">Cancel</a>
+    <button type="submit" form="addCloudCreds" class="btn btn-outline-dark"
+      [disabled]="addCloudCredsForm.invalid">
+      <div class="button-spinner" *ngIf="submitting;else addSpan">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <ng-template #addSpan>Add</ng-template>
+    </button>
+  </div>
+</div>

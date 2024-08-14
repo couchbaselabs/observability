@@ -1,0 +1,42 @@
+<div *ngIf="loading" class="text-center flex-center">
+  <i class="icon fa-spinner fa-3x fa-lg fa-spin"></i>
+</div>
+<div *ngIf="!hasCloud && !loading" class="zero-content">
+  Click <a class="link-heavy" (click)="openAddCredsModal()">HERE</a> to add a set of Couchbase Cloud Credentials.
+</div>
+<div *ngIf="hasCloud && !loading && clusters.length === 0" class="zero-content">
+  No Couchbase Cloud Clusters.
+</div>
+<div *ngIf="clusters.length > 0 && !loading">
+  <div class="cbui-table margin-left-half">
+    <div class="cbui-table-header">
+      <span class="cbui-table-cell">Name</span>
+      <span class="cbui-table-cell">Nodes</span>
+      <span class="cbui-table-cell">Services</span>
+    </div>
+    <section *ngFor="let cluster of clusters" class="has-hover" (click)="cluster.expanded = !cluster.expanded">
+      <div class="cbui-tablerow">
+        <span class="cbui-table-cell">{{ cluster.name }}</span>
+        <span class="cbui-table-cell">{{ cluster.nodes }}</span>
+        <span class="cbui-table-cell wrap">
+          <span *ngFor="let service of cluster.services" class="label neutral nocaps">{{ service }}</span>
+        </span>
+      </div>
+      <div class="cbui-tablerow-expanded" *ngIf="cluster.expanded" (click)="$event.stopPropagation()">
+        <app-cluster-health [cluster]="cluster"></app-cluster-health>
+      </div>
+    </section>
+  </div>
+  <ngb-pagination
+    class="d-flex justify-content-end"
+    size="sm"
+    [(page)]="page"
+    (pageChange)="pageChange()"
+    [collectionSize]="cursor?.pages?.totalItems"
+    [pageSize]="pageSize"
+    [maxSize]="3"
+    [rotate]="true"
+    [boundaryLinks]="true"
+    [ellipses]="false">
+  </ngb-pagination>
+</div>
