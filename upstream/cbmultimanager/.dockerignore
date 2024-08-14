@@ -1,6 +1,0 @@
-Dockerfile
-.gitreview
-dist/
-test-dist/
-jenkins/
-ui/node_modules/

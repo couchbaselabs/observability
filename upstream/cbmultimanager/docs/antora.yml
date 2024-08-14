@@ -1,5 +1,0 @@
----
-name: cbmultimanager
-title: Couchbase Cluster Monitor
-version: '0.2'
-prerelease: 'true'
