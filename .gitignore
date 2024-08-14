@@ -39,3 +39,5 @@ node_modules
 .idea/
 .vscode/
 
+/upstream/cbmultimanager/
+/upstream/
