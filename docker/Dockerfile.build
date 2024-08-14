@@ -1,0 +1,18 @@
+ARG GO_VERSION
+FROM golang:${GO_VERSION}
+RUN apt-get update && apt-get install -y --no-install-recommends sqlcipher libssl-dev openssl openssh-client gcc-x86-64-linux-gnu gcc-aarch64-linux-gnu && \
+    rm -rf /var/lib/apt/lists/*
+
+ARG BUILD_PATH
+WORKDIR ${BUILD_PATH}
+
+COPY go.* ./
+RUN go mod download
+
+ARG VERSION
+ARG BLD_NUM
+ARG BINARY_TARGET
+ARG GOAL
+
+COPY . .
+RUN --mount=type=cache,target=/root/.cache/go-build make -e VERSION=${VERSION} BLD_NUM=${BLD_NUM} BINARY_TARGET=${BINARY_TARGET} ${GOAL}

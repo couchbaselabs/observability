@@ -1,0 +1,54 @@
+<div class="row">
+  <div ngbDropdown class="d-inline-block">
+    <button class="outline" ngbDropdownToggle>Status</button>
+    <div ngbDropdownMenu aria-labelledby="status filter">
+      <div class="flex-column" (click)="$event.stopPropagation()">
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="alertVerboseLevel"
+            [checked]="statusFilter.includes('alert')"
+            (change)="statusChanged('alert')"/>
+          <label class="form-check-label" for="alertVerboseLevel">Alert</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="warningVerboseLevel"
+            [checked]="statusFilter.includes('warn')"
+            (change)="statusChanged('warn')"/>
+          <label class="form-check-label" for="warningVerboseLevel">Warning</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="infoVerboseLevel"
+            [checked]="statusFilter.includes('info')"
+            (change)="statusChanged('info')"/>
+          <label class="form-check-label" for="infoVerboseLevel">Info</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="goodVerboseLevel"
+            [checked]="statusFilter.includes('good')"
+            (change)="statusChanged('good')"/>
+          <label class="form-check-label" for="goodVerboseLevel">Good</label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            id="missingVerboseLevel"
+            [checked]="statusFilter.includes('missing')"
+            (change)="statusChanged('missing')"/>
+          <label class="form-check-label" for="missingVerboseLevel">Missing</label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

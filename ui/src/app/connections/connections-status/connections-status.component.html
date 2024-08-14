@@ -1,0 +1,11 @@
+<div class="zero-content row flex-wrap items-space-around margin-bottom-1">
+  <div class="row"
+      [ngClass]="{'green-0 ': conns < 50000,
+                  'orange-0': conns < 60000 && conns >= 50000,
+                  'red-0': conns >= 60000}">
+      <div [ngbTooltip]= tooltipCheck()>
+      <strong class="text-larger margin-right"> {{ conns }}</strong>
+      <i class="icon fa-link fa-2x fa-lg"></i>
+    </div>
+  </div>
+</div>

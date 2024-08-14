@@ -1,0 +1,12 @@
+ARG NODE_VERSION
+FROM node:${NODE_VERSION}-slim
+
+WORKDIR /ui
+COPY ui/package.json ui/package-lock.json /ui/
+RUN npm install
+
+COPY ui/ /ui/
+RUN npm run build
+
+WORKDIR /ui/dist/app
+RUN tar -cf /tmp/ui-build.tar *
