@@ -53,7 +53,7 @@
         <div class="cbui-table-cell flex-grow-1 flex-right text-right">
           <i *ngIf="cluster.enterprise" class="icon fa-refresh margin-right-half grayblack-2"
             (click)="refreshCluster(cluster.uuid); $event.stopPropagation()"></i>
-          <i class="icon fa-trash grayblack-2" (click)="deleteCluster(cluster.uuid); $event.stopPropagation()"></i>
+
         </div>
       </div>
       <div class="cbui-tablerow-expanded" *ngIf="expanedCluster.get(cluster.uuid)" (click)="$event.stopPropagation()">
@@ -72,7 +72,7 @@
             [routerLink]="[cluster.uuid, 'connections']">Connections</button>
           <button [disabled]="!cluster.enterprise" [queryParamsHandling]="'preserve'"
             [routerLink]="[cluster.uuid, 'logs']">Logs</button>
-          <button class="outline" type="button" (click)="openEditClusterModal(cluster.uuid)">Edit</button>
+
         </div>
       </div>
     </section>
