@@ -38,6 +38,4 @@ node_modules
 .gitignore/
 .idea/
 .vscode/
-upstream/
-/upstream/
-/upstream/cbmultimanager/
+
