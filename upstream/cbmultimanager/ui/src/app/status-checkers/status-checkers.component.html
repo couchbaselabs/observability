@@ -1,0 +1,53 @@
+<mn-element-cargo depot="header">
+  {{ getClusterIdentifier() }}
+</mn-element-cargo>
+<mn-element-cargo depot="actions">
+  <div class="header-controls margin-right-half">
+    <a (click)="refreshCluster(clusterUUID)"><i class="icon fa-refresh"></i> REFRESH</a>
+  </div>
+</mn-element-cargo>
+<mn-back-btn [navigate]="'../clusters'"></mn-back-btn>
+<app-cluster-sub-nav></app-cluster-sub-nav>
+<div class="global-spinner" *ngIf="loading"></div>
+<div class="main-content width-12 padding-right-min" *ngIf="clusterResults">
+  <app-cluster-status-summary [cluster]="cluster" [count]="count"></app-cluster-status-summary>
+  <app-status-filter [statusFilter]="statusFilter" (statusChange)="updateStatusFilters($event)"></app-status-filter>
+  <div class="margin-top-1">
+    <div>
+      <h3>Cluster</h3>
+      <app-checker-table
+        [statuses]="filterByStatus(getClusterStatusResults())"
+        [definitions]="definitions"
+        [(expandedResults)]="expandedResults"
+        (dismissEvent)="dismiss($event)"
+      >
+      </app-checker-table>
+    </div>
+    <div>
+      <h3>Nodes</h3>
+      <app-node-checker-table
+        [definitions]="definitions"
+        [statusFilter]="statusFilter"
+        [statuses]="clusterResults?.status_results || []"
+        [nodes]="clusterResults?.nodes_summary || []"
+        [filterByStatus]="filterByStatus"
+        [(expandedResults)]="expandedResults"
+        (dismissEvent)="dismiss($event)"
+      >
+      </app-node-checker-table>
+    </div>
+    <div>
+      <h3>Buckets</h3>
+      <app-buckets-checker-table
+        [definitions]="definitions"
+        [statusFilter]="statusFilter"
+        [statuses]="clusterResults?.status_results || []"
+        [buckets]="clusterResults?.buckets_summary || []"
+        [filterByStatus]="filterByStatus"
+        [(expandedResults)]="expandedResults"
+        (dismissEvent)="dismiss($event)"
+        >
+      </app-buckets-checker-table>
+    </div>
+  </div>
+</div>

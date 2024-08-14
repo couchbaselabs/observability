@@ -1,0 +1,18 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    build-essential=12.8* cmake=3.16.* make=4.2.* \
+    libssl-dev ca-certificates=20211016~20.04.* \
+    flex=2.6.* bison=2:3.5.* curl=7.68.*
+
+RUN mkdir /work
+RUN curl -L -o "/work/fluent-bit.tar.gz" https://github.com/fluent/fluent-bit/archive/refs/tags/v1.8.9.tar.gz \
+    && mkdir /work/fluent-bit \
+    && tar zxfv /work/fluent-bit.tar.gz -C /work/fluent-bit --strip-components=1
+
+WORKDIR "/work/fluent-bit/build"
+
+RUN cmake -DFLB_EXAMPLES=Off -DFLB_SHARED_LIB=Off -DBUILD_SHARED_LIBS=Off -DFLB_IN_SYSTEMD=Off -DFLB_OUT_PGSQL=Off .. && \
+    make -j"$(nproc)"

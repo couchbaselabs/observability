@@ -1,0 +1,24 @@
+<mn-element-cargo depot="actions">
+  <div class="header-controls">
+    <a id="addHealthCluster" class="outline resp-hide-sml" (click)="openAddClusterModal()"> ADD CLUSTER </a>
+  </div>
+</mn-element-cargo>
+<div class="main-content width-12 padding-right-min">
+  <h4
+    class="disclosure inline"
+    (click)="onPrem = !onPrem"
+    [ngClass]="{ disclosed: onPrem }">Couchbase Server</h4>
+  <div *ngIf="onPrem" class="margin-top-1">
+    <app-onprem></app-onprem>
+  </div>
+
+  <div>
+    <h4
+      class="disclosure inline"
+      (click)="cloud = !cloud"
+      [ngClass]="{ disclosed: cloud }">Couchbase Cloud</h4>
+  </div>
+  <div *ngIf="cloud" class="margin-top-1">
+    <app-cloud></app-cloud>
+  </div>
+</div>
