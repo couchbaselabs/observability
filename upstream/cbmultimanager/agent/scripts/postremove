@@ -1,0 +1,7 @@
+#!/bin/sh
+
+FOLDER="/opt/cbhealthagent"
+
+if [ -f "$FOLDER" ]; then
+   rm -r "$FOLDER"
+fi

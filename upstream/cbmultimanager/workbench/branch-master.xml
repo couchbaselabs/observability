@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <remote
+      name="couchbaselabs-priv"
+      fetch="ssh://git@github.com/couchbaselabs/"
+      review="review.couchbase.org"/>
+
+  <remote
+      name="couchbase"
+      fetch="git://github.com/couchbase/"
+      review="review.couchbase.org"/>
+
+  <default
+      revision="master"/>
+
+  <project
+      name="ns_server"
+      remote="couchbase"/>
+
+  <project
+      name="cbmultimanager"
+      remote="couchbaselabs-priv">
+    <copyfile
+        src="workbench/Makefile"
+        dest="Makefile"/>
+  </project>
+
+</manifest>
