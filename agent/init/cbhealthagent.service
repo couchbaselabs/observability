@@ -1,0 +1,15 @@
+[Unit]
+Description=Couchbase Health Agent
+Requires=couchbase-server.service
+After=couchbase-server.service
+
+[Service]
+Type=simple
+ExecStart=/opt/cbhealthagent/cbhealthagent-linux-amd64
+WorkingDirectory=/opt/cbhealthagent
+User=couchbase
+Group=couchbase
+AmbientCapabilities=CAP_SYSLOG
+
+[Install]
+WantedBy=multi-user.target

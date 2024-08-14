@@ -1,0 +1,39 @@
+<div class="global-spinner" *ngIf="loadingDismissals"></div>
+<div *ngIf="dismissals.size !== 0">
+  <div class="row flex-right margin-bottom-1">
+    <div class="filter-input-group">
+      <input
+        type="text"
+        maxlength="256"
+        placeholder="Search term"
+        (click)="$event.stopPropagation()"
+        class="filter-input"
+      />
+      <span class="icon fa-search-minus"></span>
+    </div>
+  </div>
+  <div class="margin-bottom-1" *ngFor="let entry of dismissals | keyvalue">
+    <h4
+      class="disclosure inline"
+      [ngClass]="{ disclosed: disclosed.get(entry.key) }"
+      (click)="disclosed.set(entry.key, !disclosed.get(entry.key))"
+    >
+      {{ entry.key }}
+    </h4>
+    <div class="cbui-table" *ngIf="disclosed.get(entry.key)">
+      <div class="cbui-table-header">
+        <span class="cbui-table-cell">for</span>
+        <span class="cbui-table-cell">until</span>
+        <span class="cbui-table-cell"></span>
+      </div>
+      <section *ngFor="let dismissal of entry.value" class="cbui-tablerow">
+        <span class="cbui-table-cell">{{ getDismissalTarget(dismissal) }}</span>
+        <span class="cbui-table-cell">{{ getUntil(dismissal) }}</span>
+        <span class="cbui-table-cell flex-grow-1 text-right">
+          <i class="icon fa-trash has-hover" (click)="deleteDismissal(dismissal.id); $event.stopPropagation()"></i>
+        </span>
+      </section>
+    </div>
+  </div>
+</div>
+<div *ngIf="dismissals.size === 0 && !loadingDismissals" class="zero-content">The are no dismissals.</div>

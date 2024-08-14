@@ -1,0 +1,45 @@
+<mn-back-btn [navigate]="'../clusters'"></mn-back-btn>
+<mn-element-cargo depot="header">
+  {{ getClusterIdentifier() }}
+</mn-element-cargo>
+<app-cluster-sub-nav></app-cluster-sub-nav>
+<div class="global-spinner" *ngIf="loading"></div>
+<app-connections-status [conns]="totalConns"></app-connections-status>
+<div *ngIf="!loading && connectionsByAgent.length === 0" class="zero-content">No connections</div>
+<div *ngIf="!loading && connectionsByAgent.length > 0" class="">
+  <div class="cbui-table margin-left-half">
+    <div class="cbui-table-header">
+      <div class="cbui-table-cell">Agent</div>
+      <div class="cbui-table-cell">Version</div>
+      <div class="cbui-table-cell">Connections</div>
+      <div class="cbui-table-cell">IPs</div>
+    </div>
+    <section
+      *ngFor="let val of paginator.getPage()"
+      class="has-hover"
+      (click)="expanded.set(val[0], !expanded.get(val[0]))"
+    >
+      <div class="cbui-tablerow">
+        <span class="cbui-table-cell">{{ val[1].sdk || 'Unknown'}}</span>
+        <span class="cbui-table-cell">{{ val[1].version || 'Unknown'}}</span>
+        <span class="cbui-table-cell">{{ val[1].conns }}</span>
+        <span class="cbui-table-cell">{{ val[1].sources.size }}</span>
+      </div>
+      <div class="cbui-tablerow-expanded" *ngIf="expanded.get(val[0])">
+        <strong>Client IPs:</strong> {{ getIPS(val[1]) }}
+      </div>
+    </section>
+  </div>
+  <ngb-pagination
+    class="d-flex justify-content-end"
+    size="sm"
+    [collectionSize]="paginator.contentLength()"
+    [(page)]="paginator.currentPage"
+    [pageSize]="paginator.pageSize"
+    [maxSize]="3"
+    [rotate]="true"
+    [ellipses]="false"
+    [boundaryLinks]="true"
+  >
+  </ngb-pagination>
+</div>

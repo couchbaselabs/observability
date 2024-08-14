@@ -1,0 +1,142 @@
+#!/usr/bin/env groovy
+
+import hudson.model.Result
+import hudson.model.Run
+import jenkins.model.CauseOfInterruption.UserInterruption
+
+pipeline {
+    agent { label "ubuntu-18.04&&master" }
+
+    environment {
+        GO_TARBALL_URL = "https://dl.google.com/go/go1.19.linux-amd64.tar.gz"
+        GOLINT_VERSION = "v1.49.0"
+
+        GOROOT = "${WORKSPACE}/go"
+        GOBIN = "${GOROOT}/bin"
+        PATH = "${PATH}:${GOBIN}:${WORKSPACE}/bin"
+
+        PROJECT = "${WORKSPACE}/cbmultimanager"
+    }
+
+    stages {
+        stage("Setup") {
+            steps {
+                script {
+                    // Configure Gerrit Trigger
+                    properties([pipelineTriggers([
+                        gerrit(
+                            serverName: "review.couchbase.org",
+                            gerritProjects: [
+                                [
+                                    compareType: "PLAIN", disableStrictForbiddenFileVerification: false,
+                                    pattern: "cbmultimanager", branches: [[ compareType: "PLAIN", pattern: "master" ]]
+                                ],
+                            ],
+                            triggerOnEvents: [
+                                commentAddedContains(commentAddedCommentContains: "reverify"),
+                                draftPublished(),
+                                patchsetCreated(excludeNoCodeChange: true)
+                            ]
+                        )
+                    ])])
+                }
+
+                timeout(time: 5, unit: "MINUTES") {
+                    // Install Golang locally
+                    sh "wget -q -O- ${GO_TARBALL_URL} | tar xz"
+
+                    // get golangci-lint binary
+                    sh "curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/$GOLINT_VERSION/install.sh | sh -s -- -b ${GOBIN} $GOLINT_VERSION"
+                    sh "golangci-lint --version"
+
+                    withEnv(["GO111MODULE=off"]) {
+                        // Unit test reporting
+                        sh "go get github.com/jstemmer/go-junit-report"
+
+                        // Coverage reporting
+                        sh "go get github.com/axw/gocov/gocov"
+                        sh "go get github.com/AlekSi/gocov-xml"
+                    }
+
+                    // clone project
+                    sh "git clone git@github.com:couchbaselabs/cbmultimanager.git"
+
+                    // Fetch the commit we are testing
+                    dir("${PROJECT}") {
+                        sh "git fetch ssh://buildbot@review.couchbase.org:29418/cbmultimanager ${GERRIT_REFSPEC}"
+                        sh "git checkout FETCH_HEAD"
+                    }
+                }
+            }
+        }
+
+        stage("Lint") {
+            steps {
+                timeout(time: 5, unit: "MINUTES") {
+                    dir("${PROJECT}") {
+                        sh "golangci-lint run --timeout 5m"
+                    }
+                }
+                timeout(time: 5, unit: "MINUTES") {
+                    dir("${PROJECT}") {
+                        sh "tools/licence-lint.sh"
+                    }
+                }
+                timeout(time: 5, unit: "MINUTES") {
+                    dir("${PROJECT}") {
+                        sh "go run tools/validate-checker-docs.go"
+                    }
+                }
+            }
+        }
+
+        stage("Test") {
+            steps {
+                // Create somewhere to store our coverage/test reports
+                sh "mkdir -p reports"
+
+                dir("${PROJECT}") {
+                    // Clean the Go test cache
+                    sh "go clean -testcache"
+
+                    // Run the unit testing
+                    sh "2>&1 go test -v -timeout=15m -count=1 -coverprofile=coverage.out -tags noui ./... | tee ${WORKSPACE}/reports/test.raw"
+
+                    // Convert the test output into valid 'junit' xml
+                    sh "cat ${WORKSPACE}/reports/test.raw | go-junit-report > ${WORKSPACE}/reports/test.xml"
+
+                    // Convert the coverage report into valid 'cobertura' xml
+                    sh "gocov convert coverage.out | gocov-xml > ${WORKSPACE}/reports/coverage.xml"
+                }
+            }
+        }
+
+        stage("Benchmark") {
+            steps {
+                dir("${PROJECT}") {
+                    // Run the benchmarks without running any tests by setting '-run='^$'
+                    sh "go test -timeout=15m -count=1 -run='^\044'  -tags noui -bench=Benchmark ./..."
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            // Post the test results
+            junit allowEmptyResults: true, testResults: "reports/test.xml"
+
+            // Post the test coverage
+            cobertura autoUpdateStability: false, autoUpdateHealth: false, onlyStable: false, coberturaReportFile: "reports/coverage.xml", conditionalCoverageTargets: "70, 10, 30", failNoReports: false, failUnhealthy: true, failUnstable: true, lineCoverageTargets: "70, 10, 30", methodCoverageTargets: "70, 10, 30", maxNumberOfBuilds: 0, sourceEncoding: "ASCII", zoomCoverageChart: false
+        }
+
+        cleanup {
+            // We don't need the build cache interfering with any subsequent builds
+            sh "go clean --cache --testcache"
+
+            // Remove the workspace
+            deleteDir()
+        }
+    }
+}
+
