@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# Generate auto-generated code
-make generate
