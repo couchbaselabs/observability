@@ -1,0 +1,31 @@
+<div class="cbui-table inner-table margin-top-half">
+    <div class="cbui-table-header">
+      <span class="cbui-table-cell text-fine">Host</span>
+      <span class="cbui-table-cell text-fine">Version</span>
+      <span class="cbui-table-cell text-fine">Services</span>
+    </div>
+    <div class="cbui-table-body">
+        <section *ngFor="let node of paginator.getPage()">
+            <div class="cbui-tablerow" [ngClass]="[getNodeHealth(node)]">
+                <span class="cbui-table-cell">
+                  <a href="{{node.host}}">{{node.host}}</a>
+                </span>
+                <span class="cbui-table-cell">{{node.version | formatVersion}}</span>
+                <span class="cbui-table-cell wrap">
+                  <span *ngFor="let service of node.services" class="label neutral nocaps">{{service}}</span>
+                </span>
+            </div>
+        </section>
+    </div>
+</div>
+<ngb-pagination
+  class="d-flex justify-content-end"
+  size="sm"
+  [collectionSize]="paginator.contentLength()"
+  [(page)]="paginator.currentPage"
+  [pageSize]="paginator.pageSize"
+  [maxSize]="1"
+  [rotate]="true"
+  [ellipses]="false"
+  [boundaryLinks]="true">
+</ngb-pagination>

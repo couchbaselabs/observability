@@ -1,0 +1,16 @@
+FROM centos:7
+
+RUN yum -y install epel-release-7-11 && \
+    yum -y install bison-3.0.* cmake3-3.* flex-2.5.* gcc-4.8.* \
+    gcc-c++-4.8.* make-3.82* openssl-devel-1.0.* &&\
+    yum clean all
+
+RUN mkdir /work
+RUN curl -L -o "/work/fluent-bit.tar.gz" https://github.com/fluent/fluent-bit/archive/refs/tags/v1.8.9.tar.gz  \
+    && mkdir /work/fluent-bit \
+    && tar zxfv /work/fluent-bit.tar.gz -C /work/fluent-bit --strip-components=1
+
+WORKDIR "/work/fluent-bit/build"
+
+RUN cmake3 -DFLB_EXAMPLES=Off -DFLB_SHARED_LIB=Off -DBUILD_SHARED_LIBS=Off -DFLB_IN_SYSTEMD=Off -DFLB_OUT_PGSQL=Off .. && \
+    make -j"$(nproc)"

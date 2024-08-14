@@ -1,0 +1,1061 @@
+---
+# Remember to run `make generate` after editing this file!
+activeCluster:
+  name: activeCluster
+  id: CB90016
+  title: All Nodes are Active
+  type: api
+  area: cluster
+  short_description: Checks that all nodes are available for a cluster.
+  background: |
+    The Couchbase Cluster Manager periodically contacts all nodes in the cluster to check their status.
+    If a node fails to respond, it is marked as inactive.
+  condition: |
+    One or more inactive nodes are present.
+  remediation:  |
+    Rebalance the unhealthy nodes out of the cluster, and replace them if appropriate.
+    Examine the other health check results to identify the potential cause, or contact Couchbase Technical Support for a root cause analysis.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/clusters-and-availability.html[Clusters and Availability],
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/failover.html#detecting-node-failure[Detecting Node Failure]
+asymmetricalCluster:
+  name: asymmetricalCluster
+  id: CB90019
+  title: Asymmetrical Cluster
+  type: api
+  area: cluster
+  short_description: Checks that nodes running the same service are equally provisioned.
+  background: |
+    Couchbase recommends that all nodes in the cluster have identical hardware.
+    Since clients may access any node in the cluster to service a request, differing hardware can lead to unpredictable application performance.
+  condition: |
+    Nodes with differing amounts of CPUs or RAM detected.
+  remediation: |
+    Ensure all nodes have identical hardware.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+autoFailoverEnabled:
+  name: autoFailoverEnabled
+  id: CB90007
+  title: Auto-Failover Enabled
+  type: api
+  area: cluster
+  short_description: An autofailover timeout should be set to allow unresponsive nodes to failover automatically.
+  background: |
+    Couchbase Server can automatically fail over dead or unhealthy nodes, to ensure continuity of cluster operations.
+    If auto-failover is disabled, node failure will result in some requests being unable to be serviced.
+  condition: |
+    Auto-failover is disabled.
+  remediation: |
+    Adjust auto-failover settings
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/automatic-failover.html[Automatic Failover]
+autoFailoverForVM:
+  name: autoFailoverForVM
+  id: CB90083
+  title: Auto Failover Limit for VM
+  type: system
+  area: node
+  agent: true
+  short_description: Checks if the auto failover limit for Virtual Machines is above a threshold of 45 seconds.
+  background: |
+    Due to the fact that the VM is running on top of a hypervisor or container engine, there will be a minor CPU performance overhead.
+    In certain circumstances, the default auto-failover timeout in Couchbase can cause some issues.
+    It is recommended that you change the threshold from 30 seconds (the default), to 45, or even 60 seconds, depending on how CPU-intensive your workload is.
+  condition: |
+    Auto-failover on virtual machine is set under 30 seconds.
+  remediation: |
+    Adjust auto-failover timeout to 45 or above, depending on your workload.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/best-practices-vm.html[Auto-Failover Threshold]
+analyticsJRE:
+  name: analyticsJRE
+  id: CB90088
+  title: Analytics JRE Check
+  type: api
+  area: node
+  short_description: Checks that the Analytics Service is running in a supported Java Runtime Environment.
+  background: |
+    The Analytics Service requires a Java Runtime Environment to be installed. Only HotSpot-based JVMs, which includes the ones provided by OpenJDK and Oracle's JDK, are supported.
+  condition: |
+    The Java Runtime Environment is not supported.
+  remediation: |
+    Install a Java Runtime Environment version provided by a supported vendor.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/install-environments.html
+backupLocationCheck:
+  name: backupLocationCheck
+  id: CB90022
+  title: Backup Location Check
+  type: api
+  area: cluster
+  min_version: 7.0.0
+  short_description: Checks that no node lost access to a backup repository in the last 3 days.
+  background: |
+    If the Couchbase Backup Service cannot access the backup archive location, backup failures may result, leading to reduced durability.
+  condition: |
+    The number of backup location errors has increased in the past three days.
+  remediation: |
+    Ensure the Backup Service has consistent access to its archive location.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/services-and-indexes/services/backup-service.html[Backup Service]
+backupTaskOrphaned:
+  name: backupTaskOrphaned
+  id: CB90023
+  title: Orphaned Backup Tasks
+  type: api
+  area: cluster
+  min_version: 7.0.0
+  short_description: Checks that no backup tasks have been orphaned in the last 3 days.
+  background: |
+    An "orphaned" backup task is a task that is marked as running, but no node is actually executing it.
+    This can happen if that node cannot for some reason send a status report to the Backup Service leader (for example it suffered a power cut or a network outage).
+    These may be transient errors, but seeing a consistent increase in the number of orphaned tasks can indicate a problem with the Backup Service.
+  condition: |
+    The number of orphaned backup tasks has increased in the past three days.
+  remediation: |
+    Review the Backup Service logs to identify the cause of the problem, or contact Couchbase Technical Support.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/services-and-indexes/services/backup-service.html[Backup Service]
+badRedundantIndex:
+  name: badRedundantIndex
+  id: CB90031
+  title: Bad Redundant Index
+  type: api
+  area: cluster
+  short_description: Checks for redundant indexes on the same node, which provides no effective redundancy.
+  background: |
+    When using index replicas, the Index Service will place replicas on different nodes to ensure their availability in the event of a node failover.
+    However equivalent indexes do not have this protection, and it is possible to place two or more equivalent indexes on the same node.
+    This provides effectively no redundancy, as should that node be failed over all the equivalent indexes will be lost and queries may start failing or experience severely degraded performance.
+  condition: |
+    Multiple equivalent indexes on the same node.
+  remediation: |
+    Move the indexes to different Index Service nodes.
+    Consider using index replicas instead.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/services-and-indexes/indexes/index-replication.html[Index Availability and Performance]
+belowMinMem:
+  name: belowMinMem
+  id: CB90034
+  title: Below Minimum Node Memory
+  type: api
+  area: node
+  short_description: Checks if the node has less than the recommended 4GB of memory.
+  background: |
+    The recommended minimum memory for each node in your Couchbase Server cluster to have is 4 Gigabytes.
+    Any less than this and Couchbase Server could display unwanted behaviour.
+  condition: |
+    A node has less than 4GB of RAM.
+  remediation: |
+    Upgrade the node's hardware.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/pre-install.html[System Resource Requirements]
+bucketCountChecks:
+  name: bucketCountChecks
+  id: CB90020
+  title: Bucket Count Checks
+  type: api
+  area: cluster
+  short_description: 'Checks if the number of buckets is appropriate. Recommendations: 1
+    core/bucket, max 30 buckets(from 6.5)/ 10 buckets(<6.5).'
+  background: |
+    Couchbase recommends that there are at least as many CPUs on each node as there are buckets.
+    If fewer CPUs are available, the buckets will compete with each other for resources, potentially causing degraded performance.
+    If this is not possible due to resource constraints, Couchbase recommends that each bucket have at least 0.4 CPU cores on Couchbase Server 6.x and below, and 0.2 on 7.x.
+    Additionally, no more than 10 (on versions below 6.5) or 30 (on 6.5 and later) total buckets are supported.
+    When these limits are reached, the cluster can get failures across nodes.
+  condition: |
+    Fewer CPUs than buckets detected on the node.
+    Less than or equal to 0.4 cores/bucket on 6.x and less than or equal to 0.2 cores/bucket on 7.x.
+    More than 30 buckets in the cluster.
+  remediation: |
+    Upgrade the nodes' hardware or reduce the number of buckets.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+bucketDCPPaused:
+  name: bucketDCPPaused
+  id: CB90024
+  title: DCP active writes
+  type: api
+  area: bucket
+  min_version: 6.5.0
+  max_version: 6.6.2
+  short_description: Checks that a buckets DCP queue is not in a paused state.
+  background: |
+    known bug, https://issues.couchbase.com/browse/MB-46482[MB-46482], can manifest itself as DCP replications pausing.
+    This can result in slow replication or rejected writes.
+  condition: |
+    Warns if the size of synchronous writes accepted is higher than the maximum DCP buffer. Upgraded to an alert if the DCP replication is paused.
+  remediation: |
+    Upgrade to Couchbase Server 6.6.3. If this is not viable, contact Couchbase Technical Support.
+  further_reading: |
+    https://issues.couchbase.com/browse/MB-46482[MB-46482]
+bucketMemoryUsage:
+  name: bucketMemoryUsage
+  id: CB90017
+  title: Bucket Memory Usage
+  type: api
+  area: bucket
+  short_description: Checks that bucket memory usage is not above 95% of memory quota for more than 5 seconds.
+  background: |
+    If a bucket's memory usage crosses the high water mark, ejection will be triggered.
+    By default, the high water mark is set to 85% of the bucket's quota.
+    If the bucket's memory usage exceeds this for a long period of time, it is possible that not enough data can be ejected to bring it down below the low water mark, and there is a risk of an out-of-memory condition.
+  condition: |
+    The bucket's memory usage is at or above 95% of its quota for more than 5 seconds.
+  remediation: |
+    Increase the bucket's memory quota.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html[Memory]
+checkPortStatus:
+  name: checkPortStatus
+  id: CB90082
+  title: Couchbase Ports Status Check
+  type: system
+  area: node
+  agent: true
+  short_description: Checks if any couchbase port is occupied by another service.
+  background: |
+    If the couchbase ports used by different couchbase processes are allocated to other processes then it can cause bind failures.
+    Also couchbase ports which are reserved for future use must be left alone, or can cause failures in upgrades.
+  condition: |
+    Couchbase port is used by another process.
+  remediation: |
+    Allocate another port not used by couchbase to the other process.
+checkProcessLimits:
+  name: checkProcessLimits
+  id: CB90058
+  title: Open File / Process Limits
+  type: system
+  area: node
+  agent: true
+  short_description: Checks that the open file/process limits for Couchbase Server are high enough.
+  background: |
+    Linux processes have a limit of how many file descriptors (files, network sockets, etc.) can be open at a time, and how many processes a user can create.
+    These limits are in place to prevent issues such as fork bombs, but the default values are often too low on many distros.
+    Exceeding these limits can cause hard-to-diagnose issues, including Couchbase Server failing to start.
+    
+    You can verify the values of the limits using the `ulimit -n` and `ulimit -u` commands respectively.
+  condition: |
+    Open file / process limits for the Couchbase Server `babysitter` process are below the recommended value.
+  remediation: |
+    Increase the open file / process limit for the Couchbase Server processes.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/rhel-suse-install-intro.html#setting-max-process-limits[Setting Max Process Limits],
+    https://docs.couchbase.com/server/current/install/non-root.html#establish-limits-for-user-processes-and-file-descriptors[Establish Limits for User Processes and File Descriptors]
+conntrackFull:
+  name: conntrackFull
+  id: CB90076
+  title: Connection Tracking Table Full
+  type: log
+  area: node
+  agent: true
+  short_description: Checks if the connection tracking table is full
+  background: |
+    If The connection tracking table (`conntrack`) becomes full, packets may be lost and clients might start timing out.
+    The connection table being full can be a sign that clients are not properly closing connections to Couchbase Server.
+  condition: |
+    Connection table full message found in `dmesg`.
+  remediation: |
+    Check your clients are closing connections to Couchbase Server properly.
+cpuSoftLockup:
+  name: cpuSoftLockup
+  id: CB90075
+  title: CPU Soft Lockup
+  type: log
+  area: node
+  agent: true
+  short_description: Checks if a task/kernel thread has not released the CPU it was using after a period of time
+  background: |
+    Soft lockup is a symptom of a task/kernel thread using and not releasing CPU for a period of time.
+    It can usually occur as a kernel bug or when deploying Couchbase Server in an overcommitted Virtual Environment.
+  condition: |
+    Soft lockup message detected in Linux 'dmesg'.
+  remediation: |
+    If deploying Couchbase Server in a Virtual Environment check if said enviroment is overcommitted.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/best-practices-vm.html[Deployment Considerations for Virtual Machines and Containers]
+cushionManagedFail:
+  name: cushionManagedFail
+  id: CB90044
+  title: Managed Service Crash
+  type: log
+  area: node
+  agent: true
+  short_description: Check if service crash messages are seen in the logs.
+  background: |
+    The "babysitter" is part of Couchbase Server's cluster manager which is responsible for maintaining a variety of Couchbase Server processes.
+    If any of the processes managed by the babysitter die, it is responsible for restarting them.
+  condition: |
+    A process managed by babysitter crashes.
+  remediation: |
+    A process can crash for a number of reasons, so if it happens once or twice it is not indicative of a Couchbase Server issue.
+    However, if it is happening repeatedly or you do notice disruption in your cluster please contact Couchbase Technical Support.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/cluster-manager.html[Cluster Manager]
+dataLoss:
+  name: dataLoss
+  id: CB90011
+  title: Data Loss Messages
+  type: api
+  area: cluster
+  short_description: Checks that no data loss messages have occurred.
+  background: |
+    If a node is failed over, and the active vBuckets stored on it have no replicas, data loss can result.
+    Note that this is only possible if manually performing a hard failover, as Couchbase Server will never perform an automatic failover if there is a risk of data loss.
+  condition: |
+    Messages indicating data loss due to failover detected in the cluster logs.
+  remediation: |
+    Contact Couchbase Technical Support _immediately_.
+    Isolate the failed-over node, and do not make _any_ changes to its configuration or attempt to recover it unless instructed by Couchbase Technical Support.
+    There is a risk of permanent, irrecoverable data loss.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/hard-failover.html[Hard Failover]
+defaultVBucketCount:
+  name: defaultVBucketCount
+  id: CB90079
+  title: Default VBucket Count
+  type: api
+  area: cluster
+  short_description: Checks if the VBucket Count is default (64 on macOS, 1024 on Windows/Linux)
+    Required for production clusters. Can cause failures across clusters and services.
+  background: |
+    The vBucket count set in cluster configuration, if changed from default value (64 on macOS, 1024 on Windows/Linux) can cause failures across nodes and services.
+    This may impact cluster integrity and is not recommended in production environment.
+  condition: |
+    Non-default vBucket number
+  remediation: |
+    Set the vBucket number back to the default value (64 on macOS, 1024 on Windows/Linux).
+developerPreviewCheck:
+  name: developerPreviewCheck
+  id: CB90059
+  title: Developer Preview
+  type: api
+  area: cluster
+  short_description: Checks if Developer Preview mode is enabled
+  background: |
+    Developer Preview provides early access to features which may become generally available (“GA”) in future releases and enables you to experiment with these features to get a sense of how they work.
+    However, this mode is unsupported, so it should not be used in production.
+  condition: |
+    Cluster is in Developer Preview mode.
+  remediation: |
+    If this is a development only cluster, you do not need to do anything, otherwise create a new cluster that is not in Developer Preview mode.
+  further_reading: |
+    https://docs.couchbase.com/server/current/developer-preview/preview-mode.html[Developer Preview Mode]
+duplicateNodeUUID:
+  name: duplicateNodeUUID
+  id: CB90063
+  title: Duplicate Node UUID Check
+  type: api
+  area: cluster
+  short_description: Checks if a cluster contains nodes with non-unique UUIDs
+  background: |
+    Couchbase expects the node UUID to uniquely identify each node for Cluster Manager purposes.
+    If this condition is not met, serious issues with rebalances and other operations may be experienced.
+  condition: |
+    At least one node UUID is not unique in the cluster.
+  remediation: |
+    Contact Couchbase Technical support.
+  further_reading: |
+    https://issues.couchbase.com/browse/MB-17132[MB-17132]
+emptyGroup:
+  name: emptyGroup
+  id: CB90035
+  title: Empty Server Group
+  type: api
+  area: cluster
+  short_description: Checks if cluster has any empty server groups.
+  background: |
+    There is no practical use for having an empty server group, so if one is present it is most likely a mistake.
+  condition: |
+    One or more server groups exist that do not contain any nodes.
+  remediation: |
+    Remove the empty server group.
+  further_reading: |
+    https://docs.couchbase.com/server/current/manage/manage-groups/manage-groups.html[Manage Server Groups]
+freeMem:
+  name: freeMem
+  id: CB90045
+  title: Used Memory Percentage Check
+  type: api
+  area: node
+  short_description: Checks if a node has more than 90% of its memory used up
+  background: |
+    If more than 90% of RAM is in use then Couchbase Server performance may be negatively affected.
+    This is because there needs to be enough RAM for the operating system and to avoid swapping.
+  condition: |
+    More than 90% of available RAM is used.
+  remediation: |
+    Add more RAM to the node, or review the resource usage of other applications on the server.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html[Service Memory Quotas],
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+globalAutoCompaction:
+  name: globalAutoCompaction
+  id: CB90006
+  title: Auto Compaction Enabled
+  type: api
+  area: cluster
+  short_description: Production environments should have auto-compaction enabled to ensure
+    disk space is reclaimed.
+  background: |
+    Couchbase Server uses an append-only store on disk to ensure data durability.
+    This needs to be compacted periodically, otherwise performance can be degraded or the disk can fill up.
+    This is done automatically by default.
+  condition: |
+    No auto-compaction threshold set.
+  remediation: |
+    Enable auto-compaction in the cluster settings
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html#append-only-writes-and-auto-compaction[Storage]
+gsiLogLevel:
+  name: gsiLogLevel
+  id: CB90027
+  title: Index Service Log Level
+  type: api
+  area: cluster
+  short_description: Checks that the Index Service log level has not been altered from its
+    default.
+  background: |
+    While the log level of the Index Service can be configured, only the default setting of `Info` is supported.
+    Higher levels can mean valuable information is missing from the logs, while lower levels can mean the logs are rotated more frequently.
+    Both of these can make it difficult to diagnose issues with the Index Service.
+  condition: |
+    Index Service log level is set to a non-default value.
+  remediation: |
+    Change the log level to `Info`.
+  further_reading: |
+    https://docs.couchbase.com/server/current/manage/manage-settings/general-settings.html#index-settings-via-rest[Index Settings]
+histogramUnderflow:
+  name: histogramUnderflow
+  id: CB90077
+  title: Timing Histogram Underflow (MB-40967)
+  type: api
+  area: bucket
+  short_description: On Couchbase Server versions between 6.5.0 and 6.6.0, operation timing
+    histograms may stop returning data after 2.1B operations are performed.
+  background: |
+    A known issue, https://issues.couchbase.com/browse/MB-40967[MB-40967^] affecting Couchbase Server versions between 6.5.0 and 6.6.0 inclusive, can cause _command timing histograms_ (which track how long Data Service operations take) to no longer return any data once 2.1 billion operations have been executed.
+    This means that there will no longer be any data on how long operations take, which may make it more difficult to diagnose Couchbase Server performance issues.
+    
+    This issue is fixed in version 6.6.1.
+  condition: |
+    Informational if a susceptible version is in use.
+    Upgraded to a warning if the threshold is breached or exceeded for GET or SET operations.
+  remediation: |
+    Upgrade to Couchbase Server 6.6.1 or later.
+    If this is not feasible, you can use https://docs.couchbase.com/server/6.6/cli/cbstats/cbstats-reset.html[`cbstats reset`] to reset these histograms, however the issue will reoccur once 2.1 billion operations are performed again.
+  further_reading: |
+    https://issues.couchbase.com/browse/MB-40967[MB-40967^]
+imbalancedPartitions:
+  name: imbalancedPartitions
+  id: CB90069
+  title: Imbalanced Index Partition
+  type: api
+  area: cluster
+  short_description: Checks if a partition of an index is 20% larger than partitions for
+    the same index on other nodes.
+  background: |
+    If an index partition is hashed on an invalid field, it results in one partition being larger than the partitions on other Index Service nodes.
+    This means a large chunk of a node's memory will be used by the Index Service which can then cause the `indexer` process to be killed by the Linux OOM killer.
+  condition: |
+    An Index Service node contains an index partition which is 20% larger than partitions for the same index on other nodes.
+  remediation: |
+    Recreate imbalanced index to redistribute index partition data, making sure the index partitions are hashed to valid fields.
+  further_reading: |
+    https://docs.couchbase.com/server/current/n1ql/n1ql-language-reference/index-partitioning.html[Index Partitioning]
+indexWithNoRedundancy:
+  name: indexWithNoRedundancy
+  id: CB90030
+  title: Index With No Redundancy
+  type: api
+  area: cluster
+  short_description: Checks that all indexes have either replicas or equivalent indexes.
+  background: |
+    By default, a Global Secondary Index is only situated on one Index Service node, meaning that if that node is failed over for any reason, queries using that index will either use a primary index (causing severely degraded performance) or start failing completely.
+    In production use cases we always recommend indexes have either replicas or equivalent indexes (indexes with a different name but the same definition).
+  condition: |
+    An index with no replicas or equivalent indexes is detected.
+  remediation: |
+    Either increase the number of replicas or add equivalent indexes.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/services-and-indexes/indexes/index-replication.html[Index Availability and Performance]
+kvConnectionLimit:
+  name: kvConnectionLimit
+  id: CB90072
+  title: Data Service Connection Limit
+  type: log
+  area: node
+  short_description: Checks if any client connections are rejected because the Data Service
+    connection limit is exceeded.
+  documented_in_observability: true
+largeCheckpoints:
+  name: largeCheckpoints
+  id: CB90029
+  title: Large Checkpoints
+  type: api
+  area: bucket
+  short_description: Checks that bucket checkpoints are not unexpectedly large.
+  background: |
+    Checkpoints are a feature of the Database Change Protocol (DCP) to avoid needing to re-stream large amounts of data.
+    Large checkpoints can indicate issues with the Data Service, potentially necessitating a Couchbase Server upgrade to a version where these are resolved.
+  condition: |
+    vBucket checkpoints are larger than either 50Mb or 1% of the bucket quota.
+  remediation: |
+    Contact Couchbase Technical Support for analysis.
+  further_reading: |
+    https://docs.couchbase.com/server/current/cli/cbstats/cbstats-checkpoint.html[checkpoint]
+longDcpStreamNames:
+  name: longDcpStreamNames
+  id: CB90033
+  title: Long DCP Stream Names
+  type: api
+  area: cluster
+  short_description: Checks if any DCP stream names exceed 200 characters.
+  documented_in_observability: true
+maxBuckets:
+  name: maxBuckets
+  id: CB90008
+  title: Number of Buckets
+  type: api
+  area: cluster
+  short_description: If the number of buckets is larger than 30 this can impact performance.
+  background: |
+    Couchbase Server supports up to 30 buckets in a cluster as of version 6.5.
+    Going above this number may cause performance degradation.
+  condition: |
+    More than 30 buckets in the cluster.
+  remediation: |
+    Reduce the number of buckets in the cluster.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/buckets.html[Buckets]
+maxTTLBucket:
+  name: maxTTLBucket
+  id: CB90078
+  title: Max TTL of Bucket
+  type: api
+  area: bucket
+  min_version: 5.5.0
+  max_version: 6.0.3
+  short_description: Checks for a known issue (MB-37643) relating to the maximum TTL of buckets
+  background: |
+    For versions 5.5.x and <6.0.4, the max TTL for an item in a bucket is applied incorrectly if it exceeds 30 days.
+    Instead of the max TTL being applied as an offset from the current time, it is instead applied as an offset from when memcached started.
+    This will cause all of the documents inside the bucket to expire at the same time.
+    
+    This issue is fixed in version 6.0.4.
+  condition: |
+    Maximum TTL equals or exceeds 30 days on a susceptible version.
+  remediation: |
+    Upgrade to Couchbase Server 6.0.4 or later. If not feasible at the moment, use absolute time if the TTL exceeds 30 days.
+  further_reading: |
+    https://issues.couchbase.com/browse/MB-37643[MB-37643]
+memcachedFragmentation:
+  name: memcachedFragmentation
+  id: CB90039
+  title: Memcached Fragmentation Check
+  type: api
+  area: bucket
+  short_description: Checks if memcached's heap is fragmented over a certain threshold,rendering
+    that percentage of memory useless
+  background: |
+    When the memcached heap gets fragmented, all fragmented memory becomes irretrievable and cannot be returned to the OS.
+    If memory keeps getting fragmented for an extended period of time then the amount of usable memory becomes limited.
+  condition: |
+    Over 15% of the memcached heap is fragmented.
+  remediation: |
+    Contact Couchbase Technical Support for analysis.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html[Memory]
+missingActiveVBuckets:
+  name: missingActiveVBuckets
+  id: CB90009
+  title: Missing Active vBuckets
+  type: api
+  area: bucket
+  short_description: Checks that the are no missing active vBuckets.
+  background: |
+    Couchbase Server buckets are sharded into a number of vBuckets, which are distributed among the nodes in the cluster.
+    This check verifies that all vBuckets in the cluster are in the correct state.
+  condition: |
+    Buckets reported missing by the Cluster Manager.
+  remediation: |
+    Rebalance the cluster, adding new nodes as necessary.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/vbuckets.html[vBuckets]
+missingIndexPartitions:
+  name: missingIndexPartitions
+  id: CB90068
+  title: Missing Index Partition
+  type: api
+  area: cluster
+  short_description: Checks if an index partition is missing from a cluster
+  background: |
+    If a index is missing index partitions, it can cause queries that use this index to fail which can lead to client errors.
+  condition: |
+    If the number of index partitions present is less than what was originally defined when making the index.
+  remediation: |
+    Check if a node has been failed over.
+    If this is not the case, recreate the index again and contact Couchbase Technical Support.
+  further_reading: |
+    xref:7.0@server:n1ql:n1ql-language-reference:index-partitioning[Index Partitioning]
+missingReplicaVBuckets:
+  name: missingReplicaVBuckets
+  id: CB90010
+  title: Missing Replica vBuckets
+  type: api
+  area: bucket
+  short_description: Checks that the are no missing replica vBuckets.
+  background: |
+    Couchbase Server buckets are sharded into a number of vBuckets, which are distributed among the nodes in the cluster.
+    This check verifies that all vBuckets in the cluster are in the correct state.
+  condition: |
+    Buckets reported missing by the Cluster Manager.
+  remediation: |
+    Rebalance the cluster, adding new nodes as necessary.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/vbuckets.html[vBuckets]
+mixedMode:
+  name: mixedMode
+  id: CB90004
+  title: Mixed Version Cluster
+  type: api
+  area: cluster
+  short_description: Checks that production clusters have homogeneous versions.
+  background: |
+    While Couchbase Server does support running multiple versions as part of a cluster, this is only recommended during an upgrade, rather than as a long-term state.
+    The cluster features available will be those of the lowest-version node.
+  condition: |
+    Multiple nodes detected with differing Couchbase Server versions.
+  remediation: |
+    Upgrade all nodes to the same version.
+    If this alert is present during an upgrade, it can safely be disregarded until the upgrade is complete.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/upgrade-feature-availability.html[Feature Availability during Upgrade],
+    https://docs.couchbase.com/server/current/install/upgrade.html[Upgrade]
+n2nCommunication:
+  name: n2nCommunication
+  id: CB90064
+  title: Node-to-Node Communication Issues
+  type: system
+  area: node
+  agent: yes
+  short_description: Checks that all nodes can communicate with each other on their services' ports.
+  background: |
+    Couchbase Server requires a number of ports to be open between all nodes in the cluster.
+    If these ports are not open, it can cause various problems as the services cannot communicate with each other.
+    
+    Note that this list of ports is different to the ports needed for application clients to communicate with the cluster.
+  condition: |
+    A node detects that it cannot establish TCP connections to another node.
+    
+    [NOTE]
+    ====
+    Not all internal ports are currently checked, so there may still be intra-cluster communication issues even if this health check is good.
+    You should ensure that all ports on the below page are unblocked between all nodes.
+    ====
+  remediation: |
+    Verify the ports listed in the alert, and ensure there are no firewalls or other network configuration issues between the listed nodes.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/install-ports.html[Couchbase Server Ports]
+nodeDiskSpace:
+  name: nodeDiskSpace
+  id: CB90021
+  title: Disk Space Usage
+  type: api
+  area: node
+  short_description: Checks that disk usage per node is not at or above 90%.
+  background: |
+    Couchbase Server nodes should always have sufficient disk space to store all data.
+    If a node runs out of storage, it will stop accepting writes and may potentially be automatically failed over.
+  condition: |
+    Over 90% disk usage on the node.
+  remediation: |
+    Increase the amount of disk space available.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/storage.html[Storage]
+nodeSwapUsage:
+  name: nodeSwapUsage
+  id: CB90018
+  title: Node Swap Usage
+  type: api
+  area: node
+  short_description: Checks that a node's system swap usage is not above 0.
+  background: |
+    Couchbase Server should always have sufficient RAM available without needing to use swap space.
+    Couchbase Server can manage its own disk storage using ejection, so its memory being in swap can negatively affect performance.
+  condition: |
+    Node swap usage above zero.
+    Upgraded to an alert if swap usage is above 90% of available swap memory.
+  remediation: |
+    Increase available RAM on the nodes.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html[Memory]
+nodesForBucket:
+  name: nodesForBucket
+  id: CB90081
+  title: Nodes for Bucket
+  type: api
+  area: bucket
+  short_description: Checks if a bucket has fewer nodes than Data Service nodes in the cluster.
+  background: |
+    The Data Service nodes on a cluster may not host a particular bucket due to rebalance issues or a node not being accessible.
+    If a bucket is not present on all data nodes then it would introduce bias among the buckets and will be problematic as biased nodes will have to serve more requests for the bucket.
+    This may cause slow requests and compromise cluster integrity.
+  condition: |
+    One or more buckets not present on every data service node in the cluster.
+  remediation: |
+    Verify all nodes are online, and rebalance if necessary.
+    If this still persists, contact Couchbase Technical Support.
+nonGABuild:
+  name: nonGABuild
+  id: CB90014
+  title: Generally Available Build
+  type: api
+  area: node
+  short_description: Checks that the build is recognised.
+  background: |
+    Only generally available, officially released builds of Couchbase Server are supported, unless you have a specific agreement with Couchbase to use a non-GA build in production.
+  condition: |
+    Node running non-GA build of Couchbase Server detected.
+  remediation: |
+    Upgrade the node to a generally available build of Couchbase Server.
+    If you have a specific agreement with Couchbase to operate a non-GA build (for example a Maintenance Patch), it is safe to disregard this warning.
+oneServicePerNode:
+  name: oneServicePerNode
+  id: CB90001
+  title: One Service Per Node
+  type: api
+  area: node
+  short_description: Checks that each node in the cluster is running only 1 service. Running
+    multiple services in one node can affect performance.
+  background: |
+    Couchbase recommends that only one Multi-Dimensional Scaling service per node is run in production.
+    Colocating services increases the overall resource requirements of the nodes and can cause resource contention, leading to degraded performance.
+  condition: |
+    More than one service detected per node.
+  remediation: |
+    Move services to their own dedicated nodes.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+oomKills:
+  name: oomKills
+  id: CB90060
+  title: Out-Of-Memory Killer Activity
+  type: log
+  area: node
+  agent: true
+  short_description: Checks for OOM-killer activity on the Couchbase Server nodes.
+  background: |
+    Linux will engage the Out-Of-Memory (OOM) Killer when the system is critically low on available RAM.
+    Since the OOM killer will kill the fewest possible processes to reclaim as much memory as possible, and since Couchbase Server processes generally use a lot of memory, they are often the first to be killed.
+    
+    Even if Couchbase Server processes are not themselves killed, OOM killer activity is generally a sign that the node may be underprovisioned.
+  condition: |
+    OOM kill messages are seen in the kernel log (`dmesg`).
+  remediation: |
+    Review available memory on the node.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html[Memory],
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+replicavBucketNumber:
+  name: replicavBucketNumber
+  id: CB90015
+  title: Number of Nodes for Replication
+  type: api
+  area: bucket
+  short_description: Checks the number of nodes is suitable for the number of replicas enabled.
+  background: |
+    Depending on the requested number of replica vBuckets, a certain number of Couchbase Server nodes are recommended - 5 or more for 2 replicas, or 10 or more for 3 replicas.
+    While it is possible to use 2 or 3 replicas with fewer nodes, this can cause performance degradation.
+  condition: |
+    Insufficient nodes present to support the requested number of replicas.
+  remediation: |
+    Add more nodes to the cluster, or reduce the number of replicas.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+residentRatioTooLow:
+  name: residentRatioTooLow
+  id: CB90013
+  title: Resident Ratio
+  type: api
+  area: bucket
+  short_description: Checks that the buckets Resident Ratio is more than 10%.
+  background: |
+    The resident ratio of a bucket is the percentage of its data that is stored in RAM.
+    Low resident ratio values may be an indication of insufficient resource allocation to the cluster.
+    However, they may not directly indicate a problem.
+  condition: |
+    Resident ratio below 10%.
+    Upgraded to an alert if it is below 5%.
+  remediation: |
+    Increase the bucket's memory quota.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/buckets-memory-and-storage/memory.html[Memory]
+segfaults:
+  name: segfaults
+  id: CB90042
+  title: Segmentation Faults
+  type: log
+  area: node
+  agent: true
+  short_description: Checks if segmentation faults are seen in system logs, which can indicate
+    system instability.
+  background: |
+    A segmentation fault (segfault) occurs when a process reads invalid or restricted memory.
+    Segmentation faults are nearly always a bug, and often cause processes to crash, leading to degraded availability and system instability.
+  condition: |
+    Segmentation faults seen in the system logs.
+  remediation: |
+    Examine the system logs.
+    If a Couchbase process was the one to crash, contact Couchbase Technical Support.
+serverQuota:
+  name: serverQuota
+  id: CB90005
+  title: Server Quota
+  type: api
+  area: node
+  short_description: Memory allocated to Couchbase Server should not be grater than 80%
+    if system memory.
+  background: |
+    Each Couchbase Server node has a memory quota, which limits how much memory it is allowed to use.
+    We recommend that this is set no higher than 80-90% of the host's memory, otherwise the operating system may not have enough memory remaining to function.
+  condition: |
+    Memory allocated to Couchbase Server nodes is greater than 80% of the hosts' memory.
+  remediation: |
+    Increase the amount of memory on the nodes, or reduce the Couchbase Server memory quota.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/sizing-general.html[Sizing Guidelines]
+serviceStatus:
+  name: serviceStatus
+  id: CB90026
+  title: Service Status
+  type: api
+  area: node
+  short_description: Check that the ports used for client communication for each nodes services
+    are available.
+  background: |
+    Couchbase Server uses a number of ports to communicate between clients and services.
+    If these are blocked by a firewall, this can cause connection failures for clients or other cluster problems.
+  condition: |
+    Cluster Monitor cannot communicate with the node on the specified ports.
+  remediation: |
+    Ensure there is no firewall blocking communication. Review your infrastructure for networking issues.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/install-ports.html[Couchbase Server Ports]
+sharedFilesystems:
+  name: sharedFilesystems
+  id: CB90028
+  title: Services Sharing File Systems
+  type: api
+  area: node
+  short_description: Checks that no two services are on the same file system.
+possibleSharedStorage:
+  name: possibleSharedStorage
+  id: CB90084
+  title: Possible shared storage
+  type: log
+  area: node
+  agent: true
+  short_description: |
+    Checks for evidence the cluster nodes are using a shared storage layer.
+    A shared storage layer introduces a single point of failure to a cluster and should be avoided.
+  background: |
+    Couchbase Server ensures high availability by removing single points of failure from the deployment.
+    If a shared storage layer (such as SAN) is used in the deployment then issues with this part of the stack could lead to cluster-wide adverse effects.
+  condition: |
+    Dmesg output indicates that a shared storage device layer might be present in the cluster.
+  remediation: |
+    Ensure each node has an independent storage layer to remove a single point of failure.
+singleOrTwoNodeCluster:
+  name: singleOrTwoNodeCluster
+  id: CB90002
+  title: Single or Two Node Cluster
+  type: api
+  area: cluster
+  short_description: Checks that production clusters have at least three nodes as clusters
+    with fewer nodes cannot use some features.
+  background: |
+    Couchbase recommends that all production clusters have at least three nodes.
+    Clusters with fewer than three nodes mean that automatic failover is not possible and the number of bucket replicas is limited to 0 or 1, leading to reduced durability.
+  condition: |
+    Only one or two nodes detected in the cluster.
+  remediation: |
+    Add more nodes to the cluster.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/deployment-considerations-lt-3nodes.html[About Deploying Clusters With Less Than Three Nodes]
+supportedOS:
+  name: supportedOS
+  id: CB90040
+  title: Supported/Deprecated OS
+  type: system
+  area: node
+  agent: true
+  short_description: Checks if the OS in use is supported for the version of Couchbase Server in use.
+  background: |
+    Each version of Couchbase Server supports certain operating systems.
+    Using unsupported OS versions may cause various issues, including Couchbase Server or its services failing to start, and may render your cluster unsupportable.
+  condition: |
+    A node has an operating system version not supported for the version of Couchbase Server in use.
+  remediation: |
+    Upgrade the operating system of the node.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/install-platforms.html[Supported Operating Systems]
+supportedVersion:
+  name: supportedVersion
+  id: CB90012
+  title: Server Version Supportability
+  type: api
+  area: node
+  short_description: Checks that the Couchbase Server Version is within the support and maintenance periods.
+  background: |
+    Couchbase Server versions are only supported for a period of time as defined in the Enterprise Software Support Policy.
+    Outside this period, limited or no support can be provided by Couchbase Technical Support.
+    We recommend you always run a supported version of Couchbase Server to take advantage of your Enterprise Support agreement.
+  condition: |
+    Nodes running unsupported versions of Couchbase Server detected.
+  remediation: |
+    Upgrade the nodes in question to a supported version of Couchbase Server. If this is not possible, contact your Couchbase Account Manager.
+  further_reading: |
+    https://www.couchbase.com/support-policy/enterprise-software[Couchbase Enterprise Software Support Policy], https://docs.couchbase.com/server/current/install/upgrade.html[Upgrading Couchbase Server]
+synFlooding:
+  name: synFlooding
+  id: CB90074
+  title: SYN Flooding
+  type: log
+  area: node
+  agent: true
+  short_description: Checks if the buffer used for storing SYN packets becomes full
+  background: |
+    SYN packets are normally generated when a client attempts to start a TCP connection to a node.
+    SYN flooding occurs when the buffer used to store SYN packets becomes full.
+    This can be a result of the node not being able to keep up with the rate of incoming connections, which may be because of a Denial of Service attack.
+  condition: |
+    SYN flooding message detected in `dmesg`.
+  remediation: |
+    Reduce the number of incoming connections to specified port.
+  further_reading: |
+    https://docs.couchbase.com/server/current/rest-api/rest-manage-cluster-connections.html[Manage Cluster Connections]
+THP:
+  name: THP
+  id: CB90025
+  title: Transparent Huge Pages
+  type: system
+  area: node
+  agent: true
+  short_description: Checks that the configuration of Transparent Huge Pages (THP) is correct.
+  background: |
+    The Linux kernel supports _transparent huge pages_ (THP), a feature that reduces memory management overhead.
+    Although it is often beneficial for general purpose workloads, it can cause performance degradation for databases like Couchbase Server.
+    Therefore, we recommend disabling THP.
+  condition: |
+    Transparent Huge Pages set to `always`.
+  remediation: |
+    Set the THP configuration to `madvise` or `never`.
+  further_reading: |
+    https://docs.couchbase.com/server/current/install/thp-disable.html[Disabling Transparent Huge Pages]
+tooManyIndexReplicas:
+  name: tooManyIndexReplicas
+  id: CB90032
+  title: Too Many Index Replicas
+  type: api
+  area: cluster
+  short_description: Checks if an index has more replicas defined than there are Index Service nodes in the cluster.
+  background: |
+    After an index node is failed over, it is possible that an index has more replicas than there are Index Service nodes.
+    This does not provide the desired level of redundancy and durability.
+  condition: |
+    Index with more replicas than there are Index Service nodes.
+  remediation: |
+    Either reduce the number of replicas, or add more Index Service nodes.
+tooManySearchReplicas:
+  name: tooManySearchReplicas
+  id: CB90065
+  title: Too many FTS Index replicas
+  type: api
+  area: cluster
+  short_description: Checks if the number of FTS replicas configured is greater than or
+    equal to the number of nodes running the Search service.
+  background: |
+    If there are more replicas configured than FTS nodes, these replicas cannot be distributed properly and may cause rebalance issues.
+  condition: |
+    The number of FTS replicas configured is greater than or equal to the number of nodes running the Search service.
+  remediation: |
+    Ensure there are strictly fewer FTS index replicas than nodes running the Search Service.
+  further_reading: |
+    xref:7.0@server:fts:fts-index-replicas[FTS Replicas]
+unhealthyNode:
+  name: unhealthyNode
+  id: CB90003
+  title: Unhealthy or Inactive Node
+  type: api
+  area: node
+  short_description: Checks that the node is active and healthy.
+  background: |
+    If the Cluster Manager detects that a node is unhealthy, it will mark it as such and fail it over (if Auto-Failover is enabled and the conditions are met).
+    This will mean the cluster is in a degraded state with reduced durability and capacity.
+  condition: |
+    One or more nodes are reported as unhealthy by the Couchbase Cluster Manager.
+  remediation: |
+    Rebalance the unhealthy nodes out of the cluster, and replace them if appropriate.
+    Examine the other health check results to identify the potential cause, or contact Couchbase Technical Support for a root cause analysis.
+  further_reading: |
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/clusters-and-availability.html[Clusters and Availability],
+    https://docs.couchbase.com/server/current/learn/clusters-and-availability/failover.html#detecting-node-failure[Detecting Node Failure]
+unknownStorageEngineCheck:
+  name: unknownStorageEngineCheck
+  id: CB90053
+  title: Unknown Storage Engine Check
+  type: api
+  area: bucket
+  short_description: Checks if a bucket uses a storage engine other than 'couchstore', 'ephemeral', or 'magma'
+  background: |
+    If a bucket uses a storage engine other than "couchstore", ephemeral", or "magma", it is registered as 'Unknown'.
+  condition: |
+    The bucket uses an unknown storage engine.
+  remediation: |
+    Contact Couchbase Technical Support for analysis.
+documentTooBig:
+  name: documentTooBig
+  id: CB90086
+  title: Document Size Too Big
+  type: log
+  area: node
+  short_description: Checks if a document size is greater than 20MB
+  background: |
+    If a document is 19.5MB and metadata is 1MB, then the document is more than 20MB and registers DCP stream errors.
+  condition: |
+    The document with metadata exceeds 20MB limit.
+  remediation: |
+    Reduce document size.
+highPrometheusLoadTime:
+  name: highPrometheusLoadTime
+  id: CB90085
+  title: Check High Prometheus Load Time
+  type: log
+  area: node
+  short_description: Checks if Prometheus Configuration Load is more than 1s.
+  background: |
+    Starting from Couchbase Server 7.0, An instance of Prometheus runs on each node of the cluster; and the metrics for each node are duly stored in that node’s instance of Prometheus.
+    It has been observed that lack/delay of reverse DNS resolution on the node can affect the Configuration load time of Prometheus.
+  condition: |
+    Prometheus reporting "Completed loading of configuration file" with more than 1s totalDuration.
+  remediation: |
+    Validate reverse DNS lookup for all the IP addresses associated with the node's hostname.
+xdcrInvalidDatatypeCheck:
+  name: xdcrInvalidDatatype
+  id: CB90089
+  title: XDCR Invalid Datatype
+  type: log
+  area: node
+  short_description: Checks if XDCR Logs have invalid datatype errors
+  background: |
+    If the user has improperly configuration, XDCR won't go through and give EINVAL error.
+    Follows by SET_WITH_META errors or 403 permission error.
+  condition: |
+    Improperly configured RBAC user.
+  remediation: |
+    Configure RBAC User properly.
+  further_reading: |
+    https://docs.couchbase.com/server/current/rest-api/rbac.html[RBAC]

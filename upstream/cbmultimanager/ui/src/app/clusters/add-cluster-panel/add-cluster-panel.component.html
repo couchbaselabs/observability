@@ -1,0 +1,98 @@
+<div class="dialog-med">
+  <div class="panel-header">
+    <h2>Add Remote Cluster</h2>
+    <a class="ui-dialog-titlebar-close modal-close" (click)="activeModal.dismiss('X')">X</a>
+  </div>
+  <div class="panel-content forms">
+    <form id="addRemoteHealthCluster" [formGroup]="registerClusterForm"
+      (ngSubmit)="submitForm()" class="margin-top-half">
+      <div class="formrow">
+        <div class="row">
+          <label>Host</label>
+        </div>
+        <input
+          type="url"
+          formControlName="host"
+          autocapitalize="off"
+          placeholder="Host"
+          required>
+        <div
+          class="error error-field"
+          [hidden]="!registerClusterForm.get('host')?.dirty">
+          <div [hidden]="!registerClusterForm.get('host')?.errors?.required">Host is required</div>
+        </div>
+      </div>
+        <div class="formrow">
+          <div class="row">
+            <label>User</label>
+          </div>
+          <input
+            type="text"
+            autocapitalize="off"
+            formControlName="user"
+            placeholder="Username"
+            spellcheck="off"
+            required>
+          <div
+            class="error error-field"
+            [hidden]="!registerClusterForm.get('user')?.dirty">
+            <div [hidden]="!registerClusterForm.get('user')?.errors?.required">Username is required.</div>
+            <div [hidden]="!registerClusterForm.get('user')?.errors?.pattern">
+              Username must not contain spaces, control or any of ()<>,;:\"/[]?={{'{'}}{{'}'}} characters and must be valid utf8
+            </div>
+          </div>
+        </div>
+        <div class="formrow">
+          <div class="row">
+            <label>Password</label>
+          </div>
+          <input type="password" formControlName="password" placeholder="Password" required>
+          <div
+            class="error error-field"
+            [hidden]="!registerClusterForm.get('password')?.dirty">
+            <div [hidden]="!registerClusterForm.get('password')?.errors?.required">Password is required.</div>
+          </div>
+        </div>
+      <div class="formrow">
+        <div class="row flex-left">
+          <label>Alias <small>(optional)</small></label>
+            <span
+             class="fa-stack icon-info margin-left-half"
+             ngbTooltip="Aliases can be used instead of the cluster UUID when using the REST API."
+             placement="right">
+              <span class="icon fa-circle-thin fa-stack-2x"></span>
+              <span class="icon fa-info fa-stack-1x"></span>
+            </span>
+        </div>
+        <input
+          type="text"
+          formControlName="alias"
+          autocapitalize="off"
+          maxlength="100"
+          placeholder="a-my-new-alias">
+        <div
+          class="error error-field"
+          [hidden]="!registerClusterForm.get('alias')?.dirty">
+          <div [hidden]="!registerClusterForm.get('alias')?.errors?.pattern">
+            Aliases must start with 'a-', and can be up to 100 characters long.
+          </div>
+          <div [hidden]="!registerClusterForm.get('alias')?.errors?.maxLength">
+            Aliases must be less than 100 characters.
+          </div>
+        </div>
+      </div>
+    </form>
+    <div class="error word-wrap margin-top-1" *ngIf="submitErr">{{submitErr}}</div>
+  </div>
+  <div class="panel-footer">
+    <a (click)="activeModal.dismiss()">Cancel</a>
+    <button type="submit" form="addRemoteHealthCluster" class="btn btn-outline-dark" [disabled]="registerClusterForm.invalid">
+      <div class="button-spinner" *ngIf="submitting;else addSpan">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <ng-template #addSpan>Add</ng-template>
+    </button>
+  </div>
+</div>
