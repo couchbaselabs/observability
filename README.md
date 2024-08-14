@@ -23,6 +23,26 @@ Please refer to the support page [here](./docs/modules/ROOT/pages/support.adoc).
 
 ## Local build for non-Couchbase Employees
 
+```bash
+
+
+  git pull
+  make clean container
+  docker tag couchbase/observability-stack:v1 pocan101/cmos-bbva-amd64
+  docker push pocan101/cmos-bbva-amd64
+ 
+ docker save pocan101/cmos-bbva-amd64 | gzip > cmos-bbva-amd64.tgz
+ 
+ 
+```
+
+```bash 
+Use ansible for running it
+
+bash ~/batcave/ansible/metrics/metrics.sh
+```
+
+
 ```
 # Checkout code
 git clone git@github.com/couchbaselabs/observability
