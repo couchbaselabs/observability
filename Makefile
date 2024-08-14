@@ -114,13 +114,7 @@ TAR := tar
 endif
 
 ###############################################################################
-PATCH_FILE = cbmon.patch
-PATCH_DIR = upstream/cbmultimanager/ui/src/app/
 
-# Target to apply the patch
-cbmon-ro:
-	@echo "Applying patch for cbmon-ro..."
-	patch --force --ignore-whitespace -p1 < $(PATCH_FILE)
 
 
 # Ensure the Makefile is clean by disabling all implicit rules
@@ -132,7 +126,7 @@ all: container
 
 # Clean up any potential mess
 .PHONY: clean
-clean: images-clean cbmon-ro
+clean: images-clean
 	rm -rf $(ARTIFACTSDIR) $(BUILDDIR) microlith/bin microlith/cbmultimanager-docs microlith/docs microlith/config-svc
 	-rm microlith/git-commit.txt
 ifndef oss

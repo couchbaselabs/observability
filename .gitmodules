@@ -3,4 +3,4 @@
 	url = git@github.com:couchbaselabs/cbmultimanager.git
 [submodule "upstream/couchbase-fluent-bit"]
 	path = upstream/couchbase-fluent-bit
-	url = git@github.com:couchbase/couchbase-fluent-bit
+	url = git@github.com:couchbaselabs/couchbase-fluent-bit
