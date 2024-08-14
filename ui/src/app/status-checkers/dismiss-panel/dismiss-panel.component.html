@@ -1,0 +1,60 @@
+<div class="dialog-med">
+  <div class="panel-header">
+    <h2>Dismiss Checker</h2>
+    <a class="ui-dialog-titlebar-close modal-close" (click)="activeModal.dismiss('X')">X</a>
+  </div>
+  <div class="panel-content forms">
+    <form [formGroup]="dismissCheckerForm" (ngSubmit)="dismiss()" id="dismissCheckerForm">
+      <div class="formrow row flex-left">
+        <label class="inline margin-right-1 width-3" for="target-select">Target</label>
+        <span class="simple-select width-9 m-left-negative-5">
+          <select formControlName="level" name="target-select">
+            <option *ngFor="let level of levels[_level]; index as i" [ngValue]="i">{{ level }}</option>
+          </select>
+        </span>
+      </div>
+      <div class="row formrow flex-left vertical-align-baseline">
+        <label class="inline margin-right-1 width-3 vertical-align-baseline">Dismiss For</label>
+        <input
+          class="form-control width-4 margin-right-1"
+          formControlName="scalar"
+          type="number"
+          min="1"
+          [attr.disabled]="isForever()"
+        />
+        <span class="simple-select width-5">
+          <select formControlName="unit" name="unit-select" [attr.disabled]="isForever()">
+            <option [ngValue]="'d'">Days</option>
+            <option [ngValue]="'h'">Hours</option>
+            <option [ngValue]="'m'">Minutes</option>
+          </select>
+        </span>
+      </div>
+      <div class="formrow">
+        <div>
+          <input (click)="foreverChange()" type="checkbox" name="forever-checkbox" formControlName="forever" />
+          <label (click)="foreverChange()" class="form-check-label" for="forever-checkbox">Dismiss forever</label>
+        </div>
+      </div>
+    </form>
+    <div class="error" *ngIf="showError">
+      {{ showError }}
+    </div>
+  </div>
+  <div class="panel-footer">
+    <a (click)="activeModal.dismiss()">Cancel</a>
+    <button
+      type="submit"
+      form="dismissCheckerForm"
+      class="btn btn-outline-dark"
+      [disabled]="dismissCheckerForm.invalid"
+    >
+      <div class="button-spinner" *ngIf="submitting; else addSpan">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+      </div>
+      <ng-template #addSpan>Add</ng-template>
+    </button>
+  </div>
+</div>
