@@ -1,0 +1,47 @@
+FROM alpine:3.14
+ARG PROD_VERSION
+ARG PROD_BUILD
+ARG arch=amd64
+
+# Use latest rather than pin
+# hadolint ignore=DL3018
+RUN apk add --upgrade --no-cache ca-certificates bash openssl wget
+
+# Ensure we include licensing information
+COPY ./LICENSE /licenses/couchbase.txt
+# NOTE: this creates a chicken-and-egg effect - if we update notices, we need to run two builds to ensure it gets picked up
+# Also, note that we're using couchbase-observability-stack's notices, because the blackduck scan is shared between it
+# and cbmultimanager.
+RUN wget -q -O /licenses/notices.txt https://raw.githubusercontent.com/couchbase/product-metadata/master/couchbase-observability-stack/blackduck/${PROD_VERSION}/notices.txt
+
+# Generate a certificate
+RUN mkdir -p /data /priv && \
+    openssl req -x509 -nodes -days 365 \
+    -subj "/C=CA/ST=QC/O=Couchbase, Inc./CN=couchbase.com" \
+    -addext "subjectAltName=DNS:couchbase.com" \
+    -newkey rsa:2048 -keyout /priv/server.key -out /priv/server.crt
+
+# Copy in all the executables we need plus a launch script
+COPY ./cbmultimanager-linux-${arch} /bin/cbmultimanager
+COPY ./cbeventlog-linux-${arch} /bin/cbeventlog
+COPY ./couchbase-cluster-monitor-entrypoint.sh /entrypoint.sh
+
+# Provide a configurable user to run as and for ownership
+ARG CB_UID="8453"
+ARG CB_GID="8453"
+
+RUN addgroup -g $CB_GID -S couchbase && \
+    adduser -u $CB_UID -S couchbase -G couchbase
+
+# Ensure we have everything we need set up with correct permissions
+RUN chmod a+x /bin/cb* && \
+    chmod a+x /entrypoint.sh && \
+    chown -R couchbase:couchbase /data /priv
+    # chown -R couchbase:couchbase /ui /data /priv && \
+    # chmod -R a+r /licenses
+
+EXPOSE 7196 7197
+
+# Run as non-root as per best practices and requirements for some platforms
+USER $CB_UID
+CMD [ "/entrypoint.sh" ]

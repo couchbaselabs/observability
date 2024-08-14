@@ -1,0 +1,84 @@
+<div class="row error" *ngIf="clusterHealthErr">
+  {{ clusterHealthErr }}
+</div>
+<div class="row flex-left vertical-align-baseline">
+  <div class="margin-right-3">
+    <div class="row flex-left pre-wrap">
+      <strong>Cloud ID: </strong>{{ cluster.cloudId }}
+    </div>
+    <div class="row flex-left pre-wrap">
+      <strong>Project ID: </strong>{{ cluster.projectId }}
+    </div>
+    <div class="row flex-left pre-wrap">
+      <strong>Tenant ID: </strong>{{ cluster.tenantId }}
+    </div>
+    <div class="row flex-left pre-wrap">
+      <strong>Nodes: </strong> {{ cluster.nodes }}
+    </div>
+  </div>
+  <div>
+    <div class="row flex-left pre-wrap" *ngIf="clusterHealth?.status">
+      <strong>Status: </strong>{{ clusterHealth?.status }}
+    </div>
+    <div *ngIf="clusterHealth?.health" class="row flex-left pre-wrap">
+      <strong>Health: </strong>{{ clusterHealth?.health }}
+    </div>
+    <div class="row flex-left pre-wrap" *ngIf="clusterHealth?.bucket_stats">
+      <strong>Buckets: </strong> {{ clusterHealth?.bucket_stats?.totalCount }}
+    </div>
+  </div>
+</div>
+
+<div *ngIf="clusterHealth?.bucket_stats" class="margin-top-1">
+  <h4
+    [ngClass]="{ disclosed: bucketSummary }"
+    class="disclosure inline"
+    (click)="bucketSummary = !bucketSummary">
+    Bucket Summary
+  </h4>
+  <div *ngIf="bucketSummary">
+    <div class="cbui-table">
+      <div class="cbui-table-header">
+        <span class="cbui-table-cell">Name</span>
+        <span class="cbui-table-cell">Status</span>
+      </div>
+      <section
+        *ngFor="let bucket of clusterHealth?.bucket_stats?.healthStats | keyvalue"
+        [ngClass]="[getHealthColor(bucket.value)]">
+        <div class="cbui-tablerow">
+          <span class="cbui-table-cell">{{ bucket.key }}</span>
+          <span class="cbui-table-cell">{{ bucket.value }}</span>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="clusterHealth?.node_stats" class="margin-top-1">
+  <h4
+    [ngClass]="{ disclosed: nodeSummary }"
+    class="disclosure inline"
+    (click)="nodeSummary = !nodeSummary">
+    Node Summary
+  </h4>
+  <div *ngIf="nodeSummary">
+    <div class="cbui-table">
+      <div class="cbui-table-header">
+        <span class="cbui-table-cell">Name</span>
+        <span class="cbui-table-cell">Status</span>
+        <span class="cbui-table-cell">Services</span>
+      </div>
+      <section
+        *ngFor="let node of clusterHealth?.node_stats?.serviceStats"
+        [ngClass]="[getHealthColor(node.status)]">
+        <div class="cbui-tablerow">
+          <span class="cbui-table-cell">{{ node.nodeName }}</span>
+          <span class="cbui-table-cell">{{ node.status}}</span>
+          <span class="cbui-table-cell wrap">
+            <span *ngFor="let service of node.services" class="label neutral nocaps">{{ service }}</span>
+          </span>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>

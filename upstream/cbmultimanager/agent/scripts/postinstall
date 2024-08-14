@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# AmbientCapabilities is only supported from systemd 229
+
+# systemctl --version output's first line looks like `systemd 208` or `systemd 245 (245.4-4ubuntu3.6)`
+systemd_version=$(systemctl --version | head -1 | awk '{print $2}')
+if [ "$systemd_version" -lt 229 ]; then
+    sed -i '/^AmbientCapabilities=/d' /usr/lib/systemd/system/cbhealthagent.service
+fi
+
+systemctl daemon-reload
+
+echo "Couchbase Health Agent installed."
+echo "To start it, execute: sudo systemctl start cbhealthagent"
