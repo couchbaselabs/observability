@@ -204,8 +204,8 @@
             return true;
           },
 
-          init() { 
-             this.pathPrefix = "http://localhost:3300"; // Adjust this according to your server setup
+          init() {
+              this.pathPrefix = window.location.protocol + "//" + window.location.hostname + ":8080";
 
             
             this.$watch("useTLS", () => {
