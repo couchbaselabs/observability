@@ -112,6 +112,10 @@ else
         if [[ -v "${DISABLE_VAR}" ]]; then
             log "Disabled as ${DISABLE_VAR} set (value ignored): $i"
         elif [[ -x "$i" ]]; then
+            if [ "$EXE_NAME" == "node.sh" ]; then
+                continue
+            fi
+
             if [ "${LOG_TO_STDOUT:-true}" == "true" ]; then
               log "Running: $i"
               # See https://github.com/hilbix/speedtests for log name pre-pending info
@@ -124,6 +128,25 @@ else
             log "Skipping non-executable: $i"
         fi
     done
+
+    # Wait for Grafana to be up and running on port 3000
+    log "Waiting for Grafana to be up and running on port 3000"
+    while ! nc -z localhost 3000; do
+        sleep 1
+    done
+
+    # Run node.sh after Grafana is running
+    NODE_SH="/entrypoints/node.sh"
+    if [[ -x "$NODE_SH" ]]; then
+        log "Running node.sh"
+        if [ "${LOG_TO_STDOUT:-true}" == "true" ]; then
+            "$NODE_SH" "$@" 2>&1 | tee "${CMOS_LOGS_ROOT}/node.sh".log | awk '{ print "[node.sh]" $0 }' &
+        else
+            "$NODE_SH" "$@" &> "${CMOS_LOGS_ROOT}/node.sh".log &
+        fi
+    else
+        log "Skipping non-executable: node.sh"
+    fi
 
     wait -n
 fi
