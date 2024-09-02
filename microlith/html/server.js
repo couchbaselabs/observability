@@ -186,9 +186,9 @@ async function configureCluster(config) {
   try {
     await resetKeys();
     await addGrafanaDs(config);
-    await addCluster(config);
+    await addToClusterMonitor(config);
     await addSGW(config);
-    await addConfiguration(config);
+    await addToPrometheus(config);
     await refreshPrometheus(config);
     return { success: true, message: 'Cluster successfully configured' };
   } catch (e) {
@@ -222,7 +222,7 @@ async function addSGW(config) {
 }
 
 // Function to add a Couchbase cluster
-async function addCluster(config) {
+async function addToClusterMonitor(config) {
   const postData = JSON.stringify({
     host: `${config.hostname}:${config.managementPort}`,
     user: config.serverUsername,
@@ -264,7 +264,7 @@ async function addGrafanaDs(config) {
 }
 
 // Function to add additional configuration
-async function addConfiguration(config) {
+async function addToPrometheus(config) {
   const postData = JSON.stringify({
     hostname: config.hostname,
     couchbaseConfig: {
