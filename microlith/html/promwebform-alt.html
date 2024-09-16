@@ -1,170 +1,162 @@
 <!DOCTYPE html>
+
 <html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <title>Add Cluster | CMOS</title>
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body class="doc">
-    <header class="header fixed-top">
-      <div class="header-top-row">
-        <div class="container">
-          <nav class="navbar navbar-expand-md flex-nowrap justify-content-between navbar-new-top">
-            <ul class="navbar-brand-list">
-              <li class="brand-logo">
-                <a class="navbar-brand" href="https://www.couchbase.com">
-                  <img src="img/couchbase-logo.svg" alt="Couchbase">
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </header>
-    <main class="container">
-      <h1>Configuration</h1>
-      <p>This form runs on the CMOS container so enter valid hostnames or addresses that are resolvable from it.
+<head>
+<meta charset="utf-8"/>
+<title>Add Cluster | CMOS</title>
+<link href="styles.css" rel="stylesheet"/>
+</head>
+<body class="doc">
+  <div style="display: flex; align-items: center; padding: 1rem; position: sticky; top: 0; background-color: white; z-index: 10; justify-content: center;">
+    <img src="img/couchbase-logo.svg" style="width: 150px; height: auto; margin-left: 40px;"/>
+  <div style="font-size: 1.5rem; font-weight: bold; color: #0074e0; text-align: center; flex-grow: 1;">Couchbase CMOS Platform</div>
+</div>
+<main class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+<h1>Configuration</h1>
+<p>This form runs on the CMOS container so enter valid hostnames or addresses that are resolvable from it.
         Do not enter localhost or 127.0.0.1 for example as that will resolve to the CMOS container itself.</p>
-      <div x-data="generator">
-        <form name="inputForm" id="inputForm">
-          <fieldset>
-            <div>
-              <label for="serverHost">Couchbase Server Hostname:</label>
-              <input type="text" id="serverHost" x-model="hostname" placeholder="" pattern="^\s*[^\S]+\s*$" required />
-            </div>
-            <div>
-              <label for="serverUser">Couchbase Server Username:</label>
-              <input type="text" id="serverUser" x-model="serverUsername" placeholder="Administrator" required />
-            </div>
-            <div>
-              <label for="serverPwd">Couchbase Server Password:</label>
-              <input type="password" id="serverPwd" x-model="serverPassword" placeholder="password" required />
-            </div>
-            <div>
-              <label for="managementPort">Couchbase Server Management Port:</label>
-              <input type="text" id="managementPort" x-model="managementPort" required />
-            </div>
-            <div>
-              <label>
-                <input type="checkbox" x-model="useTLS" />
-                <strong>Use TLS?</strong>
-              </label>
-            </div>
-          </fieldset>
-          <fieldset>
-            <div>
-              <label>
-                <input type="checkbox" x-model="doSGW" />
+<div x-data="generator">
+<form id="inputForm" name="inputForm" style="background-color: #f7f7f7; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+<fieldset>
+  <legend><h2>Couchbase Server Settings</h2></legend>
+<div>
+<label for="serverHost">Couchbase Server Hostname:</label>
+<input id="serverHost" pattern="^\s*[^\S]+\s*$" placeholder="" required="" type="text" x-model="hostname"/>
+</div>
+<div>
+<label for="serverUser">Couchbase Server Username:</label>
+<input id="serverUser" placeholder="Administrator" required="" type="text" x-model="serverUsername"/>
+</div>
+<div>
+<label for="serverPwd">Couchbase Server Password:</label>
+<input id="serverPwd" placeholder="password" required="" type="password" x-model="serverPassword"/>
+</div>
+<div>
+<label for="managementPort">Couchbase Server Management Port:</label>
+<input id="managementPort" required="" type="text" x-model="managementPort"/>
+</div>
+<div>
+<label>
+<input type="checkbox" x-model="useTLS"/>
+<strong>Use TLS?</strong>
+</label>
+</div>
+</fieldset>
+<fieldset>
+<div>
+<label>
+<input type="checkbox" x-model="doSGW"/>
                 Add Sync Gateway Instance?
             </label>
-          </div>
-          <div>
-            <label>
-              <input type="checkbox" x-model="doProm" />
-              Add to Prometheus?
-            </label>
-          </div>
-          <div>
-            <label>
-              <input type="checkbox" x-model="doCBMM" />
-              Add to Couchbase Cluster Monitor?
-            </label>
-          </div>
-        </fieldset>
-        <fieldset x-show="doSGW">
-          <legend>
-            <h2>Sync Gateway configuration</h2>
-          </legend>
-          <div>
-            <label for="sgwHost">Sync Gateway Hostname:</label>
-            <input type="text" id="sgwHost" x-model="sgwHostname" placeholder="" pattern="^\s*[^\S]+\s*$" required />
-          </div>
-          <div>
-            <label for="sgwUser">Sync Gateway API Admin Username:</label>
-            <input type="text" id="sgwUser" x-model="sgwUsername" placeholder="api-admin" required />
-          </div>
-          <div>
-            <label for="sgwPwd">Sync Gateway API Admin Password:</label>
-            <input type="password" id="sgwPwd" x-model="sgwPassword" placeholder="password" required />
-          </div>
-        </fieldset>
-        <fieldset x-show="doProm">
-          <legend>
-            <h2>Prometheus configuration</h2>
-          </legend>
-          <div>
-            <label for="prometheusPort">Prometheus Exporter Port:</label>
-            <input type="text" id="prometheusPort" x-model="prometheusPort" required />
-            <br />
-            <em>Note: this field is not necessary (and will be ignored) if the cluster is running Couchbase Server 7.0 or above, as the built-in Prometheus metrics will be used and an exporter is not necessary.</em>
-          </div>
-        </fieldset>
-        <fieldset x-show="doCBMM">
-          <legend>
-            <h2>Couchbase Cluster Monitor configuration</h2>
-          </legend>
-          <div>
-            <div>
-              <label for="cbmmUsername">Couchbase Cluster Monitor username:</label>
-              <input type="text" id="cbmmUsername" x-model="cbmmUsername" required />
-            </div>
-            <div>
-              <label for="cbmmPassword">Couchbase Cluster Monitor password:</label>
-              <input type="password" id="cbmmPassword" x-model="cbmmPassword" required />
-            </div>
-          </div>
-        </fieldset>
-        <div>
-          <button type="submit" class="btn btn-primary" @click.prevent="configureAndStore(getConfig())" :disabled="!(doProm || doCBMM)">
+</div>
+
+</fieldset>
+ <fieldset>
+      <legend><h2>Grafana Slow Queries Datasource</h2></legend>
+      <div>
+        <label for="alias">Alias:</label>
+        <input id="alias" pattern="^\s*[^\S]+\s*$" placeholder="Enter alias" required="" type="text" x-model="alias"/>
+      </div>
+      <div>
+        <label for="grafanaDatasourceTargetPort">Port:</label>
+        <input id="grafanaDatasourceTargetPort" placeholder="Enter port" required="" type="text" x-model="grafanaDatasourceTargetPort"/>
+      </div>
+    </fieldset>
+<fieldset x-show="doSGW">
+<legend>
+<h2>Sync Gateway configuration</h2>
+</legend>
+<div>
+<label for="sgwHost">Sync Gateway Hostname:</label>
+<input id="sgwHost" pattern="^\s*[^\S]+\s*$" placeholder="" required="" type="text" x-model="sgwHostname"/>
+</div>
+<div>
+<label for="sgwUser">Sync Gateway API Admin Username:</label>
+<input id="sgwUser" placeholder="api-admin" required="" type="text" x-model="sgwUsername"/>
+</div>
+<div>
+<label for="sgwPwd">Sync Gateway API Admin Password:</label>
+<input id="sgwPwd" placeholder="password" required="" type="password" x-model="sgwPassword"/>
+</div>
+</fieldset>
+<fieldset x-show="doProm">
+<legend>
+<h2>Prometheus configuration</h2>
+</legend>
+<div>
+<label for="prometheusPort">Prometheus Exporter Port:</label>
+<input id="prometheusPort" required="" type="text" x-model="prometheusPort"/>
+<br/>
+<em>Note: this field is not necessary (and will be ignored) if the cluster is running Couchbase Server 7.0 or above, as the built-in Prometheus metrics will be used and an exporter is not necessary.</em>
+</div>
+</fieldset>
+<fieldset x-show="doCBMM">
+<legend>
+<h2>Couchbase Cluster Monitor configuration</h2>
+</legend>
+<div>
+<div>
+<label for="cbmmUsername">Couchbase Cluster Monitor username:</label>
+<input id="cbmmUsername" required="" type="text" x-model="cbmmUsername"/>
+</div>
+<div>
+<label for="cbmmPassword">Couchbase Cluster Monitor password:</label>
+<input id="cbmmPassword" required="" type="password" x-model="cbmmPassword"/>
+</div>
+</div>
+</fieldset>
+<div>
+<button :disabled="!(doProm || doCBMM)" @click.prevent="configureAndStore(getConfig())" class="btn btn-primary" style="padding: 10px 20px; font-weight: bold; background-color: #0074e0; border: none; border-radius: 5px; color: white; cursor: pointer;" type="submit">
             Add Cluster
           </button>
-          <button type="button" class="btn btn-grey-reverse" @click.prevent="generate()" :disabled="!(doProm || doCBMM)">
+<button :disabled="!(doProm || doCBMM)" @click.prevent="generate()" class="btn btn-grey-reverse" style="padding: 10px 20px; font-weight: bold; background-color: white; border: 2px solid #0074e0; border-radius: 5px; color: #0074e0; cursor: pointer;" type="button">
             Show Manual Configuration Steps
           </button>
-        </div>
-      </form>
-
-      <div x-show="yamlPrometheus.length > 0 && doProm">
-        <h2>Prometheus configuration</h2>
-        <p>
+</div>
+</form>
+<div x-show="yamlPrometheus.length &gt; 0 &amp;&amp; doProm">
+<h2>Prometheus configuration</h2>
+<p>
           Add the following fragment of YAML to <code>/etc/prometheus/prometheus.runtime.yml</code>, in the
           <code>scrape_configs</code> section. Make sure to replace <code>&lt;cluster name&gt;</code> with the name of
           the cluster (as reported in the Couchbase Web Console). Once saved, check the "Targets" page in Prometheus to see if it has picked it up. If it does not, wait 30-60 seconds and check again, as the process is not instant.
         </p>
-        <pre id="jsonPrometheus" x-text="yamlPrometheus"></pre>
-      </div>
-      <div x-show="healthcheckCommand.length > 0 && doCBMM">
-        <h2>Couchbase Healthcheck configuration</h2>
-        <p>Execute this command to register a Couchbase Server cluster with the local Cluster Monitor process.</p>
-        <textarea x-text="healthcheckCommand" id="healthcheckCommand" class="generatedCode" onclick="this.focus();this.select()" cols="80" rows="4" readonly></textarea>
-      </div>
-      <div x-show="loading">Loading, please wait&hellip;</div>
-      <div x-show="success">
+<pre id="jsonPrometheus" x-text="yamlPrometheus"></pre>
+</div>
+<div x-show="healthcheckCommand.length &gt; 0 &amp;&amp; doCBMM">
+<h2>Couchbase Healthcheck configuration</h2>
+<p>Execute this command to register a Couchbase Server cluster with the local Cluster Monitor process.</p>
+<textarea class="generatedCode" cols="80" id="healthcheckCommand" onclick="this.focus();this.select()" readonly="" rows="4" x-text="healthcheckCommand"></textarea>
+</div>
+<div x-show="loading">Loading, please wait…</div>
+<div x-show="success">
         Cluster successfully added! Go to
         <a href="grafana/?orgId=1">Grafana</a> to see its health. Please note that it may take up to 60 seconds for all data to be available.
       </div>
-      <div x-show="error.length > 0" x-text="error" style="color: red; font-weight: bold;"></div>
-    </div>
-  </main>
-  <footer style="margin: 2em;">
-    <div class="footer-terms">
-      <div class="footer-terms-copyright">
-          <span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
-      </div>
-      <div class="footer-terms-links">
-        <a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
-        <a href="https://www.couchbase.com/support-policy">Support Policy</a>
-      </div>
-    </div>
-  </footer>
-  <script defer src="alpine-3.4.2.min.js"></script>
-  <script>
+<div style="color: red; font-weight: bold;" x-show="error.length &gt; 0" x-text="error"></div>
+</div>
+</main>
+<footer style="margin: 2em;">
+<div class="footer-terms">
+<div class="footer-terms-copyright">
+<span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
+</div>
+<div class="footer-terms-links">
+<a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
+<a href="https://www.couchbase.com/support-policy">Support Policy</a>
+</div>
+</div>
+</footer>
+<script defer="" src="alpine-3.4.2.min.js"></script>
+<script>
     document.addEventListener("alpine:init", function () {
       Alpine.data("generator", function () {
         return {
           managementPort: "8091",
           useTLS: false,
           hostname: "",
+          alias: "",
+          grafanaDatasourceTargetPort:"8093",
           serverUsername: "",
           serverPassword: "",
           sgwHostname: "",
@@ -189,6 +181,10 @@
           loading: false,
  
           validate() {
+            if (this.alias.trim().length === 0) {
+              this.error = "Alias missing";
+              return false;
+            }
             if (this.hostname.trim().length === 0) {
               this.error = "Hostname invalid";
               return false;
@@ -206,8 +202,8 @@
             return true;
           },
 
-          init() { 
-             this.pathPrefix = "http://localhost:3300"; // Adjust this according to your server setup
+          init() {
+              this.pathPrefix = "http://localhost:3300";
 
             
             this.$watch("useTLS", () => {
@@ -254,11 +250,13 @@
          getConfig(){
          const config = {
                              hostname: this.hostname,
+                             alias: this.alias,
                              serverUsername: this.serverUsername,
                              serverPassword: this.serverPassword,
                              managementPort: this.managementPort,
                              useTLS: this.useTLS,
                              sgwHostname: this.sgwHostname,
+                             grafanaDatasourceTargetPort: this.grafanaDatasourceTargetPort,
                              sgwUsername: this.sgwUsername,
                              sgwPassword: this.sgwPassword,
                              cbmmUsername: this.cbmmUsername,

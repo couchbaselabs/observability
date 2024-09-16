@@ -11,6 +11,8 @@ app.use(cors());
 
 const args = process.argv.slice(2); // Get arguments from the command line
 const configDir = args[0];
+const grafanaadmin=args[1]
+const grafanapassword=args[2]
 const pathPrefix = "http://localhost:8080";
 const configFilePath = path.join(configDir, 'clusters.json');
 const apiKeys = new Map();
@@ -70,7 +72,7 @@ function deleteKey(keyId) {
     port: 8080,
     path: `/grafana/api/auth/keys/${keyId}`,
     headers: {
-      'Authorization': `Basic ${Buffer.from('bbva:password').toString('base64')}`
+      'Authorization': `Basic ${Buffer.from(grafanaadmin+":"+grafanapassword).toString('base64')}`
     }
   };
   return sendHttpRequest(options).then(() => {
@@ -86,7 +88,7 @@ async function resetKeys() {
     port: 8080,
     path: '/grafana/api/auth/keys',
     headers: {
-      'Authorization': `Basic ${Buffer.from('bbva:password').toString('base64')}`
+      'Authorization': `Basic ${Buffer.from(grafanaadmin+":"+grafanapassword).toString('base64')}`
     }
   };
 
@@ -101,7 +103,7 @@ async function resetKeys() {
 async function createApiKey(hostname) {
   if (apiKeys.has(hostname)) {
     console.log(`Key for ${hostname} already exists. Returning from map.`);
-    return apiKeys.get(hostname);
+    return apiKeys.get(hostname)
   }
 
   const postData = JSON.stringify({ name: hostname, role: "Admin" });
@@ -112,7 +114,7 @@ async function createApiKey(hostname) {
     path: '/grafana/api/auth/keys',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Basic ${Buffer.from('bbva:password').toString('base64')}`
+      'Authorization': `Basic ${Buffer.from(grafanaadmin+":"+grafanapassword).toString('base64')}`
     }
   };
 
@@ -184,6 +186,11 @@ async function refreshPrometheus() {
 // Main function to configure a cluster
 async function configureCluster(config) {
   try {
+    
+    if (!config.hasOwnProperty('grafanaDatasourceTargetPort')){
+      config.grafanaDatasourceTargetPort=8093
+      upsertCluster(config)
+    }
     await resetKeys();
     await addGrafanaDs(config);
     await addToClusterMonitor(config);
@@ -256,7 +263,7 @@ console.info(responseBody);
 async function addGrafanaDs(config) {
   const grafanaKey = await createApiKey(config.alias);
   const dsname = config.alias;
-  const datasourceURL = `http://${config.hostname}:8093`;
+  const datasourceURL = `http://${config.hostname}:${config.grafanaDatasourceTargetPort}`;
   const grafanaURL = `${pathPrefix}/grafana/`;
 
   const result = await createDatasource(grafanaKey, grafanaURL, dsname, datasourceURL, config.serverUsername, config.serverPassword);
@@ -287,25 +294,38 @@ async function addToPrometheus(config) {
 
   await sendHttpRequest(options, postData);
 }
+function upsertCluster(newCluster) {
+  let clusters = [];
 
+  // Check if the config file exists and read it
+  if (fs.existsSync(configFilePath)) {
+    clusters = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
+  }
+
+  // Find the index of the existing cluster
+  const index = clusters.findIndex(cluster =>
+    cluster.hostname === newCluster.hostname && cluster.managementPort === newCluster.managementPort
+  );
+
+  if (index !== -1) {
+    // If found, update the existing cluster
+    clusters[index] = newCluster;
+  } else {
+    // If not found, add the new cluster
+    clusters.push(newCluster);
+  }
+
+  // Save the updated clusters
+  saveClusters(clusters);
+}
 // Endpoint to save a new cluster configuration
 app.post('/persistency/api/saveConfig', (req, res) => {
   try {
-    let clusters = [];
-    if (fs.existsSync(configFilePath)) {
-      clusters = JSON.parse(fs.readFileSync(configFilePath, 'utf8'));
-    }
 
-    const newCluster = req.body;
-    const exists = clusters.some(cluster => cluster.hostname === newCluster.hostname && cluster.managementPort === newCluster.managementPort);
+    // Upsert the cluster configuration
+    upsertCluster(req.body);
 
-    if (exists) {
-      res.status(400).send('Cluster with the same hostname and management port already exists');
-    } else {
-      clusters.push(newCluster);
-      saveClusters(clusters);
-      res.status(200).send('Cluster configuration saved successfully');
-    }
+    res.status(200).send('Cluster configuration saved successfully');
   } catch (error) {
     res.status(500).send('Error saving cluster configuration: ' + error.message);
   }

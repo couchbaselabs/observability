@@ -1,4 +1,5 @@
-node  /microlith/html/server.js /prometheus/clusters http://localhost:7196
+node  /microlith/html/server.js /prometheus/clusters bbva password
+# user pass must match grafana.ini
 #RUN printf "start all"
 #
 #
