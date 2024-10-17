@@ -4,6 +4,7 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const http = require('http');
+const https = require('https'); // Import https for HTTPS requests
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,39 +22,31 @@ function saveClusters(clusters) {
   fs.writeFileSync(configFilePath, JSON.stringify(clusters, null, 2));
 }
 
-// Helper function to generate a curl command
-function generateCurlCommand(options, data) {
-  let curlCommand = `curl -X ${options.method} http://${options.hostname}:${options.port}${options.path}`;
-  if (data) curlCommand += ` -d '${data}'`;
-  if (options.headers) {
-    for (const [header, value] of Object.entries(options.headers)) {
-      curlCommand += ` -H '${header}: ${value}'`;
-    }
-  }
-  return curlCommand;
-}
-
-// Function to send HTTP requests
 function sendHttpRequest(options, data = null) {
-  const curlCommand = generateCurlCommand(options, data);
+  // Use https if the protocol is HTTPS, otherwise use http
+  const httpModule = options.protocol === 'https:' ? https : http;
 
   console.info(`Request options: ${JSON.stringify(options, null, 2)}`);
   console.info(`Request data: ${data}`);
-  console.info(`Equivalent curl command: ${curlCommand}`);
 
   return new Promise((resolve, reject) => {
-    const req = http.request(options, (res) => {
+    // For HTTPS requests, skip SSL certificate validation
+    if (options.protocol === 'https:') {
+      options.rejectUnauthorized = false; // This skips SSL validation
+    }
+
+    const req = httpModule.request(options, (res) => {
       let responseData = '';
 
-      res.on('data', (chunk) =>{
-         responseData += chunk;
-        
-        } );
+      res.on('data', (chunk) => {
+        responseData += chunk;
+      });
+
       res.on('end', () => {
         if (res.statusCode >= 200 && res.statusCode < 300) {
           resolve(responseData);
         } else {
-          reject(new Error(`Request failed with status code ${res.statusCode} ${responseData}`));
+          reject(new Error(`Request failed with status code ${res.statusCode}: ${responseData}`));
         }
       });
     });
@@ -62,6 +55,30 @@ function sendHttpRequest(options, data = null) {
     if (data) req.write(data);
     req.end();
   });
+}
+
+function generateCurlCommand(options, data = null) {
+  let curl = `curl -X ${options.method}`;
+  
+  const protocol = options.protocol || 'http:';
+  const port = options.port ? `:${options.port}` : '';
+  const url = `${protocol}//${options.hostname}${port}${options.path}`;
+
+  curl += ` "${url}"`;
+
+  // Add headers if any
+  if (options.headers) {
+    Object.keys(options.headers).forEach((header) => {
+      curl += ` -H "${header}: ${options.headers[header]}"`;
+    });
+  }
+
+  // Include data for POST or PUT requests
+  if (data) {
+    curl += ` -d '${JSON.stringify(data)}'`;
+  }
+
+  return curl;
 }
 
 // Helper function to delete an API key by ID
@@ -101,10 +118,7 @@ async function resetKeys() {
 
 // Function to create an API key
 async function createApiKey(hostname) {
-  if (apiKeys.has(hostname)) {
-    console.log(`Key for ${hostname} already exists. Returning from map.`);
-    return apiKeys.get(hostname)
-  }
+
 
   const postData = JSON.stringify({ name: hostname, role: "Admin" });
   const options = {
@@ -230,8 +244,9 @@ async function addSGW(config) {
 
 // Function to add a Couchbase cluster
 async function addToClusterMonitor(config) {
+  const protocol = config.useTLS ? 'https' : 'http';
   const postData = JSON.stringify({
-    host: `${config.hostname}:${config.managementPort}`,
+    host: `${protocol}://${config.hostname}:${config.managementPort}`,
     user: config.serverUsername,
     password: config.serverPassword
   });
@@ -258,14 +273,14 @@ async function addToClusterMonitor(config) {
 console.info(responseBody);
 
 }
-
+//
 // Function to add a Grafana datasource
 async function addGrafanaDs(config) {
   const grafanaKey = await createApiKey(config.alias);
   const dsname = config.alias;
-  const datasourceURL = `http://${config.hostname}:${config.grafanaDatasourceTargetPort}`;
+  const protocol = config.grafanaUseTLS ? 'https' : 'http';
+  const datasourceURL = `${protocol}://${config.hostname}:${config.grafanaDatasourceTargetPort}` 
   const grafanaURL = `${pathPrefix}/grafana/`;
-
   const result = await createDatasource(grafanaKey, grafanaURL, dsname, datasourceURL, config.serverUsername, config.serverPassword);
   console.log('Datasource created:', result);
 }
