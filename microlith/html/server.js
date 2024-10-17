@@ -158,6 +158,7 @@ async function createDatasource(grafanaKey, grafanaURL, dsname, datasourceURL, b
     access: 'proxy',
     url: datasourceURL,
     basicAuth: true,
+    tlsSkipVerify: true,
     basicAuthUser,
     basicAuthPassword,
     isDefault: false,
