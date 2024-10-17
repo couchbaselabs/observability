@@ -15,12 +15,14 @@
 package couchbase
 
 import (
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/couchbase/tools-common/cbvalue"
 	"github.com/labstack/echo/v4"
@@ -75,6 +77,19 @@ func FetchCouchbaseClusterInfo(scheme, hostname string, port int, username, pass
 		return nil, fmt.Errorf("could not create HTTP request: %w", err)
 	}
 	req.SetBasicAuth(username, password)
+
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: true, // Ignore certificate validation
+		},
+	}
+
+	// Customize the http.DefaultClient to use the custom transport and timeout
+	http.DefaultClient = &http.Client{
+		Transport: transport,
+		Timeout:   10 * time.Second, // Set a 10-second timeout for the client
+	}
+
 	res, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to contact Couchbase Server: %s", err.Error())

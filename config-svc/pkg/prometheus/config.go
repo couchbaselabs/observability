@@ -1,22 +1,7 @@
-// Copyright 2021 Couchbase, Inc.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file  except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the  License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
 package prometheus
 
 import (
 	"fmt"
-
 	"gopkg.in/yaml.v3"
 )
 
@@ -24,39 +9,46 @@ const (
 	managedMarkerComment = "CMOS managed"
 )
 
+// BasicAuthConfig holds basic auth settings for scraping targets
 type BasicAuthConfig struct {
 	Username string `yaml:"username"`
 	Password string `yaml:"password"`
 }
 
-type HTTPClientConfig struct {
-	BasicAuth BasicAuthConfig `yaml:"basic_auth"`
+// TLSConfig holds TLS settings for scraping targets
+type TLSConfig struct {
+	InsecureSkipVerify bool `yaml:"insecure_skip_verify"`
 }
 
+// HTTPClientConfig holds the client configuration for HTTP scraping
+type HTTPClientConfig struct {
+	BasicAuth BasicAuthConfig `yaml:"basic_auth"`
+	TLSConfig *TLSConfig      `yaml:"tls_config,omitempty"` // TLS Config is optional
+	Scheme    string          `yaml:"scheme"`               // Add scheme (http or https)
+}
+
+// ScrapeConfig represents the scraping configuration for a target
 type ScrapeConfig struct {
-	// The job name to which the job label is set by default.
 	JobName          string           `yaml:"job_name"`
 	MetricsPath      string           `yaml:"metrics_path"`
-	HTTPClientConfig HTTPClientConfig `yaml:",inline"`
+	HTTPClientConfig HTTPClientConfig `yaml:",inline"` // Inline HTTP client config for correct YAML output
 	StaticConfigs    []StaticConfig   `yaml:"static_configs,omitempty"`
 }
 
+// StaticConfig holds static scraping targets and labels
 type StaticConfig struct {
 	Targets []string          `yaml:"targets"`
 	Labels  map[string]string `yaml:"labels"`
 }
 
-// Configuration is a subset of prometheus' config struct with special YAML marshal/unmarshal handling.
-// Adding a ScrapeConfig to the ScrapeConfigs slice will mean it will be marshaled in the resulting YAML with a special
-// marker comment. Unmarshalling the YAML will yield the "added" scrape_configs in ScrapeConfigs, but keep the user's
-// scrape_configs intact. In other words, ScrapeConfigs written by CMOS can be later edited by CMOS, but ones written by
-// the user will be preserved (and un-editable).
+// Configuration represents a Prometheus configuration with custom CMOS scrape configs
 type Configuration struct {
 	base              *yaml.Node
 	baseScrapeConfigs []*yaml.Node
 	ScrapeConfigs     []*ScrapeConfig `json:"scrape_configs" yaml:"-"`
 }
 
+// UnmarshalYAML unpacks the Prometheus configuration, including custom scrape configs
 func (c *Configuration) UnmarshalYAML(value *yaml.Node) error {
 	c.base = value
 	if value.Tag != "!!map" {
@@ -78,7 +70,6 @@ func (c *Configuration) UnmarshalYAML(value *yaml.Node) error {
 	c.baseScrapeConfigs = make([]*yaml.Node, 0)
 	c.ScrapeConfigs = make([]*ScrapeConfig, 0)
 	for _, sc := range scrapeConfigsSeq.Content {
-		// If it has the marker head comment, decode it as a ScrapeConfig struct, otherwise save it in baseScrapeConfigs
 		if sc.Tag == "!!map" && (sc.HeadComment == managedMarkerComment || sc.HeadComment == "# "+managedMarkerComment) {
 			var val ScrapeConfig
 			if err := sc.Decode(&val); err != nil {
@@ -92,6 +83,7 @@ func (c *Configuration) UnmarshalYAML(value *yaml.Node) error {
 	return nil
 }
 
+// MarshalYAML marshals the Prometheus configuration, including custom CMOS scrape configs
 func (c *Configuration) MarshalYAML() (interface{}, error) {
 	// Base it off of the existing base, but replace its scrape_configs, or add some if there aren't any
 	scrapeConfigs := new(yaml.Node)

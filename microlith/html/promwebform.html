@@ -2,46 +2,48 @@
 
 <html lang="en-US">
 <head>
-<meta charset="utf-8"/>
-<title>Add Cluster | CMOS</title>
-<link href="styles.css" rel="stylesheet"/>
+  <meta charset="utf-8"/>
+  <title>Add Cluster | CMOS</title>
+  <link href="styles.css" rel="stylesheet"/>
 </head>
 <body class="doc">
   <div style="display: flex; align-items: center; padding: 1rem; position: sticky; top: 0; background-color: white; z-index: 10; justify-content: center;">
     <img src="img/couchbase-logo.svg" style="width: 150px; height: auto; margin-left: 40px;"/>
-  <div style="font-size: 1.5rem; font-weight: bold; color: #0074e0; text-align: center; flex-grow: 1;">Couchbase CMOS Platform</div>
-</div>
-<main class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
-<h1>Configuration</h1>
-<p>This form runs on the CMOS container so enter valid hostnames or addresses that are resolvable from it.
-        Do not enter localhost or 127.0.0.1 for example as that will resolve to the CMOS container itself.</p>
-<div x-data="generator">
-<form id="inputForm" name="inputForm" style="background-color: #f7f7f7; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-<fieldset>
-  <legend><h2>Couchbase Server Settings</h2></legend>
-<div>
-<label for="serverHost">Couchbase Server Hostname:</label>
-<input id="serverHost" pattern="^\s*[^\S]+\s*$" placeholder="" required="" type="text" x-model="hostname"/>
-</div>
-<div>
-<label for="serverUser">Couchbase Server Username:</label>
-<input id="serverUser" placeholder="Administrator" required="" type="text" x-model="serverUsername"/>
-</div>
-<div>
-<label for="serverPwd">Couchbase Server Password:</label>
-<input id="serverPwd" placeholder="password" required="" type="password" x-model="serverPassword"/>
-</div>
-<div>
-<label for="managementPort">Couchbase Server Management Port:</label>
-<input id="managementPort" required="" type="text" x-model="managementPort"/>
-</div>
-<div>
-<label>
-<input type="checkbox" x-model="useTLS"/>
-<strong>Use TLS?</strong>
-</label>
-</div>
-</fieldset>
+    <div style="font-size: 1.5rem; font-weight: bold; color: #0074e0; text-align: center; flex-grow: 1;">Couchbase CMOS Platform</div>
+  </div>
+  <main class="container" style="max-width: 800px; margin: 0 auto; padding: 2rem 1rem;">
+    <h1>Configuration</h1>
+    <p>This form runs on the CMOS container so enter valid hostnames or addresses that are resolvable from it.
+      Do not enter localhost or 127.0.0.1 for example as that will resolve to the CMOS container itself.
+    </p>
+    <div x-data="generator">
+      <form id="inputForm" name="inputForm" style="background-color: #f7f7f7; padding: 2rem; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+        <!-- Couchbase Server Settings -->
+        <fieldset>
+          <legend><h2>Couchbase Server Settings</h2></legend>
+          <div>
+            <label for="serverHost">Couchbase Server Hostname:</label>
+            <input id="serverHost" pattern="^\s*[^\S]+\s*$" placeholder="" required="" type="text" x-model="hostname"/>
+          </div>
+          <div>
+            <label for="serverUser">Couchbase Server Username:</label>
+            <input id="serverUser" placeholder="Administrator" required="" type="text" x-model="serverUsername"/>
+          </div>
+          <div>
+            <label for="serverPwd">Couchbase Server Password:</label>
+            <input id="serverPwd" placeholder="password" required="" type="password" x-model="serverPassword"/>
+          </div>
+          <div>
+            <label for="managementPort">Couchbase Server Management Port:</label>
+            <input id="managementPort" required="" type="text" x-model="managementPort"/>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" x-model="useTLS"/>
+              <strong>Use TLS?</strong>
+            </label>
+          </div>
+        </fieldset>
 <fieldset>
 <div>
 <label>
@@ -51,17 +53,24 @@
 </div>
 
 </fieldset>
- <fieldset>
-      <legend><h2>Grafana Slow Queries Datasource</h2></legend>
-      <div>
-        <label for="alias">Alias:</label>
-        <input id="alias" pattern="^\s*[^\S]+\s*$" placeholder="Enter alias" required="" type="text" x-model="alias"/>
-      </div>
-      <div>
-        <label for="grafanaDatasourceTargetPort">Port:</label>
-        <input id="grafanaDatasourceTargetPort" placeholder="Enter port" required="" type="text" x-model="grafanaDatasourceTargetPort"/>
-      </div>
-    </fieldset>
+        <!-- Grafana Slow Queries Datasource -->
+        <fieldset>
+          <legend><h2>Grafana Slow Queries Datasource</h2></legend>
+          <div>
+            <label for="alias">Alias:</label>
+            <input id="alias" pattern="^\s*[^\S]+\s*$" placeholder="Enter alias" required="" type="text" x-model="alias"/>
+          </div>
+          <div>
+            <label for="grafanaDatasourceTargetPort">Port:</label>
+            <input id="grafanaDatasourceTargetPort" placeholder="Enter port" required="" type="text" x-model="grafanaDatasourceTargetPort"/>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" x-model="grafanaUseTLS"/>
+              <strong>Use TLS for Grafana Datasource?</strong>
+            </label>
+          </div>
+        </fieldset>
 <fieldset x-show="doSGW">
 <legend>
 <h2>Sync Gateway configuration</h2>
@@ -109,51 +118,55 @@
 <button :disabled="!(doProm || doCBMM)" @click.prevent="configureAndStore(getConfig())" class="btn btn-primary" style="padding: 10px 20px; font-weight: bold; background-color: #0074e0; border: none; border-radius: 5px; color: white; cursor: pointer;" type="submit">
             Add Cluster
           </button>
-<button :disabled="!(doProm || doCBMM)" @click.prevent="generate()" class="btn btn-grey-reverse" style="padding: 10px 20px; font-weight: bold; background-color: white; border: 2px solid #0074e0; border-radius: 5px; color: #0074e0; cursor: pointer;" type="button">
+          <button :disabled="!(doProm || doCBMM)" @click.prevent="generate()" class="btn btn-grey-reverse" style="padding: 10px 20px; font-weight: bold; background-color: white; border: 2px solid #0074e0; border-radius: 5px; color: #0074e0; cursor: pointer;" type="button">
             Show Manual Configuration Steps
           </button>
-</div>
-</form>
-<div x-show="yamlPrometheus.length &gt; 0 &amp;&amp; doProm">
-<h2>Prometheus configuration</h2>
-<p>
+        </div>
+      </form>
+      
+      <!-- Additional Sections -->
+      <div x-show="yamlPrometheus.length > 0 && doProm">
+        <h2>Prometheus configuration</h2>
+        <p>
           Add the following fragment of YAML to <code>/etc/prometheus/prometheus.runtime.yml</code>, in the
           <code>scrape_configs</code> section. Make sure to replace <code>&lt;cluster name&gt;</code> with the name of
           the cluster (as reported in the Couchbase Web Console). Once saved, check the "Targets" page in Prometheus to see if it has picked it up. If it does not, wait 30-60 seconds and check again, as the process is not instant.
         </p>
-<pre id="jsonPrometheus" x-text="yamlPrometheus"></pre>
-</div>
-<div x-show="healthcheckCommand.length &gt; 0 &amp;&amp; doCBMM">
-<h2>Couchbase Healthcheck configuration</h2>
-<p>Execute this command to register a Couchbase Server cluster with the local Cluster Monitor process.</p>
-<textarea class="generatedCode" cols="80" id="healthcheckCommand" onclick="this.focus();this.select()" readonly="" rows="4" x-text="healthcheckCommand"></textarea>
-</div>
-<div x-show="loading">Loading, please wait…</div>
-<div x-show="success">
+        <pre id="jsonPrometheus" x-text="yamlPrometheus"></pre>
+      </div>
+      <div x-show="healthcheckCommand.length > 0 && doCBMM">
+        <h2>Couchbase Healthcheck configuration</h2>
+        <p>Execute this command to register a Couchbase Server cluster with the local Cluster Monitor process.</p>
+
+        <textarea class="generatedCode" cols="80" id="healthcheckCommand" readonly="" rows="4" x-text="healthcheckCommand"></textarea>
+      </div>
+      <div x-show="loading">Loading, please wait…</div>
+      <div x-show="success">
         Cluster successfully added! Go to
         <a href="grafana/?orgId=1">Grafana</a> to see its health. Please note that it may take up to 60 seconds for all data to be available.
       </div>
-<div style="color: red; font-weight: bold;" x-show="error.length &gt; 0" x-text="error"></div>
-</div>
-</main>
-<footer style="margin: 2em;">
-<div class="footer-terms">
-<div class="footer-terms-copyright">
-<span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
-</div>
-<div class="footer-terms-links">
-<a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
-<a href="https://www.couchbase.com/support-policy">Support Policy</a>
-</div>
-</div>
-</footer>
-<script defer="" src="alpine-3.4.2.min.js"></script>
-<script>
+      <div style="color: red; font-weight: bold;" x-show="error.length > 0" x-text="error"></div>
+    </div>
+  </main>
+  <footer style="margin: 2em;">
+    <div class="footer-terms">
+      <div class="footer-terms-copyright">
+        <span>© 2022 Couchbase, Inc. Couchbase, Couchbase Lite and the Couchbase logo are registered trademarks of Couchbase, Inc.</span>
+      </div>
+      <div class="footer-terms-links">
+        <a href="https://www.couchbase.com/privacy-policy">Privacy Policy</a>
+        <a href="https://www.couchbase.com/support-policy">Support Policy</a>
+      </div>
+    </div>
+  </footer>
+  <script defer="" src="alpine-3.4.2.min.js"></script>
+  <script>
     document.addEventListener("alpine:init", function () {
       Alpine.data("generator", function () {
         return {
           managementPort: "8091",
           useTLS: false,
+          grafanaUseTLS: false, // Added for Grafana TLS
           hostname: "",
           alias: "",
           grafanaDatasourceTargetPort:"8093",
@@ -179,7 +192,7 @@
           success: false,
           error: "",
           loading: false,
- 
+
           validate() {
             if (this.alias.trim().length === 0) {
               this.error = "Alias missing";
@@ -203,9 +216,9 @@
           },
 
           init() {
-              this.pathPrefix = window.location.protocol + "//" + window.location.hostname + ":8080";
+              this.pathPrefix = "http:" + "//" + "localhost" + ":3300";
 
-            
+
             this.$watch("useTLS", () => {
               if (this.managementPort === "8091" && this.useTLS) {
                 this.managementPort = "18091";
@@ -256,6 +269,7 @@
                              managementPort: this.managementPort,
                              useTLS: this.useTLS,
                              grafanaDatasourceTargetPort: this.grafanaDatasourceTargetPort,
+                             grafanaUseTLS: this.grafanaUseTLS,
                              sgwHostname: this.sgwHostname,
                              sgwUsername: this.sgwUsername,
                              sgwPassword: this.sgwPassword,
