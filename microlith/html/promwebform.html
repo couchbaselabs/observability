@@ -216,7 +216,7 @@
           },
 
           init() {
-              this.pathPrefix = "http:" + "//" + "localhost" + ":3300";
+              this.pathPrefix = "http:" + "//" +  window.location.hostname + ":3300";
 
 
             this.$watch("useTLS", () => {
