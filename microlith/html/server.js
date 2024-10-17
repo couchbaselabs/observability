@@ -158,11 +158,12 @@ async function createDatasource(grafanaKey, grafanaURL, dsname, datasourceURL, b
     access: 'proxy',
     url: datasourceURL,
     basicAuth: true,
-    tlsSkipVerify: true,
     basicAuthUser,
     basicAuthPassword,
     isDefault: false,
-    jsonData: {},
+  jsonData: {
+    tlsSkipVerify: true,  // Move tlsSkipVerify into jsonData to tick the "Skip TLS Verify" box
+  }
     readOnly: false
   };
 
