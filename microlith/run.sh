@@ -136,17 +136,28 @@ else
     done
 
     # Run node.sh after Grafana is running
-    NODE_SH="/entrypoints/node.sh"
-    if [[ -x "$NODE_SH" ]]; then
-        log "Running node.sh"
-        if [ "${LOG_TO_STDOUT:-true}" == "true" ]; then
-            "$NODE_SH" "$@" 2>&1 | tee "${CMOS_LOGS_ROOT}/node.sh".log | awk '{ print "[node.sh]" $0 }' &
-        else
-            "$NODE_SH" "$@" &> "${CMOS_LOGS_ROOT}/node.sh".log &
-        fi
+  NODE_SH="/entrypoints/node.sh"
+
+if [[ -x "$NODE_SH" ]]; then
+    log "Running node.sh"
+
+    if [ "${LOG_TO_STDOUT:-true}" == "true" ]; then
+        "$NODE_SH" "$@" 2>&1 | awk '{ print "[node.sh] " $0 }' | tee -a "${CMOS_LOGS_ROOT}/node.sh.log"
     else
-        log "Skipping non-executable: node.sh"
+        "$NODE_SH" "$@" &>> "${CMOS_LOGS_ROOT}/node.sh.log"
     fi
+
+    EXIT_CODE=$?
+
+    if [[ $EXIT_CODE -ne 0 ]]; then
+        log "node.sh failed with exit code $EXIT_CODE"
+        echo "[node.sh] ERROR: node.sh exited with code $EXIT_CODE" | tee -a "${CMOS_LOGS_ROOT}/node.sh.log"
+    else
+        log "node.sh completed successfully"
+    fi
+else
+    log "Skipping non-executable: node.sh"
+fi
 
     wait -n
 fi
