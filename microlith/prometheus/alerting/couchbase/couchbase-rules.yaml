@@ -202,3 +202,130 @@ groups:
                     Resident Ratio of Active vBuckets is too low in bucket {{$labels.bucket}} on node -
                     {{$labels.instance}} (cluster {{ $labels.cluster}}).
                 remediation: Increase memory allocation for bucket.
+
+          - alert: HighCPUUsage
+            expr: avg by (node) (rate(node_cpu_seconds_total{mode="idle"}[5m])) < 0.2
+            for: 5m
+            labels:
+                severity: warning
+            annotations:
+                summary: "High CPU usage detected on {{ $labels.node }}"
+                description: "CPU usage on node {{ $labels.node }} is above 80% for the past 5 minutes."
+
+          - alert: HighMemoryUsage
+            expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes > 0.8
+            for: 5m
+            labels:
+                severity: critical
+            annotations:
+                summary: "High memory usage on {{ $labels.node }}"
+                description: "Memory usage on node {{ $labels.node }} is above 80%."
+
+          - alert: HighDiskUsage
+            expr: node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"} < 0.1
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: "Low disk space on {{ $labels.node }}"
+              description: "Disk space on node {{ $labels.node }} is less than 10% available."
+
+          - alert: HighDiskWriteQueue
+            expr: avg by (node) (couchbase_disk_write_queue) > 10000
+            for: 5m
+            labels:
+                severity: warning
+            annotations:
+                summary: "High disk write queue on {{ $labels.node }}"
+                description: "Document disk write queue on node {{ $labels.node }} has exceeded 10,000 items."
+
+          - alert: HighCacheMissRatio
+            expr: rate(couchbase_ep_cache_miss_total[5m]) / rate(couchbase_ep_cache_total[5m]) > 0.1
+            for: 5m
+            labels:
+                severity: warning
+            annotations:
+                summary: "High cache miss ratio on {{ $labels.node }}"
+                description: "The cache miss ratio on node {{ $labels.node }} is above 10%."
+          
+          - alert: NodeDown
+            expr: up{job="couchbase"} == 0
+            for: 1m
+            labels:
+                severity: critical
+            annotations:
+                summary: "Node down alert"
+                description: "Couchbase node {{ $labels.instance }} is not reachable."
+        
+          - alert: BucketRAMQuotaExhausted
+            expr: couchbase_bucket_memory_used_bytes / couchbase_bucket_memory_quota_bytes > 0.9
+            for: 5m
+            labels:
+                severity: warning
+            annotations:
+                summary: "Bucket RAM quota exceeded for {{ $labels.bucket }}"
+                description: "The memory usage for bucket {{ $labels.bucket }} is above 90% of the allocated quota."
+
+          - alert: XDCRReplicationLag
+            expr: rate(couchbase_xdcr_changes_left_total[5m]) > 100
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: "XDCR replication lag detected"
+              description: "Replication lag in XDCR is above 100 changes for the past 10 minutes."
+
+          - alert: HighRebalanceTime
+            expr: rate(couchbase_rebalance_time_total_seconds[5m]) > 3600
+            for: 1m
+            labels:
+                severity: warning
+            annotations:
+                summary: "Rebalance taking too long on {{ $labels.cluster }}"
+                description: "Rebalance operation is taking more than an hour."
+
+          - alert: HighRestRequestQueue
+            expr: cm_rest_request_enters_total - cm_rest_request_leaves_total > 100
+            for: 1m
+            labels:
+                severity: warning
+            annotations:
+                summary: High REST request queue detected.
+                description: "The number of REST requests entering exceeds those leaving by over 100. Investigate potential bottlenecks."
+
+          - alert: AuditQueueBackup
+            expr: audit_queue_length{category="audit"} > 10
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: Audit queue length is high.
+              description: "The audit queue length has exceeded 10 for more than 5 minutes. This might indicate slow processing."
+          
+          - alert: HighCPUUtilization
+            expr: rate(sys_cpu_host_seconds_total{mode="user"}[5m]) / sum(rate(sys_cpu_host_seconds_total[5m])) > 0.8
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: High CPU utilization detected.
+              description: "The CPU usage in 'user' mode has been above 80% for the last 2 minutes. This might indicate resource exhaustion."
+
+          - alert: CPUThrottlingDetected
+            expr: rate(sys_cpu_cgroup_seconds_total{mode="throttled"}[5m]) > 0
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: CPU throttling observed.
+              description: "CPU throttling has occurred. Check resource limits and workloads."
+          
+          - alert: RestRequestFailures
+            expr: rate(cm_rest_request_fails_total[5m]) > 5
+            for: 1m
+            labels:
+                severity: critical
+            annotations:
+                summary: High rate of REST request failures.
+                description: "More than 5 REST requests have failed per minute in the last 5 minutes. Investigate possible causes."
+          

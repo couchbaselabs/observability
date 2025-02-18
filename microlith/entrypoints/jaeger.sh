@@ -36,7 +36,8 @@ cat > "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"/jaeger.json << __EOF__
 ]
 __EOF__
 
-/go/bin/all-in-one-linux --query.base-path="${JAEGER_URL_SUBPATH}" \
-                         --query.ui-config="${JAEGER_CONFIG_FILE}" \
-                         --metrics-http-route="${CMOS_HTTP_PATH_PREFIX:-}/metrics" \
-                         --admin.http.host-port ":14269"
+#/go/bin/all-in-one-linux --query.base-path="${JAEGER_URL_SUBPATH}" \
+#                         --query.ui-config="${JAEGER_CONFIG_FILE}" \
+#                         --metrics-http-route="${CMOS_HTTP_PATH_PREFIX:-}/metrics" \
+#                         --admin.http.host-port ":14269"
+#

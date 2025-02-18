@@ -137,7 +137,7 @@ endif
 .PHONY: images-clean
 images-clean:
 	-docker rmi couchbase/observability-stack:v1
-	-docker rmi couchbase/observability-stack-oss:v1
+
 
 # This target is special: it's invoked by the build system, and needs to
 # prepare everything that will be archived.

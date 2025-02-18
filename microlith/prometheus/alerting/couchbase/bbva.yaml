@@ -1,0 +1,631 @@
+---
+groups:
+ - name: couchbase-rest-and-kv-alerts
+   rules:
+      - alert: HighOperationsLatency
+        expr: rate(cm_rest_request_enters_total[1m]) - rate(cm_rest_request_leaves_total[1m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+          operation: >
+          value: 100
+          category: KV
+        annotations:
+          summary: High latency in Rest operations
+          description: "KV operations are experiencing high latency. Check cluster health and workload."
+      - alert: OperationsSpike
+        expr: rate(cm_rest_request_enters_total[1m]) > 500
+        for: 1m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 500
+        annotations:
+          summary: Sudden spike in REST operations
+          description: "A significant spike in KV operations has been detected. Investigate source of traffic."
+      - alert: LowRestThroughput
+        expr: rate(cm_rest_request_leaves_total[5m]) < 10
+        for: 10m
+        labels:
+          severity: warning
+          category: KV
+          operation: <
+          value: 10
+        annotations:
+          summary: Low KV throughput
+          description: "Rest Throughput is low. Ensure nodes are healthy."
+      - alert: HighRestRequestRate
+        expr: rate(cm_rest_request_enters_total[1m]) > 1000
+        for: 2m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 1000
+        annotations:
+          summary: High KV request rate
+          description: "The KV request rate exceeds 1000 requests per second. Investigate high traffic sources."
+      - alert: RestResponseDrop
+        expr: rate(cm_rest_request_leaves_total[1m]) / rate(cm_rest_request_enters_total[1m]) < 0.8
+        for: 3m
+        labels:
+          severity: critical
+          category: KV
+          operation: <
+          value: 0.8
+        annotations:
+          summary: Rest response drop detected
+          description: "Significant drop in  responses compared to incoming requests. Check server health."
+      - alert: RestNodeHighLoad
+        expr: rate(cm_rest_request_leaves_total[5m]) > 5000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 5000
+        annotations:
+          summary: High REST load on  node
+          description: "A KV node is experiencing sustained high load. Monitor for potential bottlenecks."
+      - alert: KVItemsQueueHigh
+        expr: rate(kv_ep_diskqueue_items[5m]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 1000
+        annotations:
+          summary: High KV throttling rate
+          description: "The KV disk queue  rate has increased significantly. Verify resource availability."
+      - alert: KVHighDiskIO
+        expr: rate(kv_ep_io_total_read_bytes_bytes[5m]) > 1e+08
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 100000000
+        annotations:
+          summary: High disk IO in KV service
+          description: "Disk IO for the KV service exceeds 100MB/s. Investigate disk performance and workload."
+      - alert: KVOpsPendingHigh
+        expr: kv_ep_pending_ops > 500
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 500
+        annotations:
+          summary: High number of pending KV operations
+          description: "The number of pending KV operations exceeds 500. Investigate cluster performance."
+      - alert: KVReplicationQueueHigh
+        expr: kv_dcp_items_remaining > 10000
+        for: 10m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 10000
+        annotations:
+          summary: KV replication queue full
+          description: "Replication queue size exceeds 10,000. Investigate replication delays."
+      - alert: KVHotShardDetected
+        expr: rate(kv_ep_pending_ops[5m]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 1000
+        annotations:
+          summary: Hot shard detected in KV
+          description: "A shard in KV is handling more than 1,000 operations per second. Check for uneven load distribution."
+      - alert: KVHighWriteFailureRate
+        expr: rate(kv_ep_data_write_failed[5m]) > 10
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 10
+        annotations:
+          summary: High KV write failure rate
+          description: "Write failures in KV are occurring frequently. Investigate storage or network issues."
+      - alert: KVHighReadFailureRate
+        expr: rate(kv_ep_data_read_failed[5m]) > 10
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 10
+        annotations:
+          summary: High KV write failure rate
+          description: "Read failures in KV are occurring frequently. Investigate storage or network issues."
+      - alert: KVCheckpointMemoryHigh
+        expr: kv_vb_checkpoint_memory_queue_bytes > 1e+09
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 1000000000
+        annotations:
+          summary: Low KV replication throughput
+          description: "Checkpoint size is larger than 1 GB. Check cluster health and replication streams."
+      - alert: KVTotalOpsRaise
+        expr: rate(kv_cmd_total_ops[5m]) > 50000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 50000
+        annotations:
+          summary: Imbalance in KV shard operations
+          description: "Significant raise in the ops distribution. Redistribute workload."
+      - alert: KVHighLookupLatency
+        expr: histogram_quantile(0.95, rate(kv_cmd_lookup_10s_duration_seconds[5m])) > 0.3
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 0.3
+        annotations:
+          summary: High KV lookup latency
+          description: "95th percentile lookup latency exceeds 300ms. Investigate disk and memory performance."
+      - alert: KVFailedReads
+        expr: rate(kv_ep_data_read_failed[5m]) > 50
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 50
+        annotations:
+          summary: High rate of failed KV reads
+          description: "KV read failures exceed 50 per minute. Investigate disk or network issues."
+      - alert: KVCompactionFailed
+        expr: rate(kv_ep_compaction_failed[5m]) > 50
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 50
+        annotations:
+          summary: High rate of failed compaction operations
+          description: "Failed compaction operations exceeds 50 per minute"
+      - alert: KVCacheEvictionsSurge
+        expr: rate(kv_memcache_evictions[5m]) > 20000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 20000
+        annotations:
+          summary: Surge in KV cache evictions
+          description: "Cache evictions in KV have spiked. Check memory and caching configurations."
+      - alert: DCPBackoff
+        expr: rate(kv_dcp_backoff[10m]) > 20
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 20
+        annotations:
+          summary: High number of backed-off replication items
+          description: "DCP backed off requests exceed 520. Check network and cluster response times."
+      - alert: KVMutationOperationHighLatency
+        expr: rate(kv_cmd_mutation_10s_duration_seconds[10m]) > 1
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 1
+        annotations:
+          summary: KV mutation queue overflow
+          description: "Spike in the latency of  KV mutation operations. Investigate cluster performance."
+      - alert: KVActiveItemsInMemorySpike
+        expr: rate(kv_memcache_curr_items[5m]) > 5000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 5000
+        annotations:
+          summary: Spike in KV active operations
+          description: "Memcached operations have spiked beyond 5,000. Investigate workload and resource allocation."
+      - alert: HighIOTime
+        expr: histogram_quantile(0.05, rate(sys_disk_time_seconds[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+          operation: >
+          value: 0.5
+        annotations:
+          summary: High  IO time
+          description: "5th percentile IO time  exceeds 500ms. Investigate network latency."
+      - alert: KVDataWriteFailures
+        expr: rate(kv_ep_data_write_failed[5m]) > 10
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+          operation: >
+          value: 10
+        annotations:
+          summary: High data write failure rate in KV
+          description: "Write failures in KV exceed 10 per minute. Check disk performance and application behavior."
+      - alert: KVHighRequestRetryRate
+        expr: rate(kv_ep_data_read_failed[5m]) / rate(kv_ops[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: High KV request retry rate
+          description: "More than 10% of KV requests are being retried. Investigate network or resource issues."
+      - alert: KVExpiredItemsSpike
+        expr: rate(kv_vb_expired[5m]) > 500
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: Sudden spike in expired KV items
+          description: "Expired items in KV exceed 500 per minute. Investigate TTL settings or workload."
+      - alert: KVMemcacheFailures
+        expr: kv_uptime_seconds-kv_thread_cpu_usage_seconds{thread_name="memcached"} >0
+        for: 10m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: Memcachd KV server has been restarted
+          description: "Memcached process restarted. Verify load distribution and cluster health."
+      - alert: KVCheckpointQueueBuildUp
+        expr: rate(kv_vb_checkpoint_memory_queue_bytes[5m]) > 1000000000
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+        annotations:
+          summary: Rapid build-up in KV checkpoints queue
+          description: "Mutation queue size in KV is rapidly increasing. Investigate disk or network performance."
+      - alert: KVReplicationConflict
+        expr: rate(xdcr_docs_failed_cr_source_total[5m])+rate(xdcr_docs_failed_cr_target_total[5m]) > 5
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+        annotations:
+          summary: Frequent conficts in xdcr replication
+          description: "Sync replication failures exceed 5 per minute. Check network connectivity and cluster health."
+      - alert: KVActiveConnectionsSurge
+        expr: avg_over_time(kv_curr_connections[5m]) > 5000
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: Surge in active KV connections
+          description: "Active KV connections exceed 5,000. Verify connection pooling and client usage."
+      - alert: KVLowPendingOperationsQueueDetected
+        expr: rate(kv_ep_pending_ops[5m])/rate(kv_ep_pending_ops_max[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+        annotations:
+          summary: Slow KV operations detected
+          description: "Less than 20% of KV pending operation queue is available. Investigate resource contention or workload."
+      - alert: KVHighCASConflictAheadBehind
+        expr: rate(kv_ep_ahead_exceptions[5m]) + rate(kv_ep_behind_exceptions[5m]) > 20
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: High CAS conflict rate in KV
+          description: "CAS conflicts exceed 20 per minute. Investigate workload and document access patterns."
+      - alert: KVServerMemoryUsageHigh
+        expr: max(kv_ep_checkpoint_memory_ratio) > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          category: KV
+        annotations:
+          summary: High memory usage on KV checkpoints
+          description: "Memory ratio in checkpoints close to the TempOOM point. Investigate memory leaks or workload spikes."
+      - alert: KVHighRejectedConnections
+        expr: rate(kv_rejected_conns[5m]) > 20
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: High rate of rejected KV connections
+          description: "Rejected connections to KV service exceed 20 per minute. Investigate connection limits and client configurations."
+      - alert: KVLargeDocument
+        expr: histogram_quantile(0.50, rate(kv_mem_used_estimate_bytes[5m])/rate(kv_memcache_curr_items[5m])) > 1e+06
+        for: 5m
+        labels:
+          severity: warning
+          category: KV
+        annotations:
+          summary: Large documents in KV
+          description: "Document sizes in the 50th percentile exceed 1 MB. Optimize document design or workloads."
+
+ - name: couchbase-query-alerts
+   rules:
+
+      - alert: CPUUsageHigh
+        expr: sys_cpu_host_sys_rate > 0.8
+        for: 10m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: High CPU usage in query services
+          description: "CPU usage in query services is above 80% for the last 10 minutes."
+      - alert: QueryLatencyHigh
+        expr: histogram_quantile(0.95, rate(n1ql_request_time[5m])) > 1
+        for: 5m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: High query latency
+          description: "95th percentile query execution time exceeds 1 second. Investigate long-running queries."
+      - alert: QuerySurge
+        expr: rate(n1ql_requests[5m]) > 200
+        for: 5m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: Query node request imbalance posible
+          description: "Significant surge in requests across query nodes detected. Redistribute workload."
+      - alert: QueryErrorRateHigh
+        expr: rate(n1ql_timeouts[5m]) / rate(n1ql_requests[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: High query error rate
+          description: "Query timeout error rate exceeds 10%. Investigate potential issues with queries or data."
+      - alert: QueryQueueFull
+        expr: n1ql_queued_requests > 100
+        for: 2m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: Query queue full
+          description: "Query queue length exceeds 100. Check for long-running or blocked queries."
+      - alert: QueryTimeouts
+        expr: rate(n1ql_timeouts[5m]) > 10
+        for: 5m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: Query timeouts detected
+          description: "Queries are timing out frequently. Investigate slow queries or overloaded nodes."
+      - alert: QueryDocSize
+        expr: rate(n1ql_result_size[5m]) / rate(n1ql_result_count[5m]) > 1000000
+        for: 5m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: High query plan cache miss rate
+          description: "Query returns average size per doc >1M. Investigate query patterns."
+      - alert: QueryCancelledHigh
+        expr: rate(n1ql_cancelled[5m]) > 10
+        for: 5m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: High number of cancelled queries
+          description: "Surge in number of cancelled queries."
+      - alert: SurgeQueryError
+        expr: rate(n1ql_errors[5m]) > 50
+        for: 10m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: Increased query errors detected
+          description: "Frequent query errors detected. Investigate query execution and cluster conditions."
+      - alert: QueryBulkErrors
+        expr: rate(n1ql_bulk_get_errors[5m]) > 5
+        for: 2m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: Query requests dropped
+          description: "Query service is failing bulk get operations requests. Investigate resource constraints or workload."
+      - alert: QueryThroughputDrop
+        expr: rate(n1ql_load[5m]) < 50
+        for: 5m
+        labels:
+          severity: warning
+          category: Query
+        annotations:
+          summary: Query throughput has dropped
+          description: "Query throughput has fallen below 50 requests per minute. Check for stalled queries or errors."
+      - alert: QueryParserErrorRate
+        expr: rate(n1ql_invalid_requests[5m]) > 5
+        for: 5m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: High query parser error rate
+          description: "Query parser errors exceed 5 per minute. Investigate invalid query syntax or workload."
+      - alert: QuerySlowQueryRatio
+        expr: rate(n1ql_requests_5000ms[5m]) / rate(n1ql_requests[5m]) > 0.5
+        for: 5m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: Query slow query ratio
+          description: "Active slow query ratio above 50% . Increase pool size or optimize queries."
+      - alert: QueryMemoryErrorsSpikes
+        expr: rate(n1ql_mem_quota_exceeded_errors[5m]) > 50
+        for: 5m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: Query memory usage spikes
+          description: "Query memory errors are frequent. Check for large or inefficient queries."
+      - alert: QueryErrorSurge
+        expr: rate(query_errors_total[5m]) > 20
+        for: 5m
+        labels:
+          severity: critical
+          category: Query
+        annotations:
+          summary: Sudden surge in query errors
+          description: "Query errors exceed 20 per minute. Investigate query logs for error details."
+
+
+
+
+ - name: couchbase-index-alerts
+   rules:
+
+    - alert: ResidentPercentTooLow
+      expr: index_resident_percent < 40
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Low Resident Percent for Index"
+        description: "Resident percent is less than 40%. Lower resident percent impacts query performance."
+
+
+    - alert: IndexSizeTooLarge
+      expr: index_data_size > (10 * 1024 * 1024 * 1024)   # Greater than 10GB
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Large Index Size Detected"
+        description: "Index size is  Greater than 10GB, which may require more resources to query efficiently."
+
+
+    - alert: HighScanLatency
+      expr: index_avg_scan_latency > 1000000000   # Greater than 1 second (in nanoseconds)
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "High Scan Latency"
+        description: "Scan latency for an index is Greater than 1 second (in nanoseconds). Investigate resident percent or index size."
+
+
+    - alert: HighIndexFragmentation
+      expr: index_frag_percent > 30
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Index Fragmentation"
+        description: "Index fragmentation is >30% High fragmentation affects query performance."
+
+
+    - alert: ItemSizeTooLarge
+      expr: index_avg_item_size > 4096
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Large Indexed Item Size"
+        description: "Average item size is Greater than 4KB. Smaller items are better for performance."
+
+
+    - alert: HighRowsReturned
+      expr: rate(index_num_rows_returned[10m]) > 1000000
+      for: 10m
+      labels:
+        severity: info
+      annotations:
+        summary: "High Rows Returned by Index"
+        description: "Index returned more than a 1M rows in 10 min, indicating a large dataset."
+
+
+    - alert: LargeIndexDiskSize
+      expr: index_disk_size > (20 * 1024 * 1024 * 1024)  #
+      for: 10m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Large Disk Size for Index"
+        description: "Index disk size is Greater than 20GB, which may increase disk access latency."
+
+
+    - alert: QueueSizeNotZero
+      expr: rate(index_num_docs_queued[5m]) > 10000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "Non-Zero Queue Size"
+        description: "Index queue size is queuing more than 10k items in 5m. High queue sizes may indicate producer-consumer imbalance."
+
+
+
+
+    - alert: CacheMissesTooHigh
+      expr: rate(index_cache_misses[5m]) > 1000
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Cache Misses in Index"
+        description: "Index cache missed 1k items in 5m. This affects query performance."
+
+
+
+    - alert: HighDiskWrites
+      expr: rate(index_avg_disk_bps[5m]) > (100 * 1024 * 1024)   # Greater than 100MB/s
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Disk Writes for Index"
+        description: "Disk write more than 100MB/s in 5m. Investigate disk performance."
+
+
+
+    - alert: HighMemoryUsage
+      expr:   index_memory_quota -sum by (index) (index_memory_used) < (100 * 1024 * 1024)
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "High Memory Usage for Index"
+        description: "Index quota left is less than 100MB. Investigate memory allocation."
+
+
+
+
+
+
