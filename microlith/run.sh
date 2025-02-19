@@ -82,6 +82,7 @@ export CMOS_CFG_HTTP_PORT=${CMOS_CFG_HTTP_PORT:-7194}
 export CMOS_LOGS_ROOT=${CMOS_LOGS_ROOT:-/logs}
 # Clean up dynamic targets generated
 export PROMETHEUS_DYNAMIC_INTERNAL_DIR=${PROMETHEUS_DYNAMIC_INTERNAL_DIR:-/etc/prometheus/couchbase/monitoring/}
+export GF_PATHS_DATA="/etc/grafana"
 rm -rf "${PROMETHEUS_DYNAMIC_INTERNAL_DIR:?}"/
 mkdir -p "${PROMETHEUS_DYNAMIC_INTERNAL_DIR}"
 
@@ -98,6 +99,9 @@ else
     log "Couchbase binaries available, not OSS version"
     export CMOS_DISTRIBUTION="Couchbase"
 fi
+
+
+
 
 # Support passing in custom command to run, e.g. bash
 if [[ $# -gt 0 ]]; then
