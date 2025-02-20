@@ -323,7 +323,7 @@ ARG CB_GID="8453"
 
 RUN addgroup -g $CB_GID -S couchbase && \
     adduser -u $CB_UID -S couchbase -G couchbase
-export GF_PATHS_DATA="/etc/grafana"
+
 # Copied from `chown` lines in the original, just substitute our user
 RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
     chown -R couchbase:couchbase /etc/loki /loki && \

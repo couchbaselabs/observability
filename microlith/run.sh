@@ -40,7 +40,7 @@ if [[ "${CMOS_HTTP_PATH_PREFIX:-}" == */ ]]; then
     # This bit of Bash trickery removes a trailing slash if there is one - http://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
     CMOS_HTTP_PATH_PREFIX=${CMOS_HTTP_PATH_PREFIX%/}
 fi
-export GF_PATHS_DATA="/etc/grafana"
+
 export PROMETHEUS_CONFIG_FILE=${PROMETHEUS_CONFIG_FILE:-/etc/prometheus/prometheus-runtime.yml}
 export PROMETHEUS_CONFIG_TEMPLATE_FILE=${PROMETHEUS_CONFIG_TEMPLATE_FILE:-/etc/prometheus/prometheus-template.yml}
 export PROMETHEUS_URL_SUBPATH=${PROMETHEUS_URL_SUBPATH:-${CMOS_HTTP_PATH_PREFIX}/prometheus/}
