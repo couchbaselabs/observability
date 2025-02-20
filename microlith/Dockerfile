@@ -325,7 +325,7 @@ RUN addgroup -g $CB_GID -S couchbase && \
     adduser -u $CB_UID -S couchbase -G couchbase
 
 # Copied from `chown` lines in the original, just substitute our user
-RUN chown -R couchbase:couchbase /etc/prometheus /prometheus && \
+RUN chown -R couchbase:couchbase /etc/prometheus /prometheus /var/lib/grafana && \
     chown -R couchbase:couchbase /etc/loki /loki && \
     chown -R couchbase:couchbase "$GF_PATHS_DATA" "$GF_PATHS_HOME/.aws" "$GF_PATHS_LOGS" "$GF_PATHS_PLUGINS" "$GF_PATHS_PROVISIONING" && \
     chown -R couchbase:couchbase /etc/alertmanager /alertmanager && \
