@@ -1,6 +1,6 @@
 ---
 groups:
- - name: couchbase-rest-and-kv-alerts
+ - name: Couchbase-Rest-and-KV-Alerts
    rules:
       - alert: HighOperationsLatency
         expr: rate(cm_rest_request_enters_total[1m]) - rate(cm_rest_request_leaves_total[1m]) > 100
@@ -366,7 +366,7 @@ groups:
           summary: Large documents in KV
           description: "Document sizes in the 50th percentile exceed 1 MB. Optimize document design or workloads."
 
- - name: couchbase-query-alerts
+ - name: Couchbase-Query-Alerts
    rules:
 
       - alert: CPUUsageHigh
@@ -508,7 +508,7 @@ groups:
 
 
 
- - name: couchbase-index-alerts
+ - name: Couchbase-Index-Alerts
    rules:
 
     - alert: ResidentPercentTooLow
