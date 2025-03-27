@@ -21,6 +21,7 @@ import (
 	"os"
 	"os/exec"
 
+	"github.com/couchbase/tools-common/cbvalue"
 	"github.com/couchbaselabs/observability/config-svc/pkg/couchbase"
 	"github.com/couchbaselabs/observability/config-svc/pkg/prometheus"
 	"gopkg.in/yaml.v3"
@@ -60,18 +61,21 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	if err != nil {
 		return fmt.Errorf("unable to get cluster info: %w", err)
 	}
+	var cfg prometheus.Configuration
 
-	scrapeConfig, err := createScrapeConfigForCluster(
-		cluster,
-		mgmtPort,
-		useTLS,
-		data.CouchbaseConfig.Username,
-		data.CouchbaseConfig.Password,
-		data.MetricsConfig,
-	)
+	var username data.CouchbaseConfig.Username
+	var password data.CouchbaseConfig.Password
+
+	cbScrapeConfig, err := createScrapeConfigForCluster(cluster, useTLS, username, password, metricsConfig)
 	if err != nil {
-		return fmt.Errorf("could not create scrape config: %w", err)
+		return err
 	}
+	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, cbScrapeConfig)
+
+	xdcrScrapeConfig := createXDCREndpointScrapeConfig(cluster, username, password)
+	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, xdcrScrapeConfig)
+
+
 
 	cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
 	if cfgPath == "" {
@@ -97,7 +101,7 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	// Sync Gateway metrics path is metrics
 	scrapeConfig.MetricsPath = "/metrics"
 
-	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, scrapeConfig)
+
 
 	configYaml, err := yaml.Marshal(&cfg)
 	if err != nil {
@@ -189,16 +193,40 @@ type MetricsConfig *struct {
 	MetricsPort *float32 `json:"metricsPort,omitempty"`
 }
 
-func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, mgmtPort int, useTLS bool, username, password string,
-	metricsConfig MetricsConfig) (*prometheus.ScrapeConfig, error) {
 
-	// Set the scheme based on the useTLS flag (http or https)
-	scheme := "http"
-	if useTLS {
-		scheme = "https"
+func createXDCREndpointScrapeConfig(cluster *couchbase.PoolsDefault, username, password string) *prometheus.ScrapeConfig {
+	return &prometheus.ScrapeConfig{
+		JobName:     fmt.Sprintf("%s-http", cluster.ClusterName),
+		MetricsPath: "/probe",
+		HTTPClientConfig: prometheus.HTTPClientConfig{
+			BasicAuth: prometheus.BasicAuthConfig{
+				Username: username,
+				Password: password,
+			},
+		},
+		StaticConfigs: []prometheus.StaticConfig{
+			{
+				Targets: []string{"localhost:7979"}, // JSON exporter target
+			},
+		},
+		// Params are how json_exporter gets the actual target URL
+		Params: map[string][]string{
+			"module": {"pools"},
+			"target": {fmt.Sprintf("http://%s:8091/pools/default/tasks", cluster.Nodes[0].Hostname)},
+		},
+		RelabelConfigs: []prometheus.RelabelConfig{
+			{
+				TargetLabel: "cluster",
+				Replacement: cluster.ClusterName,
+			},
+		},
 	}
+}
 
-	// Create the StaticConfig for each node in the cluster
+
+
+func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username, password string,
+	metricsConfig MetricsConfig) (*prometheus.ScrapeConfig, error) {
 	staticConfig := prometheus.StaticConfig{
 		Targets: make([]string, len(cluster.Nodes)),
 		Labels: map[string]string{
@@ -206,29 +234,33 @@ func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, mgmtPort int,
 		},
 	}
 
-	// Loop through the nodes in the cluster to generate target URLs
+	var anyNodeCB7 bool
+
 	for i, node := range cluster.Nodes {
-		hostname, _, err := node.ResolveHostPort(useTLS)
+		hostname, mgmtPort, err := node.ResolveHostPort(useTLS)
 		if err != nil {
 			return nil, err
 		}
-		// Use the management port for the target
-		staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
+		if node.Version.AtLeast(cbvalue.Version7_0_0) {
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
+			anyNodeCB7 = true
+		} else if metricsConfig != nil && metricsConfig.MetricsPort != nil {
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%.0f", hostname, *metricsConfig.MetricsPort)
+		} else {
+			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, 9091)
+		}
 	}
 
-	// Create the scrape configuration, including http_client_config
 	scrapeConfig := prometheus.ScrapeConfig{
 		StaticConfigs: []prometheus.StaticConfig{staticConfig},
-		HTTPClientConfig: prometheus.HTTPClientConfig{
+	}
+	if anyNodeCB7 {
+		scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
 			BasicAuth: prometheus.BasicAuthConfig{
 				Username: username,
 				Password: password,
 			},
-			TLSConfig: &prometheus.TLSConfig{
-				InsecureSkipVerify: useTLS, // Set to true if useTLS is enabled to skip TLS verification
-			},
-			Scheme: scheme, // Use https if TLS is enabled, otherwise http
-		},
+		}
 	}
 
 	return &scrapeConfig, nil

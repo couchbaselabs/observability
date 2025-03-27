@@ -1,0 +1,138 @@
+---
+modules:
+  default:
+    headers:
+      X-Dummy: my-test-header
+    metrics:
+
+
+  terse_cluster_info:
+    metrics:
+    - name: terse_cluster_info
+      type: object
+      help: /pools/default/terseClusterInfo
+      path: '{  }'
+      labels:
+        clusterUUID: '{ .clusterUUID }'
+        orchestrator: '{ .orchestrator }'
+      values:
+
+        clusterCompatVersion: '{ .clusterCompatVersion }'
+
+  autofailover:
+    metrics:
+    - name: autofailover
+      type: object
+      help: /settings/autoFailover
+      path: '{  }'
+
+      values:
+        enabled: '{ .enabled }'
+        timeout: '{ .timeout }'
+        count: '{ .count }'
+  pools:
+    metrics:
+    - name: cm
+      type: object
+      help: Couchbase pools http api
+      path: '{  }'
+      values:
+        balanced: '{ .balanced }'
+        memoryQuota: '{ .memoryQuota }'
+        indexMemoryQuota : '{ .indexMemoryQuota }'
+        ram_total: '{ .storageTotals.ram.total }'
+        ram_quota_total: '{ .storageTotals.ram.quotaTotal }'
+        ram_quota_used: '{ .storageTotals.ram.quotaUsed }'
+        ram_used: '{ .storageTotals.ram.used }'
+        ram_usedByData: '{ .storageTotals.ram.usedByData }'
+        ram_quotaUsedPerNode: '{ .storageTotals.ram.quotaUsedPerNode }'
+        ram_quotaTotalPerNode: '{ .storageTotals.ram.quotaTotalPerNode }'
+        hdd_total: '{ .storageTotals.hdd.total }'
+        hdd_quotaTotal: '{ .storageTotals.hdd.quotaTotal }'
+        hdd_used: '{ .storageTotals.hdd.used }'
+        hdd_usedByData: '{ .storageTotals.hdd.usedByData }'
+        hdd_free: '{ .storageTotals.hdd.free }'
+
+    - name: nodes
+      type: object
+      help: Couchbase pools http api bucket values
+      path: '{ .nodes[*] }'
+      labels:
+        node: '{ .otpNode }'
+      values:
+        cpuCount: '{.cpuCount}'
+        uptime: '{.uptime}'
+        memoryTotal: '{.memoryTotal}'
+        memoryFree: '{.memoryFree}'
+        mcdMemoryReserved: '{.mcdMemoryReserved}'
+        mcdMemoryAllocated: '{.mcdMemoryAllocated}'
+        systemStats_cpu_utilization_rate:  '{  .systemStats.cpu_utilization_rate}'
+        systemStats_cpu_stolen_rate:   '{  .systemStats.cpu_stolen_rate}'
+        systemStats_swap_total:  '{  .systemStats.swap_total}'
+        systemStats_swap_used: '{  .systemStats.swap_used}'
+        systemStats_mem_total: '{  .systemStats.mem_total}'
+        systemStats_mem_free:  '{  .systemStats.mem_free}'
+        systemStats_mem_limit:  '{  .systemStats.mem_limit}'
+        systemStats_cpu_cores_available:  '{  .systemStats.cpu_cores_available}'
+        systemStats_allocstall:  '{  .systemStats.allocstall}'
+        interestingStats_cmd_get:   '{  .interestingStats.cmd_get}'
+        interestingStats_couch_docs_actual_disk_size: '{  .interestingStats.couch_docs_actual_disk_size}'
+        interestingStats_couch_docs_data_size:   '{  .interestingStats.couch_docs_data_size}'
+        interestingStats_couch_spatial_data_size:   '{  .interestingStats.couch_spatial_data_size}'
+        interestingStats_couch_spatial_disk_size:   '{  .interestingStats.couch_spatial_disk_size}'
+        interestingStats_couch_views_actual_disk_size:   '{  .interestingStats.couch_views_actual_disk_size}'
+        interestingStats_couch_views_data_size:   '{  .interestingStats.couch_views_data_size}'
+        interestingStats_curr_items:   '{  .interestingStats.curr_items}'
+        interestingStats_curr_items_tot:   '{  .interestingStats.curr_items_tot}'
+        interestingStats_ep_bg_fetched:   '{  .interestingStats.ep_bg_fetched}'
+        interestingStats_get_hits : '{  .interestingStats.get_hits}'
+        interestingStats_index_data_size: '{  .interestingStats.index_data_size}'
+        interestingStats_index_disk_size : '{  .interestingStats.index_disk_size}'
+        interestingStats_mem_used: '{  .interestingStats.mem_used}'
+        interestingStats_ops: '{  .interestingStats.ops}'
+        interestingStats_vb_active_num_non_resident: '{  .interestingStats.vb_active_num_non_resident}'
+        interestingStats_vb_replica_curr_items: '{  .interestingStats.vb_replica_curr_items}'
+
+    - name: status
+      type: object
+      help: Couchbase pools http api bucket values
+      path: '{ .nodes[*] }'
+      labels:
+        node: '{ .otpNode }'
+        status: '{.status}'
+
+      values:
+        status: 1
+
+    - name:         membership
+      type: object
+      help: Couchbase pools http api bucket values
+      path: '{ .nodes[*] }'
+      labels:
+        node: '{ .otpNode }'
+        membership: '{.clusterMembership}'
+
+      values:
+        membership: 1
+
+    - name:                 version
+      type: object
+      help: Couchbase pools http api bucket values
+      path: '{ .nodes[*] }'
+      labels:
+        node: '{ .otpNode }'
+        version: '{.version}'
+
+      values:
+        version: 1
+
+
+    - name:  services
+      type: object
+      help: Couchbase pools http api bucket values
+      path: '{ .nodes[*] }'
+      labels:
+          node: '{ .otpNode }'
+          services: '{ .services[*] }'
+      values:
+        list: 1
