@@ -63,8 +63,8 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	}
 	var cfg prometheus.Configuration
 
-	var username data.CouchbaseConfig.Username
-	var password data.CouchbaseConfig.Password
+	var username=data.CouchbaseConfig.Username
+	var password=data.CouchbaseConfig.Password
 
 	cbScrapeConfig, err := createScrapeConfigForCluster(cluster, useTLS, username, password, data.MetricsConfig)
 	if err != nil {
@@ -90,7 +90,7 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	if err != nil {
 		return fmt.Errorf("failed to read Prometheus config: %w", err)
 	}
-	var cfg prometheus.Configuration
+
 	if err := yaml.Unmarshal(existingConfig, &cfg); err != nil {
 		return fmt.Errorf("failed to parse Prometheus config: %w", err)
 	}
