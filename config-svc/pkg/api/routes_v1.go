@@ -75,9 +75,7 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	xdcrScrapeConfig := createXDCREndpointScrapeConfig(cluster, username, password)
 	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, xdcrScrapeConfig)
 
-
-
-	cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
+    cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
 	if cfgPath == "" {
 		cfgPath = defaultPrometheusConfigPath
 	}
@@ -96,10 +94,10 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	}
 
 	// Job name needs to be unique
-	scrapeConfig.JobName = fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1)
+	cbScrapeConfig.JobName = fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1)
 
 	// Sync Gateway metrics path is metrics
-	scrapeConfig.MetricsPath = "/metrics"
+	cbScrapeConfig.MetricsPath = "/metrics"
 
 
 
@@ -196,7 +194,7 @@ type MetricsConfig *struct {
 
 func createXDCREndpointScrapeConfig(cluster *couchbase.PoolsDefault, username, password string) *prometheus.ScrapeConfig {
 	return &prometheus.ScrapeConfig{
-		JobName:     fmt.Sprintf("%s-http", cluster.ClusterName),
+		JobName:     fmt.Sprintf("%s-http-xdcr", cluster.ClusterName),
 		MetricsPath: "/probe",
 		HTTPClientConfig: prometheus.HTTPClientConfig{
 			BasicAuth: prometheus.BasicAuthConfig{
