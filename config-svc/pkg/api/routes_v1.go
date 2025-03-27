@@ -66,7 +66,7 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	var username data.CouchbaseConfig.Username
 	var password data.CouchbaseConfig.Password
 
-	cbScrapeConfig, err := createScrapeConfigForCluster(cluster, useTLS, username, password, metricsConfig)
+	cbScrapeConfig, err := createScrapeConfigForCluster(cluster, useTLS, username, password, data.MetricsConfig)
 	if err != nil {
 		return err
 	}
