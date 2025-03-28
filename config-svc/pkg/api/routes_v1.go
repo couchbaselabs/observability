@@ -20,8 +20,8 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+ "strings"
 
-	"github.com/couchbase/tools-common/cbvalue"
 	"github.com/couchbaselabs/observability/config-svc/pkg/couchbase"
 	"github.com/couchbaselabs/observability/config-svc/pkg/prometheus"
 	"gopkg.in/yaml.v3"
@@ -43,11 +43,12 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 
 	scheme := "http"
 	useTLS := false
+	mgmtPort := 8091
 	if data.CouchbaseConfig.UseTLS != nil && *data.CouchbaseConfig.UseTLS {
 		useTLS = true
 		scheme = "https"
 	}
-	mgmtPort := 8091
+
 	if data.CouchbaseConfig.ManagementPort != nil {
 		mgmtPort = int(*data.CouchbaseConfig.ManagementPort)
 	}
@@ -61,24 +62,17 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	if err != nil {
 		return fmt.Errorf("unable to get cluster info: %w", err)
 	}
-	var cfg prometheus.Configuration
+	var cfg  prometheus.Configuration
 
-	var username=data.CouchbaseConfig.Username
-	var password=data.CouchbaseConfig.Password
+	var username= data.CouchbaseConfig.Username
+	var password =data.CouchbaseConfig.Password
 
-	cbScrapeConfig, err := createScrapeConfigForCluster(cluster, useTLS, username, password, data.MetricsConfig)
-	if err != nil {
-		return err
-	}
-	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, cbScrapeConfig)
-
-	xdcrScrapeConfig := createXDCREndpointScrapeConfig(cluster, username, password)
-	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, xdcrScrapeConfig)
-
-    cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
+	cfgPath := os.Getenv("PROMETHEUS_CONFIG_FILE")
 	if cfgPath == "" {
 		cfgPath = defaultPrometheusConfigPath
 	}
+
+
 	cfgFile, err := os.OpenFile(cfgPath, os.O_RDWR, 0)
 	if err != nil {
 		return fmt.Errorf("failed to open Prometheus config: %w", err)
@@ -92,12 +86,29 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 	if err := yaml.Unmarshal(existingConfig, &cfg); err != nil {
 		return fmt.Errorf("failed to parse Prometheus config: %w", err)
 	}
+	cbScrapeConfig, err := createScrapeConfigForCluster(cluster, mgmtPort,useTLS, username, password, data.MetricsConfig)
+	if err != nil {
+		return err
+	}
 
 	// Job name needs to be unique
 	cbScrapeConfig.JobName = fmt.Sprintf("couchbase-server-managed-%d", len(cfg.ScrapeConfigs)+1)
 
 	// Sync Gateway metrics path is metrics
 	cbScrapeConfig.MetricsPath = "/metrics"
+
+
+	addScrapeConfigIfUnique(&cfg, cbScrapeConfig, ScrapeConfigDeduplicationCriteria{
+		CheckTargetsAndPath: true,
+	})
+
+
+	xdcrScrapeConfig := createXDCREndpointScrapeConfig(cluster,mgmtPort, username, password,useTLS)
+
+
+	addScrapeConfigIfUnique(&cfg, xdcrScrapeConfig, ScrapeConfigDeduplicationCriteria{
+		CheckJobName: true,
+	})
 
 
 
@@ -115,6 +126,38 @@ func (s *Server) PostClustersAdd(ctx echo.Context) error {
 		"ok": true,
 	})
 }
+
+type ScrapeConfigDeduplicationCriteria struct {
+	CheckJobName        bool
+	CheckTargetsAndPath bool
+}
+
+func addScrapeConfigIfUnique(cfg *prometheus.Configuration, newCfg *prometheus.ScrapeConfig, criteria ScrapeConfigDeduplicationCriteria) {
+	for _, existing := range cfg.ScrapeConfigs {
+		// Check by job name
+		if criteria.CheckJobName && existing.JobName == newCfg.JobName {
+			return
+		}
+
+		// Check by target + metrics path
+		if criteria.CheckTargetsAndPath && existing.MetricsPath == newCfg.MetricsPath {
+			for _, existingStatic := range existing.StaticConfigs {
+				for _, existingTarget := range existingStatic.Targets {
+					for _, newStatic := range newCfg.StaticConfigs {
+						for _, newTarget := range newStatic.Targets {
+							if existingTarget == newTarget {
+								return // Duplicate found
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	// If no duplicates match the chosen criteria, append
+	cfg.ScrapeConfigs = append(cfg.ScrapeConfigs, newCfg)
+}
+
 
 func (s *Server) PostSgwAdd(ctx echo.Context) error {
 	var data v1.PostSgwAddJSONRequestBody
@@ -192,11 +235,15 @@ type MetricsConfig *struct {
 }
 
 
-func createXDCREndpointScrapeConfig(cluster *couchbase.PoolsDefault, username, password string) *prometheus.ScrapeConfig {
-	return &prometheus.ScrapeConfig{
-		JobName:     fmt.Sprintf("%s-http-xdcr", cluster.ClusterName),
+func createXDCREndpointScrapeConfig(cluster *couchbase.PoolsDefault, managementport int , username, password string, useTLS bool) *prometheus.ScrapeConfig {
+	var schema=  map[bool]string{true: "https", false: "http"}[useTLS]
+	var hostname=  strings.Split(cluster.Nodes[0].Hostname, ":")[0]
+	var result= prometheus.ScrapeConfig{
+		JobName:     fmt.Sprintf("%s-http", cluster.ClusterName),
 		MetricsPath: "/probe",
 		HTTPClientConfig: prometheus.HTTPClientConfig{
+			//FOR PROM EXPORTER IS ALWAYS HTTP
+			Schema: "http",
 			BasicAuth: prometheus.BasicAuthConfig{
 				Username: username,
 				Password: password,
@@ -204,13 +251,15 @@ func createXDCREndpointScrapeConfig(cluster *couchbase.PoolsDefault, username, p
 		},
 		StaticConfigs: []prometheus.StaticConfig{
 			{
+
 				Targets: []string{"localhost:7979"}, // JSON exporter target
 			},
 		},
 		// Params are how json_exporter gets the actual target URL
 		Params: map[string][]string{
 			"module": {"pools"},
-			"target": {fmt.Sprintf("http://%s:8091/pools/default/tasks", cluster.Nodes[0].Hostname)},
+			//THE TARGET TAKES THE USETLS ARGUMENT
+			"target": {fmt.Sprintf("%s://%s:%d/pools/default/tasks",schema,hostname,managementport)},
 		},
 		RelabelConfigs: []prometheus.RelabelConfig{
 			{
@@ -219,47 +268,45 @@ func createXDCREndpointScrapeConfig(cluster *couchbase.PoolsDefault, username, p
 			},
 		},
 	}
+	return &result
 }
 
 
 
-func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, useTLS bool, username, password string,
+func createScrapeConfigForCluster(cluster *couchbase.PoolsDefault, managementport int , useTLS bool, username, password string,
 	metricsConfig MetricsConfig) (*prometheus.ScrapeConfig, error) {
+	var schema=  map[bool]string{true: "https", false: "http"}[useTLS]
+
+
 	staticConfig := prometheus.StaticConfig{
 		Targets: make([]string, len(cluster.Nodes)),
+
 		Labels: map[string]string{
 			"cluster_name": cluster.ClusterName,
 		},
 	}
 
-	var anyNodeCB7 bool
 
 	for i, node := range cluster.Nodes {
-		hostname, mgmtPort, err := node.ResolveHostPort(useTLS)
-		if err != nil {
-			return nil, err
-		}
-		if node.Version.AtLeast(cbvalue.Version7_0_0) {
-			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, mgmtPort)
-			anyNodeCB7 = true
-		} else if metricsConfig != nil && metricsConfig.MetricsPort != nil {
-			staticConfig.Targets[i] = fmt.Sprintf("%s:%.0f", hostname, *metricsConfig.MetricsPort)
-		} else {
-			staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, 9091)
-		}
+		var hostname= strings.Split(node.Hostname, ":")[0]
+
+		staticConfig.Targets[i] = fmt.Sprintf("%s:%d", hostname, managementport)
+
+
 	}
 
 	scrapeConfig := prometheus.ScrapeConfig{
 		StaticConfigs: []prometheus.StaticConfig{staticConfig},
 	}
-	if anyNodeCB7 {
-		scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
+
+	scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
+			Schema: schema,
 			BasicAuth: prometheus.BasicAuthConfig{
 				Username: username,
 				Password: password,
 			},
-		}
 	}
+
 
 	return &scrapeConfig, nil
 }
@@ -276,6 +323,7 @@ func createScrapeConfigForSGW(username, password string, hostname string,
 		StaticConfigs: []prometheus.StaticConfig{staticConfig},
 	}
 	scrapeConfig.HTTPClientConfig = prometheus.HTTPClientConfig{
+
 		BasicAuth: prometheus.BasicAuthConfig{
 			Username: username,
 			Password: password,
