@@ -319,8 +319,7 @@ COPY json_exporter/config.yml /etc/json_exporter/config.yml
 COPY json_exporter/json_exporter /bin/json_exporter
 COPY scripts/collect-information.sh /collect-information.sh
 RUN chmod a+x /run.sh /collect-information.sh /entrypoints/*
-RUN chown couchbase:couchbase  /bin/json_exporter
-RUN chown couchbase:couchbase  /etc/json_exporter/config.yml
+
 RUN chmod a+x /bin/json_exporter
 
 ARG CB_UID="8453"
@@ -328,6 +327,8 @@ ARG CB_GID="8453"
 
 RUN addgroup -g $CB_GID -S couchbase && \
     adduser -u $CB_UID -S couchbase -G couchbase
+RUN chown couchbase:couchbase  /bin/json_exporter
+RUN chown couchbase:couchbase  /etc/json_exporter/config.yml
 
 # Copied from `chown` lines in the original, just substitute our user
 RUN chown -R couchbase:couchbase /etc/prometheus /prometheus /var/lib/grafana && \
