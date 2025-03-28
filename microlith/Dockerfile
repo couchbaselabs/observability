@@ -315,8 +315,13 @@ COPY --from=grafana-official /run.sh /entrypoints/grafana.sh
 
 ENV TINI_SUBREAPER=
 COPY run.sh /run.sh
+COPY json_exporter/config.yml /etc/json_exporter/config.yml
+COPY json_exporter/json_exporter /bin/json_exporter
 COPY scripts/collect-information.sh /collect-information.sh
 RUN chmod a+x /run.sh /collect-information.sh /entrypoints/*
+RUN chown couchbase:couchbase  /bin/json_exporter
+RUN chown couchbase:couchbase  /etc/json_exporter/config.yml
+RUN chmod a+x /bin/json_exporter
 
 ARG CB_UID="8453"
 ARG CB_GID="8453"

@@ -1,0 +1,1 @@
+/bin/json_exporter --config.file /etc/json_exporter/config.yml 2>&1 | sed "/is not found/d"
