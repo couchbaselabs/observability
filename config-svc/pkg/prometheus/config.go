@@ -31,6 +31,7 @@ type BasicAuthConfig struct {
 
 type HTTPClientConfig struct {
 	BasicAuth BasicAuthConfig `yaml:"basic_auth"`
+	Schema string              `yaml:"scheme"`
 }
 
 type RelabelConfig struct {
@@ -43,16 +44,18 @@ type RelabelConfig struct {
 }
 
 type ScrapeConfig struct {
-	JobName          string                `yaml:"job_name"`
-	MetricsPath      string                `yaml:"metrics_path,omitempty"`
-	HTTPClientConfig HTTPClientConfig      `yaml:",inline"`
-	StaticConfigs    []StaticConfig        `yaml:"static_configs,omitempty"`
-	Params           map[string][]string   `yaml:"params,omitempty"`
-	RelabelConfigs   []RelabelConfig       `yaml:"relabel_configs,omitempty"`
+	JobName          string              `yaml:"job_name"`
+
+	MetricsPath      string              `yaml:"metrics_path,omitempty"`
+	HTTPClientConfig HTTPClientConfig    `yaml:",inline"`
+	StaticConfigs    []StaticConfig      `yaml:"static_configs,omitempty"`
+	Params           map[string][]string `yaml:"params,omitempty"`
+	RelabelConfigs   []RelabelConfig     `yaml:"relabel_configs,omitempty"`
 }
 
 type StaticConfig struct {
 	Targets []string          `yaml:"targets"`
+
 	Labels  map[string]string `yaml:"labels"`
 }
 
